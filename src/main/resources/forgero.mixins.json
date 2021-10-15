@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.mixins",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "ItemRenderContextMixin",
+    "ModelLoaderMixin",
+    "RecipeManagerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

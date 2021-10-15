@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+  "display": {
+    "firstperson_righthand": {
+      "translation": [
+        20,
+        20,
+        20
+      ]
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "mod_id": "forgero",
+  "primary_materials": {
+    "oak": {
+      "type": "organic",
+      "weight": 100,
+      "stiffness": 100,
+      "durability": 100,
+      "sharpness": 5,
+      "enchantability": 10,
+      "malleability": 10,
+      "flexibility": 20
+    },
+    "birch": {
+      "type": "organic",
+      "weight": 100,
+      "stiffness": 100,
+      "durability": 100,
+      "sharpness": 5,
+      "enchantability": 10,
+      "malleability": 10,
+      "flexibility": 20
+    },
+    "spruce": {
+      "type": "organic",
+      "weight": 100,
+      "stiffness": 100,
+      "durability": 100,
+      "sharpness": 5,
+      "enchantability": 10,
+      "malleability": 10,
+      "flexibility": 20
+    },
+    "iron": {
+      "type": "metal",
+      "weight": 100,
+      "stiffness": 100,
+      "durability": 100,
+      "sharpness": 500,
+      "enchantability": 10,
+      "malleability": 10,
+      "flexibility": 20
+    },
+    "diamond": {
+      "type": "organic",
+      "weight": 100,
+      "stiffness": 100,
+      "durability": 100,
+      "sharpness": 5,
+      "enchantability": 10,
+      "malleability": 10,
+      "flexibility": 20
+    },
+    "gold": {
+      "type": "metal",
+      "weight": 1000,
+      "stiffness": 100,
+      "durability": 100,
+      "sharpness": 5,
+      "enchantability": 10,
+      "malleability": 10,
+      "flexibility": 20
+    },
+    "netherite": {
+      "type": "metal",
+      "weight": 100,
+      "stiffness": 100,
+      "durability": 100,
+      "sharpness": 5,
+      "enchantability": 10,
+      "malleability": 10,
+      "flexibility": 20
+    }
+  },
+  "secondary_materials": [
+    {
+      "material": "slime",
+      "type": "organic",
+      "weight": 100,
+      "durability": 200,
+      "enhantability": 20,
+      "flexibility": 10
+    },
+    {
+      "material": "graphite",
+      "type": "inorganic",
+      "weight": 20,
+      "durability": 400,
+      "enhantability": 10,
+      "flexibility": 10
+    },
+    {
+      "material": "hemp_fiber",
+      "type": "organic",
+      "weight": 50,
+      "durability": 50,
+      "enhantability": 10,
+      "flexibility": 10
+    },
+    {
+      "material": "string",
+      "type": "organic",
+      "weight": 50,
+      "durability": 50,
+      "enhantability": 10,
+      "flexibility": 10
+    },
+    {
+      "material": "metal_wire",
+      "type": "inorganic",
+      "weight": 100,
+      "durability": 500,
+      "enhantability": 10,
+      "flexibility": 5
+    }
+  ]
+}
