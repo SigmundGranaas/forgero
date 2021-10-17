@@ -6,7 +6,8 @@
   "mixins": [
     "ItemRenderContextMixin",
     "ModelLoaderMixin",
-    "RecipeManagerMixin"
+    "RecipeManagerMixin",
+    "ItemStackMixin"
   ],
   "client": [
   ],

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;

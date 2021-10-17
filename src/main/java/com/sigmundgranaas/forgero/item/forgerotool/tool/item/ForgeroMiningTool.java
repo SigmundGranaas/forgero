@@ -1,6 +1,7 @@
-package com.sigmundgranaas.forgero.item.forgerotool.tool;
+package com.sigmundgranaas.forgero.item.forgerotool.tool.item;
 
 import com.sigmundgranaas.forgero.item.forgerotool.ForgeroItemTypes;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroToolTypes;
 
 public interface ForgeroMiningTool extends ForgeroTool {
     @Override

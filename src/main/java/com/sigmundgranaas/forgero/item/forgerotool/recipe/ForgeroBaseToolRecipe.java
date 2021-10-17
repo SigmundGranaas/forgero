@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.item.forgerotool.recipe;
 
+import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.instance.ForgeroToolCreator;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.instance.ForgeroToolInstance;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,8 +11,14 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class ForgeroBaseToolRecipe implements CraftingRecipe {
+    public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
     private final Ingredient handle;
     private final Ingredient head;
     private final Item itemOutput;
@@ -47,17 +56,28 @@ public class ForgeroBaseToolRecipe implements CraftingRecipe {
 
     @Override
     public ItemStack craft(CraftingInventory inventory) {
-        ItemStack head_item;
-        ItemStack handle_item;
+        @Nullable
+        ItemStack headItem = null;
+        @Nullable
+        ItemStack handleItem = null;
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack currentItems = inventory.getStack(i);
             if (head.test(inventory.getStack(i + 3)) && handle.test(currentItems)) {
-                head_item = inventory.getStack(i + 3);
-                handle_item = inventory.getStack(i);
+                headItem = inventory.getStack(i + 3);
+                handleItem = inventory.getStack(i);
             }
         }
-        ItemStack output = new ItemStack(this.itemOutput);
-        return output;
+        assert headItem != null;
+        assert handleItem != null;
+        Optional<ForgeroToolInstance> forgeroToolInstance = ForgeroToolCreator.createForgeroToolInstance(itemOutput, headItem, handleItem);
+        if (forgeroToolInstance.isPresent()) {
+            ItemStack forgeroToolInstanceStack = new ItemStack((Item) forgeroToolInstance.get().getBaseItem());
+            forgeroToolInstanceStack.setNbt(forgeroToolInstance.get().writeNbt());
+            return forgeroToolInstanceStack;
+        } else {
+            LOGGER.debug("Unable to craft custom ForgeroToolInstance, returned default output");
+            return new ItemStack(itemOutput);
+        }
     }
 
     @Override

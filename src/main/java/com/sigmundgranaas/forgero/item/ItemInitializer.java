@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.forgerotool.Modifier.ForgeroModifierItem;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroPickaxe;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroShovel;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroPickaxeItem;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroShovelItem;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes;
 import net.minecraft.item.Item;
@@ -72,8 +72,8 @@ public class ItemInitializer {
             for (ForgeroToolPartItem handle : toolHandles) {
                 Item tool;
                 switch (head.getToolPartType()) {
-                    case SHOVEL_HEAD -> tool = new ForgeroShovel(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
-                    case PICKAXE_HEAD -> tool = new ForgeroPickaxe(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
+                    case SHOVEL_HEAD -> tool = new ForgeroShovelItem(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
+                    case PICKAXE_HEAD -> tool = new ForgeroPickaxeItem(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
                     default -> throw new IllegalStateException("Unexpected value: " + head.getToolPartType());
                 }
                 items.add(tool);

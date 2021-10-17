@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.impl.client.indigo.renderer.render.ItemRenderContext;
 import net.minecraft.client.render.VertexConsumerProvider;

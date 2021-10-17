@@ -16,6 +16,7 @@ public enum ForgeroMaterial implements ToolMaterial {
     SPRUCE(2, 100, 3.0F, 3.0F, 15, Ingredient.ofItems(Items.SPRUCE_PLANKS)),
     EMPTY_MATERIAL(1, 1, 1F, 1F, 1, Ingredient.ofItems(Items.AIR));
 
+
     private final int miningLevel;
     private final int itemDurability;
     private final float miningSpeed;
@@ -47,7 +48,7 @@ public enum ForgeroMaterial implements ToolMaterial {
 
     public static Map<String, ToolMaterial> getMaterialMap() {
         Map<String, ToolMaterial> materialList = new HashMap<>();
-        materialList.put(BIRCH.toString(),BIRCH);
+        materialList.put(BIRCH.toString(), BIRCH);
         materialList.put(OAK.toString(), OAK);
         materialList.put(SPRUCE.toString(), SPRUCE);
         materialList.put(ToolMaterials.NETHERITE.toString(), ToolMaterials.NETHERITE);

@@ -1,11 +1,11 @@
-package com.sigmundgranaas.forgero.item.forgerotool.tool;
-
+package com.sigmundgranaas.forgero.item.forgerotool.tool.item;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -14,12 +14,13 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Locale;
 
-public class ForgeroPickaxe extends PickaxeItem implements ForgeroMiningTool {
+
+public class ForgeroShovelItem extends ShovelItem implements ForgeroMiningTool {
     private final ForgeroToolPartItem handle;
     private final ForgeroToolPartItem head;
 
-    public ForgeroPickaxe(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, ForgeroToolPartItem head, ForgeroToolPartItem handle) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+    public ForgeroShovelItem(ToolMaterial toolMaterial, float f, float g, Settings settings, ForgeroToolPartItem head, ForgeroToolPartItem handle) {
+        super(toolMaterial, f, g, settings);
         this.head = head;
         this.handle = handle;
     }
@@ -34,26 +35,27 @@ public class ForgeroPickaxe extends PickaxeItem implements ForgeroMiningTool {
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-    }
 
-    @Override
-    public String getToolTip() {
-        return super.getMaterial().toString() + "_" + getToolTypeLowerCaseString();
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return new Identifier(Forgero.MOD_NAMESPACE, getToolType().toString().toLowerCase(Locale.ROOT) + "_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase());
     }
 
     @Override
     public ForgeroToolTypes getToolType() {
-        return ForgeroToolTypes.PICKAXE;
+        return ForgeroToolTypes.SHOVEL;
     }
 
     @Override
     public String getToolTypeLowerCaseString() {
-        return ForgeroToolTypes.PICKAXE.toString().toLowerCase(Locale.ROOT);
+        return getToolType().toString().toLowerCase(Locale.ROOT);
+    }
+
+    @Override
+    public String getToolTip() {
+        return "Shovel";
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return new Identifier(Forgero.MOD_NAMESPACE, getToolTypeLowerCaseString() + "_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase());
     }
 
     @Override
@@ -65,5 +67,4 @@ public class ForgeroPickaxe extends PickaxeItem implements ForgeroMiningTool {
     public ForgeroToolPartItem getToolHandle() {
         return getHandle();
     }
-
 }

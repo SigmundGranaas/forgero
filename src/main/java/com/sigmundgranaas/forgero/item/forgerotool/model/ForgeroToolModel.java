@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.item.forgerotool.model;
 
 import com.google.common.base.Charsets;
 import com.mojang.datafixers.util.Pair;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
