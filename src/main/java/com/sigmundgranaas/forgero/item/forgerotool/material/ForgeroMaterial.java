@@ -6,12 +6,15 @@ import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public enum ForgeroMaterial implements ToolMaterial {
-    Birch(2, 100, 1.0F, 1.0F, 15, Ingredient.ofItems(Items.BIRCH_PLANKS)),
-    Oak(2, 100, 2.0F, 2.0F, 15, Ingredient.ofItems(Items.OAK_PLANKS)),
-    Spruce(2, 100, 3.0F, 3.0F, 15, Ingredient.ofItems(Items.SPRUCE_PLANKS));
+    BIRCH(2, 100, 1.0F, 1.0F, 15, Ingredient.ofItems(Items.BIRCH_PLANKS)),
+    OAK(2, 100, 2.0F, 2.0F, 15, Ingredient.ofItems(Items.OAK_PLANKS)),
+    SPRUCE(2, 100, 3.0F, 3.0F, 15, Ingredient.ofItems(Items.SPRUCE_PLANKS)),
+    EMPTY_MATERIAL(1, 1, 1F, 1F, 1, Ingredient.ofItems(Items.AIR));
 
     private final int miningLevel;
     private final int itemDurability;
@@ -31,14 +34,27 @@ public enum ForgeroMaterial implements ToolMaterial {
 
     public static List<ToolMaterial> getMaterialList() {
         List<ToolMaterial> materialList = new ArrayList<>();
-        materialList.add(Birch);
-        materialList.add(Oak);
-        materialList.add(Spruce);
+        materialList.add(BIRCH);
+        materialList.add(OAK);
+        materialList.add(SPRUCE);
         materialList.add(ToolMaterials.NETHERITE);
         materialList.add(ToolMaterials.DIAMOND);
         materialList.add(ToolMaterials.IRON);
         materialList.add(ToolMaterials.GOLD);
         materialList.add(ToolMaterials.STONE);
+        return materialList;
+    }
+
+    public static Map<String, ToolMaterial> getMaterialMap() {
+        Map<String, ToolMaterial> materialList = new HashMap<>();
+        materialList.put(BIRCH.toString(),BIRCH);
+        materialList.put(OAK.toString(), OAK);
+        materialList.put(SPRUCE.toString(), SPRUCE);
+        materialList.put(ToolMaterials.NETHERITE.toString(), ToolMaterials.NETHERITE);
+        materialList.put(ToolMaterials.DIAMOND.toString(), ToolMaterials.DIAMOND);
+        materialList.put(ToolMaterials.IRON.toString(), ToolMaterials.IRON);
+        materialList.put(ToolMaterials.GOLD.toString(), ToolMaterials.GOLD);
+        materialList.put(ToolMaterials.STONE.toString(), ToolMaterials.STONE);
         return materialList;
     }
 
