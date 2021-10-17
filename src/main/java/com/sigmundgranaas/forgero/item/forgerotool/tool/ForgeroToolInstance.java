@@ -1,20 +1,19 @@
 package com.sigmundgranaas.forgero.item.forgerotool.tool;
 
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolBinding;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolHandle;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolHead;
+import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ForgeroToolInstance {
     ItemStack ForgeroTool;
     NbtCompound rootNbt;
-    ForgeroToolHead head;
-    ForgeroToolHandle handle;
-    ForgeroToolBinding binding;
+    ForgeroToolPart head;
+    ForgeroToolPart handle;
+    ForgeroToolPart binding;
 
-    public ForgeroToolInstance(ItemStack forgeroTool, ForgeroToolHead head, ForgeroToolHandle handle, @Nullable ForgeroToolBinding binding) {
+    public ForgeroToolInstance(@NotNull ItemStack forgeroTool, @NotNull ForgeroToolPart head, @NotNull ForgeroToolPart handle, @NotNull ForgeroToolPart binding) {
         if (!(forgeroTool.getItem() instanceof ForgeroTool)) {
             throw new IllegalArgumentException("The provided Itemstack is not a ForgeroTool");
         }
