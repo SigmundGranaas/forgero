@@ -21,6 +21,7 @@ import java.util.Optional;
  */
 public class ForgeroToolCreator {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
+    public static final String FORGERO_TOOL_IDENTIFIER = "FORGERO_TOOL";
 
     /**
      * Usable when creating a forgeroTool from an existing itemstack
@@ -58,14 +59,20 @@ public class ForgeroToolCreator {
     }
 
     public static @NotNull Optional<ForgeroToolInstance> createForgeroToolInstance(@Nullable NbtCompound itemStackCompound, Item baseItem) {
-        if (!(baseItem instanceof ForgeroTool) || itemStackCompound == null) {
+        NbtCompound forgeroToolCompound = itemStackCompound;
+        if (forgeroToolCompound.contains(FORGERO_TOOL_IDENTIFIER)) {
+            forgeroToolCompound = itemStackCompound.getCompound(FORGERO_TOOL_IDENTIFIER);
+        }
+        if (!(baseItem instanceof ForgeroTool) || forgeroToolCompound == null || forgeroToolCompound.isEmpty()) {
+            LOGGER.warn("Cannot create Tool, as the ItemStack is not a ForgeroTool, the NbtCompound is null or empty, returning empty");
             return Optional.empty();
         }
 
-        Optional<ForgeroToolPart> toolPartHead = ForgeroToolPartCreator.createToolPart(itemStackCompound.getCompound(ForgeroToolPartCreator.TOOL_PART_HEAD_IDENTIFIER));
-        Optional<ForgeroToolPart> toolPartHandle = ForgeroToolPartCreator.createToolPart(itemStackCompound.getCompound(ForgeroToolPartCreator.TOOL_PART_HANDLE_IDENTIFIER));
+        Optional<ForgeroToolPart> toolPartHead = ForgeroToolPartCreator.createToolPart(forgeroToolCompound.getCompound(ForgeroToolPartCreator.TOOL_PART_HEAD_IDENTIFIER));
+        Optional<ForgeroToolPart> toolPartHandle = ForgeroToolPartCreator.createToolPart(forgeroToolCompound.getCompound(ForgeroToolPartCreator.TOOL_PART_HANDLE_IDENTIFIER));
         if (toolPartHead.isEmpty() || toolPartHandle.isEmpty()) {
             LOGGER.warn("Cannot create Tool as the head or the handle is empty: Tool head present: {}, Tool handle present: {}", toolPartHead.isPresent(), toolPartHandle.isPresent());
+            LOGGER.warn(forgeroToolCompound.getKeys().toString());
             return Optional.empty();
         }
 
