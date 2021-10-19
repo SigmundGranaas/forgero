@@ -63,8 +63,8 @@ public class ForgeroBaseToolRecipe implements CraftingRecipe {
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack currentItems = inventory.getStack(i);
             if (head.test(inventory.getStack(i + 3)) && handle.test(currentItems)) {
-                headItem = inventory.getStack(i + 3);
-                handleItem = inventory.getStack(i);
+                handleItem = inventory.getStack(i + 3);
+                headItem = inventory.getStack(i);
             }
         }
         assert headItem != null;
@@ -72,7 +72,7 @@ public class ForgeroBaseToolRecipe implements CraftingRecipe {
         Optional<ForgeroToolInstance> forgeroToolInstance = ForgeroToolCreator.createForgeroToolInstance(itemOutput, headItem, handleItem);
         if (forgeroToolInstance.isPresent()) {
             ItemStack forgeroToolInstanceStack = new ItemStack((Item) forgeroToolInstance.get().getBaseItem());
-            forgeroToolInstanceStack.setNbt(forgeroToolInstance.get().writeNbt());
+            forgeroToolInstanceStack.getOrCreateNbt().put(ForgeroToolCreator.FORGERO_TOOL_IDENTIFIER, forgeroToolInstance.get().writeNbt());
             return forgeroToolInstanceStack;
         } else {
             LOGGER.debug("Unable to craft custom ForgeroToolInstance, returned default output");
