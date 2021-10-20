@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.item.forgerotool.toolpart;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.Modifier.EmptyModifier;
 import com.sigmundgranaas.forgero.item.forgerotool.Modifier.ForgeroModifier;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -34,16 +34,16 @@ public class ForgeroToolPartCreator {
         }
 
         @Nullable
-        ToolMaterial primaryMaterial = ForgeroMaterial.getMaterialMap().get(primaryMaterialIdentifier);
+        ToolMaterial primaryMaterial = ForgeroToolMaterial.getMaterialMap().get(primaryMaterialIdentifier);
         if (primaryMaterial == null) {
             LOGGER.warn("Cannot create toolpart with Primary material: {} as it was not found in the materialMap", primaryMaterialIdentifier);
             return Optional.empty();
         }
 
         @Nullable
-        ToolMaterial secondaryMaterial = ForgeroMaterial.getMaterialMap().get(nbtCompound.getString(ForgeroToolPart.SECONDARY_MATERIAL_IDENTIFIER));
+        ToolMaterial secondaryMaterial = ForgeroToolMaterial.getMaterialMap().get(nbtCompound.getString(ForgeroToolPart.SECONDARY_MATERIAL_IDENTIFIER));
         if (secondaryMaterial == null) {
-            secondaryMaterial = ForgeroMaterial.EMPTY_MATERIAL;
+            secondaryMaterial = ForgeroToolMaterial.EMPTY_MATERIAL;
         }
 
         ForgeroModifier modifier = new EmptyModifier();
@@ -53,7 +53,7 @@ public class ForgeroToolPartCreator {
 
     public static @NotNull Optional<ForgeroToolPart> createToolPart(ItemStack forgeroToolPart) {
         if (forgeroToolPart.getItem() instanceof ForgeroToolPartItem) {
-            return Optional.of(new ForgeroToolPart(((ForgeroToolPartItem) forgeroToolPart.getItem()).getMaterial(), ForgeroMaterial.EMPTY_MATERIAL, new EmptyModifier()));
+            return Optional.of(new ForgeroToolPart(((ForgeroToolPartItem) forgeroToolPart.getItem()).getMaterial(), ForgeroToolMaterial.EMPTY_MATERIAL, new EmptyModifier()));
         } else {
             LOGGER.warn("Cannot create toolpart, as the Itemstack input is an ForgeroToolpart, returning empty");
             return Optional.empty();
@@ -61,7 +61,7 @@ public class ForgeroToolPartCreator {
     }
 
     public static @NotNull ForgeroToolPart createToolPart(ForgeroToolPartItem forgeroToolPart) {
-        return new ForgeroToolPart(forgeroToolPart.getMaterial(), ForgeroMaterial.EMPTY_MATERIAL, new EmptyModifier());
+        return new ForgeroToolPart(forgeroToolPart.getMaterial(), ForgeroToolMaterial.EMPTY_MATERIAL, new EmptyModifier());
     }
 
     public static ForgeroToolPart createToolPart(Item forgeroToolPart) {

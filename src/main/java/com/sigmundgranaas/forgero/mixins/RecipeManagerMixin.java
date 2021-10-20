@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.mixins;
 
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroRecipeCreator;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.resource.ResourceManager;
@@ -19,7 +19,7 @@ public class RecipeManagerMixin {
 
     @Inject(method = "apply", at = @At("HEAD"))
     public void interceptApply(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
-        ForgeroRecipeCreator creator = new ForgeroRecipeCreator(map, ForgeroMaterial.getMaterialList());
+        ForgeroRecipeCreator creator = new ForgeroRecipeCreator(map, ForgeroToolMaterial.getMaterialList());
         creator.createAndRegisterHandles();
         creator.createAndRegisterHeads();
         creator.createAndRegisterBindings();

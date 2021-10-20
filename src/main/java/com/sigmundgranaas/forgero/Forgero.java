@@ -2,7 +2,8 @@ package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.item.ForgeroItemRegister;
 import com.sigmundgranaas.forgero.item.ItemInitializer;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
+import com.sigmundgranaas.forgero.item.forgerotool.material.MaterialManager;
 import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroBaseToolRecipeSerializer;
 import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroToolWithBindingRecipeSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -18,9 +19,10 @@ public class Forgero implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ItemInitializer items = new ItemInitializer(ForgeroMaterial.getMaterialList());
+        ItemInitializer items = new ItemInitializer(ForgeroToolMaterial.getMaterialList());
         registerItems(items);
         registerRecipes();
+        MaterialManager.initializePrimaryMaterials();
     }
 
     private void registerItems(ItemInitializer items) {

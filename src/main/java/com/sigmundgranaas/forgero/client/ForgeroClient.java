@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.client;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.ItemInitializer;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import com.sigmundgranaas.forgero.item.forgerotool.model.ForgeroModelResourceProvider;
 import com.sigmundgranaas.forgero.item.forgerotool.model.ForgeroPartModels;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
@@ -20,7 +20,7 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private void initializeItemModels() {
-        ItemInitializer initializer = new ItemInitializer(ForgeroMaterial.getMaterialList());
+        ItemInitializer initializer = new ItemInitializer(ForgeroToolMaterial.getMaterialList());
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
             for (ForgeroToolPartItem part : initializer.getToolPartsBindings()) {
                 out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase(), "inventory"));

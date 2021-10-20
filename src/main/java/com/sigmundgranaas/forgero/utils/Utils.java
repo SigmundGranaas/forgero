@@ -1,6 +1,10 @@
 package com.sigmundgranaas.forgero.utils;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.item.forgerotool.material.MaterialManager;
+import org.jetbrains.annotations.Nullable;
+
+import java.io.InputStream;
 
 public class Utils {
     public static String createModelJson(String path, String parent) {
@@ -12,5 +16,10 @@ public class Utils {
                 "    \"layer0\": \"" + Forgero.MOD_NAMESPACE + ":item/" + path + "\"\n" +
                 "  }\n" +
                 "}";
+    }
+
+    @Nullable
+    public static InputStream readJsonResourceAsString(String path) {
+        return MaterialManager.class.getResourceAsStream(path);
     }
 }
