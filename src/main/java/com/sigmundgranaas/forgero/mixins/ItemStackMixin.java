@@ -12,7 +12,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,11 +23,6 @@ import java.util.Optional;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-
-    @Final
-    @Shadow
-    private Item item;
-
     @Shadow
     private NbtCompound nbt;
 
@@ -36,13 +30,11 @@ public abstract class ItemStackMixin {
     public abstract Item getItem();
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult> cir) {
-        if (this.item instanceof ForgeroTool) {
-            Optional<ForgeroToolInstance> tool = ForgeroToolCreator.createForgeroToolInstance(this.nbt, this.item);
-            if (tool.isPresent() && tool.get() instanceof ForgeroPickaxeInstance) {
-            }
+    public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<?>> cir) {
+        if (this.getItem() instanceof ForgeroTool) {
+            Optional<ForgeroToolInstance> tool = ForgeroToolCreator.createForgeroToolInstance(this.nbt, this.getItem());
         }
-        cir.setReturnValue(this.item.use(world, user, hand));
+        cir.setReturnValue(this.getItem().use(world, user, hand));
         cir.cancel();
     }
 
@@ -50,13 +42,14 @@ public abstract class ItemStackMixin {
     public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
         float customSpeed = 0F;
         if (this.getItem() instanceof ForgeroTool) {
-            Optional<ForgeroToolInstance> tool = ForgeroToolCreator.createForgeroToolInstance(this.nbt, this.item);
+            Optional<ForgeroToolInstance> tool = ForgeroToolCreator.createForgeroToolInstance(this.nbt, this.getItem());
             if (tool.isPresent() && tool.get() instanceof ForgeroPickaxeInstance forgeroTool) {
-                customSpeed = this.item.getMiningSpeedMultiplier((ItemStack) (Object) this, state) + forgeroTool.getMiningSpeedMultiplier();
-                if (info.getReturnValueF() < customSpeed) {
-                    info.setReturnValue(customSpeed);
-                }
+                customSpeed = this.getItem().getMiningSpeedMultiplier((ItemStack) (Object) this, state) + forgeroTool.getMiningSpeedMultiplier();
+
             }
+        }
+        if (info.getReturnValueF() < customSpeed) {
+            info.setReturnValue(customSpeed);
         }
     }
 }
