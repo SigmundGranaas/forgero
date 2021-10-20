@@ -67,4 +67,9 @@ public class ForgeroShovelItem extends ShovelItem implements ForgeroMiningTool {
     public ForgeroToolPartItem getToolHandle() {
         return getHandle();
     }
+
+    @Override
+    protected String getOrCreateTranslationKey() {
+        return String.format("item.%s.%s_%s", Forgero.MOD_NAMESPACE, getHead().getMaterial().toString().toLowerCase(Locale.ROOT), getToolType().toString().toLowerCase(Locale.ROOT));
+    }
 }

@@ -67,4 +67,9 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroMiningTool
         return getHandle();
     }
 
+    @Override
+    protected String getOrCreateTranslationKey() {
+        return String.format("item.%s.%s_%s", Forgero.MOD_NAMESPACE, getHead().getMaterial().toString().toLowerCase(Locale.ROOT), getToolType().toString().toLowerCase(Locale.ROOT));
+
+    }
 }
