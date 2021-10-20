@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.resource.Resource;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -34,6 +35,7 @@ import java.util.function.Supplier;
 public class ForgeroToolModel implements UnbakedModel, BakedModel, FabricBakedModel {
     private final ForgeroPartModels partModels;
     private HashMap<String, FabricBakedModel> BAKED_PART_MODELS = new HashMap<>();
+    private Sprite sprite = null;
 
     public ForgeroToolModel(ForgeroPartModels partModels) {
         this.partModels = partModels;
@@ -122,7 +124,7 @@ public class ForgeroToolModel implements UnbakedModel, BakedModel, FabricBakedMo
 
     @Override
     public Sprite getParticleSprite() {
-        return null;
+        return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(new Identifier("block/cobblestone"));
     }
 
     @Override

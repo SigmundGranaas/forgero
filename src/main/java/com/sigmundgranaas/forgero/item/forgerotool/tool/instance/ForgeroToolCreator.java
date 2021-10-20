@@ -58,13 +58,17 @@ public class ForgeroToolCreator {
         };
     }
 
-    public static @NotNull Optional<ForgeroToolInstance> createForgeroToolInstance(@Nullable NbtCompound itemStackCompound, Item baseItem) {
+    public static @NotNull Optional<ForgeroToolInstance> createForgeroToolInstance(@Nullable NbtCompound itemStackCompound, @NotNull Item baseItem) {
         NbtCompound forgeroToolCompound = itemStackCompound;
+
+        if (!(baseItem instanceof ForgeroTool) || itemStackCompound == null || itemStackCompound.isEmpty()) {
+            return Optional.empty();
+        }
+
         if (forgeroToolCompound.contains(FORGERO_TOOL_IDENTIFIER)) {
             forgeroToolCompound = itemStackCompound.getCompound(FORGERO_TOOL_IDENTIFIER);
         }
-        if (!(baseItem instanceof ForgeroTool) || forgeroToolCompound == null || forgeroToolCompound.isEmpty()) {
-            LOGGER.warn("Cannot create Tool, as the ItemStack is not a ForgeroTool, the NbtCompound is null or empty, returning empty");
+        if (!forgeroToolCompound.contains(ForgeroToolPartCreator.TOOL_PART_HEAD_IDENTIFIER) && !forgeroToolCompound.contains(ForgeroToolPartCreator.TOOL_PART_HANDLE_IDENTIFIER)) {
             return Optional.empty();
         }
 
@@ -72,7 +76,6 @@ public class ForgeroToolCreator {
         Optional<ForgeroToolPart> toolPartHandle = ForgeroToolPartCreator.createToolPart(forgeroToolCompound.getCompound(ForgeroToolPartCreator.TOOL_PART_HANDLE_IDENTIFIER));
         if (toolPartHead.isEmpty() || toolPartHandle.isEmpty()) {
             LOGGER.warn("Cannot create Tool as the head or the handle is empty: Tool head present: {}, Tool handle present: {}", toolPartHead.isPresent(), toolPartHandle.isPresent());
-            LOGGER.warn(forgeroToolCompound.getKeys().toString());
             return Optional.empty();
         }
 

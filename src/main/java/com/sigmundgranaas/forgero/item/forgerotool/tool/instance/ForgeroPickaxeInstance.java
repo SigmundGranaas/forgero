@@ -17,7 +17,7 @@ public class ForgeroPickaxeInstance extends ForgeroToolInstance {
     }
 
     public float getMiningSpeedMultiplier() {
-        return 2.0F;
+        return 100.0F;
     }
 
     public float getDamageMultiplier() {
