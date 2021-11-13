@@ -86,8 +86,8 @@ public class ForgeroToolModel implements UnbakedModel, BakedModel, FabricBakedMo
         if (item instanceof ForgeroTool) {
             ForgeroToolPartItem head = ((ForgeroTool) item).getToolHead();
             ForgeroToolPartItem handle = ((ForgeroTool) item).getToolHandle();
-            itemHead = partModels.getModel(head.getToolPartTypeAndMaterialLowerCase());
-            itemHandle = partModels.getModel(handle.getToolPartTypeAndMaterialLowerCase());
+            itemHead = partModels.getModel(head.getToolPartTypeAndMaterialLowerCase() + "_toolpart");
+            itemHandle = partModels.getModel(handle.getToolPartTypeAndMaterialLowerCase() + "_toolpart");
 
             NbtCompound nbt = stack.getNbt();
             if (nbt != null) {

@@ -17,7 +17,7 @@ public class PickaxeBindingModel extends AbstractDynamicModel {
 
     @Override
     public ModelIdentifier getModelIdentifier() {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, getToolpart().getToolPartTypeAndMaterialLowerCase() + "_pickaxe", "inventory");
+        return new ModelIdentifier(Forgero.MOD_NAMESPACE, super.itemPartModelIdentifier() + "_pickaxe", "inventory");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class PickaxeBindingModel extends AbstractDynamicModel {
     @Override
     protected JsonObject getTextures() {
         JsonObject textures = new JsonObject();
-        String texture = Forgero.MOD_NAMESPACE + ":item/" + super.getToolpart().getToolPartTypeAndMaterialLowerCase();
+        String texture = super.getTexture();
         textures.addProperty("0", texture);
         textures.addProperty("particle", texture);
         return textures;

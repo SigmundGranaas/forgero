@@ -47,12 +47,21 @@ public abstract class AbstractDynamicModel implements DynamicModel {
 
     @Override
     public ModelIdentifier getModelIdentifier() {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, toolpart.getToolPartTypeAndMaterialLowerCase(), "inventory");
+        return new ModelIdentifier(Forgero.MOD_NAMESPACE, itemPartModelIdentifier(), "inventory");
     }
 
     abstract protected JsonArray getElements();
 
     abstract protected JsonObject getTextures();
+
+    @Override
+    public String itemPartModelIdentifier() {
+        return toolpart.getToolPartTypeAndMaterialLowerCase() + "_toolpart";
+    }
+
+    protected String getTexture() {
+        return Forgero.MOD_NAMESPACE + ":item/" + itemPartModelIdentifier().replace("_toolpart", "");
+    }
 
     @Override
     @Nullable

@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.handle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.AbstractDynamicModel;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 
@@ -20,7 +19,7 @@ public class HandleModel extends AbstractDynamicModel {
 
     protected JsonObject getTextures() {
         JsonObject textures = new JsonObject();
-        String texture = Forgero.MOD_NAMESPACE + ":item/" + super.getToolpart().getToolPartTypeAndMaterialLowerCase();
+        String texture = super.getTexture();
         textures.addProperty("0", texture);
         textures.addProperty("particle", texture);
         return textures;
