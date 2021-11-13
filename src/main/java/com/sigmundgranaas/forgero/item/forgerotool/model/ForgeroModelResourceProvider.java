@@ -9,9 +9,9 @@ import net.minecraft.client.util.ModelIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 public class ForgeroModelResourceProvider implements ModelVariantProvider {
-    private final ForgeroPartModels partModels;
+    private final ToolPartModelManager partModels;
 
-    public ForgeroModelResourceProvider(ForgeroPartModels partModels) {
+    public ForgeroModelResourceProvider(ToolPartModelManager partModels) {
         this.partModels = partModels;
     }
 

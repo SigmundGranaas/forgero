@@ -2,7 +2,9 @@ package com.sigmundgranaas.forgero.item.forgerotool.model;
 
 import com.google.common.base.Charsets;
 import com.mojang.datafixers.util.Pair;
+import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
+import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
@@ -22,6 +24,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -33,11 +37,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ForgeroToolModel implements UnbakedModel, BakedModel, FabricBakedModel {
-    private final ForgeroPartModels partModels;
+    public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
+    private final ToolPartModelManager partModels;
     private HashMap<String, FabricBakedModel> BAKED_PART_MODELS = new HashMap<>();
     private Sprite sprite = null;
 
-    public ForgeroToolModel(ForgeroPartModels partModels) {
+    public ForgeroToolModel(ToolPartModelManager partModels) {
         this.partModels = partModels;
     }
 
@@ -79,21 +84,24 @@ public class ForgeroToolModel implements UnbakedModel, BakedModel, FabricBakedMo
         FabricBakedModel itemUpgrade = null;
         Item item = stack.getItem();
         if (item instanceof ForgeroTool) {
-            itemHead = BAKED_PART_MODELS.get(((ForgeroTool) item).getToolHead().getToolPartTypeAndMaterialLowerCase());
-            itemHandle = BAKED_PART_MODELS.get(((ForgeroTool) item).getToolHandle().getToolPartTypeAndMaterialLowerCase());
+            ForgeroToolPartItem head = ((ForgeroTool) item).getToolHead();
+            ForgeroToolPartItem handle = ((ForgeroTool) item).getToolHandle();
+            itemHead = partModels.getModel(head.getToolPartTypeAndMaterialLowerCase());
+            itemHandle = partModels.getModel(handle.getToolPartTypeAndMaterialLowerCase());
+
             NbtCompound nbt = stack.getNbt();
             if (nbt != null) {
-                itemBinding = BAKED_PART_MODELS.get(nbt.getString("binding"));
+                itemBinding = partModels.getModel(nbt.getString("binding"));
             }
         }
         if (itemHead != null || itemHandle != null) {
             assert itemHead != null;
             assert itemHandle != null;
-            itemHandle.emitItemQuads(null, null, context);
-            itemHead.emitItemQuads(null, null, context);
             if (itemBinding != null) {
                 itemBinding.emitItemQuads(null, null, context);
             }
+            itemHandle.emitItemQuads(null, null, context);
+            itemHead.emitItemQuads(null, null, context);
         }
     }
 
@@ -150,9 +158,7 @@ public class ForgeroToolModel implements UnbakedModel, BakedModel, FabricBakedMo
     @Nullable
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-        if (BAKED_PART_MODELS.isEmpty()) {
-            BAKED_PART_MODELS = partModels.getBakedPartModels(loader);
-        }
+        partModels.bakeToolPartModels(loader);
         return this;
     }
 }

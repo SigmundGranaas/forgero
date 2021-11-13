@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.item.forgerotool.recipe;
 
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroShovelItem;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.minecraft.inventory.CraftingInventory;
@@ -68,8 +69,9 @@ public class ForgeroToolWithBindingRecipe implements CraftingRecipe {
         String bindingType = ((ForgeroToolPartItem) binding.getMatchingStacks()[0].getItem()).getToolPartTypeAndMaterialLowerCase();
         if (this.itemOutput instanceof ForgeroShovelItem) {
             bindingType += "_shovel";
+        } else if (this.itemOutput instanceof ForgeroPickaxeItem) {
+            bindingType += "_pickaxe";
         }
-        System.out.println(bindingType);
         output.getOrCreateNbt().putString("binding", bindingType);
         return output;
     }

@@ -5,9 +5,9 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "ItemRenderContextMixin",
+    "ItemStackMixin",
     "ModelLoaderMixin",
-    "RecipeManagerMixin",
-    "ItemStackMixin"
+    "RecipeManagerMixin"
   ],
   "client": [
   ],
