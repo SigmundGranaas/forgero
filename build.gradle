@@ -88,7 +88,43 @@ publishing {
         // retrieving dependencies.
     }
 }
-
-test {
-    useJUnitPlatform()
+sourceSets {
+    forgero {
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
+    }
 }
+loom {
+    runs {
+        testmodClient {
+            client()
+            ideConfigGenerated project.rootProject == project
+            name = "Testmod Client"
+            source sourceSets.forgero
+        }
+        testmodServer {
+            server()
+            ideConfigGenerated project.rootProject == project
+            name = "Testmod Server"
+            source sourceSets.forgero
+        }
+        gametest {
+            inherit testmodServer
+
+            name "Game Test"
+
+            // Enable the gametest runner
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+            runDir "build/gametest"
+        }
+        autoTestServer {
+            inherit testmodServer
+
+            name "Auto Test Server"
+
+            vmArg "-Dfabric.autoTest"
+        }
+    }
+}
+test.dependsOn runGametest

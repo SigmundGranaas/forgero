@@ -43,12 +43,26 @@ public class ForgeroBaseToolRecipe implements CraftingRecipe {
         return head;
     }
 
-    @Override
-    public boolean matches(CraftingInventory inventory, World world) {
+    private boolean containsAdditionalItems(CraftingInventory inventory) {
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack currentItems = inventory.getStack(i);
-            if (head.test(inventory.getStack(i + 3)) && handle.test(currentItems)) {
+            if (!handle.test(currentItems) || !head.test(currentItems)) {
+                LOGGER.info(currentItems.toString());
                 return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean matches(CraftingInventory inventory, World world) {
+        if (containsAdditionalItems(inventory)) {
+            return false;
+        }
+        for (int i = 0; i < inventory.size(); ++i) {
+            ItemStack currentItems = inventory.getStack(i);
+            if (head.test(inventory.getStack(i + 2)) && handle.test(currentItems)) {
+                return i != 0 && i != 3 && i != 6;
             }
         }
         return false;
@@ -62,8 +76,8 @@ public class ForgeroBaseToolRecipe implements CraftingRecipe {
         ItemStack handleItem = null;
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack currentItems = inventory.getStack(i);
-            if (head.test(inventory.getStack(i + 3)) && handle.test(currentItems)) {
-                handleItem = inventory.getStack(i + 3);
+            if (head.test(inventory.getStack(i + 2)) && handle.test(currentItems)) {
+                handleItem = inventory.getStack(i + 2);
                 headItem = inventory.getStack(i);
             }
         }

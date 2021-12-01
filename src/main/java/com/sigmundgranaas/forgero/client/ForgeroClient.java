@@ -25,9 +25,6 @@ public class ForgeroClient implements ClientModInitializer {
             for (ForgeroToolPartItem part : initializer.getToolPartsBindings()) {
                 out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase(), "inventory"));
             }
-            for (ForgeroToolPartItem part : initializer.getToolPartsBindings()) {
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase() + "_shovel", "inventory"));
-            }
             for (ForgeroToolPartItem part : initializer.getToolPartsHandles()) {
                 out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase(), "inventory"));
             }

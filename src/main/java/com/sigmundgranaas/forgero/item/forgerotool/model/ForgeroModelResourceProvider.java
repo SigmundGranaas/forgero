@@ -15,7 +15,6 @@ public class ForgeroModelResourceProvider implements ModelVariantProvider {
         this.partModels = partModels;
     }
 
-
     @Override
     public @Nullable UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) throws ModelProviderException {
         if (modelId.getNamespace().equals(Forgero.MOD_NAMESPACE) && modelId.getPath().startsWith("pickaxe") || modelId.getPath().startsWith("shovel")) {

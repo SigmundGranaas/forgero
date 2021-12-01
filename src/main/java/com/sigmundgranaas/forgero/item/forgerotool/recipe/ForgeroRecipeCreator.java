@@ -151,8 +151,9 @@ public class ForgeroRecipeCreator {
                     //The items/tags we are using as input.
                     Lists.newArrayList(element), //Whether the input we provided is a tag or an item.
                     Lists.newArrayList(
-                            " #",
-                            "# "
+                            "  #",
+                            " # ",
+                            "#  "
 
                     ), //The crafting pattern.
                     new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_handle") //The crafting output
