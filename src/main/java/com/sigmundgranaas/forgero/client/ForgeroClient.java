@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.client;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.ItemInitializer;
 import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
-import com.sigmundgranaas.forgero.item.forgerotool.model.ForgeroModelResourceProvider;
-import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelManager;
+import com.sigmundgranaas.forgero.item.forgerotool.model.ForgeroToolModelProvider;
+import com.sigmundgranaas.forgero.item.forgerotool.model.ToolModel3DManager;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -32,7 +32,7 @@ public class ForgeroClient implements ClientModInitializer {
                 out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase(), "inventory"));
             }
         });
-        ToolPartModelManager partModels = new ToolPartModelManager(initializer.getToolPartsHandles(), initializer.getToolPartsHeads(), initializer.getToolPartsBindings());
-        ModelLoadingRegistry.INSTANCE.registerVariantProvider(rm -> new ForgeroModelResourceProvider(partModels));
+        ToolModel3DManager partModels = new ToolModel3DManager(initializer.getToolPartsHandles(), initializer.getToolPartsHeads(), initializer.getToolPartsBindings());
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(rm -> new ForgeroToolModelProvider(partModels));
     }
 }

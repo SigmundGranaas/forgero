@@ -5,11 +5,9 @@ import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 
 /**
- * An interface used to create models which should be rendered dynamically next to other models.
+ * An interface used to create toolpart models which should be rendered dynamically next to other models.
  */
 public interface DynamicModel extends UnbakedModel {
-
-
     /**
      * Method for return a Json representation of the model which has been created
      *

@@ -94,14 +94,9 @@ sourceSets {
         runtimeClasspath += main.runtimeClasspath
     }
 }
+
 loom {
     runs {
-        testmodClient {
-            client()
-            ideConfigGenerated project.rootProject == project
-            name = "Testmod Client"
-            source sourceSets.forgero
-        }
         testmodServer {
             server()
             ideConfigGenerated project.rootProject == project

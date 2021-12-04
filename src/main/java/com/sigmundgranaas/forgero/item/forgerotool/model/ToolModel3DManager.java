@@ -1,37 +1,64 @@
 package com.sigmundgranaas.forgero.item.forgerotool.model;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.Dynamic3DModelFactory;
 import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.DynamicModel;
 import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.DynamicModelFactory;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.ModelRotation;
 import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
-public class ToolPartModelManager {
+public class ToolModel3DManager implements ToolModelManager {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
     private final List<ForgeroToolPartItem> handles;
     private final List<ForgeroToolPartItem> heads;
     private final List<ForgeroToolPartItem> bindings;
-
     private final HashMap<String, FabricBakedModel> models = new HashMap<>();
+    private final DynamicModelFactory factory = new Dynamic3DModelFactory();
 
-    public ToolPartModelManager(List<ForgeroToolPartItem> handles, List<ForgeroToolPartItem> heads, List<ForgeroToolPartItem> bindings) {
+    public ToolModel3DManager(List<ForgeroToolPartItem> handles, List<ForgeroToolPartItem> heads, List<ForgeroToolPartItem> bindings) {
         this.handles = handles;
         this.heads = heads;
         this.bindings = bindings;
     }
 
-    @Nullable
-    public FabricBakedModel getModel(String id) {
-        return models.get(id);
+    @Override
+    public Optional<FabricBakedModel> getModel(@NotNull ItemStack tool) {
+        Item item = tool.getItem();
+        assert item instanceof ForgeroTool;
+
+        FabricBakedModel itemHead = null;
+        FabricBakedModel itemHandle = null;
+
+        ForgeroToolPartItem head = ((ForgeroTool) item).getToolHead();
+        ForgeroToolPartItem handle = ((ForgeroTool) item).getToolHandle();
+        itemHead = models.get(head.getToolPartTypeAndMaterialLowerCase() + "_toolpart");
+        itemHandle = models.get(handle.getToolPartTypeAndMaterialLowerCase() + "_toolpart");
+
+        FabricBakedModel itemBinding = null;
+
+        NbtCompound nbt = tool.getNbt();
+        if (nbt != null) {
+            itemBinding = models.get(nbt.getString("binding"));
+        }
+
+        if (itemHead != null && itemHandle != null) {
+            return Optional.of(new ForgeroBakedToolModel3D(itemHead, itemHandle, itemBinding));
+        }
+        return Optional.empty();
     }
 
     public HashMap<String, FabricBakedModel> getBakedPartModels(ModelLoader loader) {
@@ -52,27 +79,29 @@ public class ToolPartModelManager {
         return PART_MODELS;
     }
 
-    public void bakeToolPartModels(ModelLoader loader) {
-        if (models.isEmpty()) {
-            bakeModels(loader);
-        }
-    }
-
-    private void bakeModels(ModelLoader loader) {
+    private void bakeAllModels(ModelLoader loader) {
         for (ForgeroToolPartItem part : bindings) {
-            DynamicModel[] models = DynamicModelFactory.createModels(part);
+            DynamicModel[] models = factory.createModels(part);
             for (DynamicModel model : models) {
                 this.models.put(model.getModelIdentifier().getPath(), (FabricBakedModel) model.bake(loader, null, null, null));
             }
         }
         for (ForgeroToolPartItem part : handles) {
-            DynamicModel[] models = DynamicModelFactory.createModels(part);
+            DynamicModel[] models = factory.createModels(part);
             this.models.put(models[0].getModelIdentifier().getPath(), (FabricBakedModel) models[0].bake(loader, null, null, null));
 
         }
         for (ForgeroToolPartItem part : heads) {
-            DynamicModel[] models = DynamicModelFactory.createModels(part);
+            DynamicModel[] models = factory.createModels(part);
             this.models.put(models[0].getModelIdentifier().getPath(), (FabricBakedModel) models[0].bake(loader, null, null, null));
+        }
+    }
+
+
+    @Override
+    public void bakeModels(ModelLoader loader) {
+        if (models.isEmpty()) {
+            bakeAllModels(loader);
         }
     }
 }
