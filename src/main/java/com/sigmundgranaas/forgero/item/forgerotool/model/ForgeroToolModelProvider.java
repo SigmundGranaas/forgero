@@ -7,15 +7,12 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import org.jetbrains.annotations.Nullable;
 
-public class ForgeroToolModelProvider implements ModelVariantProvider {
-    private final ToolModelManager modelManager;
-
-    public ForgeroToolModelProvider(ToolModelManager modelManager) {
-        this.modelManager = modelManager;
-    }
+public record ForgeroToolModelProvider(
+        ToolModelManager modelManager) implements ModelVariantProvider {
 
     @Override
-    public @Nullable UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
+    public @Nullable
+    UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
         if (modelId.getNamespace().equals(Forgero.MOD_NAMESPACE) && modelId.getPath().startsWith("pickaxe") || modelId.getPath().startsWith("shovel")) {
             return new ForgeroToolModel(modelManager);
         }

@@ -7,8 +7,8 @@ import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.head.Picka
 import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.head.ShovelHeadModel;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 
-public class Dynamic3DModelFactory implements DynamicModelFactory {
-    public DynamicModel[] createModels(ForgeroToolPartItem toolPartItem) {
+public class Dynamic3DModelFactory {
+    public static DynamicModel[] createModel(ForgeroToolPartItem toolPartItem) {
         String toolPartPath = toolPartItem.getIdentifier().getPath();
         if (toolPartPath.contains("handle")) {
             DynamicModel handle = new HandleModel(toolPartItem);
