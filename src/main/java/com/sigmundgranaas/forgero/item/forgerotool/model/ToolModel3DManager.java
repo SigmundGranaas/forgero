@@ -9,7 +9,10 @@ import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.ModelRotation;
+import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -20,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class ToolModel3DManager implements ToolModelManager {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
@@ -78,7 +82,7 @@ public class ToolModel3DManager implements ToolModelManager {
         return PART_MODELS;
     }
 
-    private void bakeAllModels(ModelLoader loader) {
+    private void bakeAllModels(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter) {
         for (ForgeroToolPartItem part : bindings) {
             DynamicModel[] models = Dynamic3DModelFactory.createModel(part);
             for (DynamicModel model : models) {
@@ -97,9 +101,19 @@ public class ToolModel3DManager implements ToolModelManager {
     }
 
     @Override
-    public void bakeModels(ModelLoader loader) {
+    public void bakeModels(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter) {
         if (models.isEmpty()) {
-            bakeAllModels(loader);
+            bakeAllModels(loader, textureGetter);
         }
+    }
+
+    @Override
+    public UnbakedModel getUnbakedModel(ModelIdentifier id) {
+        return new ForgeroToolModel(this);
+    }
+
+    @Override
+    public boolean isQualifiedModelManager(ModelIdentifier id) {
+        return false;
     }
 }

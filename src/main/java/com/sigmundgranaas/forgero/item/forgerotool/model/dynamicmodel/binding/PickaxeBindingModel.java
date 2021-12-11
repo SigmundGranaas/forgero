@@ -22,7 +22,7 @@ public class PickaxeBindingModel extends AbstractDynamicModel {
 
     @Override
     protected JsonArray getElements() {
-        return (JsonArray) new JsonParser().parse(ELEMENTS);
+        return new JsonParser().parse(ELEMENTS).getAsJsonArray();
     }
 
     @Override

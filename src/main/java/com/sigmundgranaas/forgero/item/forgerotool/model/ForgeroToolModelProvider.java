@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.item.forgerotool.model;
 
-import com.sigmundgranaas.forgero.Forgero;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -13,7 +12,7 @@ public record ForgeroToolModelProvider(
     @Override
     public @Nullable
     UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
-        if (modelId.getNamespace().equals(Forgero.MOD_NAMESPACE) && modelId.getPath().startsWith("pickaxe") || modelId.getPath().startsWith("shovel")) {
+        if (modelManager.isQualifiedModelManager(modelId)) {
             return new ForgeroToolModel(modelManager);
         }
         return null;

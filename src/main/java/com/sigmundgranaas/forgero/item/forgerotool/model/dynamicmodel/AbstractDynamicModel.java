@@ -78,7 +78,9 @@ public abstract class AbstractDynamicModel implements DynamicModel {
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
         LOGGER.debug("baking: {}", this.getModelIdentifier());
-        ((GeneratedJsonLoader) loader).loadGeneratedJson(this.buildUnbakedJsonModel(), this.getModelIdentifier());
+        JsonUnbakedModel model = this.buildUnbakedJsonModel();
+        ModelIdentifier id = this.getModelIdentifier();
+        ((GeneratedJsonLoader) loader).loadGeneratedJson(model, id);
         return loader.bake(this.getModelIdentifier(), ModelRotation.X0_Y0);
     }
 }

@@ -33,7 +33,7 @@ public class ForgeroToolModel extends AbstractForgeroToolModel {
     @Nullable
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-        modelManager.bakeModels(loader);
+        modelManager.bakeModels(loader, textureGetter);
         return this;
     }
 }

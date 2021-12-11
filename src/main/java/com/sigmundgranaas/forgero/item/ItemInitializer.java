@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.forgerotool.Modifier.ForgeroModifierItem;
+import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroShovelItem;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
@@ -17,15 +18,23 @@ public class ItemInitializer {
     public static List<Item> tools;
     public static List<ForgeroToolPartItem> toolPartsBindings;
     public static List<Item> modifiers;
+    private static ItemInitializer initializer = null;
     public final List<ToolMaterial> materials;
 
-    public ItemInitializer(List<ToolMaterial> materials) {
-        this.materials = materials;
+    private ItemInitializer() {
+        this.materials = ForgeroToolMaterial.getMaterialList();
         toolPartsHandles = initializeHandles();
         toolPartsHeads = initializeHeads();
         tools = initializeTools(toolPartsHandles, toolPartsHeads);
         toolPartsBindings = initializeBindings();
         modifiers = initializeModifiers();
+    }
+
+    public static ItemInitializer getInstance() {
+        if (initializer == null) {
+            initializer = new ItemInitializer();
+        }
+        return initializer;
     }
 
     private List<Item> initializeModifiers() {

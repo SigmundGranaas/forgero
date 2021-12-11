@@ -49,6 +49,7 @@ public class ModelLoaderMixin implements GeneratedJsonLoader {
     @Override
     public void loadGeneratedJson(JsonUnbakedModel unbakedModel, ModelIdentifier id) {
         this.unbakedModels.put(id, unbakedModel);
+        this.unbakedModels.put(new Identifier(id.getNamespace(), "item/" + id.getPath()), unbakedModel);
         this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
     }
 }

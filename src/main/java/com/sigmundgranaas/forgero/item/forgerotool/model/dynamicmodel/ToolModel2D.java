@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import net.minecraft.client.render.model.*;
+import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.ModelIdentifier;
@@ -21,7 +22,8 @@ import java.util.function.Function;
 
 public class ToolModel2D implements DynamicModel {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
-    private ForgeroTool tool;
+    private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
+    protected final ForgeroTool tool;
 
     public ToolModel2D(ForgeroTool tool) {
         this.tool = tool;
@@ -30,14 +32,13 @@ public class ToolModel2D implements DynamicModel {
     @Override
     public String BuildJsonModel() {
         JsonObject model = new JsonObject();
-        model.addProperty("parent", "item/generated");
+        model.addProperty("parent", "builtin/generated");
         model.add("textures", this.getTextures());
         model.addProperty("gui_light", "front");
         return model.toString();
-
     }
 
-    private JsonElement getTextures() {
+    protected JsonElement getTextures() {
         JsonObject textures = new JsonObject();
         String headTexture = getTextureBase() + tool.getToolHead().getToolPartTypeAndMaterialLowerCase();
         String handleTexture = getTextureBase() + tool.getToolHandle().getToolPartTypeAndMaterialLowerCase();
@@ -47,7 +48,7 @@ public class ToolModel2D implements DynamicModel {
         return textures;
     }
 
-    private String getTextureBase() {
+    protected String getTextureBase() {
         return Forgero.MOD_NAMESPACE + ":item/";
     }
 
@@ -80,8 +81,10 @@ public class ToolModel2D implements DynamicModel {
     @Nullable
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-        LOGGER.debug("baking: {}", this.getModelIdentifier());
-        ((GeneratedJsonLoader) loader).loadGeneratedJson(this.buildUnbakedJsonModel(), this.getModelIdentifier());
-        return loader.bake(this.getModelIdentifier(), ModelRotation.X0_Y0);
+        JsonUnbakedModel model = this.buildUnbakedJsonModel();
+        ModelIdentifier id = (ModelIdentifier) this.tool.getIdentifier();
+        JsonUnbakedModel generated_model = ITEM_MODEL_GENERATOR.create(textureGetter, model);
+        ((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
+        return loader.bake(id, ModelRotation.X0_Y0);
     }
 }
