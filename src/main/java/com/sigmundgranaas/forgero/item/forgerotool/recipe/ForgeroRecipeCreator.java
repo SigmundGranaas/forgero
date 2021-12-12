@@ -247,11 +247,11 @@ public class ForgeroRecipeCreator {
             for (ForgeroToolPartItem head : ItemInitializer.toolPartsHeads) {
                 JsonObject recipe;
                 switch (head.getToolPartType()) {
-                    case PICKAXE_HEAD -> {
+                    case PICKAXEHEAD -> {
                         recipe = createForgeroBaseToolRecipeJson(head, handle, "pickaxe");
                         map.put(new Identifier(Forgero.MOD_NAMESPACE, "pickaxe_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase()), recipe);
                     }
-                    case SHOVEL_HEAD -> {
+                    case SHOVELHEAD -> {
                         recipe = createForgeroBaseToolRecipeJson(head, handle, "shovel");
                         map.put(new Identifier(Forgero.MOD_NAMESPACE, "shovel_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase()), recipe);
                     }
@@ -267,11 +267,11 @@ public class ForgeroRecipeCreator {
                 for (ForgeroToolPartItem binding : ItemInitializer.toolPartsBindings) {
                     JsonObject recipe;
                     switch (head.getToolPartType()) {
-                        case PICKAXE_HEAD -> {
+                        case PICKAXEHEAD -> {
                             recipe = createForgeroToolWithBinding(head, handle, binding, "pickaxe");
                             map.put(new Identifier(Forgero.MOD_NAMESPACE, "pickaxe_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase() + "_" + binding.getToolPartTypeAndMaterialLowerCase()), recipe);
                         }
-                        case SHOVEL_HEAD -> {
+                        case SHOVELHEAD -> {
                             recipe = createForgeroToolWithBinding(head, handle, binding, "shovel");
                             map.put(new Identifier(Forgero.MOD_NAMESPACE, "shovel_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase() + "_" + binding.getToolPartTypeAndMaterialLowerCase()), recipe);
                         }

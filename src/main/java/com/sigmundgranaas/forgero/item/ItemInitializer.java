@@ -58,9 +58,9 @@ public class ItemInitializer {
     private List<ForgeroToolPartItem> initializeHeads() {
         List<ForgeroToolPartItem> items = new ArrayList<>();
         for (ToolMaterial material : materials) {
-            ForgeroToolPartItem toolPartItem1 = new ForgeroToolPartItem(new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOL_PARTS), material, ForgeroToolPartTypes.PICKAXE_HEAD);
+            ForgeroToolPartItem toolPartItem1 = new ForgeroToolPartItem(new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOL_PARTS), material, ForgeroToolPartTypes.PICKAXEHEAD);
             items.add(toolPartItem1);
-            ForgeroToolPartItem toolPartItem2 = new ForgeroToolPartItem(new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOL_PARTS), material, ForgeroToolPartTypes.SHOVEL_HEAD);
+            ForgeroToolPartItem toolPartItem2 = new ForgeroToolPartItem(new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOL_PARTS), material, ForgeroToolPartTypes.SHOVELHEAD);
             items.add(toolPartItem2);
         }
         return items;
@@ -81,8 +81,8 @@ public class ItemInitializer {
             for (ForgeroToolPartItem handle : toolHandles) {
                 Item tool;
                 switch (head.getToolPartType()) {
-                    case SHOVEL_HEAD -> tool = new ForgeroShovelItem(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
-                    case PICKAXE_HEAD -> tool = new ForgeroPickaxeItem(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
+                    case SHOVELHEAD -> tool = new ForgeroShovelItem(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
+                    case PICKAXEHEAD -> tool = new ForgeroPickaxeItem(head.getMaterial(), 7, 5, new Item.Settings().group(ForgeroItemGroups.FORGERO_TOOLS), head, handle);
                     default -> throw new IllegalStateException("Unexpected value: " + head.getToolPartType());
                 }
                 items.add(tool);

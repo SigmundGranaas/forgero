@@ -56,7 +56,7 @@
   },
   {
     "name": "Diamond",
-    "type": "organic",
+    "type": "metal",
     "weight": 50,
     "stiffness": 95,
     "durability": 1561,
@@ -78,7 +78,7 @@
   },
   {
     "name": "Netherite",
-    "type": "metal",
+    "type": "organic",
     "weight": 60,
     "stiffness": 100,
     "durability": 2031,
