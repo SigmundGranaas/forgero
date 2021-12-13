@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin {
@@ -25,7 +26,7 @@ public abstract class ReloadableResourceManagerImplMixin {
     public abstract Resource getResource(Identifier id) throws IOException;
 
     @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
-    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
+    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException, URISyntaxException {
         String[] segments = id.getPath().split("/");
         String path = segments[segments.length - 1];
 

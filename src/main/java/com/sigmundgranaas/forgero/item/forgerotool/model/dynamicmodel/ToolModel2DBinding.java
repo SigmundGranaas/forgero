@@ -6,6 +6,8 @@ import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroMiningTool;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 
+import java.util.Locale;
+
 public class ToolModel2DBinding extends ToolModel2D {
     private final ForgeroToolPartItem binding;
 
@@ -18,7 +20,9 @@ public class ToolModel2DBinding extends ToolModel2D {
     @Override
     protected JsonElement getTextures() {
         JsonObject textures = super.getTextures().getAsJsonObject();
-        textures.addProperty("layer2", super.getTextureBase() + binding.getToolPartTypeAndMaterialLowerCase());
+        if (tool instanceof ForgeroMiningTool) {
+            textures.addProperty("layer2", super.getTextureBase() + ((ForgeroMiningTool) tool).getItemType().toString().toUpperCase(Locale.ROOT) + binding.getToolPartTypeAndMaterialLowerCase());
+        }
         return textures;
     }
 

@@ -6,6 +6,7 @@ public class Constants {
     public static final String AXEHEAD_FILENAME = "axehead";
     public static final String SHOVELHEAD_FILENAME = "shovelhead";
     public static final String PICKAXEHEAD_FILENAME = "pickaxehead";
+    public static final String BINDING_FILENAME = "binding";
 
     // Materials
     public static final String BIRCH_FILENAME = "birch";
@@ -15,8 +16,19 @@ public class Constants {
     //Identifier
     public static final String COLOR_IDENTIFIER = "_color";
     public static final String BASE_IDENTIFIER = "_base";
-    
+
     //Paths
-    public static final String ASSETS_PATH = "src/main/resources/assets/";
-    public static final String CONFIG_PATH = "src/main/resources/config/";
+    public static final String ASSETS_PATH = "/src/main/resources/assets/";
+    public static final String CONFIG_PATH = "resources/config/";
+
+
+    //Materials
+    public static final String OAK = "OAK";
+    public static final String SPRUCE = "SPRUCE";
+    public static final String BIRCH = "BIRCH";
+    public static final String STONE = "STONE";
+    public static final String IRON = "IRON";
+    public static final String GOLD = "GOLD";
+    public static final String DIAMOND = "DIAMOND";
+    public static final String NETHERITE = "NETHERITE";
 }

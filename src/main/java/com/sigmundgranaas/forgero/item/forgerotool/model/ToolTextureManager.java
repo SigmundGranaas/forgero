@@ -2,10 +2,9 @@ package com.sigmundgranaas.forgero.item.forgerotool.model;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.Constants;
+import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.ToolMaterials;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -13,14 +12,18 @@ import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.HashMap;
-import java.util.Optional;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.*;
 
 public class ToolTextureManager {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
     private static ToolTextureManager manager = null;
-    private final HashMap<ToolMaterial, MaterialColourPalette> materialPalettes = new HashMap<>();
+    private final HashMap<String, MaterialColourPalette> materialPalettes = new HashMap<>();
     private final HashMap<ForgeroToolPartTypes, BaseTexture> templateTextures = new HashMap<>();
 
     public static ToolTextureManager getInstance() {
@@ -38,7 +41,7 @@ public class ToolTextureManager {
      * @param getResource A method for accessing the potential resource dependency
      * @throws IOException If a resource is not found, an IOException will be thrown.
      */
-    public void createTextureDependencies(Identifier id, BiConsumer_WithExceptions<Identifier, Resource> getResource) throws IOException {
+    public void createTextureDependencies(Identifier id, BiConsumer_WithExceptions<Identifier, Resource> getResource) throws IOException, URISyntaxException {
         if (resourceExists(id)) {
             return;
         }
@@ -57,58 +60,70 @@ public class ToolTextureManager {
         try {
             writeTextureToFile(id, recolouredTexture);
         } catch (Exception e) {
-
-        }
-
-        Resource plankTexture = getResource.apply(new Identifier("minecraft:textures/item/birch_boat.png"));
-        InputStream stream = plankTexture.getInputStream();
-        BufferedImage texture;
-        ImageIO.setUseCache(false);
-
-
-        try {
-            texture = ImageIO.read(stream);
-        } catch (IOException e) {
-
+            LOGGER.warn(e);
+            return;
         }
     }
 
-    private void writeTextureToFile(Identifier id, BufferedImage recolouredTexture) {
+    private void writeTextureToFile(Identifier id, BufferedImage recolouredTexture) throws IOException, URISyntaxException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource("assets/forgero");
+        ImageIO.setUseCache(false);
+        File targetFile = new File(resource.toURI() + "/" + getFileNameFromId(id));
+        targetFile.getParentFile().mkdirs();
+        if (targetFile.createNewFile()) {
+            ImageIO.write(recolouredTexture, "PNG", targetFile);
+        }
     }
 
 
     private Optional<MaterialColourPalette> getOrCreateMaterialPalette(Identifier id, BiConsumer_WithExceptions<Identifier, Resource> getResource) {
         String toolPartName = getResourceNameFromID(id);
-        Optional<ToolMaterial> materialResult = ForgeroToolPartItem.getMaterialFromFileName(toolPartName);
+        Optional<String> materialResult = ForgeroToolPartItem.getMaterialFromFileName(toolPartName);
         if (materialResult.isEmpty()) {
             return Optional.empty();
         }
-        ToolMaterial material = materialResult.get();
+        String material = materialResult.get();
         if (materialPalettes.containsKey(material)) {
             return Optional.of(materialPalettes.get(material));
         }
 
-        Identifier materialDependencyIdentifier = getMaterialDependencyFromMaterial(material);
+        List<Identifier> materialDependencyIdentifiers = getMaterialDependencyFromMaterial(material);
 
         try {
-            Resource materialTexture = getResource.apply(materialDependencyIdentifier);
-            BufferedInputStream materialTextureStream = new BufferedInputStream(materialTexture.getInputStream());
-            BufferedImage materialTextureImage = ImageIO.read(materialTextureStream);
-            return Optional.of(MaterialColourPalette.createColourPalette(materialTextureImage));
+            List<BufferedImage> materialTextureImages = new ArrayList<>();
+
+            for (Identifier identifier : materialDependencyIdentifiers) {
+                Resource materialTexture = getResource.apply(identifier);
+                BufferedInputStream materialTextureStream = new BufferedInputStream(materialTexture.getInputStream());
+                BufferedImage materialTextureImage = ImageIO.read(materialTextureStream);
+                materialTextureImages.add(materialTextureImage);
+            }
+            MaterialColourPalette palette = MaterialColourPalette.createColourPalette(materialTextureImages);
+            writePaletteAsImage(palette.getColourValues(), new Identifier("forgero:textures/item/" + materialResult.get().toString().toLowerCase(Locale.ROOT) + ".png"));
+            return Optional.of(palette);
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
-    private Identifier getMaterialDependencyFromMaterial(ToolMaterial material) {
-        if (material == ToolMaterials.WOOD) {
-            return new Identifier("minecraft:textures/item/oak_boat.png");
-        } else {
-            return new Identifier("minecraft:textures/item/iron_armor.png");
+    private void writePaletteAsImage(int[] palette, Identifier id) {
+        try {
+            BufferedImage paletteImage = new BufferedImage(palette.length, 1, BufferedImage.TYPE_INT_ARGB);
+            for (int x = 0; x < palette.length; x++) {
+                paletteImage.setRGB(x, 0, palette[x]);
+            }
+            writeTextureToFile(id, paletteImage);
+        } catch (Exception e) {
+            LOGGER.warn(e);
         }
     }
 
-    private Optional<BaseTexture> getOrCreateTemplateTexture(Identifier id) {
+    private List<Identifier> getMaterialDependencyFromMaterial(String material) {
+        return ForgeroToolMaterial.getMaterialRepresentations(material);
+    }
+
+    private Optional<BaseTexture> getOrCreateTemplateTexture(Identifier id) throws URISyntaxException {
         String fileName = getResourceNameFromID(id);
         Optional<ForgeroToolPartTypes> toolPartResult = ForgeroToolPartItem.getToolPartTypeFromFileName(fileName);
 
@@ -128,22 +143,32 @@ public class ToolTextureManager {
         }
         BaseTexture baseTexture = BaseTextureResult.get();
         templateTextures.put(toolPart, baseTexture);
+
+        writePaletteAsImage(baseTexture.getGreyScaleValues(), new Identifier("forgero:textures/item/" + toolPart.toString().toLowerCase() + "_template.png"));
         return Optional.of(baseTexture);
     }
 
-    private Optional<BaseTexture> createBaseTexture(ForgeroToolPartTypes toolPart) {
+    private Optional<BaseTexture> createBaseTexture(ForgeroToolPartTypes toolPart) throws URISyntaxException {
         String textureName = getTextureNameFromToolPart(toolPart);
         String baseTextureName = textureName + Constants.BASE_IDENTIFIER;
-        String baseTextureFullPath = Constants.CONFIG_PATH + "templates/toolparts/" + baseTextureName + ".png";
+        String baseTextureFullPath = "config/templates/toolparts/" + baseTextureName + ".png";
 
-        File targetFile = new File(baseTextureFullPath);
+        File targetFile;
+
+        try {
+            targetFile = getFileFromResource(baseTextureFullPath);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+
+
         if (!targetFile.exists()) {
             return Optional.empty();
         }
 
         BufferedImage templateImage;
         try {
-            BufferedInputStream imageStream = new BufferedInputStream(new FileInputStream(baseTextureFullPath));
+            BufferedInputStream imageStream = new BufferedInputStream(new FileInputStream(targetFile));
             templateImage = ImageIO.read(imageStream);
 
         } catch (IOException e) {
@@ -164,6 +189,7 @@ public class ToolTextureManager {
             case PICKAXEHEAD -> Constants.PICKAXEHEAD_FILENAME;
             case SHOVELHEAD -> Constants.SHOVELHEAD_FILENAME;
             case HANDLE -> Constants.FULLHANDLE_FILENAME;
+            case BINDING -> Constants.BINDING_FILENAME;
             default -> "";
         };
     }
@@ -183,6 +209,16 @@ public class ToolTextureManager {
 
     private String getFileNameFromId(Identifier id) {
         return id.getPath();
+    }
+
+    private File getFileFromResource(String fileName) throws URISyntaxException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("file not found! " + fileName);
+        } else {
+            return new File(resource.toURI());
+        }
     }
 
 

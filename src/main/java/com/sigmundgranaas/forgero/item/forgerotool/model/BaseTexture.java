@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.item.forgerotool.model;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 
@@ -12,9 +11,9 @@ import java.util.HashSet;
  */
 public class BaseTexture {
     private final ArrayList<PixelInformation> pixelValues;
-    private final Integer[] greyScaleValues;
+    private final int[] greyScaleValues;
 
-    private BaseTexture(ArrayList<PixelInformation> pixelValues, Integer[] greyScaleValues) {
+    private BaseTexture(ArrayList<PixelInformation> pixelValues, int[] greyScaleValues) {
         this.pixelValues = pixelValues;
         this.greyScaleValues = greyScaleValues;
     }
@@ -30,21 +29,35 @@ public class BaseTexture {
                 }
             }
         }
-        Integer[] greyScaleValues = greyScaleValueSet.toArray(Integer[]::new);
+        int[] greyScaleValues = greyScaleValueSet.stream().mapToInt(Integer::intValue).toArray();
+        greyScaleValues = MaterialColourPalette.sortRgbValues(greyScaleValues);
         return new BaseTexture(pixelValues, greyScaleValues);
     }
 
     public BufferedImage createRecolouredImage(MaterialColourPalette templatePalette) {
         int paletteSize = templatePalette.getColourValues().length;
         int greyScaleSize = greyScaleValues.length;
-        Integer[] palette = createUsableColourPalette(greyScaleSize, templatePalette);
+        int[] palette = createUsableColourPalette(greyScaleSize, templatePalette);
         assert greyScaleSize >= 2 && paletteSize >= 2;
 
-        BufferedImage recolouredImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
+        BufferedImage recolouredImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
         for (PixelInformation pixel : pixelValues) {
-            recolouredImage.setRGB(pixel.heightIndex(), pixel.getLengthIndex(), palette[Arrays.asList(greyScaleValues).indexOf(pixel.getRgbColor())]);
+            recolouredImage.setRGB(pixel.heightIndex(), pixel.getLengthIndex(), palette[findIntPosition(pixel.getRgbColor(), greyScaleValues)]);
         }
         return recolouredImage;
+    }
+
+    public int[] getGreyScaleValues() {
+        return greyScaleValues;
+    }
+
+    public int findIntPosition(int target, int[] reference) {
+        for (int i = 0; i < reference.length; i++) {
+            if (target == reference[i]) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -52,17 +65,24 @@ public class BaseTexture {
      *
      * @return A colour palette matching the original greyscale values
      */
-    private Integer[] createUsableColourPalette(int greyScaleSize, MaterialColourPalette palette) {
-        Integer[] colourList = new Integer[greyScaleSize];
+    private int[] createUsableColourPalette(int greyScaleSize, MaterialColourPalette palette) {
+        int[] colourList = new int[greyScaleSize];
+        if (greyScaleSize == palette.getColourValues().length) {
+            for (int i = 0; i < colourList.length; i++) {
+                colourList[i] = palette.getColourValues()[i];
+            }
+            return colourList;
+        }
+
         for (int i = 0; i < colourList.length; i++) {
-            float scaleValue = (float) i / (float) palette.getColourValues().length;
-            float normalized = scaleValue * greyScaleSize;
+            float scaleValue = (float) palette.getColourValues().length / (float) greyScaleSize;
+            float normalized = scaleValue * i;
             int newIndex = Math.round(normalized);
 
-            if (newIndex == 0) {
+            if (newIndex == 0 || i == 0) {
                 colourList[0] = palette.getColourValues()[0];
-            } else if (newIndex == colourList.length - 1) {
-                colourList[colourList.length - 1] = palette.getColourValues()[colourList.length - 1];
+            } else if (i == 1) {
+                colourList[1] = palette.getColourValues()[1];
             } else {
                 colourList[i] = palette.getColourValues()[newIndex];
             }

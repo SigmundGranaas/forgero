@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.item.forgerotool.toolpart;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.ForgeroItem;
 import com.sigmundgranaas.forgero.item.forgerotool.ForgeroItemTypes;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.Identifier;
@@ -33,13 +32,13 @@ public class ForgeroToolPartItem extends Item implements ForgeroItem {
         }
     }
 
-    public static Optional<ToolMaterial> getMaterialFromFileName(String fileName) {
+    public static Optional<String> getMaterialFromFileName(String fileName) {
         //TODO Add support for all materials???
         String[] elements = fileName.split("_");
         assert elements.length == 2;
         String material = elements[0];
         try {
-            return Optional.of(ForgeroToolMaterial.valueOf(material.toUpperCase(Locale.ROOT)));
+            return Optional.of(material.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             Forgero.LOGGER.warn(e);
             return Optional.empty();

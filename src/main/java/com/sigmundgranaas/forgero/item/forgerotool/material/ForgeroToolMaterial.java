@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.item.forgerotool.material;
 
+import com.sigmundgranaas.forgero.item.forgerotool.Constants;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +59,33 @@ public enum ForgeroToolMaterial implements ToolMaterial {
         materialList.put(ToolMaterials.GOLD.toString(), ToolMaterials.GOLD);
         materialList.put(ToolMaterials.STONE.toString(), ToolMaterials.STONE);
         return materialList;
+    }
+
+    public static List<Identifier> getMaterialRepresentations(String material) {
+        ToolMaterial toolMaterial = getMaterialMap().get(material);
+        return switch (toolMaterial.toString()) {
+            case Constants.OAK -> List.of(new Identifier("minecraft:textures/item/oak_boat.png"));
+            case Constants.SPRUCE -> List.of(new Identifier("minecraft:textures/item/spruce_boat.png"));
+            case Constants.BIRCH -> List.of(new Identifier("minecraft:textures/item/birch_boat.png"));
+            case Constants.DIAMOND -> List.of(new Identifier("minecraft:textures/item/diamond_chestplate.png"),
+                    new Identifier("minecraft:textures/item/diamond_helmet.png"),
+                    new Identifier("minecraft:textures/item/diamond.png"));
+            case Constants.IRON -> List.of(new Identifier("minecraft:textures/item/iron_chestplate.png"),
+                    new Identifier("minecraft:textures/item/iron_helmet.png"),
+                    new Identifier("minecraft:textures/item/iron_ingot.png"));
+            case Constants.NETHERITE -> List.of(new Identifier("minecraft:textures/item/netherite_chestplate.png"),
+                    new Identifier("minecraft:textures/item/netherite_helmet.png"),
+                    new Identifier("minecraft:textures/item/netherite_ingot.png"));
+            case Constants.GOLD -> List.of(new Identifier("minecraft:textures/item/golden_chestplate.png"),
+                    new Identifier("minecraft:textures/item/golden_helmet.png"),
+                    new Identifier("minecraft:textures/item/gold_ingot.png"));
+            case Constants.STONE -> List.of(new Identifier("minecraft:textures/block/stone.png"),
+                    new Identifier("minecraft:textures/block/cobblestone.png"));
+
+
+            default -> List.of(new Identifier("minecraft:textures/item/oak_boat.png"));
+        };
+
     }
 
     @Override
