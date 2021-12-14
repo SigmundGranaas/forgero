@@ -64,23 +64,49 @@ public enum ForgeroToolMaterial implements ToolMaterial {
     public static List<Identifier> getMaterialRepresentations(String material) {
         ToolMaterial toolMaterial = getMaterialMap().get(material);
         return switch (toolMaterial.toString()) {
-            case Constants.OAK -> List.of(new Identifier("minecraft:textures/item/oak_boat.png"));
-            case Constants.SPRUCE -> List.of(new Identifier("minecraft:textures/item/spruce_boat.png"));
-            case Constants.BIRCH -> List.of(new Identifier("minecraft:textures/item/birch_boat.png"));
+            case Constants.OAK -> List.of(new Identifier("minecraft:textures/item/oak_boat.png"), new Identifier("minecraft:textures/item/wooden_shovel.png"), new Identifier("minecraft:textures/block/oak_planks.png"));
+            case Constants.SPRUCE -> List.of(new Identifier("minecraft:textures/item/spruce_boat.png"), new Identifier("minecraft:textures/block/spruce_planks.png"));
+            case Constants.BIRCH -> List.of(new Identifier("minecraft:textures/item/birch_boat.png"), new Identifier("minecraft:textures/block/birch_planks.png"));
             case Constants.DIAMOND -> List.of(new Identifier("minecraft:textures/item/diamond_chestplate.png"),
                     new Identifier("minecraft:textures/item/diamond_helmet.png"),
-                    new Identifier("minecraft:textures/item/diamond.png"));
+                    new Identifier("minecraft:textures/item/diamond.png"), new Identifier("minecraft:textures/item/diamond_sword.png"), new Identifier("minecraft:textures/item/diamond_pickaxe.png"));
             case Constants.IRON -> List.of(new Identifier("minecraft:textures/item/iron_chestplate.png"),
                     new Identifier("minecraft:textures/item/iron_helmet.png"),
-                    new Identifier("minecraft:textures/item/iron_ingot.png"));
+                    new Identifier("minecraft:textures/item/iron_ingot.png"), new Identifier("minecraft:textures/item/iron_pickaxe.png"));
             case Constants.NETHERITE -> List.of(new Identifier("minecraft:textures/item/netherite_chestplate.png"),
                     new Identifier("minecraft:textures/item/netherite_helmet.png"),
-                    new Identifier("minecraft:textures/item/netherite_ingot.png"));
+                    new Identifier("minecraft:textures/item/netherite_ingot.png"), new Identifier("minecraft:textures/item/netherite_pickaxe.png"));
             case Constants.GOLD -> List.of(new Identifier("minecraft:textures/item/golden_chestplate.png"),
                     new Identifier("minecraft:textures/item/golden_helmet.png"),
-                    new Identifier("minecraft:textures/item/gold_ingot.png"));
+                    new Identifier("minecraft:textures/item/gold_ingot.png"), new Identifier("minecraft:textures/item/golden_sword.png"), new Identifier("minecraft:textures/item/golden_pickaxe.png"));
             case Constants.STONE -> List.of(new Identifier("minecraft:textures/block/stone.png"),
-                    new Identifier("minecraft:textures/block/cobblestone.png"));
+                    new Identifier("minecraft:textures/block/cobblestone.png"), new Identifier("minecraft:textures/item/stone_sword.png"), new Identifier("minecraft:textures/item/stone_pickaxe.png"));
+            default -> List.of(new Identifier("minecraft:textures/item/oak_boat.png"));
+        };
+
+    }
+
+    public static List<Identifier> getMaterialExclusions(String material) {
+        ToolMaterial toolMaterial = getMaterialMap().get(material);
+        return switch (toolMaterial.toString()) {
+            case Constants.OAK -> List.of();
+            case Constants.SPRUCE -> List.of(new Identifier("minecraft:textures/item/oak_boat.png"), new Identifier("minecraft:textures/item/birch_boat.png"));
+            case Constants.BIRCH -> List.of(new Identifier("minecraft:textures/item/spruce_boat.png"), new Identifier("minecraft:textures/item/oak_boat.png"));
+            case Constants.DIAMOND -> List.of(new Identifier("minecraft:textures/item/iron_sword.png"),
+                    new Identifier("minecraft:textures/item/stone_sword.png"),
+                    new Identifier("minecraft:textures/item/diamond.png"), new Identifier("minecraft:textures/item/iron_pickaxe.png"));
+            case Constants.IRON -> List.of(new Identifier("minecraft:textures/item/diamond_sword.png"),
+                    new Identifier("minecraft:textures/item/stone_sword.png"),
+                    new Identifier("minecraft:textures/item/netherite_sword.png"), new Identifier("minecraft:textures/item/diamond_pickaxe.png"));
+            case Constants.NETHERITE -> List.of(new Identifier("minecraft:textures/item/iron_sword.png"),
+                    new Identifier("minecraft:textures/item/diamond_sword.png"),
+                    new Identifier("minecraft:textures/item/stone_sword.png"), new Identifier("minecraft:textures/item/iron_pickaxe.png"));
+            case Constants.GOLD -> List.of(new Identifier("minecraft:textures/item/iron_sword.png"),
+                    new Identifier("minecraft:textures/item/diamond_sword.png"),
+                    new Identifier("minecraft:textures/item/wooden_sword.png"), new Identifier("minecraft:textures/item/iron_pickaxe.png"));
+            case Constants.STONE -> List.of(new Identifier("minecraft:textures/item/iron_sword.png"),
+                    new Identifier("minecraft:textures/item/golden_sword.png"),
+                    new Identifier("minecraft:textures/item/iron_pickaxe.png"));
 
 
             default -> List.of(new Identifier("minecraft:textures/item/oak_boat.png"));

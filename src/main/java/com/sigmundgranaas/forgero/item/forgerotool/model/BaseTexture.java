@@ -79,10 +79,9 @@ public class BaseTexture {
             float normalized = scaleValue * i;
             int newIndex = Math.round(normalized);
 
+
             if (newIndex == 0 || i == 0) {
                 colourList[0] = palette.getColourValues()[0];
-            } else if (i == 1) {
-                colourList[1] = palette.getColourValues()[1];
             } else {
                 colourList[i] = palette.getColourValues()[newIndex];
             }

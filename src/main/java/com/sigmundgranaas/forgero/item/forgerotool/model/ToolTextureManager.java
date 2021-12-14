@@ -88,9 +88,11 @@ public class ToolTextureManager {
         }
 
         List<Identifier> materialDependencyIdentifiers = getMaterialDependencyFromMaterial(material);
+        List<Identifier> materialExclusionDependencies = ForgeroToolMaterial.getMaterialExclusions(material);
 
         try {
             List<BufferedImage> materialTextureImages = new ArrayList<>();
+            List<BufferedImage> materialExclusionImages = new ArrayList<>();
 
             for (Identifier identifier : materialDependencyIdentifiers) {
                 Resource materialTexture = getResource.apply(identifier);
@@ -98,7 +100,13 @@ public class ToolTextureManager {
                 BufferedImage materialTextureImage = ImageIO.read(materialTextureStream);
                 materialTextureImages.add(materialTextureImage);
             }
-            MaterialColourPalette palette = MaterialColourPalette.createColourPalette(materialTextureImages);
+            for (Identifier identifier : materialExclusionDependencies) {
+                Resource materialTexture = getResource.apply(identifier);
+                BufferedInputStream materialTextureStream = new BufferedInputStream(materialTexture.getInputStream());
+                BufferedImage materialTextureImage = ImageIO.read(materialTextureStream);
+                materialExclusionImages.add(materialTextureImage);
+            }
+            MaterialColourPalette palette = MaterialColourPalette.createColourPalette(materialTextureImages, materialExclusionImages);
             materialPalettes.put(material, palette);
             writePaletteAsImage(palette.getColourValues(), new Identifier("forgero:textures/item/" + materialResult.get().toString().toLowerCase(Locale.ROOT) + ".png"));
             return Optional.of(palette);
