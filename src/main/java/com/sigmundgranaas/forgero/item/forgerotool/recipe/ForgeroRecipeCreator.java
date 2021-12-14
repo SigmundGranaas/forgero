@@ -185,9 +185,9 @@ public class ForgeroRecipeCreator {
                     Lists.newArrayList(
                             "###"
                     ), //The crafting pattern.
-                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxe_head") //The crafting output
+                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxehead") //The crafting output
             );
-            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxe_head"), recipe);
+            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxehead"), recipe);
         }
     }
 
@@ -210,9 +210,9 @@ public class ForgeroRecipeCreator {
                             " # ",
                             "# #"
                     ), //The crafting pattern.
-                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovel_head") //The crafting output
+                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovelhead") //The crafting output
             );
-            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovel_head"), recipe);
+            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovelhead"), recipe);
         }
     }
 

@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelTypes;
+import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroMiningTool;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
@@ -17,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -40,8 +43,8 @@ public class ToolModel2D implements DynamicModel {
 
     protected JsonElement getTextures() {
         JsonObject textures = new JsonObject();
-        String headTexture = getTextureBase() + tool.getToolHead().getToolPartTypeAndMaterialLowerCase();
-        String handleTexture = getTextureBase() + tool.getToolHandle().getToolPartTypeAndMaterialLowerCase();
+        String headTexture = getTextureBase() + tool.getToolHandle().getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getHeadType());
+        String handleTexture = getTextureBase() + tool.getToolHandle().getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getHandleType());
         textures.addProperty("layer0", handleTexture);
         textures.addProperty("layer1", headTexture);
         textures.addProperty("particle", headTexture);
@@ -66,6 +69,35 @@ public class ToolModel2D implements DynamicModel {
     @Override
     public ModelIdentifier getModelIdentifier() {
         return new ModelIdentifier(Forgero.MOD_NAMESPACE, itemPartModelIdentifier(), "inventory");
+    }
+
+    public ToolPartModelTypes getHeadType() {
+        //TODO add sword
+        return switch (((ForgeroMiningTool) tool).getToolType()) {
+            case PICKAXE -> ToolPartModelTypes.PICKAXEHEAD;
+            case SHOVEL -> ToolPartModelTypes.SHOVELHEAD;
+            case SWORD -> ToolPartModelTypes.AXEHEAD;
+        };
+    }
+
+    public String ToolPartModelTypeToFilename(ToolPartModelTypes modelType) {
+        return modelType.toString().toLowerCase(Locale.ROOT).replace("_", "");
+    }
+
+    public ToolPartModelTypes getHandleType() {
+        return switch (((ForgeroMiningTool) tool).getToolType()) {
+            case PICKAXE -> ToolPartModelTypes.FULLHANDLE;
+            case SHOVEL -> ToolPartModelTypes.MEDIUMHANDLE;
+            case SWORD -> ToolPartModelTypes.SHORTHANDLE;
+        };
+    }
+
+    public ToolPartModelTypes getBindingType() {
+        return switch (((ForgeroMiningTool) tool).getToolType()) {
+            case PICKAXE -> ToolPartModelTypes.PICKAXEBINDING;
+            case SHOVEL -> ToolPartModelTypes.SHOVELBINDING;
+            case SWORD -> ToolPartModelTypes.AXEHEAD;
+        };
     }
 
     @Override

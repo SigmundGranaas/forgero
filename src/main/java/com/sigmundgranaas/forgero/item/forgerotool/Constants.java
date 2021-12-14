@@ -2,11 +2,16 @@ package com.sigmundgranaas.forgero.item.forgerotool;
 
 public class Constants {
     //Tool parts
-    public static final String FULLHANDLE_FILENAME = "fullhandle";
+    public static final String HANDLE_FILENAME = "handle";
+    public static final String FULL_HANDLE_FILENAME = "handlefull";
+    public static final String HANDLE_HALF_FILENAME = "handlehalf";
+    public static final String HANDLE_SHORT_FILENAME = "handleshort";
     public static final String AXEHEAD_FILENAME = "axehead";
     public static final String SHOVELHEAD_FILENAME = "shovelhead";
     public static final String PICKAXEHEAD_FILENAME = "pickaxehead";
     public static final String BINDING_FILENAME = "binding";
+    public static final String PICKAXE_BINDING = "pickaxebinding";
+    public static final String SHOVEL_BINDING = "shovelbinding";
 
     // Materials
     public static final String BIRCH_FILENAME = "birch";

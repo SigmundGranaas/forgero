@@ -1,15 +1,23 @@
 package com.sigmundgranaas.forgero.item.forgerotool.model;
 
+import java.util.Locale;
+
 /**
  * Enum containing all possible model types. Each model should have a corresponding templateTexture
  */
 public enum ToolPartModelTypes {
-    PICKAXE_HEAD,
-    SHOVEL_HEAD,
-    AXE_HEAD,
-    HANDLE_FULL,
-    HANDLE_MEDIUM,
-    HANDLE_SHORT,
-    PICKAXE_BINDING,
-    SHOVEL_BINDING;
+    PICKAXEHEAD,
+    SHOVELHEAD,
+    AXEHEAD,
+    FULLHANDLE,
+    MEDIUMHANDLE,
+    SHORTHANDLE,
+    PICKAXEBINDING,
+    SHOVELBINDING,
+    BINDING,
+    HANDLE;
+
+    public String toFileName() {
+        return this.toString().toLowerCase(Locale.ROOT).replace("_", "");
+    }
 }

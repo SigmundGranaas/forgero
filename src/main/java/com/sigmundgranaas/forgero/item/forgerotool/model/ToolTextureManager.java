@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.Constants;
 import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +23,7 @@ public class ToolTextureManager {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
     private static ToolTextureManager manager = null;
     private final HashMap<String, MaterialColourPalette> materialPalettes = new HashMap<>();
-    private final HashMap<ForgeroToolPartTypes, BaseTexture> templateTextures = new HashMap<>();
+    private final HashMap<ToolPartModelTypes, BaseTexture> templateTextures = new HashMap<>();
 
     public static ToolTextureManager getInstance() {
         if (manager == null) {
@@ -100,6 +99,7 @@ public class ToolTextureManager {
                 materialTextureImages.add(materialTextureImage);
             }
             MaterialColourPalette palette = MaterialColourPalette.createColourPalette(materialTextureImages);
+            materialPalettes.put(material, palette);
             writePaletteAsImage(palette.getColourValues(), new Identifier("forgero:textures/item/" + materialResult.get().toString().toLowerCase(Locale.ROOT) + ".png"));
             return Optional.of(palette);
         } catch (Exception e) {
@@ -125,12 +125,12 @@ public class ToolTextureManager {
 
     private Optional<BaseTexture> getOrCreateTemplateTexture(Identifier id) throws URISyntaxException {
         String fileName = getResourceNameFromID(id);
-        Optional<ForgeroToolPartTypes> toolPartResult = ForgeroToolPartItem.getToolPartTypeFromFileName(fileName);
+        Optional<ToolPartModelTypes> toolPartResult = ForgeroToolPartItem.getToolPartModelTypeFromFileName(fileName);
 
         if (toolPartResult.isEmpty()) {
             return Optional.empty();
         }
-        ForgeroToolPartTypes toolPart = toolPartResult.get();
+        ToolPartModelTypes toolPart = toolPartResult.get();
 
         if (templateTextures.containsKey(toolPart)) {
             return Optional.of(templateTextures.get(toolPart));
@@ -148,7 +148,7 @@ public class ToolTextureManager {
         return Optional.of(baseTexture);
     }
 
-    private Optional<BaseTexture> createBaseTexture(ForgeroToolPartTypes toolPart) throws URISyntaxException {
+    private Optional<BaseTexture> createBaseTexture(ToolPartModelTypes toolPart) throws URISyntaxException {
         String textureName = getTextureNameFromToolPart(toolPart);
         String baseTextureName = textureName + Constants.BASE_IDENTIFIER;
         String baseTextureFullPath = "config/templates/toolparts/" + baseTextureName + ".png";
@@ -184,14 +184,8 @@ public class ToolTextureManager {
         return Optional.of(baseTexture);
     }
 
-    private String getTextureNameFromToolPart(ForgeroToolPartTypes toolPart) {
-        return switch (toolPart) {
-            case PICKAXEHEAD -> Constants.PICKAXEHEAD_FILENAME;
-            case SHOVELHEAD -> Constants.SHOVELHEAD_FILENAME;
-            case HANDLE -> Constants.FULLHANDLE_FILENAME;
-            case BINDING -> Constants.BINDING_FILENAME;
-            default -> "";
-        };
+    private String getTextureNameFromToolPart(ToolPartModelTypes toolPart) {
+        return toolPart.toFileName();
     }
 
     private String getResourceNameFromID(Identifier id) {
@@ -220,7 +214,6 @@ public class ToolTextureManager {
             return new File(resource.toURI());
         }
     }
-
 
     @FunctionalInterface
     public interface BiConsumer_WithExceptions<Identifier, Resource> {
