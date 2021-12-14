@@ -197,8 +197,14 @@ public class ToolTextureManager {
     }
 
     private boolean resourceExists(Identifier id) {
-        File targetFile = new File("src/main/resources/assets/forgero" + getFileNameFromId(id));
-        return targetFile.exists();
+        String baseTextureFullPath = "assets/forgero/textures/item/";
+        String fileName = getResourceNameFromID(id);
+        try {
+            File targetFile = getFileFromResource(baseTextureFullPath + fileName + ".png");
+            return targetFile.exists();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private String getFileNameFromId(Identifier id) {
@@ -220,4 +226,3 @@ public class ToolTextureManager {
         Resource apply(Identifier id) throws IOException;
     }
 }
-
