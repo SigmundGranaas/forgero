@@ -43,7 +43,7 @@ public class ToolModel2D implements DynamicModel {
 
     protected JsonElement getTextures() {
         JsonObject textures = new JsonObject();
-        String headTexture = getTextureBase() + tool.getToolHandle().getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getHeadType());
+        String headTexture = getTextureBase() + tool.getToolHead().getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getHeadType());
         String handleTexture = getTextureBase() + tool.getToolHandle().getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getHandleType());
         textures.addProperty("layer0", handleTexture);
         textures.addProperty("layer1", headTexture);
