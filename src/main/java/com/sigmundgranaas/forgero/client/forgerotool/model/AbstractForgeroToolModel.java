@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model;
+package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.google.common.base.Charsets;
 import com.mojang.datafixers.util.Pair;
@@ -85,7 +85,7 @@ public abstract class AbstractForgeroToolModel implements UnbakedModel, BakedMod
     public Sprite getParticleSprite() {
         return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(new Identifier("block/cobblestone"));
     }
-    
+
     @Override
     public ModelOverrideList getOverrides() {
         return ModelOverrideList.EMPTY;

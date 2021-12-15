@@ -1,10 +1,10 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel;
+package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
 
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.binding.PickaxeBindingModel;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.binding.ShovelBindingModel;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.handle.HandleModel;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.head.PickaxeHeadModel;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.head.ShovelHeadModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.binding.PickaxeBindingModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.binding.ShovelBindingModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.handle.HandleModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.head.PickaxeHeadModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.head.ShovelHeadModel;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 
 public class Dynamic3DModelFactory {

@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.client;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.client.forgerotool.model.*;
 import com.sigmundgranaas.forgero.item.ItemInitializer;
-import com.sigmundgranaas.forgero.item.forgerotool.model.*;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;

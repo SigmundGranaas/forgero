@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel;
+package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

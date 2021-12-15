@@ -1,9 +1,9 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.handle;
+package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.handle;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.AbstractDynamicModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.AbstractDynamicModel;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 
 public class HandleModel extends AbstractDynamicModel {

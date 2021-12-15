@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.item.forgerotool.toolpart;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.item.forgerotool.ForgeroItem;
 import com.sigmundgranaas.forgero.item.forgerotool.ForgeroItemTypes;
-import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.Identifier;

@@ -1,9 +1,9 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model;
+package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.Dynamic3DModelFactory;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.DynamicModel;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.ForgeroBakedToolModel3D;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.Dynamic3DModelFactory;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.DynamicModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.ForgeroBakedToolModel3D;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;

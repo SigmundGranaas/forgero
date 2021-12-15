@@ -1,10 +1,10 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel;
+package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelType;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroMiningTool;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import net.minecraft.client.render.model.*;

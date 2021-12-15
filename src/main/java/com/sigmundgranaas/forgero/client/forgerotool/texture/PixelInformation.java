@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model;
+package com.sigmundgranaas.forgero.client.forgerotool.texture;
 
 public record PixelInformation(int heightIndex, int lengthIndex, int rgbColor) {
 
