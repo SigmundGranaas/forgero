@@ -27,13 +27,13 @@ public class ForgeroClient implements ClientModInitializer {
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(rm -> new ForgeroToolModelProvider(toolModels));
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
             for (ForgeroToolPartItem part : ItemInitializer.toolPartsBindings) {
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypes.PICKAXEBINDING.toFileName(), "inventory"));
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypes.SHOVELBINDING.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.PICKAXEBINDING.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.SHOVELBINDING.toFileName(), "inventory"));
             }
             for (ForgeroToolPartItem part : ItemInitializer.toolPartsHandles) {
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypes.FULLHANDLE.toFileName(), "inventory"));
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypes.MEDIUMHANDLE.toFileName(), "inventory"));
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypes.SHORTHANDLE.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.FULLHANDLE.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.MEDIUMHANDLE.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.SHORTHANDLE.toFileName(), "inventory"));
             }
 
         });

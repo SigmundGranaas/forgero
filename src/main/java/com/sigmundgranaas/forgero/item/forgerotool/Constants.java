@@ -24,7 +24,7 @@ public class Constants {
 
     //Paths
     public static final String ASSETS_PATH = "/src/main/resources/assets/";
-    public static final String CONFIG_PATH = "resources/config/";
+    public static final String CONFIG_PATH = "config/";
 
 
     //Materials

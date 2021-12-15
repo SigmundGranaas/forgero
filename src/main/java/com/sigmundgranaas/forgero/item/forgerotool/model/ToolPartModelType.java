@@ -5,7 +5,7 @@ import java.util.Locale;
 /**
  * Enum containing all possible model types. Each model should have a corresponding templateTexture
  */
-public enum ToolPartModelTypes {
+public enum ToolPartModelType {
     PICKAXEHEAD,
     SHOVELHEAD,
     AXEHEAD,

@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.item.forgerotool.toolpart;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.ForgeroItem;
 import com.sigmundgranaas.forgero.item.forgerotool.ForgeroItemTypes;
-import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelTypes;
+import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.Identifier;
@@ -33,12 +33,12 @@ public class ForgeroToolPartItem extends Item implements ForgeroItem {
         }
     }
 
-    public static Optional<ToolPartModelTypes> getToolPartModelTypeFromFileName(String fileName) {
+    public static Optional<ToolPartModelType> getToolPartModelTypeFromFileName(String fileName) {
         String[] elements = fileName.split("_");
         assert elements.length == 2;
         String toolpart = elements[1];
         try {
-            return Optional.of(ToolPartModelTypes.valueOf(toolpart.toUpperCase(Locale.ROOT)));
+            return Optional.of(ToolPartModelType.valueOf(toolpart.toUpperCase(Locale.ROOT)));
         } catch (IllegalArgumentException e) {
             Forgero.LOGGER.warn(e);
             return Optional.empty();

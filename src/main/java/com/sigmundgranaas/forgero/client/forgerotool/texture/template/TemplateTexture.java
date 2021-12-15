@@ -1,4 +1,7 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model;
+package com.sigmundgranaas.forgero.client.forgerotool.texture.template;
+
+import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPalette;
+import com.sigmundgranaas.forgero.item.forgerotool.model.PixelInformation;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -9,16 +12,16 @@ import java.util.HashSet;
  * Class for storing TemplateTextures for Tool Parts
  * This class can create recouloured versions of it's template data by using the createRecoulouredImage function.
  */
-public class BaseTexture {
+public class TemplateTexture {
     private final ArrayList<PixelInformation> pixelValues;
     private final int[] greyScaleValues;
 
-    private BaseTexture(ArrayList<PixelInformation> pixelValues, int[] greyScaleValues) {
+    private TemplateTexture(ArrayList<PixelInformation> pixelValues, int[] greyScaleValues) {
         this.pixelValues = pixelValues;
         this.greyScaleValues = greyScaleValues;
     }
 
-    public static BaseTexture createBaseTexture(BufferedImage templateImage) {
+    public static TemplateTexture createBaseTexture(BufferedImage templateImage) {
         ArrayList<PixelInformation> pixelValues = new ArrayList<>();
         HashSet<Integer> greyScaleValueSet = new HashSet<>();
         for (int y = 0; y < templateImage.getHeight(); ++y) {
@@ -29,12 +32,13 @@ public class BaseTexture {
                 }
             }
         }
+
         int[] greyScaleValues = greyScaleValueSet.stream().mapToInt(Integer::intValue).toArray();
-        greyScaleValues = MaterialColourPalette.sortRgbValues(greyScaleValues);
-        return new BaseTexture(pixelValues, greyScaleValues);
+        greyScaleValues = MaterialPalette.sortRgbValues(greyScaleValues);
+        return new TemplateTexture(pixelValues, greyScaleValues);
     }
 
-    public BufferedImage createRecolouredImage(MaterialColourPalette templatePalette) {
+    public BufferedImage createRecolouredImage(MaterialPalette templatePalette) {
         int paletteSize = templatePalette.getColourValues().length;
         int greyScaleSize = greyScaleValues.length;
         int[] palette = createUsableColourPalette(greyScaleSize, templatePalette);
@@ -65,7 +69,7 @@ public class BaseTexture {
      *
      * @return A colour palette matching the original greyscale values
      */
-    private int[] createUsableColourPalette(int greyScaleSize, MaterialColourPalette palette) {
+    private int[] createUsableColourPalette(int greyScaleSize, MaterialPalette palette) {
         int[] colourList = new int[greyScaleSize];
         if (greyScaleSize == palette.getColourValues().length) {
             for (int i = 0; i < colourList.length; i++) {

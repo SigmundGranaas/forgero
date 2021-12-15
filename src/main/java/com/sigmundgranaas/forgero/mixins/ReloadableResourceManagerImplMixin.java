@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.item.forgerotool.model.ToolTextureManager;
+import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureManager;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
@@ -27,15 +26,21 @@ public abstract class ReloadableResourceManagerImplMixin {
 
     @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException, URISyntaxException {
-        String[] segments = id.getPath().split("/");
-        String path = segments[segments.length - 1];
+        //String[] segments = id.getPath().split("/");
+        //String path = segments[segments.length - 1];
 
-        if (!id.getNamespace().equals(Forgero.MOD_NAMESPACE) || !path.endsWith(".png")) {
-            return;
+
+        if (ForgeroTextureManager.INSTANCE.isManagedByForgeroTextureManager(id)) {
+            cir.setReturnValue(ForgeroTextureManager.INSTANCE.getResource(id, (((ReloadableResourceManagerImpl) (Object)
+                    this)::getResource)));
         }
 
-        ToolTextureManager.getInstance().createTextureDependencies(id, (((ReloadableResourceManagerImpl) (Object)
-                this)::getResource));
+
+        // if (!id.getNamespace().equals(Forgero.MOD_NAMESPACE) || !path.endsWith(".png")) {
+        //    return;
+        // }
+        //ToolTextureManager.getInstance().createTextureDependencies(id,(((ReloadableResourceManagerImpl) (Object)
+        //                this)::getResource) );
 
     }
 }

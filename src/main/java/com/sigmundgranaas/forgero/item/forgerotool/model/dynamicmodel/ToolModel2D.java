@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelTypes;
+import com.sigmundgranaas.forgero.item.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroMiningTool;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
 import net.minecraft.client.render.model.*;
@@ -71,32 +71,32 @@ public class ToolModel2D implements DynamicModel {
         return new ModelIdentifier(Forgero.MOD_NAMESPACE, itemPartModelIdentifier(), "inventory");
     }
 
-    public ToolPartModelTypes getHeadType() {
+    public ToolPartModelType getHeadType() {
         //TODO add sword
         return switch (((ForgeroMiningTool) tool).getToolType()) {
-            case PICKAXE -> ToolPartModelTypes.PICKAXEHEAD;
-            case SHOVEL -> ToolPartModelTypes.SHOVELHEAD;
-            case SWORD -> ToolPartModelTypes.AXEHEAD;
+            case PICKAXE -> ToolPartModelType.PICKAXEHEAD;
+            case SHOVEL -> ToolPartModelType.SHOVELHEAD;
+            case SWORD -> ToolPartModelType.AXEHEAD;
         };
     }
 
-    public String ToolPartModelTypeToFilename(ToolPartModelTypes modelType) {
+    public String ToolPartModelTypeToFilename(ToolPartModelType modelType) {
         return modelType.toString().toLowerCase(Locale.ROOT).replace("_", "");
     }
 
-    public ToolPartModelTypes getHandleType() {
+    public ToolPartModelType getHandleType() {
         return switch (((ForgeroMiningTool) tool).getToolType()) {
-            case PICKAXE -> ToolPartModelTypes.FULLHANDLE;
-            case SHOVEL -> ToolPartModelTypes.MEDIUMHANDLE;
-            case SWORD -> ToolPartModelTypes.SHORTHANDLE;
+            case PICKAXE -> ToolPartModelType.FULLHANDLE;
+            case SHOVEL -> ToolPartModelType.MEDIUMHANDLE;
+            case SWORD -> ToolPartModelType.SHORTHANDLE;
         };
     }
 
-    public ToolPartModelTypes getBindingType() {
+    public ToolPartModelType getBindingType() {
         return switch (((ForgeroMiningTool) tool).getToolType()) {
-            case PICKAXE -> ToolPartModelTypes.PICKAXEBINDING;
-            case SHOVEL -> ToolPartModelTypes.SHOVELBINDING;
-            case SWORD -> ToolPartModelTypes.AXEHEAD;
+            case PICKAXE -> ToolPartModelType.PICKAXEBINDING;
+            case SHOVEL -> ToolPartModelType.SHOVELBINDING;
+            case SWORD -> ToolPartModelType.AXEHEAD;
         };
     }
 

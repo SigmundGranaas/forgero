@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.InputStream;
 
 public class Utils {
+
     public static String createModelJson(String path, String parent) {
         String[] segments = path.split("/");
         path = segments[segments.length - 1];

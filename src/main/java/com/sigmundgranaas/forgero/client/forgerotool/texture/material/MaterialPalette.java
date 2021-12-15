@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.forgerotool.model;
+package com.sigmundgranaas.forgero.client.forgerotool.texture.material;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -6,17 +6,17 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class MaterialColourPalette {
+public class MaterialPalette {
     private final int[] colourValues;
     private final int blackPoint;
 
-    private MaterialColourPalette(int[] colourValues, int blackPoint) {
+    private MaterialPalette(int[] colourValues, int blackPoint) {
         this.colourValues = colourValues;
         this.blackPoint = blackPoint;
     }
 
     //TODO Split into smaller methods
-    public static MaterialColourPalette createColourPalette(List<BufferedImage> palettes, List<BufferedImage> exlusions) {
+    public static MaterialPalette createColourPalette(List<BufferedImage> palettes, List<BufferedImage> exlusions) {
         HashSet<Integer> colourValueSet = new HashSet<>();
         for (BufferedImage image : palettes) {
             for (int y = 0; y < image.getHeight(); ++y) {
@@ -45,7 +45,7 @@ public class MaterialColourPalette {
         //int[] exclusionValues = exclusionValueSet.stream().mapToInt(Integer::intValue).toArray();
         colourValues = sortRgbValues(colourValues);
         colourValues[1] = getSecondaryDarkPoint(colourValues);
-        return new MaterialColourPalette(colourValues, blackPoint);
+        return new MaterialPalette(colourValues, blackPoint);
     }
 
     public static int[] sortRgbValues(int[] rgbValues) {
@@ -96,3 +96,5 @@ public class MaterialColourPalette {
         return colourValues;
     }
 }
+
+
