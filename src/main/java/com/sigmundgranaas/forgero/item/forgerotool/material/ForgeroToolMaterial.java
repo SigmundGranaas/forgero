@@ -143,6 +143,4 @@ public enum ForgeroToolMaterial implements ToolMaterial {
     public Ingredient getRepairIngredient() {
         return this.repairIngredient;
     }
-
-    ;
 }
