@@ -65,7 +65,6 @@ public class MaterialPaletteFactoryImpl implements MaterialPaletteFactory {
 
     protected void savePalette(String material, MaterialPalette palette) {
         materialPalettes.put(material, palette);
-
     }
 
     @Override

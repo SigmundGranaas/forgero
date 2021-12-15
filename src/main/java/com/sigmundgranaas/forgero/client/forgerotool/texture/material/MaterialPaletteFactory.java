@@ -30,6 +30,7 @@ public interface MaterialPaletteFactory {
         }
     }
 
+
     /**
      * @param getResource A preloaded method for fetching existing Minecraft resources
      * @param identifier  - identifier to find the correct Material to create the palette from.

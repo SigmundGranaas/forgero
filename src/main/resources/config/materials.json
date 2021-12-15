@@ -55,17 +55,6 @@
     "rarity": 100
   },
   {
-    "name": "Diamond",
-    "type": "metal",
-    "weight": 50,
-    "stiffness": 95,
-    "durability": 1561,
-    "sharpness": 5,
-    "enchantability": 20,
-    "flexibility": 1,
-    "rarity": 100
-  },
-  {
     "name": "Gold",
     "type": "metal",
     "weight": 100,
@@ -74,6 +63,17 @@
     "sharpness": 50,
     "enchantability": 10,
     "flexibility": 20,
+    "rarity": 100
+  },
+  {
+    "name": "Diamond",
+    "type": "metal",
+    "weight": 50,
+    "stiffness": 95,
+    "durability": 1561,
+    "sharpness": 5,
+    "enchantability": 20,
+    "flexibility": 1,
     "rarity": 100
   },
   {
