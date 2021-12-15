@@ -37,27 +37,27 @@ public enum ForgeroToolMaterial implements ToolMaterial {
 
     public static List<ToolMaterial> getMaterialList() {
         List<ToolMaterial> materialList = new ArrayList<>();
-        materialList.add(BIRCH);
         materialList.add(OAK);
+        materialList.add(BIRCH);
         materialList.add(SPRUCE);
-        materialList.add(ToolMaterials.NETHERITE);
-        materialList.add(ToolMaterials.DIAMOND);
+        materialList.add(ToolMaterials.STONE);
         materialList.add(ToolMaterials.IRON);
         materialList.add(ToolMaterials.GOLD);
-        materialList.add(ToolMaterials.STONE);
+        materialList.add(ToolMaterials.DIAMOND);
+        materialList.add(ToolMaterials.NETHERITE);
         return materialList;
     }
 
     public static Map<String, ToolMaterial> getMaterialMap() {
         Map<String, ToolMaterial> materialList = new HashMap<>();
-        materialList.put(BIRCH.toString(), BIRCH);
         materialList.put(OAK.toString(), OAK);
+        materialList.put(BIRCH.toString(), BIRCH);
         materialList.put(SPRUCE.toString(), SPRUCE);
-        materialList.put(ToolMaterials.NETHERITE.toString(), ToolMaterials.NETHERITE);
-        materialList.put(ToolMaterials.DIAMOND.toString(), ToolMaterials.DIAMOND);
+        materialList.put(ToolMaterials.STONE.toString(), ToolMaterials.STONE);
         materialList.put(ToolMaterials.IRON.toString(), ToolMaterials.IRON);
         materialList.put(ToolMaterials.GOLD.toString(), ToolMaterials.GOLD);
-        materialList.put(ToolMaterials.STONE.toString(), ToolMaterials.STONE);
+        materialList.put(ToolMaterials.DIAMOND.toString(), ToolMaterials.DIAMOND);
+        materialList.put(ToolMaterials.NETHERITE.toString(), ToolMaterials.NETHERITE);
         return materialList;
     }
 
