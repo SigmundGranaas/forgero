@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.texture;
+package com.sigmundgranaas.forgero.client.forgerotool.texture.utils;
 
 import com.sigmundgranaas.forgero.Forgero;
 

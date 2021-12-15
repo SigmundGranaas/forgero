@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.template;
 
-import com.sigmundgranaas.forgero.client.forgerotool.texture.PixelInformation;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPalette;
 
 import java.awt.image.BufferedImage;

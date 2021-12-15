@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.client.forgerotool.texture.template.factory;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdentifier;
-import com.sigmundgranaas.forgero.client.forgerotool.texture.TextureLoader;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTexture;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTextureFactory;
+import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
 import com.sigmundgranaas.forgero.item.forgerotool.Constants;
 import org.jetbrains.annotations.NotNull;
 

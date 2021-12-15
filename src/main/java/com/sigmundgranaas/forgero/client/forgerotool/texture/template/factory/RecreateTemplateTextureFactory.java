@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.template.factory;
 
 import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdentifier;
-import com.sigmundgranaas.forgero.client.forgerotool.texture.TextureLoader;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTexture;
+import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
 
 public class RecreateTemplateTextureFactory extends TemplateTextureFactoryImpl {
 

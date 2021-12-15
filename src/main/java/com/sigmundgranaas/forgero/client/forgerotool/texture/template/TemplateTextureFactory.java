@@ -9,9 +9,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+/**
+ * A factory for creating TemplateTextures.
+ * <p>
+ * Will determine which type of factory is appropriate according the configuration settings of the mod.
+ * Currently, this only decides if the templates should be loaded from files, persisted or overwritten.
+ */
 public interface TemplateTextureFactory {
-
-
     static TemplateTextureFactory createFactory() {
         if (ClientConfiguration.INSTANCE.shouldCreateNewPalettes()) {
             if (ClientConfiguration.INSTANCE.shouldOverWriteOldPalettes()) {
@@ -24,6 +28,12 @@ public interface TemplateTextureFactory {
         }
     }
 
+    /**
+     * Will use the FactoryImplamentation for generating a TemplateTexture Object from a base texture
+     *
+     * @param id - identifier which will tell the factory which base texture to use
+     * @return - Returns an Optional in case the Template texture could not be created.
+     */
     @NotNull
     Optional<TemplateTexture> getTexture(ForgeroTextureIdentifier id);
 

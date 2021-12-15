@@ -11,6 +11,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
+/**
+ * A factory for creating Palettes from Materials.
+ * <p>
+ * Will determine which type of factory is appropriate according the configuration settings of the mod.
+ * Currently, this only decides if the templates should be loaded from files, persisted or overwritten.
+ */
 public interface MaterialPaletteFactory {
     static MaterialPaletteFactory createMaterialPaletteFactory() {
         if (ClientConfiguration.INSTANCE.shouldCreateNewPalettes()) {
@@ -24,7 +30,11 @@ public interface MaterialPaletteFactory {
         }
     }
 
-
+    /**
+     * @param getResource A preloaded method for fetching existing Minecraft resources
+     * @param identifier  - identifier to find the correct Material to create the palette from.
+     * @return - Return an Optional in case the factory is unable to create a Palette.
+     */
     public Optional<MaterialPalette> getPalette(Function<Identifier, Resource> getResource, ForgeroTextureIdentifier identifier);
 
     public void clearCache();

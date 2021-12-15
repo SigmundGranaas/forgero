@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes
 
 import java.util.Optional;
 
+//TODO Document me
 public interface ForgeroTextureIdentifier {
     boolean fileExists();
 
