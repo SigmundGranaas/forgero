@@ -5,17 +5,19 @@ package com.sigmundgranaas.forgero.client;
  * Should be replaced by a proper Setting solution.
  */
 public interface ClientConfiguration {
-    public static ClientConfiguration INSTANCE = ClientConfigurationImpl.getInstance();
+    ClientConfiguration INSTANCE = ClientConfigurationImpl.getInstance();
 
-    public boolean shouldCreateNewTextures();
+    boolean shouldCreateNewTextures();
 
-    public boolean shouldOverWriteOldTextures();
+    boolean shouldOverWriteOldTextures();
 
-    public boolean shouldCreateNewPalettes();
+    boolean shouldCreateNewPalettes();
 
-    public boolean shouldOverWriteOldPalettes();
+    boolean shouldOverWriteOldPalettes();
 
-    public boolean shouldCreateNewTextureBases();
+    boolean isDev();
 
-    public boolean shouldOverWriteOldTextureBases();
+    boolean shouldCreateNewTextureBases();
+
+    boolean shouldOverWriteOldTextureBases();
 }

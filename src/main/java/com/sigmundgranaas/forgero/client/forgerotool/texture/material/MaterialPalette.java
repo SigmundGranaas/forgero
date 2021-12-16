@@ -1,98 +1,65 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.material;
 
-import java.awt.*;
+import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.RgbColour;
+
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MaterialPalette {
-    private final int[] colourValues;
-    private final int blackPoint;
+    private final List<RgbColour> colourValues;
 
-    private MaterialPalette(int[] colourValues, int blackPoint) {
+    private MaterialPalette(List<RgbColour> colourValues) {
         this.colourValues = colourValues;
-        this.blackPoint = blackPoint;
     }
 
     //TODO Split into smaller methods
     public static MaterialPalette createColourPalette(List<BufferedImage> palettes, List<BufferedImage> exlusions) {
-        HashSet<Integer> colourValueSet = new HashSet<>();
+        HashSet<RgbColour> colourValueSet = new HashSet<>();
         for (BufferedImage image : palettes) {
-            for (int y = 0; y < image.getHeight(); ++y) {
-                for (int x = 0; x < image.getWidth(); ++x) {
-                    if (image.getRGB(y, x) != 0) {
-                        colourValueSet.add(image.getRGB(y, x));
-                    }
-                }
-            }
+            extractColourSetFromImage(colourValueSet, image);
         }
 
-        HashSet<Integer> exclusionValueSet = new HashSet<>();
+        HashSet<RgbColour> exclusionValueSet = new HashSet<>();
         for (BufferedImage image : exlusions) {
-            for (int y = 0; y < image.getHeight(); ++y) {
-                for (int x = 0; x < image.getWidth(); ++x) {
-                    if (image.getRGB(y, x) != 0) {
-                        exclusionValueSet.add(image.getRGB(y, x));
-                    }
+            extractColourSetFromImage(exclusionValueSet, image);
+        }
+        RgbColour blackPoint = colourValueSet.stream().toList().get(0);
+        exclusionValueSet.remove(blackPoint);
+
+        colourValueSet.removeAll(exclusionValueSet);
+
+        List<RgbColour> colourValues = colourValueSet.stream().toList();
+        colourValues = colourValues.stream().sorted().collect(Collectors.toList());
+        return new MaterialPalette(colourValues);
+    }
+
+    private static void extractColourSetFromImage(HashSet<RgbColour> colourValueSet, BufferedImage image) {
+        for (int y = 0; y < image.getHeight(); ++y) {
+            for (int x = 0; x < image.getWidth(); ++x) {
+                if (image.getRGB(x, y) != 0) {
+                    colourValueSet.add(new RgbColour(image.getRGB(x, y)));
                 }
             }
         }
-        int blackPoint = sortRgbValues(colourValueSet.stream().mapToInt(Integer::intValue).toArray())[0];
-        exclusionValueSet.remove(blackPoint);
-        colourValueSet.removeAll(exclusionValueSet);
-        int[] colourValues = colourValueSet.stream().mapToInt(Integer::intValue).toArray();
-        //int[] exclusionValues = exclusionValueSet.stream().mapToInt(Integer::intValue).toArray();
-        colourValues = sortRgbValues(colourValues);
-        colourValues[1] = getSecondaryDarkPoint(colourValues);
-        return new MaterialPalette(colourValues, blackPoint);
     }
 
-    public static int[] sortRgbValues(int[] rgbValues) {
-        Integer[] integerArray = Arrays.stream(rgbValues).boxed().toArray(Integer[]::new);
-        return Arrays.stream(integerArray).sorted((prev, next) -> {
-            int redprev = (prev >> 16) & 0xFF;
-            int blueprev = (prev >> 8) & 0xFF;
-            int greenprev = prev & 0xFF;
-            int previousLightValue = (redprev + blueprev + greenprev) / 3;
+    public static MaterialPalette createColourPaletteFromExistingPalette(BufferedImage palette) {
+        HashSet<RgbColour> colourValueSet = new HashSet<>();
 
-            int rednext = (next >> 16) & 0xFF;
-            int bluenext = (next >> 8) & 0xFF;
-            int greennext = next & 0xFF;
-            int nextLightValue = (rednext + bluenext + greennext) / 3;
-            return previousLightValue - nextLightValue;
-        }).mapToInt(Integer::intValue).toArray();
-    }
-
-    public static int getSecondaryDarkPoint(int[] sortedColourValues) {
-        int blackPoint = sortedColourValues[0];
-        int secondaryPoint = sortedColourValues[1];
-
-        int blackPointRed = (blackPoint >> 16) & 0xFF;
-        int blackPointBlue = (blackPoint >> 8) & 0xFF;
-        int blackPointGreen = blackPoint & 0xFF;
-        int blackPointLightValue = (blackPointRed + blackPointBlue + blackPointGreen) / 3;
-
-        int secondaryPointRed = (secondaryPoint >> 16) & 0xFF;
-        int secondaryPointBlue = (secondaryPoint >> 8) & 0xFF;
-        int secondaryPointGreen = secondaryPoint & 0xFF;
-        int secondaryPointLightValue = (secondaryPointRed + secondaryPointBlue + secondaryPointGreen) / 3;
-
-        int secondaryDarkPoint = sortedColourValues[1];
-
-        if (secondaryPointLightValue - blackPointLightValue > 20) {
-
-            int thirdPoint = sortedColourValues[2];
-            int thirdPointRed = (thirdPoint >> 16) & 0xFF;
-            int thirdPointBlue = (thirdPoint >> 8) & 0xFF;
-            int thirdPointGreen = thirdPoint & 0xFF;
-            Color secondaryRGBPoint = new Color((thirdPointRed + blackPointRed) / 2, (thirdPointBlue + blackPointBlue) / 2, (thirdPointGreen + blackPointGreen) / 2);
-            secondaryDarkPoint = secondaryRGBPoint.getRGB();
+        for (int x = 0; x < palette.getWidth(); ++x) {
+            if (palette.getRGB(x, 0) != 0) {
+                colourValueSet.add(new RgbColour(palette.getRGB(x, 0)));
+            }
         }
-        return secondaryDarkPoint;
+
+        List<RgbColour> colourValues = colourValueSet.stream().toList();
+        colourValues = colourValues.stream().sorted().collect(Collectors.toList());
+        return new MaterialPalette(colourValues);
     }
 
-    public int[] getColourValues() {
+    public List<RgbColour> getColourValues() {
         return colourValues;
     }
 }

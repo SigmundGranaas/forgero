@@ -28,6 +28,11 @@ public class ClientConfigurationImpl implements ClientConfiguration {
 
     @Override
     public boolean shouldOverWriteOldPalettes() {
+        return false;
+    }
+
+    @Override
+    public boolean isDev() {
         return true;
     }
 

@@ -25,6 +25,8 @@ public class Constants {
     //Paths
     public static final String ASSETS_PATH = "/src/main/resources/assets/";
     public static final String CONFIG_PATH = "config/";
+    // This is somewhat of a hack to access the src directory
+    public static final String DEV_SRC_RESOURCES_PATH = "../src/main/resources/";
 
 
     //Materials

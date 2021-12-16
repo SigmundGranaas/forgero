@@ -1,95 +1,50 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.template;
 
-import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPalette;
+import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.RgbColour;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * Class for storing TemplateTextures for Tool Parts
- * This class can create recouloured versions of it's template data by using the createRecoulouredImage function.
+ * This class can create recouloured versions of its template data by using the createRecoulouredImage function.
  */
 public class TemplateTexture {
     private final ArrayList<PixelInformation> pixelValues;
-    private final int[] greyScaleValues;
+    private final List<RgbColour> greyScaleValues;
 
-    private TemplateTexture(ArrayList<PixelInformation> pixelValues, int[] greyScaleValues) {
+    private TemplateTexture(ArrayList<PixelInformation> pixelValues, List<RgbColour> greyScaleValues) {
         this.pixelValues = pixelValues;
         this.greyScaleValues = greyScaleValues;
     }
 
     public static TemplateTexture createBaseTexture(BufferedImage templateImage) {
         ArrayList<PixelInformation> pixelValues = new ArrayList<>();
-        HashSet<Integer> greyScaleValueSet = new HashSet<>();
+        HashSet<RgbColour> greyScaleValueSet = new HashSet<>();
         for (int y = 0; y < templateImage.getHeight(); ++y) {
             for (int x = 0; x < templateImage.getWidth(); ++x) {
-                if (templateImage.getRGB(y, x) != 0) {
-                    greyScaleValueSet.add(templateImage.getRGB(y, x));
-                    pixelValues.add(new PixelInformation(y, x, templateImage.getRGB(y, x)));
+                if (templateImage.getRGB(x, y) != 0) {
+                    greyScaleValueSet.add(new RgbColour(templateImage.getRGB(x, y)));
+                    pixelValues.add(new PixelInformation(x, y, new RgbColour(templateImage.getRGB(x, y))));
                 }
             }
         }
 
-        int[] greyScaleValues = greyScaleValueSet.stream().mapToInt(Integer::intValue).toArray();
-        greyScaleValues = MaterialPalette.sortRgbValues(greyScaleValues);
+        List<RgbColour> greyScaleValues = greyScaleValueSet.stream().toList();
+        greyScaleValues = greyScaleValues.stream().sorted().collect(Collectors.toList());
         return new TemplateTexture(pixelValues, greyScaleValues);
     }
 
-    public BufferedImage createRecolouredImage(MaterialPalette templatePalette) {
-        int paletteSize = templatePalette.getColourValues().length;
-        int greyScaleSize = greyScaleValues.length;
-        int[] palette = createUsableColourPalette(greyScaleSize, templatePalette);
-        assert greyScaleSize >= 2 && paletteSize >= 2;
-
-        BufferedImage recolouredImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-        for (PixelInformation pixel : pixelValues) {
-            recolouredImage.setRGB(pixel.heightIndex(), pixel.getLengthIndex(), palette[findIntPosition(pixel.getRgbColor(), greyScaleValues)]);
-        }
-        return recolouredImage;
-    }
-
-    public int[] getGreyScaleValues() {
+    public List<RgbColour> getGreyScaleValues() {
         return greyScaleValues;
     }
 
-    public int findIntPosition(int target, int[] reference) {
-        for (int i = 0; i < reference.length; i++) {
-            if (target == reference[i]) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * Method for normalizing the colour palette to match the existing greyscale values of the template texture
-     *
-     * @return A colour palette matching the original greyscale values
-     */
-    private int[] createUsableColourPalette(int greyScaleSize, MaterialPalette palette) {
-        int[] colourList = new int[greyScaleSize];
-        if (greyScaleSize == palette.getColourValues().length) {
-            for (int i = 0; i < colourList.length; i++) {
-                colourList[i] = palette.getColourValues()[i];
-            }
-            return colourList;
-        }
-
-        for (int i = 0; i < colourList.length; i++) {
-            float scaleValue = (float) palette.getColourValues().length / (float) greyScaleSize;
-            float normalized = scaleValue * i;
-            int newIndex = Math.round(normalized);
-
-
-            if (newIndex == 0 || i == 0) {
-                colourList[0] = palette.getColourValues()[0];
-            } else {
-                colourList[i] = palette.getColourValues()[newIndex];
-            }
-        }
-        return colourList;
+    public ArrayList<PixelInformation> getPixelValues() {
+        return pixelValues;
     }
 }
 

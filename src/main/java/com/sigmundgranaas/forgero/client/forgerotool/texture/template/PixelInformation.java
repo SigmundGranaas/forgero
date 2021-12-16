@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.template;
 
 
-public record PixelInformation(int heightIndex, int lengthIndex, int rgbColor) {
+import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.RgbColour;
+
+public record PixelInformation(int lengthIndex, int heightIndex, RgbColour rgbColor) {
 
     public int getHeightIndex() {
         return heightIndex;
@@ -11,7 +13,7 @@ public record PixelInformation(int heightIndex, int lengthIndex, int rgbColor) {
         return lengthIndex;
     }
 
-    public int getRgbColor() {
+    public RgbColour getRgbColor() {
         return rgbColor;
     }
 }

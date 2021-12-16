@@ -51,12 +51,19 @@ public class TemplateTextureFactoryImpl implements TemplateTextureFactory {
             return Optional.empty();
         }
         TemplateTexture baseTexture = TemplateTexture.createBaseTexture(textureImageResult.get());
-        templateTexturesCache.put(textureIdentifier.getModelType().get(), baseTexture);
-        return Optional.of(baseTexture);
+        Optional<ToolPartModelType> modelType = textureIdentifier.getModelType();
+        if (modelType.isPresent()) {
+            templateTexturesCache.put(modelType.get(), baseTexture);
+            return Optional.of(baseTexture);
+        } else {
+            return Optional.empty();
+        }
+
     }
 
     protected void saveTemplateTexture(ForgeroTextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
-        templateTexturesCache.put(textureIdentifier.getModelType().get(), baseTexture);
+        textureIdentifier.getModelType().ifPresent(model -> templateTexturesCache.put(model, baseTexture));
+
     }
 
     protected Optional<BufferedImage> loadTemplateFromFile(ForgeroTextureIdentifier textureIdentifier) {
@@ -64,15 +71,14 @@ public class TemplateTextureFactoryImpl implements TemplateTextureFactory {
     }
 
 
-    public @NotNull
-    String getTemplateTextureFolder() {
+    public @NotNull String getTemplateTextureFolder() {
         return Constants.CONFIG_PATH + "forgero/templates/textures/";
     }
 
     protected void WriteTemplateTexturePaletteAsImage(ForgeroTextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
-        BufferedImage paletteImage = new BufferedImage(baseTexture.getGreyScaleValues().length, 1, BufferedImage.TYPE_INT_ARGB);
-        for (int x = 0; x < baseTexture.getGreyScaleValues().length; x++) {
-            paletteImage.setRGB(x, 0, baseTexture.getGreyScaleValues()[x]);
+        BufferedImage paletteImage = new BufferedImage(baseTexture.getGreyScaleValues().size(), 1, BufferedImage.TYPE_INT_ARGB);
+        for (int x = 0; x < baseTexture.getGreyScaleValues().size(); x++) {
+            paletteImage.setRGB(x, 0, baseTexture.getGreyScaleValues().get(x).getRgb());
         }
         try {
             TextureLoader.saveTextureToFile(getTemplateTextureFolder() + "palette_" + textureIdentifier.getBaseTextureFileNameWithExtension(), paletteImage);

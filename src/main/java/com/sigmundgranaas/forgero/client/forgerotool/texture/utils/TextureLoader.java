@@ -26,11 +26,12 @@ public class TextureLoader {
     }
 
     public static boolean saveTextureToFile(String path, BufferedImage texture) {
-        File targetFile = new File(path);
         try {
-            if (targetFile.getParentFile().mkdirs() && targetFile.createNewFile()) {
+            File targetFile = new File(path).getAbsoluteFile();
+            if (targetFile.createNewFile()) {
                 return ImageIO.write(texture, "PNG", targetFile);
             } else {
+                Forgero.LOGGER.warn("Unable to save texture to path: {}", path);
                 return false;
             }
         } catch (IOException e) {
@@ -43,7 +44,7 @@ public class TextureLoader {
         return new File(path).exists();
     }
 
-    private static File getFileFromResource(String path) throws URISyntaxException {
+    public static File getFileFromResource(String path) throws URISyntaxException {
         ClassLoader classLoader = TextureLoader.class.getClassLoader();
         URL resource = classLoader.getResource(path);
         if (resource == null) {

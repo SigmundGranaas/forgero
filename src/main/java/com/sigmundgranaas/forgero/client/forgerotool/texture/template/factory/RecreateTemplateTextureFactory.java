@@ -9,10 +9,10 @@ public class RecreateTemplateTextureFactory extends TemplateTextureFactoryImpl {
     @Override
     protected void saveTemplateTexture(ForgeroTextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
         super.saveTemplateTexture(textureIdentifier, baseTexture);
-        saveTemplateTextureifNotExists(textureIdentifier, baseTexture);
+        saveTemplateTextureIfNotExists(textureIdentifier, baseTexture);
     }
 
-    protected void saveTemplateTextureifNotExists(ForgeroTextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
+    protected void saveTemplateTextureIfNotExists(ForgeroTextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
         if (!templateTexturePaletteExists(textureIdentifier)) {
             WriteTemplateTexturePaletteAsImage(textureIdentifier, baseTexture);
         }
@@ -21,6 +21,4 @@ public class RecreateTemplateTextureFactory extends TemplateTextureFactoryImpl {
     private boolean templateTexturePaletteExists(ForgeroTextureIdentifier textureIdentifier) {
         return TextureLoader.textureExists(getTemplateTextureFolder() + "palette_" + textureIdentifier.getBaseTextureFileNameWithExtension());
     }
-
-
 }

@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdent
 import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureManager.Function;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory.MaterialPaletteFactoryImpl;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory.OverridableMaterialPaletteFactory;
-import com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory.RecreateMaterialPaletteFactory;
+import com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory.PersistMaterialPaletteFactory;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 
@@ -18,12 +18,19 @@ import java.util.Optional;
  * Currently, this only decides if the templates should be loaded from files, persisted or overwritten.
  */
 public interface MaterialPaletteFactory {
+
+    /**
+     * Factory method for creating the correct Material Palette factory.
+     * This will be decided
+     *
+     * @return - An instance of the proper Material Factory
+     */
     static MaterialPaletteFactory createMaterialPaletteFactory() {
-        if (ClientConfiguration.INSTANCE.shouldCreateNewPalettes()) {
+        if (ClientConfiguration.INSTANCE.isDev()) {
             if (ClientConfiguration.INSTANCE.shouldOverWriteOldPalettes()) {
                 return new OverridableMaterialPaletteFactory();
             } else {
-                return new RecreateMaterialPaletteFactory();
+                return new PersistMaterialPaletteFactory();
             }
         } else {
             return new MaterialPaletteFactoryImpl();
@@ -36,7 +43,10 @@ public interface MaterialPaletteFactory {
      * @param identifier  - identifier to find the correct Material to create the palette from.
      * @return - Return an Optional in case the factory is unable to create a Palette.
      */
-    public Optional<MaterialPalette> getPalette(Function<Identifier, Resource> getResource, ForgeroTextureIdentifier identifier);
+    Optional<MaterialPalette> getPalette(Function<Identifier, Resource> getResource, ForgeroTextureIdentifier identifier);
 
-    public void clearCache();
+    /**
+     * Method for clearing the cache of the factory. This will force the factory to recreate or reload the palettes.
+     */
+    void clearCache();
 }
