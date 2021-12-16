@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.mixins;
 
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.item.forgerotool.model.dynamicmodel.GeneratedJsonLoader;
+import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.GeneratedJsonLoader;
 import com.sigmundgranaas.forgero.utils.Utils;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;

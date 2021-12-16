@@ -55,17 +55,6 @@
     "rarity": 100
   },
   {
-    "name": "Diamond",
-    "type": "organic",
-    "weight": 50,
-    "stiffness": 95,
-    "durability": 1561,
-    "sharpness": 5,
-    "enchantability": 20,
-    "flexibility": 1,
-    "rarity": 100
-  },
-  {
     "name": "Gold",
     "type": "metal",
     "weight": 100,
@@ -77,8 +66,19 @@
     "rarity": 100
   },
   {
-    "name": "Netherite",
+    "name": "Diamond",
     "type": "metal",
+    "weight": 50,
+    "stiffness": 95,
+    "durability": 1561,
+    "sharpness": 5,
+    "enchantability": 20,
+    "flexibility": 1,
+    "rarity": 100
+  },
+  {
+    "name": "Netherite",
+    "type": "organic",
     "weight": 60,
     "stiffness": 100,
     "durability": 2031,

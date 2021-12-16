@@ -8,9 +8,9 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 public class ForgeroItemGroups {
-    public static final String FORGERO_TOOL_GROUP = "tool";
-    public static final String FORGERO_TOOL_PART_GROUP = "toolpart";
-    public static final String FORGERO_MODIFIER_GROUP = "modifier";
+    public static final String FORGERO_TOOL_GROUP = "tools";
+    public static final String FORGERO_TOOL_PART_GROUP = "toolparts";
+    public static final String FORGERO_MODIFIER_GROUP = "modifiers";
 
     public static final ItemGroup FORGERO_TOOLS = FabricItemGroupBuilder.create(
                     new Identifier(Forgero.MOD_NAMESPACE, FORGERO_TOOL_GROUP))

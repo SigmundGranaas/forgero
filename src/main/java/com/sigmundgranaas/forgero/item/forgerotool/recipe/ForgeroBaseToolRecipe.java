@@ -47,7 +47,6 @@ public class ForgeroBaseToolRecipe implements CraftingRecipe {
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack currentItems = inventory.getStack(i);
             if (!handle.test(currentItems) || !head.test(currentItems)) {
-                LOGGER.info(currentItems.toString());
                 return true;
             }
         }

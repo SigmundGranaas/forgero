@@ -185,9 +185,9 @@ public class ForgeroRecipeCreator {
                     Lists.newArrayList(
                             "###"
                     ), //The crafting pattern.
-                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxe_head") //The crafting output
+                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxehead") //The crafting output
             );
-            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxe_head"), recipe);
+            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_pickaxehead"), recipe);
         }
     }
 
@@ -210,9 +210,9 @@ public class ForgeroRecipeCreator {
                             " # ",
                             "# #"
                     ), //The crafting pattern.
-                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovel_head") //The crafting output
+                    new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovelhead") //The crafting output
             );
-            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovel_head"), recipe);
+            map.put(new Identifier(Forgero.MOD_NAMESPACE, material.toString().toLowerCase(Locale.ROOT) + "_shovelhead"), recipe);
         }
     }
 
@@ -247,11 +247,11 @@ public class ForgeroRecipeCreator {
             for (ForgeroToolPartItem head : ItemInitializer.toolPartsHeads) {
                 JsonObject recipe;
                 switch (head.getToolPartType()) {
-                    case PICKAXE_HEAD -> {
+                    case PICKAXEHEAD -> {
                         recipe = createForgeroBaseToolRecipeJson(head, handle, "pickaxe");
                         map.put(new Identifier(Forgero.MOD_NAMESPACE, "pickaxe_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase()), recipe);
                     }
-                    case SHOVEL_HEAD -> {
+                    case SHOVELHEAD -> {
                         recipe = createForgeroBaseToolRecipeJson(head, handle, "shovel");
                         map.put(new Identifier(Forgero.MOD_NAMESPACE, "shovel_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase()), recipe);
                     }
@@ -267,11 +267,11 @@ public class ForgeroRecipeCreator {
                 for (ForgeroToolPartItem binding : ItemInitializer.toolPartsBindings) {
                     JsonObject recipe;
                     switch (head.getToolPartType()) {
-                        case PICKAXE_HEAD -> {
+                        case PICKAXEHEAD -> {
                             recipe = createForgeroToolWithBinding(head, handle, binding, "pickaxe");
                             map.put(new Identifier(Forgero.MOD_NAMESPACE, "pickaxe_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase() + "_" + binding.getToolPartTypeAndMaterialLowerCase()), recipe);
                         }
-                        case SHOVEL_HEAD -> {
+                        case SHOVELHEAD -> {
                             recipe = createForgeroToolWithBinding(head, handle, binding, "shovel");
                             map.put(new Identifier(Forgero.MOD_NAMESPACE, "shovel_" + head.getToolPartTypeAndMaterialLowerCase() + "_" + handle.getToolPartTypeAndMaterialLowerCase() + "_" + binding.getToolPartTypeAndMaterialLowerCase()), recipe);
                         }

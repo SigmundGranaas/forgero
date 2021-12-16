@@ -53,7 +53,7 @@ public class ForgeroToolCreator {
 
 
         return switch (((ForgeroTool) baseItem).getToolHead().getToolPartType()) {
-            case PICKAXE_HEAD -> Optional.of(new ForgeroPickaxeInstance((ForgeroTool) forgeroTool.getItem(), forgeroTool.getOrCreateNbt(), toolPartHead.get(), toolPartHandle.get(), null));
+            case PICKAXEHEAD -> Optional.of(new ForgeroPickaxeInstance((ForgeroTool) forgeroTool.getItem(), forgeroTool.getOrCreateNbt(), toolPartHead.get(), toolPartHandle.get(), null));
             default -> Optional.empty();
         };
     }
@@ -80,7 +80,7 @@ public class ForgeroToolCreator {
         }
 
         return switch (((ForgeroTool) baseItem).getToolHead().getToolPartType()) {
-            case PICKAXE_HEAD -> Optional.of(new ForgeroPickaxeInstance((ForgeroTool) baseItem, new NbtCompound(), toolPartHead.get(), toolPartHandle.get(), null));
+            case PICKAXEHEAD -> Optional.of(new ForgeroPickaxeInstance((ForgeroTool) baseItem, new NbtCompound(), toolPartHead.get(), toolPartHandle.get(), null));
             default -> Optional.empty();
         };
     }
@@ -99,7 +99,7 @@ public class ForgeroToolCreator {
         }
         ForgeroToolPartTypes headType = ((ForgeroToolPartItem) baseItemHead).getToolPartType();
         return switch (headType) {
-            case PICKAXE_HEAD -> Optional.of(new ForgeroPickaxeInstance((ForgeroTool) forgeroItem, new NbtCompound(), toolPartHead.get(), toolPartHandle.get(), null));
+            case PICKAXEHEAD -> Optional.of(new ForgeroPickaxeInstance((ForgeroTool) forgeroItem, new NbtCompound(), toolPartHead.get(), toolPartHandle.get(), null));
             default -> Optional.empty();
         };
     }
