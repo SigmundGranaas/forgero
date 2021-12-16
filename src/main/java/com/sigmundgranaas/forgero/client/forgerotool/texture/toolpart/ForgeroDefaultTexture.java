@@ -23,7 +23,7 @@ public class ForgeroDefaultTexture extends AbstractForgeroToolPartTexture {
 
         BufferedImage recolouredImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
         for (PixelInformation pixel : template.getPixelValues()) {
-            recolouredImage.setRGB(pixel.heightIndex(), pixel.getLengthIndex(), palette.get(findIntPosition(pixel.getRgbColor(), template.getGreyScaleValues())).getRgb());
+            recolouredImage.setRGB(pixel.getLengthIndex(), pixel.getHeightIndex(), palette.get(findIntPosition(pixel.getRgbColor(), template.getGreyScaleValues())).getRgb());
         }
         return recolouredImage;
     }
