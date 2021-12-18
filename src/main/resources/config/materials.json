@@ -1,91 +1,220 @@
 [
   {
     "name": "Oak",
+    "rarity": 100,
     "type": "organic",
-    "weight": 10,
-    "stiffness": 60,
     "durability": 59,
-    "sharpness": 5,
-    "enchantability": 10,
-    "flexibility": 80,
-    "rarity": 100
+    "properties": [
+    ],
+    "weight": 10,
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 60,
+      "sharpness": 5,
+      "enchantability": 10,
+      "flexibility": 80
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
   },
   {
     "name": "Birch",
     "type": "organic",
-    "weight": 9,
-    "stiffness": 50,
     "durability": 59,
-    "sharpness": 5,
-    "enchantability": 10,
-    "flexibility": 90,
-    "rarity": 100
+    "properties": [
+    ],
+    "weight": 9,
+    "rarity": 100,
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 50,
+      "sharpness": 5,
+      "enchantability": 10,
+      "flexibility": 90
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
   },
   {
     "name": "Spruce",
     "type": "organic",
-    "weight": 7,
-    "stiffness": 55,
     "durability": 59,
-    "sharpness": 40,
-    "enchantability": 10,
-    "flexibility": 95,
-    "rarity": 100
+    "rarity": 100,
+    "weight": 7,
+    "properties": [
+    ],
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 55,
+      "sharpness": 40,
+      "enchantability": 10,
+      "flexibility": 95
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
   },
   {
     "name": "Stone",
-    "type": "organic",
+    "rarity": 100,
     "weight": 40,
-    "stiffness": 95,
     "durability": 59,
-    "sharpness": 5,
-    "enchantability": 5,
-    "flexibility": 5,
-    "rarity": 100
+    "type": "organic",
+    "properties": [
+    ],
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 95,
+      "sharpness": 5,
+      "enchantability": 5,
+      "flexibility": 5
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
   },
   {
     "name": "Iron",
     "type": "metal",
-    "weight": 60,
-    "stiffness": 90,
     "durability": 131,
-    "sharpness": 70,
-    "enchantability": 14,
-    "flexibility": 40,
-    "rarity": 100
+    "rarity": 100,
+    "weight": 60,
+    "properties": [
+    ],
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 90,
+      "sharpness": 70,
+      "enchantability": 14,
+      "flexibility": 40
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
   },
   {
     "name": "Gold",
     "type": "metal",
+    "properties": [
+      "golden"
+    ],
+    "rarity": 100,
     "weight": 100,
-    "stiffness": 50,
     "durability": 10,
-    "sharpness": 50,
-    "enchantability": 10,
-    "flexibility": 20,
-    "rarity": 100
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 50,
+      "sharpness": 50,
+      "enchantability": 10,
+      "flexibility": 20
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
   },
   {
     "name": "Diamond",
     "type": "metal",
+    "rarity": 100,
     "weight": 50,
-    "stiffness": 95,
     "durability": 1561,
-    "sharpness": 5,
-    "enchantability": 20,
-    "flexibility": 1,
-    "rarity": 100
+    "properties": [
+      "sparkling"
+    ],
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 95,
+      "sharpness": 5,
+      "enchantability": 20,
+      "flexibility": 1
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
   },
   {
     "name": "Netherite",
     "type": "organic",
+    "rarity": 100,
     "weight": 60,
-    "stiffness": 100,
+    "properties": [
+      "golden"
+    ],
     "durability": 2031,
-    "sharpness": 100,
-    "enchantability": 15,
-    "flexibility": 10,
-    "rarity": 100
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "primary": {
+      "stiffness": 100,
+      "sharpness": 100,
+      "enchantability": 15,
+      "flexibility": 10
+    },
+    "secondary": {
+      "luck": 50,
+      "grip": 10
+    }
+  },
+  {
+    "name": "Leather",
+    "type": "organic",
+    "rarity": 2,
+    "weight": 10,
+    "durability": 30,
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "secondary": {
+      "luck": 1,
+      "grip": 50
+    }
+  },
+  {
+    "name": "Glowstone",
+    "type": "organic",
+    "rarity": 40,
+    "weight": 30,
+    "durability": 20,
+    "palette": {
+      "include": [],
+      "exclude": []
+    },
+    "secondary": {
+      "luck": 20,
+      "grip": 30
+    }
   }
 ]
 
