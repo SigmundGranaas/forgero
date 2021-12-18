@@ -7,6 +7,8 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+    mavenCentral()
+
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -15,6 +17,8 @@ repositories {
 }
 
 dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -117,9 +121,16 @@ loom {
             inherit testmodServer
 
             name "Auto Test Server"
-
             vmArg "-Dfabric.autoTest"
         }
     }
 }
-test.dependsOn runGametest
+
+test {
+    useJUnitPlatform()
+    maxParallelForks = 10
+    testLogging.events("failed")
+    testLogging.info.events = ["failed", "skipped"]
+}
+
+//test.dependsOn runGametest
