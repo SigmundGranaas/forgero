@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.mixins;
 
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroRecipeCreator;
+import com.sigmundgranaas.forgero.material.ForgeroToolMaterial;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;

@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.forgerotool.Modifier.ForgeroModifierItem;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroShovelItem;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
 import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.material.ForgeroToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
 

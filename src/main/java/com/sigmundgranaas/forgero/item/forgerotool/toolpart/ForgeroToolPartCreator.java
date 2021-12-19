@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.item.forgerotool.toolpart;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.item.forgerotool.Modifier.EmptyModifier;
 import com.sigmundgranaas.forgero.item.forgerotool.Modifier.ForgeroModifier;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
+import com.sigmundgranaas.forgero.material.ForgeroToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -21,7 +21,8 @@ public class ForgeroToolPartCreator {
     public static String TOOL_PART_HANDLE_IDENTIFIER = "TOOL_PART_HANDLE";
     public static String TOOL_PART_BINDING_IDENTIFIER = "TOOL_PART_BINDING";
 
-    public static @NotNull Optional<ForgeroToolPart> createToolPart(@Nullable NbtCompound nbtCompound) {
+    public static @NotNull
+    Optional<ForgeroToolPart> createToolPart(@Nullable NbtCompound nbtCompound) {
         if (nbtCompound == null || nbtCompound.isEmpty()) {
             LOGGER.warn("Cannot create tool part, as the inputCompound is null or empty, returning empty toolPart");
             return Optional.empty();
@@ -51,7 +52,8 @@ public class ForgeroToolPartCreator {
         return Optional.of(new ForgeroToolPart(primaryMaterial, secondaryMaterial, modifier));
     }
 
-    public static @NotNull Optional<ForgeroToolPart> createToolPart(ItemStack forgeroToolPart) {
+    public static @NotNull
+    Optional<ForgeroToolPart> createToolPart(ItemStack forgeroToolPart) {
         if (forgeroToolPart.getItem() instanceof ForgeroToolPartItem) {
             return Optional.of(new ForgeroToolPart(((ForgeroToolPartItem) forgeroToolPart.getItem()).getMaterial(), ForgeroToolMaterial.EMPTY_MATERIAL, new EmptyModifier()));
         } else {
@@ -60,7 +62,8 @@ public class ForgeroToolPartCreator {
         }
     }
 
-    public static @NotNull ForgeroToolPart createToolPart(ForgeroToolPartItem forgeroToolPart) {
+    public static @NotNull
+    ForgeroToolPart createToolPart(ForgeroToolPartItem forgeroToolPart) {
         return new ForgeroToolPart(forgeroToolPart.getMaterial(), ForgeroToolMaterial.EMPTY_MATERIAL, new EmptyModifier());
     }
 

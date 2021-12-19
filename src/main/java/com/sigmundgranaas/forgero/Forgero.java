@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.item.ForgeroItemRegister;
 import com.sigmundgranaas.forgero.item.ItemInitializer;
-import com.sigmundgranaas.forgero.item.forgerotool.material.MaterialManager;
 import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroBaseToolRecipeSerializer;
 import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroToolWithBindingRecipeSerializer;
+import com.sigmundgranaas.forgero.material.MaterialManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
