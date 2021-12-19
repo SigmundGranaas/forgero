@@ -10,7 +10,6 @@ public class CustomisedForgeroTool extends AbstractForgeroTool {
         super(head, handle);
     }
 
-
     @Override
     public @NotNull ForgeroToolIdentifier getIdentifier() {
         return null;
@@ -25,6 +24,7 @@ public class CustomisedForgeroTool extends AbstractForgeroTool {
     public @NotNull String getToolIdentifierString() {
         return null;
     }
+
 
     @Override
     public @NotNull ForgeroToolTypes getToolType() {
