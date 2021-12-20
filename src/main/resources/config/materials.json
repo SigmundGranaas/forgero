@@ -4,9 +4,9 @@
     "rarity": 100,
     "type": "organic",
     "durability": 59,
+    "weight": 10,
     "properties": [
     ],
-    "weight": 10,
     "palette": {
       "include": [],
       "exclude": []

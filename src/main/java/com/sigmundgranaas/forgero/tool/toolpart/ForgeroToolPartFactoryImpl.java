@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.tool.toolpart;
 import com.sigmundgranaas.forgero.identifier.ForgeroToolPartIdentifier;
 import com.sigmundgranaas.forgero.material.MaterialCollection;
 import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     private static ForgeroToolPartFactory INSTANCE;
@@ -15,7 +16,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     @Override
-    public ForgeroToolPart createToolPart(ForgeroToolPartIdentifier identifier) {
+    public @NotNull ForgeroToolPart createToolPart(@NotNull ForgeroToolPartIdentifier identifier) {
         PrimaryMaterial material = (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(identifier.getMaterial());
         return switch (identifier.getToolPartType()) {
             case PICKAXEHEAD -> new PickaxeHead(material);
@@ -23,7 +24,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
             case SHOVELHEAD -> null;
             case AXEHEAD -> null;
             case HANDLE -> new Handle(material);
-            case BINDING -> null;
+            case BINDING -> new Binding(material);
         };
     }
 }

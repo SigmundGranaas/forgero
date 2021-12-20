@@ -8,6 +8,7 @@ class MaterialFactoryImplTest {
 
     @Test
     void createMaterial() {
+        MaterialFactoryImpl factory = new MaterialFactoryImpl();
         fail();
     }
 }

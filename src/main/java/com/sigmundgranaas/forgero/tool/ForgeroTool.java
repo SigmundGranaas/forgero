@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.registry.ItemRegister;
 import com.sigmundgranaas.forgero.tool.toolpart.ForgeroToolPart;
+import net.minecraft.item.ToolMaterial;
 import org.jetbrains.annotations.NotNull;
 
 public interface ForgeroTool {
@@ -32,4 +33,14 @@ public interface ForgeroTool {
 
     @NotNull
     ForgeroToolTypes getToolType();
+
+    int getDurability();
+
+    int getAttackDamage();
+
+    float getAttackSpeed();
+
+    float getMiningSpeedMultiplier();
+
+    ToolMaterial getMaterial();
 }

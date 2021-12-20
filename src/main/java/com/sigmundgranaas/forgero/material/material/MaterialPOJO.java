@@ -16,7 +16,7 @@ public class MaterialPOJO {
     public Secondary secondary;
 
 
-    public class Palette {
+    public static class Palette {
         public List<Identifier> include;
         public List<Identifier> exclude;
     }

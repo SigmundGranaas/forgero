@@ -7,8 +7,8 @@ import java.util.Locale;
 public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier implements ForgeroToolPartIdentifier {
     private final String toolPartName;
 
-    public ForgeroToolPartIdentifierImpl(ForgeroIdentifierType toolpart, String forgeroName) {
-        super(toolpart);
+    public ForgeroToolPartIdentifierImpl(String forgeroName) {
+        super(ForgeroIdentifierType.TOOLPART);
         this.toolPartName = forgeroName;
     }
 

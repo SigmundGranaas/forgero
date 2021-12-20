@@ -1,12 +1,14 @@
 package com.sigmundgranaas.forgero.tool;
 
+import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.identifier.ForgeroIdentifierFactory;
-import com.sigmundgranaas.forgero.identifier.ForgeroIdentifierType;
 import com.sigmundgranaas.forgero.identifier.ForgeroToolIdentifierImpl;
 import com.sigmundgranaas.forgero.identifier.ForgeroToolPartIdentifier;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.tool.toolpart.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.tool.toolpart.ToolPartHandle;
+import com.sigmundgranaas.forgero.tool.toolpart.ToolPartHead;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
@@ -20,8 +22,8 @@ class DefaultForgeroToolTest {
     }
 
     public static DefaultForgeroTool getDefaultForgeroTool() {
-        ForgeroToolPart head = createToolPart("iron_pickaxehead");
-        ForgeroToolPart handle = createToolPart("oak_handle");
+        ToolPartHead head = (ToolPartHead) createToolPart(Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING);
+        ToolPartHandle handle = (ToolPartHandle) createToolPart("oak_handle");
         return new DefaultForgeroTool(head, handle);
     }
 
@@ -32,7 +34,7 @@ class DefaultForgeroToolTest {
 
     @Test
     void getIdentifier() {
-        assertEquals(new ForgeroToolIdentifierImpl(ForgeroIdentifierType.TOOL, "iron_pickaxe_iron_pickaxehead_oak_handle").getHead().getToolPartType().toString().toLowerCase(Locale.ROOT)
+        assertEquals(new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING).getHead().getToolPartType().toString().toLowerCase(Locale.ROOT)
                 , getDefaultForgeroTool().getToolHead().getToolPartName());
     }
 
@@ -43,7 +45,7 @@ class DefaultForgeroToolTest {
 
     @Test
     void getToolName() {
-        assertEquals("iron_pickaxe_iron_pickaxehead_oak_handle", getDefaultForgeroTool().getToolIdentifierString());
+        assertEquals(Constants.FORGERO_TOOL_IDENTIFIER_STRING, getDefaultForgeroTool().getToolIdentifierString());
     }
 
     @Test

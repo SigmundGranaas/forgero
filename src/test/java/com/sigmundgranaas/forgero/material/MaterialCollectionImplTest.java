@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.material;
 
 import com.sigmundgranaas.forgero.Constants;
-import com.sigmundgranaas.forgero.identifier.ForgeroIdentifierType;
 import com.sigmundgranaas.forgero.identifier.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.identifier.ForgeroToolIdentifierImpl;
 import com.sigmundgranaas.forgero.identifier.ForgeroToolPartIdentifierImpl;
@@ -37,20 +36,20 @@ class MaterialCollectionImplTest {
     @Test
     void getMaterialFromToolIdentifier() {
         MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
-        materialCollection.getMaterial(new ForgeroToolIdentifierImpl(ForgeroIdentifierType.TOOL, Constants.FORGERO_TOOL_IDENTIFIER_STRING));
+        materialCollection.getMaterial(new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING));
 
     }
 
     @Test
     void getMaterialFromToolPartIdentifier() {
         MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
-        materialCollection.getMaterial(new ForgeroToolPartIdentifierImpl(ForgeroIdentifierType.TOOLPART, Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING));
+        materialCollection.getMaterial(new ForgeroToolPartIdentifierImpl(Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING));
 
     }
 
     @Test
     void getMaterialFromMaterialIdentifier() {
         MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
-        materialCollection.getMaterial(new ForgeroMaterialIdentifierImpl(ForgeroIdentifierType.MATERIAL, Constants.FORGERO_MATERIAL_IDENTIFIER_STRING));
+        materialCollection.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING));
     }
 }

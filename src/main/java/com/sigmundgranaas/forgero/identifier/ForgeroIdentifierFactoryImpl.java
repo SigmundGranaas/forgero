@@ -38,10 +38,9 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {
         String[] elements = forgeroName.split("_");
         return switch (elements.length) {
-            case 7 -> new ForgeroToolIdentifierImpl(ForgeroIdentifierType.TOOL, forgeroName);
-            case 2 -> new ForgeroToolPartIdentifierImpl(ForgeroIdentifierType.TOOLPART, forgeroName);
-            case 1 -> new ForgeroMaterialIdentifierImpl(ForgeroIdentifierType.MATERIAL, forgeroName);
-
+            case 6 -> new ForgeroToolIdentifierImpl(forgeroName);
+            case 2 -> new ForgeroToolPartIdentifierImpl(forgeroName);
+            case 1 -> new ForgeroMaterialIdentifierImpl(forgeroName);
             default -> throw new IllegalStateException("Unexpected value: " + elements.length);
         };
 

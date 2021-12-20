@@ -29,8 +29,4 @@ public abstract class AbstractToolPart implements ForgeroToolPart {
         return secondaryMaterial;
     }
 
-    @Override
-    public float getHeadDamage() {
-        return 0;
-    }
 }

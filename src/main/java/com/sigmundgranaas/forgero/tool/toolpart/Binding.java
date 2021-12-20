@@ -4,20 +4,18 @@ import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes
 import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.material.material.SecondaryMaterial;
 
-import java.util.Locale;
-
-public class PickaxeHead extends AbstractToolPartHead {
-    public PickaxeHead(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial) {
+public class Binding extends AbstractToolPart implements ToolPartBinding {
+    public Binding(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial) {
         super(primaryMaterial, secondaryMaterial);
     }
 
-    public PickaxeHead(PrimaryMaterial primaryMaterial) {
+    public Binding(PrimaryMaterial primaryMaterial) {
         super(primaryMaterial);
     }
 
     @Override
     public int getWeight() {
-        return getPrimaryMaterial().getWeight();
+        return getPrimaryMaterial().getWeight() / 10;
     }
 
     @Override
@@ -27,7 +25,7 @@ public class PickaxeHead extends AbstractToolPartHead {
 
     @Override
     public int getDurability() {
-        return getPrimaryMaterial().getDurability();
+        return 0;
     }
 
     @Override
@@ -35,23 +33,19 @@ public class PickaxeHead extends AbstractToolPartHead {
         return 0;
     }
 
+
     @Override
     public String getToolTypeName() {
-        return "pickaxe";
+        return "binding";
     }
 
     @Override
     public String getToolPartName() {
-        return ForgeroToolPartTypes.PICKAXEHEAD.toString().toLowerCase(Locale.ROOT);
+        return "binding";
     }
 
     @Override
     public ForgeroToolPartTypes getToolpartType() {
-        return ForgeroToolPartTypes.PICKAXEHEAD;
-    }
-
-    @Override
-    public int getSharpness() {
-        return getPrimaryMaterial().getSharpness() / 2;
+        return ForgeroToolPartTypes.BINDING;
     }
 }
