@@ -15,4 +15,8 @@ class ForgeroToolFactoryImplTest {
     @Test
     void testCreateForgeroTool1() {
     }
+
+    @Test
+    void createForgeroTools() {
+    }
 }

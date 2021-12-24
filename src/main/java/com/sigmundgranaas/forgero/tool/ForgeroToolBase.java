@@ -3,7 +3,9 @@ package com.sigmundgranaas.forgero.tool;
 import com.sigmundgranaas.forgero.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.identifier.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.item.forgerotool.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.registry.ItemRegister;
+import com.sigmundgranaas.forgero.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.tool.toolpart.ToolPartHandle;
 import com.sigmundgranaas.forgero.tool.toolpart.ToolPartHead;
 import net.minecraft.item.ToolMaterial;
@@ -11,14 +13,33 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class DefaultForgeroTool extends AbstractForgeroTool {
-    protected DefaultForgeroTool(ToolPartHead head, ToolPartHandle handle) {
-        super(head, handle);
+public class ForgeroToolBase implements ForgeroTool {
+    private final ToolPartHead head;
+    private final ToolPartHandle handle;
+
+    public ForgeroToolBase(ToolPartHead head, ToolPartHandle handle) {
+        this.handle = handle;
+        this.head = head;
     }
 
     @Override
     public void registerToolItem(ItemRegister register) {
-        super.registerToolItem(register);
+        register.registerTool(this);
+    }
+
+    @Override
+    public @NotNull ForgeroToolPart getToolHead() {
+        return head;
+    }
+
+    @Override
+    public @NotNull PrimaryMaterial getPrimaryMaterial() {
+        return head.getPrimaryMaterial();
+    }
+
+    @Override
+    public @NotNull ForgeroToolPart getToolHandle() {
+        return handle;
     }
 
     @Override

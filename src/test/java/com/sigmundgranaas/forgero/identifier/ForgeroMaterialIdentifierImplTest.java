@@ -8,7 +8,7 @@ class ForgeroMaterialIdentifierImplTest {
 
     @Test
     void getName() {
-        ForgeroMaterialIdentifierImpl materialIdentifier = new ForgeroMaterialIdentifierImpl(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING);
-        Assertions.assertEquals(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING, materialIdentifier.getName());
+        ForgeroMaterialIdentifierImpl materialIdentifier = new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING);
+        Assertions.assertEquals(Constants.IRON_IDENTIFIER_STRING, materialIdentifier.getName());
     }
 }

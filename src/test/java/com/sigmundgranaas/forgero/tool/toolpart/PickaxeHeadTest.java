@@ -7,17 +7,19 @@ import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class PickaxeHeadTest {
+public class PickaxeHeadTest {
+    public static PickaxeHead createDefaultPickaxeHead() {
+        return new PickaxeHead((PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)));
+    }
+
 
     @Test
     void getToolTypeName() {
-        ForgeroToolPart referenceToolPart = new PickaxeHead((PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING)));
-        Assertions.assertEquals(referenceToolPart.getToolTypeName(), "pickaxe");
+        Assertions.assertEquals("pickaxe", createDefaultPickaxeHead().getToolTypeName());
     }
 
     @Test
     void getToolPartName() {
-        ForgeroToolPart referenceToolPart = new PickaxeHead((PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING)));
-        Assertions.assertEquals(referenceToolPart.getToolPartName(), "pickaxehead");
+        Assertions.assertEquals("pickaxehead", createDefaultPickaxeHead().getToolPartName());
     }
 }

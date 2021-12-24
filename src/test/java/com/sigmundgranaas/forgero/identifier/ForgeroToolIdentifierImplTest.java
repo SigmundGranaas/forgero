@@ -9,21 +9,21 @@ class ForgeroToolIdentifierImplTest {
 
     @Test
     void getMaterial() {
-        ForgeroToolIdentifierImpl tool = new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING);
-        Assertions.assertEquals(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING, tool.getMaterial().getName());
+        ForgeroToolIdentifierImpl tool = new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER);
+        Assertions.assertEquals(Constants.IRON_IDENTIFIER_STRING, tool.getMaterial().getName());
     }
 
     @Test
     void getToolType() {
-        ForgeroToolIdentifierImpl tool = new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING);
+        ForgeroToolIdentifierImpl tool = new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER);
         Assertions.assertEquals(ForgeroToolTypes.PICKAXE, tool.getToolType());
     }
 
     @Test
     void getHead() {
-        ForgeroToolPartIdentifierImpl referenceIdentifier = new ForgeroToolPartIdentifierImpl(Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING);
+        ForgeroToolPartIdentifierImpl referenceIdentifier = new ForgeroToolPartIdentifierImpl(Constants.IRON_PICKAXEHEAD_IDENTIFIER);
 
-        ForgeroToolIdentifierImpl toolIdentifier = new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING);
+        ForgeroToolIdentifierImpl toolIdentifier = new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER);
 
         Assertions.assertEquals(referenceIdentifier.getToolPartType(), toolIdentifier.getHead().getToolPartType());
     }
@@ -32,7 +32,7 @@ class ForgeroToolIdentifierImplTest {
     void getHandle() {
         ForgeroToolPartIdentifierImpl referenceIdentifier = new ForgeroToolPartIdentifierImpl("oak_handle");
 
-        ForgeroToolIdentifierImpl toolIdentifier = new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING);
+        ForgeroToolIdentifierImpl toolIdentifier = new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER);
 
         Assertions.assertEquals(referenceIdentifier.getToolPartType(), toolIdentifier.getHandle().getToolPartType());
     }

@@ -21,10 +21,10 @@ class DefaultForgeroToolTest {
         return ForgeroToolPartFactory.INSTANCE.createToolPart((ForgeroToolPartIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(identifier));
     }
 
-    public static DefaultForgeroTool getDefaultForgeroTool() {
-        ToolPartHead head = (ToolPartHead) createToolPart(Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING);
+    public static ForgeroToolBase getDefaultForgeroTool() {
+        ToolPartHead head = (ToolPartHead) createToolPart(Constants.IRON_PICKAXEHEAD_IDENTIFIER);
         ToolPartHandle handle = (ToolPartHandle) createToolPart("oak_handle");
-        return new DefaultForgeroTool(head, handle);
+        return new ForgeroToolBase(head, handle);
     }
 
     //TODO
@@ -34,7 +34,7 @@ class DefaultForgeroToolTest {
 
     @Test
     void getIdentifier() {
-        assertEquals(new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING).getHead().getToolPartType().toString().toLowerCase(Locale.ROOT)
+        assertEquals(new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER).getHead().getToolPartType().toString().toLowerCase(Locale.ROOT)
                 , getDefaultForgeroTool().getToolHead().getToolPartName());
     }
 
@@ -45,7 +45,7 @@ class DefaultForgeroToolTest {
 
     @Test
     void getToolName() {
-        assertEquals(Constants.FORGERO_TOOL_IDENTIFIER_STRING, getDefaultForgeroTool().getToolIdentifierString());
+        assertEquals(Constants.EXAMPLE_TOOL_IDENTIFIER, getDefaultForgeroTool().getToolIdentifierString());
     }
 
     @Test

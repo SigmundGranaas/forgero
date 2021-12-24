@@ -36,20 +36,20 @@ class MaterialCollectionImplTest {
     @Test
     void getMaterialFromToolIdentifier() {
         MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
-        materialCollection.getMaterial(new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING));
+        materialCollection.getMaterial(new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER));
 
     }
 
     @Test
     void getMaterialFromToolPartIdentifier() {
         MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
-        materialCollection.getMaterial(new ForgeroToolPartIdentifierImpl(Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING));
+        materialCollection.getMaterial(new ForgeroToolPartIdentifierImpl(Constants.IRON_PICKAXEHEAD_IDENTIFIER));
 
     }
 
     @Test
     void getMaterialFromMaterialIdentifier() {
         MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
-        materialCollection.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING));
+        materialCollection.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING));
     }
 }

@@ -1,14 +1,18 @@
 package com.sigmundgranaas.forgero.material.material.factory;
 
+import com.sigmundgranaas.forgero.material.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.material.material.MaterialPOJO;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 class MaterialFactoryImplTest {
+
 
     @Test
     void createMaterial() {
         MaterialFactoryImpl factory = new MaterialFactoryImpl();
-        fail();
+        ForgeroMaterial material = factory.createMaterial(new MaterialPOJO());
+
+        Assertions.assertEquals("default", material.getName());
     }
 }

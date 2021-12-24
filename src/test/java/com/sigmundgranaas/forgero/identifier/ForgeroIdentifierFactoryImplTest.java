@@ -9,27 +9,27 @@ class ForgeroIdentifierFactoryImplTest {
 
     @Test
     void testCreateMaterialIdentifier() {
-        ForgeroMaterialIdentifierImpl materialIdentifierReference = new ForgeroMaterialIdentifierImpl(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING);
+        ForgeroMaterialIdentifierImpl materialIdentifierReference = new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING);
 
-        ForgeroMaterialIdentifier materialIdentifier = (ForgeroMaterialIdentifier) new ForgeroIdentifierFactoryImpl().createForgeroIdentifier(Constants.FORGERO_MATERIAL_IDENTIFIER_STRING);
+        ForgeroMaterialIdentifier materialIdentifier = (ForgeroMaterialIdentifier) new ForgeroIdentifierFactoryImpl().createForgeroIdentifier(Constants.IRON_IDENTIFIER_STRING);
         Assertions.assertEquals(materialIdentifierReference.getName(), materialIdentifier.getName());
 
     }
 
     @Test
     void testCreateToolIdentifier() {
-        ForgeroToolIdentifierImpl toolIdentifierReference = new ForgeroToolIdentifierImpl(Constants.FORGERO_TOOL_IDENTIFIER_STRING);
+        ForgeroToolIdentifierImpl toolIdentifierReference = new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER);
 
-        ForgeroToolIdentifier toolIdentifier = (ForgeroToolIdentifier) new ForgeroIdentifierFactoryImpl().createForgeroIdentifier(Constants.FORGERO_TOOL_IDENTIFIER_STRING);
+        ForgeroToolIdentifier toolIdentifier = (ForgeroToolIdentifier) new ForgeroIdentifierFactoryImpl().createForgeroIdentifier(Constants.EXAMPLE_TOOL_IDENTIFIER);
 
         Assertions.assertEquals(toolIdentifierReference.getToolType(), toolIdentifier.getToolType());
     }
 
     @Test
     void testCreateToolPartIdentifier() {
-        ForgeroToolPartIdentifierImpl toolPartIdentifierReference = new ForgeroToolPartIdentifierImpl(Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING);
+        ForgeroToolPartIdentifierImpl toolPartIdentifierReference = new ForgeroToolPartIdentifierImpl(Constants.IRON_PICKAXEHEAD_IDENTIFIER);
 
-        ForgeroToolPartIdentifier toolPartIdentifier = (ForgeroToolPartIdentifier) new ForgeroIdentifierFactoryImpl().createForgeroIdentifier(Constants.FORGERO_TOOL_PART_IDENTIFIER_STRING);
+        ForgeroToolPartIdentifier toolPartIdentifier = (ForgeroToolPartIdentifier) new ForgeroIdentifierFactoryImpl().createForgeroIdentifier(Constants.IRON_PICKAXEHEAD_IDENTIFIER);
 
         Assertions.assertEquals(toolPartIdentifierReference.getToolPartType(), toolPartIdentifier.getToolPartType());
     }

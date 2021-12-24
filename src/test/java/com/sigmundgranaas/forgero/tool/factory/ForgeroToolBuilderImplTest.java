@@ -1,23 +1,27 @@
 package com.sigmundgranaas.forgero.tool.factory;
 
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.tool.toolpart.HandleTest;
+import com.sigmundgranaas.forgero.tool.toolpart.PickaxeHeadTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 class ForgeroToolBuilderImplTest {
 
+
     @Test
     void addGem() {
-        fail();
+        //TODO()
     }
 
     @Test
     void addSkin() {
-        fail();
+        //TODO()
     }
 
     @Test
-    void createTool() {
-        fail();
+    void createBaseTool() {
+        ForgeroTool tool = ForgeroToolBuilder.createBuilder(PickaxeHeadTest.createDefaultPickaxeHead(), HandleTest.createDefaultToolPartHandle()).createTool();
+        Assertions.assertEquals("iron_pickaxe_iron_pickaxehead_oak_handle", tool.getToolIdentifierString());
     }
 }
