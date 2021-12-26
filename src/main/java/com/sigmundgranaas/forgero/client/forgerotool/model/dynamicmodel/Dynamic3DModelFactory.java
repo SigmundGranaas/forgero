@@ -5,10 +5,10 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.binding.
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.handle.HandleModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.head.PickaxeHeadModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.head.ShovelHeadModel;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
+import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItemImpl;
 
 public class Dynamic3DModelFactory {
-    public static DynamicModel[] createModel(ForgeroToolPartItem toolPartItem) {
+    public static DynamicModel[] createModel(ForgeroToolPartItemImpl toolPartItem) {
         String toolPartPath = toolPartItem.getIdentifier().getPath();
         if (toolPartPath.contains("handle")) {
             DynamicModel handle = new HandleModel(toolPartItem);

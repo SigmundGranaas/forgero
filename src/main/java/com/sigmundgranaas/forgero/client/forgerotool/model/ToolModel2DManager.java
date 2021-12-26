@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.Dynamic2DModelFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.DynamicModel;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
+import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.ModelRotation;
@@ -46,17 +46,17 @@ public class ToolModel2DManager implements ToolModelManager {
     @Override
     public Optional<FabricBakedModel> getModel(@NotNull ItemStack tool) {
         Item item = tool.getItem();
-        assert item instanceof ForgeroTool;
+        assert item instanceof ForgeroToolItem;
 
         NbtCompound nbt = tool.getNbt();
         if (nbt != null && !nbt.getString("binding").equals("")) {
             String itemBinding = nbt.getString("binding");
-            FabricBakedModel toolModel = models.get(((ForgeroTool) item).getIdentifier().getPath() + "_" + itemBinding);
+            FabricBakedModel toolModel = models.get(((ForgeroToolItem) item).getIdentifier().getPath() + "_" + itemBinding);
             if (toolModel != null) {
                 return Optional.of(toolModel);
             }
         } else {
-            FabricBakedModel toolModel = models.get(((ForgeroTool) item).getIdentifier().getPath());
+            FabricBakedModel toolModel = models.get(((ForgeroToolItem) item).getIdentifier().getPath());
             if (toolModel != null) {
                 return Optional.of(toolModel);
             }
@@ -68,11 +68,11 @@ public class ToolModel2DManager implements ToolModelManager {
 
     private void bakeAllModels(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter) {
         for (Item tool : tools) {
-            DynamicModel[] models = Dynamic2DModelFactory.createModels((ForgeroTool) tool, bindings);
+            DynamicModel[] models = Dynamic2DModelFactory.createModels((ForgeroToolItem) tool, bindings);
             for (DynamicModel model : models) {
                 JsonUnbakedModel jsonModelTemplate = model.buildUnbakedJsonModel();
                 JsonUnbakedModel generatedJsonModel = ITEM_MODEL_GENERATOR.create(textureGetter, jsonModelTemplate);
-                this.models.put(model.getModelIdentifier().getPath(), (FabricBakedModel) generatedJsonModel.bake(loader, jsonModelTemplate, textureGetter, ModelRotation.X0_Y0, ((ForgeroTool) tool).getIdentifier(), true));
+                this.models.put(model.getModelIdentifier().getPath(), (FabricBakedModel) generatedJsonModel.bake(loader, jsonModelTemplate, textureGetter, ModelRotation.X0_Y0, ((ForgeroToolItem) tool).getIdentifier(), true));
             }
         }
     }

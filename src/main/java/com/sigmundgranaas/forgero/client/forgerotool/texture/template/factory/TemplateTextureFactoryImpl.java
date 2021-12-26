@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdent
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTexture;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTextureFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
-import com.sigmundgranaas.forgero.item.forgerotool.Constants;
+import com.sigmundgranaas.forgero.item.Constants;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
@@ -71,7 +71,8 @@ public class TemplateTextureFactoryImpl implements TemplateTextureFactory {
     }
 
 
-    public @NotNull String getTemplateTextureFolder() {
+    public @NotNull
+    String getTemplateTextureFolder() {
         return Constants.CONFIG_PATH + "forgero/templates/textures/";
     }
 

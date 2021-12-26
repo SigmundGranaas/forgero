@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero;
 
-import com.sigmundgranaas.forgero.item.ForgeroItemRegister;
-import com.sigmundgranaas.forgero.item.ItemInitializer;
-import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroBaseToolRecipeSerializer;
-import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroToolWithBindingRecipeSerializer;
-import com.sigmundgranaas.forgero.material.MaterialManager;
+import com.sigmundgranaas.forgero.core.material.MaterialManager;
+import com.sigmundgranaas.forgero.recipe.ForgeroBaseToolRecipeSerializer;
+import com.sigmundgranaas.forgero.recipe.ForgeroToolWithBindingRecipeSerializer;
+import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
@@ -17,17 +16,14 @@ public class Forgero implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ItemInitializer.getInstance();
         registerItems();
         registerRecipes();
         MaterialManager.initializePrimaryMaterials();
     }
 
     private void registerItems() {
-        ForgeroItemRegister.RegisterForgeroItem(ItemInitializer.toolPartsHandles);
-        ForgeroItemRegister.RegisterForgeroItem(ItemInitializer.toolPartsBindings);
-        ForgeroItemRegister.RegisterForgeroItem(ItemInitializer.toolPartsHeads);
-        ForgeroItemRegister.RegisterForgeroItem(ItemInitializer.tools);
+        ForgeroItemRegistry.INSTANCE.registerTools();
+        ForgeroItemRegistry.INSTANCE.registerToolParts();
     }
 
     private void registerRecipes() {

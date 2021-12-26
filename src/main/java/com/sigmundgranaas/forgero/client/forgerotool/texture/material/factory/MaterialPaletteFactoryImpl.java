@@ -6,8 +6,8 @@ import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureManag
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPalette;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPaletteFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
-import com.sigmundgranaas.forgero.item.forgerotool.Constants;
-import com.sigmundgranaas.forgero.material.ForgeroToolMaterial;
+import com.sigmundgranaas.forgero.core.material.ForgeroToolMaterial;
+import com.sigmundgranaas.forgero.item.Constants;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

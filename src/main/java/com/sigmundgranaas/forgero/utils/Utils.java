@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.utils;
 
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.material.MaterialManager;
+import com.sigmundgranaas.forgero.core.material.MaterialManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;

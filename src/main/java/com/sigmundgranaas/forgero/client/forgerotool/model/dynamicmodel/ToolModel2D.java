@@ -5,8 +5,7 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroMiningTool;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
+import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
@@ -26,9 +25,9 @@ import java.util.function.Function;
 public class ToolModel2D implements DynamicModel {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
     private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
-    protected final ForgeroTool tool;
+    protected final ForgeroToolItem tool;
 
-    public ToolModel2D(ForgeroTool tool) {
+    public ToolModel2D(ForgeroToolItem tool) {
         this.tool = tool;
     }
 
@@ -43,8 +42,8 @@ public class ToolModel2D implements DynamicModel {
 
     protected JsonElement getTextures() {
         JsonObject textures = new JsonObject();
-        String headTexture = getTextureBase() + tool.getToolHead().getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getHeadType());
-        String handleTexture = getTextureBase() + tool.getToolHandle().getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getHandleType());
+        String headTexture = getTextureBase() + tool.getTool().getToolHead().getPrimaryMaterial().getName() + "_" + ToolPartModelTypeToFilename(getHeadType());
+        String handleTexture = getTextureBase() + tool.getTool().getToolHandle().getPrimaryMaterial().getName() + "_" + ToolPartModelTypeToFilename(getHandleType());
         textures.addProperty("layer0", handleTexture);
         textures.addProperty("layer1", headTexture);
         textures.addProperty("particle", headTexture);
@@ -63,7 +62,7 @@ public class ToolModel2D implements DynamicModel {
 
     @Override
     public String itemPartModelIdentifier() {
-        return tool.getIdentifier().getPath();
+        return tool.getTool().getToolIdentifierString();
     }
 
     @Override
@@ -73,7 +72,7 @@ public class ToolModel2D implements DynamicModel {
 
     public ToolPartModelType getHeadType() {
         //TODO add sword
-        return switch (((ForgeroMiningTool) tool).getToolType()) {
+        return switch (((ForgeroToolItem) tool).getToolType()) {
             case PICKAXE -> ToolPartModelType.PICKAXEHEAD;
             case SHOVEL -> ToolPartModelType.SHOVELHEAD;
             case SWORD -> ToolPartModelType.AXEHEAD;
@@ -85,7 +84,7 @@ public class ToolModel2D implements DynamicModel {
     }
 
     public ToolPartModelType getHandleType() {
-        return switch (((ForgeroMiningTool) tool).getToolType()) {
+        return switch (((ForgeroToolItem) tool).getToolType()) {
             case PICKAXE -> ToolPartModelType.FULLHANDLE;
             case SHOVEL -> ToolPartModelType.MEDIUMHANDLE;
             case SWORD -> ToolPartModelType.SHORTHANDLE;
@@ -93,7 +92,7 @@ public class ToolModel2D implements DynamicModel {
     }
 
     public ToolPartModelType getBindingType() {
-        return switch (((ForgeroMiningTool) tool).getToolType()) {
+        return switch (((ForgeroToolItem) tool).getToolType()) {
             case PICKAXE -> ToolPartModelType.PICKAXEBINDING;
             case SHOVEL -> ToolPartModelType.SHOVELBINDING;
             case SWORD -> ToolPartModelType.AXEHEAD;

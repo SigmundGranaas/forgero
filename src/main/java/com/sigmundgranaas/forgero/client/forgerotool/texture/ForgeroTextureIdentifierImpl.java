@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.item.forgerotool.Constants;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.item.Constants;
+import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItemImpl;
 import com.sigmundgranaas.forgero.utils.FileSystemUtilities;
 import com.sigmundgranaas.forgero.utils.ResourceUtils;
 import net.minecraft.util.Identifier;
@@ -59,16 +59,16 @@ public class ForgeroTextureIdentifierImpl implements ForgeroTextureIdentifier {
 
     @Override
     public Optional<ToolPartModelType> getModelType() {
-        return ForgeroToolPartItem.getToolPartModelTypeFromFileName(getFileNameWithoutExtension());
+        return ForgeroToolPartItemImpl.getToolPartModelTypeFromFileName(getFileNameWithoutExtension());
     }
 
     @Override
     public Optional<ForgeroToolPartTypes> getToolPartType() {
-        return ForgeroToolPartItem.getToolPartTypeFromFileName(getFileNameWithoutExtension());
+        return ForgeroToolPartItemImpl.getToolPartTypeFromFileName(getFileNameWithoutExtension());
     }
 
     @Override
     public Optional<String> getMaterial() {
-        return ForgeroToolPartItem.getMaterialFromFileName(getFileNameWithoutExtension());
+        return ForgeroToolPartItemImpl.getMaterialFromFileName(getFileNameWithoutExtension());
     }
 }

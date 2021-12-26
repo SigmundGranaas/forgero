@@ -2,15 +2,14 @@ package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroMiningTool;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
+import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
 
 public class ToolModel2DBinding extends ToolModel2D {
     private final ForgeroToolPartItem binding;
 
 
-    public ToolModel2DBinding(ForgeroTool tool, ForgeroToolPartItem binding) {
+    public ToolModel2DBinding(ForgeroToolItem tool, ForgeroToolPartItem binding) {
         super(tool);
         this.binding = binding;
     }
@@ -18,15 +17,15 @@ public class ToolModel2DBinding extends ToolModel2D {
     @Override
     protected JsonElement getTextures() {
         JsonObject textures = super.getTextures().getAsJsonObject();
-        if (tool instanceof ForgeroMiningTool) {
-            textures.addProperty("layer2", super.getTextureBase() + binding.getMaterial().toString().toLowerCase() + "_" + ToolPartModelTypeToFilename(getBindingType()));
+        if (tool instanceof ForgeroToolItem) {
+            textures.addProperty("layer2", super.getTextureBase() + binding.getPrimaryMaterial().getName() + "_" + ToolPartModelTypeToFilename(getBindingType()));
         }
         return textures;
     }
 
     @Override
     public String itemPartModelIdentifier() {
-        String bindingType = ((ForgeroMiningTool) tool).getToolTypeLowerCaseString();
-        return tool.getIdentifier().getPath() + "_" + binding.getToolPartTypeAndMaterialLowerCase() + "_toolpart" + "_" + bindingType;
+        String bindingType = ((ForgeroToolItem) tool).getTool().getToolHead().getToolTypeName();
+        return tool.getTool().getToolIdentifierString() + "_" + binding.getIdentifier() + "_toolpart" + "_" + bindingType;
     }
 }

@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.item.forgerotool.tool.instance.ForgeroPickaxeInstance;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.instance.ForgeroToolCreator;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.instance.ForgeroToolInstance;
-import com.sigmundgranaas.forgero.item.forgerotool.tool.item.ForgeroTool;
+import com.sigmundgranaas.forgero.item.instance.ForgeroToolInstanceFactory;
+import com.sigmundgranaas.forgero.item.instance.tool.ForgeroPickaxeInstance;
+import com.sigmundgranaas.forgero.item.instance.tool.ForgeroToolInstance;
+import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -18,8 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
-
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
@@ -31,8 +29,8 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<?>> cir) {
-        if (this.getItem() instanceof ForgeroTool) {
-            Optional<ForgeroToolInstance> tool = ForgeroToolCreator.createForgeroToolInstance(this.nbt, this.getItem());
+        if (this.getItem() instanceof ForgeroToolItem) {
+            //Optional<ForgeroToolInstance> tool = ForgeroToolInstanceFactory.INSTANCE.createForgeroToolInstance((ForgeroToolItem) this.getItem(), this.nbt);
         }
         cir.setReturnValue(this.getItem().use(world, user, hand));
         cir.cancel();
@@ -41,9 +39,9 @@ public abstract class ItemStackMixin {
     @Inject(at = @At("RETURN"), method = "getMiningSpeedMultiplier", cancellable = true)
     public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
         float customSpeed = 0F;
-        if (this.getItem() instanceof ForgeroTool) {
-            Optional<ForgeroToolInstance> tool = ForgeroToolCreator.createForgeroToolInstance(this.nbt, this.getItem());
-            if (tool.isPresent() && tool.get() instanceof ForgeroPickaxeInstance forgeroTool) {
+        if (this.getItem() instanceof ForgeroToolItem) {
+            ForgeroToolInstance tool = ForgeroToolInstanceFactory.INSTANCE.createForgeroToolInstance((ForgeroToolItem) this.getItem(), this.nbt);
+            if (tool instanceof ForgeroPickaxeInstance forgeroTool) {
                 customSpeed = this.getItem().getMiningSpeedMultiplier((ItemStack) (Object) this, state) + forgeroTool.getMiningSpeedMultiplier();
 
             }

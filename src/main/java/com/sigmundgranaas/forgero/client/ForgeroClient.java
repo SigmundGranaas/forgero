@@ -1,9 +1,12 @@
 package com.sigmundgranaas.forgero.client;
 
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.client.forgerotool.model.*;
-import com.sigmundgranaas.forgero.item.ItemInitializer;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartItem;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ForgeroToolModelProvider;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolModel2DManager;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolModelManager;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
+import com.sigmundgranaas.forgero.item.ForgeroItemCollection;
+import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -22,18 +25,18 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private void initializeItemModels() {
-        ToolModelManager toolParts = new ToolModel3DManager(ItemInitializer.toolPartsHandles, ItemInitializer.toolPartsHeads, ItemInitializer.toolPartsBindings);
-        ToolModelManager toolModels = new ToolModel2DManager(ItemInitializer.tools, ItemInitializer.toolPartsBindings);
+        //ToolModelManager toolParts = new ToolModel3DManager(ForgeroItemCollection.INSTANCE.getToolPartHandles(), ItemInitializer.toolPartsHeads, ItemInitializer.toolPartsBindings);
+        ToolModelManager toolModels = new ToolModel2DManager(ForgeroItemCollection.INSTANCE.getTools(), ForgeroItemCollection.INSTANCE.getToolPartBindings());
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(rm -> new ForgeroToolModelProvider(toolModels));
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
-            for (ForgeroToolPartItem part : ItemInitializer.toolPartsBindings) {
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.PICKAXEBINDING.toFileName(), "inventory"));
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.SHOVELBINDING.toFileName(), "inventory"));
+            for (ForgeroToolPartItem part : ForgeroItemCollection.INSTANCE.getToolPartBindings()) {
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getPrimaryMaterial().getName() + "_" + ToolPartModelType.PICKAXEBINDING.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getPrimaryMaterial().getName() + "_" + ToolPartModelType.SHOVELBINDING.toFileName(), "inventory"));
             }
-            for (ForgeroToolPartItem part : ItemInitializer.toolPartsHandles) {
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.FULLHANDLE.toFileName(), "inventory"));
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.MEDIUMHANDLE.toFileName(), "inventory"));
-                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getMaterial().toString().toLowerCase() + "_" + ToolPartModelType.SHORTHANDLE.toFileName(), "inventory"));
+            for (ForgeroToolPartItem part : ForgeroItemCollection.INSTANCE.getToolPartHandles()) {
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getPrimaryMaterial().getName() + "_" + ToolPartModelType.FULLHANDLE.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getPrimaryMaterial().getName() + "_" + ToolPartModelType.MEDIUMHANDLE.toFileName(), "inventory"));
+                out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getPrimaryMaterial().getName() + "_" + ToolPartModelType.SHORTHANDLE.toFileName(), "inventory"));
             }
 
         });

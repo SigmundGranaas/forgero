@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPalette;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
-import com.sigmundgranaas.forgero.item.forgerotool.Constants;
+import com.sigmundgranaas.forgero.item.Constants;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
@@ -28,7 +28,8 @@ public class PersistMaterialPaletteFactory extends MaterialPaletteFactoryImpl {
     }
 
 
-    protected @NotNull String getTemplateMaterialFolder() {
+    protected @NotNull
+    String getTemplateMaterialFolder() {
         return Constants.DEV_SRC_RESOURCES_PATH + Constants.CONFIG_PATH + "forgero/templates/materials/";
     }
 

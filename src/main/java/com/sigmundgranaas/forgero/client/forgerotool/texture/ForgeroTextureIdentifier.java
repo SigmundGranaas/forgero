@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.item.forgerotool.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
 
 import java.util.Optional;
 
