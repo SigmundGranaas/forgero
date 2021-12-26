@@ -36,7 +36,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     private ToolPartHead createToolPartHead(@NotNull ForgeroToolPartIdentifier identifier, PrimaryMaterial material) {
         return switch (((ForgeroToolPartHeadIdentifier) identifier).getHeadType()) {
             case PICKAXE -> new PickaxeHead(material);
-            case SHOVEL -> null;
+            case SHOVEL -> new Shovelhead(material);
             case SWORD -> null;
         };
     }
@@ -67,6 +67,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
         List<ForgeroToolPart> toolparts = new ArrayList<>();
         toolparts.add(new Handle(material));
         toolparts.add(new PickaxeHead(material));
+        toolparts.add(new Shovelhead(material));
         toolparts.add(new Binding(material));
         return toolparts;
     }

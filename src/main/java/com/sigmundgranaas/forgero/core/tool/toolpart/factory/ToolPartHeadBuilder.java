@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.AbstractToolPartHead;
 import com.sigmundgranaas.forgero.core.tool.toolpart.PickaxeHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.Shovelhead;
 
 public class ToolPartHeadBuilder extends ToolPartBuilder {
     private final ForgeroToolTypes head;
@@ -21,7 +22,7 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
     public AbstractToolPartHead createToolPart() {
         return switch (head) {
             case PICKAXE -> new PickaxeHead(this);
-            case SHOVEL -> null;
+            case SHOVEL -> new Shovelhead(this);
             case SWORD -> null;
         };
     }

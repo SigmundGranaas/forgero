@@ -6,13 +6,13 @@ import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartHeadBuilder
 
 import java.util.Locale;
 
-public class PickaxeHead extends AbstractToolPartHead {
-    public PickaxeHead(PrimaryMaterial primaryMaterial) {
-        super(primaryMaterial, ForgeroToolTypes.PICKAXE);
+public class Shovelhead extends AbstractToolPartHead {
+    public Shovelhead(ToolPartHeadBuilder toolPartHeadBuilder) {
+        super(toolPartHeadBuilder.getPrimary(), toolPartHeadBuilder.getSecondary(), toolPartHeadBuilder.getHead());
     }
 
-    public PickaxeHead(ToolPartHeadBuilder toolPartHeadBuilder) {
-        super(toolPartHeadBuilder.getPrimary(), toolPartHeadBuilder.getSecondary(), toolPartHeadBuilder.getHead());
+    public Shovelhead(PrimaryMaterial primaryMaterial) {
+        super(primaryMaterial, ForgeroToolTypes.SHOVEL);
     }
 
     @Override
@@ -37,12 +37,12 @@ public class PickaxeHead extends AbstractToolPartHead {
 
     @Override
     public String getToolTypeName() {
-        return "pickaxe";
+        return "shovel";
     }
 
     @Override
     public String getToolPartName() {
-        return ForgeroToolTypes.PICKAXE.toString().toLowerCase(Locale.ROOT) + getToolPartType().toString().toLowerCase(Locale.ROOT);
+        return ForgeroToolTypes.SHOVEL.toString().toLowerCase(Locale.ROOT) + getToolPartType().toString().toLowerCase(Locale.ROOT);
     }
 
     @Override
