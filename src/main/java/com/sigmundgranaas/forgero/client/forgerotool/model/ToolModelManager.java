@@ -20,6 +20,7 @@ public interface ToolModelManager {
     UnbakedModel getUnbakedModel(ModelIdentifier id);
 
     default boolean isQualifiedModelManager(ModelIdentifier id) {
-        return id.getNamespace().equals(Forgero.MOD_NAMESPACE) && id.getPath().startsWith("pickaxe") || id.getPath().startsWith("shovel");
+        String[] elements = id.getPath().split("_");
+        return id.getNamespace().equals(Forgero.MOD_NAMESPACE) && elements.length == 6;
     }
 }

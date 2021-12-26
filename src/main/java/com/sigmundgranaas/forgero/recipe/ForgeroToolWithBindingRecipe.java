@@ -66,7 +66,7 @@ public class ForgeroToolWithBindingRecipe implements CraftingRecipe {
             }
         }
         ItemStack output = new ItemStack(this.itemOutput);
-        String bindingType = ((ForgeroToolPartItemImpl) binding.getMatchingStacks()[0].getItem()).getToolPartTypeAndMaterialLowerCase();
+        String bindingType = ((ForgeroToolPartItemImpl) binding.getMatchingStacks()[0].getItem()).getToolPartIdentifierString();
         if (this.itemOutput instanceof ForgeroShovelItem) {
             bindingType += "_toolpart_shovel";
         } else if (this.itemOutput instanceof ForgeroPickaxeItem) {

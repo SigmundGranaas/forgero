@@ -56,7 +56,7 @@ public abstract class AbstractDynamicModel implements DynamicModel {
 
     @Override
     public String itemPartModelIdentifier() {
-        return toolpart.getToolPartTypeAndMaterialLowerCase() + "_toolpart";
+        return toolpart.getPart().getToolPartIdentifier() + "_toolpart";
     }
 
     protected String getTexture() {

@@ -25,7 +25,8 @@ public class ToolModel2DBinding extends ToolModel2D {
 
     @Override
     public String itemPartModelIdentifier() {
-        String bindingType = ((ForgeroToolItem) tool).getTool().getToolHead().getToolTypeName();
-        return tool.getTool().getToolIdentifierString() + "_" + binding.getIdentifier() + "_toolpart" + "_" + bindingType;
+        String bindingType = tool.getTool().getToolHead().getToolTypeName();
+        String toolIdentifier = tool.getTool().getToolIdentifierString();
+        return toolIdentifier + "_" + binding.getPart().getToolPartIdentifier() + "_toolpart" + "_" + bindingType;
     }
 }

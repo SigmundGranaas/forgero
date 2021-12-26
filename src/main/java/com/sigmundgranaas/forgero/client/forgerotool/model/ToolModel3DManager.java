@@ -69,17 +69,17 @@ public class ToolModel3DManager implements ToolModelManager {
     public HashMap<String, FabricBakedModel> getBakedPartModels(ModelLoader loader) {
         HashMap<String, FabricBakedModel> PART_MODELS = new HashMap<>();
         for (ForgeroToolPartItemImpl part : bindings) {
-            PART_MODELS.put(part.getToolPartTypeAndMaterialLowerCase(), (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase(), "inventory"), ModelRotation.X0_Y0));
+            PART_MODELS.put(part.getToolPartIdentifierString(), (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartIdentifierString(), "inventory"), ModelRotation.X0_Y0));
         }
         for (ForgeroToolPartItemImpl part : bindings) {
-            FabricBakedModel model = (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase() + "_shovel", "inventory"), ModelRotation.X0_Y0);
-            PART_MODELS.put(part.getToolPartTypeAndMaterialLowerCase() + "_shovel", model);
+            FabricBakedModel model = (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartIdentifierString() + "_shovel", "inventory"), ModelRotation.X0_Y0);
+            PART_MODELS.put(part.getToolPartIdentifierString() + "_shovel", model);
         }
         for (ForgeroToolPartItemImpl part : handles) {
-            PART_MODELS.put(part.getToolPartTypeAndMaterialLowerCase(), (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase(), "inventory"), ModelRotation.X0_Y0));
+            PART_MODELS.put(part.getToolPartIdentifierString(), (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartIdentifierString(), "inventory"), ModelRotation.X0_Y0));
         }
         for (ForgeroToolPartItemImpl part : heads) {
-            PART_MODELS.put(part.getToolPartTypeAndMaterialLowerCase(), (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartTypeAndMaterialLowerCase(), "inventory"), ModelRotation.X0_Y0));
+            PART_MODELS.put(part.getToolPartIdentifierString(), (FabricBakedModel) loader.bake(new ModelIdentifier(Forgero.MOD_NAMESPACE, part.getToolPartIdentifierString(), "inventory"), ModelRotation.X0_Y0));
         }
         return PART_MODELS;
     }

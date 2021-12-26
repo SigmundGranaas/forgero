@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.item.ForgeroItemTypes;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
@@ -70,23 +69,13 @@ public class ForgeroToolPartItemImpl extends Item implements ForgeroToolPartItem
         return type.toString().toLowerCase(Locale.ROOT);
     }
 
-    public String getToolPartTypeAndMaterialLowerCase() {
-        return this.material.toString().toLowerCase(Locale.ROOT) + "_" + getToolPartTypeLowerCase();
-    }
-
-
-    public ForgeroItemTypes getItemType() {
-        return ForgeroItemTypes.TOOL_PART;
-    }
-
-
-    public String getToolTip() {
-        return getPrimaryMaterial().getName() + "_" + getToolPartType();
+    public String getToolPartIdentifierString() {
+        return part.getToolPartIdentifier();
     }
 
     @Override
     public Identifier getIdentifier() {
-        return new Identifier(Forgero.MOD_NAMESPACE, getPrimaryMaterial().getName() + "_" + getToolPartTypeLowerCase());
+        return new Identifier(Forgero.MOD_NAMESPACE, getToolPartIdentifierString());
     }
 
     @Override

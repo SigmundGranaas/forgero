@@ -15,45 +15,46 @@ public class MaterialPOJO {
     public Primary primary;
     public Secondary secondary;
 
-    public MaterialPOJO() {
-        this.name = "Default";
-        this.rarity = 1;
-        this.type = MaterialType.METAL;
-        this.durability = 1;
-        this.properties = List.of();
-        this.weight = 1;
+    public static MaterialPOJO createDefualtMaterialPOJO() {
+        MaterialPOJO pojo = new MaterialPOJO();
+        pojo.name = "Default";
+        pojo.rarity = 1;
+        pojo.type = MaterialType.METAL;
+        pojo.durability = 1;
+        pojo.properties = List.of();
+        pojo.weight = 1;
         Palette palette = new Palette();
         palette.include = List.of();
         palette.exclude = List.of();
-        this.palette = palette;
+        pojo.palette = palette;
         Primary primary = new Primary();
         primary.enchantability = 1;
         primary.flexibility = 1;
         primary.sharpness = 1;
         primary.stiffness = 1;
 
-        this.primary = primary;
+        pojo.primary = primary;
 
         Secondary secondary = new Secondary();
         secondary.grip = 1;
         secondary.luck = 1;
-        this.secondary = secondary;
+        pojo.secondary = secondary;
+        return pojo;
     }
 
-
-    public class Palette {
+    public static class Palette {
         public List<Identifier> include;
         public List<Identifier> exclude;
     }
 
-    public class Primary {
+    public static class Primary {
         public int stiffness;
         public int sharpness;
         public int enchantability;
         public int flexibility;
     }
 
-    public class Secondary {
+    public static class Secondary {
         public int luck;
         public int grip;
     }

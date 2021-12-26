@@ -22,16 +22,10 @@ public class ForgeroToolPartCollectionImpl implements ForgeroToolPartCollection 
         return INSTANCE;
     }
 
-    private void loadToolParts() {
-
-    }
 
     @Override
     public @NotNull
     List<ForgeroToolPart> getToolParts() {
-        if (toolParts.isEmpty()) {
-            loadToolParts();
-        }
         return toolParts;
     }
 

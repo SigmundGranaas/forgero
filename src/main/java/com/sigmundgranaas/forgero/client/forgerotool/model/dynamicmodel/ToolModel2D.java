@@ -67,7 +67,8 @@ public class ToolModel2D implements DynamicModel {
 
     @Override
     public ModelIdentifier getModelIdentifier() {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, itemPartModelIdentifier(), "inventory");
+        String itemPartModelIdentifier = itemPartModelIdentifier();
+        return new ModelIdentifier(Forgero.MOD_NAMESPACE, itemPartModelIdentifier, "inventory");
     }
 
     public ToolPartModelType getHeadType() {

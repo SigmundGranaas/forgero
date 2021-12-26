@@ -17,6 +17,7 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +73,9 @@ public class ToolModel2DManager implements ToolModelManager {
             for (DynamicModel model : models) {
                 JsonUnbakedModel jsonModelTemplate = model.buildUnbakedJsonModel();
                 JsonUnbakedModel generatedJsonModel = ITEM_MODEL_GENERATOR.create(textureGetter, jsonModelTemplate);
-                this.models.put(model.getModelIdentifier().getPath(), (FabricBakedModel) generatedJsonModel.bake(loader, jsonModelTemplate, textureGetter, ModelRotation.X0_Y0, ((ForgeroToolItem) tool).getIdentifier(), true));
+                String modelIdentifier = model.getModelIdentifier().getPath();
+                Identifier toolIdentifier = ((ForgeroToolItem) tool).getIdentifier();
+                this.models.put(modelIdentifier, (FabricBakedModel) generatedJsonModel.bake(loader, jsonModelTemplate, textureGetter, ModelRotation.X0_Y0, toolIdentifier, true));
             }
         }
     }

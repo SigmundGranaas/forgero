@@ -15,9 +15,6 @@ public class ForgeroTextureIdentifierImpl implements ForgeroTextureIdentifier {
     private final Identifier id;
 
     public ForgeroTextureIdentifierImpl(@NotNull Identifier id) {
-        if (ResourceUtils.isNotForgeroResource(id) || !ResourceUtils.isTextureIdentifier(id)) {
-            throw new IllegalArgumentException("Cannot create a Forgero Texture Identifier without a proper Identifier");
-        }
         this.id = id;
     }
 
@@ -61,6 +58,7 @@ public class ForgeroTextureIdentifierImpl implements ForgeroTextureIdentifier {
     public Optional<ToolPartModelType> getModelType() {
         return ForgeroToolPartItemImpl.getToolPartModelTypeFromFileName(getFileNameWithoutExtension());
     }
+
 
     @Override
     public Optional<ForgeroToolPartTypes> getToolPartType() {

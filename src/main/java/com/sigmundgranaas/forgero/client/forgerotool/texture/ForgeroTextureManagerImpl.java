@@ -42,7 +42,7 @@ public class ForgeroTextureManagerImpl implements ForgeroTextureManager {
             return false;
         }
 
-        ForgeroTextureIdentifierImpl textureIdentifier = new ForgeroTextureIdentifierImpl(resourceId);
+        ForgeroTextureIdentifier textureIdentifier = new ForgeroTextureIdentifierImpl(resourceId);
 
         boolean fileExists = textureIdentifier.fileExists();
         if (fileExists && ClientConfiguration.INSTANCE.shouldCreateNewTextures()) {

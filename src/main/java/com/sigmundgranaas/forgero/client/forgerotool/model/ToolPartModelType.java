@@ -13,9 +13,9 @@ public enum ToolPartModelType {
     MEDIUMHANDLE,
     SHORTHANDLE,
     PICKAXEBINDING,
-    SHOVELBINDING,
+    HANDLE,
     BINDING,
-    HANDLE;
+    SHOVELBINDING;
 
     public String toFileName() {
         return this.toString().toLowerCase(Locale.ROOT).replace("_", "");

@@ -11,7 +11,7 @@ class MaterialFactoryImplTest {
     @Test
     void createMaterial() {
         MaterialFactoryImpl factory = new MaterialFactoryImpl();
-        ForgeroMaterial material = factory.createMaterial(new MaterialPOJO());
+        ForgeroMaterial material = factory.createMaterial(MaterialPOJO.createDefualtMaterialPOJO());
 
         Assertions.assertEquals("default", material.getName());
     }
