@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
+import com.google.gson.JsonObject;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class MaterialPOJO {
     public Palette palette;
     public Primary primary;
     public Secondary secondary;
+
 
     public static MaterialPOJO createDefualtMaterialPOJO() {
         MaterialPOJO pojo = new MaterialPOJO();
@@ -52,6 +54,7 @@ public class MaterialPOJO {
         public int sharpness;
         public int enchantability;
         public int flexibility;
+        public JsonObject repairIngredient;
     }
 
     public static class Secondary {

@@ -41,7 +41,7 @@ public class ForgeroRecipeCreator {
         json.add("handle", handleProperty);
         //We create a new Json Element, and add our crafting pattern to it.
 
-        json.addProperty("outputItem", Forgero.MOD_NAMESPACE + ":" + type + "_" + head.getPart().getToolPartIdentifier() + "_" + handle.getPart().getToolPartIdentifier());
+        json.addProperty("outputItem", Forgero.MOD_NAMESPACE + ":" + head.getPrimaryMaterial().getName() + "_" + type + "_" + head.getPart().getToolPartIdentifier() + "_" + handle.getPart().getToolPartIdentifier());
         //Then we add the pattern to our json object.
 
         return json;
@@ -67,7 +67,7 @@ public class ForgeroRecipeCreator {
         json.add("handle", handleProperty);
         //We create a new Json Element, and add our crafting pattern to it.
 
-        json.addProperty("outputItem", Forgero.MOD_NAMESPACE + ":" + type + "_" + head.getPart().getToolPartIdentifier() + "_" + handle.getPart().getToolPartIdentifier());
+        json.addProperty("outputItem", Forgero.MOD_NAMESPACE + ":" + head.getPrimaryMaterial().getName() + "_" + type + "_" + head.getPart().getToolPartIdentifier() + "_" + handle.getPart().getToolPartIdentifier());
         //Then we add the pattern to our json object.
 
         return json;

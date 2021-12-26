@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
+import com.google.gson.JsonObject;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -7,9 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMaterial {
+    private JsonObject ingredient;
 
     public PrimaryMaterialImpl(MaterialPOJO material) {
         super(material);
+        ingredient = material.primary.repairIngredient;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMate
 
     @Override
     public Ingredient getRepairIngredient() {
-        return null;
+        return Ingredient.fromJson(ingredient);
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
+import com.google.gson.JsonObject;
+import net.minecraft.recipe.Ingredient;
+
 public abstract class AbstractDuoMaterial extends AbstractMaterial implements PrimaryMaterial, SecondaryMaterial {
     private final int stiffness;
     private final int sharpness;
@@ -7,6 +10,7 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
     private final int flexibility;
     private final int luck;
     private final int grip;
+    private final JsonObject ingredient;
 
     public AbstractDuoMaterial(MaterialPOJO material) {
         super(material);
@@ -16,6 +20,7 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
         this.flexibility = material.primary.flexibility;
         this.luck = material.secondary.luck;
         this.grip = material.secondary.grip;
+        this.ingredient = material.primary.repairIngredient;
     }
 
     public int getStiffness() {
@@ -37,6 +42,10 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
         return flexibility;
     }
 
+    @Override
+    public Ingredient getRepairIngredient() {
+        return Ingredient.fromJson(ingredient);
+    }
 
     @Override
     public int getLuck() {
@@ -52,6 +61,4 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
     public int getGrip() {
         return grip;
     }
-
-
 }

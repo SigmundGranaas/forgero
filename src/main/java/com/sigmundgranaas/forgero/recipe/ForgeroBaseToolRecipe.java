@@ -48,7 +48,7 @@ public class ForgeroBaseToolRecipe implements CraftingRecipe {
     private boolean containsAdditionalItems(CraftingInventory inventory) {
         for (int i = 0; i < inventory.size(); ++i) {
             ItemStack currentItems = inventory.getStack(i);
-            if (!handle.test(currentItems) || !head.test(currentItems)) {
+            if (!handle.test(currentItems) && !head.test(currentItems) && !currentItems.toString().equals("1 air")) {
                 return true;
             }
         }
