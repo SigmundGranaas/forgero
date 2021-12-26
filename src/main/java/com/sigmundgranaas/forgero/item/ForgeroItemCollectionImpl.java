@@ -7,13 +7,14 @@ import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
 import net.minecraft.item.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ForgeroItemCollectionImpl implements ForgeroItemCollection {
     public static ForgeroItemCollection INSTANCE;
-    private List<Item> tools;
-    private List<Item> toolParts;
+    private List<Item> tools = new ArrayList<>();
+    private List<Item> toolParts = new ArrayList<>();
 
     public static ForgeroItemCollection getInstance() {
         if (INSTANCE == null) {

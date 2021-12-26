@@ -52,6 +52,6 @@ public class Handle extends AbstractToolPart implements ToolPartHandle {
 
     @Override
     public ForgeroToolPartTypes getToolPartType() {
-        return null;
+        return ForgeroToolPartTypes.HANDLE;
     }
 }

@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.registry;
 
 import com.sigmundgranaas.forgero.item.ForgeroItemCollection;
 import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
-import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItemImpl;
+import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 
@@ -22,8 +22,8 @@ public class ForgeroItemRegistryImpl implements ForgeroItemRegistry {
     }
 
     @Override
-    public void registerToolPart(ForgeroToolPartItemImpl part) {
-        Registry.register(Registry.ITEM, part.getIdentifier(), part);
+    public void registerToolPart(Item part) {
+        Registry.register(Registry.ITEM, ((ForgeroToolPartItem) part).getIdentifier(), part);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class ForgeroItemRegistryImpl implements ForgeroItemRegistry {
 
     @Override
     public void registerToolParts() {
-        collection.INSTANCE.getToolParts().forEach(this::registerTool);
+        collection.INSTANCE.getToolParts().forEach(this::registerToolPart);
     }
 }
