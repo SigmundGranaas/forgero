@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItemImpl;
+import com.sigmundgranaas.forgero.item.implementation.ToolPartItemImpl;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.texture.Sprite;
@@ -21,13 +21,13 @@ import java.util.function.Function;
 
 public abstract class AbstractDynamicModel implements DynamicModel {
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
-    private final ForgeroToolPartItemImpl toolpart;
+    private final ToolPartItemImpl toolpart;
 
-    public AbstractDynamicModel(ForgeroToolPartItemImpl toolpart) {
+    public AbstractDynamicModel(ToolPartItemImpl toolpart) {
         this.toolpart = toolpart;
     }
 
-    protected ForgeroToolPartItemImpl getToolpart() {
+    protected ToolPartItemImpl getToolpart() {
         return toolpart;
     }
 

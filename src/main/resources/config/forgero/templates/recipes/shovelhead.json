@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH"
+  ],
+  "key": {
+    "H": {
+      "item": "SHOVELHEAD_INGREDIENT"
+    }
+  },
+  "result": {
+    "item": "SHOVELHEAD_ITEM"
+  }
+}

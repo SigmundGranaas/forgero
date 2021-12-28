@@ -1,0 +1,22 @@
+{
+  "type": "forgero:tool_with_binding",
+  "pattern": [
+    "  H",
+    " B ",
+    "I  "
+  ],
+  "key": {
+    "I": {
+      "item": "HANDLE"
+    },
+    "H": {
+      "item": "HEAD"
+    },
+    "B": {
+      "item": "BINDING"
+    }
+  },
+  "result": {
+    "item": "TOOL_WITH_BINDING"
+  }
+}

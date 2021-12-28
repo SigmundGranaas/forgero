@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " H ",
+    "H H",
+    " H "
+  ],
+  "key": {
+    "H": {
+      "item": "BINDING_INGREDIENT"
+    }
+  },
+  "result": {
+    "item": "BINDING_ITEM"
+  }
+}

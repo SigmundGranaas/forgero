@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.item.instance.ForgeroToolInstanceFactory;
-import com.sigmundgranaas.forgero.item.instance.tool.ForgeroPickaxeInstance;
-import com.sigmundgranaas.forgero.item.instance.tool.ForgeroToolInstance;
-import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.ForgeroToolInstance;
+import com.sigmundgranaas.forgero.item.ForgeroToolInstanceFactory;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.tool.instance.ForgeroPickaxeInstance;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

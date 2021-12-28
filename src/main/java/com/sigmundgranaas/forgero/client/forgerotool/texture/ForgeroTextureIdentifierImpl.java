@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.client.forgerotool.texture;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.Constants;
-import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItemImpl;
+import com.sigmundgranaas.forgero.item.implementation.ToolPartItemImpl;
 import com.sigmundgranaas.forgero.utils.FileSystemUtilities;
 import com.sigmundgranaas.forgero.utils.ResourceUtils;
 import net.minecraft.util.Identifier;
@@ -56,17 +56,17 @@ public class ForgeroTextureIdentifierImpl implements ForgeroTextureIdentifier {
 
     @Override
     public Optional<ToolPartModelType> getModelType() {
-        return ForgeroToolPartItemImpl.getToolPartModelTypeFromFileName(getFileNameWithoutExtension());
+        return ToolPartItemImpl.getToolPartModelTypeFromFileName(getFileNameWithoutExtension());
     }
 
 
     @Override
     public Optional<ForgeroToolPartTypes> getToolPartType() {
-        return ForgeroToolPartItemImpl.getToolPartTypeFromFileName(getFileNameWithoutExtension());
+        return ToolPartItemImpl.getToolPartTypeFromFileName(getFileNameWithoutExtension());
     }
 
     @Override
     public Optional<String> getMaterial() {
-        return ForgeroToolPartItemImpl.getMaterialFromFileName(getFileNameWithoutExtension());
+        return ToolPartItemImpl.getMaterialFromFileName(getFileNameWithoutExtension());
     }
 }

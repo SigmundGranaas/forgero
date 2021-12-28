@@ -4,10 +4,11 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
-import com.sigmundgranaas.forgero.item.ForgeroItemCollection;
-import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
+import com.sigmundgranaas.forgero.item.ItemCollection;
+import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.Identifier;
 
@@ -25,7 +26,7 @@ public class ForgeroRecipeCreator {
         this.materials = materials;
     }
 
-    public static JsonObject createForgeroBaseToolRecipeJson(ForgeroToolPartItem head, ForgeroToolPartItem handle, String type) {
+    public static JsonObject createForgeroBaseToolRecipeJson(ToolPartItem head, ToolPartItem handle, String type) {
         //Creating a new json object, where we will store our recipe.
         JsonObject json = new JsonObject();
         //The "type" of the recipe we are creating. In this case, a shaped recipe.
@@ -47,7 +48,7 @@ public class ForgeroRecipeCreator {
         return json;
     }
 
-    public static JsonObject createForgeroToolWithBinding(ForgeroToolPartItem head, ForgeroToolPartItem handle, ForgeroToolPartItem binding, String type) {
+    public static JsonObject createForgeroToolWithBinding(ToolPartItem head, ToolPartItem handle, ToolPartItem binding, String type) {
         //Creating a new json object, where we will store our recipe.
         JsonObject json = new JsonObject();
         //The "type" of the recipe we are creating. In this case, a shaped recipe.
@@ -166,6 +167,27 @@ public class ForgeroRecipeCreator {
     public void createAndRegisterHeads() {
         createAndRegisterPickaxeHeads();
         createAndRegisterShovelHeads();
+        createAndRegisterTestRecipe();
+    }
+
+    private void createAndRegisterTestRecipe() {
+        String element = "item";
+        JsonElement ingredient = new JsonPrimitive("oak_planks");
+
+        JsonObject recipe = createShapedRecipeJson(
+                Lists.newArrayList(
+                        '#'
+                ), //The keys we are using for the input items/tags.
+                Lists.newArrayList(new Identifier(ingredient.getAsString())),
+                //The items/tags we are using as input.
+                Lists.newArrayList(element), //Whether the input we provided is a tag or an item.
+                Lists.newArrayList(
+                        "##"
+                ), //The crafting pattern.
+                new Identifier(Forgero.MOD_NAMESPACE, "oak" + "_pickaxehead") //The crafting output
+        );
+        recipe.addProperty("type", "forgero_recipe_test");
+        map.put(new Identifier(Forgero.MOD_NAMESPACE, "oak" + "_pickaxehead"), recipe);
     }
 
     public void createAndRegisterPickaxeHeads() {
@@ -244,8 +266,8 @@ public class ForgeroRecipeCreator {
     }
 
     public void createAndRegisterTools() {
-        for (ForgeroToolPartItem handle : ForgeroItemCollection.INSTANCE.getToolPartHandles()) {
-            for (ForgeroToolPartItem head : ForgeroItemCollection.INSTANCE.getToolPartHeads()) {
+        for (ToolPartItem handle : ItemCollection.INSTANCE.getToolPartHandles()) {
+            for (ToolPartItem head : ItemCollection.INSTANCE.getToolPartHeads()) {
                 JsonObject recipe;
                 switch (((ToolPartHead) head.getPart()).getHeadType()) {
                     case PICKAXE -> {
@@ -263,9 +285,9 @@ public class ForgeroRecipeCreator {
     }
 
     public void createAndRegisterToolsWithBinding() {
-        for (ForgeroToolPartItem handle : ForgeroItemCollection.INSTANCE.getToolPartHandles()) {
-            for (ForgeroToolPartItem head : ForgeroItemCollection.INSTANCE.getToolPartHeads()) {
-                for (ForgeroToolPartItem binding : ForgeroItemCollection.INSTANCE.getToolPartBindings()) {
+        for (ToolPartItem handle : ItemCollection.INSTANCE.getToolPartHandles()) {
+            for (ToolPartItem head : ItemCollection.INSTANCE.getToolPartHeads()) {
+                for (ToolPartItem binding : ItemCollection.INSTANCE.getToolPartBindings()) {
                     JsonObject recipe;
                     switch (((ToolPartHead) head.getPart()).getHeadType()) {
                         case PICKAXE -> {

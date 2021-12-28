@@ -2,14 +2,14 @@ package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
-import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.ToolPartItem;
 
 public class ToolModel2DBinding extends ToolModel2D {
-    private final ForgeroToolPartItem binding;
+    private final ToolPartItem binding;
 
 
-    public ToolModel2DBinding(ForgeroToolItem tool, ForgeroToolPartItem binding) {
+    public ToolModel2DBinding(ForgeroToolItem tool, ToolPartItem binding) {
         super(tool);
         this.binding = binding;
     }

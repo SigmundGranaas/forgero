@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.Dynamic2DModelFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.DynamicModel;
-import com.sigmundgranaas.forgero.item.tool.ForgeroToolItem;
-import com.sigmundgranaas.forgero.item.toolpart.ForgeroToolPartItem;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.ModelRotation;
@@ -36,10 +36,10 @@ public class ToolModel2DManager implements ToolModelManager {
     }
 
     private final List<Item> tools;
-    private final List<ForgeroToolPartItem> bindings;
+    private final List<ToolPartItem> bindings;
     private final HashMap<String, FabricBakedModel> models = new HashMap<>();
 
-    public ToolModel2DManager(List<Item> tools, List<ForgeroToolPartItem> bindings) {
+    public ToolModel2DManager(List<Item> tools, List<ToolPartItem> bindings) {
         this.tools = tools;
         this.bindings = bindings;
     }

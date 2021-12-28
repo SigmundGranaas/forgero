@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH"
+  ],
+  "key": {
+    "H": {
+      "item": "PICKAXEHEAD_INGREDIENT"
+    }
+  },
+  "result": {
+    "item": "PICKAXEHEAD_ITEM"
+  }
+}
