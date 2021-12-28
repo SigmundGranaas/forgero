@@ -9,6 +9,8 @@ public interface PrimaryMaterial extends ForgeroMaterial, ToolMaterial {
 
     int getSharpness();
 
+    String getIngredientAsString();
+
     int getFlexibility();
 
     int getEnchantability();

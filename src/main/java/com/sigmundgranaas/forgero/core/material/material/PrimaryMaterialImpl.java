@@ -78,6 +78,11 @@ public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMate
     }
 
     @Override
+    public String getIngredientAsString() {
+        return ingredient.toString();
+    }
+
+    @Override
     public int getFlexibility() {
         return 0;
     }

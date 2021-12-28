@@ -48,6 +48,11 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
     }
 
     @Override
+    public String getIngredientAsString() {
+        return ingredient.toString();
+    }
+
+    @Override
     public int getLuck() {
         return luck;
     }

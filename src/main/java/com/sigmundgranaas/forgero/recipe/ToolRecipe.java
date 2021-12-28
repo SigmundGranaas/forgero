@@ -16,16 +16,11 @@ public class ToolRecipe extends ShapedRecipe {
     }
 
     @Override
-    public Identifier getIdentifier() {
-        return new Identifier(Forgero.MOD_NAMESPACE, RecipeTypes.TOOL_RECIPE.getName());
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return new ToolRecipeSerializer();
     }
 
-    public static class ToolRecipeSerializer extends ShapedRecipe.Serializer, implements ForgeroRecipeSerializerTypes {
+    public static class ToolRecipeSerializer extends ShapedRecipe.Serializer implements ForgeroRecipeSerializerTypes {
         @Override
         public ToolRecipe read(Identifier identifier, JsonObject jsonObject) {
             return (ToolRecipe) super.read(identifier, jsonObject);
