@@ -1,12 +1,14 @@
 package com.sigmundgranaas.forgero.registry;
 
+import com.google.gson.JsonElement;
+import net.minecraft.util.Identifier;
+
+import java.util.Map;
+
 public interface RecipeRegistry {
     RecipeRegistry INSTANCE = RecipeRegistryImpl.getInstance();
 
-    void registerToolPartRecipes();
+    void registerRecipes(Map<Identifier, JsonElement> map);
 
-    void registerToolRecipes();
-
-    void registerToolWithBindingRecipes();
-
+    void registerRecipeSerializers();
 }

@@ -1,5 +1,5 @@
 {
-  "type": "forgero:tool_with_binding",
+  "type": "forgero:tool_with_binding_recipe",
   "pattern": [
     "  H",
     " B ",

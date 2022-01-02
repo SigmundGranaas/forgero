@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.core.tool.factory;
 
+import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.skin.ForgeroToolPartSkin;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolBase;
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
@@ -12,6 +14,7 @@ import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
 public class ForgeroToolBuilderImpl implements ForgeroToolBuilder {
     private final ToolPartHead head;
     private final ToolPartHandle handle;
+    private ToolPartBinding binding = null;
 
     public ForgeroToolBuilderImpl(ToolPartHead head, ToolPartHandle handle) {
         this.head = head;
@@ -21,7 +24,9 @@ public class ForgeroToolBuilderImpl implements ForgeroToolBuilder {
 
     @Override
     public ForgeroToolBuilder addBinding(ToolPartBinding binding) {
-        return null;
+        this.binding = binding;
+        Forgero.LOGGER.info(binding.getToolPartIdentifier());
+        return this;
     }
 
     @Override
@@ -36,6 +41,10 @@ public class ForgeroToolBuilderImpl implements ForgeroToolBuilder {
 
     @Override
     public ForgeroTool createTool() {
-        return new ForgeroToolBase(head, handle);
+        if (binding == null) {
+            return new ForgeroToolBase(head, handle);
+        } else {
+            return new ForgeroToolWithBinding(head, handle, binding);
+        }
     }
 }

@@ -18,27 +18,41 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ToolWithBindingRecipe extends ShapedRecipe {
-    public ToolWithBindingRecipe(Identifier identifier, String string, int width, int height, DefaultedList<Ingredient> defaultedList, ItemStack itemStack) {
-        super(identifier, string, width, height, defaultedList, itemStack);
+
+    public ToolWithBindingRecipe(ShapedRecipe recipe) {
+        super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
     }
 
+    @Override
+    public boolean matches(CraftingInventory craftingInventory, World world) {
+        return super.matches(craftingInventory, world);
+    }
 
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
         ItemStack headItem = null;
-        ItemStack handleItem = null;
         ItemStack bindingItem = null;
+        ItemStack handleItem = null;
 
-        for (int itemSlot = 0; itemSlot < getIngredients().size(); itemSlot++) {
-            if (getIngredients().get(0).test(craftingInventory.getStack(itemSlot))) {
-                headItem = craftingInventory.getStack(itemSlot);
-            } else if (getIngredients().get(1).test(craftingInventory.getStack(itemSlot))) {
-                handleItem = craftingInventory.getStack(itemSlot);
-            } else if (getIngredients().get(2).test(craftingInventory.getStack(itemSlot))) {
-                bindingItem = craftingInventory.getStack(itemSlot);
+
+        List<Ingredient> ingredients = super.getIngredients();
+
+        for (int ingredientSlot = 0; ingredientSlot < ingredients.size(); ingredientSlot++) {
+            if (ingredients.get(ingredientSlot).getMatchingStacks().length > 0) {
+                ItemStack toolPart = craftingInventory.getStack(ingredientSlot);
+                if (headItem == null) {
+                    headItem = toolPart;
+                } else if (bindingItem == null) {
+                    bindingItem = toolPart;
+                } else if (handleItem == null) {
+                    handleItem = toolPart;
+                }
+
             }
         }
 
@@ -61,7 +75,7 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
             handle = ((ForgeroToolItem) getOutput().getItem()).getHandle();
         }
 
-        if (handleItem.hasNbt() && handleItem.getNbt().contains(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER)) {
+        if (bindingItem.hasNbt() && bindingItem.getNbt().contains(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER)) {
             binding = (ToolPartBinding) NBTFactory.INSTANCE.createToolPartFromNBT(bindingItem.getNbt());
         } else {
             binding = ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(((ToolPartItem) bindingItem.getItem()).getPrimaryMaterial()).createToolPart();
@@ -76,23 +90,30 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return new ToolWithBindingRecipeSerializer();
+        return ToolWithBindingRecipeSerializer.INSTANCE;
     }
 
     public static class ToolWithBindingRecipeSerializer extends ShapedRecipe.Serializer implements ForgeroRecipeSerializerTypes {
+        public static ToolWithBindingRecipeSerializer INSTANCE = new ToolWithBindingRecipeSerializer();
+
         @Override
         public ToolWithBindingRecipe read(Identifier identifier, JsonObject jsonObject) {
-            return (ToolWithBindingRecipe) super.read(identifier, jsonObject);
+            return new ToolWithBindingRecipe(super.read(identifier, jsonObject));
         }
 
         @Override
         public ToolWithBindingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-            return (ToolWithBindingRecipe) super.read(identifier, packetByteBuf);
+            return new ToolWithBindingRecipe(super.read(identifier, packetByteBuf));
         }
 
         @Override
         public Identifier getIdentifier() {
             return new Identifier(Forgero.MOD_NAMESPACE, RecipeTypes.TOOL_WITH_BINDING_RECIPE.getName());
+        }
+
+        @Override
+        public RecipeSerializer<?> getSerializer() {
+            return INSTANCE;
         }
     }
 }

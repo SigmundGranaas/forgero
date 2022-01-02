@@ -20,6 +20,7 @@ public class ForgeroToolWithBindingRecipeSerializer implements RecipeSerializer<
     private ForgeroToolWithBindingRecipeSerializer() {
     }
 
+
     @Override
     public ForgeroToolWithBindingRecipe read(Identifier id, JsonObject json) {
         ForgeroToolWithBindingRecipeSerializerJsonFormat recipeJson = new Gson().fromJson(json, ForgeroToolWithBindingRecipeSerializerJsonFormat.class);

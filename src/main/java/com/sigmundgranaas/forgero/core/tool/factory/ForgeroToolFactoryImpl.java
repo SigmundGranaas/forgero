@@ -30,7 +30,9 @@ public class ForgeroToolFactoryImpl implements ForgeroToolFactory {
 
     @Override
     public ForgeroTool createForgeroTool(@NotNull ToolPartHead head, @NotNull ToolPartHandle handle, @NotNull ToolPartBinding binding) {
-        return ForgeroToolBuilder.createBuilder(head, handle).addBinding(binding).createTool();
+        ForgeroToolBuilder builder = ForgeroToolBuilder.createBuilder(head, handle);
+        builder = builder.addBinding(binding);
+        return builder.createTool();
     }
 
     @Override

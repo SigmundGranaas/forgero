@@ -1,34 +1,34 @@
 package com.sigmundgranaas.forgero.registry;
 
-import com.sigmundgranaas.forgero.item.ItemCollection;
+import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.recipe.RecipeCollection;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+
+import java.util.Map;
 
 public class RecipeRegistryImpl implements RecipeRegistry {
     private static RecipeRegistry INSTANCE;
-    private final ItemCollection itemCollection;
+    private final RecipeCollection collection;
 
-    public RecipeRegistryImpl(ItemCollection itemCollection) {
-        this.itemCollection = itemCollection;
+    public RecipeRegistryImpl(RecipeCollection collection) {
+        this.collection = collection;
     }
 
     public static RecipeRegistry getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RecipeRegistryImpl(ItemCollection.INSTANCE);
+            INSTANCE = new RecipeRegistryImpl(RecipeCollection.INSTANCE);
         }
         return INSTANCE;
     }
 
     @Override
-    public void registerToolPartRecipes() {
-
+    public void registerRecipes(Map<Identifier, JsonElement> map) {
+        collection.getRecipes().forEach(recipeWrapper -> map.put(recipeWrapper.getRecipeID(), recipeWrapper.getRecipe()));
     }
 
     @Override
-    public void registerToolRecipes() {
-
-    }
-
-    @Override
-    public void registerToolWithBindingRecipes() {
-
+    public void registerRecipeSerializers() {
+        collection.getRecipeTypes().forEach(serializer -> Registry.register(Registry.RECIPE_SERIALIZER, serializer.getIdentifier(), serializer.getSerializer()));
     }
 }

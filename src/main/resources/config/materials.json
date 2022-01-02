@@ -17,7 +17,7 @@
       "enchantability": 10,
       "flexibility": 80,
       "repairIngredient": {
-        "item": "minecraft:oak_planks"
+        "item": "oak_planks"
       }
     },
     "secondary": {
@@ -43,7 +43,7 @@
       "enchantability": 10,
       "flexibility": 90,
       "repairIngredient": {
-        "item": "minecraft:birch_planks"
+        "item": "birch_planks"
       }
     },
     "secondary": {
@@ -69,7 +69,7 @@
       "enchantability": 10,
       "flexibility": 95,
       "repairIngredient": {
-        "item": "minecraft:spruce_planks"
+        "item": "spruce_planks"
       }
     },
     "secondary": {
@@ -95,7 +95,7 @@
       "enchantability": 5,
       "flexibility": 5,
       "repairIngredient": {
-        "item": "minecraft:cobblestone"
+        "item": "cobblestone"
       }
     },
     "secondary": {
@@ -121,7 +121,7 @@
       "enchantability": 14,
       "flexibility": 40,
       "repairIngredient": {
-        "item": "minecraft:iron_ingot"
+        "item": "iron_ingot"
       }
     },
     "secondary": {
@@ -148,7 +148,7 @@
       "enchantability": 10,
       "flexibility": 20,
       "repairIngredient": {
-        "item": "minecraft:gold_ingot"
+        "item": "gold_ingot"
       }
     },
     "secondary": {
@@ -175,7 +175,7 @@
       "enchantability": 20,
       "flexibility": 1,
       "repairIngredient": {
-        "item": "minecraft:diamond"
+        "item": "diamond"
       }
     },
     "secondary": {
@@ -202,7 +202,7 @@
       "enchantability": 15,
       "flexibility": 10,
       "repairIngredient": {
-        "item": "minecraft:netherite_ingot"
+        "item": "netherite_ingot"
       }
     },
     "secondary": {

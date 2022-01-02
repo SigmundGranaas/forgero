@@ -49,7 +49,7 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
 
     @Override
     public String getIngredientAsString() {
-        return ingredient.toString();
+        return ingredient.getAsJsonPrimitive("item").getAsString();
     }
 
     @Override

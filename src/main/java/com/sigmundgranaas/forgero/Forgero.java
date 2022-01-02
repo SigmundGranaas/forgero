@@ -1,12 +1,9 @@
 package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.core.material.MaterialManager;
-import com.sigmundgranaas.forgero.recipe.ForgeroBaseToolRecipeSerializer;
-import com.sigmundgranaas.forgero.recipe.ForgeroRecipeTest;
-import com.sigmundgranaas.forgero.recipe.ForgeroToolWithBindingRecipeSerializer;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
+import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +25,6 @@ public class Forgero implements ModInitializer {
     }
 
     private void registerRecipes() {
-        Registry.register(Registry.RECIPE_SERIALIZER, ForgeroBaseToolRecipeSerializer.ID, ForgeroBaseToolRecipeSerializer.INSTANCE);
-        Registry.register(Registry.RECIPE_SERIALIZER, ForgeroToolWithBindingRecipeSerializer.ID, ForgeroToolWithBindingRecipeSerializer.INSTANCE);
-        Registry.register(Registry.RECIPE_SERIALIZER, "forgero_recipe_test", ForgeroRecipeTest.getSerializerInstance());
+        RecipeRegistry.INSTANCE.registerRecipeSerializers();
     }
 }

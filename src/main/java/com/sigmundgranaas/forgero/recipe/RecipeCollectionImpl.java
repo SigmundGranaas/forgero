@@ -1,10 +1,12 @@
 package com.sigmundgranaas.forgero.recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeCollectionImpl implements RecipeCollection {
     private static RecipeCollectionImpl INSTANCE;
     private final RecipeCreator recipeCreator;
+    private List<RecipeWrapper> recipes = new ArrayList<>();
 
     public RecipeCollectionImpl(RecipeCreator recipeCreator) {
         this.recipeCreator = recipeCreator;
@@ -19,11 +21,14 @@ public class RecipeCollectionImpl implements RecipeCollection {
 
     @Override
     public List<RecipeWrapper> getRecipes() {
-        return recipeCreator.createRecipes();
+        if (recipes.isEmpty()) {
+            recipes = recipeCreator.createRecipes();
+        }
+        return recipes;
     }
 
     @Override
     public List<ForgeroRecipeSerializerTypes> getRecipeTypes() {
-        return List.of(new ToolRecipe.ToolRecipeSerializer(), new ToolWithBindingRecipe.ToolWithBindingRecipeSerializer());
+        return List.of(ToolRecipe.ToolRecipeSerializer.INSTANCE, ToolWithBindingRecipe.ToolWithBindingRecipeSerializer.INSTANCE);
     }
 }
