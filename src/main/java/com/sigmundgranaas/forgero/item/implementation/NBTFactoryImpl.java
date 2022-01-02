@@ -101,6 +101,7 @@ public class NBTFactoryImpl implements NBTFactory {
         baseCompound.putString(SECONDARY_MATERIAL_NBT_IDENTIFIER, toolPart.getSecondaryMaterial().getName());
         baseCompound.putString(GEM_NBT_IDENTIFIER, "NOT_IMPLEMENTED");
         baseCompound.putString(TOOL_PART_TYPE_NBT_IDENTIFIER, toolPart.getToolPartType().toString());
+        baseCompound.putString(TOOL_PART_IDENTIFIER, toolPart.getToolPartIdentifier());
         if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
             baseCompound.putString(TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER, ((ToolPartHead) toolPart).getHeadType().toString());
         }

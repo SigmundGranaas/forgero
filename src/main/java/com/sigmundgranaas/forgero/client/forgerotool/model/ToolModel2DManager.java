@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.Dynamic2DModelFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.DynamicModel;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -50,9 +52,17 @@ public class ToolModel2DManager implements ToolModelManager {
         assert item instanceof ForgeroToolItem;
 
         NbtCompound nbt = tool.getNbt();
-        if (nbt != null && !nbt.getString("binding").equals("")) {
+        if (nbt != null && nbt.contains("binding")) {
+            // Legacy setup for finding old bindings
             String itemBinding = nbt.getString("binding");
             FabricBakedModel toolModel = models.get(((ForgeroToolItem) item).getIdentifier().getPath() + "_" + itemBinding);
+            if (toolModel != null) {
+                return Optional.of(toolModel);
+            }
+        } else if (nbt != null && nbt.contains(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER)) {
+            nbt = nbt.getCompound(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER).getCompound(NBTFactory.BINDING_NBT_IDENTIFIER);
+            String modelIdentifier = ((ForgeroToolItem) item).getTool().getToolIdentifierString() + "_" + nbt.getString(NBTFactory.TOOL_PART_IDENTIFIER) + "_toolpart_" + ((ForgeroToolItem) item).getToolType().toString().toLowerCase(Locale.ROOT);
+            FabricBakedModel toolModel = models.get(modelIdentifier);
             if (toolModel != null) {
                 return Optional.of(toolModel);
             }

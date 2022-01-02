@@ -19,6 +19,7 @@ public interface NBTFactory {
     public static final String TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER = "ToolPartHeadType";
     public static final String GEM_NBT_IDENTIFIER = "Gem";
     public static final String HASH_NBT_IDENTIFIER = "ToolHash";
+    public static final String TOOL_PART_IDENTIFIER = "ToolPartIdentifier";
 
     @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound);
