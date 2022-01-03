@@ -10,4 +10,6 @@ public interface SecondaryMaterial extends ForgeroMaterial {
     int getLuck();
 
     int getGrip();
+
+    String getIngredientAsString();
 }

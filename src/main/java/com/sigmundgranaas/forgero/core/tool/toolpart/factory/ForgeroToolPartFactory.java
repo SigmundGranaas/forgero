@@ -25,5 +25,8 @@ public interface ForgeroToolPartFactory {
     ToolPartBindingBuilder createToolPartBindingBuilder(@NotNull PrimaryMaterial material);
 
     @NotNull
+    ToolPartBuilder createToolPartBuilderFromToolPart(@NotNull ForgeroToolPart toolPart);
+
+    @NotNull
     List<ForgeroToolPart> createBaseToolParts(@NotNull MaterialCollection collection);
 }

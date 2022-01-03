@@ -10,7 +10,7 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
     private final int flexibility;
     private final int luck;
     private final int grip;
-    private final JsonObject ingredient;
+    private final String ingredient;
 
     public AbstractDuoMaterial(MaterialPOJO material) {
         super(material);
@@ -20,7 +20,7 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
         this.flexibility = material.primary.flexibility;
         this.luck = material.secondary.luck;
         this.grip = material.secondary.grip;
-        this.ingredient = material.primary.repairIngredient;
+        this.ingredient = material.ingredient.item;
     }
 
     public int getStiffness() {
@@ -44,12 +44,14 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
 
     @Override
     public Ingredient getRepairIngredient() {
-        return Ingredient.fromJson(ingredient);
+        JsonObject json = new JsonObject();
+        json.addProperty("item", ingredient);
+        return Ingredient.fromJson(json);
     }
 
     @Override
     public String getIngredientAsString() {
-        return ingredient.getAsJsonPrimitive("item").getAsString();
+        return ingredient;
     }
 
     @Override

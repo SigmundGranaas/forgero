@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -30,17 +31,19 @@ public class RecipeCreatorImpl implements RecipeCreator {
     private final List<ForgeroTool> tools;
     private final List<ForgeroToolPart> toolParts;
     private final List<PrimaryMaterial> materials;
+    private final List<SecondaryMaterial> secondaryMaterials;
 
-    public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates, List<ForgeroTool> tools, List<ForgeroToolPart> toolParts, List<PrimaryMaterial> materials) {
+    public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates, List<ForgeroTool> tools, List<ForgeroToolPart> toolParts, List<PrimaryMaterial> materials, List<SecondaryMaterial> secondaryMaterials) {
         this.recipeTemplates = recipeTemplates;
         this.tools = tools;
         this.toolParts = toolParts;
         this.materials = materials;
+        this.secondaryMaterials = secondaryMaterials;
     }
 
     public static RecipeCreator getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates(), ForgeroToolCollection.INSTANCE.getTools(), ForgeroToolPartCollection.INSTANCE.getToolParts(), MaterialCollection.INSTANCE.getPrimaryMaterialsAsList());
+            INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates(), ForgeroToolCollection.INSTANCE.getTools(), ForgeroToolPartCollection.INSTANCE.getToolParts(), MaterialCollection.INSTANCE.getPrimaryMaterialsAsList(), MaterialCollection.INSTANCE.getSecondaryMaterialsAsList());
         }
         return INSTANCE;
     }
@@ -49,8 +52,9 @@ public class RecipeCreatorImpl implements RecipeCreator {
     public List<RecipeWrapper> createRecipes() {
         List<RecipeWrapper> toolRecipes = tools.stream().map(this::createToolRecipe).flatMap(List::stream).collect(Collectors.toList());
         List<RecipeWrapper> toolPartRecipes = toolParts.stream().map(this::createToolPartRecipe).flatMap(List::stream).collect(Collectors.toList());
+        List<RecipeWrapper> toolPartSecondaryMaterialUpgradeRecipe = toolParts.stream().map(this::createSecondaryMaterialUpgradeRecipes).flatMap(List::stream).collect(Collectors.toList());
 
-        return Stream.concat(toolRecipes.stream(), toolPartRecipes.stream()).collect(Collectors.toList());
+        return Stream.concat(Stream.concat(toolRecipes.stream(), toolPartRecipes.stream()), toolPartSecondaryMaterialUpgradeRecipe.stream()).collect(Collectors.toList());
     }
 
     private List<RecipeWrapper> createToolPartRecipe(ForgeroToolPart toolPart) {
@@ -59,6 +63,18 @@ public class RecipeCreatorImpl implements RecipeCreator {
         } else {
             return createHandleAndBindingRecipe(toolPart);
         }
+    }
+
+    private List<RecipeWrapper> createSecondaryMaterialUpgradeRecipes(ForgeroToolPart toolPart) {
+        return secondaryMaterials.stream().filter(secondaryMaterial -> !secondaryMaterial.getName().equals(toolPart.getPrimaryMaterial().getName())).map(secondaryMaterial -> createSecondaryMaterialUpgradeRecipe(toolPart, secondaryMaterial)).collect(Collectors.toList());
+    }
+
+    private RecipeWrapper createSecondaryMaterialUpgradeRecipe(ForgeroToolPart toolPart, SecondaryMaterial material) {
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE).toString()).getAsJsonObject();
+        template.getAsJsonObject("base").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
+        template.getAsJsonObject("addition").addProperty("item", material.getIngredientAsString());
+        template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
+        return new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_" + material.getName() + "_secondary_upgrade"), template);
     }
 
     private List<RecipeWrapper> createHandleAndBindingRecipe(ForgeroToolPart toolPart) {
@@ -71,7 +87,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
 
     private List<RecipeWrapper> createToolPartRecipe(ForgeroToolPart toolPart, RecipeTypes templateIdentifier) {
         JsonObject template = new JsonParser().parse(recipeTemplates.get(templateIdentifier).toString()).getAsJsonObject();
-        template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", new Identifier("minecraft", toolPart.getPrimaryMaterial().getIngredientAsString()).toString());
+        template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", toolPart.getPrimaryMaterial().getIngredientAsString());
         template.getAsJsonObject("result").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier()).toString());
         return List.of(new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier()), template));
     }

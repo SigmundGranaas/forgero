@@ -5,16 +5,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class AbstractMaterial implements ForgeroMaterial {
     protected String name;
     protected int rarity;
     protected int durability;
     protected int weight;
-    protected List<Identifier> paletteIdentifiers;
-    protected List<Identifier> paletteExclusionIdentifiers;
+    protected List<String> paletteIdentifiers;
+    protected List<String> paletteExclusionIdentifiers;
     protected List<String> properties;
     protected MaterialType type;
+    protected String ingredient;
 
     public AbstractMaterial(MaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
@@ -25,6 +27,7 @@ public class AbstractMaterial implements ForgeroMaterial {
         this.paletteExclusionIdentifiers = material.palette.exclude;
         this.properties = material.properties;
         this.type = material.type;
+        this.ingredient = material.ingredient.item;
     }
 
     @Override
@@ -58,14 +61,20 @@ public class AbstractMaterial implements ForgeroMaterial {
     }
 
     @Override
+    public String getIngredientAsString() {
+        return ingredient;
+    }
+
+    @Override
     public @NotNull
     List<Identifier> getPaletteIdentifiers() {
-        return paletteIdentifiers;
+        return paletteIdentifiers.stream().map(Identifier::new).collect(Collectors.toList());
     }
 
     @Override
     public @NotNull
     List<Identifier> getPaletteExclusionIdentifiers() {
-        return paletteExclusionIdentifiers;
+        return paletteIdentifiers.stream().map(Identifier::new).collect(Collectors.toList());
+
     }
 }

@@ -5,20 +5,22 @@
     "type": "organic",
     "durability": 59,
     "weight": 10,
+    "ingredient": {
+      "item": "oak_planks"
+    },
     "properties": [
     ],
     "palette": {
-      "include": [],
+      "include": [
+        "minecraft:textures/item/oak_boat.png"
+      ],
       "exclude": []
     },
     "primary": {
       "stiffness": 60,
       "sharpness": 5,
       "enchantability": 10,
-      "flexibility": 80,
-      "repairIngredient": {
-        "item": "oak_planks"
-      }
+      "flexibility": 80
     },
     "secondary": {
       "luck": 50,
@@ -31,20 +33,24 @@
     "durability": 59,
     "properties": [
     ],
+    "ingredient": {
+      "item": "birch_planks"
+    },
     "weight": 9,
     "rarity": 100,
     "palette": {
-      "include": [],
-      "exclude": []
+      "include": [
+        "minecraft:textures/item/birch_boat.png"
+      ],
+      "exclude": [
+        "minecraft:textures/item/oak_boat.png"
+      ]
     },
     "primary": {
       "stiffness": 50,
       "sharpness": 5,
       "enchantability": 10,
-      "flexibility": 90,
-      "repairIngredient": {
-        "item": "birch_planks"
-      }
+      "flexibility": 90
     },
     "secondary": {
       "luck": 50,
@@ -57,20 +63,24 @@
     "durability": 59,
     "rarity": 100,
     "weight": 7,
+    "ingredient": {
+      "item": "spruce_planks"
+    },
     "properties": [
     ],
     "palette": {
-      "include": [],
-      "exclude": []
+      "include": [
+        "minecraft:textures/item/spruce_boat.png"
+      ],
+      "exclude": [
+        "minecraft:textures/item/oak_boat.png"
+      ]
     },
     "primary": {
       "stiffness": 55,
       "sharpness": 40,
       "enchantability": 10,
-      "flexibility": 95,
-      "repairIngredient": {
-        "item": "spruce_planks"
-      }
+      "flexibility": 95
     },
     "secondary": {
       "luck": 50,
@@ -83,20 +93,29 @@
     "weight": 40,
     "durability": 59,
     "type": "organic",
+    "ingredient": {
+      "item": "cobblestone"
+    },
     "properties": [
     ],
     "palette": {
-      "include": [],
-      "exclude": []
+      "include": [
+        "minecraft:textures/block/stone.png",
+        "minecraft:textures/block/cobblestone.png",
+        "minecraft:textures/item/stone_sword.png",
+        "minecraft:textures/item/stone_pickaxe.png"
+      ],
+      "exclude": [
+        "minecraft:textures/item/golden_sword.png",
+        "minecraft:textures/item/iron_pickaxe.png",
+        "minecraft:textures/item/iron_sword.png"
+      ]
     },
     "primary": {
       "stiffness": 95,
       "sharpness": 5,
       "enchantability": 5,
-      "flexibility": 5,
-      "repairIngredient": {
-        "item": "cobblestone"
-      }
+      "flexibility": 5
     },
     "secondary": {
       "luck": 50,
@@ -109,20 +128,29 @@
     "durability": 131,
     "rarity": 100,
     "weight": 60,
+    "ingredient": {
+      "item": "iron_ingot"
+    },
     "properties": [
     ],
     "palette": {
-      "include": [],
-      "exclude": []
+      "include": [
+        "minecraft:textures/item/iron_chestplate.png",
+        "minecraft:textures/item/iron_helmet.png",
+        "minecraft:textures/item/iron_ingot.png",
+        "minecraft:textures/item/iron_sword.png"
+      ],
+      "exclude": [
+        "minecraft:textures/item/diamond_sword.png",
+        "minecraft:textures/item/stone_sword.png",
+        "minecraft:textures/item/netherite_sword.png"
+      ]
     },
     "primary": {
       "stiffness": 90,
       "sharpness": 70,
       "enchantability": 14,
-      "flexibility": 40,
-      "repairIngredient": {
-        "item": "iron_ingot"
-      }
+      "flexibility": 40
     },
     "secondary": {
       "luck": 50,
@@ -138,18 +166,26 @@
     "rarity": 100,
     "weight": 100,
     "durability": 10,
+    "ingredient": {
+      "item": "gold_ingot"
+    },
     "palette": {
-      "include": [],
-      "exclude": []
+      "include": [
+        "minecraft:textures/item/golden_chestplate.png",
+        "minecraft:textures/item/golden_helmet.png",
+        "minecraft:textures/item/golden_ingot.png"
+      ],
+      "exclude": [
+        "minecraft:textures/item/iron_sword.png",
+        "minecraft:textures/item/diamond_sword.png",
+        "minecraft:textures/item/wooden_sword.png"
+      ]
     },
     "primary": {
       "stiffness": 50,
       "sharpness": 50,
       "enchantability": 10,
-      "flexibility": 20,
-      "repairIngredient": {
-        "item": "gold_ingot"
-      }
+      "flexibility": 20
     },
     "secondary": {
       "luck": 50,
@@ -162,21 +198,29 @@
     "rarity": 100,
     "weight": 50,
     "durability": 1561,
+    "ingredient": {
+      "item": "diamond"
+    },
     "properties": [
       "sparkling"
     ],
     "palette": {
-      "include": [],
-      "exclude": []
+      "include": [
+        "minecraft:textures/item/diamond_chestplate.png",
+        "minecraft:textures/item/diamond.png",
+        "minecraft:textures/item/diamond.png"
+      ],
+      "exclude": [
+        "minecraft:textures/item/iron_sword.png",
+        "minecraft:textures/item/stone_sword.png",
+        "minecraft:textures/item/diamond_sword.png"
+      ]
     },
     "primary": {
       "stiffness": 95,
       "sharpness": 5,
       "enchantability": 20,
-      "flexibility": 1,
-      "repairIngredient": {
-        "item": "diamond"
-      }
+      "flexibility": 1
     },
     "secondary": {
       "luck": 50,
@@ -188,22 +232,30 @@
     "type": "organic",
     "rarity": 100,
     "weight": 60,
+    "ingredient": {
+      "item": "netherite_ingot"
+    },
     "properties": [
       "golden"
     ],
     "durability": 2031,
     "palette": {
-      "include": [],
-      "exclude": []
+      "include": [
+        "minecraft:textures/item/netherite_chestplate.png",
+        "minecraft:textures/item/netherite_helmet.png",
+        "minecraft:textures/item/netherite_ingot.png"
+      ],
+      "exclude": [
+        "minecraft:textures/item/netherite_chestplate.png",
+        "minecraft:textures/item/netherite_helmet.png",
+        "minecraft:textures/item/netherite_ingot.png"
+      ]
     },
     "primary": {
       "stiffness": 100,
       "sharpness": 100,
       "enchantability": 15,
-      "flexibility": 10,
-      "repairIngredient": {
-        "item": "netherite_ingot"
-      }
+      "flexibility": 10
     },
     "secondary": {
       "luck": 50,
@@ -213,11 +265,16 @@
   {
     "name": "Leather",
     "type": "organic",
+    "ingredient": {
+      "item": "minecraft:leather"
+    },
     "rarity": 2,
     "weight": 10,
     "durability": 30,
     "palette": {
-      "include": [],
+      "include": [
+        "minecraft:textures/item/leather.png"
+      ],
       "exclude": []
     },
     "secondary": {
@@ -231,8 +288,13 @@
     "rarity": 40,
     "weight": 30,
     "durability": 20,
+    "ingredient": {
+      "item": "minecraft:glowstone_dust"
+    },
     "palette": {
-      "include": [],
+      "include": [
+        "minecraft:textures/item/glowstone_dust.png"
+      ],
       "exclude": []
     },
     "secondary": {

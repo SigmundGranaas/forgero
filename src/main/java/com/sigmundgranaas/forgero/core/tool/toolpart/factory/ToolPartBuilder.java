@@ -8,11 +8,20 @@ import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 
 public abstract class ToolPartBuilder {
     protected final PrimaryMaterial primary;
-    protected SecondaryMaterial secondary = new EmptySecondaryMaterial();
-    protected Gem gem = null;
+    protected SecondaryMaterial secondary;
+    protected Gem gem;
+
 
     public ToolPartBuilder(PrimaryMaterial primary) {
         this.primary = primary;
+        this.secondary = new EmptySecondaryMaterial();
+        this.gem = null;
+    }
+
+    public ToolPartBuilder(ForgeroToolPart part) {
+        this.primary = part.getPrimaryMaterial();
+        this.secondary = part.getSecondaryMaterial();
+        this.gem = null;
     }
 
     public PrimaryMaterial getPrimary() {
@@ -35,5 +44,5 @@ public abstract class ToolPartBuilder {
         this.gem = gem;
     }
 
-    abstract ForgeroToolPart createToolPart();
+    public abstract ForgeroToolPart createToolPart();
 }

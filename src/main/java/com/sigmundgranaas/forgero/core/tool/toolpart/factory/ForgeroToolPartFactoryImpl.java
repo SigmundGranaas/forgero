@@ -56,6 +56,15 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
         return new ToolPartBindingBuilder(material);
     }
 
+    @Override
+    public @NotNull ToolPartBuilder createToolPartBuilderFromToolPart(@NotNull ForgeroToolPart toolPart) {
+        return switch (toolPart.getToolPartType()) {
+            case HEAD -> new ToolPartHeadBuilder((ToolPartHead) toolPart);
+            case BINDING -> new ToolPartBindingBuilder((ToolPartBinding) toolPart);
+            case HANDLE -> new ToolPartHandleBuilder((ToolPartHandle) toolPart);
+        };
+    }
+
 
     @Override
     public @NotNull

@@ -1,8 +1,5 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.google.gson.JsonObject;
-import net.minecraft.util.Identifier;
-
 import java.util.List;
 
 public class MaterialPOJO {
@@ -11,13 +8,14 @@ public class MaterialPOJO {
     public MaterialType type;
     public int durability;
     public List<String> properties;
+    public Ingredient ingredient;
     public int weight;
     public Palette palette;
     public Primary primary;
     public Secondary secondary;
 
 
-    public static MaterialPOJO createDefualtMaterialPOJO() {
+    public static MaterialPOJO createDefaultMaterialPOJO() {
         MaterialPOJO pojo = new MaterialPOJO();
         pojo.name = "Default";
         pojo.rarity = 1;
@@ -41,12 +39,20 @@ public class MaterialPOJO {
         secondary.grip = 1;
         secondary.luck = 1;
         pojo.secondary = secondary;
+
+        Ingredient ingredient = new Ingredient();
+        ingredient.item = "ingredient";
+        pojo.ingredient = ingredient;
         return pojo;
     }
 
     public static class Palette {
-        public List<Identifier> include;
-        public List<Identifier> exclude;
+        public List<String> include;
+        public List<String> exclude;
+    }
+
+    public static class Ingredient {
+        public String item;
     }
 
     public static class Primary {
@@ -54,7 +60,6 @@ public class MaterialPOJO {
         public int sharpness;
         public int enchantability;
         public int flexibility;
-        public JsonObject repairIngredient;
     }
 
     public static class Secondary {

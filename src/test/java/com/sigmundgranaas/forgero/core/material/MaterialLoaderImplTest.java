@@ -18,4 +18,9 @@ class MaterialLoaderImplTest {
         MaterialLoader loader = new MaterialLoaderImpl("/config/wrongMaterials.json");
         Assertions.assertThrows(NoMaterialsException.class, loader::getMaterials);
     }
+
+    @Test
+    void checkPojoCreation() {
+        MaterialLoader loader = new MaterialLoaderImpl("/config/wrongMaterials.json");
+    }
 }

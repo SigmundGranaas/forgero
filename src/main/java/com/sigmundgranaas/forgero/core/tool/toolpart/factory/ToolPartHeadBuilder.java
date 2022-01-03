@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.AbstractToolPartHead;
 import com.sigmundgranaas.forgero.core.tool.toolpart.PickaxeHead;
 import com.sigmundgranaas.forgero.core.tool.toolpart.Shovelhead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
 
 public class ToolPartHeadBuilder extends ToolPartBuilder {
     private final ForgeroToolTypes head;
@@ -12,6 +13,11 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
     public ToolPartHeadBuilder(PrimaryMaterial primary, ForgeroToolTypes head) {
         super(primary);
         this.head = head;
+    }
+
+    public ToolPartHeadBuilder(ToolPartHead toolPart) {
+        super(toolPart);
+        this.head = toolPart.getHeadType();
     }
 
     public ForgeroToolTypes getHead() {

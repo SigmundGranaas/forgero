@@ -18,7 +18,6 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -26,11 +25,6 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
 
     public ToolWithBindingRecipe(ShapedRecipe recipe) {
         super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
-    }
-
-    @Override
-    public boolean matches(CraftingInventory craftingInventory, World world) {
-        return super.matches(craftingInventory, world);
     }
 
     @Override

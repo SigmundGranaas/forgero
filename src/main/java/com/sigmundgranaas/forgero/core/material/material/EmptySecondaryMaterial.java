@@ -57,4 +57,9 @@ public class EmptySecondaryMaterial implements SecondaryMaterial {
     public int getGrip() {
         return 0;
     }
+
+    @Override
+    public String getIngredientAsString() {
+        return "empty";
+    }
 }

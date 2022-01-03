@@ -18,6 +18,8 @@ public interface ForgeroMaterial {
 
     List<String> getProperties();
 
+    String getIngredientAsString();
+
     @NotNull
     List<Identifier> getPaletteIdentifiers();
 

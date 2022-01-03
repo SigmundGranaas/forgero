@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMaterial {
-    private JsonObject ingredient;
+    private String ingredient;
 
     public PrimaryMaterialImpl(MaterialPOJO material) {
         super(material);
-        ingredient = material.primary.repairIngredient;
+        ingredient = material.ingredient.item;
     }
 
     @Override
@@ -69,7 +69,9 @@ public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMate
 
     @Override
     public Ingredient getRepairIngredient() {
-        return Ingredient.fromJson(ingredient);
+        JsonObject json = new JsonObject();
+        json.addProperty("item", ingredient);
+        return Ingredient.fromJson(json);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMate
 
     @Override
     public String getIngredientAsString() {
-        return ingredient.toString();
+        return ingredient;
     }
 
     @Override

@@ -37,6 +37,7 @@ public class RecipeLoaderImpl implements RecipeLoader {
             JsonObject shovelHeadRecipe = getRecipeAsJson(recipeFolderPath + "/shovelhead.json");
             JsonObject toolRecipe = getRecipeAsJson(recipeFolderPath + "/tool.json");
             JsonObject toolWithBindingRecipe = getRecipeAsJson(recipeFolderPath + "/tool_with_binding.json");
+            JsonObject toolPartSecondaryMaterialUpgrade = getRecipeAsJson(recipeFolderPath + "/toolpart_secondary_upgrade.json");
 
             Map<RecipeTypes, JsonObject> recipes = new HashMap<>();
             recipes.put(RecipeTypes.BINDING_RECIPE, bindingRecipe);
@@ -45,6 +46,7 @@ public class RecipeLoaderImpl implements RecipeLoader {
             recipes.put(RecipeTypes.SHOVELHEAD_RECIPE, shovelHeadRecipe);
             recipes.put(RecipeTypes.TOOL_RECIPE, toolRecipe);
             recipes.put(RecipeTypes.TOOL_WITH_BINDING_RECIPE, toolWithBindingRecipe);
+            recipes.put(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE, toolPartSecondaryMaterialUpgrade);
             return recipes;
         } catch (NullPointerException | JsonIOException e) {
             Forgero.LOGGER.error("Unable to read Materials from: {}", recipeFolderPath);
