@@ -13,6 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
+/**
+ * RecipeManager mixin
+ * <p>
+ * Forgero does not come with pre-made recipes for tools and tool parts.
+ * Recipes are generated from templates at startup. This system could also be used to generate Json recipes, which could cover all different tools, but currently, with only
+ */
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
 

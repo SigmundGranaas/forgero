@@ -1,4 +1,6 @@
-package com.sigmundgranaas.forgero.recipe;
+package com.sigmundgranaas.forgero.recipe.implementation;
+
+import com.sigmundgranaas.forgero.recipe.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class RecipeCollectionImpl implements RecipeCollection {
     }
 
     @Override
-    public List<ForgeroRecipeSerializerTypes> getRecipeTypes() {
+    public List<ForgeroRecipeSerializer> getRecipeTypes() {
         return List.of(ToolRecipe.ToolRecipeSerializer.INSTANCE, ToolWithBindingRecipe.ToolWithBindingRecipeSerializer.INSTANCE);
     }
 }

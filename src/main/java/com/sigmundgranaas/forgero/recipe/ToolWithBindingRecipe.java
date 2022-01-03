@@ -93,7 +93,7 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
         return ToolWithBindingRecipeSerializer.INSTANCE;
     }
 
-    public static class ToolWithBindingRecipeSerializer extends ShapedRecipe.Serializer implements ForgeroRecipeSerializerTypes {
+    public static class ToolWithBindingRecipeSerializer extends ShapedRecipe.Serializer implements ForgeroRecipeSerializer {
         public static ToolWithBindingRecipeSerializer INSTANCE = new ToolWithBindingRecipeSerializer();
 
         @Override

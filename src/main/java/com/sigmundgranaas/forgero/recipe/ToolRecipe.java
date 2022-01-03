@@ -18,7 +18,7 @@ public class ToolRecipe extends ShapedRecipe {
         return ToolRecipeSerializer.INSTANCE;
     }
 
-    public static class ToolRecipeSerializer extends ShapedRecipe.Serializer implements ForgeroRecipeSerializerTypes {
+    public static class ToolRecipeSerializer extends ShapedRecipe.Serializer implements ForgeroRecipeSerializer {
         public static ToolRecipeSerializer INSTANCE = new ToolRecipeSerializer();
 
         @Override

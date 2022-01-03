@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.recipe;
 
+import com.sigmundgranaas.forgero.recipe.implementation.RecipeCollectionImpl;
+
 import java.util.List;
 
 public interface RecipeCollection {
@@ -7,6 +9,6 @@ public interface RecipeCollection {
 
     List<RecipeWrapper> getRecipes();
 
-    List<ForgeroRecipeSerializerTypes> getRecipeTypes();
+    List<ForgeroRecipeSerializer> getRecipeTypes();
 }
 
