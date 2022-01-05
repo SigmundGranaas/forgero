@@ -18,7 +18,7 @@ public class ToolModel2DBinding extends ToolModel2D {
     protected JsonElement getTextures() {
         JsonObject textures = super.getTextures().getAsJsonObject();
         if (tool instanceof ForgeroToolItem) {
-            textures.addProperty("layer2", super.getTextureBase() + binding.getPrimaryMaterial().getName() + "_" + ToolPartModelTypeToFilename(getBindingType()));
+            textures.addProperty("layer3", super.getTextureBase() + binding.getPrimaryMaterial().getName() + "_" + ToolPartModelTypeToFilename(getBindingType()));
         }
         return textures;
     }

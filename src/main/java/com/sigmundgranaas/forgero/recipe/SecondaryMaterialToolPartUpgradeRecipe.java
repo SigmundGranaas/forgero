@@ -36,7 +36,6 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
 
     @Override
     public ItemStack craft(Inventory inventory) {
-        //TODO add NBT values to tool part
         ItemStack toolPartStack = null;
         String additionMaterialIdentifier = addition.toJson().getAsJsonObject().getAsJsonPrimitive("item").getAsString();
         SecondaryMaterial secondaryMaterial = MaterialCollection.INSTANCE.getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredientAsString().equals(additionMaterialIdentifier)).findFirst().orElse(new EmptySecondaryMaterial());

@@ -18,7 +18,7 @@ public class ClientConfigurationImpl implements ClientConfiguration {
 
     @Override
     public boolean shouldOverWriteOldTextures() {
-        return true;
+        return false;
     }
 
     @Override

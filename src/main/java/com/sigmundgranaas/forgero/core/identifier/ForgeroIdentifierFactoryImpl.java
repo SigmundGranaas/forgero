@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.core.identifier;
 
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
+import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import net.minecraft.util.Identifier;
 
 import java.util.stream.Stream;
@@ -33,6 +38,32 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
     public ForgeroMaterialIdentifier createForgeroMaterialIdentifier(String identifier) {
         String[] elements = identifier.split("_");
         return new ForgeroMaterialIdentifierImpl(elements[0]);
+    }
+
+    @Override
+    public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
+        return new ForgeroModelIdentifier(toolPart.getToolPartIdentifier());
+    }
+
+    @Override
+    public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
+        return new ForgeroModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart, toolType), toolPart.getPrimaryMaterial()));
+    }
+
+    private String createToolPartModelVariationTemplate(ToolPartModelType type, ForgeroMaterial material) {
+        return material.getName() + "_" + type.toFileName();
+    }
+
+    @Override
+    public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
+            secondaryMaterial) {
+        return null;
+    }
+
+    @Override
+    public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
+            toolPart, SecondaryMaterial secondaryMaterial) {
+        return null;
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {

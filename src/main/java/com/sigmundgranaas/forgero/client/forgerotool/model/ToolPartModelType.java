@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model;
 
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+
 import java.util.Locale;
 
 /**
@@ -17,7 +21,35 @@ public enum ToolPartModelType {
     BINDING,
     SHOVELBINDING;
 
+    public static ToolPartModelType getModelType(ForgeroToolPart toolPart) {
+        return switch (toolPart.getToolPartType()) {
+            case HEAD -> switch (((ToolPartHead) toolPart).getHeadType()) {
+                case PICKAXE -> PICKAXEHEAD;
+                case SHOVEL -> SHOVELHEAD;
+                case SWORD -> null;
+            };
+            case HANDLE -> HANDLE;
+            case BINDING -> BINDING;
+        };
+    }
+
+    public static ToolPartModelType getModelType(ForgeroToolPart toolPart, ForgeroToolTypes toolType) {
+        return switch (toolType) {
+            case PICKAXE -> switch (toolPart.getToolPartType()) {
+                case HEAD -> PICKAXEHEAD;
+                case HANDLE -> FULLHANDLE;
+                case BINDING -> PICKAXEBINDING;
+            };
+            case SHOVEL -> switch (toolPart.getToolPartType()) {
+                case HEAD -> SHOVELHEAD;
+                case HANDLE -> MEDIUMHANDLE;
+                case BINDING -> SHOVELBINDING;
+            };
+            case SWORD -> null;
+        };
+    }
+
     public String toFileName() {
-        return this.toString().toLowerCase(Locale.ROOT).replace("_", "");
+        return this.toString().toLowerCase(Locale.ROOT);
     }
 }

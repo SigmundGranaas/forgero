@@ -25,10 +25,8 @@ public interface NBTFactory {
     @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound);
 
-
     @NotNull
     ForgeroTool createToolFromNBT(@NotNull ForgeroToolItem baseTool, @NotNull NbtCompound compound);
-
 
     @NotNull
     NbtCompound createNBTFromTool(@NotNull ForgeroTool baseTool);

@@ -38,7 +38,7 @@ public class ForgeroTextureManagerImpl implements ForgeroTextureManager {
 
     @Override
     public boolean isManagedByForgeroTextureManager(Identifier resourceId) {
-        if (ResourceUtils.isNotForgeroResource(resourceId) || !ResourceUtils.isTextureIdentifier(resourceId)) {
+        if (ResourceUtils.isNotForgeroResource(resourceId) || !ResourceUtils.isTextureIdentifier(resourceId) || resourceId.getPath().contains("transparent_base")) {
             return false;
         }
 

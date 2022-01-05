@@ -45,7 +45,8 @@ public class ToolModel2D implements DynamicModel {
         String headTexture = getTextureBase() + tool.getTool().getToolHead().getPrimaryMaterial().getName() + "_" + ToolPartModelTypeToFilename(getHeadType());
         String handleTexture = getTextureBase() + tool.getTool().getToolHandle().getPrimaryMaterial().getName() + "_" + ToolPartModelTypeToFilename(getHandleType());
         textures.addProperty("layer0", handleTexture);
-        textures.addProperty("layer1", headTexture);
+        textures.addProperty("layer1", getTextureBase() + "transparent_base");
+        textures.addProperty("layer2", headTexture);
         textures.addProperty("particle", headTexture);
         return textures;
     }
