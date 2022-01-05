@@ -6,7 +6,8 @@ import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureManag
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPalette;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPaletteFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
-import com.sigmundgranaas.forgero.core.material.ForgeroToolMaterial;
+import com.sigmundgranaas.forgero.core.identifier.ForgeroMaterialIdentifierImpl;
+import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.item.Constants;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
@@ -58,8 +59,8 @@ public class MaterialPaletteFactoryImpl implements MaterialPaletteFactory {
     }
 
     protected Optional<MaterialPalette> generatePaletteFromTextures(String material, Function<Identifier, Resource> getResource) {
-        List<Identifier> materialDependencyIdentifiers = ForgeroToolMaterial.getMaterialRepresentations(material);
-        List<Identifier> materialExclusionDependencies = ForgeroToolMaterial.getMaterialExclusions(material);
+        List<Identifier> materialDependencyIdentifiers = MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(material)).getPaletteIdentifiers();
+        List<Identifier> materialExclusionDependencies = MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(material)).getPaletteExclusionIdentifiers();
 
         try {
             List<BufferedImage> materialReferenceImages = new ArrayList<>();

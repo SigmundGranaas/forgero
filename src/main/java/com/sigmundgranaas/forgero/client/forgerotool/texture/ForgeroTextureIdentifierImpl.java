@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class ForgeroTextureIdentifierImpl implements ForgeroTextureIdentifier {
     private final Identifier id;
 

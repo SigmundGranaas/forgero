@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero;
 
-import com.sigmundgranaas.forgero.core.material.MaterialManager;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import net.fabricmc.api.ModInitializer;
@@ -16,7 +15,7 @@ public class Forgero implements ModInitializer {
     public void onInitialize() {
         registerItems();
         registerRecipes();
-        MaterialManager.initializePrimaryMaterials();
+        //MaterialManager.initializePrimaryMaterials();
     }
 
     private void registerItems() {
