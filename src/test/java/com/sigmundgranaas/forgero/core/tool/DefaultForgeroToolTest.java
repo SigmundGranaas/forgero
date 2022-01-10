@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.core.tool;
 
 import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.ForgeroToolIdentifierImpl;
-import com.sigmundgranaas.forgero.core.identifier.ForgeroToolPartIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifierImpl;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;

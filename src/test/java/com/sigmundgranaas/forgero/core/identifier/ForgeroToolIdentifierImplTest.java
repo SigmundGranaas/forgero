@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.core.identifier;
 
 import com.sigmundgranaas.forgero.Constants;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifierImpl;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

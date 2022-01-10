@@ -1,5 +1,7 @@
-package com.sigmundgranaas.forgero.core.identifier;
+package com.sigmundgranaas.forgero.core.identifier.tool;
 
+import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
+import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierType;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
 
 import java.util.Locale;

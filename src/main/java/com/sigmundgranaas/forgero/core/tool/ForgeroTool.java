@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.tool;
 
-import com.sigmundgranaas.forgero.core.identifier.ForgeroToolIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;

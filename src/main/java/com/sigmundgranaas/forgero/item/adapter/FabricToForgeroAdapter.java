@@ -44,6 +44,9 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
 
     @Override
     public Optional<ForgeroTool> getTool(ItemStack itemStack) {
+        if (itemStack.getItem() instanceof ForgeroToolItem) {
+            return Optional.of(getTool((ForgeroToolItem) itemStack.getItem()));
+        }
         return Optional.empty();
     }
 
@@ -54,7 +57,7 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
 
     @Override
     public ForgeroTool getTool(ForgeroToolItem toolItem) {
-        return null;
+        return toolItem.getTool();
     }
 
     @Override
@@ -89,6 +92,9 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
 
     @Override
     public Optional<ForgeroToolPart> getToolPart(ItemStack itemStack) {
+        if (itemStack.getItem() instanceof ToolPartItem) {
+            return Optional.of(((ToolPartItem) itemStack.getItem()).getPart());
+        }
         return Optional.empty();
     }
 

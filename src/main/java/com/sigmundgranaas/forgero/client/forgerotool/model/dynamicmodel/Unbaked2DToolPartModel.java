@@ -40,9 +40,9 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
         return Forgero.MOD_NAMESPACE + ":item/";
     }
 
-    JsonObject getTextures() {
+    private JsonObject getTextures() {
         JsonObject textures = new JsonObject();
-        for (int i = 0; i < getModelLayerIndex(); i++) {
+        for (int i = 0; i <= getModelLayerIndex(); i++) {
             if (i == getModelLayerIndex()) {
                 textures.addProperty("layer" + i, getTextureBasePath() + getIdentifier());
             } else {

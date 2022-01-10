@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart;
 
 import com.sigmundgranaas.forgero.Constants;
-import com.sigmundgranaas.forgero.core.identifier.ForgeroMaterialIdentifierImpl;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import org.junit.jupiter.api.Assertions;

@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.template;
 
 import com.sigmundgranaas.forgero.client.ClientConfiguration;
-import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdentifier;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.factory.OverridableTemplateTextureFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.factory.RecreateTemplateTextureFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.factory.TemplateTextureFactoryImpl;
+import com.sigmundgranaas.forgero.core.identifier.model.texture.TextureIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -35,6 +35,6 @@ public interface TemplateTextureFactory {
      * @return - Returns an Optional in case the Template texture could not be created.
      */
     @NotNull
-    Optional<TemplateTexture> getTexture(ForgeroTextureIdentifier id);
+    Optional<TemplateTexture> getTexture(TextureIdentifier id);
 
 }

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.identifier;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
+import com.sigmundgranaas.forgero.core.identifier.tool.*;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -57,13 +58,13 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return null;
+        return new ForgeroModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart), secondaryMaterial));
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return null;
+        return new ForgeroModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart, toolType), secondaryMaterial));
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {

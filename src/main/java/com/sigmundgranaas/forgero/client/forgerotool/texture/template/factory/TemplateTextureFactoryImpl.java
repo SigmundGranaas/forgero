@@ -2,10 +2,10 @@ package com.sigmundgranaas.forgero.client.forgerotool.texture.template.factory;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdentifier;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTexture;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTextureFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
+import com.sigmundgranaas.forgero.core.identifier.model.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.item.Constants;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public class TemplateTextureFactoryImpl implements TemplateTextureFactory {
 
     @Override
     public @NotNull
-    Optional<TemplateTexture> getTexture(ForgeroTextureIdentifier textureIdentifier) {
+    Optional<TemplateTexture> getTexture(TextureIdentifier textureIdentifier) {
         if (textureIdentifier.getModelType().isEmpty()) {
             return Optional.empty();
         }
@@ -45,7 +45,7 @@ public class TemplateTextureFactoryImpl implements TemplateTextureFactory {
         return baseTexture;
     }
 
-    protected Optional<TemplateTexture> getOrCreateTexture(ForgeroTextureIdentifier textureIdentifier) {
+    protected Optional<TemplateTexture> getOrCreateTexture(TextureIdentifier textureIdentifier) {
         Optional<BufferedImage> textureImageResult = loadTemplateFromFile(textureIdentifier);
         if (textureImageResult.isEmpty()) {
             return Optional.empty();
@@ -61,12 +61,12 @@ public class TemplateTextureFactoryImpl implements TemplateTextureFactory {
 
     }
 
-    protected void saveTemplateTexture(ForgeroTextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
+    protected void saveTemplateTexture(TextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
         textureIdentifier.getModelType().ifPresent(model -> templateTexturesCache.put(model, baseTexture));
 
     }
 
-    protected Optional<BufferedImage> loadTemplateFromFile(ForgeroTextureIdentifier textureIdentifier) {
+    protected Optional<BufferedImage> loadTemplateFromFile(TextureIdentifier textureIdentifier) {
         return TextureLoader.loadTextureFromFile(getTemplateTextureFolder() + textureIdentifier.getBaseTextureFileNameWithExtension());
     }
 
@@ -76,7 +76,7 @@ public class TemplateTextureFactoryImpl implements TemplateTextureFactory {
         return Constants.CONFIG_PATH + "forgero/templates/textures/";
     }
 
-    protected void WriteTemplateTexturePaletteAsImage(ForgeroTextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
+    protected void WriteTemplateTexturePaletteAsImage(TextureIdentifier textureIdentifier, TemplateTexture baseTexture) {
         BufferedImage paletteImage = new BufferedImage(baseTexture.getGreyScaleValues().size(), 1, BufferedImage.TYPE_INT_ARGB);
         for (int x = 0; x < baseTexture.getGreyScaleValues().size(); x++) {
             paletteImage.setRGB(x, 0, baseTexture.getGreyScaleValues().get(x).getRgb());

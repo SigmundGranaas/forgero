@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.identifier;
 
 import com.sigmundgranaas.forgero.Constants;
+import com.sigmundgranaas.forgero.core.identifier.tool.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

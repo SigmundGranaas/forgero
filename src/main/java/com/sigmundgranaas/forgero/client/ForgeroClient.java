@@ -29,9 +29,12 @@ public class ForgeroClient implements ClientModInitializer {
         //ToolModelManager toolParts = new ToolModel3DManager(ForgeroItemCollection.INSTANCE.getToolPartHandles(), ItemInitializer.toolPartsHeads, ItemInitializer.toolPartsBindings);
         //ToolModelManager toolModels = new ToolModel2DManager(ItemCollection.INSTANCE.getTools(), ItemCollection.INSTANCE.getToolPartBindings());
         //ModelLoadingRegistry.INSTANCE.registerVariantProvider(rm -> new ForgeroToolModelProvider(toolModels));
-        ItemCollection itemCollection = ItemCollection.INSTANCE;
-
+        registerToolPartModels();
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE));
+    }
+
+    private void registerToolPartModels() {
+        ItemCollection itemCollection = ItemCollection.INSTANCE;
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
             itemCollection.getToolParts()
                     .stream()
@@ -44,7 +47,7 @@ public class ForgeroClient implements ClientModInitializer {
                                 .stream()
                                 .map(ForgeroToolItem.class::cast)
                                 .forEach(forgeroToolItem -> {
-                                    out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, toolPart.getPrimaryMaterial().getName() + "_" + ToolPartModelType.getModelType(toolPart.getPart(), forgeroToolItem.getToolType())));
+                                    //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, toolPart.getPrimaryMaterial().getName() + "_" + ToolPartModelType.getModelType(toolPart.getPart(), forgeroToolItem.getToolType())));
                                     MaterialCollection.INSTANCE.getSecondaryMaterialsAsList()
                                             .forEach(secondaryMaterial -> out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, secondaryMaterial.getName() + "_" + ToolPartModelType.getModelType(toolPart.getPart(), forgeroToolItem.getToolType()).toFileName() + "_secondary", "inventory")));
                                 });
@@ -52,4 +55,6 @@ public class ForgeroClient implements ClientModInitializer {
             out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "transparent_base", "inventory"));
         });
     }
+
+
 }

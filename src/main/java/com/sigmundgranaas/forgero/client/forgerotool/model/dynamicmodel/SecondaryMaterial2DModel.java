@@ -21,7 +21,7 @@ public class SecondaryMaterial2DModel extends Unbaked2DToolPartModel {
 
     @Override
     public String getIdentifier() {
-        return secondaryMaterial.getName() + "_" + type.toFileName() + "secondary";
+        return secondaryMaterial.getName() + "_" + type.toFileName() + "_secondary";
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.identifier;
+package com.sigmundgranaas.forgero.core.identifier.tool;
 
 public class ForgeroModelIdentifier {
     private final String identifier;

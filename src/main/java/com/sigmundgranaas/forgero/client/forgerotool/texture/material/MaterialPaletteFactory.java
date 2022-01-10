@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.material;
 
 import com.sigmundgranaas.forgero.client.ClientConfiguration;
-import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdentifier;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureManager.Function;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory.MaterialPaletteFactoryImpl;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory.OverridableMaterialPaletteFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory.PersistMaterialPaletteFactory;
+import com.sigmundgranaas.forgero.core.identifier.model.texture.TextureIdentifier;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 
@@ -43,7 +43,7 @@ public interface MaterialPaletteFactory {
      * @param identifier  - identifier to find the correct Material to create the palette from.
      * @return - Return an Optional in case the factory is unable to create a Palette.
      */
-    Optional<MaterialPalette> getPalette(Function<Identifier, Resource> getResource, ForgeroTextureIdentifier identifier);
+    Optional<MaterialPalette> getPalette(Function<Identifier, Resource> getResource, TextureIdentifier identifier);
 
     /**
      * Method for clearing the cache of the factory. This will force the factory to recreate or reload the palettes.

@@ -1,6 +1,8 @@
-package com.sigmundgranaas.forgero.core.identifier;
+package com.sigmundgranaas.forgero.core.identifier.tool;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
+import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierType;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 
 public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier implements ForgeroToolIdentifier {

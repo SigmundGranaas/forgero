@@ -8,6 +8,8 @@ import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTe
 import com.sigmundgranaas.forgero.client.forgerotool.texture.template.TemplateTextureFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.toolpart.ForgeroToolPartTexture;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.toolpart.ForgeroToolPartTextureFactory;
+import com.sigmundgranaas.forgero.core.identifier.model.texture.ForgeroTextureIdentifierImpl;
+import com.sigmundgranaas.forgero.core.identifier.model.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.utils.ResourceUtils;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceImpl;
@@ -42,7 +44,7 @@ public class ForgeroTextureManagerImpl implements ForgeroTextureManager {
             return false;
         }
 
-        ForgeroTextureIdentifier textureIdentifier = new ForgeroTextureIdentifierImpl(resourceId);
+        TextureIdentifier textureIdentifier = new ForgeroTextureIdentifierImpl(resourceId);
 
         boolean fileExists = textureIdentifier.fileExists();
         if (fileExists && ClientConfiguration.INSTANCE.shouldCreateNewTextures()) {

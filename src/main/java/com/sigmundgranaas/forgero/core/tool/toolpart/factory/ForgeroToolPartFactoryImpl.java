@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart.factory;
 
-import com.sigmundgranaas.forgero.core.identifier.ForgeroToolPartHeadIdentifier;
-import com.sigmundgranaas.forgero.core.identifier.ForgeroToolPartIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -42,22 +42,26 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     @Override
-    public @NotNull ToolPartHeadBuilder createToolPartHeadBuilder(@NotNull PrimaryMaterial material, ForgeroToolTypes type) {
+    public @NotNull
+    ToolPartHeadBuilder createToolPartHeadBuilder(@NotNull PrimaryMaterial material, ForgeroToolTypes type) {
         return new ToolPartHeadBuilder(material, type);
     }
 
     @Override
-    public @NotNull ToolPartHandleBuilder createToolPartHandleBuilder(@NotNull PrimaryMaterial material) {
+    public @NotNull
+    ToolPartHandleBuilder createToolPartHandleBuilder(@NotNull PrimaryMaterial material) {
         return new ToolPartHandleBuilder(material);
     }
 
     @Override
-    public @NotNull ToolPartBindingBuilder createToolPartBindingBuilder(@NotNull PrimaryMaterial material) {
+    public @NotNull
+    ToolPartBindingBuilder createToolPartBindingBuilder(@NotNull PrimaryMaterial material) {
         return new ToolPartBindingBuilder(material);
     }
 
     @Override
-    public @NotNull ToolPartBuilder createToolPartBuilderFromToolPart(@NotNull ForgeroToolPart toolPart) {
+    public @NotNull
+    ToolPartBuilder createToolPartBuilderFromToolPart(@NotNull ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
             case HEAD -> new ToolPartHeadBuilder((ToolPartHead) toolPart);
             case BINDING -> new ToolPartBindingBuilder((ToolPartBinding) toolPart);

@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.client.forgerotool.texture.material.factory;
 
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureIdentifier;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.ForgeroTextureManager.Function;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPalette;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.material.MaterialPaletteFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.texture.utils.TextureLoader;
-import com.sigmundgranaas.forgero.core.identifier.ForgeroMaterialIdentifierImpl;
+import com.sigmundgranaas.forgero.core.identifier.model.texture.TextureIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.item.Constants;
 import net.minecraft.resource.Resource;
@@ -23,7 +23,7 @@ public class MaterialPaletteFactoryImpl implements MaterialPaletteFactory {
     private final HashMap<String, MaterialPalette> materialPalettes = new HashMap<>();
 
     @Override
-    public Optional<MaterialPalette> getPalette(Function<Identifier, Resource> getResource, @NotNull ForgeroTextureIdentifier textureIdentifier) {
+    public Optional<MaterialPalette> getPalette(Function<Identifier, Resource> getResource, @NotNull TextureIdentifier textureIdentifier) {
         Optional<String> materialResult = textureIdentifier.getMaterial();
 
         if (materialResult.isEmpty()) {

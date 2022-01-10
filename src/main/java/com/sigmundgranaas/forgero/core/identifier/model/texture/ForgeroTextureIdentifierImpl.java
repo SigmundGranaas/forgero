@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.texture;
+package com.sigmundgranaas.forgero.core.identifier.model.texture;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class ForgeroTextureIdentifierImpl implements ForgeroTextureIdentifier {
+public class ForgeroTextureIdentifierImpl implements TextureIdentifier {
     private final Identifier id;
 
     public ForgeroTextureIdentifierImpl(@NotNull Identifier id) {
@@ -51,7 +51,13 @@ public class ForgeroTextureIdentifierImpl implements ForgeroTextureIdentifier {
         String texturePath = id.getPath();
         String[] elements = texturePath.split("/");
         String[] materialSplit = elements[elements.length - 1].split("_");
-        String[] extensionSplit = materialSplit[1].split("\\.");
+        String[] extensionSplit;
+        if (elements.length == 3) {
+            extensionSplit = materialSplit[2].split("\\.");
+        } else {
+            extensionSplit = materialSplit[1].split("\\.");
+        }
+
         return extensionSplit[0] + Constants.BASE_IDENTIFIER + "." + extensionSplit[1];
     }
 

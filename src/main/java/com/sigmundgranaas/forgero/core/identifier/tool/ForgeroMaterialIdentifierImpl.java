@@ -1,4 +1,6 @@
-package com.sigmundgranaas.forgero.core.identifier;
+package com.sigmundgranaas.forgero.core.identifier.tool;
+
+import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierType;
 
 public class ForgeroMaterialIdentifierImpl extends AbstractForgeroIdentifier implements ForgeroMaterialIdentifier {
     private final String name;
