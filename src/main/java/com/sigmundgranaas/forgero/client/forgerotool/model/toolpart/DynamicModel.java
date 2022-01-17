@@ -24,7 +24,7 @@ public interface DynamicModel extends UnbakedModel {
     JsonUnbakedModel buildUnbakedJsonModel();
 
     /**
-     * Method for creating an Identifier which corresponds to models being used to render parts of a tool
+     * Method for creating an Identifier which corresponds to a model being used to render parts of a tool
      *
      * @return Unique identifier
      */
