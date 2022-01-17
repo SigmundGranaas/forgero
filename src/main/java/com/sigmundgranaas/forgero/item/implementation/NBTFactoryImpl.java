@@ -72,12 +72,15 @@ public class NBTFactoryImpl implements NBTFactory {
         } else {
             toolCompound = compound;
         }
-        Optional<String> hash = Optional.ofNullable(toolCompound).map(toolCompounds -> toolCompounds.getString(NBTFactory.HASH_NBT_IDENTIFIER));
+        assert toolCompound != null;
+
+        Optional<String> hash = Optional.of(toolCompound).map(toolCompounds -> toolCompounds.getString(NBTFactory.HASH_NBT_IDENTIFIER));
         if (hash.isPresent() && toolCache.containsKey(hash.get())) {
             return toolCache.get(hash.get());
         }
         ToolPartHead head;
         ToolPartHandle handle;
+
         if (toolCompound.contains(ToolPartItem.HEAD_IDENTIFIER)) {
             head = (ToolPartHead) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.HEAD_IDENTIFIER));
         } else {

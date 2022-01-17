@@ -7,13 +7,9 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 
-public class RecipeRegistryImpl implements RecipeRegistry {
+public record RecipeRegistryImpl(
+        RecipeCollection collection) implements RecipeRegistry {
     private static RecipeRegistry INSTANCE;
-    private final RecipeCollection collection;
-
-    public RecipeRegistryImpl(RecipeCollection collection) {
-        this.collection = collection;
-    }
 
     public static RecipeRegistry getInstance() {
         if (INSTANCE == null) {

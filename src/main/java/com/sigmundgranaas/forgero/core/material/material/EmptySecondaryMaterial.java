@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.material.material;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EmptySecondaryMaterial implements SecondaryMaterial {
@@ -34,13 +35,13 @@ public class EmptySecondaryMaterial implements SecondaryMaterial {
     @Override
     public @NotNull
     List<Identifier> getPaletteIdentifiers() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public @NotNull
     List<Identifier> getPaletteExclusionIdentifiers() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

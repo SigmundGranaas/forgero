@@ -3,12 +3,8 @@ package com.sigmundgranaas.forgero.core.identifier.texture.toolpart;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifier;
 
-public class PaletteIdentifier implements TextureIdentifier {
-    private final ForgeroMaterialIdentifier material;
-
-    public PaletteIdentifier(ForgeroMaterialIdentifier material) {
-        this.material = material;
-    }
+public record PaletteIdentifier(
+        ForgeroMaterialIdentifier material) implements TextureIdentifier {
 
     @Override
     public String getFileNameWithExtension() {

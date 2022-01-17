@@ -15,15 +15,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class ForgeroToolInstanceFactoryImpl implements ForgeroToolInstanceFactory {
+public record ForgeroToolInstanceFactoryImpl(
+        NBTFactory factory) implements ForgeroToolInstanceFactory {
     public static ForgeroToolInstanceFactory INSTANCE;
-
-    public final NBTFactory factory;
-
-    public ForgeroToolInstanceFactoryImpl(NBTFactory factory) {
-        this.factory = factory;
-
-    }
 
     public static ForgeroToolInstanceFactory getInstance() {
         if (INSTANCE == null) {

@@ -9,15 +9,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RawTexture implements Texture {
-
-    private final BufferedImage image;
-    private final TextureIdentifier id;
-
-    public RawTexture(TextureIdentifier id, BufferedImage image) {
-        this.id = id;
-        this.image = image;
-    }
+public record RawTexture(TextureIdentifier id,
+                         BufferedImage image) implements Texture {
 
     public static RawTexture createRawTexture(TextureIdentifier id, InputStream stream) throws IOException {
         try (stream) {

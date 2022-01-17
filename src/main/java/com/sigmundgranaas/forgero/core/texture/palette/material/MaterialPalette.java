@@ -14,14 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class MaterialPalette implements Palette, Texture {
-    private final List<RgbColour> colourValues;
-    private final PaletteIdentifier id;
-
-    public MaterialPalette(List<RgbColour> colourValues, PaletteIdentifier id) {
-        this.colourValues = colourValues;
-        this.id = id;
-    }
+public record MaterialPalette(List<RgbColour> colourValues,
+                              PaletteIdentifier id) implements Palette, Texture {
 
     public List<RgbColour> getColourValues() {
         return colourValues;

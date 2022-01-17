@@ -25,21 +25,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class RecipeCreatorImpl implements RecipeCreator {
+public record RecipeCreatorImpl(
+        Map<RecipeTypes, JsonObject> recipeTemplates,
+        List<ForgeroTool> tools,
+        List<ForgeroToolPart> toolParts,
+        List<PrimaryMaterial> materials,
+        List<SecondaryMaterial> secondaryMaterials) implements RecipeCreator {
     private static RecipeCreator INSTANCE;
-    private final Map<RecipeTypes, JsonObject> recipeTemplates;
-    private final List<ForgeroTool> tools;
-    private final List<ForgeroToolPart> toolParts;
-    private final List<PrimaryMaterial> materials;
-    private final List<SecondaryMaterial> secondaryMaterials;
-
-    public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates, List<ForgeroTool> tools, List<ForgeroToolPart> toolParts, List<PrimaryMaterial> materials, List<SecondaryMaterial> secondaryMaterials) {
-        this.recipeTemplates = recipeTemplates;
-        this.tools = tools;
-        this.toolParts = toolParts;
-        this.materials = materials;
-        this.secondaryMaterials = secondaryMaterials;
-    }
 
     public static RecipeCreator getInstance() {
         if (INSTANCE == null) {

@@ -21,6 +21,7 @@ public enum ToolPartModelType {
     BINDING,
     SHOVELBINDING;
 
+    @SuppressWarnings("DuplicateBranchesInSwitch")
     public static ToolPartModelType getModelType(ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
             case HEAD -> switch (((ToolPartHead) toolPart).getHeadType()) {

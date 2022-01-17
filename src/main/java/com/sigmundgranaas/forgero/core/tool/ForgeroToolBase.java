@@ -84,6 +84,6 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public ToolMaterial getMaterial() {
-        return (ToolMaterial) getPrimaryMaterial();
+        return getPrimaryMaterial();
     }
 }

@@ -15,15 +15,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class MaterialLoaderImpl implements MaterialLoader {
+public record MaterialLoaderImpl(String materialPath) implements MaterialLoader {
     public static final HashMap<String, ForgeroMaterial> materialMap = new HashMap<>();
     public static final Logger LOGGER = Forgero.LOGGER;
     private static MaterialLoaderImpl INSTANCE;
-    private final String materialPath;
-
-    public MaterialLoaderImpl(String materialPath) {
-        this.materialPath = materialPath;
-    }
 
     public static MaterialLoader getInstance() {
         if (INSTANCE == null) {
@@ -39,6 +34,8 @@ public class MaterialLoaderImpl implements MaterialLoader {
     public List<MaterialPOJO> loadMaterials() {
         try {
             InputStream materialsStream = Utils.readJsonResourceAsString(materialPath);
+
+            assert materialsStream != null;
 
             JsonReader materialsJson = new JsonReader(new InputStreamReader(materialsStream));
             MaterialPOJO[] materials = new Gson().fromJson(materialsJson, MaterialPOJO[].class);

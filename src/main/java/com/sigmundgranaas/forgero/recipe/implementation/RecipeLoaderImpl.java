@@ -12,14 +12,10 @@ import com.sigmundgranaas.forgero.utils.Utils;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class RecipeLoaderImpl implements RecipeLoader {
+public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader {
     private static RecipeLoader INSTANCE;
-    private final String recipeFolderPath;
-
-    public RecipeLoaderImpl(String recipeFolderPath) {
-        this.recipeFolderPath = recipeFolderPath;
-    }
 
     public static RecipeLoader getInstance() {
         if (INSTANCE == null) {
@@ -56,6 +52,6 @@ public class RecipeLoaderImpl implements RecipeLoader {
     }
 
     private JsonObject getRecipeAsJson(String path) {
-        return (JsonObject) new JsonParser().parse(new InputStreamReader(Utils.readJsonResourceAsString(path)));
+        return (JsonObject) new JsonParser().parse(new InputStreamReader(Objects.requireNonNull(Utils.readJsonResourceAsString(path))));
     }
 }

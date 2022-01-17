@@ -27,6 +27,7 @@ public abstract class ItemStackMixin {
     @Shadow
     public abstract Item getItem();
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<?>> cir) {
         if (this.getItem() instanceof ForgeroToolItem) {
