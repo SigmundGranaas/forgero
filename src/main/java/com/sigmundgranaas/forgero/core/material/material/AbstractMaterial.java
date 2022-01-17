@@ -8,15 +8,15 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class AbstractMaterial implements ForgeroMaterial {
-    protected String name;
-    protected int rarity;
-    protected int durability;
-    protected int weight;
-    protected List<String> paletteIdentifiers;
-    protected List<String> paletteExclusionIdentifiers;
-    protected List<String> properties;
-    protected MaterialType type;
-    protected String ingredient;
+    protected final String name;
+    protected final int rarity;
+    protected final int durability;
+    protected final int weight;
+    protected final List<String> paletteIdentifiers;
+    protected final List<String> paletteExclusionIdentifiers;
+    protected final List<String> properties;
+    protected final MaterialType type;
+    protected final String ingredient;
 
     public AbstractMaterial(MaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);

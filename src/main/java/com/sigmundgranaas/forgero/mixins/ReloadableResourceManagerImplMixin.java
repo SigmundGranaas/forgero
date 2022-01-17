@@ -20,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 @Mixin(ReloadableResourceManagerImpl.class)
@@ -30,10 +29,10 @@ public abstract class ReloadableResourceManagerImplMixin {
     private static Logger LOGGER;
 
     @Shadow
-    public abstract Resource getResource(Identifier id) throws IOException;
+    public abstract Resource getResource(Identifier id);
 
     @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
-    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException, URISyntaxException {
+    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
 
         if (id.getNamespace().equals(Forgero.MOD_NAMESPACE)) {
             Optional<ToolPartTextureIdentifier> identifierResult = new FabricTextureIdentifierFactory().createToolPartTextureIdentifier(id);

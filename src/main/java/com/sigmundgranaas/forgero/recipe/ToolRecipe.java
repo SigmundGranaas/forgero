@@ -32,10 +32,10 @@ public class ToolRecipe extends ShapedRecipe {
 
         List<Ingredient> ingredients = super.getIngredients();
 
-        for (int ingredientSlot = 0; ingredientSlot < ingredients.size(); ingredientSlot++) {
-            if (ingredients.get(ingredientSlot).getMatchingStacks().length > 0) {
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient.getMatchingStacks().length > 0) {
                 for (int craftingSlot = 0; craftingSlot < craftingInventory.size(); craftingSlot++) {
-                    if (ingredients.get(ingredientSlot).test(craftingInventory.getStack(craftingSlot))) {
+                    if (ingredient.test(craftingInventory.getStack(craftingSlot))) {
                         ItemStack toolPart = craftingInventory.getStack(craftingSlot);
                         if (headItem == null) {
                             headItem = toolPart;
@@ -53,13 +53,15 @@ public class ToolRecipe extends ShapedRecipe {
         ToolPartHead head;
         ToolPartHandle handle;
 
-        if (headItem.hasNbt() && headItem.getNbt().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
+        if (headItem.hasNbt() && headItem.getOrCreateNbt().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
+            assert headItem.getNbt() != null;
             head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
         } else {
             head = ((ForgeroToolItem) getOutput().getItem()).getHead();
         }
 
-        if (handleItem.hasNbt() && handleItem.getNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
+        if (handleItem.hasNbt() && handleItem.getOrCreateNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
+            assert handleItem.getNbt() != null;
             handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getNbt().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
         } else {
             handle = ((ForgeroToolItem) getOutput().getItem()).getHandle();
@@ -79,7 +81,7 @@ public class ToolRecipe extends ShapedRecipe {
     }
 
     public static class ToolRecipeSerializer extends ShapedRecipe.Serializer implements ForgeroRecipeSerializer {
-        public static ToolRecipeSerializer INSTANCE = new ToolRecipeSerializer();
+        public static final ToolRecipeSerializer INSTANCE = new ToolRecipeSerializer();
 
         @Override
         public RecipeSerializer<?> getSerializer() {

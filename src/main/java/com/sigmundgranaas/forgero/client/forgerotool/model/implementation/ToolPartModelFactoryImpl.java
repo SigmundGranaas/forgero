@@ -2,11 +2,11 @@ package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.SecondaryMaterial2DModel;
-import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.Unbaked2DToolPartModel;
-import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.binding.BindingModel2D;
-import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.handle.HandleModel2D;
-import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.head.HeadModel2D;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.SecondaryMaterial2DModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Unbaked2DToolPartModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.binding.BindingModel2D;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.handle.HandleModel2D;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.head.HeadModel2D;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -49,17 +49,11 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
     private void createModels() {
         List<Unbaked2DToolPartModel> models = new ArrayList<>();
 
-        Arrays.stream(ToolPartModelType.values()).forEach(modelType -> {
-            materials.stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).forEach(secondaryMaterial -> {
-                models.add(new SecondaryMaterial2DModel(loader, textureGetter, secondaryMaterial, modelType));
-            });
-        });
+        Arrays.stream(ToolPartModelType.values()).forEach(modelType -> materials.stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).forEach(secondaryMaterial -> models.add(new SecondaryMaterial2DModel(loader, textureGetter, secondaryMaterial, modelType))));
 
         toolParts.forEach(toolpart -> {
             models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart)));
-            Arrays.stream(ForgeroToolTypes.values()).forEach(toolTypes -> {
-                models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart, toolTypes)));
-            });
+            Arrays.stream(ForgeroToolTypes.values()).forEach(toolTypes -> models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart, toolTypes))));
         });
 
         models.forEach(model -> toolPartModels.put(model.getIdentifier(), model.bake()));

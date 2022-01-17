@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 
+@SuppressWarnings("ALL")
 public class ItemRegistryImpl implements ItemRegistry {
     private static ItemRegistry INSTANCE;
     private final ItemCollection collection;

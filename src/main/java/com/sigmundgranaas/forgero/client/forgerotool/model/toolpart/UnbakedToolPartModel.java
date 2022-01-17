@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
+package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.util.ModelIdentifier;

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
+package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;

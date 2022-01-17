@@ -4,8 +4,6 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TemplateTextu
 import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,14 +28,10 @@ public class CachedTemplateTextureService implements TemplateTextureService {
     }
 
     private TemplateTexture createTemplateTexture(TemplateTextureIdentifier id) {
-        try {
-            Texture RawTemplate = loader.getResource(id);
-            TemplateTexture template = factory.createTemplateTexture(RawTemplate, id);
-            templateCache.put(id.getIdentifier(), template);
-            return template;
-        } catch (IOException | URISyntaxException e) {
-            //TODO proper errors
-            throw new IllegalArgumentException();
-        }
+        Texture RawTemplate = loader.getResource(id);
+        TemplateTexture template = factory.createTemplateTexture(RawTemplate, id);
+        templateCache.put(id.getIdentifier(), template);
+        return template;
+
     }
 }

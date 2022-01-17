@@ -15,7 +15,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class ToolPartModelVariant extends ForgeroCustomModel {
+public class ToolPartModelVariant extends ForgeroCustomModelProvider {
     private final UnbakedModelCollection unbakedModelCollection;
     private BakedModelCollection bakedModelCollection;
 

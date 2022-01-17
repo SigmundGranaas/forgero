@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel;
+package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;

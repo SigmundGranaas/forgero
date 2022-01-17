@@ -7,7 +7,6 @@
     "ItemRenderContextMixin",
     "ItemStackMixin",
     "ModelLoaderMixin",
-    "NameSpaceResourceManagerMixin",
     "RecipeManagerMixin",
     "ReloadableResourceManagerImplMixin",
     "SmithingRecipeMixin"

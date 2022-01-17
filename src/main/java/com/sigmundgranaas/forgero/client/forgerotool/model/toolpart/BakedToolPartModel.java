@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model;
+package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.ToolPartModelBuilderImpl;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;

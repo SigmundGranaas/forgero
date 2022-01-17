@@ -21,17 +21,15 @@ import net.minecraft.util.Identifier;
 public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
 
 
-    private final Identifier id;
     private final Ingredient base;
     private final Ingredient addition;
-    private final ItemStack output;
 
     public SecondaryMaterialToolPartUpgradeRecipe(SmithingRecipeGetters recipe) {
         super(recipe.getId(), recipe.getBase(), recipe.getAddition(), recipe.getResult().copy());
-        this.id = recipe.getId();
+        Identifier id = recipe.getId();
         this.base = recipe.getBase();
         this.addition = recipe.getAddition();
-        this.output = recipe.getResult();
+        ItemStack output = recipe.getResult();
     }
 
     @Override
@@ -60,7 +58,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
     }
 
     public static class Serializer extends SmithingRecipe.Serializer implements ForgeroRecipeSerializer {
-        public static Serializer INSTANCE = new Serializer();
+        public static final Serializer INSTANCE = new Serializer();
 
         @Override
         public SmithingRecipe read(Identifier identifier, JsonObject jsonObject) {

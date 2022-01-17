@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.sigmundgranaas.forgero.Forgero;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
-import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
@@ -17,7 +16,8 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     }
 
     @Override
-    public @Nullable UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) throws ModelProviderException {
+    public @Nullable
+    UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
         if (modelId.getNamespace().equals(Forgero.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
             String[] elements = modelId.getPath().split("_");
             if (elements.length > 4) {

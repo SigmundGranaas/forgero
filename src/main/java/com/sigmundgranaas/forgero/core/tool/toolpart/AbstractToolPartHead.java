@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 
 public abstract class AbstractToolPartHead extends AbstractToolPart implements ToolPartHead {
-    private ForgeroToolTypes head;
+    private final ForgeroToolTypes head;
 
     public AbstractToolPartHead(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial, ForgeroToolTypes type) {
         super(primaryMaterial, secondaryMaterial);

@@ -21,7 +21,7 @@ import java.util.List;
 public class TemplateTexture implements Texture {
     private final List<PixelInformation> pixelValues;
     private final List<RgbColour> greyScaleValues;
-    private TemplateTextureIdentifier id;
+    private final TemplateTextureIdentifier id;
 
     public TemplateTexture(ArrayList<PixelInformation> pixelValues, List<RgbColour> greyScaleValues, TemplateTextureIdentifier id) {
         this.pixelValues = pixelValues;

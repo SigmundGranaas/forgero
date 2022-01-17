@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class ForgeroToolPartCollectionImpl implements ForgeroToolPartCollection {
     public static ForgeroToolPartCollection INSTANCE;
     private final List<ForgeroToolPart> toolParts;

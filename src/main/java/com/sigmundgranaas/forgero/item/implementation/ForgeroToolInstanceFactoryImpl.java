@@ -18,7 +18,7 @@ import java.util.Optional;
 public class ForgeroToolInstanceFactoryImpl implements ForgeroToolInstanceFactory {
     public static ForgeroToolInstanceFactory INSTANCE;
 
-    public NBTFactory factory;
+    public final NBTFactory factory;
 
     public ForgeroToolInstanceFactoryImpl(NBTFactory factory) {
         this.factory = factory;
@@ -39,21 +39,23 @@ public class ForgeroToolInstanceFactoryImpl implements ForgeroToolInstanceFactor
         return createInstance(forgeroTool);
     }
 
+    @SuppressWarnings("DuplicateBranchesInSwitch")
     @Override
     public @NotNull
     ForgeroToolInstance createForgeroToolInstance(ForgeroTool tool) {
         return switch (tool.getToolType()) {
             case PICKAXE -> new ForgeroPickaxeInstance(tool);
-            case SHOVEL -> null;
-            case SWORD -> null;
+            case SHOVEL -> new ForgeroPickaxeInstance(tool);
+            case SWORD -> new ForgeroPickaxeInstance(tool);
         };
     }
 
+    @SuppressWarnings("DuplicateBranchesInSwitch")
     private ForgeroToolInstance createInstance(ForgeroTool tool) {
         return switch (tool.getToolType()) {
             case PICKAXE -> new ForgeroPickaxeInstance(tool);
-            case SHOVEL -> null;
-            case SWORD -> null;
+            case SHOVEL -> new ForgeroPickaxeInstance(tool);
+            case SWORD -> new ForgeroPickaxeInstance(tool);
         };
     }
 

@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class ForgeroCustomModel implements UnbakedModel, BakedModel, FabricBakedModel {
+public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedModel, FabricBakedModel {
 
     public static ModelTransformation loadTransformFromJson(Identifier location) {
         try {

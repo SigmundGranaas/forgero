@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroAdapter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
-import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.item.ItemStack;
 
@@ -15,12 +14,9 @@ import java.util.Map;
 
 public class EmptyBakedModelCollection implements BakedModelCollection {
     private final FabricToForgeroToolAdapter toolAdapter;
-    private final FabricToForgeroToolPartAdapter toolPartAdapter;
 
     public EmptyBakedModelCollection() {
-        FabricToForgeroAdapter adapter = new FabricToForgeroAdapter();
-        this.toolAdapter = adapter;
-        this.toolPartAdapter = adapter;
+        this.toolAdapter = new FabricToForgeroAdapter();
     }
 
     @Override

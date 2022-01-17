@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.ToolModelBuilderImpl;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.BakedToolModel;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 
 public interface ToolModelBuilder {

@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Forgero implements ModInitializer {
     public static String MOD_NAME = "Forgero";
-    public static String MOD_NAMESPACE = "forgero";
+    public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
 
     @Override

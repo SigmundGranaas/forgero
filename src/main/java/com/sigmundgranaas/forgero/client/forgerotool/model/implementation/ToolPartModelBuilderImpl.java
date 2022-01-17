@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
-import com.sigmundgranaas.forgero.client.forgerotool.model.BakedToolPartModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelBuilder;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.BakedToolPartModel;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 
 public class ToolPartModelBuilderImpl implements ToolPartModelBuilder {
     private FabricBakedModel toolPartModel;
     private FabricBakedModel secondaryMaterial;
-    private FabricBakedModel gem;
+    private final FabricBakedModel gem;
 
     public ToolPartModelBuilderImpl() {
         this.toolPartModel = new EmptyBakedModel();

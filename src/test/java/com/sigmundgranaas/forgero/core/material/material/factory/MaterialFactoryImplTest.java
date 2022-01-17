@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class MaterialFactoryImplTest {
-    public static ForgeroMaterial testMaterial = new MaterialFactoryImpl().createMaterial(MaterialPOJO.createDefaultMaterialPOJO());
+    public static final ForgeroMaterial testMaterial = new MaterialFactoryImpl().createMaterial(MaterialPOJO.createDefaultMaterialPOJO());
 
     @Test
     void materialName() {

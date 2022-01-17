@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMaterial {
-    private String ingredient;
+    private final String ingredient;
 
     public PrimaryMaterialImpl(MaterialPOJO material) {
         super(material);
@@ -23,13 +23,13 @@ public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMate
     @Override
     public @NotNull
     List<Identifier> getPaletteIdentifiers() {
-        return null;
+        return super.getPaletteIdentifiers();
     }
 
     @Override
     public @NotNull
     List<Identifier> getPaletteExclusionIdentifiers() {
-        return null;
+        return super.getPaletteExclusionIdentifiers();
     }
 
     @Override

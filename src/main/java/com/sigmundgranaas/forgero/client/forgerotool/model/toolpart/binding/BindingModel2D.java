@@ -1,7 +1,7 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.binding;
+package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.binding;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.Unbaked2DToolPartModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Unbaked2DToolPartModel;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;

@@ -34,9 +34,6 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private void initializeItemModels() {
-        //ToolModelManager toolParts = new ToolModel3DManager(ForgeroItemCollection.INSTANCE.getToolPartHandles(), ItemInitializer.toolPartsHeads, ItemInitializer.toolPartsBindings);
-        //ToolModelManager toolModels = new ToolModel2DManager(ItemCollection.INSTANCE.getTools(), ItemCollection.INSTANCE.getToolPartBindings());
-        //ModelLoadingRegistry.INSTANCE.registerVariantProvider(rm -> new ForgeroToolModelProvider(toolModels));
         registerToolPartModels();
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE));
     }

@@ -8,8 +8,6 @@ import com.sigmundgranaas.forgero.item.tool.PickaxeItem;
 import com.sigmundgranaas.forgero.item.tool.ShovelItem;
 import net.minecraft.item.Item;
 
-;
-
 public class ItemFactoryImpl implements ItemFactory {
     public static ItemFactory INSTANCE;
 
