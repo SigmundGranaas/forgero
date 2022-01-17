@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.factory.MaterialFactory;
 import com.sigmundgranaas.forgero.utils.Utils;
-import com.sigmundgranaas.forgero.utils.exception.NoMaterialsException;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;

@@ -1,24 +1,24 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.tool.toolpart.*;
 import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartBuilder;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class NBTFactoryImpl implements NBTFactory {
 
@@ -42,31 +42,57 @@ public class NBTFactoryImpl implements NBTFactory {
         String primaryMaterialString = compound.getString(ToolPartItem.PRIMARY_MATERIAL_IDENTIFIER);
         PrimaryMaterial primary = (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
         String secondaryMaterialString = compound.getString(ToolPartItem.SECONDARY_MATERIAL_IDENTIFIER);
+
         String toolPartTypeIdentifier = compound.getString(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER);
-        ForgeroToolPartTypes toolPartTypes = ForgeroToolPartTypes.valueOf(toolPartTypeIdentifier);
-        ForgeroToolTypes head = ForgeroToolTypes.valueOf(compound.getString(NBTFactory.HEAD_NBT_IDENTIFIER));
+        ForgeroToolPartTypes toolPartTypes = ForgeroToolPartTypes.valueOf(toolPartTypeIdentifier.toUpperCase(Locale.ROOT));
 
-        return switch (toolPartTypes) {
-            case HANDLE -> ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(primary).createToolPart();
-            case BINDING -> ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(primary).createToolPart();
-            case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, head).createToolPart();
+        ForgeroToolTypes toolType = ForgeroToolTypes.PICKAXE;
+        if (compound.contains(NBTFactory.TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER)) {
+            String toolTypeIdentifier = compound.getString(NBTFactory.TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER);
+            toolType = ForgeroToolTypes.valueOf(toolTypeIdentifier.toUpperCase(Locale.ROOT));
+        }
 
+        ToolPartBuilder builder = switch (toolPartTypes) {
+            case HANDLE -> ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(primary);
+            case BINDING -> ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(primary);
+            case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, toolType);
         };
+        if (!secondaryMaterialString.equals("empty")) {
+            builder.setSecondary((SecondaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
+        }
+        return builder.createToolPart();
     }
 
     @Override
     public @NotNull
     ForgeroTool createToolFromNBT(@NotNull ForgeroToolItem baseTool, @NotNull NbtCompound compound) {
-        Optional<String> hash = Optional.ofNullable(compound.getCompound(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER)).map(toolCompound -> toolCompound.getString(NBTFactory.HASH_NBT_IDENTIFIER));
+        NbtCompound toolCompound;
+        if (compound.contains(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER)) {
+            toolCompound = compound.getCompound(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER);
+        } else {
+            toolCompound = compound;
+        }
+        Optional<String> hash = Optional.ofNullable(toolCompound).map(toolCompounds -> toolCompounds.getString(NBTFactory.HASH_NBT_IDENTIFIER));
         if (hash.isPresent() && toolCache.containsKey(hash.get())) {
             return toolCache.get(hash.get());
         }
+        ToolPartHead head;
+        ToolPartHandle handle;
+        if (toolCompound.contains(ToolPartItem.HEAD_IDENTIFIER)) {
+            head = (ToolPartHead) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.HEAD_IDENTIFIER));
+        } else {
+            head = baseTool.getHead();
+        }
 
-        ToolPartHead head = (ToolPartHead) createToolPartFromNBT(compound.getCompound(ToolPartItem.HEAD_IDENTIFIER));
-        ToolPartHandle handle = (ToolPartHandle) createToolPartFromNBT(compound.getCompound(ToolPartItem.HANDLE_IDENTIFIER));
+        if (toolCompound.contains(ToolPartItem.HANDLE_IDENTIFIER)) {
+            handle = (ToolPartHandle) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.HANDLE_IDENTIFIER));
+        } else {
+            handle = baseTool.getHandle();
+        }
+
         Optional<ToolPartBinding> binding = Optional.empty();
-        if (compound.contains(ToolPartItem.BINDING_IDENTIFIER)) {
-            binding = Optional.of((ToolPartBinding) createToolPartFromNBT(compound.getCompound(ToolPartItem.BINDING_IDENTIFIER)));
+        if (toolCompound.contains(ToolPartItem.BINDING_IDENTIFIER)) {
+            binding = Optional.of((ToolPartBinding) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.BINDING_IDENTIFIER)));
         }
         ForgeroTool tool;
         if (binding.isPresent()) {

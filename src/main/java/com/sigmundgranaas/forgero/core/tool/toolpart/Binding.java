@@ -9,7 +9,7 @@ public class Binding extends AbstractToolPart implements ToolPartBinding {
     }
 
     public Binding(ToolPartBindingBuilder toolPartBindingBuilder) {
-        super(toolPartBindingBuilder.getPrimary());
+        super(toolPartBindingBuilder.getPrimary(), toolPartBindingBuilder.getSecondary());
     }
 
     @Override

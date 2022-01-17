@@ -38,7 +38,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
     public ItemStack craft(Inventory inventory) {
         ItemStack toolPartStack = null;
         String additionMaterialIdentifier = addition.toJson().getAsJsonObject().getAsJsonPrimitive("item").getAsString();
-        SecondaryMaterial secondaryMaterial = MaterialCollection.INSTANCE.getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredientAsString().equals(additionMaterialIdentifier)).findFirst().orElse(new EmptySecondaryMaterial());
+        SecondaryMaterial secondaryMaterial = MaterialCollection.INSTANCE.getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredientAsString().equals(additionMaterialIdentifier.replace("minecraft:", ""))).findFirst().orElse(new EmptySecondaryMaterial());
         for (int i = 0; i < inventory.size(); i++) {
             if (base.test(inventory.getStack(i))) {
                 toolPartStack = inventory.getStack(i);
@@ -46,12 +46,11 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
         }
         assert toolPartStack != null;
 
-        ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(((ToolPartItem) toolPartStack.getItem()).getPart());
-
-        builder.setSecondary(secondaryMaterial);
+        ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(((ToolPartItem) toolPartStack.getItem()).getPart()).setSecondary(secondaryMaterial);
 
         ItemStack result = super.craft(inventory);
-        result.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_PART_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
+        result.getOrCreateNbt().put(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) toolPartStack.getItem()).getPart()), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
+
         return result;
     }
 

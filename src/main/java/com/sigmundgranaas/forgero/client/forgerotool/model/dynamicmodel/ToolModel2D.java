@@ -34,7 +34,7 @@ public class ToolModel2D implements DynamicModel {
     @Override
     public String BuildJsonModel() {
         JsonObject model = new JsonObject();
-        model.addProperty("parent", "builtin/generated");
+        model.addProperty("parent", "item/handheld");
         model.add("textures", this.getTextures());
         model.addProperty("gui_light", "front");
         return model.toString();

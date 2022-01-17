@@ -58,13 +58,13 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart), secondaryMaterial));
+        return new ForgeroSecondaryModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart), secondaryMaterial));
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart, toolType), secondaryMaterial));
+        return new ForgeroSecondaryModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart, toolType), secondaryMaterial));
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {
@@ -75,7 +75,6 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
             case 1 -> new ForgeroMaterialIdentifierImpl(forgeroName);
             default -> throw new IllegalStateException("Unexpected value: " + elements.length);
         };
-
     }
 
     private ForgeroIdentifier createForgeroToolIdentifier(String forgeroName) {

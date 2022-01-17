@@ -37,4 +37,9 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.PICKAXE;
     }
+
+    @Override
+    public String getIdentifier() {
+        return toolElements[0] + "_" + toolElements[1] + "_" + toolElements[2] + "_" + toolElements[3] + "_" + toolElements[4] + "_" + toolElements[5];
+    }
 }

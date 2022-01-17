@@ -74,7 +74,7 @@ public class AbstractMaterial implements ForgeroMaterial {
     @Override
     public @NotNull
     List<Identifier> getPaletteExclusionIdentifiers() {
-        return paletteIdentifiers.stream().map(Identifier::new).collect(Collectors.toList());
+        return paletteExclusionIdentifiers.stream().map(Identifier::new).collect(Collectors.toList());
 
     }
 }

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.tool.factory;
 
-import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.skin.ForgeroToolPartSkin;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -25,7 +24,6 @@ public class ForgeroToolBuilderImpl implements ForgeroToolBuilder {
     @Override
     public ForgeroToolBuilder addBinding(ToolPartBinding binding) {
         this.binding = binding;
-        Forgero.LOGGER.info(binding.getToolPartIdentifier());
         return this;
     }
 

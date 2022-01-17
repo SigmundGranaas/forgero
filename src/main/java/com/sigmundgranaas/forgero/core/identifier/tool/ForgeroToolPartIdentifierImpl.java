@@ -28,4 +28,9 @@ public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier imp
         }
 
     }
+
+    @Override
+    public String getIdentifier() {
+        return null;
+    }
 }

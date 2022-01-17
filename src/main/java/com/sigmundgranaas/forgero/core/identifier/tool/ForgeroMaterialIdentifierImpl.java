@@ -8,10 +8,16 @@ public class ForgeroMaterialIdentifierImpl extends AbstractForgeroIdentifier imp
     public ForgeroMaterialIdentifierImpl(String materialName) {
         super(ForgeroIdentifierType.MATERIAL);
         this.name = materialName;
+
     }
 
     @Override
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getIdentifier() {
         return name;
     }
 }

@@ -10,8 +10,4 @@ public class ForgeroModelIdentifier {
     public String getIdentifier() {
         return identifier;
     }
-
-    public String getSecondaryMaterialIdentifier() {
-        return identifier + "_secondary";
-    }
 }

@@ -7,6 +7,9 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.Unbaked2
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.binding.BindingModel2D;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.handle.HandleModel2D;
 import com.sigmundgranaas.forgero.client.forgerotool.model.dynamicmodel.head.HeadModel2D;
+import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
@@ -16,9 +19,7 @@ import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 
@@ -27,11 +28,13 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
     private final ModelLoader loader;
     private final Function<SpriteIdentifier, Sprite> textureGetter;
     private final List<ForgeroToolPart> toolParts;
+    private final List<ForgeroMaterial> materials;
 
-    public ToolPartModelFactoryImpl(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, List<ForgeroToolPart> toolParts) {
+    public ToolPartModelFactoryImpl(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, List<ForgeroToolPart> toolParts, List<ForgeroMaterial> materials) {
         this.loader = loader;
         this.textureGetter = textureGetter;
         this.toolParts = toolParts;
+        this.materials = materials;
         this.toolPartModels = new HashMap<>();
     }
 
@@ -44,58 +47,41 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
     }
 
     private void createModels() {
-        toolParts.forEach(this::createModelsFromToolPart);
+        List<Unbaked2DToolPartModel> models = new ArrayList<>();
+
+        Arrays.stream(ToolPartModelType.values()).forEach(modelType -> {
+            materials.stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).forEach(secondaryMaterial -> {
+                models.add(new SecondaryMaterial2DModel(loader, textureGetter, secondaryMaterial, modelType));
+            });
+        });
+
+        toolParts.forEach(toolpart -> {
+            models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart)));
+            Arrays.stream(ForgeroToolTypes.values()).forEach(toolTypes -> {
+                models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart, toolTypes)));
+            });
+        });
+
+        models.forEach(model -> toolPartModels.put(model.getIdentifier(), model.bake()));
     }
 
-    private void createModelsFromToolPart(ForgeroToolPart toolPart) {
-        switch (toolPart.getToolPartType()) {
-            case HEAD -> createHeadModels((ToolPartHead) toolPart);
-            case HANDLE -> createHandleModels((ToolPartHandle) toolPart);
-            case BINDING -> createBindingModels((ToolPartBinding) toolPart);
-        }
+    private Unbaked2DToolPartModel createModelsFromToolPart(ForgeroToolPart toolPart, ToolPartModelType modelType) {
+        return switch (toolPart.getToolPartType()) {
+            case HEAD -> createToolPartHead((ToolPartHead) toolPart, modelType);
+            case HANDLE -> createToolPartHandle((ToolPartHandle) toolPart, modelType);
+            case BINDING -> createToolPartBinding((ToolPartBinding) toolPart, modelType);
+        };
     }
 
-    private void createHeadModels(ToolPartHead head) {
-        Unbaked2DToolPartModel headModel = new HeadModel2D(loader, textureGetter, head);
-        toolPartModels.put(headModel.getIdentifier(), headModel.bake());
-
-        ToolPartModelType modelType = ToolPartModelType.getModelType(head);
-        Unbaked2DToolPartModel headModelSecondaryMaterial = new SecondaryMaterial2DModel(loader, textureGetter, head, modelType);
-        toolPartModels.put(headModelSecondaryMaterial.getIdentifier(), headModelSecondaryMaterial.bake());
+    private Unbaked2DToolPartModel createToolPartHandle(ToolPartHandle handle, ToolPartModelType modelType) {
+        return new HandleModel2D(loader, textureGetter, handle, modelType);
     }
 
-    private void createHandleModels(ToolPartHandle handle) {
-        Unbaked2DToolPartModel handleModel = new HandleModel2D(loader, textureGetter, handle, ToolPartModelType.HANDLE);
-        toolPartModels.put(handleModel.getIdentifier(), handleModel.bake());
-        Unbaked2DToolPartModel handleModelSecondaryMaterial = new SecondaryMaterial2DModel(loader, textureGetter, handle, ToolPartModelType.HANDLE);
-        toolPartModels.put(handleModelSecondaryMaterial.getIdentifier(), handleModelSecondaryMaterial.bake());
-
-        Unbaked2DToolPartModel HandleModelHalf = new HandleModel2D(loader, textureGetter, handle, ToolPartModelType.MEDIUMHANDLE);
-        toolPartModels.put(HandleModelHalf.getIdentifier(), HandleModelHalf.bake());
-        Unbaked2DToolPartModel HandleModelHalfSecondaryMaterial = new SecondaryMaterial2DModel(loader, textureGetter, handle, ToolPartModelType.HANDLE);
-        toolPartModels.put(HandleModelHalfSecondaryMaterial.getIdentifier(), HandleModelHalfSecondaryMaterial.bake());
-
-        Unbaked2DToolPartModel HandleModelShort = new HandleModel2D(loader, textureGetter, handle, ToolPartModelType.SHORTHANDLE);
-        toolPartModels.put(HandleModelShort.getIdentifier(), HandleModelShort.bake());
-        Unbaked2DToolPartModel HandleModelShortSecondaryMaterial = new SecondaryMaterial2DModel(loader, textureGetter, handle, ToolPartModelType.HANDLE);
-        toolPartModels.put(HandleModelShortSecondaryMaterial.getIdentifier(), HandleModelShortSecondaryMaterial.bake());
+    private Unbaked2DToolPartModel createToolPartHead(ToolPartHead head, ToolPartModelType modelType) {
+        return new HeadModel2D(loader, textureGetter, head);
     }
 
-    private void createBindingModels(ToolPartBinding binding) {
-        Unbaked2DToolPartModel PickaxeBindingModel = new BindingModel2D(loader, textureGetter, binding, ToolPartModelType.PICKAXEBINDING);
-        Unbaked2DToolPartModel PickaxeBindingModelSecondaryMaterial = new SecondaryMaterial2DModel(loader, textureGetter, binding, ToolPartModelType.PICKAXEBINDING);
-        toolPartModels.put(PickaxeBindingModel.getIdentifier(), PickaxeBindingModel.bake());
-        toolPartModels.put(PickaxeBindingModelSecondaryMaterial.getIdentifier(), PickaxeBindingModelSecondaryMaterial.bake());
-
-
-        Unbaked2DToolPartModel ShovelBindingModel = new BindingModel2D(loader, textureGetter, binding, ToolPartModelType.SHOVELBINDING);
-        toolPartModels.put(ShovelBindingModel.getIdentifier(), ShovelBindingModel.bake());
-        Unbaked2DToolPartModel ShovelBindingModelSecondaryMaterial = new SecondaryMaterial2DModel(loader, textureGetter, binding, ToolPartModelType.SHOVELBINDING);
-        toolPartModels.put(ShovelBindingModelSecondaryMaterial.getIdentifier(), ShovelBindingModelSecondaryMaterial.bake());
-
-        Unbaked2DToolPartModel bindingModel = new BindingModel2D(loader, textureGetter, binding, ToolPartModelType.BINDING);
-        toolPartModels.put(bindingModel.getIdentifier(), bindingModel.bake());
-        Unbaked2DToolPartModel bindingModelSecondaryMaterial = new SecondaryMaterial2DModel(loader, textureGetter, binding, ToolPartModelType.BINDING);
-        toolPartModels.put(bindingModelSecondaryMaterial.getIdentifier(), bindingModelSecondaryMaterial.bake());
+    private Unbaked2DToolPartModel createToolPartBinding(ToolPartBinding binding, ToolPartModelType modelType) {
+        return new BindingModel2D(loader, textureGetter, binding, modelType);
     }
 }

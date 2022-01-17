@@ -20,10 +20,10 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     public @Nullable UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) throws ModelProviderException {
         if (modelId.getNamespace().equals(Forgero.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
             String[] elements = modelId.getPath().split("_");
-            if (elements.length > 3) {
+            if (elements.length > 4) {
                 return new ToolModelVariant(collection);
             } else if (elements.length == 2) {
-                // return new ToolPartModelVariant(collection);
+                return new ToolPartModelVariant(collection);
             }
         }
         return null;

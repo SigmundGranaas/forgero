@@ -30,7 +30,7 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
 
     public String BuildJsonModel() {
         JsonObject model = new JsonObject();
-        model.addProperty("parent", "builtin/generated");
+        model.addProperty("parent", "minecraft:item/handheld");
         model.add("textures", this.getTextures());
         model.addProperty("gui_light", "front");
         return model.toString();
@@ -62,8 +62,8 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
         JsonUnbakedModel model = this.buildUnbakedJsonModel();
         ModelIdentifier id = this.getId();
         JsonUnbakedModel generated_model = ITEM_MODEL_GENERATOR.create(textureGetter, model);
-        ((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
-        return (FabricBakedModel) loader.bake(this.getId(), ModelRotation.X0_Y0);
+        //((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
+        return (FabricBakedModel) generated_model.bake(loader, model, textureGetter, ModelRotation.X0_Y0, id, false);
     }
 
     @Override

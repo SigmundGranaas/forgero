@@ -47,9 +47,6 @@ public abstract class ForgeroCustomModel implements UnbakedModel, BakedModel, Fa
         return new BufferedReader(new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
     }
 
-    public static ModelTransformation loadTransformFromJsonString(String json) {
-        return JsonUnbakedModel.deserialize(json).getTransformations();
-    }
 
     @Override
     public ModelTransformation getTransformation() {

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.material;
 
+import com.sigmundgranaas.forgero.core.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.utils.exception.NoMaterialsException;
 
 import java.util.Map;
 

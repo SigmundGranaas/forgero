@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.item.adapter;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,12 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
     @Override
     public Optional<ForgeroTool> getTool(ItemStack itemStack) {
         if (itemStack.getItem() instanceof ForgeroToolItem) {
-            return Optional.of(getTool((ForgeroToolItem) itemStack.getItem()));
+            if (itemStack.getOrCreateNbt().contains(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER)) {
+                assert itemStack.getNbt() != null;
+                return Optional.of(NBTFactory.INSTANCE.createToolFromNBT((ForgeroToolItem) itemStack.getItem(), itemStack.getNbt()));
+            } else {
+                return Optional.of(getTool((ForgeroToolItem) itemStack.getItem()));
+            }
         }
         return Optional.empty();
     }
@@ -93,7 +99,12 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
     @Override
     public Optional<ForgeroToolPart> getToolPart(ItemStack itemStack) {
         if (itemStack.getItem() instanceof ToolPartItem) {
-            return Optional.of(((ToolPartItem) itemStack.getItem()).getPart());
+            if (itemStack.getOrCreateNbt().contains(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))) {
+                assert itemStack.getNbt() != null;
+                return Optional.of(NBTFactory.INSTANCE.createToolPartFromNBT(itemStack.getNbt().getCompound(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))));
+            } else {
+                return Optional.of(((ToolPartItem) itemStack.getItem()).getPart());
+            }
         }
         return Optional.empty();
     }

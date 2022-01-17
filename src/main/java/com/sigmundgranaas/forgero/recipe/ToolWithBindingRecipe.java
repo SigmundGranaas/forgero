@@ -21,6 +21,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+import static com.sigmundgranaas.forgero.item.NBTFactory.BINDING_NBT_IDENTIFIER;
+
 public class ToolWithBindingRecipe extends ShapedRecipe {
 
     public ToolWithBindingRecipe(ShapedRecipe recipe) {
@@ -57,20 +59,20 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
         ToolPartHead head;
         ToolPartHandle handle;
         ToolPartBinding binding;
-        if (headItem.hasNbt() && headItem.getNbt().contains(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER)) {
-            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getNbt());
+        if (headItem.hasNbt() && headItem.getOrCreateNbt().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
+            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
         } else {
             head = ((ForgeroToolItem) getOutput().getItem()).getHead();
         }
 
-        if (handleItem.hasNbt() && handleItem.getNbt().contains(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER)) {
-            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getNbt());
+        if (handleItem.hasNbt() && handleItem.getOrCreateNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
+            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getNbt().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
         } else {
             handle = ((ForgeroToolItem) getOutput().getItem()).getHandle();
         }
 
-        if (bindingItem.hasNbt() && bindingItem.getNbt().contains(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER)) {
-            binding = (ToolPartBinding) NBTFactory.INSTANCE.createToolPartFromNBT(bindingItem.getNbt());
+        if (bindingItem.hasNbt() && bindingItem.getOrCreateNbt().contains(BINDING_NBT_IDENTIFIER)) {
+            binding = (ToolPartBinding) NBTFactory.INSTANCE.createToolPartFromNBT(bindingItem.getNbt().getCompound(BINDING_NBT_IDENTIFIER));
         } else {
             binding = ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(((ToolPartItem) bindingItem.getItem()).getPrimaryMaterial()).createToolPart();
         }

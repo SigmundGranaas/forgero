@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelAssemble
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelBuilder;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
@@ -27,7 +28,7 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
     public FabricBakedModel assembleToolPartModel(ForgeroToolPart toolPart) {
         ToolPartModelBuilder builder = ToolPartModelBuilder.createBuilder();
         builder.addToolPart(getBaseModel(toolPart));
-        if (!(toolPart.getPrimaryMaterial() instanceof EmptySecondaryMaterial)) {
+        if (!(toolPart.getSecondaryMaterial() instanceof EmptySecondaryMaterial)) {
             builder.addSecondaryMaterial(getSecondaryMaterialModel(toolPart));
         }
         return builder.build();
@@ -37,8 +38,8 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
     public FabricBakedModel assembleToolPartModel(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
         ToolPartModelBuilder builder = ToolPartModelBuilder.createBuilder();
         builder.addToolPart(getBaseModel(toolType, toolPart));
-        if (!(toolPart.getPrimaryMaterial() instanceof EmptySecondaryMaterial)) {
-            builder.addSecondaryMaterial(getSecondaryMaterialModel(toolType, toolPart));
+        if (!(toolPart.getSecondaryMaterial() instanceof EmptySecondaryMaterial)) {
+            builder.addSecondaryMaterial(getSecondaryMaterialModel(toolType, toolPart, toolPart.getSecondaryMaterial()));
         }
         return builder.build();
     }
@@ -47,8 +48,8 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
         return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(type, part).getIdentifier())).orElse(new EmptyBakedModel());
     }
 
-    private FabricBakedModel getSecondaryMaterialModel(ForgeroToolTypes type, ForgeroToolPart part) {
-        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(type, part, part.getSecondaryMaterial()).getSecondaryMaterialIdentifier())).orElse(new EmptyBakedModel());
+    private FabricBakedModel getSecondaryMaterialModel(ForgeroToolTypes type, ForgeroToolPart part, SecondaryMaterial secondaryMaterial) {
+        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(type, part, secondaryMaterial).getIdentifier())).orElse(new EmptyBakedModel());
     }
 
     private FabricBakedModel getBaseModel(ForgeroToolPart part) {
@@ -56,7 +57,7 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
     }
 
     private FabricBakedModel getSecondaryMaterialModel(ForgeroToolPart part) {
-        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(part, part.getSecondaryMaterial()).getSecondaryMaterialIdentifier())).orElse(new EmptyBakedModel());
+        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(part, part.getSecondaryMaterial()).getIdentifier())).orElse(new EmptyBakedModel());
     }
 
     @Override

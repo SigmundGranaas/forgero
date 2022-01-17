@@ -32,16 +32,18 @@ public abstract class ToolPartBuilder {
         return secondary;
     }
 
-    public void setSecondary(SecondaryMaterial secondary) {
+    public ToolPartBuilder setSecondary(SecondaryMaterial secondary) {
         this.secondary = secondary;
+        return this;
     }
 
     public Gem getGem() {
         return gem;
     }
 
-    public void setGem(Gem gem) {
+    public ToolPartBuilder setGem(Gem gem) {
         this.gem = gem;
+        return this;
     }
 
     public abstract ForgeroToolPart createToolPart();

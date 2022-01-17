@@ -26,7 +26,7 @@ public enum ToolPartModelType {
             case HEAD -> switch (((ToolPartHead) toolPart).getHeadType()) {
                 case PICKAXE -> PICKAXEHEAD;
                 case SHOVEL -> SHOVELHEAD;
-                case SWORD -> null;
+                case SWORD -> PICKAXEHEAD;
             };
             case HANDLE -> HANDLE;
             case BINDING -> BINDING;
@@ -45,7 +45,7 @@ public enum ToolPartModelType {
                 case HANDLE -> MEDIUMHANDLE;
                 case BINDING -> SHOVELBINDING;
             };
-            case SWORD -> null;
+            case SWORD -> PICKAXEHEAD;
         };
     }
 

@@ -173,7 +173,7 @@
       "include": [
         "minecraft:textures/item/golden_chestplate.png",
         "minecraft:textures/item/golden_helmet.png",
-        "minecraft:textures/item/golden_ingot.png"
+        "minecraft:textures/item/gold_ingot.png"
       ],
       "exclude": [
         "minecraft:textures/item/iron_sword.png",
@@ -246,9 +246,9 @@
         "minecraft:textures/item/netherite_ingot.png"
       ],
       "exclude": [
-        "minecraft:textures/item/netherite_chestplate.png",
-        "minecraft:textures/item/netherite_helmet.png",
-        "minecraft:textures/item/netherite_ingot.png"
+        "minecraft:textures/item/golden_chestplate.png",
+        "minecraft:textures/item/golden_helmet.png",
+        "minecraft:textures/item/golden_sword.png"
       ]
     },
     "primary": {

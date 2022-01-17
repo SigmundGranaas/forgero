@@ -12,7 +12,7 @@ public class Handle extends AbstractToolPart implements ToolPartHandle {
 
 
     public Handle(ToolPartHandleBuilder toolPartHandleBuilder) {
-        super(toolPartHandleBuilder.getPrimary());
+        super(toolPartHandleBuilder.getPrimary(), toolPartHandleBuilder.getSecondary());
     }
 
     @Override

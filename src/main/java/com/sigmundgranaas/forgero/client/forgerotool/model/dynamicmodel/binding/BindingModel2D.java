@@ -26,6 +26,6 @@ public class BindingModel2D extends Unbaked2DToolPartModel {
 
     @Override
     public int getModelLayerIndex() {
-        return 0;
+        return 2;
     }
 }

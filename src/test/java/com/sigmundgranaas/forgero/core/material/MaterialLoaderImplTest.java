@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.material;
 
-import com.sigmundgranaas.forgero.utils.exception.NoMaterialsException;
+import com.sigmundgranaas.forgero.core.exception.NoMaterialsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
