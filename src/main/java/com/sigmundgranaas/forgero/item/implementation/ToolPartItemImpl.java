@@ -5,8 +5,17 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
+import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
+import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ToolPartItemImpl extends Item implements ToolPartItem {
     private final PrimaryMaterial material;
@@ -48,5 +57,9 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
         return part;
     }
 
-
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        ForgeroToolPart toolPart = FabricToForgeroToolPartAdapter.createAdapter().getToolPart(stack).orElse(part);
+        toolPart.createToolPartDescription(new DescriptionWriter(tooltip));
+    }
 }
