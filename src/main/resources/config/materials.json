@@ -266,7 +266,7 @@
     "name": "Leather",
     "type": "organic",
     "ingredient": {
-      "item": "minecraft:leather"
+      "item": "leather"
     },
     "rarity": 2,
     "weight": 10,
@@ -289,13 +289,15 @@
     "weight": 30,
     "durability": 20,
     "ingredient": {
-      "item": "minecraft:glowstone_dust"
+      "item": "glowstone_dust"
     },
     "palette": {
       "include": [
         "minecraft:textures/item/glowstone_dust.png"
       ],
-      "exclude": []
+      "exclude": [
+        "minecraft:textures/item/iron_pickaxe.png"
+      ]
     },
     "secondary": {
       "luck": 20,
