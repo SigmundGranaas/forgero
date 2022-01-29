@@ -35,4 +35,10 @@ public class ForgeroToolWithBinding extends ForgeroToolBase {
     public float getMiningSpeedMultiplier() {
         return super.getMiningSpeedMultiplier();
     }
+
+    @Override
+    public void createToolDescription(ToolDescriptionWriter writer) {
+        super.createToolDescription(writer);
+        writer.addBinding(binding);
+    }
 }

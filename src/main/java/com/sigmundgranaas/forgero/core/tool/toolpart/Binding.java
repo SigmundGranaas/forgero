@@ -52,4 +52,6 @@ public class Binding extends AbstractToolPart implements ToolPartBinding {
     public ForgeroToolPartTypes getToolPartType() {
         return ForgeroToolPartTypes.BINDING;
     }
+
+
 }

@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ItemGroups;
-import com.sigmundgranaas.forgero.item.tool.PickaxeItem;
+import com.sigmundgranaas.forgero.item.tool.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.item.tool.ShovelItem;
 import net.minecraft.item.Item;
 
@@ -21,7 +21,7 @@ public class ItemFactoryImpl implements ItemFactory {
     @Override
     public Item createTool(ForgeroTool tool) {
         return switch (tool.getToolType()) {
-            case PICKAXE -> new PickaxeItem(tool.getMaterial(), tool.getAttackDamage(), tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
+            case PICKAXE -> new ForgeroPickaxeItem(tool.getMaterial(), tool.getAttackDamage(), tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
             case SHOVEL -> new ShovelItem(tool.getMaterial(), tool.getAttackDamage(), tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
             case SWORD -> null;
         };

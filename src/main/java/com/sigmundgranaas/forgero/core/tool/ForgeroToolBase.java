@@ -86,4 +86,10 @@ public class ForgeroToolBase implements ForgeroTool {
     public ToolMaterial getMaterial() {
         return getPrimaryMaterial();
     }
+
+    @Override
+    public void createToolDescription(ToolDescriptionWriter writer) {
+        writer.addHead(head);
+        writer.addHandle(handle);
+    }
 }

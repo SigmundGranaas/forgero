@@ -6,6 +6,8 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
+import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -28,7 +30,8 @@ public class ShovelItem extends net.minecraft.item.ShovelItem implements Forgero
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-
+        ForgeroTool forgeroTool = FabricToForgeroToolAdapter.createAdapter().getTool(itemStack).orElse(tool);
+        forgeroTool.createToolDescription(new DescriptionWriter(tooltip));
     }
 
     @Override

@@ -39,5 +39,5 @@ public interface ForgeroTool {
 
     ToolMaterial getMaterial();
 
-
+    void createToolDescription(ToolDescriptionWriter writer);
 }
