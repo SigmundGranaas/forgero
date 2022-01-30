@@ -61,7 +61,7 @@ public abstract class AbstractDuoMaterial extends AbstractMaterial implements Pr
 
     @Override
     public int getStiffNess() {
-        return 0;
+        return stiffness;
     }
 
     @Override

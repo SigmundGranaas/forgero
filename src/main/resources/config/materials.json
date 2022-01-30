@@ -17,7 +17,7 @@
       "exclude": []
     },
     "primary": {
-      "stiffness": 60,
+      "stiffness": 25,
       "sharpness": 5,
       "enchantability": 10,
       "flexibility": 80
@@ -47,7 +47,7 @@
       ]
     },
     "primary": {
-      "stiffness": 50,
+      "stiffness": 30,
       "sharpness": 5,
       "enchantability": 10,
       "flexibility": 90
@@ -60,7 +60,7 @@
   {
     "name": "Spruce",
     "type": "organic",
-    "durability": 59,
+    "durability": 61,
     "rarity": 100,
     "weight": 7,
     "ingredient": {
@@ -77,7 +77,7 @@
       ]
     },
     "primary": {
-      "stiffness": 55,
+      "stiffness": 20,
       "sharpness": 40,
       "enchantability": 10,
       "flexibility": 95

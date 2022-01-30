@@ -78,7 +78,7 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public float getMiningSpeedMultiplier() {
-        return 1f;
+        return (float) head.getPrimaryMaterial().getStiffNess() / 20;
     }
 
     @Override

@@ -78,7 +78,8 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
     public int getMiningLevel(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(toolType)) {
             ForgeroTool forgeroTool = toolAdapter.getTool(stack).orElse(tool);
-            return forgeroTool.getMiningLevel();
+            int miningLevel = forgeroTool.getMiningLevel();
+            return miningLevel;
         }
 
         return 0;
@@ -88,7 +89,8 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
     public float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(toolType)) {
             ForgeroTool forgeroTool = toolAdapter.getTool(stack).orElse(tool);
-            return 20f;
+            float miningSpeedMultiplier = forgeroTool.getMiningSpeedMultiplier();
+            return miningSpeedMultiplier;
         }
 
         return 1f;
