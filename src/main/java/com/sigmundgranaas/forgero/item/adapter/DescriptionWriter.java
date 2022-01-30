@@ -36,6 +36,16 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
     }
 
     @Override
+    public void addMiningLevel(int miningLevel) {
+        tooltip.add(new LiteralText(String.format("Mining level: %s", miningLevel)));
+    }
+
+    @Override
+    public void addMiningMultiplier(float multiplier) {
+        tooltip.add(new LiteralText(String.format("Mining multiplier: %s", multiplier)));
+    }
+
+    @Override
     public void addHead(ToolPartHead head) {
         tooltip.add(new LiteralText(String.format("Head: %s %s", head.getToolPartName(), head.getPrimaryMaterial().getName())));
         head.createToolPartDescription(this);

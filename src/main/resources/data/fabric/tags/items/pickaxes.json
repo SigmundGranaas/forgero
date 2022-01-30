@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:oak_pickaxe",
+    "forgero:spruce_pickaxe",
+    "forgero:birch_pickaxe",
+    "forgero:stone_pickaxe",
+    "forgero:iron_pickaxe",
+    "forgero:gold_pickaxe",
+    "forgero:diamond_pickaxe",
+    "forgero:netherite_pickaxe"
+  ]
+}

@@ -59,4 +59,6 @@ public class PickaxeHead extends AbstractToolPartHead {
     public int getSharpness() {
         return getPrimaryMaterial().getSharpness() / 2;
     }
+
+
 }

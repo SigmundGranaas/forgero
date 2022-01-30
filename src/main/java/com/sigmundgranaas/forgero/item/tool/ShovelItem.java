@@ -32,6 +32,7 @@ public class ShovelItem extends net.minecraft.item.ShovelItem implements Forgero
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         ForgeroTool forgeroTool = FabricToForgeroToolAdapter.createAdapter().getTool(itemStack).orElse(tool);
         forgeroTool.createToolDescription(new DescriptionWriter(tooltip));
+        super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 
     @Override

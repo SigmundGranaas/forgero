@@ -37,6 +37,8 @@ public interface ForgeroTool {
 
     float getMiningSpeedMultiplier();
 
+    int getMiningLevel();
+
     ToolMaterial getMaterial();
 
     void createToolDescription(ToolDescriptionWriter writer);

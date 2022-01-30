@@ -31,6 +31,7 @@
   "depends": {
     "fabricloader": ">=0.11.7",
     "fabric": "*",
+    "fabric-tool-attribute-api-v1": "*",
     "minecraft": "1.17.1"
   }
 }

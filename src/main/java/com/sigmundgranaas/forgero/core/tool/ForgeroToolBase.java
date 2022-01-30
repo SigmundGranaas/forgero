@@ -52,8 +52,7 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull
     String getToolIdentifierString() {
-        return head.getPrimaryMaterial().getName() + "_" + head.getToolTypeName() + "_" + head.getPrimaryMaterial().getName() + "_" + head.getToolPartName() + "_" + handle.getPrimaryMaterial().getName() +
-                "_" + handle.getToolPartName();
+        return String.format("%s_%s", head.getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
     @Override
@@ -80,6 +79,11 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public float getMiningSpeedMultiplier() {
         return 1f;
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return head.getMiningLevel();
     }
 
     @Override

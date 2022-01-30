@@ -1,10 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.item.ForgeroToolInstance;
-import com.sigmundgranaas.forgero.item.ForgeroToolInstanceFactory;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
-import com.sigmundgranaas.forgero.item.tool.instance.ForgeroPickaxeInstance;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,20 +31,5 @@ public abstract class ItemStackMixin {
         }
         cir.setReturnValue(this.getItem().use(world, user, hand));
         cir.cancel();
-    }
-
-    @Inject(at = @At("RETURN"), method = "getMiningSpeedMultiplier", cancellable = true)
-    public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
-        float customSpeed = 0F;
-        if (this.getItem() instanceof ForgeroToolItem) {
-            ForgeroToolInstance tool = ForgeroToolInstanceFactory.INSTANCE.createForgeroToolInstance((ForgeroToolItem) this.getItem(), this.nbt);
-            if (tool instanceof ForgeroPickaxeInstance forgeroTool) {
-                customSpeed = this.getItem().getMiningSpeedMultiplier((ItemStack) (Object) this, state) + forgeroTool.getMiningSpeedMultiplier();
-
-            }
-        }
-        if (info.getReturnValueF() < customSpeed) {
-            info.setReturnValue(customSpeed);
-        }
     }
 }

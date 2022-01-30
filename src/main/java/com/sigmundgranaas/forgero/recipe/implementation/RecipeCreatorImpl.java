@@ -94,25 +94,27 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createToolRecipe(ForgeroTool tool) {
         ArrayList<RecipeWrapper> toolRecipes = new ArrayList<>();
-        toolRecipes.add(createBaseToolRecipe(tool));
-        materials.forEach(material -> toolRecipes.add(createToolWithBinding(tool, material)));
+        materials.forEach(handleMaterial -> {
+            toolRecipes.add(createBaseToolRecipe(tool, handleMaterial));
+            materials.forEach(bindingMaterial -> toolRecipes.add(createToolWithBindingRecipe(tool, handleMaterial, bindingMaterial)));
+        });
         return toolRecipes;
     }
 
-    private RecipeWrapper createBaseToolRecipe(ForgeroTool tool) {
+    private RecipeWrapper createBaseToolRecipe(ForgeroTool tool, PrimaryMaterial handleMaterial) {
         JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_RECIPE).toString()).getAsJsonObject();
         template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, tool.getToolHead().getToolPartIdentifier()).toString());
-        template.getAsJsonObject("key").getAsJsonObject("I").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, tool.getToolHandle().getToolPartIdentifier()).toString());
+        template.getAsJsonObject("key").getAsJsonObject("I").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, handleMaterial.getName() + "_handle").toString());
         template.getAsJsonObject("result").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, tool.getToolIdentifierString()).toString());
-        return new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, tool.getToolIdentifierString()), template);
+        return new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, tool.getToolIdentifierString() + "_" + tool.getToolHead().getToolPartIdentifier() + "_" + handleMaterial.getName() + "_handle"), template);
     }
 
-    private RecipeWrapper createToolWithBinding(ForgeroTool tool, PrimaryMaterial material) {
+    private RecipeWrapper createToolWithBindingRecipe(ForgeroTool tool, PrimaryMaterial handleMaterial, PrimaryMaterial bindingMaterial) {
         JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_WITH_BINDING_RECIPE).toString()).getAsJsonObject();
-        template.getAsJsonObject("key").getAsJsonObject("I").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, tool.getToolHandle().getToolPartIdentifier()).toString());
+        template.getAsJsonObject("key").getAsJsonObject("I").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, handleMaterial.getName() + "_handle").toString());
         template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, tool.getToolHead().getToolPartIdentifier()).toString());
-        template.getAsJsonObject("key").getAsJsonObject("B").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, material.getName() + "_binding").toString());
+        template.getAsJsonObject("key").getAsJsonObject("B").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, bindingMaterial.getName() + "_binding").toString());
         template.getAsJsonObject("result").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, tool.getToolIdentifierString()).toString());
-        return new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, tool.getToolIdentifierString() + "_" + material.getName() + "_binding"), template);
+        return new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, tool.getToolIdentifierString() + "_" + tool.getToolHead().getToolPartIdentifier() + "_" + handleMaterial.getName() + "_handle" + "_" + bindingMaterial.getName() + "_binding"), template);
     }
 }

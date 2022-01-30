@@ -49,17 +49,17 @@ public class PrimaryMaterialImpl extends AbstractMaterial implements PrimaryMate
 
     @Override
     public float getMiningSpeedMultiplier() {
-        return 0;
+        return 1f;
     }
 
     @Override
     public float getAttackDamage() {
-        return 0;
+        return 1f;
     }
 
     @Override
     public int getMiningLevel() {
-        return 0;
+        return 1;
     }
 
     @Override

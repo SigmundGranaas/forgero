@@ -9,4 +9,8 @@ public interface ToolPartDescriptionWriter {
     void addGem();
 
     void addPrimaryMaterial(PrimaryMaterial material);
+
+    void addMiningLevel(int miningLevel);
+
+    void addMiningMultiplier(float mulitipler);
 }

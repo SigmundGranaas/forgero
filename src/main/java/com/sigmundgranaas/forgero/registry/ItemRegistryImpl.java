@@ -3,8 +3,12 @@ package com.sigmundgranaas.forgero.registry;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
+import com.sigmundgranaas.forgero.item.tool.ForgeroPickaxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class ItemRegistryImpl implements ItemRegistry {
@@ -36,6 +40,9 @@ public class ItemRegistryImpl implements ItemRegistry {
     @Override
     public void registerTools() {
         collection.INSTANCE.getTools().forEach(this::registerTool);
+        List<Item> pickaxes = collection.INSTANCE.getTools().stream().filter(item -> item instanceof ForgeroPickaxeItem).collect(Collectors.toList());
+        //ToolManagerImpl.tag(FabricToolTags.PICKAXES).register(new ModdedToolsVanillaBlocksToolHandler(pickaxes));
+
     }
 
     @Override

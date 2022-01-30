@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -20,11 +21,12 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
         if (modelId.getNamespace().equals(Forgero.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
             String[] elements = modelId.getPath().split("_");
-            if (elements.length > 4) {
+            if (ForgeroToolTypes.isTool(elements[1])) {
                 return new ToolModelVariant(collection);
             } else if (elements.length == 2) {
                 return new ToolPartModelVariant(collection);
             }
+            
         }
         return null;
     }
