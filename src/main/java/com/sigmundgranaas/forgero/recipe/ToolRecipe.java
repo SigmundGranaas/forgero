@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
+import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -64,13 +65,13 @@ public class ToolRecipe extends ShapedRecipe {
             assert handleItem.getNbt() != null;
             handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getNbt().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
         } else {
-            handle = ((ForgeroToolItem) getOutput().getItem()).getHandle();
+            handle = (ToolPartHandle) ((ToolPartItem) handleItem.getItem()).getPart();
         }
 
 
         ForgeroTool tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle);
 
-        ItemStack forgeroToolInstanceStack = new ItemStack(getOutput().getItem());
+        ItemStack forgeroToolInstanceStack = getOutput().copy();
         forgeroToolInstanceStack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromTool(tool));
         return forgeroToolInstanceStack;
     }
