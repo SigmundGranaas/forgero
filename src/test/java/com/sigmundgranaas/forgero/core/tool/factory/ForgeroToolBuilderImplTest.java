@@ -22,6 +22,6 @@ class ForgeroToolBuilderImplTest {
     @Test
     void createBaseTool() {
         ForgeroTool tool = ForgeroToolBuilder.createBuilder(PickaxeHeadTest.createDefaultPickaxeHead(), HandleTest.createDefaultToolPartHandle()).createTool();
-        Assertions.assertEquals("iron_pickaxe_iron_pickaxehead_oak_handle", tool.getToolIdentifierString());
+        Assertions.assertEquals("iron_pickaxe", tool.getToolIdentifierString());
     }
 }

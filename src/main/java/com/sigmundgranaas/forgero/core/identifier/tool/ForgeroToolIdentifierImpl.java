@@ -11,7 +11,7 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
     public ForgeroToolIdentifierImpl(String toolDescriptor) {
         super(ForgeroIdentifierType.TOOL);
         String[] elements = toolDescriptor.split("_");
-        if (elements.length != 6) {
+        if (elements.length != 2) {
             Forgero.LOGGER.warn("Unable to Create ForgeroToolIdentifier with: {}", toolDescriptor);
             throw new IllegalArgumentException("Unable to Create ForgeroTolIdentifier with: " + toolDescriptor);
         }
@@ -25,12 +25,12 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
 
     @Override
     public ForgeroToolPartHeadIdentifier getHead() {
-        return (ForgeroToolPartHeadIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolElements[2] + "_" + toolElements[3]);
+        return (ForgeroToolPartHeadIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolElements[0] + "_" + toolElements[1] + "head");
     }
 
     @Override
     public ForgeroToolPartIdentifier getHandle() {
-        return (ForgeroToolPartIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolElements[4] + "_" + toolElements[5]);
+        return (ForgeroToolPartIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier("oak_handle");
     }
 
     @Override
@@ -40,6 +40,6 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
 
     @Override
     public String getIdentifier() {
-        return toolElements[0] + "_" + toolElements[1] + "_" + toolElements[2] + "_" + toolElements[3] + "_" + toolElements[4] + "_" + toolElements[5];
+        return toolElements[0] + "_" + toolElements[1];
     }
 }

@@ -69,12 +69,14 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {
         String[] elements = forgeroName.split("_");
-        return switch (elements.length) {
-            case 6 -> new ForgeroToolIdentifierImpl(forgeroName);
-            case 2 -> createForgeroToolIdentifier(forgeroName);
-            case 1 -> new ForgeroMaterialIdentifierImpl(forgeroName);
-            default -> throw new IllegalStateException("Unexpected value: " + elements.length);
-        };
+        if (elements.length == 1) {
+            return new ForgeroMaterialIdentifierImpl(forgeroName);
+        } else if (ForgeroToolTypes.isTool(elements[1])) {
+            return new ForgeroToolIdentifierImpl(forgeroName);
+        } else if (elements.length == 2) {
+            return createForgeroToolIdentifier(forgeroName);
+        }
+        throw new IllegalStateException("Unexpected value: " + elements.length);
     }
 
     private ForgeroIdentifier createForgeroToolIdentifier(String forgeroName) {
