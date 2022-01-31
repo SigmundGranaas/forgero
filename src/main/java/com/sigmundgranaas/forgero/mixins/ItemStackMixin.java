@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -18,9 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ItemStackMixin {
 
     @Shadow
-    private NbtCompound nbt;
-
-    @Shadow
     public abstract Item getItem();
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -31,5 +27,13 @@ public abstract class ItemStackMixin {
         }
         cir.setReturnValue(this.getItem().use(world, user, hand));
         cir.cancel();
+    }
+
+
+    @Inject(method = "getMaxDamage", at = @At("HEAD"), cancellable = true)
+    public void getCustomDurability(CallbackInfoReturnable<Integer> cir) {
+        if (this.getItem() instanceof ForgeroToolItem) {
+            cir.setReturnValue(((ForgeroToolItem) this.getItem()).getDurability((ItemStack) (Object) this));
+        }
     }
 }

@@ -46,6 +46,11 @@ public class ShovelItem extends net.minecraft.item.ShovelItem implements Forgero
     }
 
     @Override
+    public int getItemBarStep(ItemStack stack) {
+        return getCustomItemBarStep(stack);
+    }
+
+    @Override
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.SHOVEL;
     }

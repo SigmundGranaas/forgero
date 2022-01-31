@@ -18,7 +18,7 @@ public class ForgeroToolWithBinding extends ForgeroToolBase {
 
     @Override
     public int getDurability() {
-        return super.getDurability();
+        return super.getDurability() + binding.getDurability();
     }
 
     @Override

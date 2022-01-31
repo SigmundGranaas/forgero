@@ -75,6 +75,11 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
     }
 
     @Override
+    public int getItemBarStep(ItemStack stack) {
+        return getCustomItemBarStep(stack);
+    }
+
+    @Override
     public int getMiningLevel(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(toolType)) {
             ForgeroTool forgeroTool = toolAdapter.getTool(stack).orElse(tool);
@@ -84,6 +89,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
 
         return 0;
     }
+
 
     @Override
     public float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
@@ -95,4 +101,5 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
 
         return 1f;
     }
+
 }

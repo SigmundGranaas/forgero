@@ -24,7 +24,7 @@ public class Binding extends AbstractToolPart implements ToolPartBinding {
 
     @Override
     public int getDurability() {
-        return 0;
+        return getPrimaryMaterial().getDurability();
     }
 
     @Override

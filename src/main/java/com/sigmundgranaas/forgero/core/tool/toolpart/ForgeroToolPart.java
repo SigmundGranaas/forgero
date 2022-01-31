@@ -18,6 +18,7 @@ public interface ForgeroToolPart {
 
     int getDurabilityScale();
 
+
     String getToolTypeName();
 
     String getToolPartName();

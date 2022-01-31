@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.mixins;
 
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderLayers;
@@ -33,15 +34,25 @@ public abstract class ItemRenderMixin {
 
     @Inject(method = "renderBakedItemModel", at = @At("HEAD"), cancellable = true)
     public void renderBakedItemModel(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices, CallbackInfo ci) {
-        if (stack.getItem() instanceof ForgeroToolItem && stack.hasGlint() && numberOfDuplicates == 7) {
+        if ((stack.getItem() instanceof ForgeroToolItem || stack.getItem() instanceof ToolPartItem) && numberOfDuplicates == 7) {
+            //
             //model.getTransformation().getTransformation(ModelTransformation.Mode.GUI).apply(false, matrices);
-            //matrices.translate(+0.5, +0.5, 0.0);
+            //matrices.translate(+0.2, +0.2, 0.2);
             //matrices.push();
             //matrices.pop();
 
             VertexConsumerProvider.Immediate consumer = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
             RenderLayer renderLayer = RenderLayers.getItemLayer(stack, true);
-            VertexConsumer vertexConsumer = ItemRenderer.getItemGlintConsumer(consumer, renderLayer, true, model.getParticleSprite().getId().getPath().contains("handle") && !model.getParticleSprite().getId().getPath().contains("secondary"));
+            //
+
+            VertexConsumer vertexConsumer;
+            if (stack.getItem() instanceof ForgeroToolItem) {
+                boolean glintModelTool = model.getParticleSprite().getId().getPath().contains("handle") && !model.getParticleSprite().getId().getPath().contains("secondary") && stack.hasGlint();
+                vertexConsumer = ItemRenderer.getItemGlintConsumer(consumer, renderLayer, true, glintModelTool);
+            } else {
+                vertexConsumer = ItemRenderer.getItemGlintConsumer(consumer, renderLayer, true, stack.hasGlint());
+            }
+
             Random random = new Random();
             long l = 42L;
             for (Direction direction : Direction.values()) {
@@ -58,6 +69,7 @@ public abstract class ItemRenderMixin {
             ci.cancel();
         }
     }
+
 
     @Shadow
     protected abstract void renderBakedItemQuads(MatrixStack matrices, VertexConsumer vertices, List<BakedQuad> quads, ItemStack stack, int light, int overlay);
