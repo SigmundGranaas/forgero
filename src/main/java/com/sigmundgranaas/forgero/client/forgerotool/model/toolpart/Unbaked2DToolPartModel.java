@@ -63,7 +63,7 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
         ModelIdentifier id = this.getId();
         JsonUnbakedModel generated_model = ITEM_MODEL_GENERATOR.create(textureGetter, model);
         //((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
-        return (FabricBakedModel) generated_model.bake(loader, model, textureGetter, ModelRotation.X0_Y0, id, false);
+        return (FabricBakedModel) generated_model.bake(loader, model, textureGetter, ModelRotation.X0_Y0, id, true);
     }
 
     @Override

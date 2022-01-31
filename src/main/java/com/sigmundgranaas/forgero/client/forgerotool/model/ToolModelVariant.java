@@ -26,7 +26,7 @@ public class ToolModelVariant extends ForgeroCustomModelProvider {
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        bakedModelCollection.getToolModel(stack).emitItemQuads(null, null, context);
+        bakedModelCollection.getToolModel(stack).emitItemQuads(stack, null, context);
     }
 
     @Nullable
