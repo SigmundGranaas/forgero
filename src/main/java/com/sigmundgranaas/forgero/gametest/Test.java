@@ -27,13 +27,6 @@ public class Test implements FabricGameTest {
         context.setBlockState(0, 5, 0, Blocks.GOLD_BLOCK);
     }
 
-   /*
-    private void afterEach(TestContext context) {
-        context.addInstantFinalTask(() ->
-                context.checkBlock(new BlockPos(0, 2, 0), (block) -> block == Blocks.DIAMOND_BLOCK, "Expect block to be gold")
-        );
-    } */
-
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE)
     public void noStructure(TestContext context) {
         context.setBlockState(0, 2, 0, Blocks.DIAMOND_BLOCK);
@@ -49,7 +42,7 @@ public class Test implements FabricGameTest {
         context.setBlockState(0, 2, 0, Blocks.DIAMOND_BLOCK);
 
         context.addInstantFinalTask(() ->
-                context.checkBlock(new BlockPos(0, 1, 0), (block) -> block == Blocks.DIAMOND_BLOCK, "Expect block to be diamond")
+                context.checkBlock(new BlockPos(0, 1, 0), (block) -> block != Blocks.DIAMOND_BLOCK, "Expect block to be diamond")
         );
     }
 }

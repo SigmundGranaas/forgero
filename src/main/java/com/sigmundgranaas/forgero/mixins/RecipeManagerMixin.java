@@ -1,8 +1,7 @@
 package com.sigmundgranaas.forgero.mixins;
 
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.item.forgerotool.material.ForgeroToolMaterial;
-import com.sigmundgranaas.forgero.item.forgerotool.recipe.ForgeroRecipeCreator;
+import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -14,16 +13,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
+/**
+ * RecipeManager mixin
+ * <p>
+ * Forgero does not come with pre-made recipes for tools and tool parts.
+ * Recipes are generated from templates at startup. This system could also be used to generate Json recipes, which could cover all different tools, but currently, with only
+ */
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
 
     @Inject(method = "apply", at = @At("HEAD"))
     public void interceptApply(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
-        ForgeroRecipeCreator creator = new ForgeroRecipeCreator(map, ForgeroToolMaterial.getMaterialList());
-        creator.createAndRegisterHandles();
-        creator.createAndRegisterHeads();
-        creator.createAndRegisterBindings();
-        creator.createAndRegisterTools();
-        creator.createAndRegisterToolsWithBinding();
+        RecipeRegistry.INSTANCE.registerRecipes(map);
     }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  H",
+    " H ",
+    "H  "
+  ],
+  "key": {
+    "H": {
+      "item": "HANDLE_INGREDIENT"
+    }
+  },
+  "result": {
+    "item": "HANDLE_ITEM"
+  }
+}

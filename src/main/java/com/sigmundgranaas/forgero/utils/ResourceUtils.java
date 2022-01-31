@@ -4,8 +4,8 @@ import com.sigmundgranaas.forgero.Forgero;
 import net.minecraft.util.Identifier;
 
 public class ResourceUtils {
-    public static String ASSETS_FOLDER_PATH = "assets/forgero/";
-    public static String TEXTURE_FOLDER_PATH = ASSETS_FOLDER_PATH + "textures/";
+    public static final String ASSETS_FOLDER_PATH = "assets/forgero/";
+    public static final String TEXTURE_FOLDER_PATH = ASSETS_FOLDER_PATH + "textures/";
     public static String ITEM_TEXTURES_FOLDER_PATH = TEXTURE_FOLDER_PATH + "item/";
     public static String CONFIG_FOLDER_PATH = "config/";
 

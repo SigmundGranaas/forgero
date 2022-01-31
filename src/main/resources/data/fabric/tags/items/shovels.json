@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:oak_shovel",
+    "forgero:spruce_shovel",
+    "forgero:birch_shovel",
+    "forgero:stone_shovel",
+    "forgero:iron_shovel",
+    "forgero:gold_shovel",
+    "forgero:diamond_shovel",
+    "forgero:netherite_shovel"
+  ]
+}
