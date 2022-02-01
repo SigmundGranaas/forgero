@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.core.material.material.factory;
 
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.MaterialPOJO;
-import com.sigmundgranaas.forgero.core.material.material.MaterialType;
+import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
+import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class MaterialFactoryImplTest {
-    public static final ForgeroMaterial testMaterial = new MaterialFactoryImpl().createMaterial(MaterialPOJO.createDefaultMaterialPOJO());
+    public static final ForgeroMaterial testMaterial = new MaterialFactoryImpl().createMaterial(RealisticMaterialPOJO.createDefaultMaterialPOJO());
 
     @Test
     void materialName() {
@@ -35,11 +35,6 @@ class MaterialFactoryImplTest {
     }
 
     @Test
-    void weight() {
-        Assertions.assertEquals(1, testMaterial.getWeight());
-    }
-
-    @Test
     void paletteInclusions() {
         Assertions.assertEquals(0, testMaterial.getPaletteIdentifiers().size());
     }
@@ -51,6 +46,6 @@ class MaterialFactoryImplTest {
 
     @Test
     void ingredient() {
-        Assertions.assertEquals("ingredient", testMaterial.getIngredientAsString());
+        Assertions.assertEquals("ingredient", testMaterial.getIngredient());
     }
 }

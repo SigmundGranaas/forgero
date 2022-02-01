@@ -6,34 +6,21 @@ import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartHeadBuilder
 
 import java.util.Locale;
 
-public class Shovelhead extends AbstractToolPartHead {
-    public Shovelhead(ToolPartHeadBuilder toolPartHeadBuilder) {
+public class ShovelHead extends AbstractToolPartHead {
+    public ShovelHead(ToolPartHeadBuilder toolPartHeadBuilder) {
         super(toolPartHeadBuilder.getPrimary(), toolPartHeadBuilder.getSecondary(), toolPartHeadBuilder.getHead());
     }
 
-    public Shovelhead(PrimaryMaterial primaryMaterial) {
+    public ShovelHead(PrimaryMaterial primaryMaterial) {
         super(primaryMaterial, ForgeroToolTypes.SHOVEL);
     }
 
-    @Override
-    public int getWeight() {
-        return getPrimaryMaterial().getWeight();
-    }
-
-    @Override
-    public float getWeightScale() {
-        return 0;
-    }
 
     @Override
     public int getDurability() {
         return getPrimaryMaterial().getDurability();
     }
 
-    @Override
-    public int getDurabilityScale() {
-        return 0;
-    }
 
     @Override
     public String getToolTypeName() {
@@ -57,7 +44,7 @@ public class Shovelhead extends AbstractToolPartHead {
 
     @Override
     public int getSharpness() {
-        return getPrimaryMaterial().getSharpness() / 2;
+        return 1;
     }
 
 }

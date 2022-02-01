@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart;
 
-import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ToolPartDescriptionWriter;
 
 public interface ForgeroToolPart {
@@ -10,14 +10,8 @@ public interface ForgeroToolPart {
 
     SecondaryMaterial getSecondaryMaterial();
 
-    int getWeight();
-
-    float getWeightScale();
 
     int getDurability();
-
-    int getDurabilityScale();
-
 
     String getToolTypeName();
 

@@ -1,28 +1,29 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import net.minecraft.util.Identifier;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
+import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
+import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class AbstractMaterial implements ForgeroMaterial {
+public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final String name;
     protected final int rarity;
     protected final int durability;
-    protected final int weight;
     protected final List<String> paletteIdentifiers;
     protected final List<String> paletteExclusionIdentifiers;
     protected final List<String> properties;
     protected final MaterialType type;
     protected final String ingredient;
 
-    public AbstractMaterial(MaterialPOJO material) {
+    public AbstractForgeroMaterial(RealisticMaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
         this.rarity = material.rarity;
         this.durability = material.durability;
-        this.weight = material.weight;
         this.paletteIdentifiers = material.palette.include;
         this.paletteExclusionIdentifiers = material.palette.exclude;
         this.properties = material.properties;
@@ -37,7 +38,7 @@ public class AbstractMaterial implements ForgeroMaterial {
 
     @Override
     public String getName() {
-        return name;
+        return name.toLowerCase();
     }
 
     @Override
@@ -45,10 +46,6 @@ public class AbstractMaterial implements ForgeroMaterial {
         return durability;
     }
 
-    @Override
-    public int getWeight() {
-        return weight;
-    }
 
     @Override
     public MaterialType getType() {
@@ -57,24 +54,21 @@ public class AbstractMaterial implements ForgeroMaterial {
 
     @Override
     public List<String> getProperties() {
-        return properties;
+        return null;
     }
 
     @Override
-    public String getIngredientAsString() {
-        return ingredient;
+    public String getIngredient() {
+        return null;
     }
 
     @Override
-    public @NotNull
-    List<Identifier> getPaletteIdentifiers() {
-        return paletteIdentifiers.stream().map(Identifier::new).collect(Collectors.toList());
+    public @NotNull List<PaletteIdentifier> getPaletteIdentifiers() {
+        return paletteIdentifiers.stream().map(paletteIdentifiers -> new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name))).collect(Collectors.toList());
     }
 
     @Override
-    public @NotNull
-    List<Identifier> getPaletteExclusionIdentifiers() {
-        return paletteExclusionIdentifiers.stream().map(Identifier::new).collect(Collectors.toList());
-
+    public @NotNull List<PaletteIdentifier> getPaletteExclusionIdentifiers() {
+        return paletteExclusionIdentifiers.stream().map(paletteIdentifiers -> new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name))).collect(Collectors.toList());
     }
 }

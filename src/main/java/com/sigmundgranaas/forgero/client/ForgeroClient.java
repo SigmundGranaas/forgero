@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ItemCollection;
@@ -52,7 +52,7 @@ public class ForgeroClient implements ClientModInitializer {
             }
         }
 
-        for (SecondaryMaterial material : materialCollection.getMaterialsAsList().stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).collect(Collectors.toList())) {
+        for (RealisticSecondaryMaterial material : materialCollection.getMaterialsAsList().stream().filter(material -> material instanceof RealisticSecondaryMaterial).map(RealisticSecondaryMaterial.class::cast).collect(Collectors.toList())) {
             for (Item toolPart : itemCollection.getToolParts()) {
                 modelSet.add(createToolPartModelIdentifier(material, ((ToolPartItem) toolPart).getPart()));
                 modelSet.add(createToolPartModelIdentifier(material, ((ToolPartItem) toolPart).getPart(), ForgeroToolTypes.PICKAXE));
@@ -75,11 +75,11 @@ public class ForgeroClient implements ClientModInitializer {
         return new ModelIdentifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "texture_dummy", "inventory");
     }
 
-    private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
+    private ModelIdentifier createToolPartModelIdentifier(RealisticSecondaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
         return new ModelIdentifier(Forgero.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_secondary" + "texture_dummy", "inventory");
     }
 
-    private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart) {
+    private ModelIdentifier createToolPartModelIdentifier(RealisticSecondaryMaterial material, ForgeroToolPart toolPart) {
         return new ModelIdentifier(Forgero.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart).toFileName() + "_secondary" + "texture_dummy", "inventory");
     }
 }

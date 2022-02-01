@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.binding.Bind
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.handle.HandleModel2D;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.head.HeadModel2D;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
@@ -49,7 +49,7 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
     private void createModels() {
         List<Unbaked2DToolPartModel> models = new ArrayList<>();
 
-        Arrays.stream(ToolPartModelType.values()).forEach(modelType -> materials.stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).forEach(secondaryMaterial -> models.add(new SecondaryMaterial2DModel(loader, textureGetter, secondaryMaterial, modelType))));
+        Arrays.stream(ToolPartModelType.values()).forEach(modelType -> materials.stream().filter(material -> material instanceof RealisticSecondaryMaterial).map(RealisticSecondaryMaterial.class::cast).forEach(secondaryMaterial -> models.add(new SecondaryMaterial2DModel(loader, textureGetter, secondaryMaterial, modelType))));
 
         toolParts.forEach(toolpart -> {
             models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart)));

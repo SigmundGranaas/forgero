@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart;
 
-import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.ToolPartDescriptionWriter;
 
@@ -26,7 +26,7 @@ public abstract class AbstractToolPartHead extends AbstractToolPart implements T
 
     @Override
     public int getMiningLevel() {
-        int level = getPrimaryMaterial().getStiffNess() / 20;
+        int level = 1;
         if (getSecondaryMaterial() instanceof EmptySecondaryMaterial) {
             return level;
         } else {

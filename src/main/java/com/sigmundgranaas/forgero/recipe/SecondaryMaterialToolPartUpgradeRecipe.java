@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.recipe;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
-import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartBuilder;
 import com.sigmundgranaas.forgero.item.NBTFactory;
@@ -36,7 +36,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
     public ItemStack craft(Inventory inventory) {
         ItemStack toolPartStack = null;
         String additionMaterialIdentifier = addition.toJson().getAsJsonObject().getAsJsonPrimitive("item").getAsString();
-        SecondaryMaterial secondaryMaterial = MaterialCollection.INSTANCE.getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredientAsString().equals(additionMaterialIdentifier.replace("minecraft:", ""))).findFirst().orElse(new EmptySecondaryMaterial());
+        SecondaryMaterial secondaryMaterial = MaterialCollection.INSTANCE.getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredient().equals(additionMaterialIdentifier.replace("minecraft:", ""))).findFirst().orElse(new EmptySecondaryMaterial());
         for (int i = 0; i < inventory.size(); i++) {
             if (base.test(inventory.getStack(i))) {
                 toolPartStack = inventory.getStack(i);

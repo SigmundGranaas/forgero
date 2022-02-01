@@ -64,7 +64,7 @@ public record RecipeCreatorImpl(
     private RecipeWrapper createSecondaryMaterialUpgradeRecipe(ForgeroToolPart toolPart, SecondaryMaterial material) {
         JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE).toString()).getAsJsonObject();
         template.getAsJsonObject("base").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
-        template.getAsJsonObject("addition").addProperty("item", material.getIngredientAsString());
+        template.getAsJsonObject("addition").addProperty("item", material.getIngredient());
         template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
         return new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_" + material.getName() + "_secondary_upgrade"), template);
     }
@@ -79,7 +79,7 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createToolPartRecipe(ForgeroToolPart toolPart, RecipeTypes templateIdentifier) {
         JsonObject template = new JsonParser().parse(recipeTemplates.get(templateIdentifier).toString()).getAsJsonObject();
-        template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", toolPart.getPrimaryMaterial().getIngredientAsString());
+        template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", toolPart.getPrimaryMaterial().getIngredient());
         template.getAsJsonObject("result").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier()).toString());
         return List.of(new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier()), template));
     }

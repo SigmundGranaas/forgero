@@ -73,12 +73,12 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public float getAttackSpeed() {
-        return 100f / ((float) head.getWeight() + (float) handle.getWeight());
+        return 1f;
     }
 
     @Override
     public float getMiningSpeedMultiplier() {
-        return (float) head.getPrimaryMaterial().getStiffNess() / 20;
+        return 1f;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public ToolMaterial getMaterial() {
-        return getPrimaryMaterial();
+        return (ToolMaterial) getPrimaryMaterial();
     }
 
     @Override

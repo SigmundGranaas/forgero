@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart;
 
-import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
 
 public abstract class AbstractToolPart implements ForgeroToolPart {
     private final PrimaryMaterial primaryMaterial;

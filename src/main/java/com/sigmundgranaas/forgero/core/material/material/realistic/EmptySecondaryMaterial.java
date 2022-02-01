@@ -1,6 +1,7 @@
-package com.sigmundgranaas.forgero.core.material.material;
+package com.sigmundgranaas.forgero.core.material.material.realistic;
 
-import net.minecraft.util.Identifier;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
+import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -17,10 +18,6 @@ public class EmptySecondaryMaterial implements SecondaryMaterial {
         return "empty";
     }
 
-    @Override
-    public int getWeight() {
-        return 0;
-    }
 
     @Override
     public MaterialType getType() {
@@ -34,13 +31,13 @@ public class EmptySecondaryMaterial implements SecondaryMaterial {
 
     @Override
     public @NotNull
-    List<Identifier> getPaletteIdentifiers() {
+    List<PaletteIdentifier> getPaletteIdentifiers() {
         return Collections.emptyList();
     }
 
     @Override
     public @NotNull
-    List<Identifier> getPaletteExclusionIdentifiers() {
+    List<PaletteIdentifier> getPaletteExclusionIdentifiers() {
         return Collections.emptyList();
     }
 
@@ -49,18 +46,9 @@ public class EmptySecondaryMaterial implements SecondaryMaterial {
         return 0;
     }
 
-    @Override
-    public int getLuck() {
-        return 0;
-    }
 
     @Override
-    public int getGrip() {
-        return 0;
-    }
-
-    @Override
-    public String getIngredientAsString() {
+    public String getIngredient() {
         return "empty";
     }
 }

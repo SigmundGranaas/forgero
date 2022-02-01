@@ -14,26 +14,12 @@ public class PickaxeHead extends AbstractToolPartHead {
     public PickaxeHead(ToolPartHeadBuilder toolPartHeadBuilder) {
         super(toolPartHeadBuilder.getPrimary(), toolPartHeadBuilder.getSecondary(), toolPartHeadBuilder.getHead());
     }
-
-    @Override
-    public int getWeight() {
-        return getPrimaryMaterial().getWeight();
-    }
-
-    @Override
-    public float getWeightScale() {
-        return 0;
-    }
-
+    
     @Override
     public int getDurability() {
         return getPrimaryMaterial().getDurability();
     }
 
-    @Override
-    public int getDurabilityScale() {
-        return 0;
-    }
 
     @Override
     public String getToolTypeName() {
@@ -57,8 +43,6 @@ public class PickaxeHead extends AbstractToolPartHead {
 
     @Override
     public int getSharpness() {
-        return getPrimaryMaterial().getSharpness() / 2;
+        return 1;
     }
-
-
 }

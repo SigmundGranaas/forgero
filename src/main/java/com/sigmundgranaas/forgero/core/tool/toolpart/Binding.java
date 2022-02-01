@@ -12,24 +12,10 @@ public class Binding extends AbstractToolPart implements ToolPartBinding {
         super(toolPartBindingBuilder.getPrimary(), toolPartBindingBuilder.getSecondary());
     }
 
-    @Override
-    public int getWeight() {
-        return getPrimaryMaterial().getWeight() / 10;
-    }
-
-    @Override
-    public float getWeightScale() {
-        return 0;
-    }
 
     @Override
     public int getDurability() {
         return getPrimaryMaterial().getDurability();
-    }
-
-    @Override
-    public int getDurabilityScale() {
-        return 0;
     }
 
 
