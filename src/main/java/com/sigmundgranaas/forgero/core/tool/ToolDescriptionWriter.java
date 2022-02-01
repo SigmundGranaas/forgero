@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool;
 
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 
 public interface ToolDescriptionWriter {
 

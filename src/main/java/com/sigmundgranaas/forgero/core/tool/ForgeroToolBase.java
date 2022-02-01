@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.core.tool;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 import net.minecraft.item.ToolMaterial;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +68,7 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public int getAttackDamage() {
-        return head.getSharpness() / 10;
+        return 1;
     }
 
     @Override

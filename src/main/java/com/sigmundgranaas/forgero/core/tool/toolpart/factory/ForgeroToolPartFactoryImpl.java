@@ -5,7 +5,14 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.*;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.tool.toolpart.binding.Binding;
+import com.sigmundgranaas.forgero.core.tool.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.Handle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.PickaxeHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ShovelHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

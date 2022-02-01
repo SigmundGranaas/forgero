@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart;
 
+import com.sigmundgranaas.forgero.core.tool.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

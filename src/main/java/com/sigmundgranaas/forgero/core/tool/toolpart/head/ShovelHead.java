@@ -1,7 +1,8 @@
-package com.sigmundgranaas.forgero.core.tool.toolpart;
+package com.sigmundgranaas.forgero.core.tool.toolpart.head;
 
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartHeadBuilder;
 
 import java.util.Locale;
@@ -42,9 +43,5 @@ public class ShovelHead extends AbstractToolPartHead {
         return ForgeroToolPartTypes.HEAD;
     }
 
-    @Override
-    public int getSharpness() {
-        return 1;
-    }
 
 }

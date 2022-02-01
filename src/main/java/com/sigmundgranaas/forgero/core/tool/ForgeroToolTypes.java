@@ -13,4 +13,8 @@ public enum ForgeroToolTypes {
         }
         return false;
     }
+
+    public String getToolName() {
+        return this.name().toLowerCase();
+    }
 }

@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart.factory;
 
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.toolpart.Handle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.Handle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
 
 public class ToolPartHandleBuilder extends ToolPartBuilder {
     public ToolPartHandleBuilder(PrimaryMaterial primary) {

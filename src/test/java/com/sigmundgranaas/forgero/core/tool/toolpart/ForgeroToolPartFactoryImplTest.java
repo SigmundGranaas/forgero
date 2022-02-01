@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdenti
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ForgeroToolPartFactoryImpl;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.PickaxeHead;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

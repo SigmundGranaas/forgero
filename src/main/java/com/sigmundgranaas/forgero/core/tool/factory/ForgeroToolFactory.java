@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.core.tool.factory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartCollection;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

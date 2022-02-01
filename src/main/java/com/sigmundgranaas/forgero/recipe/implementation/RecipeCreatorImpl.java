@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartCollection;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.RecipeTypes;

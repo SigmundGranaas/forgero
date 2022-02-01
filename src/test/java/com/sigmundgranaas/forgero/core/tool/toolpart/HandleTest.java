@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.Handle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -2,10 +2,10 @@ package com.sigmundgranaas.forgero.core.tool.toolpart.factory;
 
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.AbstractToolPartHead;
-import com.sigmundgranaas.forgero.core.tool.toolpart.PickaxeHead;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ShovelHead;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.AbstractToolPartHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.PickaxeHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ShovelHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 
 public class ToolPartHeadBuilder extends ToolPartBuilder {
     private final ForgeroToolTypes head;

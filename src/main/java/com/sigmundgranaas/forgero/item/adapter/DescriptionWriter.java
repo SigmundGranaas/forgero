@@ -4,9 +4,9 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
 import com.sigmundgranaas.forgero.core.tool.ToolPartDescriptionWriter;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 

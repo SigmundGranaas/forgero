@@ -1,6 +1,8 @@
-package com.sigmundgranaas.forgero.core.tool.toolpart;
+package com.sigmundgranaas.forgero.core.tool.toolpart.handle;
 
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.tool.toolpart.AbstractToolPart;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartHandleBuilder;
 
 import java.util.Locale;

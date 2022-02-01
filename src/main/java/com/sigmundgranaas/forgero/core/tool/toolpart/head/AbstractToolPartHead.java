@@ -1,10 +1,11 @@
-package com.sigmundgranaas.forgero.core.tool.toolpart;
+package com.sigmundgranaas.forgero.core.tool.toolpart.head;
 
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.ToolPartDescriptionWriter;
+import com.sigmundgranaas.forgero.core.tool.toolpart.AbstractToolPart;
 
 public abstract class AbstractToolPartHead extends AbstractToolPart implements ToolPartHead {
     private final ForgeroToolTypes head;
