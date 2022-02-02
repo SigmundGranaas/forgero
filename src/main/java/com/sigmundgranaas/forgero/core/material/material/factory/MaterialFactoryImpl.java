@@ -5,6 +5,9 @@ import com.sigmundgranaas.forgero.core.material.material.realistic.PrimaryMateri
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.realistic.SecondaryMaterialImpl;
+import com.sigmundgranaas.forgero.core.material.material.simple.SimpleDuoMaterial;
+import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
+import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterialImpl;
 
 public class MaterialFactoryImpl implements MaterialFactory {
     private static MaterialFactoryImpl INSTANCE;
@@ -24,6 +27,15 @@ public class MaterialFactoryImpl implements MaterialFactory {
             return new PrimaryMaterialImpl(material);
         } else {
             return new SecondaryMaterialImpl(material);
+        }
+    }
+
+    @Override
+    public ForgeroMaterial createMaterial(SimpleMaterialPOJO material) {
+        if (material.primary != null && material.secondary != null) {
+            return new SimpleDuoMaterial(material);
+        } else {
+            return new SimpleSecondaryMaterialImpl(material);
         }
     }
 }

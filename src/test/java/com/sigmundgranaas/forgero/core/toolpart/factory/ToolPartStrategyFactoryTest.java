@@ -1,8 +1,5 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
-import com.sigmundgranaas.forgero.Constants;
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
@@ -84,20 +81,6 @@ class ToolPartStrategyFactoryTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             ToolPartStrategyFactory.createToolPartBinding(new PrimaryMaterialTestClass(), new EmptySecondaryMaterial());
         });
-    }
-
-    @Test
-    void testCreateRealisticToolPartHeadStrategy() {
-        ToolPartHeadStrategy strategy = ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.PICKAXE, (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)));
-        Assertions.assertEquals(RealisticHeadStrategy.class, strategy.getClass());
-    }
-
-    @Test
-    void createToolPartHandleStrategy() {
-    }
-
-    @Test
-    void createToolPartBinding() {
     }
 
     public static class PrimaryMaterialTestClass implements PrimaryMaterial {
