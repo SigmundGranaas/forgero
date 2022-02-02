@@ -13,7 +13,7 @@ public class PaletteTemplateIdentifier implements TextureIdentifier {
 
     @Override
     public String getFileNameWithExtension() {
-        return id;
+        return id + ".png";
     }
 
     @Override

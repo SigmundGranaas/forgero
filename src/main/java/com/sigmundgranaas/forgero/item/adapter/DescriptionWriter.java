@@ -3,10 +3,10 @@ package com.sigmundgranaas.forgero.item.adapter;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
-import com.sigmundgranaas.forgero.core.tool.ToolPartDescriptionWriter;
-import com.sigmundgranaas.forgero.core.tool.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
+import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 

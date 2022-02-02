@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +19,8 @@ public interface ForgeroMaterial {
     String getIngredient();
 
     @NotNull
-    List<PaletteIdentifier> getPaletteIdentifiers();
+    List<PaletteResourceIdentifier> getPaletteIdentifiers();
 
     @NotNull
-    List<PaletteIdentifier> getPaletteExclusionIdentifiers();
+    List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers();
 }

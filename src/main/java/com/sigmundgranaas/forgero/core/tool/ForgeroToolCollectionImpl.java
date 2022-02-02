@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.tool;
 
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartCollection;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

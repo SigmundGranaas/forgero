@@ -3,9 +3,8 @@ package com.sigmundgranaas.forgero.core.tool;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
-import net.minecraft.item.ToolMaterial;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -87,8 +86,8 @@ public class ForgeroToolBase implements ForgeroTool {
     }
 
     @Override
-    public ToolMaterial getMaterial() {
-        return (ToolMaterial) getPrimaryMaterial();
+    public PrimaryMaterial getMaterial() {
+        return getPrimaryMaterial();
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifier
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroModelIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import net.minecraft.util.Identifier;
 
 public interface ForgeroIdentifierFactory {

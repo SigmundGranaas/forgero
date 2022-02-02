@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool;
 
-import com.sigmundgranaas.forgero.core.tool.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 
 public class ForgeroToolWithBinding extends ForgeroToolBase {
     private final ToolPartBinding binding;

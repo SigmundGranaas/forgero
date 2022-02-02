@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material.realistic;
 
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
+import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
 import org.jetbrains.annotations.NotNull;
@@ -32,13 +32,13 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
 
     @Override
     public @NotNull
-    List<PaletteIdentifier> getPaletteIdentifiers() {
+    List<PaletteResourceIdentifier> getPaletteIdentifiers() {
         return Collections.emptyList();
     }
 
     @Override
     public @NotNull
-    List<PaletteIdentifier> getPaletteExclusionIdentifiers() {
+    List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
         return Collections.emptyList();
     }
 

@@ -75,12 +75,12 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     }
 
     @Override
-    public @NotNull List<PaletteIdentifier> getPaletteIdentifiers() {
-        return paletteIdentifiers.stream().map(paletteIdentifiers -> new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name))).collect(Collectors.toList());
+    public @NotNull List<PaletteResourceIdentifier> getPaletteIdentifiers() {
+        return paletteIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name)), paletteIdentifiers)).collect(Collectors.toList());
     }
 
     @Override
-    public @NotNull List<PaletteIdentifier> getPaletteExclusionIdentifiers() {
-        return paletteExclusionIdentifiers.stream().map(paletteIdentifiers -> new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name))).collect(Collectors.toList());
+    public @NotNull List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
+        return paletteExclusionIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name)), paletteIdentifiers)).collect(Collectors.toList());
     }
 }
