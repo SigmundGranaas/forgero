@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdenti
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
+import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -31,13 +32,24 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
         this.ingredient = material.ingredient.item;
     }
 
+    public AbstractForgeroMaterial(SimpleMaterialPOJO material) {
+        this.name = material.name.toLowerCase(Locale.ROOT);
+        this.rarity = material.rarity;
+        this.durability = material.durability;
+        this.paletteIdentifiers = material.palette.include;
+        this.paletteExclusionIdentifiers = material.palette.exclude;
+        this.properties = material.properties;
+        this.type = material.type;
+        this.ingredient = material.ingredient.item;
+    }
+
     @Override
     public int getRarity() {
         return rarity;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name.toLowerCase();
     }
 
@@ -53,13 +65,13 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     }
 
     @Override
-    public List<String> getProperties() {
-        return null;
+    public @NotNull List<String> getProperties() {
+        return properties;
     }
 
     @Override
     public String getIngredient() {
-        return null;
+        return ingredient;
     }
 
     @Override

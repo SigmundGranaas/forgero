@@ -1,0 +1,23 @@
+{
+  "name": "Spruce",
+  "rarity": 100,
+  "type": "WOOD",
+  "durability": 59,
+  "ingredient": {
+    "item": "minecraft:spruce_planks"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/spruce_boat.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/oak_boat.png"
+    ]
+  },
+  "primary": {
+  },
+  "secondary": {
+  }
+}

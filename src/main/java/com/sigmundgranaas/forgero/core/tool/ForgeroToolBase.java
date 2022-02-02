@@ -46,7 +46,7 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull
     String getShortToolIdentifierString() {
-        return head.getPrimaryMaterial().getName() + "_" + head.getToolTypeName();
+        return head.getPrimaryMaterial().getName() + "_" + head.getToolType().getToolName();
     }
 
     @Override
@@ -58,12 +58,12 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull
     ForgeroToolTypes getToolType() {
-        return ForgeroToolTypes.valueOf(head.getToolTypeName().toUpperCase(Locale.ROOT));
+        return head.getToolType();
     }
 
     @Override
     public int getDurability() {
-        return head.getDurability() + handle.getDurability();
+        return head.getDurability();
     }
 
     @Override

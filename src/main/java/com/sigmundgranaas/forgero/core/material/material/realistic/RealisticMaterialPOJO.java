@@ -1,11 +1,19 @@
 package com.sigmundgranaas.forgero.core.material.material.realistic;
 
-import com.sigmundgranaas.forgero.core.material.material.MaterialPOJO;
-
 import java.util.List;
 
-public class RealisticMaterialPOJO extends MaterialPOJO {
+public class RealisticMaterialPOJO {
     public int weight;
+    public Primary primary;
+    public Secondary secondary;
+
+    public String name;
+    public int rarity;
+    public MaterialType type;
+    public int durability;
+    public List<String> properties;
+    public Ingredient ingredient;
+    public Palette palette;
 
     public static RealisticMaterialPOJO createDefaultMaterialPOJO() {
         RealisticMaterialPOJO pojo = new RealisticMaterialPOJO();
@@ -19,7 +27,7 @@ public class RealisticMaterialPOJO extends MaterialPOJO {
         palette.include = List.of();
         palette.exclude = List.of();
         pojo.palette = palette;
-        RealisticPrimaryMaterialPOJO primary = new RealisticPrimaryMaterialPOJO();
+        Primary primary = new Primary();
         primary.enchantability = 1;
         primary.flexibility = 1;
         primary.sharpness = 1;
@@ -27,7 +35,7 @@ public class RealisticMaterialPOJO extends MaterialPOJO {
 
         pojo.primary = primary;
 
-        RealisticSecondaryMaterialPOJO secondary = new RealisticSecondaryMaterialPOJO();
+        Secondary secondary = new Secondary();
         secondary.grip = 1;
         secondary.luck = 1;
         pojo.secondary = secondary;
@@ -38,16 +46,24 @@ public class RealisticMaterialPOJO extends MaterialPOJO {
         return pojo;
     }
 
-    public static class RealisticPrimaryMaterialPOJO extends MaterialPOJO.Primary {
+    public static class Palette {
+        public List<String> include;
+        public List<String> exclude;
+    }
+
+    public static class Ingredient {
+        public String item;
+    }
+
+    public static class Primary {
         public int stiffness;
         public int sharpness;
         public int enchantability;
         public int flexibility;
     }
 
-    public static class RealisticSecondaryMaterialPOJO extends MaterialPOJO.Secondary {
+    public static class Secondary {
         public int luck;
         public int grip;
     }
-
 }

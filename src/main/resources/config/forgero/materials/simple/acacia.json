@@ -1,0 +1,23 @@
+{
+  "name": "Acacia",
+  "rarity": 100,
+  "type": "WOOD",
+  "durability": 59,
+  "ingredient": {
+    "item": "minecraft:acacia_planks"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/acacia_boat.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/oak_boat.png"
+    ]
+  },
+  "primary": {
+  },
+  "secondary": {
+  }
+}

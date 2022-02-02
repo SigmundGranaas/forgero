@@ -1,19 +1,11 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart.head;
 
-import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartHeadBuilder;
-
-import java.util.Locale;
 
 public class PickaxeHead extends AbstractToolPartHead {
-    public PickaxeHead(PrimaryMaterial primaryMaterial) {
-        super(primaryMaterial, ForgeroToolTypes.PICKAXE);
-    }
-
-    public PickaxeHead(ToolPartHeadBuilder toolPartHeadBuilder) {
-        super(toolPartHeadBuilder.getPrimary(), toolPartHeadBuilder.getSecondary(), toolPartHeadBuilder.getHead());
+    public PickaxeHead(ToolPartHeadStrategy headStrategy) {
+        super(headStrategy);
     }
 
     @Override
@@ -24,13 +16,9 @@ public class PickaxeHead extends AbstractToolPartHead {
 
     @Override
     public String getToolTypeName() {
-        return "pickaxe";
+        return this.getToolType().getToolName();
     }
 
-    @Override
-    public String getToolPartName() {
-        return ForgeroToolTypes.PICKAXE.toString().toLowerCase(Locale.ROOT) + getToolPartType().toString().toLowerCase(Locale.ROOT);
-    }
 
     @Override
     public String getToolPartIdentifier() {
@@ -43,4 +31,8 @@ public class PickaxeHead extends AbstractToolPartHead {
     }
 
 
+    @Override
+    public ForgeroToolTypes getToolType() {
+        return ForgeroToolTypes.PICKAXE;
+    }
 }

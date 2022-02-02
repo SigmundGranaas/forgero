@@ -14,8 +14,8 @@ public abstract class AbstractDuoMaterial extends AbstractForgeroMaterial implem
 
     public AbstractDuoMaterial(RealisticMaterialPOJO material) {
         super(material);
-        RealisticMaterialPOJO.RealisticPrimaryMaterialPOJO primary = ((RealisticMaterialPOJO.RealisticPrimaryMaterialPOJO) material.primary);
-        RealisticMaterialPOJO.RealisticSecondaryMaterialPOJO secondary = (RealisticMaterialPOJO.RealisticSecondaryMaterialPOJO) material.secondary;
+        RealisticMaterialPOJO.Primary primary = material.primary;
+        RealisticMaterialPOJO.Secondary secondary = material.secondary;
         this.stiffness = primary.stiffness;
         this.sharpness = primary.sharpness;
         this.enchantability = primary.enchantability;

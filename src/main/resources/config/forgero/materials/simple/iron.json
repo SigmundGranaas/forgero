@@ -1,0 +1,28 @@
+{
+  "name": "Iron",
+  "rarity": 100,
+  "type": "METAL",
+  "durability": 250,
+  "ingredient": {
+    "item": "minecraft:iron_ingot"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/iron_chestplate.png",
+      "minecraft:textures/item/iron_helmet.png",
+      "minecraft:textures/item/iron_ingot.png",
+      "minecraft:textures/item/iron_sword.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/diamond_sword.png",
+      "minecraft:textures/item/stone_sword.png",
+      "minecraft:textures/item/netherite_sword.png"
+    ]
+  },
+  "primary": {
+  },
+  "secondary": {
+  }
+}

@@ -6,7 +6,7 @@
     "durability": 59,
     "weight": 10,
     "ingredient": {
-      "item": "oak_planks"
+      "item": "minecraft:oak_planks"
     },
     "properties": [
     ],
@@ -34,7 +34,7 @@
     "properties": [
     ],
     "ingredient": {
-      "item": "birch_planks"
+      "item": "minecraft:birch_planks"
     },
     "weight": 9,
     "rarity": 100,
@@ -64,7 +64,7 @@
     "rarity": 100,
     "weight": 7,
     "ingredient": {
-      "item": "spruce_planks"
+      "item": "minecraft:spruce_planks"
     },
     "properties": [
     ],
@@ -91,10 +91,10 @@
     "name": "Stone",
     "rarity": 100,
     "weight": 40,
-    "durability": 59,
+    "durability": 131,
     "type": "organic",
     "ingredient": {
-      "item": "cobblestone"
+      "item": "minecraft:cobblestone"
     },
     "properties": [
     ],
@@ -125,11 +125,11 @@
   {
     "name": "Iron",
     "type": "metal",
-    "durability": 131,
+    "durability": 250,
     "rarity": 100,
     "weight": 60,
     "ingredient": {
-      "item": "iron_ingot"
+      "item": "minecraft:iron_ingot"
     },
     "properties": [
     ],
@@ -167,7 +167,7 @@
     "weight": 100,
     "durability": 10,
     "ingredient": {
-      "item": "gold_ingot"
+      "item": "minecraft:gold_ingot"
     },
     "palette": {
       "include": [
@@ -199,7 +199,7 @@
     "weight": 50,
     "durability": 1561,
     "ingredient": {
-      "item": "diamond"
+      "item": "minecraft:diamond"
     },
     "properties": [
       "sparkling"
@@ -233,7 +233,7 @@
     "rarity": 100,
     "weight": 60,
     "ingredient": {
-      "item": "netherite_ingot"
+      "item": "minecraft:netherite_ingot"
     },
     "properties": [
       "golden"
@@ -266,7 +266,7 @@
     "name": "Leather",
     "type": "organic",
     "ingredient": {
-      "item": "leather"
+      "item": "minecraft:leather"
     },
     "rarity": 2,
     "weight": 10,
@@ -289,7 +289,7 @@
     "weight": 30,
     "durability": 20,
     "ingredient": {
-      "item": "glowstone_dust"
+      "item": "minecraft:glowstone_dust"
     },
     "palette": {
       "include": [

@@ -1,41 +1,17 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart.head;
 
-import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartHeadBuilder;
-
-import java.util.Locale;
 
 public class ShovelHead extends AbstractToolPartHead {
-    public ShovelHead(ToolPartHeadBuilder toolPartHeadBuilder) {
-        super(toolPartHeadBuilder.getPrimary(), toolPartHeadBuilder.getSecondary(), toolPartHeadBuilder.getHead());
+
+    public ShovelHead(ToolPartHeadStrategy toolPartHeadStrategy) {
+        super(toolPartHeadStrategy);
     }
-
-    public ShovelHead(PrimaryMaterial primaryMaterial) {
-        super(primaryMaterial, ForgeroToolTypes.SHOVEL);
-    }
-
-
-    @Override
-    public int getDurability() {
-        return getPrimaryMaterial().getDurability();
-    }
-
 
     @Override
     public String getToolTypeName() {
-        return "shovel";
-    }
-
-    @Override
-    public String getToolPartName() {
-        return ForgeroToolTypes.SHOVEL.toString().toLowerCase(Locale.ROOT) + getToolPartType().toString().toLowerCase(Locale.ROOT);
-    }
-
-    @Override
-    public String getToolPartIdentifier() {
-        return getPrimaryMaterial().getName() + "_" + getToolPartName();
+        return getToolType().getToolName();
     }
 
     @Override
@@ -44,4 +20,8 @@ public class ShovelHead extends AbstractToolPartHead {
     }
 
 
+    @Override
+    public ForgeroToolTypes getToolType() {
+        return ForgeroToolTypes.SHOVEL;
+    }
 }

@@ -7,5 +7,6 @@ public interface ToolPartHead extends ForgeroToolPart {
 
     int getMiningLevel();
 
-    ForgeroToolTypes getHeadType();
+
+    ForgeroToolTypes getToolType();
 }

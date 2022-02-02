@@ -15,6 +15,6 @@ public class ToolPartBindingBuilder extends ToolPartBuilder {
 
     @Override
     public Binding createToolPart() {
-        return new Binding(this);
+        return new Binding(ToolPartStrategyFactory.createToolPartBinding(primary, secondary));
     }
 }

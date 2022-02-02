@@ -1,0 +1,21 @@
+{
+  "name": "Oak",
+  "rarity": 100,
+  "type": "WOOD",
+  "durability": 59,
+  "ingredient": {
+    "item": "minecraft:oak_planks"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/oak_boat.png"
+    ],
+    "exclude": []
+  },
+  "primary": {
+  },
+  "secondary": {
+  }
+}

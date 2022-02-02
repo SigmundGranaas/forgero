@@ -17,7 +17,7 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
 
     public ToolPartHeadBuilder(ToolPartHead toolPart) {
         super(toolPart);
-        this.head = toolPart.getHeadType();
+        this.head = toolPart.getToolType();
     }
 
     public ForgeroToolTypes getHead() {
@@ -27,8 +27,8 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
     @Override
     public AbstractToolPartHead createToolPart() {
         return switch (head) {
-            case PICKAXE -> new PickaxeHead(this);
-            case SHOVEL -> new ShovelHead(this);
+            case PICKAXE -> new PickaxeHead(ToolPartStrategyFactory.createToolPartHeadStrategy(head, primary, secondary));
+            case SHOVEL -> new ShovelHead(ToolPartStrategyFactory.createToolPartHeadStrategy(head, primary, secondary));
             case SWORD -> null;
         };
     }

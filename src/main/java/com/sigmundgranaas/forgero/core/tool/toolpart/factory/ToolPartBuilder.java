@@ -5,11 +5,13 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartPropertyStrategy;
 
 public abstract class ToolPartBuilder {
     protected final PrimaryMaterial primary;
     protected SecondaryMaterial secondary;
     protected Gem gem;
+    protected ToolPartPropertyStrategy strategy;
 
 
     public ToolPartBuilder(PrimaryMaterial primary) {
@@ -21,6 +23,7 @@ public abstract class ToolPartBuilder {
     public ToolPartBuilder(ForgeroToolPart part) {
         this.primary = part.getPrimaryMaterial();
         this.secondary = part.getSecondaryMaterial();
+        this.strategy = part.getStrategy();
         this.gem = null;
     }
 

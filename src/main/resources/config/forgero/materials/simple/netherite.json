@@ -1,0 +1,25 @@
+{
+  "name": "Netherite",
+  "rarity": 100,
+  "type": "METAL",
+  "durability": 2100,
+  "ingredient": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "palette": {
+    "include": [
+      "minecraft:textures/item/netherite_chestplate.png",
+      "minecraft:textures/item/netherite_helmet.png",
+      "minecraft:textures/item/netherite_ingot.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/golden_chestplate.png",
+      "minecraft:textures/item/golden_helmet.png",
+      "minecraft:textures/item/golden_sword.png"
+    ]
+  },
+  "primary": {
+  },
+  "secondary": {
+  }
+}

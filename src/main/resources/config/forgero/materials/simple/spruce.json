@@ -1,0 +1,23 @@
+{
+  "name": "Birch",
+  "rarity": 100,
+  "type": "WOOD",
+  "durability": 59,
+  "ingredient": {
+    "item": "minecraft:oak_planks"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/birch_boat.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/oak_boat.png"
+    ]
+  },
+  "primary": {
+  },
+  "secondary": {
+  }
+}

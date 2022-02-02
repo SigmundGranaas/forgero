@@ -85,7 +85,7 @@ public record RecipeCreatorImpl(
     }
 
     private List<RecipeWrapper> createToolPartHeadRecipe(ForgeroToolPart part) {
-        if (((ToolPartHead) part).getHeadType() == ForgeroToolTypes.PICKAXE) {
+        if (((ToolPartHead) part).getToolType() == ForgeroToolTypes.PICKAXE) {
             return createToolPartRecipe(part, RecipeTypes.PICKAXEHEAD_RECIPE);
         } else {
             return createToolPartRecipe(part, RecipeTypes.SHOVELHEAD_RECIPE);

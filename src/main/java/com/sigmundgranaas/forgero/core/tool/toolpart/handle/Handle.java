@@ -1,40 +1,18 @@
 package com.sigmundgranaas.forgero.core.tool.toolpart.handle;
 
-import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.toolpart.AbstractToolPart;
 import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartHandleBuilder;
 
 import java.util.Locale;
 
 public class Handle extends AbstractToolPart implements ToolPartHandle {
-    public Handle(PrimaryMaterial primaryMaterial) {
-        super(primaryMaterial);
-    }
-
-
-    public Handle(ToolPartHandleBuilder toolPartHandleBuilder) {
-        super(toolPartHandleBuilder.getPrimary(), toolPartHandleBuilder.getSecondary());
-    }
-
-    @Override
-    public int getDurability() {
-        return getPrimaryMaterial().getDurability();
-    }
-
-    @Override
-    public String getToolTypeName() {
-        return getToolPartName();
+    public Handle(HandleStrategy strategy) {
+        super(strategy);
     }
 
     @Override
     public String getToolPartName() {
         return ForgeroToolPartTypes.HANDLE.toString().toLowerCase(Locale.ROOT);
-    }
-
-    @Override
-    public String getToolPartIdentifier() {
-        return getPrimaryMaterial().getName() + "_" + getToolPartName();
     }
 
     @Override

@@ -24,7 +24,7 @@ public enum ToolPartModelType {
     @SuppressWarnings("DuplicateBranchesInSwitch")
     public static ToolPartModelType getModelType(ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
-            case HEAD -> switch (((ToolPartHead) toolPart).getHeadType()) {
+            case HEAD -> switch (((ToolPartHead) toolPart).getToolType()) {
                 case PICKAXE -> PICKAXEHEAD;
                 case SHOVEL -> SHOVELHEAD;
                 case SWORD -> PICKAXEHEAD;

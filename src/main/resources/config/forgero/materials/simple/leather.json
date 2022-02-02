@@ -1,0 +1,19 @@
+{
+  "name": "Leather",
+  "rarity": 100,
+  "type": "LEATHER",
+  "durability": 20,
+  "ingredient": {
+    "item": "minecraft:leather"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/leather.png"
+    ],
+    "exclude": []
+  },
+  "secondary": {
+  }
+}

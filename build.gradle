@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
     // To change the versions see the gradle.properties file
@@ -128,7 +129,7 @@ loom {
 
 test {
     useJUnitPlatform()
-    maxParallelForks = 10
+    maxParallelForks = 32
     testLogging.events("failed")
     testLogging.info.events = ["failed", "skipped"]
 }

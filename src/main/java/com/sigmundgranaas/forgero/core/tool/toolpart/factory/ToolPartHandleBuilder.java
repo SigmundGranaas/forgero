@@ -15,6 +15,6 @@ public class ToolPartHandleBuilder extends ToolPartBuilder {
 
     @Override
     public Handle createToolPart() {
-        return new Handle(this);
+        return new Handle(ToolPartStrategyFactory.createToolPartHandleStrategy(primary, secondary));
     }
 }

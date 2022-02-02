@@ -5,8 +5,11 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifier
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ForgeroToolPartFactoryImpl;
+import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartStrategyFactory;
 import com.sigmundgranaas.forgero.core.tool.toolpart.head.PickaxeHead;
+import com.sigmundgranaas.forgero.core.tool.toolpart.head.ToolPartHeadStrategy;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +19,9 @@ class ForgeroToolPartFactoryImplTest {
 
     @Test
     void testCreateToolPart() {
-        ForgeroToolPart referenceToolPart = new PickaxeHead((PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)));
+        ToolPartHeadStrategy strategy = ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.PICKAXE, (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)));
+
+        ForgeroToolPart referenceToolPart = new PickaxeHead(strategy);
 
         ForgeroToolPartFactoryImpl factory = new ForgeroToolPartFactoryImpl();
         ForgeroToolPart part = factory.createToolPart(new ForgeroToolPartHeadIdentifier(Constants.IRON_PICKAXEHEAD_IDENTIFIER));

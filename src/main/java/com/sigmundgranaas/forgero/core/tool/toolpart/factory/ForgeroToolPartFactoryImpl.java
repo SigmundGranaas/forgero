@@ -35,15 +35,15 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
         PrimaryMaterial material = (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(identifier.getMaterial());
         return switch (identifier.getToolPartType()) {
             case HEAD -> createToolPartHead(identifier, material);
-            case HANDLE -> new Handle(material);
-            case BINDING -> new Binding(material);
+            case HANDLE -> new Handle(ToolPartStrategyFactory.createToolPartHandleStrategy(material));
+            case BINDING -> new Binding(ToolPartStrategyFactory.createToolPartBinding(material));
         };
     }
 
     private ToolPartHead createToolPartHead(@NotNull ForgeroToolPartIdentifier identifier, PrimaryMaterial material) {
         return switch (((ForgeroToolPartHeadIdentifier) identifier).getHeadType()) {
-            case PICKAXE -> new PickaxeHead(material);
-            case SHOVEL -> new ShovelHead(material);
+            case PICKAXE -> new PickaxeHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.PICKAXE, material));
+            case SHOVEL -> new ShovelHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.SHOVEL, material));
             case SWORD -> null;
         };
     }
@@ -84,11 +84,11 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     private List<ForgeroToolPart> createBaseToolPartsFromMaterial(PrimaryMaterial material) {
-        List<ForgeroToolPart> toolparts = new ArrayList<>();
-        toolparts.add(new Handle(material));
-        toolparts.add(new PickaxeHead(material));
-        toolparts.add(new ShovelHead(material));
-        toolparts.add(new Binding(material));
-        return toolparts;
+        List<ForgeroToolPart> toolParts = new ArrayList<>();
+        toolParts.add(new Handle(ToolPartStrategyFactory.createToolPartHandleStrategy(material)));
+        toolParts.add(new PickaxeHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.PICKAXE, material)));
+        toolParts.add(new ShovelHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.SHOVEL, material)));
+        toolParts.add(new Binding(ToolPartStrategyFactory.createToolPartBinding(material)));
+        return toolParts;
     }
 }

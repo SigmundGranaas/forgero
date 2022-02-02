@@ -27,7 +27,7 @@ class DefaultForgeroToolTest {
     @Test
     void getIdentifier() {
         assertEquals(new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER).getHead().getHeadType()
-                , getDefaultForgeroTool().getToolHead().getHeadType());
+                , getDefaultForgeroTool().getToolHead().getToolType());
     }
 
     @Test

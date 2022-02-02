@@ -23,7 +23,7 @@ public record RealisticMaterialLoader(String materialPath) implements MaterialLo
 
     public static MaterialLoader getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RealisticMaterialLoader("/config/materials.json");
+            INSTANCE = new RealisticMaterialLoader("/config/forgero/materials/realistic/realistic_materials.json");
         }
         return INSTANCE;
     }

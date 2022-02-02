@@ -13,8 +13,6 @@ public interface ForgeroToolPart {
 
     int getDurability();
 
-    String getToolTypeName();
-
     String getToolPartName();
 
     String getToolPartIdentifier();
@@ -27,4 +25,6 @@ public interface ForgeroToolPart {
             writer.addSecondaryMaterial(getSecondaryMaterial());
         }
     }
+
+    ToolPartPropertyStrategy getStrategy();
 }
