@@ -62,4 +62,24 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     public int getGrip() {
         return 0;
     }
+
+    @Override
+    public int getMiningLevel() {
+        return 0;
+    }
+
+    @Override
+    public float getMiningSpeedAddition() {
+        return 0;
+    }
+
+    @Override
+    public int getAttackDamageAddition() {
+        return 0;
+    }
+
+    @Override
+    public float getAttackSpeedAddition() {
+        return 0;
+    }
 }

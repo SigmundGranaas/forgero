@@ -20,7 +20,7 @@ public class SimpleMaterialPOJO {
         pojo.name = "Default";
         pojo.rarity = 1;
         pojo.type = MaterialType.METAL;
-        pojo.durability = 1;
+        pojo.durability = 50;
         pojo.properties = List.of();
         Palette palette = new Palette();
         palette.include = List.of();
@@ -39,6 +39,7 @@ public class SimpleMaterialPOJO {
 
         pojo.secondary = secondary;
 
+        secondary.miningLevel = 0;
         Ingredient ingredient = new Ingredient();
         ingredient.item = "ingredient";
         pojo.ingredient = ingredient;
@@ -63,5 +64,9 @@ public class SimpleMaterialPOJO {
     }
 
     public static class Secondary {
+        public int miningLevel;
+        public float miningSpeedAddition;
+        public float attackSpeedAddition;
+        public int attackDamageAddition;
     }
 }

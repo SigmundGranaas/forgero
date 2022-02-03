@@ -13,6 +13,11 @@ public class SimpleDuoMaterialToolPartStrategy extends SimpleToolPartStrategy {
     }
 
     @Override
+    public int getDurability() {
+        return super.getDurability() + secondaryMaterial.getDurability() / 3;
+    }
+
+    @Override
     public SecondaryMaterial getSecondaryMaterial() {
         return secondaryMaterial;
     }

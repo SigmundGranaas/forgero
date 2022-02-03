@@ -31,6 +31,11 @@ public class RealisticHeadStrategy extends RealisticToolPartStrategy implements 
     }
 
     @Override
+    public float getAttackSpeed() {
+        return 0;
+    }
+
+    @Override
     public ForgeroMaterial getMaterial() {
         return realisticPrimaryMaterial;
     }

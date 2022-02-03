@@ -20,9 +20,6 @@
     ],
     "main": [
       "com.sigmundgranaas.forgero.Forgero"
-    ],
-    "fabric-gametest": [
-      "com.sigmundgranaas.forgero.gametest.Test"
     ]
   },
   "mixins": [

@@ -22,6 +22,21 @@ public class SimpleDuoMaterial extends AbstractForgeroMaterial implements Simple
     }
 
     @Override
+    public float getMiningSpeedAddition() {
+        return 0;
+    }
+
+    @Override
+    public int getAttackDamageAddition() {
+        return 0;
+    }
+
+    @Override
+    public float getAttackSpeedAddition() {
+        return 0;
+    }
+
+    @Override
     public float getMiningSpeed() {
         return miningSpeed;
     }

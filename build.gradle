@@ -98,6 +98,10 @@ sourceSets {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
     }
+    test {
+        compileClasspath += test.compileClasspath
+        runtimeClasspath += test.runtimeClasspath
+    }
 }
 
 loom {
@@ -106,12 +110,13 @@ loom {
             server()
             ideConfigGenerated project.rootProject == project
             name = "Testmod Server"
-            source sourceSets.forgero
+            source sourceSets.test
         }
         gametest {
             inherit testmodServer
 
             name "Game Test"
+
 
             // Enable the gametest runner
             vmArg "-Dfabric-api.gametest"
