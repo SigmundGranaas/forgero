@@ -29,11 +29,11 @@ class SimpleMaterialPOJOTest {
 
     @Test
     void defaultDamageIs5() {
-        Assertions.assertEquals(5, defaultTestMaterial.primary.damage);
+        Assertions.assertEquals(5, defaultTestMaterial.primary.attackDamage);
     }
 
     @Test
     void defaultDurabilityIs50() {
-        Assertions.assertEquals(50, defaultTestMaterial.primary.durability);
+        Assertions.assertEquals(50, defaultTestMaterial.durability);
     }
 }

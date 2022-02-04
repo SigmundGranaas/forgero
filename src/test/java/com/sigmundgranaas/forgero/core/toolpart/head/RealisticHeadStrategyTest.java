@@ -28,7 +28,7 @@ public class RealisticHeadStrategyTest {
 
     @Test
     void getDamage() {
-        Assertions.assertEquals(5, strategy.getDamage());
+        Assertions.assertEquals(5, strategy.getAttackDamage());
     }
 
     @Test

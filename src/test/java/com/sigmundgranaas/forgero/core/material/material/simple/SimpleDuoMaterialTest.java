@@ -9,7 +9,7 @@ class SimpleDuoMaterialTest {
         SimpleMaterialPOJO pojo = SimpleMaterialPOJO.createDefaultMaterialPOJO();
         SimpleDuoMaterial material = new SimpleDuoMaterial(pojo);
 
-        Assertions.assertEquals(pojo.primary.damage, material.getAttackDamage());
+        Assertions.assertEquals(pojo.primary.attackDamage, material.getAttackDamage());
         Assertions.assertEquals(pojo.primary.attackSpeed, material.getAttackSpeed());
         Assertions.assertEquals(pojo.primary.miningLevel, material.getMiningLevel());
         Assertions.assertEquals(pojo.primary.miningSpeed, material.getMiningSpeed());
