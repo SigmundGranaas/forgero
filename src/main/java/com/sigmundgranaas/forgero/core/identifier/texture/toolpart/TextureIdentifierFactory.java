@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.identifier.texture.toolpart;
 
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import net.minecraft.util.Identifier;
 
 import java.util.Optional;

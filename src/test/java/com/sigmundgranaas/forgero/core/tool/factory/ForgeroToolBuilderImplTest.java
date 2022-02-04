@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool.factory;
 
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.core.tool.toolpart.HandleTest;
-import com.sigmundgranaas.forgero.core.tool.toolpart.PickaxeHeadTest;
+import com.sigmundgranaas.forgero.core.toolpart.toolpart.HandleTest;
+import com.sigmundgranaas.forgero.core.toolpart.toolpart.PickaxeHeadTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

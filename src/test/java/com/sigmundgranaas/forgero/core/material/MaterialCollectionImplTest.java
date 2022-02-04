@@ -4,6 +4,8 @@ import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
+import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
+import net.minecraft.item.ToolMaterial;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -51,5 +53,12 @@ class MaterialCollectionImplTest {
     void getMaterialFromMaterialIdentifier() {
         MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
         materialCollection.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING));
+    }
+
+    // Core modules, like material, should not depend on classes from Minecraft.
+    @Test
+    void assertMaterialsIsNotToolMaterial() {
+        MaterialCollection materialCollection = new MaterialCollectionImpl(MaterialLoader.INSTANCE);
+        materialCollection.getMaterialsAsList().forEach(material -> Assertions.assertFalse(material instanceof ToolMaterial));
     }
 }

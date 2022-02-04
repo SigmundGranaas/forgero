@@ -1,0 +1,31 @@
+{
+  "name": "Birch",
+  "rarity": 5,
+  "type": "WOOD",
+  "durability": 59,
+  "ingredient": {
+    "item": "minecraft:birch_planks"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/birch_boat.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/oak_boat.png"
+    ]
+  },
+  "primary": {
+    "miningLevel": 0,
+    "miningSpeed": 2.0,
+    "attackDamage": 0.0,
+    "attackSpeed": 0.0
+  },
+  "secondary": {
+    "miningLevel": 0,
+    "miningSpeedAddition": 0.2,
+    "attackDamageAddition": 0.3,
+    "attackSpeedAddition": 0.0
+  }
+}

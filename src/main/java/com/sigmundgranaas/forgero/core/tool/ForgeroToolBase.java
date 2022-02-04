@@ -3,9 +3,8 @@ package com.sigmundgranaas.forgero.core.tool;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
-import net.minecraft.item.ToolMaterial;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -46,7 +45,7 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull
     String getShortToolIdentifierString() {
-        return head.getPrimaryMaterial().getName() + "_" + head.getToolTypeName();
+        return head.getPrimaryMaterial().getName() + "_" + head.getToolType().getToolName();
     }
 
     @Override
@@ -58,27 +57,27 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull
     ForgeroToolTypes getToolType() {
-        return ForgeroToolTypes.valueOf(head.getToolTypeName().toUpperCase(Locale.ROOT));
+        return head.getToolType();
     }
 
     @Override
     public int getDurability() {
-        return head.getDurability() + handle.getDurability();
+        return head.getDurability();
     }
 
     @Override
-    public int getAttackDamage() {
-        return head.getSharpness() / 10;
+    public float getAttackDamage() {
+        return head.getAttackDamage();
     }
 
     @Override
     public float getAttackSpeed() {
-        return 100f / ((float) head.getWeight() + (float) handle.getWeight());
+        return head.getAttackSpeed();
     }
 
     @Override
     public float getMiningSpeedMultiplier() {
-        return (float) head.getPrimaryMaterial().getStiffNess() / 20;
+        return head.getMiningSpeedMultiplier();
     }
 
     @Override
@@ -87,7 +86,7 @@ public class ForgeroToolBase implements ForgeroTool {
     }
 
     @Override
-    public ToolMaterial getMaterial() {
+    public PrimaryMaterial getMaterial() {
         return getPrimaryMaterial();
     }
 

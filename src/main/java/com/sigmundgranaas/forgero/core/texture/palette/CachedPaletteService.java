@@ -39,8 +39,8 @@ public class CachedPaletteService implements PaletteService {
 
     private Palette createPalette(PaletteIdentifier id) {
         try {
-            List<Texture> inclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(id.getIdentifier()).getPaletteIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.toString())).collect(Collectors.toList()));
-            List<Texture> exclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(id.getIdentifier()).getPaletteExclusionIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.toString())).collect(Collectors.toList()));
+            List<Texture> inclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(id.getIdentifier()).getPaletteIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
+            List<Texture> exclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(id.getIdentifier()).getPaletteExclusionIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
             UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, inclusions, exclusions);
             Palette palette = factory.createPalette(unbakedPalette);
             paletteCache.put(id.getIdentifier(), palette);

@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
     // To change the versions see the gradle.properties file
@@ -97,6 +98,10 @@ sourceSets {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
     }
+    test {
+        compileClasspath += test.compileClasspath
+        runtimeClasspath += test.runtimeClasspath
+    }
 }
 
 loom {
@@ -105,12 +110,14 @@ loom {
             server()
             ideConfigGenerated project.rootProject == project
             name = "Testmod Server"
-            source sourceSets.forgero
+
+            source sourceSets.test
         }
         gametest {
             inherit testmodServer
 
             name "Game Test"
+
 
             // Enable the gametest runner
             vmArg "-Dfabric-api.gametest"
@@ -128,7 +135,7 @@ loom {
 
 test {
     useJUnitPlatform()
-    maxParallelForks = 10
+    maxParallelForks = 32
     testLogging.events("failed")
     testLogging.info.events = ["failed", "skipped"]
 }

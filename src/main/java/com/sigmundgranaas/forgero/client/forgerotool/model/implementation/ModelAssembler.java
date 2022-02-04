@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 
 import java.util.Optional;

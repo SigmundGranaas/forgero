@@ -5,10 +5,10 @@ import com.sigmundgranaas.forgero.core.skin.ForgeroToolPartSkin;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolBase;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 
 public class ForgeroToolBuilderImpl implements ForgeroToolBuilder {
     private final ToolPartHead head;

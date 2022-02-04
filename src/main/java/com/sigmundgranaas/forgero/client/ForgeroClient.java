@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.fabricmc.api.ClientModInitializer;

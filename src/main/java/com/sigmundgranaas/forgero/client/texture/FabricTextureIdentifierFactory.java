@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.SecondaryMate
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TextureIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartTextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import net.minecraft.util.Identifier;
 
 import java.util.Locale;

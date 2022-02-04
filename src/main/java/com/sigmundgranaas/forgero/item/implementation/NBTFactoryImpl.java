@@ -9,9 +9,13 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
-import com.sigmundgranaas.forgero.core.tool.toolpart.*;
-import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ForgeroToolPartFactory;
-import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ToolPartBuilder;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
@@ -132,7 +136,7 @@ public class NBTFactoryImpl implements NBTFactory {
         baseCompound.putString(TOOL_PART_TYPE_NBT_IDENTIFIER, toolPart.getToolPartType().toString());
         baseCompound.putString(TOOL_PART_IDENTIFIER, toolPart.getToolPartIdentifier());
         if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
-            baseCompound.putString(TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER, ((ToolPartHead) toolPart).getHeadType().toString());
+            baseCompound.putString(TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER, ((ToolPartHead) toolPart).getToolType().toString());
         }
         return baseCompound;
     }

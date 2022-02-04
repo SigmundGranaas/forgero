@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartCollection;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ItemFactory;

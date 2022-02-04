@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import net.minecraft.util.Identifier;
 
 public interface ToolPartItem {

@@ -10,10 +10,10 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.head.HeadMod
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;

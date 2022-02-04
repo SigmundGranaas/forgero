@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.tool;
 
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
+import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 
 public class ForgeroToolWithBinding extends ForgeroToolBase {
     private final ToolPartBinding binding;
@@ -22,7 +22,7 @@ public class ForgeroToolWithBinding extends ForgeroToolBase {
     }
 
     @Override
-    public int getAttackDamage() {
+    public float getAttackDamage() {
         return super.getAttackDamage();
     }
 

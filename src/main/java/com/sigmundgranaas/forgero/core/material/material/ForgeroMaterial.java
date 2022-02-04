@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -8,21 +7,19 @@ import java.util.List;
 public interface ForgeroMaterial {
     int getRarity();
 
-    String getName();
+    @NotNull String getName();
 
     int getDurability();
 
-    int getWeight();
-
     MaterialType getType();
 
-    List<String> getProperties();
+    @NotNull List<String> getProperties();
 
-    String getIngredientAsString();
-
-    @NotNull
-    List<Identifier> getPaletteIdentifiers();
+    String getIngredient();
 
     @NotNull
-    List<Identifier> getPaletteExclusionIdentifiers();
+    List<PaletteResourceIdentifier> getPaletteIdentifiers();
+
+    @NotNull
+    List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers();
 }

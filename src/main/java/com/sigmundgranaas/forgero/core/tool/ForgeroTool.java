@@ -2,9 +2,8 @@ package com.sigmundgranaas.forgero.core.tool;
 
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
-import net.minecraft.item.ToolMaterial;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
 public interface ForgeroTool {
@@ -31,7 +30,7 @@ public interface ForgeroTool {
 
     int getDurability();
 
-    int getAttackDamage();
+    float getAttackDamage();
 
     float getAttackSpeed();
 
@@ -39,7 +38,7 @@ public interface ForgeroTool {
 
     int getMiningLevel();
 
-    ToolMaterial getMaterial();
+    PrimaryMaterial getMaterial();
 
     void createToolDescription(ToolDescriptionWriter writer);
 }

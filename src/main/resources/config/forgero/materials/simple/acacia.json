@@ -1,0 +1,31 @@
+{
+  "name": "Acacia",
+  "rarity": 100,
+  "type": "WOOD",
+  "durability": 59,
+  "ingredient": {
+    "item": "minecraft:acacia_planks"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/acacia_boat.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/oak_boat.png"
+    ]
+  },
+  "primary": {
+    "miningLevel": 0,
+    "miningSpeed": 2.0,
+    "attackDamage": 0.0,
+    "attackSpeed": 0.0
+  },
+  "secondary": {
+    "miningLevel": 0,
+    "miningSpeedAddition": 0.2,
+    "attackDamageAddition": 0.2,
+    "attackSpeedAddition": 0.1
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Gold",
+  "rarity": 100,
+  "type": "METAL",
+  "durability": 32,
+  "ingredient": {
+    "item": "minecraft:gold_ingot"
+  },
+  "properties": [
+    "golden"
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/golden_chestplate.png",
+      "minecraft:textures/item/golden_helmet.png",
+      "minecraft:textures/item/gold_ingot.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/iron_sword.png",
+      "minecraft:textures/item/diamond_sword.png",
+      "minecraft:textures/item/wooden_sword.png"
+    ]
+  },
+  "primary": {
+    "miningLevel": 0,
+    "miningSpeed": 12.0,
+    "attackDamage": 0.0,
+    "attackSpeed": 0.0
+  },
+  "secondary": {
+    "miningLevel": 0,
+    "miningSpeedAddition": 3.0,
+    "attackDamageAddition": -0.2,
+    "attackSpeedAddition": 0.1
+  }
+}

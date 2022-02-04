@@ -1,0 +1,36 @@
+{
+  "name": "Stone",
+  "rarity": 100,
+  "type": "STONE",
+  "durability": 100,
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "properties": [
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/block/stone.png",
+      "minecraft:textures/block/cobblestone.png",
+      "minecraft:textures/item/stone_sword.png",
+      "minecraft:textures/item/stone_pickaxe.png"
+    ],
+    "exclude": [
+      "minecraft:textures/item/golden_sword.png",
+      "minecraft:textures/item/iron_pickaxe.png",
+      "minecraft:textures/item/iron_sword.png"
+    ]
+  },
+  "primary": {
+    "miningLevel": 1,
+    "miningSpeed": 3.0,
+    "attackDamage": 1.0,
+    "attackSpeed": 0.0
+  },
+  "secondary": {
+    "miningLevel": 1,
+    "miningSpeedAddition": 0.3,
+    "attackDamageAddition": 0.3,
+    "attackSpeedAddition": 0.1
+  }
+}

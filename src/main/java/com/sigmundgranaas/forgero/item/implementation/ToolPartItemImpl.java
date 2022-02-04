@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;

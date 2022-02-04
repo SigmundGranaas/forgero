@@ -1,26 +1,23 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import net.minecraft.util.Identifier;
+import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
-public class EmptySecondaryMaterial implements SecondaryMaterial {
+public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecondaryMaterial, SimpleSecondaryMaterial {
     @Override
     public int getRarity() {
         return 0;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "empty";
     }
 
-    @Override
-    public int getWeight() {
-        return 0;
-    }
 
     @Override
     public MaterialType getType() {
@@ -28,25 +25,31 @@ public class EmptySecondaryMaterial implements SecondaryMaterial {
     }
 
     @Override
-    public List<String> getProperties() {
-        return null;
-    }
-
-    @Override
-    public @NotNull
-    List<Identifier> getPaletteIdentifiers() {
+    public @NotNull List<String> getProperties() {
         return Collections.emptyList();
     }
 
     @Override
     public @NotNull
-    List<Identifier> getPaletteExclusionIdentifiers() {
+    List<PaletteResourceIdentifier> getPaletteIdentifiers() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public @NotNull
+    List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
         return Collections.emptyList();
     }
 
     @Override
     public int getDurability() {
         return 0;
+    }
+
+
+    @Override
+    public String getIngredient() {
+        return "empty";
     }
 
     @Override
@@ -60,7 +63,22 @@ public class EmptySecondaryMaterial implements SecondaryMaterial {
     }
 
     @Override
-    public String getIngredientAsString() {
-        return "empty";
+    public int getMiningLevel() {
+        return 0;
+    }
+
+    @Override
+    public float getMiningSpeedAddition() {
+        return 0;
+    }
+
+    @Override
+    public float getAttackDamageAddition() {
+        return 0;
+    }
+
+    @Override
+    public float getAttackSpeedAddition() {
+        return 0;
     }
 }

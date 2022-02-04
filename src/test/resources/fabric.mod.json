@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "test",
+  "version": "${version}",
+  "environment": "*",
+  "description": "Forgero gametests",
+  "license": "MIT",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.gametest.RecipeCreation",
+      "com.sigmundgranaas.forgero.gametest.ItemRegistration"
+    ]
+  }
+}

@@ -4,10 +4,10 @@ import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.tool.toolpart.ToolPartHead;
-import com.sigmundgranaas.forgero.core.tool.toolpart.factory.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +27,7 @@ class DefaultForgeroToolTest {
     @Test
     void getIdentifier() {
         assertEquals(new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER).getHead().getHeadType()
-                , getDefaultForgeroTool().getToolHead().getHeadType());
+                , getDefaultForgeroTool().getToolHead().getToolType());
     }
 
     @Test

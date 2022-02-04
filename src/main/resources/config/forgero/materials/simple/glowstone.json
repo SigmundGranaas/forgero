@@ -1,0 +1,25 @@
+{
+  "name": "Glowstone",
+  "rarity": 100,
+  "type": "LEATHER",
+  "durability": 20,
+  "ingredient": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "properties": [
+    "lightness"
+  ],
+  "palette": {
+    "include": [
+      "minecraft:textures/item/glowstone_dust.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "secondary": {
+    "miningLevel": 3,
+    "miningSpeedAddition": 0.2,
+    "attackDamageAddition": 1.0,
+    "attackSpeedAddition": 0.5
+  }
+}
