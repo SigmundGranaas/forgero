@@ -6,5 +6,7 @@ import net.minecraft.util.Identifier;
 public interface RecipeWrapper {
     Identifier getRecipeID();
 
+    RecipeTypes getRecipeType();
+
     JsonObject getRecipe();
 }

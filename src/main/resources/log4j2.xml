@@ -17,7 +17,7 @@
         </RollingRandomAccessFile>
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Root level="error">
             <AppenderRef ref="SysOut"/>
             <AppenderRef ref="File"/>
             <AppenderRef ref="ServerGuiConsole"/>

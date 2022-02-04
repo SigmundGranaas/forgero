@@ -4,7 +4,7 @@
   "type": "METAL",
   "durability": 40,
   "ingredient": {
-    "item": "minecraft:iron_ingot"
+    "item": "minecraft:gold_ingot"
   },
   "properties": [
     "golden"
