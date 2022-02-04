@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.toolpart.strategy.realistic;
 
+import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticPrimaryMaterial;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHeadStrategy;
 
@@ -16,8 +16,8 @@ public class RealisticHeadStrategy extends RealisticToolPartStrategy implements 
     }
 
     @Override
-    public int getDamage() {
-        return realisticPrimaryMaterial.getSharpness() / 10;
+    public float getAttackDamage() {
+        return (float) realisticPrimaryMaterial.getSharpness() / 10;
     }
 
     @Override

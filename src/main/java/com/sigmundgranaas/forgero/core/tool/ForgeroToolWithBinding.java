@@ -22,7 +22,7 @@ public class ForgeroToolWithBinding extends ForgeroToolBase {
     }
 
     @Override
-    public int getAttackDamage() {
+    public float getAttackDamage() {
         return super.getAttackDamage();
     }
 

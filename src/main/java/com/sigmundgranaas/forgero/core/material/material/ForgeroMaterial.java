@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

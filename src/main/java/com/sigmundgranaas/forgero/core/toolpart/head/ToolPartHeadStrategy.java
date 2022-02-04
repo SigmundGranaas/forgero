@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.core.toolpart.ToolPartPropertyStrategy;
 
 public interface ToolPartHeadStrategy extends ToolPartPropertyStrategy {
 
-    int getDamage();
+    float getAttackDamage();
 
     float getMiningSpeedMultiplier();
 

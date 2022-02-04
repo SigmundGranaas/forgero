@@ -10,7 +10,7 @@ public class SimpleHeadStrategy extends SimpleDuoMaterialToolPartStrategy implem
     }
 
     @Override
-    public int getDamage() {
+    public float getAttackDamage() {
         return primaryMaterial.getAttackDamage() + secondaryMaterial.getAttackDamageAddition();
     }
 
@@ -22,7 +22,7 @@ public class SimpleHeadStrategy extends SimpleDuoMaterialToolPartStrategy implem
     @Override
     public int getMiningLevel() {
         if (secondaryMaterial.getMiningLevel() > primaryMaterial.getMiningLevel()) {
-            return primaryMaterial.getMiningLevel() + (secondaryMaterial.getMiningLevel() - primaryMaterial.getMiningLevel()) / 2;
+            return primaryMaterial.getMiningLevel() + (secondaryMaterial.getMiningLevel() - primaryMaterial.getMiningLevel());
         } else {
             return primaryMaterial.getMiningLevel();
         }

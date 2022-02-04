@@ -12,7 +12,7 @@ public class SimpleDuoMaterial extends AbstractForgeroMaterial implements Simple
         super(material);
         miningLevel = material.primary.miningLevel;
         miningSpeed = material.primary.miningSpeed;
-        attackDamage = material.primary.damage;
+        attackDamage = material.primary.attackDamage;
         attackSpeed = material.primary.attackSpeed;
     }
 

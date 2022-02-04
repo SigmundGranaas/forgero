@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.material.material.realistic;
 
+import com.sigmundgranaas.forgero.core.material.material.MaterialType;
+
 import java.util.List;
 
 public class RealisticMaterialPOJO {

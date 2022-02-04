@@ -24,4 +24,15 @@ public class ShovelHead extends AbstractToolPartHead {
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.SHOVEL;
     }
+
+    @Override
+    public float getAttackSpeed() {
+        return headStrategy.getAttackSpeed() - 3.0f;
+    }
+
+    @Override
+    public float getAttackDamage() {
+        return 1 + headStrategy.getAttackDamage();
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material.simple;
 
-import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
+import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ public class SimpleMaterialPOJO {
     public Palette palette;
     public Primary primary;
     public Secondary secondary;
+
 
     public static SimpleMaterialPOJO createDefaultMaterialPOJO() {
         SimpleMaterialPOJO pojo = new SimpleMaterialPOJO();
@@ -30,8 +31,7 @@ public class SimpleMaterialPOJO {
         primary.miningLevel = 5;
         primary.attackSpeed = 5;
         primary.miningSpeed = 5;
-        primary.durability = 50;
-        primary.damage = 5;
+        primary.attackDamage = 5;
         pojo.primary = primary;
 
 
@@ -59,8 +59,7 @@ public class SimpleMaterialPOJO {
         public int miningLevel;
         public int miningSpeed;
         public int attackSpeed;
-        public int durability;
-        public int damage;
+        public int attackDamage;
     }
 
     public static class Secondary {

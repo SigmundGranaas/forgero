@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.material.material;
 
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
-import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import org.jetbrains.annotations.NotNull;

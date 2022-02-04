@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.material.material.factory;
 
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
+import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -7,6 +7,11 @@ public interface ToolPartHead extends ForgeroToolPart {
 
     int getMiningLevel();
 
+    float getAttackDamage();
+
+    float getMiningSpeedMultiplier();
+
+    float getAttackSpeed();
 
     ForgeroToolTypes getToolType();
 }

@@ -66,18 +66,18 @@ public class ForgeroToolBase implements ForgeroTool {
     }
 
     @Override
-    public int getAttackDamage() {
-        return 1;
+    public float getAttackDamage() {
+        return head.getAttackDamage();
     }
 
     @Override
     public float getAttackSpeed() {
-        return 1f;
+        return head.getAttackSpeed();
     }
 
     @Override
     public float getMiningSpeedMultiplier() {
-        return 1f;
+        return head.getMiningSpeedMultiplier();
     }
 
     @Override

@@ -22,8 +22,8 @@ public class ItemFactoryImpl implements ItemFactory {
     @Override
     public Item createTool(ForgeroTool tool) {
         return switch (tool.getToolType()) {
-            case PICKAXE -> new ForgeroPickaxeItem(new ToolMaterialAdapter(tool.getMaterial()), tool.getAttackDamage(), tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
-            case SHOVEL -> new ShovelItem(new ToolMaterialAdapter(tool.getMaterial()), tool.getAttackDamage(), tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
+            case PICKAXE -> new ForgeroPickaxeItem(new ToolMaterialAdapter(tool.getMaterial()), 1, tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
+            case SHOVEL -> new ShovelItem(new ToolMaterialAdapter(tool.getMaterial()), 1.5f, tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
             case SWORD -> null;
         };
     }

@@ -1,7 +1,6 @@
-package com.sigmundgranaas.forgero.core.material.material.realistic;
+package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
-import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
 import org.jetbrains.annotations.NotNull;
 

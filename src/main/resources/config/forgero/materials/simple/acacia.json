@@ -17,6 +17,10 @@
     ]
   },
   "primary": {
+    "miningLevel": 0,
+    "miningSpeed": 2.0,
+    "attackDamage": 0.0,
+    "attackSpeed": 0.0
   },
   "secondary": {
   }

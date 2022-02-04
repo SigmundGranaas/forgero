@@ -1,6 +1,6 @@
 {
   "name": "Netherite",
-  "rarity": 100,
+  "rarity": 90,
   "type": "METAL",
   "durability": 2100,
   "ingredient": {
@@ -19,6 +19,10 @@
     ]
   },
   "primary": {
+    "miningLevel": 4,
+    "miningSpeed": 9.0,
+    "attackDamage": 4.0,
+    "attackSpeed": 0.0
   },
   "secondary": {
   }

@@ -30,7 +30,7 @@ public interface ForgeroTool {
 
     int getDurability();
 
-    int getAttackDamage();
+    float getAttackDamage();
 
     float getAttackSpeed();
 

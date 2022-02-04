@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.toolpart.ToolPartPropertyStrategy;
 import java.util.Locale;
 
 public abstract class AbstractToolPartHead extends AbstractToolPart implements ToolPartHead {
-    private final ToolPartHeadStrategy headStrategy;
+    protected final ToolPartHeadStrategy headStrategy;
 
     public AbstractToolPartHead(ToolPartHeadStrategy headStrategy) {
         super(headStrategy);
@@ -37,6 +37,21 @@ public abstract class AbstractToolPartHead extends AbstractToolPart implements T
     }
 
     @Override
+    public float getAttackDamage() {
+        return headStrategy.getAttackDamage();
+    }
+
+    @Override
+    public float getMiningSpeedMultiplier() {
+        return headStrategy.getMiningSpeedMultiplier();
+    }
+
+    @Override
+    public float getAttackSpeed() {
+        return headStrategy.getAttackSpeed();
+    }
+
+    @Override
     public void createToolPartDescription(ToolPartDescriptionWriter writer) {
         super.createToolPartDescription(writer);
         writer.addMiningLevel(getMiningLevel());
@@ -46,5 +61,6 @@ public abstract class AbstractToolPartHead extends AbstractToolPart implements T
     public ToolPartPropertyStrategy getStrategy() {
         return strategy;
     }
+
 
 }

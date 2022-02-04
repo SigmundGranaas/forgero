@@ -1,7 +1,7 @@
 {
   "name": "Diamond",
   "rarity": 100,
-  "type": "METAL",
+  "type": "MINERAL",
   "durability": 1561,
   "properties": [
     "sparkling"
@@ -22,6 +22,10 @@
     ]
   },
   "primary": {
+    "miningLevel": 3,
+    "miningSpeed": 8.0,
+    "attackDamage": 3.0,
+    "attackSpeed": 0.0
   },
   "secondary": {
   }

@@ -34,4 +34,14 @@ public class PickaxeHead extends AbstractToolPartHead {
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.PICKAXE;
     }
+
+    @Override
+    public float getAttackSpeed() {
+        return headStrategy.getAttackSpeed() - 2.8f;
+    }
+
+    @Override
+    public float getAttackDamage() {
+        return 1 + headStrategy.getAttackDamage();
+    }
 }

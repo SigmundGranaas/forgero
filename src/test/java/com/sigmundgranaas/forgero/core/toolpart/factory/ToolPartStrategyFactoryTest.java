@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
+import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.material.material.realistic.EmptySecondaryMaterial;
-import com.sigmundgranaas.forgero.core.material.material.realistic.MaterialType;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleDuoMaterial;

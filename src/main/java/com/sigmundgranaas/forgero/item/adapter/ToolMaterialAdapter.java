@@ -27,7 +27,7 @@ public class ToolMaterialAdapter implements ToolMaterial {
 
     @Override
     public float getAttackDamage() {
-        return strategy.getDamage();
+        return strategy.getAttackDamage();
     }
 
     @Override

@@ -1,6 +1,6 @@
 {
   "name": "Birch",
-  "rarity": 100,
+  "rarity": 5,
   "type": "WOOD",
   "durability": 59,
   "ingredient": {
@@ -17,6 +17,10 @@
     ]
   },
   "primary": {
+    "miningLevel": 0,
+    "miningSpeed": 2.0,
+    "attackDamage": 0.0,
+    "attackSpeed": 0.0
   },
   "secondary": {
   }
