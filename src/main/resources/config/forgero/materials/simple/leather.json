@@ -15,5 +15,9 @@
     "exclude": []
   },
   "secondary": {
+    "miningLevel": 0,
+    "miningSpeedAddition": 0.0,
+    "attackDamageAddition": -1.0,
+    "attackSpeedAddition": 0.5
   }
 }

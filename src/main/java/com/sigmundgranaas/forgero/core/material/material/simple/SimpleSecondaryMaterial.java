@@ -7,7 +7,7 @@ public interface SimpleSecondaryMaterial extends SecondaryMaterial {
 
     float getMiningSpeedAddition();
 
-    int getAttackDamageAddition();
+    float getAttackDamageAddition();
 
     float getAttackSpeedAddition();
 }

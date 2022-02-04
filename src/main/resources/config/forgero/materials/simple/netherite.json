@@ -25,5 +25,9 @@
     "attackSpeed": 0.0
   },
   "secondary": {
+    "miningLevel": 4,
+    "miningSpeedAddition": 1.2,
+    "attackDamageAddition": 1.2,
+    "attackSpeedAddition": 0.0
   }
 }

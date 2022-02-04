@@ -73,7 +73,7 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     }
 
     @Override
-    public int getAttackDamageAddition() {
+    public float getAttackDamageAddition() {
         return 0;
     }
 

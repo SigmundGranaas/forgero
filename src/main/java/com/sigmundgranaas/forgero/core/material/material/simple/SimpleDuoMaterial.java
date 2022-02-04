@@ -8,12 +8,20 @@ public class SimpleDuoMaterial extends AbstractForgeroMaterial implements Simple
     private final int attackDamage;
     private final float attackSpeed;
 
+    private final float miningSpeedAddition;
+    private final float attackDamageAddition;
+    private final float attackSpeedAddition;
+
+
     public SimpleDuoMaterial(SimpleMaterialPOJO material) {
         super(material);
         miningLevel = material.primary.miningLevel;
         miningSpeed = material.primary.miningSpeed;
         attackDamage = material.primary.attackDamage;
         attackSpeed = material.primary.attackSpeed;
+        miningSpeedAddition = material.secondary.miningSpeedAddition;
+        attackDamageAddition = material.secondary.attackDamageAddition;
+        attackSpeedAddition = material.secondary.attackSpeedAddition;
     }
 
     @Override
@@ -23,17 +31,17 @@ public class SimpleDuoMaterial extends AbstractForgeroMaterial implements Simple
 
     @Override
     public float getMiningSpeedAddition() {
-        return 0;
+        return miningSpeedAddition;
     }
 
     @Override
-    public int getAttackDamageAddition() {
-        return 0;
+    public float getAttackDamageAddition() {
+        return attackDamageAddition;
     }
 
     @Override
     public float getAttackSpeedAddition() {
-        return 0;
+        return attackSpeedAddition;
     }
 
     @Override

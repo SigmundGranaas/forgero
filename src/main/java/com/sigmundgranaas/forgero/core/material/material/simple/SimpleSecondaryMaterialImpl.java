@@ -6,7 +6,7 @@ public class SimpleSecondaryMaterialImpl extends AbstractForgeroMaterial impleme
     private final int miningLevel;
     private final float miningSpeedAddition;
     private final float attackSpeedAddition;
-    private final int attackDamageAddition;
+    private final float attackDamageAddition;
 
     public SimpleSecondaryMaterialImpl(SimpleMaterialPOJO material) {
         super(material);
@@ -27,7 +27,7 @@ public class SimpleSecondaryMaterialImpl extends AbstractForgeroMaterial impleme
     }
 
     @Override
-    public int getAttackDamageAddition() {
+    public float getAttackDamageAddition() {
         return attackDamageAddition;
     }
 

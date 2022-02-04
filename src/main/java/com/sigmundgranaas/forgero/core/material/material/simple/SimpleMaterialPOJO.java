@@ -66,6 +66,6 @@ public class SimpleMaterialPOJO {
         public int miningLevel;
         public float miningSpeedAddition;
         public float attackSpeedAddition;
-        public int attackDamageAddition;
+        public float attackDamageAddition;
     }
 }
