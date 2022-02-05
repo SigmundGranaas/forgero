@@ -4,10 +4,17 @@ import com.sigmundgranaas.forgero.core.toolpart.AbstractToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 public class Binding extends AbstractToolPart implements ToolPartBinding {
-    public Binding(BindingStrategy strategy) {
-        super(strategy);
+    BindingStrategy strategy;
+
+    public Binding(BindingState state) {
+        super(state);
+        this.strategy = state.createBindingStrategy();
     }
 
+    @Override
+    public int getDurability() {
+        return strategy.getDurability();
+    }
 
     @Override
     public String getToolPartName() {

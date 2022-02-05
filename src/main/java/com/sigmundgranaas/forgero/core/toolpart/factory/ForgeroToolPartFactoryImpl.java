@@ -1,15 +1,20 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
+import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
+import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.binding.Binding;
+import com.sigmundgranaas.forgero.core.toolpart.binding.BindingState;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.Handle;
+import com.sigmundgranaas.forgero.core.toolpart.handle.HandleState;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
 import com.sigmundgranaas.forgero.core.toolpart.head.PickaxeHead;
 import com.sigmundgranaas.forgero.core.toolpart.head.ShovelHead;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
@@ -35,15 +40,16 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
         PrimaryMaterial material = (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(identifier.getMaterial());
         return switch (identifier.getToolPartType()) {
             case HEAD -> createToolPartHead(identifier, material);
-            case HANDLE -> new Handle(ToolPartStrategyFactory.createToolPartHandleStrategy(material));
-            case BINDING -> new Binding(ToolPartStrategyFactory.createToolPartBinding(material));
+            case HANDLE -> new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem()));
+            case BINDING -> new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem()));
         };
     }
 
     private ToolPartHead createToolPartHead(@NotNull ForgeroToolPartIdentifier identifier, PrimaryMaterial material) {
+
         return switch (((ForgeroToolPartHeadIdentifier) identifier).getHeadType()) {
-            case PICKAXE -> new PickaxeHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.PICKAXE, material));
-            case SHOVEL -> new ShovelHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.SHOVEL, material));
+            case PICKAXE -> new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE));
+            case SHOVEL -> new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.SHOVEL));
             case SWORD -> null;
         };
     }
@@ -85,10 +91,10 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
 
     private List<ForgeroToolPart> createBaseToolPartsFromMaterial(PrimaryMaterial material) {
         List<ForgeroToolPart> toolParts = new ArrayList<>();
-        toolParts.add(new Handle(ToolPartStrategyFactory.createToolPartHandleStrategy(material)));
-        toolParts.add(new PickaxeHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.PICKAXE, material)));
-        toolParts.add(new ShovelHead(ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.SHOVEL, material)));
-        toolParts.add(new Binding(ToolPartStrategyFactory.createToolPartBinding(material)));
+        toolParts.add(new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem())));
+        toolParts.add(new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE)));
+        toolParts.add(new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.SHOVEL)));
+        toolParts.add(new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem())));
         return toolParts;
     }
 }

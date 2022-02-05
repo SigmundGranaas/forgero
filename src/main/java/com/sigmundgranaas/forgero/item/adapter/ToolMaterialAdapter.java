@@ -1,18 +1,22 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.gem.EmptyGem;
+import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartStrategyFactory;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHeadStrategy;
+import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
+import com.sigmundgranaas.forgero.core.toolpart.head.HeadStrategy;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public class ToolMaterialAdapter implements ToolMaterial {
-    ToolPartHeadStrategy strategy;
+    private final HeadStrategy strategy;
+    private final HeadState state;
 
     public ToolMaterialAdapter(PrimaryMaterial material) {
-        this.strategy = ToolPartStrategyFactory.createToolPartHeadStrategy(ForgeroToolTypes.PICKAXE, material);
+        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE);
+        this.strategy = state.createHeadStrategy();
     }
 
     @Override
@@ -43,7 +47,7 @@ public class ToolMaterialAdapter implements ToolMaterial {
     @Override
     public Ingredient getRepairIngredient() {
         JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("item", strategy.getMaterial().getIngredient());
+        ingredient.addProperty("item", state.getPrimaryMaterial().getIngredient());
         return Ingredient.fromJson(ingredient);
     }
 }

@@ -5,5 +5,6 @@ public enum GemTypes {
     ATTACK_DAMAGE,
     MINING_SPEED,
     MINING_LEVEL,
+    EMPTY
 
 }

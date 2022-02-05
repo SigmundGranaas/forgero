@@ -1,30 +1,28 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
+import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.core.toolpart.ToolPartPropertyStrategy;
 
 public abstract class ToolPartBuilder {
     protected final PrimaryMaterial primary;
     protected SecondaryMaterial secondary;
     protected Gem gem;
-    protected ToolPartPropertyStrategy strategy;
 
 
     public ToolPartBuilder(PrimaryMaterial primary) {
         this.primary = primary;
         this.secondary = new EmptySecondaryMaterial();
-        this.gem = null;
+        this.gem = EmptyGem.createEmptyGem();
     }
 
     public ToolPartBuilder(ForgeroToolPart part) {
         this.primary = part.getPrimaryMaterial();
         this.secondary = part.getSecondaryMaterial();
-        this.strategy = part.getStrategy();
-        this.gem = null;
+        this.gem = part.getGem();
     }
 
     public PrimaryMaterial getPrimary() {
@@ -44,8 +42,8 @@ public abstract class ToolPartBuilder {
         return gem;
     }
 
-    public ToolPartBuilder setGem(Gem gem) {
-        this.gem = gem;
+    protected ToolPartBuilder setGem(Gem newGem) {
+        this.gem = newGem;
         return this;
     }
 

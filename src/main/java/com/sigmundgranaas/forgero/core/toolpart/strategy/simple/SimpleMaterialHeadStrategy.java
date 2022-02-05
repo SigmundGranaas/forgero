@@ -2,10 +2,10 @@ package com.sigmundgranaas.forgero.core.toolpart.strategy.simple;
 
 import com.sigmundgranaas.forgero.core.material.material.simple.SimplePrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHeadStrategy;
+import com.sigmundgranaas.forgero.core.toolpart.strategy.HeadMaterialStrategy;
 
-public class SimpleHeadStrategy extends SimpleDuoMaterialToolPartStrategy implements ToolPartHeadStrategy {
-    public SimpleHeadStrategy(SimplePrimaryMaterial primary, SimpleSecondaryMaterial secondary) {
+public class SimpleMaterialHeadStrategy extends SimpleDuoMaterialToolPartStrategy implements HeadMaterialStrategy {
+    public SimpleMaterialHeadStrategy(SimplePrimaryMaterial primary, SimpleSecondaryMaterial secondary) {
         super(primary, secondary);
     }
 
