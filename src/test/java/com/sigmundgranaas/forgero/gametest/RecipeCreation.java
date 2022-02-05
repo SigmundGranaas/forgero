@@ -56,7 +56,7 @@ public class RecipeCreation {
     public void TestBasicToolDamage(TestContext context) {
         ItemStack tool = new ItemStack(createDummyToolItem());
         PlayerEntity mockPlayer = context.createMockPlayer();
-        BeeEntity bee = context.spawnEntity(EntityType.BEE, 0, 0, 0);
+        BeeEntity bee = context.spawnEntity(EntityType.BEE, 1, 1, 1);
         float healthBefore = bee.getHealth();
         mockPlayer.setStackInHand(Hand.MAIN_HAND, tool);
         mockPlayer.attack(bee);
@@ -86,9 +86,9 @@ public class RecipeCreation {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing")
     public void testCraftAllHandles(TestContext context) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
-        context.setBlockState(new BlockPos(0, 0, 0), Blocks.CRAFTING_TABLE);
-        CraftingTableBlock craftingTableBlock = (CraftingTableBlock) context.getBlockState(new BlockPos(0, 0, 0)).getBlock();
-        mockPlayer.currentScreenHandler = craftingTableBlock.createScreenHandlerFactory(craftingTableBlock.getDefaultState(), context.getWorld(), new BlockPos(0, 0, 0)).createMenu(0, mockPlayer.getInventory(), mockPlayer);
+        context.setBlockState(new BlockPos(1, 1, 1), Blocks.CRAFTING_TABLE);
+        CraftingTableBlock craftingTableBlock = (CraftingTableBlock) context.getBlockState(new BlockPos(1, 1, 1)).getBlock();
+        mockPlayer.currentScreenHandler = craftingTableBlock.createScreenHandlerFactory(craftingTableBlock.getDefaultState(), context.getWorld(), new BlockPos(1, 1, 1)).createMenu(0, mockPlayer.getInventory(), mockPlayer);
         int total = 0;
         int correct = 0;
         for (Item toolPart : ItemCollection.INSTANCE.getToolParts().stream().filter(toolPart -> ((ToolPartItem) toolPart).getType() == ForgeroToolPartTypes.HANDLE).collect(Collectors.toList())
@@ -117,9 +117,9 @@ public class RecipeCreation {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing", required = false)
     public void testingGeneratedRecipes(TestContext context) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
-        context.setBlockState(new BlockPos(0, 0, 0), Blocks.CRAFTING_TABLE);
-        CraftingTableBlock craftingTableBlock = (CraftingTableBlock) context.getBlockState(new BlockPos(0, 0, 0)).getBlock();
-        mockPlayer.currentScreenHandler = craftingTableBlock.createScreenHandlerFactory(craftingTableBlock.getDefaultState(), context.getWorld(), new BlockPos(0, 0, 0)).createMenu(0, mockPlayer.getInventory(), mockPlayer);
+        context.setBlockState(new BlockPos(1, 1, 1), Blocks.CRAFTING_TABLE);
+        CraftingTableBlock craftingTableBlock = (CraftingTableBlock) context.getBlockState(new BlockPos(1, 1, 1)).getBlock();
+        mockPlayer.currentScreenHandler = craftingTableBlock.createScreenHandlerFactory(craftingTableBlock.getDefaultState(), context.getWorld(), new BlockPos(1, 1, 1)).createMenu(0, mockPlayer.getInventory(), mockPlayer);
         AtomicInteger total = new AtomicInteger();
         AtomicInteger correct = new AtomicInteger();
         RecipeCollection.INSTANCE.getRecipes().stream().filter(this::isCraftingTableRecipe).forEach(recipe -> {

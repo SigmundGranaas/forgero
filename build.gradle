@@ -130,6 +130,14 @@ loom {
             name "Auto Test Server"
             vmArg "-Dfabric.autoTest"
         }
+
+        gametestClient {
+            inherit testmodServer
+            client()
+
+            name "test client"
+            //vmArg "-Dfabric.autoTest"
+        }
     }
 }
 
