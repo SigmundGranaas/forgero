@@ -1,30 +1,31 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.gem.Gem;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 
 import java.util.function.Function;
 
-public class SecondaryMaterial2DModel extends Unbaked2DToolPartModel {
+public class Gem2DModel extends Unbaked2DToolPartModel {
     private final ToolPartModelType type;
-    private final SecondaryMaterial secondaryMaterial;
+    private final Gem gem;
 
-    public SecondaryMaterial2DModel(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, SecondaryMaterial material, ToolPartModelType modelType) {
+    public Gem2DModel(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, Gem gem, ToolPartModelType modelType) {
         super(loader, textureGetter);
         this.type = modelType;
-        this.secondaryMaterial = material;
+        this.gem = gem;
     }
 
     @Override
     public String getIdentifier() {
-        return secondaryMaterial.getName() + "_" + type.toFileName() + "_secondary";
+        return type.toFileName() + "_gem";
     }
+
 
     @Override
     public int getModelLayerIndex() {
-        return 3;
+        return 4;
     }
 }

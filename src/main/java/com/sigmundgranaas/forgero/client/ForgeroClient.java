@@ -63,6 +63,9 @@ public class ForgeroClient implements ClientModInitializer {
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
             modelSet.forEach(out);
             out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "transparent_base", "inventory"));
+            out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "pickaxehead_gem" + "texture_dummy", "inventory"));
+            out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "handle_gem" + "texture_dummy", "inventory"));
+            out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "fullhandle_gem" + "texture_dummy", "inventory"));
         });
     }
 

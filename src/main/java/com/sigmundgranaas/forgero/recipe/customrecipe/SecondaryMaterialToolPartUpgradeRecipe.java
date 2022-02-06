@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.recipe;
+package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.Forgero;
@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
+import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;

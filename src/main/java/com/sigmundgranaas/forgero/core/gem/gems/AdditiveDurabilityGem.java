@@ -13,8 +13,8 @@ public class AdditiveDurabilityGem extends ForgeroGem implements DurabilityGem, 
     }
 
     @Override
-    public ForgeroGem createNewGem(int level, String Identifier) {
-        return new AdditiveMiningSpeedGem(level, Identifier);
+    public AdditiveDurabilityGem createNewGem(int level, String Identifier) {
+        return new AdditiveDurabilityGem(level, Identifier);
     }
 
     @Override

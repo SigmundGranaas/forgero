@@ -1,10 +1,11 @@
-package com.sigmundgranaas.forgero.recipe;
+package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.items.GemItem;
+import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -28,15 +29,7 @@ public class GemUpgradeRecipe extends SmithingRecipe {
         this.addition = recipe.getAddition();
     }
 
-    @Override
-    public boolean matches(Inventory inventory, World world) {
-        if (super.matches(inventory, world)) {
-            return getGem(inventory).isPresent();
-        }
-        return false;
-    }
-
-    Optional<Gem> getGem(Inventory inventory) {
+    public static Optional<Gem> getGem(Inventory inventory) {
         Gem baseGem;
         Gem additionGem;
         ItemStack base = inventory.getStack(0);
@@ -54,6 +47,14 @@ public class GemUpgradeRecipe extends SmithingRecipe {
         }
 
         return baseGem.upgradeGem(additionGem);
+    }
+
+    @Override
+    public boolean matches(Inventory inventory, World world) {
+        if (super.matches(inventory, world)) {
+            return getGem(inventory).isPresent();
+        }
+        return false;
     }
 
     @Override

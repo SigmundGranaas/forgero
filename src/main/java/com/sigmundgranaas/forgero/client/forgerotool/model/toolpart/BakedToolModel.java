@@ -34,8 +34,8 @@ public class BakedToolModel implements FabricBakedModel {
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        this.head.emitItemQuads(null, null, context);
         this.handle.emitItemQuads(null, null, context);
+        this.head.emitItemQuads(null, null, context);
         this.binding.emitItemQuads(null, null, context);
     }
 }

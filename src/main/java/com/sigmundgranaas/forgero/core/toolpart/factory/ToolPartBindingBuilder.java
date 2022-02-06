@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
-import com.sigmundgranaas.forgero.core.gem.EmptyGem;
+import com.sigmundgranaas.forgero.core.gem.BindingGem;
+import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.toolpart.binding.Binding;
 import com.sigmundgranaas.forgero.core.toolpart.binding.BindingState;
@@ -16,7 +17,15 @@ public class ToolPartBindingBuilder extends ToolPartBuilder {
     }
 
     @Override
+    public ToolPartBuilder setGem(Gem newGem) {
+        if (newGem instanceof BindingGem) {
+            gem = newGem;
+        }
+        return this;
+    }
+
+    @Override
     public Binding createToolPart() {
-        return new Binding(new BindingState(primary, secondary, EmptyGem.createEmptyGem()));
+        return new Binding(new BindingState(primary, secondary, (BindingGem) gem));
     }
 }

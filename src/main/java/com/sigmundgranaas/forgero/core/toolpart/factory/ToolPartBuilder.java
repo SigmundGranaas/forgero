@@ -42,10 +42,7 @@ public abstract class ToolPartBuilder {
         return gem;
     }
 
-    public ToolPartBuilder setGem(Gem newGem) {
-        this.gem = newGem;
-        return this;
-    }
+    public abstract ToolPartBuilder setGem(Gem newGem);
 
     public abstract ForgeroToolPart createToolPart();
 }

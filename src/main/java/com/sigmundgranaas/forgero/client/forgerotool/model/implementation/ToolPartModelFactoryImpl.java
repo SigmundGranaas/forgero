@@ -2,11 +2,13 @@ package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Gem2DModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.SecondaryMaterial2DModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Unbaked2DToolPartModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.binding.BindingModel2D;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.handle.HandleModel2D;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.head.HeadModel2D;
+import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -55,6 +57,9 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
             models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart)));
             Arrays.stream(ForgeroToolTypes.values()).forEach(toolTypes -> models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart, toolTypes))));
         });
+        models.add(new Gem2DModel(loader, textureGetter, EmptyGem.createEmptyGem(), ToolPartModelType.PICKAXEHEAD));
+        models.add(new Gem2DModel(loader, textureGetter, EmptyGem.createEmptyGem(), ToolPartModelType.HANDLE));
+        models.add(new Gem2DModel(loader, textureGetter, EmptyGem.createEmptyGem(), ToolPartModelType.FULLHANDLE));
 
         models.forEach(model -> toolPartModels.put(model.getIdentifier(), model.bake()));
     }

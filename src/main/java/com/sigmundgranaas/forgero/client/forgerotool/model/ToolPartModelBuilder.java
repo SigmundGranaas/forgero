@@ -12,7 +12,7 @@ public interface ToolPartModelBuilder {
 
     ToolPartModelBuilder addSecondaryMaterial(FabricBakedModel secondaryMaterial);
 
-    ToolPartModelBuilder addGem();
+    ToolPartModelBuilder addGem(FabricBakedModel secondaryMaterial);
 
     FabricBakedModel build();
 

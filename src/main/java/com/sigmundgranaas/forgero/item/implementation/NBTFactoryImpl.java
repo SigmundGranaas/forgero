@@ -71,6 +71,7 @@ public class NBTFactoryImpl implements NBTFactory {
             builder.setSecondary((SecondaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
         }
 
+
         if (!gemString.equals("")) {
             builder.setGem(getGemFromNbtString(gemString));
         }
