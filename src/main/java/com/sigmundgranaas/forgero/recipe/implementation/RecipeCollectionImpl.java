@@ -31,6 +31,6 @@ public class RecipeCollectionImpl implements RecipeCollection {
 
     @Override
     public List<ForgeroRecipeSerializer> getRecipeTypes() {
-        return List.of(ToolRecipe.ToolRecipeSerializer.INSTANCE, ToolWithBindingRecipe.ToolWithBindingRecipeSerializer.INSTANCE, SecondaryMaterialToolPartUpgradeRecipe.Serializer.INSTANCE);
+        return List.of(ToolRecipe.ToolRecipeSerializer.INSTANCE, ToolWithBindingRecipe.ToolWithBindingRecipeSerializer.INSTANCE, SecondaryMaterialToolPartUpgradeRecipe.Serializer.INSTANCE, GemUpgradeRecipe.Serializer.INSTANCE);
     }
 }

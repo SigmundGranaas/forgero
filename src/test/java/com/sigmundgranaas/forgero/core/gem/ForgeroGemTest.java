@@ -63,5 +63,10 @@ class ForgeroGemTest {
         public GemTypes getType() {
             return GemTypes.DURABILITY;
         }
+
+        @Override
+        public Gem createGem(int level) {
+            return createNewGem(level, getIdentifier());
+        }
     }
 }

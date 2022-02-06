@@ -16,7 +16,7 @@ import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.adapter.ToolMaterialAdapter;
-import com.sigmundgranaas.forgero.item.tool.ForgeroPickaxeItem;
+import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

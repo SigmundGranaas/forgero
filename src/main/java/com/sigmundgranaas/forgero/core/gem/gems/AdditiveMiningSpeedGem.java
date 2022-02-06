@@ -3,27 +3,27 @@ package com.sigmundgranaas.forgero.core.gem.gems;
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.HeadGem;
+import com.sigmundgranaas.forgero.core.gem.MiningSpeedGem;
 
-public class AdditiveAttackDamageGemImpl extends ForgeroGem implements AdditiveAttackDamageGem, HeadGem {
-    public AdditiveAttackDamageGemImpl(int gemLevel, String identifier) {
+public class AdditiveMiningSpeedGem extends ForgeroGem implements MiningSpeedGem, HeadGem {
+    public AdditiveMiningSpeedGem(int gemLevel, String identifier) {
         super(gemLevel, identifier);
     }
 
     @Override
     public ForgeroGem createNewGem(int level, String Identifier) {
-        return new AdditiveAttackDamageGemImpl(level, getIdentifier());
+        return new AdditiveMiningSpeedGem(level, Identifier);
     }
 
     @Override
     public boolean equals(Gem newGem) {
-        return (newGem instanceof AdditiveAttackDamageGemImpl && newGem.getLevel() == this.getLevel());
+        return newGem instanceof AdditiveMiningSpeedGem && newGem.getLevel() == getLevel();
     }
 
     @Override
-    public float applyAttackDamage(float currentDamage) {
-        return AdditiveAttackDamageGem.super.applyAttackDamage(currentDamage);
+    public float applyMiningSpeed(float oldMiningSpeed) {
+        return oldMiningSpeed + 1f * getLevel();
     }
-
 
     @Override
     public Gem createGem(int level) {

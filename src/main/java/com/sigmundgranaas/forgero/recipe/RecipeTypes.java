@@ -9,6 +9,7 @@ public enum RecipeTypes {
     SHOVELHEAD_RECIPE,
     TOOL_PART_SECONDARY_MATERIAL_UPGRADE,
     TOOL_RECIPE,
+    GEM_UPGRADE_RECIPE,
     TOOL_WITH_BINDING_RECIPE;
 
     String getName() {

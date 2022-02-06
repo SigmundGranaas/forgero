@@ -10,4 +10,12 @@ public interface Gem {
     int getLevel();
 
     Optional<Gem> upgradeGem(Gem newGem);
+
+    Gem createGem(int level);
+
+    String getName();
+
+    default void createToolPartDescription(GemDescriptionWriter writer) {
+        writer.createGemDescription(this);
+    }
 }

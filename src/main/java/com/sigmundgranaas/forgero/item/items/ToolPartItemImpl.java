@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.implementation;
+package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;

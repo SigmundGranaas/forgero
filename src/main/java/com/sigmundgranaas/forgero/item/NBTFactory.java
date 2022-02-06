@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.item;
 
+import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.implementation.NBTFactoryImpl;
@@ -39,4 +40,10 @@ public interface NBTFactory {
 
     @NotNull
     NbtCompound createNBTFromToolPart(@NotNull ForgeroToolPart toolPart);
+
+    @NotNull
+    Gem createGemFromNbt(@NotNull NbtCompound compound);
+
+    @NotNull
+    NbtCompound createNBTFromGem(@NotNull Gem gem, NbtCompound compound);
 }

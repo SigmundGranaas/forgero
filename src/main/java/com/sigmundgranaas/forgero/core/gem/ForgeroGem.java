@@ -36,4 +36,9 @@ public abstract class ForgeroGem implements Gem {
 
     public abstract boolean equals(Gem newGem);
 
+    @Override
+    public String getName() {
+        return getIdentifier();
+    }
+
 }

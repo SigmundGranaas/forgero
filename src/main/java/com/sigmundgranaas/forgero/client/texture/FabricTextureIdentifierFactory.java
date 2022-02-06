@@ -21,7 +21,7 @@ public class FabricTextureIdentifierFactory implements TextureIdentifierFactory 
 
     @Override
     public Optional<ToolPartTextureIdentifier> createToolPartTextureIdentifier(Identifier part) {
-        if (!part.getPath().contains(".png") || !part.getNamespace().equals(Forgero.MOD_NAMESPACE) || part.toString().contains("transparent_base")) {
+        if (!part.getPath().contains(".png") || !part.getNamespace().equals(Forgero.MOD_NAMESPACE) || part.toString().contains("transparent_base") || part.toString().contains("gem")) {
             return Optional.empty();
         }
         String[] elements = part.getPath().split("/");

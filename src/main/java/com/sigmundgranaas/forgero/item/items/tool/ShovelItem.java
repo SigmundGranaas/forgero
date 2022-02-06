@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.tool;
+package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;

@@ -50,6 +50,18 @@ public enum ToolPartModelType {
         };
     }
 
+    public static boolean isModelIdentifier(String[] identifier) {
+        if (identifier.length == 2) {
+            for (ToolPartModelType value : ToolPartModelType.values()) {
+                if (value.name().toLowerCase().equals(identifier[1].toLowerCase(Locale.ROOT))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public String toFileName() {
         return this.toString().toLowerCase(Locale.ROOT);
     }

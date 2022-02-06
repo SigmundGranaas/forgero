@@ -5,8 +5,9 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ItemGroups;
 import com.sigmundgranaas.forgero.item.adapter.ToolMaterialAdapter;
-import com.sigmundgranaas.forgero.item.tool.ForgeroPickaxeItem;
-import com.sigmundgranaas.forgero.item.tool.ShovelItem;
+import com.sigmundgranaas.forgero.item.items.ToolPartItemImpl;
+import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
+import com.sigmundgranaas.forgero.item.items.tool.ShovelItem;
 import net.minecraft.item.Item;
 
 public class ItemFactoryImpl implements ItemFactory {

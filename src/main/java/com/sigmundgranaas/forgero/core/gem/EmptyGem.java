@@ -34,4 +34,9 @@ public class EmptyGem extends ForgeroGem implements HeadGem, HandleGem, BindingG
         return GemTypes.EMPTY;
     }
 
+    @Override
+    public Gem createGem(int level) {
+        return createEmptyGem();
+    }
+
 }

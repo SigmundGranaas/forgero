@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.registry;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
-import com.sigmundgranaas.forgero.item.tool.ForgeroPickaxeItem;
+import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 

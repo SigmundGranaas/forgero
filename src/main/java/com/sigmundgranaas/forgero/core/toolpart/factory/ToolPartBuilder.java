@@ -42,7 +42,7 @@ public abstract class ToolPartBuilder {
         return gem;
     }
 
-    protected ToolPartBuilder setGem(Gem newGem) {
+    public ToolPartBuilder setGem(Gem newGem) {
         this.gem = newGem;
         return this;
     }
