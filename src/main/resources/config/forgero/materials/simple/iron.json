@@ -9,6 +9,7 @@
   "properties": [
   ],
   "palette": {
+    "name": "iron",
     "include": [
       "minecraft:textures/item/iron_chestplate.png",
       "minecraft:textures/item/iron_helmet.png",

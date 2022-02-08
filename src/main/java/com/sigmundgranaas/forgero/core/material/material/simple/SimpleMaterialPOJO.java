@@ -47,6 +47,7 @@ public class SimpleMaterialPOJO {
     }
 
     public static class Palette {
+        public String name;
         public List<String> include;
         public List<String> exclude;
     }

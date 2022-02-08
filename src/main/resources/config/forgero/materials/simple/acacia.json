@@ -9,6 +9,7 @@
   "properties": [
   ],
   "palette": {
+    "name": "acacia",
     "include": [
       "minecraft:textures/item/acacia_boat.png"
     ],

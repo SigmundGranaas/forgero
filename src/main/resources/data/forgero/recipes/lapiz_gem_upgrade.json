@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:lapiz_gem"
+  },
+  "addition": {
+    "item": "forgero:lapiz_gem"
+  },
+  "result": {
+    "item": "forgero:lapiz_gem"
+  }
+}
+

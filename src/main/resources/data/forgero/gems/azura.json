@@ -1,0 +1,15 @@
+{
+  "name": "Azura",
+  "item_identifier": "forgero:item/azura_gem",
+  "palette": {
+    "name": "azura",
+    "include": [
+      "minecraft:textures/item/blue_dye.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "type": "DURABILITY",
+  "effect": "ADDITIVE",
+  "amount": 100.0
+}

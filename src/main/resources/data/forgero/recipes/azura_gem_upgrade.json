@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:azura_gem"
+  },
+  "addition": {
+    "item": "forgero:azura_gem"
+  },
+  "result": {
+    "item": "forgero:azura_gem"
+  }
+}
+

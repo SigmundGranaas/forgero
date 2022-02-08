@@ -9,6 +9,7 @@
   "properties": [
   ],
   "palette": {
+    "name": "oak",
     "include": [
       "minecraft:textures/item/oak_boat.png"
     ],

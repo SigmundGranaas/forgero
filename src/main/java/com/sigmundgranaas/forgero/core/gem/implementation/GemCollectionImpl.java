@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.gem.implementation;
 
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
-import com.sigmundgranaas.forgero.core.gem.GemLoader;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class GemCollectionImpl implements GemCollection {
     @Override
     public List<Gem> getGems() {
         if (gems == null) {
-            gems = GemLoader.INSTANCE.loadGems();
+            gems = new FileGemLoader().loadGems();
         }
         return gems;
     }

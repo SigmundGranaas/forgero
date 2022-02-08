@@ -9,6 +9,7 @@
   "properties": [
   ],
   "palette": {
+    "name": "spruce",
     "include": [
       "minecraft:textures/item/spruce_boat.png"
     ],

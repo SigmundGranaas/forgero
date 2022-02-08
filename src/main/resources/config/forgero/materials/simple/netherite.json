@@ -7,6 +7,7 @@
     "item": "minecraft:netherite_ingot"
   },
   "palette": {
+    "name": "netherite",
     "include": [
       "minecraft:textures/item/netherite_chestplate.png",
       "minecraft:textures/item/netherite_helmet.png",

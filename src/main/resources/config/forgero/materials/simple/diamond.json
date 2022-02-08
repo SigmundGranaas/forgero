@@ -10,6 +10,7 @@
     "item": "minecraft:diamond"
   },
   "palette": {
+    "name": "diamond",
     "include": [
       "minecraft:textures/item/diamond_chestplate.png",
       "minecraft:textures/item/diamond.png",

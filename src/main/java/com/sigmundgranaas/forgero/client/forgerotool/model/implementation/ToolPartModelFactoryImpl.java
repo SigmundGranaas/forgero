@@ -42,7 +42,6 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
 
         ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory()).getTextures().stream().map(texture -> new Basic2DToolPartModel(loader, textureGetter, texture)).forEach(models::add);
 
-
         models.forEach(model -> toolPartModels.put(model.getIdentifier(), model.bake()));
     }
 }
