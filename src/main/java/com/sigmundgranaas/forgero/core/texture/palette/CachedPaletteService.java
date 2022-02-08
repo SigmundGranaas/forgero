@@ -32,7 +32,7 @@ public class CachedPaletteService implements PaletteService {
 
     private void createGemPalettes() {
         try {
-            createPalette(new PaletteIdentifier("durability"), getPalettesFromGem("green_dye"));
+            createPalette(new PaletteIdentifier("durability"), getPalettesFromGem("yellow_dye"));
             createPalette(new PaletteIdentifier("miningspeed"), getPalettesFromGem("blue_dye"));
             createPalette(new PaletteIdentifier("attackspeed"), getPalettesFromGem("purple_dye"));
             createPalette(new PaletteIdentifier("attackdamage"), getPalettesFromGem("red_dye"));
