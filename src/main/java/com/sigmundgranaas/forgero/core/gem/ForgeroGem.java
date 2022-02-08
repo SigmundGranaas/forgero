@@ -38,7 +38,6 @@ public abstract class ForgeroGem implements Gem {
 
     @Override
     public String getName() {
-        return getIdentifier();
+        return getIdentifier().split("_")[0];
     }
-
 }

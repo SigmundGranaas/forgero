@@ -26,6 +26,10 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
 
     public abstract String getIdentifier();
 
+    public String getTextureIdentifier() {
+        return getIdentifier();
+    }
+
     public abstract int getModelLayerIndex();
 
     public String BuildJsonModel() {

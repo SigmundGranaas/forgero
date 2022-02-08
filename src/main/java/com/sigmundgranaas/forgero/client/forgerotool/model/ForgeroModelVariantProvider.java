@@ -23,7 +23,7 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
             String[] elements = modelId.getPath().split("_");
             if (ForgeroToolTypes.isTool(elements[1])) {
                 return new ToolModelVariant(collection);
-            } else if (ToolPartModelType.isModelIdentifier(elements)) {
+            } else if (ToolPartModelType.isItemModelIdentifier(elements)) {
                 return new ToolPartModelVariant(collection);
             }
 

@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTempla
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
+import net.minecraft.util.Pair;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,6 +27,19 @@ public class CachedPaletteService implements PaletteService {
         this.factory = factory;
         paletteCache = new HashMap<>();
         cachedPaletteTemplatesTextures = new HashMap<>();
+        createGemPalettes();
+    }
+
+    private void createGemPalettes() {
+        try {
+            createPalette(new PaletteIdentifier("durability"), getPalettesFromGem("green_dye"));
+            createPalette(new PaletteIdentifier("miningspeed"), getPalettesFromGem("blue_dye"));
+            createPalette(new PaletteIdentifier("attackspeed"), getPalettesFromGem("purple_dye"));
+            createPalette(new PaletteIdentifier("attackdamage"), getPalettesFromGem("red_dye"));
+        } catch (Exception ignored) {
+
+        }
+
     }
 
     @Override
@@ -33,26 +47,39 @@ public class CachedPaletteService implements PaletteService {
         if (paletteCache.containsKey(id.getIdentifier())) {
             return paletteCache.get(id.getIdentifier());
         } else {
-            return createPalette(id);
+            try {
+                Pair<List<Texture>, List<Texture>> references = getPalettesFromMaterial(id.material());
+                return createPalette(id, references);
+            } catch (IOException | URISyntaxException e) {
+                //TODO Proper exception handling
+                throw new IllegalArgumentException();
+            }
         }
     }
 
-    private Palette createPalette(PaletteIdentifier id) {
-        try {
-            List<Texture> inclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(id.getIdentifier()).getPaletteIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
-            List<Texture> exclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(id.getIdentifier()).getPaletteExclusionIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
-            UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, inclusions, exclusions);
-            Palette palette = factory.createPalette(unbakedPalette);
-            paletteCache.put(id.getIdentifier(), palette);
-            return palette;
-        } catch (IOException | URISyntaxException e) {
-            //TODO Proper exception handling
-            throw new IllegalArgumentException();
-        }
+    Pair<List<Texture>, List<Texture>> getPalettesFromMaterial(String material) throws IOException, URISyntaxException {
+        List<Texture> inclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(material).getPaletteIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
+        List<Texture> exclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(material).getPaletteExclusionIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
+        return new Pair<>(inclusions, exclusions);
+    }
+
+    Pair<List<Texture>, List<Texture>> getPalettesFromGem(String gem) throws IOException, URISyntaxException {
+        List<Texture> inclusions = getPalettes(List.of(new PaletteTemplateIdentifier("minecraft:textures/item/" + gem)));
+        List<Texture> exclusions = getPalettes(List.of());
+        return new Pair<>(inclusions, exclusions);
     }
 
 
-    private List<Texture> getPalettes(List<TextureIdentifier> templatePalettes) throws IOException, URISyntaxException {
+    private Palette createPalette(PaletteIdentifier id, Pair<List<Texture>, List<Texture>> reference) {
+        UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
+        Palette palette = factory.createPalette(unbakedPalette);
+        paletteCache.put(id.getIdentifier(), palette);
+        return palette;
+
+    }
+
+
+    private List<Texture> getPalettes(List<TextureIdentifier> templatePalettes) {
         List<Texture> paletteTemplates = new ArrayList<>();
         for (TextureIdentifier template : templatePalettes) {
             if (cachedPaletteTemplatesTextures.containsKey(template.getIdentifier())) {

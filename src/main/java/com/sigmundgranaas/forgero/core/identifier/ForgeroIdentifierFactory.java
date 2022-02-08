@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.core.identifier;
 
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.identifier.model.ForgeroModelIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifier;
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroModelIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
@@ -11,6 +13,8 @@ public interface ForgeroIdentifierFactory {
     ForgeroIdentifierFactory INSTANCE = ForgeroIdentifierFactoryImpl.getInstance();
 
     ForgeroIdentifier createForgeroIdentifier(Identifier identifier);
+
+    ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ToolPartModelType type);
 
     ForgeroIdentifier createForgeroIdentifier(String identifier);
 

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.GeneratedJsonLoader;
 import com.sigmundgranaas.forgero.utils.Utils;
 import net.minecraft.client.render.model.ModelLoader;
@@ -36,13 +36,11 @@ public class ModelLoaderMixin implements GeneratedJsonLoader {
 
     @Inject(method = "loadModelFromJson", at = @At("HEAD"), cancellable = true)
     public void loadModelFromJson(Identifier id, CallbackInfoReturnable<JsonUnbakedModel> cir) {
-        if (id.getNamespace().equals(Forgero.MOD_NAMESPACE)) {
-            if (id.getPath().contains("texture_dummy") || id.getPath().contains("transparent")) {
-                String modelJson = Utils.createModelJson(id.getPath().replace("texture_dummy", ""), "minecraft:item/handheld");
-                JsonUnbakedModel model = JsonUnbakedModel.deserialize(modelJson);
-                cir.setReturnValue(model);
-                cir.cancel();
-            }
+        if (id.getPath().contains("texture_dummy") || ToolPartModelType.isModelIdentifier(id.getPath().split("_"))) {
+            String modelJson = Utils.createModelJson(id.getPath().replace("texture_dummy", ""), "minecraft:item/handheld");
+            JsonUnbakedModel model = JsonUnbakedModel.deserialize(modelJson);
+            cir.setReturnValue(model);
+            cir.cancel();
         }
     }
 

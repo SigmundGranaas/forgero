@@ -13,12 +13,14 @@ public enum ToolPartModelType {
     PICKAXEHEAD,
     SHOVELHEAD,
     AXEHEAD,
+
+    HANDLE,
     FULLHANDLE,
     MEDIUMHANDLE,
     SHORTHANDLE,
-    PICKAXEBINDING,
-    HANDLE,
+
     BINDING,
+    PICKAXEBINDING,
     SHOVELBINDING;
 
     @SuppressWarnings("DuplicateBranchesInSwitch")
@@ -51,6 +53,17 @@ public enum ToolPartModelType {
     }
 
     public static boolean isModelIdentifier(String[] identifier) {
+        if (identifier.length > 1) {
+            for (ToolPartModelType value : ToolPartModelType.values()) {
+                if (value.name().toLowerCase().equals(identifier[1].toLowerCase(Locale.ROOT))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isItemModelIdentifier(String[] identifier) {
         if (identifier.length == 2) {
             for (ToolPartModelType value : ToolPartModelType.values()) {
                 if (value.name().toLowerCase().equals(identifier[1].toLowerCase(Locale.ROOT))) {
@@ -58,7 +71,6 @@ public enum ToolPartModelType {
                 }
             }
         }
-
         return false;
     }
 

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.texture;
 
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartTextureIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.texture.palette.*;
 import com.sigmundgranaas.forgero.core.texture.palette.strategy.RecolourStrategyFactory;
 import com.sigmundgranaas.forgero.core.texture.template.CachedTemplateTextureService;
@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.texture.template.TemplateTexture;
 import com.sigmundgranaas.forgero.core.texture.template.TemplateTextureFactory;
 import com.sigmundgranaas.forgero.core.texture.template.TemplateTextureService;
 
-public class CachedToolPartTextureService implements com.sigmundgranaas.forgero.core.texture.ToolPartTextureService {
+public class CachedToolPartTextureService implements ToolPartTextureService {
     public static CachedToolPartTextureService INSTANCE;
     private final PaletteService paletteService;
     private final TemplateTextureService templateService;
@@ -33,7 +33,7 @@ public class CachedToolPartTextureService implements com.sigmundgranaas.forgero.
     }
 
     @Override
-    public Texture getTexture(ToolPartTextureIdentifier id) {
+    public Texture getTexture(ToolPartModelTextureIdentifier id) {
         Palette palette = paletteService.getPalette(id.getPaletteIdentifier());
         TemplateTexture template = templateService.getTemplate(id.getTemplateTextureIdentifier());
         RecolourStrategy strategy = recolourStrategyFactory.createStrategy(template, palette);

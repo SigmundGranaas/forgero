@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import org.jetbrains.annotations.NotNull;
@@ -75,11 +74,11 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
 
     @Override
     public @NotNull List<PaletteResourceIdentifier> getPaletteIdentifiers() {
-        return paletteIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name)), paletteIdentifiers)).collect(Collectors.toList());
+        return paletteIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(this.name), paletteIdentifiers)).collect(Collectors.toList());
     }
 
     @Override
     public @NotNull List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
-        return paletteExclusionIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(new ForgeroMaterialIdentifierImpl(this.name)), paletteIdentifiers)).collect(Collectors.toList());
+        return paletteExclusionIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(this.name), paletteIdentifiers)).collect(Collectors.toList());
     }
 }
