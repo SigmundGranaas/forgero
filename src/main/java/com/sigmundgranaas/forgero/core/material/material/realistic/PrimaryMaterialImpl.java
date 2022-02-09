@@ -1,10 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material.realistic;
 
 import com.sigmundgranaas.forgero.core.material.material.AbstractForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class PrimaryMaterialImpl extends AbstractForgeroMaterial implements RealisticPrimaryMaterial {
     private final String ingredient;
@@ -18,19 +14,6 @@ public class PrimaryMaterialImpl extends AbstractForgeroMaterial implements Real
     public int getRarity() {
         return 0;
     }
-
-    @Override
-    public @NotNull
-    List<PaletteResourceIdentifier> getPaletteIdentifiers() {
-        return super.getPaletteIdentifiers();
-    }
-
-    @Override
-    public @NotNull
-    List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
-        return super.getPaletteExclusionIdentifiers();
-    }
-
 
     @Override
     public int getDurability() {

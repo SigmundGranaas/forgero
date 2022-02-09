@@ -1,19 +1,17 @@
 package com.sigmundgranaas.forgero.core.texture.palette;
 
+import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
+import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
 import net.minecraft.util.Pair;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CachedPaletteService implements PaletteService {
@@ -27,20 +25,8 @@ public class CachedPaletteService implements PaletteService {
         this.factory = factory;
         paletteCache = new HashMap<>();
         cachedPaletteTemplatesTextures = new HashMap<>();
-        createGemPalettes();
     }
 
-    private void createGemPalettes() {
-        try {
-            createPalette(new PaletteIdentifier("emerald"), getPalettesFromGem("yellow_dye"));
-            createPalette(new PaletteIdentifier("azura"), getPalettesFromGem("blue_dye"));
-            createPalette(new PaletteIdentifier("lapiz"), getPalettesFromGem("purple_dye"));
-            createPalette(new PaletteIdentifier("redstone"), getPalettesFromGem("red_dye"));
-        } catch (Exception ignored) {
-
-        }
-
-    }
 
     @Override
     public Palette getPalette(PaletteIdentifier id) {
@@ -58,8 +44,16 @@ public class CachedPaletteService implements PaletteService {
     }
 
     Pair<List<Texture>, List<Texture>> getPalettesFromMaterial(String material) throws IOException, URISyntaxException {
-        List<Texture> inclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(material).getPaletteIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
-        List<Texture> exclusions = getPalettes(MaterialCollection.INSTANCE.getMaterialsAsMap().get(material).getPaletteExclusionIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
+        PaletteResourceIdentifier paletteIdentifier;
+        try {
+            paletteIdentifier = PaletteResourceRegistry.getInstance().getPalette(material).orElseThrow();
+
+        } catch (NoSuchElementException e) {
+            Forgero.LOGGER.error("Unable to find Palette {} in palette registry, you have probably forgotten to add it", material);
+            throw e;
+        }
+        List<Texture> inclusions = getPalettes(paletteIdentifier.getPaletteIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
+        List<Texture> exclusions = getPalettes(paletteIdentifier.getPaletteExclusionIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
         return new Pair<>(inclusions, exclusions);
     }
 

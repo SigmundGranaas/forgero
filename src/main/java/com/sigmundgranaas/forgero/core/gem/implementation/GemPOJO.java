@@ -10,6 +10,7 @@ public class GemPOJO {
     public GemTypes type;
     public String effect;
     public String amount;
+    public Palette palette;
 
     public static class Palette {
         public String name;

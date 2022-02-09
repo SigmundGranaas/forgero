@@ -1,23 +1,29 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
+import java.util.List;
 
 public class PaletteResourceIdentifier {
+    private final String identifier;
+    private final List<ResourceIdentifier> inclusions;
+    private final List<ResourceIdentifier> exclusions;
 
-    private PaletteIdentifier paletteIdentifier;
-    private String resource;
+    public PaletteResourceIdentifier(String identifier, List<ResourceIdentifier> inclusions, List<ResourceIdentifier> exclusions) {
+        this.identifier = identifier;
+        this.inclusions = inclusions;
+        this.exclusions = exclusions;
+    }
 
-    public PaletteResourceIdentifier(PaletteIdentifier paletteIdentifier, String resource) {
-        this.paletteIdentifier = paletteIdentifier;
-        this.resource = resource;
+    public String getIdentifier() {
+        return this.identifier;
+    }
+
+    public List<ResourceIdentifier> getPaletteIdentifiers() {
+        return this.inclusions;
+
     }
 
 
-    public PaletteIdentifier getPaletteIdentifier() {
-        return paletteIdentifier;
-    }
-
-    public String getResource() {
-        return resource;
+    public List<ResourceIdentifier> getPaletteExclusionIdentifiers() {
+        return this.exclusions;
     }
 }

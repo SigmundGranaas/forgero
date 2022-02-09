@@ -1,0 +1,15 @@
+{
+  "name": "Lapis",
+  "item_identifier": "minecraft:item/lapis_lazuli",
+  "palette": {
+    "name": "lapis",
+    "include": [
+      "minecraft:textures/item/lapis_lazuli.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "type": "MINING_SPEED",
+  "effect": "ADDITIVE",
+  "amount": 1.0
+}

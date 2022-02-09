@@ -16,10 +16,4 @@ public interface ForgeroMaterial {
     @NotNull List<String> getProperties();
 
     String getIngredient();
-
-    @NotNull
-    List<PaletteResourceIdentifier> getPaletteIdentifiers();
-
-    @NotNull
-    List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers();
 }

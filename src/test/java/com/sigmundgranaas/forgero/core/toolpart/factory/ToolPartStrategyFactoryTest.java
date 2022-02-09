@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.toolpart.factory;
 
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.MaterialType;
-import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
@@ -115,16 +114,5 @@ class ToolPartStrategyFactoryTest {
             return null;
         }
 
-        @Override
-        public @NotNull
-        List<PaletteResourceIdentifier> getPaletteIdentifiers() {
-            return null;
-        }
-
-        @Override
-        public @NotNull
-        List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
-            return null;
-        }
     }
 }

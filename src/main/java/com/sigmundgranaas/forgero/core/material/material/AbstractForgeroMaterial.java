@@ -1,13 +1,11 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final String name;
@@ -70,15 +68,5 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     @Override
     public String getIngredient() {
         return ingredient;
-    }
-
-    @Override
-    public @NotNull List<PaletteResourceIdentifier> getPaletteIdentifiers() {
-        return paletteIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(this.name), paletteIdentifiers)).collect(Collectors.toList());
-    }
-
-    @Override
-    public @NotNull List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
-        return paletteExclusionIdentifiers.stream().map(paletteIdentifiers -> new PaletteResourceIdentifier(new PaletteIdentifier(this.name), paletteIdentifiers)).collect(Collectors.toList());
     }
 }

@@ -33,16 +33,7 @@ class MaterialFactoryImplTest {
     void properties() {
         Assertions.assertEquals(0, testMaterial.getProperties().size());
     }
-
-    @Test
-    void paletteInclusions() {
-        Assertions.assertEquals(0, testMaterial.getPaletteIdentifiers().size());
-    }
-
-    @Test
-    void paletteExclusions() {
-        Assertions.assertEquals(0, testMaterial.getPaletteExclusionIdentifiers().size());
-    }
+    
 
     @Test
     void ingredient() {

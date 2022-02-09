@@ -29,15 +29,15 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
         return Collections.emptyList();
     }
 
-    @Override
+
     public @NotNull
-    List<PaletteResourceIdentifier> getPaletteIdentifiers() {
+    List<ResourceIdentifier> getPaletteIdentifiers() {
         return Collections.emptyList();
     }
 
-    @Override
+
     public @NotNull
-    List<PaletteResourceIdentifier> getPaletteExclusionIdentifiers() {
+    List<ResourceIdentifier> getPaletteExclusionIdentifiers() {
         return Collections.emptyList();
     }
 
@@ -51,6 +51,7 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     public String getIngredient() {
         return "empty";
     }
+    
 
     @Override
     public int getLuck() {
