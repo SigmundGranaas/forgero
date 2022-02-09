@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
+import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroGemAdapterImpl;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +26,7 @@ public class GemItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        Gem newGem = NBTFactory.INSTANCE.createGemFromNbt(stack.getOrCreateNbt());
+        Gem newGem = new FabricToForgeroGemAdapterImpl().getGem(stack).orElse(this.gem);
         newGem.createToolPartDescription(new DescriptionWriter(tooltip));
     }
 }
