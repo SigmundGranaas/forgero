@@ -1,13 +1,13 @@
 {
   "type": "forgero:gem_upgrade_recipe",
   "base": {
-    "item": "forgero:azura_gem"
+    "item": "forgero:ender_gem"
   },
   "addition": {
-    "item": "forgero:azura_gem"
+    "item": "forgero:ender_gem"
   },
   "result": {
-    "item": "forgero:azura_gem"
+    "item": "forgero:ender_gem"
   }
 }
 
