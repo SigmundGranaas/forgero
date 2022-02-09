@@ -67,5 +67,9 @@
   "item.forgero.stone_pickaxehead": "Stone pickaxe head",
   "item.forgero.iron_pickaxehead": "Iron pickaxe head",
   "item.forgero.gold_pickaxehead": "Gold pickaxe head",
-  "item.forgero.diamond_pickaxehead": "Diamond pickaxe head"
+  "item.forgero.diamond_pickaxehead": "Diamond pickaxe head",
+  "item.forgero.emerald_gem": "Emerald gem",
+  "item.forgero.azura_gem": "Azura gem",
+  "item.forgero.redstone_gem": "Redstone gem",
+  "item.forgero.lapis_gem": "Lapis Lazuli gem"
 }
