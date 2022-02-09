@@ -10,7 +10,7 @@ public class PickaxeHead extends AbstractToolPartHead {
 
     @Override
     public int getDurability() {
-        return getPrimaryMaterial().getDurability();
+        return headStrategy.getDurability();
     }
 
 

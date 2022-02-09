@@ -14,4 +14,5 @@ public interface ToolPartHead extends ForgeroToolPart {
     float getAttackSpeed();
 
     ForgeroToolTypes getToolType();
+
 }

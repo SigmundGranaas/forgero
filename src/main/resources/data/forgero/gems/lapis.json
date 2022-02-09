@@ -1,10 +1,10 @@
 {
-  "name": "Ender",
-  "item_identifier": "minecraft:item/ender_eye",
+  "name": "Lapis",
+  "item_identifier": "minecraft:item/lapis_lazuli",
   "palette": {
-    "name": "ender",
+    "name": "lapis",
     "include": [
-      "minecraft:textures/item/ender_eye.png"
+      "minecraft:textures/item/lapis_lazuli.png"
     ],
     "exclude": [
     ]

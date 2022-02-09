@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.gem;
 
 public interface MiningSpeedGem extends Gem {
-    float applyMiningSpeed(float oldMiningSpeed);
+    float applyMiningSpeedMultiplier(float currentMiningSpeed);
 
     default GemTypes getType() {
         return GemTypes.MINING_LEVEL;

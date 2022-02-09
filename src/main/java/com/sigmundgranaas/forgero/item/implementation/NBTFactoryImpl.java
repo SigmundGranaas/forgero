@@ -43,6 +43,10 @@ public class NBTFactoryImpl implements NBTFactory {
         return INSTANCE;
     }
 
+    public static String createGemNbtString(Gem gem) {
+        return String.format("%s_%s", gem.getLevel(), gem.getIdentifier());
+    }
+
     @Override
     public @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound) {
@@ -123,7 +127,6 @@ public class NBTFactoryImpl implements NBTFactory {
         return tool;
     }
 
-
     @Override
     public @NotNull
     NbtCompound createNBTFromTool(@NotNull ForgeroTool baseTool) {
@@ -168,10 +171,6 @@ public class NBTFactoryImpl implements NBTFactory {
     public @NotNull NbtCompound createNBTFromGem(@NotNull Gem gem, NbtCompound compound) {
         compound.putString(NBTFactoryImpl.GEM_NBT_IDENTIFIER, createGemNbtString(gem));
         return compound;
-    }
-
-    String createGemNbtString(Gem gem) {
-        return String.format("%s_%s", gem.getLevel(), gem.getIdentifier());
     }
 
     Gem getGemFromNbtString(String nbtGem) {

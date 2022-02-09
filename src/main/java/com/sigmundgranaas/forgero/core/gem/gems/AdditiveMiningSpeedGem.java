@@ -20,13 +20,19 @@ public class AdditiveMiningSpeedGem extends ForgeroGem implements MiningSpeedGem
         return newGem instanceof AdditiveMiningSpeedGem && newGem.getLevel() == getLevel();
     }
 
-    @Override
-    public float applyMiningSpeed(float oldMiningSpeed) {
-        return oldMiningSpeed + 1f * getLevel();
-    }
 
     @Override
     public Gem createGem(int level) {
         return createNewGem(level, this.getIdentifier());
+    }
+
+    @Override
+    public float applyAttackDamage(float currentDamage) {
+        return currentDamage;
+    }
+
+    @Override
+    public float applyMiningSpeedMultiplier(float currentMiningSpeed) {
+        return currentMiningSpeed + 3.0f * getLevel();
     }
 }

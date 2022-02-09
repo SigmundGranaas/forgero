@@ -11,10 +11,12 @@ import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroGemAdapter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
+import com.sigmundgranaas.forgero.item.implementation.NBTFactoryImpl;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
@@ -30,9 +32,21 @@ public class GemToolPartUpgradeRecipe extends SmithingRecipe {
     @Override
     public boolean matches(Inventory inventory, World world) {
         if (super.matches(inventory, world)) {
-            return !inventory.getStack(0).getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER);
+            NbtCompound toolNbt = inventory.getStack(0).getOrCreateNbt();
+            String gemType = toolNbt.getCompound(getToolPartType(toolNbt)).getString(NBTFactory.GEM_NBT_IDENTIFIER);
+            return gemType.equals("") || gemType.equals(NBTFactoryImpl.createGemNbtString(EmptyGem.createEmptyGem()));
         }
         return false;
+    }
+
+    String getToolPartType(NbtCompound compound) {
+        if (compound.contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
+            return NBTFactory.HEAD_NBT_IDENTIFIER;
+        } else if (compound.contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
+            return NBTFactory.HANDLE_NBT_IDENTIFIER;
+        } else {
+            return NBTFactory.BINDING_NBT_IDENTIFIER;
+        }
     }
 
     @Override

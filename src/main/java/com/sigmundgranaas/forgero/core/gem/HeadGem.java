@@ -1,13 +1,9 @@
 package com.sigmundgranaas.forgero.core.gem;
 
 public interface HeadGem extends Gem {
-    default float applyAttackDamage(float currentDamage) {
-        return currentDamage;
-    }
+    float applyAttackDamage(float currentDamage);
 
-    default float applyMiningSpeedMultiplier(float currentMiningSpeed) {
-        return currentMiningSpeed;
-    }
+    float applyMiningSpeedMultiplier(float currentMiningSpeed);
 
     default int applyDurability(int currentDurability) {
         return currentDurability;

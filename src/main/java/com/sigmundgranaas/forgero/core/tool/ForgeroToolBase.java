@@ -62,7 +62,7 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public int getDurability() {
-        return head.getDurability();
+        return head.getDurability() + handle.getDurability() / 2;
     }
 
     @Override

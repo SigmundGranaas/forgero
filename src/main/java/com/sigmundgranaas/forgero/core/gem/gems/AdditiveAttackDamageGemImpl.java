@@ -24,6 +24,11 @@ public class AdditiveAttackDamageGemImpl extends ForgeroGem implements AdditiveA
         return AdditiveAttackDamageGem.super.applyAttackDamage(currentDamage);
     }
 
+    @Override
+    public float applyMiningSpeedMultiplier(float currentMiningSpeed) {
+        return currentMiningSpeed;
+    }
+
 
     @Override
     public Gem createGem(int level) {

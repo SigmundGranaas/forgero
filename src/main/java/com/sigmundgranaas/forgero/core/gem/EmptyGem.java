@@ -15,6 +15,11 @@ public class EmptyGem extends ForgeroGem implements HeadGem, HandleGem, BindingG
     }
 
     @Override
+    public float applyMiningSpeedMultiplier(float currentMiningSpeed) {
+        return currentMiningSpeed;
+    }
+
+    @Override
     public int applyDurability(int currentDurability) {
         return currentDurability;
     }

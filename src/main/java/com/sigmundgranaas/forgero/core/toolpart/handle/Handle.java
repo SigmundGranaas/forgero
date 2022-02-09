@@ -13,7 +13,7 @@ public class Handle extends AbstractToolPart implements ToolPartHandle {
 
     @Override
     public int getDurability() {
-        return 0;
+        return strategy.getDurability();
     }
 
     @Override
