@@ -31,4 +31,9 @@ public class RealisticHeadStrategy extends RealisticToolPartStrategy implements 
         return 0;
     }
 
+    @Override
+    public float getAttackDamageAddition() {
+        return 0;
+    }
+
 }

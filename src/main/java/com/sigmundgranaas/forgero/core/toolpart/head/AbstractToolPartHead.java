@@ -49,4 +49,9 @@ public abstract class AbstractToolPartHead extends AbstractToolPart implements T
         super.createToolPartDescription(writer);
         writer.addMiningLevel(getMiningLevel());
     }
+
+    @Override
+    public double getAttackDamageAddition() {
+        return headStrategy.getAttackDamageAddition();
+    }
 }

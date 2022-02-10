@@ -12,4 +12,6 @@ public interface ToolPartHeadStrategy extends ToolPartPropertyStrategy {
     int getMiningLevel();
 
     float getAttackSpeed();
+
+    double getAttackDamageAddition();
 }

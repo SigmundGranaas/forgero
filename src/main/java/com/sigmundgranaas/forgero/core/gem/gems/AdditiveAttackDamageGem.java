@@ -6,6 +6,6 @@ public interface AdditiveAttackDamageGem extends AttackDamageGem {
 
     @Override
     default float applyAttackDamage(float currentDamage) {
-        return currentDamage + getLevel();
+        return currentDamage + 0.1f * getLevel();
     }
 }

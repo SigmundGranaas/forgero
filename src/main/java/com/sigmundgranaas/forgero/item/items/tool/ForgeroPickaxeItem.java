@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -13,13 +11,7 @@ import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
@@ -28,12 +20,12 @@ import net.minecraft.tag.Tag;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 
 public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, DynamicAttributeTool {
+
     final Tag<Item> toolType = FabricToolTags.PICKAXES;
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
     private final ForgeroTool tool;
@@ -49,6 +41,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
         forgeroTool.createToolDescription(new DescriptionWriter(tooltip));
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
+
 
     @Override
     public Identifier getIdentifier() {
@@ -76,6 +69,16 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
     }
 
     @Override
+    public FabricToForgeroToolAdapter getToolAdapter() {
+        return toolAdapter;
+    }
+
+    @Override
+    public Tag<Item> getToolTags() {
+        return toolType;
+    }
+
+    @Override
     protected String getOrCreateTranslationKey() {
         return String.format("item.%s.%s_%s", Forgero.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
@@ -85,36 +88,5 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
         return getCustomItemBarStep(stack);
     }
 
-    @Override
-    public int getMiningLevel(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
-        if (tag.equals(toolType)) {
-            ForgeroTool forgeroTool = toolAdapter.getTool(stack).orElse(tool);
-            int miningLevel = forgeroTool.getMiningLevel();
-            return miningLevel;
-        }
 
-        return 0;
-    }
-
-
-    @Override
-    public float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
-        if (tag.equals(toolType)) {
-            ForgeroTool forgeroTool = toolAdapter.getTool(stack).orElse(tool);
-            float miningSpeedMultiplier = forgeroTool.getMiningSpeedMultiplier();
-            return miningSpeedMultiplier;
-        }
-
-        return 1f;
-    }
-
-    @Override
-    public Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
-        ForgeroTool tool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(this.getTool());
-
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", tool.getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
-
-        return DynamicAttributeTool.super.getDynamicModifiers(slot, stack, user);
-    }
 }

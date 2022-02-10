@@ -10,11 +10,11 @@ import com.sigmundgranaas.forgero.core.toolpart.head.HeadStrategy;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
-public class ToolMaterialAdapter implements ToolMaterial {
+public class SimpleToolMaterialAdapter implements ToolMaterial {
     private final HeadStrategy strategy;
     private final HeadState state;
 
-    public ToolMaterialAdapter(PrimaryMaterial material) {
+    public SimpleToolMaterialAdapter(PrimaryMaterial material) {
         this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE);
         this.strategy = state.createHeadStrategy();
     }

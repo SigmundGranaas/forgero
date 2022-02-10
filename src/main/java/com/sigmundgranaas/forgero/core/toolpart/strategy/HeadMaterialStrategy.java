@@ -8,4 +8,6 @@ public interface HeadMaterialStrategy extends MaterialStrategy {
     int getMiningLevel();
 
     float getAttackSpeed();
+
+    float getAttackDamageAddition();
 }

@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ItemGroups;
-import com.sigmundgranaas.forgero.item.adapter.ToolMaterialAdapter;
+import com.sigmundgranaas.forgero.item.adapter.SimpleToolMaterialAdapter;
 import com.sigmundgranaas.forgero.item.items.ToolPartItemImpl;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.item.items.tool.ShovelItem;
@@ -23,8 +23,8 @@ public class ItemFactoryImpl implements ItemFactory {
     @Override
     public Item createTool(ForgeroTool tool) {
         return switch (tool.getToolType()) {
-            case PICKAXE -> new ForgeroPickaxeItem(new ToolMaterialAdapter(tool.getMaterial()), 1, tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
-            case SHOVEL -> new ShovelItem(new ToolMaterialAdapter(tool.getMaterial()), 1.5f, tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
+            case PICKAXE -> new ForgeroPickaxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), 1, tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
+            case SHOVEL -> new ShovelItem(new SimpleToolMaterialAdapter(tool.getMaterial()), 1.5f, tool.getAttackSpeed(), new Item.Settings().group(ItemGroups.FORGERO_TOOLS), tool);
             case SWORD -> null;
         };
     }

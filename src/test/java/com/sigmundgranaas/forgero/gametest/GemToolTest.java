@@ -21,10 +21,12 @@ import com.sigmundgranaas.forgero.item.NBTFactory;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
@@ -42,19 +44,24 @@ public class GemToolTest {
     public void AttackDamageGemIncreasesDamageByLevel(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
 
-
-        for (int i = 1; i < 10; i++) {
-            ItemStack tool = createToolItemWithGem(new AdditiveAttackDamageGemImpl(i, "redstone_gem"));
-            mockPlayer.setStackInHand(Hand.MAIN_HAND, tool);
+        for (int i = 0; i < 10; i++) {
+            ItemStack tool;
+            if (i == 0) {
+                tool = createToolItemWithGem(EmptyGem.createEmptyGem());
+            } else {
+                tool = createToolItemWithGem(new AdditiveAttackDamageGemImpl(i, "redstone_gem"));
+            }
+            mockPlayer.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND_AXE));
             ZombieEntity zombie = context.spawnEntity(EntityType.ZOMBIE, 1, 1, 1);
             float healthBefore = zombie.getHealth();
             mockPlayer.attack(zombie);
+            mockPlayer.tryAttack(zombie);
             float healthAfter = zombie.getHealth();
             if (healthAfter < healthBefore) {
                 context.complete();
             }
+            zombie.damage(DamageSource.ANVIL, 100);
         }
-
 
         context.complete();
     }

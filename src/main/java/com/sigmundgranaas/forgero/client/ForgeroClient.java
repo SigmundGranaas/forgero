@@ -11,7 +11,7 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModel
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.skin.ForgeroToolPartTextureRegistry;
+import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ItemCollection;

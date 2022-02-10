@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelFactory;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Basic2DToolPartModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Unbaked2DToolPartModel;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
-import com.sigmundgranaas.forgero.core.skin.ForgeroToolPartTextureRegistry;
+import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;

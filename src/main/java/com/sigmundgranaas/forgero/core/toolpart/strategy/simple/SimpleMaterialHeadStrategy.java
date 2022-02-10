@@ -14,7 +14,7 @@ public class SimpleMaterialHeadStrategy extends SimpleDuoMaterialToolPartStrateg
         if (secondaryMaterial.getMiningLevel() > primaryMaterial.getMiningLevel()) {
             return primaryMaterial.getAttackDamage() + secondaryMaterial.getAttackDamageAddition();
         }
-        return primaryMaterial.getMiningSpeed();
+        return primaryMaterial.getAttackDamage();
     }
 
     @Override
@@ -38,5 +38,10 @@ public class SimpleMaterialHeadStrategy extends SimpleDuoMaterialToolPartStrateg
     @Override
     public float getAttackSpeed() {
         return primaryMaterial.getAttackSpeed() + secondaryMaterial.getAttackSpeedAddition();
+    }
+
+    @Override
+    public float getAttackDamageAddition() {
+        return secondaryMaterial.getAttackDamageAddition();
     }
 }

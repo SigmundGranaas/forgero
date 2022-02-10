@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.skin;
+package com.sigmundgranaas.forgero.core.texture;
 
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TextureIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;

@@ -31,4 +31,9 @@ public record HeadStrategy(HeadMaterialStrategy materialStrategy,
         return gemStrategy.applyAttackSpeed(materialStrategy.getAttackSpeed());
     }
 
+    @Override
+    public double getAttackDamageAddition() {
+        return gemStrategy.applyAttackDamage(materialStrategy.getAttackDamageAddition());
+    }
+
 }

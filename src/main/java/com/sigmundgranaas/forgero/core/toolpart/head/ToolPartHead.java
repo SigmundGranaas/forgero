@@ -15,4 +15,5 @@ public interface ToolPartHead extends ForgeroToolPart {
 
     ForgeroToolTypes getToolType();
 
+    double getAttackDamageAddition();
 }

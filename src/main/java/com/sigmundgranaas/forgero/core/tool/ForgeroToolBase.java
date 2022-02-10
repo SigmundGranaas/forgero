@@ -95,4 +95,9 @@ public class ForgeroToolBase implements ForgeroTool {
         writer.addHead(head);
         writer.addHandle(handle);
     }
+
+    @Override
+    public double getAttackDamageAddition() {
+        return head.getAttackDamageAddition();
+    }
 }
