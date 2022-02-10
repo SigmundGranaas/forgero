@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
-import com.sigmundgranaas.forgero.item.adapter.ToolMaterialAdapter;
+import com.sigmundgranaas.forgero.item.adapter.SimpleToolMaterialAdapter;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.network.ClientConnection;
@@ -33,7 +33,7 @@ public class GameTestHelper {
     }
 
     public static ForgeroPickaxeItem createDummyToolItem() {
-        ToolMaterialAdapter adapter = new ToolMaterialAdapter(createDummyDuoMaterial());
+        SimpleToolMaterialAdapter adapter = new SimpleToolMaterialAdapter(createDummyDuoMaterial());
         ForgeroTool tool = createDummyTool();
         return new ForgeroPickaxeItem(adapter, 10, 10, new FabricItemSettings(), tool);
     }

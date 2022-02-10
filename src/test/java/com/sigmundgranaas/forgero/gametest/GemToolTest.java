@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.HeadGem;
-import com.sigmundgranaas.forgero.core.gem.gems.AdditiveAttackDamageGemImpl;
 import com.sigmundgranaas.forgero.core.gem.gems.AdditiveDurabilityGem;
 import com.sigmundgranaas.forgero.core.gem.gems.AdditiveMiningSpeedGem;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
@@ -20,19 +19,12 @@ import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -40,31 +32,6 @@ import net.minecraft.util.registry.Registry;
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithSmithingScreenHandler;
 
 public class GemToolTest {
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
-    public void AttackDamageGemIncreasesDamageByLevel(TestContext context) {
-        ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
-
-        for (int i = 0; i < 10; i++) {
-            ItemStack tool;
-            if (i == 0) {
-                tool = createToolItemWithGem(EmptyGem.createEmptyGem());
-            } else {
-                tool = createToolItemWithGem(new AdditiveAttackDamageGemImpl(i, "redstone_gem"));
-            }
-            mockPlayer.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND_AXE));
-            ZombieEntity zombie = context.spawnEntity(EntityType.ZOMBIE, 1, 1, 1);
-            float healthBefore = zombie.getHealth();
-            mockPlayer.attack(zombie);
-            mockPlayer.tryAttack(zombie);
-            float healthAfter = zombie.getHealth();
-            if (healthAfter < healthBefore) {
-                context.complete();
-            }
-            zombie.damage(DamageSource.ANVIL, 100);
-        }
-
-        context.complete();
-    }
 
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void DurabilityGemIncreasesByLevel(TestContext context) {
@@ -115,20 +82,4 @@ public class GemToolTest {
         stack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, nbt);
         return stack;
     }
-
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BasicToolDamage", required = true)
-    public void TestBasicToolDamage(TestContext context) {
-        ItemStack tool = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "iron_pickaxe")));
-        PlayerEntity mockPlayer = context.createMockPlayer();
-        BeeEntity bee = context.spawnEntity(EntityType.BEE, 1, 1, 1);
-        float healthBefore = bee.getHealth();
-        mockPlayer.setStackInHand(Hand.MAIN_HAND, tool);
-        mockPlayer.attack(bee);
-        float healthAfter = bee.getHealth();
-        if (healthAfter < healthBefore) {
-            context.complete();
-        }
-    }
-
-
 }
