@@ -24,16 +24,7 @@ class AbstractForgeroMaterialTest {
     void getProperties() {
         Assertions.assertNotNull(defaultTestMaterial.getProperties());
     }
-
-    @Test
-    void getPaletteIdentifiers() {
-        Assertions.assertNotNull(defaultTestMaterial.getPaletteIdentifiers());
-    }
-
-    @Test
-    void getPaletteExclusionIdentifiers() {
-        Assertions.assertNotNull(defaultTestMaterial.getPaletteIdentifiers());
-    }
+    
 
     @Test
     void abstractMaterialsFromPojoBehaveTheSame() {

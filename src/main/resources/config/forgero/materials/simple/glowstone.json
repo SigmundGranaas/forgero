@@ -10,6 +10,7 @@
     "lightness"
   ],
   "palette": {
+    "name": "glowstone",
     "include": [
       "minecraft:textures/item/glowstone_dust.png"
     ],

@@ -1,0 +1,15 @@
+{
+  "name": "Ender",
+  "item_identifier": "minecraft:item/ender_eye",
+  "palette": {
+    "name": "ender",
+    "include": [
+      "minecraft:textures/item/ender_eye.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "type": "MINING_SPEED",
+  "effect": "ADDITIVE",
+  "amount": 1.0
+}

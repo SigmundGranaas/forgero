@@ -9,6 +9,7 @@
   "properties": [
   ],
   "palette": {
+    "name": "birch",
     "include": [
       "minecraft:textures/item/birch_boat.png"
     ],

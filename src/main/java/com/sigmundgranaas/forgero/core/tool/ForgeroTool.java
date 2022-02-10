@@ -41,4 +41,6 @@ public interface ForgeroTool {
     PrimaryMaterial getMaterial();
 
     void createToolDescription(ToolDescriptionWriter writer);
+
+    double getAttackDamageAddition();
 }

@@ -10,6 +10,7 @@
     "golden"
   ],
   "palette": {
+    "name": "gold",
     "include": [
       "minecraft:textures/item/golden_chestplate.png",
       "minecraft:textures/item/golden_helmet.png",

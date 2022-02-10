@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import java.util.Map;
 
 public interface MaterialLoader {
-    MaterialLoader INSTANCE = SimpleMaterialLoader.getInstance();
+    MaterialLoader INSTANCE = new SimpleMaterialLoader("/config/forgero/materials/simple/");
 
 
     Map<String, ForgeroMaterial> getMaterials() throws NoMaterialsException;

@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.recipe.implementation;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.recipe.RecipeTypes;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
+import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 import net.minecraft.util.Identifier;
 
 public record RecipeWrapperImpl(Identifier id,

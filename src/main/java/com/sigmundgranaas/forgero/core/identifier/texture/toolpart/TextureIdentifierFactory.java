@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.core.identifier.texture.toolpart;
 
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
-import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
 public interface TextureIdentifierFactory {
-    ToolPartTextureIdentifier createToolPartTextureIdentifier(ForgeroToolPart part);
+    ToolPartModelTextureIdentifier createToolPartTextureIdentifier(ForgeroToolPart part);
 
-    Optional<ToolPartTextureIdentifier> createToolPartTextureIdentifier(Identifier part);
+    Optional<ToolPartModelTextureIdentifier> createToolPartTextureIdentifier(String identifier);
 }

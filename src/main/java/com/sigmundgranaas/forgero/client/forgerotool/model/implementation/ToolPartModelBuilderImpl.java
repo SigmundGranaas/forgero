@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.BakedToolPar
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 
 public class ToolPartModelBuilderImpl implements ToolPartModelBuilder {
+    private FabricBakedModel gem;
     private FabricBakedModel toolPartModel;
     private FabricBakedModel secondaryMaterial;
-    private final FabricBakedModel gem;
 
     public ToolPartModelBuilderImpl() {
         this.toolPartModel = new EmptyBakedModel();
@@ -29,7 +29,8 @@ public class ToolPartModelBuilderImpl implements ToolPartModelBuilder {
     }
 
     @Override
-    public ToolPartModelBuilder addGem() {
+    public ToolPartModelBuilder addGem(FabricBakedModel gem) {
+        this.gem = gem;
         return this;
     }
 

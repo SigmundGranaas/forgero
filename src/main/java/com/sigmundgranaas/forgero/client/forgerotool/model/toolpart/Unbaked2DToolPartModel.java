@@ -26,6 +26,10 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
 
     public abstract String getIdentifier();
 
+    public String getTextureIdentifier() {
+        return getIdentifier();
+    }
+
     public abstract int getModelLayerIndex();
 
     public String BuildJsonModel() {
@@ -40,7 +44,7 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
         return Forgero.MOD_NAMESPACE + ":item/";
     }
 
-    private JsonObject getTextures() {
+    protected JsonObject getTextures() {
         JsonObject textures = new JsonObject();
         for (int i = 0; i <= getModelLayerIndex(); i++) {
             if (i == getModelLayerIndex()) {

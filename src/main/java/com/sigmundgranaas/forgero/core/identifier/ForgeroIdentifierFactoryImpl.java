@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.core.identifier;
 
+import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.identifier.model.ForgeroModelIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.*;
-import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
@@ -43,28 +46,29 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getToolPartIdentifier());
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart, toolType), toolPart.getPrimaryMaterial()));
-    }
-
-    private String createToolPartModelVariationTemplate(ToolPartModelType type, ForgeroMaterial material) {
-        return material.getName() + "_" + type.toFileName();
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroSecondaryModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart), secondaryMaterial));
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroSecondaryModelIdentifier(createToolPartModelVariationTemplate(ToolPartModelType.getModelType(toolPart, toolType), secondaryMaterial));
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+    }
+
+    @Override
+    public ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ToolPartModelType type) {
+        return new ForgeroModelIdentifier(gem.getName(), type, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {

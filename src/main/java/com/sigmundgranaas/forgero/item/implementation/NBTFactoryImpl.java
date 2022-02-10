@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
+import com.sigmundgranaas.forgero.core.gem.EmptyGem;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
@@ -40,12 +43,19 @@ public class NBTFactoryImpl implements NBTFactory {
         return INSTANCE;
     }
 
+    public static String createGemNbtString(Gem gem) {
+        return String.format("%s_%s", gem.getLevel(), gem.getIdentifier());
+    }
+
     @Override
     public @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound) {
         String primaryMaterialString = compound.getString(ToolPartItem.PRIMARY_MATERIAL_IDENTIFIER);
         PrimaryMaterial primary = (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
         String secondaryMaterialString = compound.getString(ToolPartItem.SECONDARY_MATERIAL_IDENTIFIER);
+
+        String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
+
 
         String toolPartTypeIdentifier = compound.getString(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER);
         ForgeroToolPartTypes toolPartTypes = ForgeroToolPartTypes.valueOf(toolPartTypeIdentifier.toUpperCase(Locale.ROOT));
@@ -64,6 +74,13 @@ public class NBTFactoryImpl implements NBTFactory {
         if (!secondaryMaterialString.equals("empty")) {
             builder.setSecondary((SecondaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
         }
+
+
+        if (!gemString.equals("")) {
+            builder.setGem(getGemFromNbtString(gemString));
+        }
+
+
         return builder.createToolPart();
     }
 
@@ -110,7 +127,6 @@ public class NBTFactoryImpl implements NBTFactory {
         return tool;
     }
 
-
     @Override
     public @NotNull
     NbtCompound createNBTFromTool(@NotNull ForgeroTool baseTool) {
@@ -132,7 +148,7 @@ public class NBTFactoryImpl implements NBTFactory {
         NbtCompound baseCompound = new NbtCompound();
         baseCompound.putString(PRIMARY_MATERIAL_NBT_IDENTIFIER, toolPart.getPrimaryMaterial().getName());
         baseCompound.putString(SECONDARY_MATERIAL_NBT_IDENTIFIER, toolPart.getSecondaryMaterial().getName());
-        baseCompound.putString(GEM_NBT_IDENTIFIER, "NOT_IMPLEMENTED");
+        baseCompound.putString(GEM_NBT_IDENTIFIER, createGemNbtString(toolPart.getGem()));
         baseCompound.putString(TOOL_PART_TYPE_NBT_IDENTIFIER, toolPart.getToolPartType().toString());
         baseCompound.putString(TOOL_PART_IDENTIFIER, toolPart.getToolPartIdentifier());
         if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
@@ -140,5 +156,29 @@ public class NBTFactoryImpl implements NBTFactory {
         }
         return baseCompound;
     }
+
+    @Override
+    public @NotNull Gem createGemFromNbt(@NotNull NbtCompound compound) {
+        String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
+        if (!gemString.equals("")) {
+            return getGemFromNbtString(gemString);
+        } else {
+            return EmptyGem.createEmptyGem();
+        }
+    }
+
+    @Override
+    public @NotNull NbtCompound createNBTFromGem(@NotNull Gem gem, NbtCompound compound) {
+        compound.putString(NBTFactoryImpl.GEM_NBT_IDENTIFIER, createGemNbtString(gem));
+        return compound;
+    }
+
+    Gem getGemFromNbtString(String nbtGem) {
+        String[] elements = nbtGem.split("_");
+        assert (elements.length == 3);
+        Gem gem = GemCollection.INSTANCE.getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
+        return gem.createGem(Integer.parseInt(elements[0]));
+    }
+
 }
 

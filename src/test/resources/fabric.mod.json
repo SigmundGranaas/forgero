@@ -11,7 +11,9 @@
   "entrypoints": {
     "fabric-gametest": [
       "com.sigmundgranaas.forgero.gametest.RecipeCreation",
-      "com.sigmundgranaas.forgero.gametest.ItemRegistration"
+      "com.sigmundgranaas.forgero.gametest.ItemRegistration",
+      "com.sigmundgranaas.forgero.gametest.GemRecipeTest",
+      "com.sigmundgranaas.forgero.gametest.GemToolTest"
     ]
   }
 }

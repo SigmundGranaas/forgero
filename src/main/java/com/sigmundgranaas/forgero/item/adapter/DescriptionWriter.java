@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.gem.GemDescriptionWriter;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -12,7 +15,7 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescriptionWriter {
+public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescriptionWriter, GemDescriptionWriter {
     private List<Text> tooltip;
 
     public DescriptionWriter(List<Text> tooltip) {
@@ -26,8 +29,8 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
     }
 
     @Override
-    public void addGem() {
-
+    public void addGem(Gem gem) {
+        tooltip.add(new LiteralText(String.format("Gem : %s, level%s", gem.getName(), gem.getLevel())));
     }
 
     @Override
@@ -46,6 +49,11 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
     }
 
     @Override
+    public void createToolPartDescription(ForgeroToolPart part) {
+
+    }
+
+    @Override
     public void addHead(ToolPartHead head) {
         tooltip.add(new LiteralText(String.format("Head: %s %s", head.getToolPartName(), head.getPrimaryMaterial().getName())));
         head.createToolPartDescription(this);
@@ -61,5 +69,10 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
     public void addBinding(ToolPartBinding binding) {
         tooltip.add(new LiteralText(String.format("Binding: %s %s", binding.getToolPartName(), binding.getPrimaryMaterial().getName())));
         binding.createToolPartDescription(this);
+    }
+
+    @Override
+    public void createGemDescription(Gem gem) {
+        tooltip.add(new LiteralText(String.format("Gem : %s, level%s", gem.getName(), gem.getLevel())));
     }
 }

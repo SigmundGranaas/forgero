@@ -9,6 +9,7 @@
   "properties": [
   ],
   "palette": {
+    "name": "stone",
     "include": [
       "minecraft:textures/block/stone.png",
       "minecraft:textures/block/cobblestone.png",

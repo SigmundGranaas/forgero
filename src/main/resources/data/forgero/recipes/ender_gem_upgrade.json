@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:ender_gem"
+  },
+  "addition": {
+    "item": "forgero:ender_gem"
+  },
+  "result": {
+    "item": "forgero:ender_gem"
+  }
+}
+

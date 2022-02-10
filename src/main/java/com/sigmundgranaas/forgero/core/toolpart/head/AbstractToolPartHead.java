@@ -3,16 +3,15 @@ package com.sigmundgranaas.forgero.core.toolpart.head;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.AbstractToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
-import com.sigmundgranaas.forgero.core.toolpart.ToolPartPropertyStrategy;
 
 import java.util.Locale;
 
 public abstract class AbstractToolPartHead extends AbstractToolPart implements ToolPartHead {
     protected final ToolPartHeadStrategy headStrategy;
 
-    public AbstractToolPartHead(ToolPartHeadStrategy headStrategy) {
-        super(headStrategy);
-        this.headStrategy = headStrategy;
+    public AbstractToolPartHead(HeadState state) {
+        super(state);
+        this.headStrategy = state.createHeadStrategy();
     }
 
     @Override
@@ -27,12 +26,6 @@ public abstract class AbstractToolPartHead extends AbstractToolPart implements T
 
     @Override
     public int getMiningLevel() {
-        /** int level = 1;
-         if (getSecondaryMaterial() instanceof EmptySecondaryMaterial) {
-         return level;
-         } else {
-         return level + 1;
-         } **/
         return headStrategy.getMiningLevel();
     }
 
@@ -58,9 +51,7 @@ public abstract class AbstractToolPartHead extends AbstractToolPart implements T
     }
 
     @Override
-    public ToolPartPropertyStrategy getStrategy() {
-        return strategy;
+    public double getAttackDamageAddition() {
+        return headStrategy.getAttackDamageAddition();
     }
-
-
 }

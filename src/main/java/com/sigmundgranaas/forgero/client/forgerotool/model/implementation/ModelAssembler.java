@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
-import com.sigmundgranaas.forgero.client.forgerotool.model.ToolModelAssembler;
-import com.sigmundgranaas.forgero.client.forgerotool.model.ToolModelBuilder;
-import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelAssembler;
-import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelBuilder;
+import com.sigmundgranaas.forgero.client.forgerotool.model.*;
+import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
@@ -31,6 +29,9 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
         if (!(toolPart.getSecondaryMaterial() instanceof EmptySecondaryMaterial)) {
             builder.addSecondaryMaterial(getSecondaryMaterialModel(toolPart));
         }
+        if (!(toolPart.getGem() instanceof EmptyGem)) {
+            builder.addGem(getGemModel(toolPart));
+        }
         return builder.build();
     }
 
@@ -41,7 +42,18 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
         if (!(toolPart.getSecondaryMaterial() instanceof EmptySecondaryMaterial)) {
             builder.addSecondaryMaterial(getSecondaryMaterialModel(toolType, toolPart, toolPart.getSecondaryMaterial()));
         }
+        if (!(toolPart.getGem() instanceof EmptyGem)) {
+            builder.addGem(getGemModel(toolType, toolPart));
+        }
         return builder.build();
+    }
+
+    private FabricBakedModel getGemModel(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
+        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(toolPart.getGem(), ToolPartModelType.getModelType(toolPart, toolType)).getIdentifier())).orElse(new EmptyBakedModel());
+    }
+
+    private FabricBakedModel getGemModel(ForgeroToolPart toolPart) {
+        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(toolPart.getGem(), ToolPartModelType.getModelType(toolPart)).getIdentifier())).orElse(new EmptyBakedModel());
     }
 
     private FabricBakedModel getBaseModel(ForgeroToolTypes type, ForgeroToolPart part) {

@@ -62,7 +62,7 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public int getDurability() {
-        return head.getDurability();
+        return head.getDurability() + handle.getDurability() / 2;
     }
 
     @Override
@@ -94,5 +94,10 @@ public class ForgeroToolBase implements ForgeroTool {
     public void createToolDescription(ToolDescriptionWriter writer) {
         writer.addHead(head);
         writer.addHandle(handle);
+    }
+
+    @Override
+    public double getAttackDamageAddition() {
+        return head.getAttackDamageAddition();
     }
 }

@@ -1,41 +1,34 @@
 package com.sigmundgranaas.forgero.core.toolpart;
 
+import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractToolPart implements ForgeroToolPart {
-    protected final ToolPartPropertyStrategy strategy;
+    protected final ToolPartState state;
 
 
-    public AbstractToolPart(@NotNull ToolPartPropertyStrategy strategy) {
-        this.strategy = strategy;
+    public AbstractToolPart(ToolPartState state) {
+        this.state = state;
     }
 
     @Override
-    public int getDurability() {
-        return strategy.getDurability();
+    public Gem getGem() {
+        return this.state.getGem();
     }
 
     @Override
     public String getToolPartIdentifier() {
-        return strategy.getPrimaryMaterial().getName() + "_" + getToolPartName();
+        return state.getPrimaryMaterial().getName() + "_" + getToolPartName();
     }
 
     @Override
     public PrimaryMaterial getPrimaryMaterial() {
-        return strategy.getPrimaryMaterial();
+        return state.getPrimaryMaterial();
     }
 
     @Override
     public SecondaryMaterial getSecondaryMaterial() {
-        return strategy.getSecondaryMaterial();
+        return state.getSecondaryMaterial();
     }
-
-    @Override
-    public ToolPartPropertyStrategy getStrategy() {
-        return strategy;
-    }
-
-
 }

@@ -1,25 +1,19 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelFactory;
-import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.SecondaryMaterial2DModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Basic2DToolPartModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.Unbaked2DToolPartModel;
-import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.binding.BindingModel2D;
-import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.handle.HandleModel2D;
-import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.head.HeadModel2D;
-import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
+import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 
@@ -27,14 +21,11 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
     private final Map<String, FabricBakedModel> toolPartModels;
     private final ModelLoader loader;
     private final Function<SpriteIdentifier, Sprite> textureGetter;
-    private final List<ForgeroToolPart> toolParts;
-    private final List<ForgeroMaterial> materials;
 
-    public ToolPartModelFactoryImpl(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, List<ForgeroToolPart> toolParts, List<ForgeroMaterial> materials) {
+
+    public ToolPartModelFactoryImpl(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter) {
         this.loader = loader;
         this.textureGetter = textureGetter;
-        this.toolParts = toolParts;
-        this.materials = materials;
         this.toolPartModels = new HashMap<>();
     }
 
@@ -49,33 +40,8 @@ public class ToolPartModelFactoryImpl implements ToolPartModelFactory {
     private void createModels() {
         List<Unbaked2DToolPartModel> models = new ArrayList<>();
 
-        Arrays.stream(ToolPartModelType.values()).forEach(modelType -> materials.stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).forEach(secondaryMaterial -> models.add(new SecondaryMaterial2DModel(loader, textureGetter, secondaryMaterial, modelType))));
-
-        toolParts.forEach(toolpart -> {
-            models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart)));
-            Arrays.stream(ForgeroToolTypes.values()).forEach(toolTypes -> models.add(createModelsFromToolPart(toolpart, ToolPartModelType.getModelType(toolpart, toolTypes))));
-        });
+        ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory()).getTextures().stream().map(texture -> new Basic2DToolPartModel(loader, textureGetter, texture)).forEach(models::add);
 
         models.forEach(model -> toolPartModels.put(model.getIdentifier(), model.bake()));
-    }
-
-    private Unbaked2DToolPartModel createModelsFromToolPart(ForgeroToolPart toolPart, ToolPartModelType modelType) {
-        return switch (toolPart.getToolPartType()) {
-            case HEAD -> createToolPartHead((ToolPartHead) toolPart, modelType);
-            case HANDLE -> createToolPartHandle((ToolPartHandle) toolPart, modelType);
-            case BINDING -> createToolPartBinding((ToolPartBinding) toolPart, modelType);
-        };
-    }
-
-    private Unbaked2DToolPartModel createToolPartHandle(ToolPartHandle handle, ToolPartModelType modelType) {
-        return new HandleModel2D(loader, textureGetter, handle, modelType);
-    }
-
-    private Unbaked2DToolPartModel createToolPartHead(ToolPartHead head, ToolPartModelType modelType) {
-        return new HeadModel2D(loader, textureGetter, head);
-    }
-
-    private Unbaked2DToolPartModel createToolPartBinding(ToolPartBinding binding, ToolPartModelType modelType) {
-        return new BindingModel2D(loader, textureGetter, binding, modelType);
     }
 }

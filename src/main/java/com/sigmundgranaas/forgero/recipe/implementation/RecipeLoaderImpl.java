@@ -6,7 +6,7 @@ import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
-import com.sigmundgranaas.forgero.recipe.RecipeTypes;
+import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.utils.Utils;
 
 import java.io.InputStreamReader;
@@ -34,6 +34,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             JsonObject toolRecipe = getRecipeAsJson(recipeFolderPath + "/tool.json");
             JsonObject toolWithBindingRecipe = getRecipeAsJson(recipeFolderPath + "/tool_with_binding.json");
             JsonObject toolPartSecondaryMaterialUpgrade = getRecipeAsJson(recipeFolderPath + "/toolpart_secondary_upgrade.json");
+            JsonObject toolPartGemUpgrade = getRecipeAsJson(recipeFolderPath + "/toolpart_gem_upgrade.json");
 
             Map<RecipeTypes, JsonObject> recipes = new HashMap<>();
             recipes.put(RecipeTypes.BINDING_RECIPE, bindingRecipe);
@@ -43,6 +44,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             recipes.put(RecipeTypes.TOOL_RECIPE, toolRecipe);
             recipes.put(RecipeTypes.TOOL_WITH_BINDING_RECIPE, toolWithBindingRecipe);
             recipes.put(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE, toolPartSecondaryMaterialUpgrade);
+            recipes.put(RecipeTypes.TOOL_PART_GEM_UPGRADE, toolPartGemUpgrade);
             return recipes;
         } catch (NullPointerException | JsonIOException e) {
             Forgero.LOGGER.error("Unable to read Materials from: {}", recipeFolderPath);

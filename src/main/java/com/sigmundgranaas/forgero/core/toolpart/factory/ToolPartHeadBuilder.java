@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
+import com.sigmundgranaas.forgero.core.gem.EmptyGem;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.toolpart.head.AbstractToolPartHead;
-import com.sigmundgranaas.forgero.core.toolpart.head.PickaxeHead;
-import com.sigmundgranaas.forgero.core.toolpart.head.ShovelHead;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.core.toolpart.head.*;
 
 public class ToolPartHeadBuilder extends ToolPartBuilder {
     private final ForgeroToolTypes head;
@@ -25,10 +25,25 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
     }
 
     @Override
+    public ToolPartBuilder setGem(Gem newGem) {
+        if (newGem instanceof HeadGem) {
+            super.gem = newGem;
+        }
+        return this;
+    }
+
+    @Override
     public AbstractToolPartHead createToolPart() {
+        HeadGem headGem;
+        if (gem instanceof HeadGem) {
+            headGem = (HeadGem) gem;
+        } else {
+            headGem = EmptyGem.createEmptyGem();
+        }
+        HeadState state = new HeadState(primary, secondary, headGem, head);
         return switch (head) {
-            case PICKAXE -> new PickaxeHead(ToolPartStrategyFactory.createToolPartHeadStrategy(head, primary, secondary));
-            case SHOVEL -> new ShovelHead(ToolPartStrategyFactory.createToolPartHeadStrategy(head, primary, secondary));
+            case PICKAXE -> new PickaxeHead(state);
+            case SHOVEL -> new ShovelHead(state);
             case SWORD -> null;
         };
     }

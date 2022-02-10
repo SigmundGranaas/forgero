@@ -10,9 +10,4 @@ public class RealisticDuoMaterialToolPartStrategy extends RealisticToolPartStrat
         super(material);
         this.secondaryMaterial = secondaryMaterial;
     }
-
-    @Override
-    public SecondaryMaterial getSecondaryMaterial() {
-        return secondaryMaterial;
-    }
 }

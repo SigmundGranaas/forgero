@@ -8,23 +8,23 @@ import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSeco
 import com.sigmundgranaas.forgero.core.material.material.simple.SimplePrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.toolpart.binding.BindingStrategy;
-import com.sigmundgranaas.forgero.core.toolpart.handle.HandleStrategy;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHeadStrategy;
+import com.sigmundgranaas.forgero.core.toolpart.strategy.BindingMaterialStrategy;
+import com.sigmundgranaas.forgero.core.toolpart.strategy.HandleMaterialStrategy;
+import com.sigmundgranaas.forgero.core.toolpart.strategy.HeadMaterialStrategy;
 import com.sigmundgranaas.forgero.core.toolpart.strategy.realistic.RealisticBindingStrategy;
 import com.sigmundgranaas.forgero.core.toolpart.strategy.realistic.RealisticHandleStrategy;
 import com.sigmundgranaas.forgero.core.toolpart.strategy.realistic.RealisticHeadStrategy;
 import com.sigmundgranaas.forgero.core.toolpart.strategy.simple.SimpleBindingStrategy;
 import com.sigmundgranaas.forgero.core.toolpart.strategy.simple.SimpleHandleStrategy;
-import com.sigmundgranaas.forgero.core.toolpart.strategy.simple.SimpleHeadStrategy;
+import com.sigmundgranaas.forgero.core.toolpart.strategy.simple.SimpleMaterialHeadStrategy;
 
 public interface ToolPartStrategyFactory {
 
-    static ToolPartHeadStrategy createToolPartHeadStrategy(ForgeroToolTypes head, PrimaryMaterial primary) {
+    static HeadMaterialStrategy createToolPartHeadStrategy(ForgeroToolTypes head, PrimaryMaterial primary) {
         return createToolPartHeadStrategy(head, primary, new EmptySecondaryMaterial());
     }
 
-    static ToolPartHeadStrategy createToolPartHeadStrategy(ForgeroToolTypes head, PrimaryMaterial primary, SecondaryMaterial secondary) {
+    static HeadMaterialStrategy createToolPartHeadStrategy(ForgeroToolTypes head, PrimaryMaterial primary, SecondaryMaterial secondary) {
         //TODO add complete branching
         if (primary instanceof RealisticPrimaryMaterial) {
             return switch (head) {
@@ -33,13 +33,13 @@ public interface ToolPartStrategyFactory {
                 case SWORD -> null;
             };
         } else if (primary instanceof SimplePrimaryMaterial && secondary instanceof SimpleSecondaryMaterial) {
-            return new SimpleHeadStrategy((SimplePrimaryMaterial) primary, (SimpleSecondaryMaterial) secondary);
+            return new SimpleMaterialHeadStrategy((SimplePrimaryMaterial) primary, (SimpleSecondaryMaterial) secondary);
         } else {
             throw new IllegalArgumentException("Unknown type of material");
         }
     }
 
-    static HandleStrategy createToolPartHandleStrategy(PrimaryMaterial primary, SecondaryMaterial secondary) {
+    static HandleMaterialStrategy createToolPartHandleStrategy(PrimaryMaterial primary, SecondaryMaterial secondary) {
         //TODO add complete branching
         if (primary instanceof RealisticPrimaryMaterial && secondary instanceof RealisticSecondaryMaterial) {
             return new RealisticHandleStrategy((RealisticPrimaryMaterial) primary, (RealisticSecondaryMaterial) secondary);
@@ -51,16 +51,16 @@ public interface ToolPartStrategyFactory {
 
     }
 
-    static HandleStrategy createToolPartHandleStrategy(PrimaryMaterial primary) {
+    static HandleMaterialStrategy createToolPartHandleStrategy(PrimaryMaterial primary) {
         return createToolPartHandleStrategy(primary, new EmptySecondaryMaterial());
 
     }
 
-    static BindingStrategy createToolPartBinding(PrimaryMaterial primary) {
+    static BindingMaterialStrategy createToolPartBinding(PrimaryMaterial primary) {
         return createToolPartBinding(primary, new EmptySecondaryMaterial());
     }
 
-    static BindingStrategy createToolPartBinding(PrimaryMaterial primary, SecondaryMaterial secondary) {
+    static BindingMaterialStrategy createToolPartBinding(PrimaryMaterial primary, SecondaryMaterial secondary) {
         if (primary instanceof RealisticPrimaryMaterial && secondary instanceof RealisticSecondaryMaterial) {
             return new RealisticBindingStrategy((RealisticPrimaryMaterial) primary, (RealisticSecondaryMaterial) secondary);
         } else if (primary instanceof SimplePrimaryMaterial && secondary instanceof SimpleSecondaryMaterial) {

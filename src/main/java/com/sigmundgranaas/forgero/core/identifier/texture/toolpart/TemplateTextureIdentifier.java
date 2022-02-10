@@ -1,15 +1,14 @@
 package com.sigmundgranaas.forgero.core.identifier.texture.toolpart;
 
+import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 
-public class TemplateTextureIdentifier implements TextureIdentifier {
-
-    private final ToolPartModelType toolPartModelType;
-
-    public TemplateTextureIdentifier(ToolPartModelType toolPartModelType) {
-        this.toolPartModelType = toolPartModelType;
-    }
+public record TemplateTextureIdentifier(
+        ToolPartModelType toolPartModelType,
+        ModelLayer layer,
+        String skin
+) implements TextureIdentifier {
 
     @Override
     public String getFileNameWithExtension() {
@@ -23,10 +22,14 @@ public class TemplateTextureIdentifier implements TextureIdentifier {
 
     @Override
     public String getIdentifier() {
-        return toolPartModelType.toFileName() + "_base";
+        return String.format("%s_%s_%s", toolPartModelType.toFileName(), layer.getFileName(), skin);
     }
 
     public ToolPartModelType getToolPartModelType() {
         return this.toolPartModelType;
+    }
+
+    public ModelLayer getToolPartModelLayer() {
+        return this.layer;
     }
 }

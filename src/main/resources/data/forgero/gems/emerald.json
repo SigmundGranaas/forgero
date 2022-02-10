@@ -1,0 +1,15 @@
+{
+  "name": "Emerald",
+  "item_identifier": "minecraft:item/emerald",
+  "palette": {
+    "name": "emerald",
+    "include": [
+      "minecraft:textures/item/emerald.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "type": "DURABILITY",
+  "effect": "ADDITIVE",
+  "amount": 100.0
+}

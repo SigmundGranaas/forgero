@@ -7,7 +7,7 @@ class SimpleMaterialLoaderTest {
 
     @Test
     void loadMaterials() {
-        Assertions.assertTrue(SimpleMaterialLoader.getInstance().getMaterials().size() > 0);
+        Assertions.assertTrue(new SimpleMaterialLoader("/config/forgero/materials/simple/").getMaterials().size() > 0);
     }
 
     @Test

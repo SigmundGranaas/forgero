@@ -4,13 +4,13 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 public class PickaxeHead extends AbstractToolPartHead {
-    public PickaxeHead(ToolPartHeadStrategy headStrategy) {
-        super(headStrategy);
+    public PickaxeHead(HeadState state) {
+        super(state);
     }
 
     @Override
     public int getDurability() {
-        return getPrimaryMaterial().getDurability();
+        return headStrategy.getDurability();
     }
 
 

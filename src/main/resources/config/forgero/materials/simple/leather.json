@@ -9,6 +9,7 @@
   "properties": [
   ],
   "palette": {
+    "name": "leather",
     "include": [
       "minecraft:textures/item/leather.png"
     ],

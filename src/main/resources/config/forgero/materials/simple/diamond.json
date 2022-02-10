@@ -10,15 +10,15 @@
     "item": "minecraft:diamond"
   },
   "palette": {
+    "name": "diamond",
     "include": [
       "minecraft:textures/item/diamond_chestplate.png",
       "minecraft:textures/item/diamond.png",
-      "minecraft:textures/item/diamond.png"
+      "minecraft:textures/item/diamond_sword.png"
     ],
     "exclude": [
       "minecraft:textures/item/iron_sword.png",
-      "minecraft:textures/item/stone_sword.png",
-      "minecraft:textures/item/diamond_sword.png"
+      "minecraft:textures/item/stone_sword.png"
     ]
   },
   "primary": {

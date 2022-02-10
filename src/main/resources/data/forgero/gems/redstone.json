@@ -1,0 +1,15 @@
+{
+  "name": "Redstone",
+  "item_identifier": "minecraft:item/redstone_dust",
+  "palette": {
+    "name": "redstone",
+    "include": [
+      "minecraft:textures/item/redstone.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "type": "ATTACK_DAMAGE",
+  "effect": "ADDITIVE",
+  "amount": 1.0
+}

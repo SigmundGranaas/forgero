@@ -1,50 +1,44 @@
 package com.sigmundgranaas.forgero.client.texture;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.BaseTextureIdentifier;
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.SecondaryMaterialTextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TextureIdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartTextureIdentifier;
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
-import net.minecraft.util.Identifier;
 
 import java.util.Locale;
 import java.util.Optional;
 
 public class FabricTextureIdentifierFactory implements TextureIdentifierFactory {
     @Override
-    public ToolPartTextureIdentifier createToolPartTextureIdentifier(ForgeroToolPart part) {
-        return new BaseTextureIdentifier(ToolPartModelType.getModelType(part), new ForgeroMaterialIdentifierImpl(part.getPrimaryMaterial().getName()));
+    public ToolPartModelTextureIdentifier createToolPartTextureIdentifier(ForgeroToolPart part) {
+        return new ToolPartModelTextureIdentifier(part.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(part), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
     }
 
     @Override
-    public Optional<ToolPartTextureIdentifier> createToolPartTextureIdentifier(Identifier part) {
-        if (!part.getPath().contains(".png") || !part.getNamespace().equals(Forgero.MOD_NAMESPACE) || part.toString().contains("transparent_base")) {
+    public Optional<ToolPartModelTextureIdentifier> createToolPartTextureIdentifier(String part) {
+        String[] elements = part.split(ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR);
+        elements[0] = elements[0].split("/")[elements[0].split("/").length - 1];
+        elements[ToolPartModelTextureIdentifier.SKIN_INDEX] = elements[ToolPartModelTextureIdentifier.SKIN_INDEX].replace(".png", "");
+        if (!ToolPartModelType.isModelIdentifier(elements)) {
             return Optional.empty();
         }
-        String[] elements = part.getPath().split("/");
-        String identifier = elements[elements.length - 1];
-        elements[elements.length - 1] = elements[elements.length - 1].replace(".png", "");
 
-        String[] identifierElements = identifier.split("_");
-        identifierElements[identifierElements.length - 1] = identifierElements[identifierElements.length - 1].replace(".png", "");
-
-
-        if (identifierElements.length == 2) {
-            return Optional.of(createToolPartIdentifier(identifierElements));
-        } else if (identifierElements.length == 3) {
-            return Optional.of(createSecondaryToolPartIdentifier(identifierElements));
+        if (part.split(ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR).length == ToolPartModelTextureIdentifier.DEFAULT_SPLIT_IDENTIFIER_LENGTH) {
+            elements[0] = elements[0].split("/")[elements[0].split("/").length - 1];
+            elements[ToolPartModelTextureIdentifier.SKIN_INDEX] = elements[ToolPartModelTextureIdentifier.SKIN_INDEX].replace(".png", "");
+            return Optional.of(createIdentifier(elements));
         }
+
         return Optional.empty();
     }
 
-    private ToolPartTextureIdentifier createSecondaryToolPartIdentifier(String[] identifierElements) {
-        return new SecondaryMaterialTextureIdentifier(ToolPartModelType.valueOf(identifierElements[1].toUpperCase(Locale.ROOT)), new ForgeroMaterialIdentifierImpl(identifierElements[0]));
+    private ToolPartModelTextureIdentifier createIdentifier(String[] elements) {
+        ToolPartModelType type = ToolPartModelType.valueOf(elements[ToolPartModelTextureIdentifier.MODEL_TYPE_INDEX].toUpperCase(Locale.ROOT));
+        ModelLayer layer = ModelLayer.valueOf(elements[ToolPartModelTextureIdentifier.MODEL_LAYER_INDEX].toUpperCase(Locale.ROOT));
+        String material = elements[ToolPartModelTextureIdentifier.MATERIAL_INDEX];
+        String skin = elements[ToolPartModelTextureIdentifier.SKIN_INDEX];
+        return new ToolPartModelTextureIdentifier(material, type, layer, skin);
     }
 
-    ToolPartTextureIdentifier createToolPartIdentifier(String[] elements) {
-        return new BaseTextureIdentifier(ToolPartModelType.valueOf(elements[1].toUpperCase(Locale.ROOT)), new ForgeroMaterialIdentifierImpl(elements[0]));
-    }
 }

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.toolpart.strategy.simple;
 
-import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimplePrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
 
@@ -15,10 +14,5 @@ public class SimpleDuoMaterialToolPartStrategy extends SimpleToolPartStrategy {
     @Override
     public int getDurability() {
         return super.getDurability() + secondaryMaterial.getDurability() / 3;
-    }
-
-    @Override
-    public SecondaryMaterial getSecondaryMaterial() {
-        return secondaryMaterial;
     }
 }
