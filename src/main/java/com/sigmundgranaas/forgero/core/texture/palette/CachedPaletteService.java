@@ -9,10 +9,14 @@ import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
 import net.minecraft.util.Pair;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CachedPaletteService implements PaletteService {
     private final TextureLoader loader;
@@ -57,19 +61,32 @@ public class CachedPaletteService implements PaletteService {
         return new Pair<>(inclusions, exclusions);
     }
 
-    Pair<List<Texture>, List<Texture>> getPalettesFromGem(String gem) throws IOException, URISyntaxException {
-        List<Texture> inclusions = getPalettes(List.of(new PaletteTemplateIdentifier("minecraft:textures/item/" + gem)));
-        List<Texture> exclusions = getPalettes(List.of());
-        return new Pair<>(inclusions, exclusions);
-    }
-
-
     private Palette createPalette(PaletteIdentifier id, Pair<List<Texture>, List<Texture>> reference) {
         UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
         Palette palette = factory.createPalette(unbakedPalette);
         paletteCache.put(id.getIdentifier(), palette);
+        exportPalette(palette, id);
         return palette;
 
+    }
+
+    private void exportPalette(Palette palette, PaletteIdentifier id) {
+        var image = new BufferedImage(palette.getColourValues().size(), 1, BufferedImage.TYPE_INT_ARGB);
+        IntStream.range(0, palette.getColourValues().size() - 1)
+                .forEach(i -> image.setRGB(i, 0, palette.getColourValues().get(i).getRgb()));
+
+        try {
+
+            File outputFile = new File(String.format("./%s.png", id.getIdentifier()));
+            if (!outputFile.exists()) {
+                outputFile.createNewFile();
+            }
+            ImageIO.write(image, "png", outputFile);
+
+
+        } catch (IOException e) {
+            Forgero.LOGGER.error(e);
+        }
     }
 
 
