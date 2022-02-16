@@ -14,7 +14,7 @@
     "include": [
       "minecraft:textures/item/diamond_shovel.png",
       "minecraft:textures/item/diamond_pickaxe.png",
-      "minecraft:textures/item/diamond.png"
+      "minecraft:textures/item/diamond_leggings.png"
     ],
     "exclude": [
       "minecraft:textures/item/iron_shovel.png",

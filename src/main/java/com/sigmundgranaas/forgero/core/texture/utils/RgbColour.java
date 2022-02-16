@@ -82,6 +82,6 @@ public class RgbColour implements Comparable<RgbColour> {
 
     @Override
     public int compareTo(@NotNull RgbColour o) {
-        return o.getLightValue() - this.getLightValue();
+        return this.getLightValue() - o.getLightValue();
     }
 }
