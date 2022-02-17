@@ -12,8 +12,8 @@ import java.util.List;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class DefaultToolPartRecolourStrategy implements RecolourStrategy {
-    private final TemplateTexture template;
-    private final Palette palette;
+    protected final TemplateTexture template;
+    protected final Palette palette;
 
     public DefaultToolPartRecolourStrategy(TemplateTexture template, Palette palette) {
         this.template = template;
@@ -54,7 +54,7 @@ public class DefaultToolPartRecolourStrategy implements RecolourStrategy {
      *
      * @return A colour palette matching the original greyscale values
      */
-    private List<RgbColour> createUsableColourPalette() {
+    public List<RgbColour> createUsableColourPalette() {
         int greyScaleSize = template.getGreyScaleValues().size();
 
         List<RgbColour> colourList = new ArrayList<>(greyScaleSize);

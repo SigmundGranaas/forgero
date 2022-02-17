@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.texture.palette.material.MaterialPalette;
 import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,11 @@ public class PaletteFactoryImpl implements PaletteFactory {
         for (Texture image : palette.getExclusions()) {
             extractColourSetFromImage(exclusionValueSet, image);
         }
-        RgbColour blackPoint = colourValueSet.stream().toList().get(0);
+        RgbColour blackPoint = colourValueSet
+                .stream()
+                .min(Comparator.comparing(RgbColour::getLightValue))
+                .orElse(new RgbColour(255, 255, 255));
+
         exclusionValueSet.remove(blackPoint);
 
         colourValueSet.removeAll(exclusionValueSet);
@@ -43,7 +48,8 @@ public class PaletteFactoryImpl implements PaletteFactory {
         }
     }
 
-    public static MaterialPalette createColourPaletteFromExistingPalette(BufferedImage palette, PaletteIdentifier id) {
+
+    public Palette createColourPaletteFromExistingPalette(BufferedImage palette, PaletteIdentifier id) {
         HashSet<RgbColour> colourValueSet = new HashSet<>();
 
         for (int x = 0; x < palette.getWidth(); ++x) {
@@ -60,5 +66,10 @@ public class PaletteFactoryImpl implements PaletteFactory {
     @Override
     public Palette createPalette(UnbakedPalette palette) {
         return createColourPalette(palette);
+    }
+
+    @Override
+    public Palette createPalette(BufferedImage palette, PaletteIdentifier id) {
+        return createColourPaletteFromExistingPalette(palette, id);
     }
 }

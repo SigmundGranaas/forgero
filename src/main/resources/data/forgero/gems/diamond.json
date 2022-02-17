@@ -2,7 +2,7 @@
   "name": "diamond",
   "item_identifier": "forgero:item/diamond_gem",
   "palette": {
-    "name": "diamond",
+    "name": "diamond_gem",
     "include": [
       "minecraft:textures/item/diamond.png"
     ],

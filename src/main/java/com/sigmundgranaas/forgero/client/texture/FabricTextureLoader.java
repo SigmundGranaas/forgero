@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.client.texture;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier;
 import com.sigmundgranaas.forgero.core.io.FileLoader;
 import com.sigmundgranaas.forgero.core.io.FileService;
@@ -35,6 +36,16 @@ public class FabricTextureLoader implements TextureLoader {
             } else {
                 return RawTexture.createRawTexture(id, fileLoader.loadStreamFromFile(fileService.getFile(id)));
             }
+        } catch (IOException | URISyntaxException e) {
+            Forgero.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
+            return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
+        }
+    }
+
+    @Override
+    public Texture getResource(PaletteIdentifier id) {
+        try {
+            return RawTexture.createRawTexture(id, (fileLoader.loadStreamFromFile(fileService.getFile(id))));
         } catch (IOException | URISyntaxException e) {
             Forgero.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
