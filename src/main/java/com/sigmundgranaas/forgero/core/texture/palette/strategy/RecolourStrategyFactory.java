@@ -13,16 +13,11 @@ public class RecolourStrategyFactory {
                 case BINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
                 case PICKAXEBINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
                 case SHOVELBINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
-                case HANDLE -> new SecondaryToolPartRecolourStrategy(template, palette);
-                case FULLHANDLE -> new SecondaryToolPartRecolourStrategy(template, palette);
-                case MEDIUMHANDLE -> new SecondaryToolPartRecolourStrategy(template, palette);
                 case PICKAXEHEAD -> new PickaxeHeadRecolourStrategy(template, palette);
                 case SHOVELHEAD -> new PickaxeHeadRecolourStrategy(template, palette);
                 default -> new DefaultToolPartRecolourStrategy(template, palette);
             };
         }
-        //More branches will be added
-        //noinspection SwitchStatementWithTooFewBranches
         return switch (template.getId().getToolPartModelType()) {
             case PICKAXEHEAD -> new PickaxeHeadRecolourStrategy(template, palette);
             case SHOVELHEAD -> new PickaxeHeadRecolourStrategy(template, palette);

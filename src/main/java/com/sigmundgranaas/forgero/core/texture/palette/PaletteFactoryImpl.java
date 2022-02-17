@@ -48,7 +48,8 @@ public class PaletteFactoryImpl implements PaletteFactory {
         }
     }
 
-    public static MaterialPalette createColourPaletteFromExistingPalette(BufferedImage palette, PaletteIdentifier id) {
+
+    public Palette createColourPaletteFromExistingPalette(BufferedImage palette, PaletteIdentifier id) {
         HashSet<RgbColour> colourValueSet = new HashSet<>();
 
         for (int x = 0; x < palette.getWidth(); ++x) {
@@ -65,5 +66,10 @@ public class PaletteFactoryImpl implements PaletteFactory {
     @Override
     public Palette createPalette(UnbakedPalette palette) {
         return createColourPalette(palette);
+    }
+
+    @Override
+    public Palette createPalette(BufferedImage palette, PaletteIdentifier id) {
+        return createColourPaletteFromExistingPalette(palette, id);
     }
 }

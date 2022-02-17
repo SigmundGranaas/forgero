@@ -37,21 +37,28 @@ public class CachedPaletteService implements PaletteService {
         if (paletteCache.containsKey(id.getIdentifier())) {
             return paletteCache.get(id.getIdentifier());
         } else {
-            try {
-                Pair<List<Texture>, List<Texture>> references = getPalettesFromMaterial(id.material());
-                return createPalette(id, references);
-            } catch (IOException | URISyntaxException e) {
-                //TODO Proper exception handling
-                throw new IllegalArgumentException();
-            }
+            return createPalette(id);
         }
     }
 
-    Pair<List<Texture>, List<Texture>> getPalettesFromMaterial(String material) throws IOException, URISyntaxException {
+    private Palette createPalette(PaletteIdentifier id) {
+        try {
+            if (PaletteResourceRegistry.getInstance().premadePalette(id)) {
+                return factory.createPalette(loader.getResource(id).getImage(), id);
+            } else {
+                return generatePalette(id);
+            }
+        } catch (IOException | URISyntaxException e) {
+            Forgero.LOGGER.error(e);
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    Pair<List<Texture>, List<Texture>> getPalettesFromMaterial(String material) {
         PaletteResourceIdentifier paletteIdentifier;
         try {
             paletteIdentifier = PaletteResourceRegistry.getInstance().getPalette(material).orElseThrow();
-
         } catch (NoSuchElementException e) {
             Forgero.LOGGER.error("Unable to find Palette {} in palette registry, you have probably forgotten to add it", material);
             throw e;
@@ -61,7 +68,8 @@ public class CachedPaletteService implements PaletteService {
         return new Pair<>(inclusions, exclusions);
     }
 
-    private Palette createPalette(PaletteIdentifier id, Pair<List<Texture>, List<Texture>> reference) {
+    private Palette generatePalette(PaletteIdentifier id) throws IOException, URISyntaxException {
+        Pair<List<Texture>, List<Texture>> reference = getPalettesFromMaterial(id.material());
         UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
         Palette palette = factory.createPalette(unbakedPalette);
         paletteCache.put(id.getIdentifier(), palette);
