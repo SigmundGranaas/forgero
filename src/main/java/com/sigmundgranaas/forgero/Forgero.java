@@ -27,6 +27,7 @@ public class Forgero implements ModInitializer {
     private void registerItems() {
         ItemRegistry.INSTANCE.registerTools();
         ItemRegistry.INSTANCE.registerToolParts();
+        ItemRegistry.INSTANCE.registerPatterns();
         GemCollection.INSTANCE.getGems().forEach(gem -> Registry.register(Registry.ITEM, new Identifier(Forgero.MOD_NAMESPACE, gem.getIdentifier()), new GemItem(new FabricItemSettings().group(ItemGroup.MISC), gem)));
     }
 

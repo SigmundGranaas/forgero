@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:oak_binding",
+    "forgero:birch_binding",
+    "forgero:spruce_binding",
+    "forgero:acacia_binding",
+    "forgero:stone_binding",
+    "forgero:iron_binding",
+    "forgero:gold_binding",
+    "forgero:diamond_binding",
+    "forgero:netherite_binding"
+  ]
+}

@@ -1,15 +1,22 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " H ",
-    "H H",
-    " H "
-  ],
-  "key": {
-    "H": {
+  "type": "forgero:tool_part_recipe",
+  "ingredients": [
+    {
       "item": "BINDING_INGREDIENT"
+    },
+    {
+      "item": "BINDING_INGREDIENT"
+    },
+    {
+      "item": "BINDING_INGREDIENT"
+    },
+    {
+      "item": "BINDING_INGREDIENT"
+    },
+    {
+      "tag": "forgero:binding_patterns"
     }
-  },
+  ],
   "result": {
     "item": "BINDING_ITEM"
   }
