@@ -40,6 +40,7 @@ public class RecipeCreation {
         handler.clearCraftingSlots();
         return actualOutput;
     }
+
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing")
     public void testCraftAllHandles(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithCraftingScreenHandler(context);
