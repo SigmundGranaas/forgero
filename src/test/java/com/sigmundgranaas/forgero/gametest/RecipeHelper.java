@@ -43,6 +43,7 @@ public class RecipeHelper {
             case TOOL_PART_GEM_UPGRADE -> false;
             case TOOL_RECIPE -> true;
             case GEM_UPGRADE_RECIPE -> false;
+            case TOOL_PART_RECIPE -> true;
             case TOOL_WITH_BINDING_RECIPE -> true;
         };
     }

@@ -8,17 +8,14 @@ import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CraftingTableBlock;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -34,6 +31,7 @@ public class RecipeCreation {
 
     public static Item testHandleRecipe(Item ingredient, ServerPlayerEntity player) {
         CraftingScreenHandler handler = ((CraftingScreenHandler) player.currentScreenHandler);
+        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "handle_pattern_default"))));
         handler.getSlot(3).setStack(new ItemStack(ingredient));
         handler.setStackInSlot(5, 1, new ItemStack(ingredient, 1));
         handler.setStackInSlot(7, 3, new ItemStack(ingredient));
@@ -41,23 +39,6 @@ public class RecipeCreation {
         Item actualOutput = handler.getSlot(handler.getCraftingResultSlotIndex()).getStack().getItem();
         handler.clearCraftingSlots();
         return actualOutput;
-    }
-
-
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BasicToolDamage")
-    public void testSomeThingRandom(TestContext context) {
-        ItemStack tool = new ItemStack(Items.GOLDEN_SHOVEL);
-        PlayerEntity mockPlayer = context.createMockPlayer();
-        //mockPlayer.setStackInHand(Hand.MAIN_HAND, tool);
-        ItemCollection.INSTANCE.getToolItems().stream().filter(pickaxe -> pickaxe instanceof PickaxeItem).forEach(toolItem -> {
-            //((PickaxeItem) toolItem).asItem())
-            mockPlayer.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.IRON_PICKAXE));
-            if (mockPlayer.canHarvest(Blocks.BEDROCK.getDefaultState())) {
-                //throw new GameTestException("should'nt");
-            }
-            mockPlayer.clearActiveItem();
-        });
-        context.complete();
     }
 
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing")

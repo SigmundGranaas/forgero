@@ -1,15 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "  H",
-    " H ",
-    "H  "
-  ],
-  "key": {
-    "H": {
+  "type": "forgero:tool_part_recipe",
+  "ingredients": [
+    {
       "item": "HANDLE_INGREDIENT"
+    },
+    {
+      "item": "HANDLE_INGREDIENT"
+    },
+    {
+      "item": "HANDLE_INGREDIENT"
+    },
+    {
+      "tag": "forgero:handle_patterns"
     }
-  },
+  ],
   "result": {
     "item": "HANDLE_ITEM"
   }

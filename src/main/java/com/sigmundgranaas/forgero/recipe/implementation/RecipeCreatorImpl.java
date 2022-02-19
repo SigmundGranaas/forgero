@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.recipe.implementation;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.Forgero;
@@ -94,10 +95,20 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createHandleAndBindingRecipe(ForgeroToolPart toolPart) {
         if (toolPart.getToolPartType() == ForgeroToolPartTypes.HANDLE) {
-            return createToolPartRecipe(toolPart, RecipeTypes.HANDLE_RECIPE);
+            return createRecipe(toolPart, RecipeTypes.HANDLE_RECIPE);
         } else {
-            return createToolPartRecipe(toolPart, RecipeTypes.BINDING_RECIPE);
+            return createRecipe(toolPart, RecipeTypes.BINDING_RECIPE);
         }
+    }
+
+    private List<RecipeWrapper> createRecipe(ForgeroToolPart toolPart, RecipeTypes templateIdentifier) {
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(templateIdentifier).toString()).getAsJsonObject();
+        JsonArray ingredients = template.getAsJsonArray("ingredients");
+        for (int i = 0; i < ingredients.size() - 1; i++) {
+            ((JsonObject) ingredients.get(i)).addProperty("item", toolPart.getPrimaryMaterial().getIngredient());
+        }
+        template.getAsJsonObject("result").addProperty("item", new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier()).toString());
+        return List.of(new RecipeWrapperImpl(new Identifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier()), template, templateIdentifier));
     }
 
     private List<RecipeWrapper> createToolPartRecipe(ForgeroToolPart toolPart, RecipeTypes templateIdentifier) {
@@ -109,9 +120,9 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createToolPartHeadRecipe(ForgeroToolPart part) {
         if (((ToolPartHead) part).getToolType() == ForgeroToolTypes.PICKAXE) {
-            return createToolPartRecipe(part, RecipeTypes.PICKAXEHEAD_RECIPE);
+            return createRecipe(part, RecipeTypes.PICKAXEHEAD_RECIPE);
         } else {
-            return createToolPartRecipe(part, RecipeTypes.SHOVELHEAD_RECIPE);
+            return createRecipe(part, RecipeTypes.SHOVELHEAD_RECIPE);
         }
     }
 
