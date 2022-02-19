@@ -1,14 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " H ",
-    "H H"
-  ],
-  "key": {
-    "H": {
+  "type": "forgero:tool_part_recipe",
+  "ingredients": [
+    {
       "item": "SHOVELHEAD_INGREDIENT"
+    },
+    {
+      "item": "SHOVELHEAD_INGREDIENT"
+    },
+    {
+      "item": "SHOVELHEAD_INGREDIENT"
+    },
+    {
+      "tag": "forgero:shovelhead_patterns"
     }
-  },
+  ],
   "result": {
     "item": "SHOVELHEAD_ITEM"
   }

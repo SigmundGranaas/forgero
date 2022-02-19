@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:oak_handle",
+    "forgero:birch_handle",
+    "forgero:spruce_handle",
+    "forgero:acacia_handle",
+    "forgero:stone_handle",
+    "forgero:iron_handle",
+    "forgero:gold_handle",
+    "forgero:diamond_handle",
+    "forgero:netherite_handle"
+  ]
+}

@@ -34,6 +34,7 @@ public class RecipeCreation {
 
     public static Item testHandleRecipe(Item ingredient, ServerPlayerEntity player) {
         CraftingScreenHandler handler = ((CraftingScreenHandler) player.currentScreenHandler);
+        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "handle_pattern_default"))));
         handler.getSlot(3).setStack(new ItemStack(ingredient));
         handler.setStackInSlot(5, 1, new ItemStack(ingredient, 1));
         handler.setStackInSlot(7, 3, new ItemStack(ingredient));

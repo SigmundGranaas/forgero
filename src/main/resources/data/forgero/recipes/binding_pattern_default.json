@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "tag": "forgero:bindings"
+    }
+  ],
+  "result": {
+    "item": "forgero:binding_pattern_default"
+  }
+}
