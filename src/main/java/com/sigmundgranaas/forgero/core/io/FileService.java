@@ -5,9 +5,8 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdenti
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TemplateTextureIdentifier;
 import com.sigmundgranaas.forgero.core.texture.utils.TextureLoader;
 
-import java.io.File;
+import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 public class FileService {
 
@@ -17,23 +16,23 @@ public class FileService {
     public static String CONFIG_FOLDER_PATH = "config/";
 
 
-    public File getFile(TextureIdentifier id) throws URISyntaxException {
-        ClassLoader classLoader = TextureLoader.class.getClassLoader();
-        URL resource = classLoader.getResource(getTexturePath(id));
-        if (resource == null) {
-            throw new IllegalArgumentException("file not found! " + getTexturePath(id));
+    private String getTexturePath(TextureIdentifier id) {
+        if (id instanceof TemplateTextureIdentifier) {
+            return "assets/forgero/templates/textures/" + id.getFileNameWithExtension();
+        } else if (id instanceof PaletteIdentifier) {
+            return "assets/forgero/templates/materials/" + id.getFileNameWithExtension();
         } else {
-            return new File(resource.toURI());
+            return "";
         }
     }
 
-    private String getTexturePath(TextureIdentifier id) {
-        if (id instanceof TemplateTextureIdentifier) {
-            return "config/forgero/templates/textures/" + id.getFileNameWithExtension();
-        } else if (id instanceof PaletteIdentifier) {
-            return "config/forgero/templates/materials/" + id.getFileNameWithExtension();
+    public InputStream getStream(TextureIdentifier id) throws URISyntaxException {
+        ClassLoader classLoader = TextureLoader.class.getClassLoader();
+        InputStream resource = classLoader.getResourceAsStream(getTexturePath(id));
+        if (resource == null) {
+            throw new IllegalArgumentException("file not found! " + getTexturePath(id));
         } else {
-            return "";
+            return resource;
         }
     }
 }

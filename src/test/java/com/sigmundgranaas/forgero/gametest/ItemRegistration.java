@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.gametest;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
@@ -18,10 +18,10 @@ public class ItemRegistration {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolsHaveBeenRegistered(TestContext context) {
         ForgeroToolCollection.INSTANCE.getTools().forEach(forgeroTool -> {
-            Item checkedTool = Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, forgeroTool.getShortToolIdentifierString()));
+            Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getShortToolIdentifierString()));
             if (checkedTool == Items.AIR && !(checkedTool instanceof ForgeroToolItem)) {
                 String message = String.format("%s has not been registered correctly", forgeroTool.getToolIdentifierString());
-                Forgero.LOGGER.error(message);
+                ForgeroInitializer.LOGGER.error(message);
                 throw new GameTestException(message);
             }
 
@@ -32,10 +32,10 @@ public class ItemRegistration {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolPartsHaveBeenRegistered(TestContext context) {
         ForgeroToolPartCollection.INSTANCE.getToolParts().forEach(forgeroTool -> {
-            Item checkedTool = Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, forgeroTool.getToolPartIdentifier()));
+            Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getToolPartIdentifier()));
             if (checkedTool == Items.AIR && !(checkedTool instanceof ToolPartItem)) {
                 String message = String.format("%s has not been registered correctly", forgeroTool.getToolPartIdentifier());
-                Forgero.LOGGER.error(message);
+                ForgeroInitializer.LOGGER.error(message);
                 throw new GameTestException(message);
             }
         });

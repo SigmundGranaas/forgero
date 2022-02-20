@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.BakedModelCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
@@ -50,7 +50,7 @@ public class EmptyBakedModelCollection implements BakedModelCollection {
     }
 
     private FabricBakedModel getEmptyModel(String identifier) {
-        Forgero.LOGGER.debug("Attempting to retrieve {} model from an Empty collection, return empty model", identifier);
+        ForgeroInitializer.LOGGER.debug("Attempting to retrieve {} model from an Empty collection, return empty model", identifier);
         return new EmptyBakedModel();
     }
 }

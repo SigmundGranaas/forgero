@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.utils;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import net.minecraft.util.Identifier;
 
 public class ResourceUtils {
@@ -10,7 +10,7 @@ public class ResourceUtils {
     public static String CONFIG_FOLDER_PATH = "config/";
 
     public static boolean isForgeroResource(Identifier id) {
-        return id.getNamespace().equals(Forgero.MOD_NAMESPACE);
+        return id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE);
     }
 
     public static boolean isNotForgeroResource(Identifier id) {

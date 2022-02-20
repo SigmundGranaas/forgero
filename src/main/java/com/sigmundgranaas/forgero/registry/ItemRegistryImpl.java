@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.registry;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ItemGroups;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class ItemRegistryImpl implements ItemRegistry {
-    public static final Tag<Item> HANDLE_PATTERNS = TagFactory.ITEM.create(new Identifier(Forgero.MOD_NAMESPACE, "handle_patterns"));
-    public static final Tag<Item> BINDING_PATTERNS = TagFactory.ITEM.create(new Identifier(Forgero.MOD_NAMESPACE, "binding_patterns"));
-    public static final Tag<Item> PICKAXEHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(Forgero.MOD_NAMESPACE, "pickaxehead_patterns"));
-    public static final Tag<Item> SHOVELHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(Forgero.MOD_NAMESPACE, "shovelhead_patterns"));
+    public static final Tag<Item> HANDLE_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_patterns"));
+    public static final Tag<Item> BINDING_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "binding_patterns"));
+    public static final Tag<Item> PICKAXEHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_patterns"));
+    public static final Tag<Item> SHOVELHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_patterns"));
 
     private static final Item BINDING_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.BINDING_RECIPE);
     private static final Item HANDLE_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.HANDLE_RECIPE);
@@ -70,9 +70,9 @@ public class ItemRegistryImpl implements ItemRegistry {
     @Override
     public void registerPatterns() {
         Tag<Item> handles = HANDLE_PATTERNS;
-        Registry.register(Registry.ITEM, new Identifier(Forgero.MOD_NAMESPACE, "binding_pattern_default"), BINDING_PATTERN_DEFAULT);
-        Registry.register(Registry.ITEM, new Identifier(Forgero.MOD_NAMESPACE, "handle_pattern_default"), HANDLE_PATTERN_DEFAULT);
-        Registry.register(Registry.ITEM, new Identifier(Forgero.MOD_NAMESPACE, "pickaxehead_pattern_default"), PICKAXEHEAD_PATTERN_DEFAULT);
-        Registry.register(Registry.ITEM, new Identifier(Forgero.MOD_NAMESPACE, "shovelhead_pattern_default"), SHOVELHEAD_PATTERN_DEFAULT);
+        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "binding_pattern_default"), BINDING_PATTERN_DEFAULT);
+        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_pattern_default"), HANDLE_PATTERN_DEFAULT);
+        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_pattern_default"), PICKAXEHEAD_PATTERN_DEFAULT);
+        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_pattern_default"), SHOVELHEAD_PATTERN_DEFAULT);
     }
 }

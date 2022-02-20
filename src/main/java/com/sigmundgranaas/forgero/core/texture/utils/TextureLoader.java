@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.texture.utils;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,11 +31,11 @@ public class TextureLoader {
             if (targetFile.createNewFile()) {
                 return ImageIO.write(texture, "PNG", targetFile);
             } else {
-                Forgero.LOGGER.warn("Unable to save texture to path: {}", path);
+                ForgeroInitializer.LOGGER.warn("Unable to save texture to path: {}", path);
                 return false;
             }
         } catch (IOException e) {
-            Forgero.LOGGER.warn("Unable to save texture to path: {}, because: {}", path, e);
+            ForgeroInitializer.LOGGER.warn("Unable to save texture to path: {}, because: {}", path, e);
             return false;
         }
     }

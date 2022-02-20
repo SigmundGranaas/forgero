@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.gametest;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.item.NBTFactory;
@@ -35,8 +35,8 @@ public class GemRecipeTest {
                 Gem gem1 = gem.createGem(i);
                 Gem gem2 = gem.createGem(i);
 
-                ItemStack stack1 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, gem1.getIdentifier())));
-                ItemStack stack2 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, gem2.getIdentifier())));
+                ItemStack stack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getIdentifier())));
+                ItemStack stack2 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem2.getIdentifier())));
 
                 NBTFactory.INSTANCE.createNBTFromGem(gem1, stack1.getOrCreateNbt());
                 NBTFactory.INSTANCE.createNBTFromGem(gem2, stack2.getOrCreateNbt());
@@ -52,7 +52,7 @@ public class GemRecipeTest {
                     total.getAndIncrement();
                     correct.getAndIncrement();
                 } else if (craftedGem.isEmpty()) {
-                    Forgero.LOGGER.warn("expected {} to be output, but got {}. There is a possible conflict in the recipes", "a gem", actualOutput.toString());
+                    ForgeroInitializer.LOGGER.warn("expected {} to be output, but got {}. There is a possible conflict in the recipes", "a gem", actualOutput.toString());
                     total.getAndIncrement();
                 } else {
                     total.getAndIncrement();
@@ -61,11 +61,11 @@ public class GemRecipeTest {
         });
 
         if (total.get() == correct.get()) {
-            Forgero.LOGGER.info("tested {} gem upgrade recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+            ForgeroInitializer.LOGGER.info("tested {} gem upgrade recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
             mockPlayer.closeHandledScreen();
             context.complete();
         } else {
-            Forgero.LOGGER.error("tested {} gem upgrade recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+            ForgeroInitializer.LOGGER.error("tested {} gem upgrade recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
             throw new GameTestException("gem upgrade testing failed");
         }
     }
@@ -78,8 +78,8 @@ public class GemRecipeTest {
             Gem gem1 = gem.createGem(1);
             Gem gem2 = gem.createGem(2);
 
-            ItemStack stack1 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, gem1.getIdentifier())));
-            ItemStack stack2 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, gem2.getIdentifier())));
+            ItemStack stack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getIdentifier())));
+            ItemStack stack2 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem2.getIdentifier())));
 
             NBTFactory.INSTANCE.createNBTFromGem(gem1, stack1.getOrCreateNbt());
             NBTFactory.INSTANCE.createNBTFromGem(gem2, stack2.getOrCreateNbt());
@@ -92,7 +92,7 @@ public class GemRecipeTest {
 
             if (craftedGem.isPresent()
             ) {
-                Forgero.LOGGER.error("Should not be able to combine {} with level {} and {} with level {}", gem1.getIdentifier(), gem1.getLevel(), gem2.getIdentifier(), gem2.getLevel());
+                ForgeroInitializer.LOGGER.error("Should not be able to combine {} with level {} and {} with level {}", gem1.getIdentifier(), gem1.getLevel(), gem2.getIdentifier(), gem2.getLevel());
                 throw new GameTestException("gem upgrade testing failed");
             }
 
@@ -102,7 +102,7 @@ public class GemRecipeTest {
 
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void allGemsHaveBeenRegistered(TestContext context) {
-        GemCollection.INSTANCE.getGems().stream().map(gem -> Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, gem.getIdentifier()))).forEach(item -> {
+        GemCollection.INSTANCE.getGems().stream().map(gem -> Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()))).forEach(item -> {
             if (item == Items.AIR) {
                 throw new GameTestException("Not all gems have been registered correctly");
             }
@@ -120,9 +120,9 @@ public class GemRecipeTest {
             Gem gem1 = gem.createGem(1);
             Gem gem2 = gem.createGem(2);
 
-            ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, gem1.getIdentifier())));
-            ItemStack gemStack2 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, gem1.getIdentifier())));
-            ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "iron_pickaxehead")));
+            ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getIdentifier())));
+            ItemStack gemStack2 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getIdentifier())));
+            ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead")));
 
             handler.setStackInSlot(0, 1, toolPartStack);
             handler.setStackInSlot(1, 1, gemStack1);
@@ -148,7 +148,7 @@ public class GemRecipeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "iron_pickaxehead")));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead")));
         ItemStack diamondSecondaryUpgrade = new ItemStack(Items.DIAMOND);
 
 
@@ -158,7 +158,7 @@ public class GemRecipeTest {
         ItemStack itemStackWithNbtReference1 = handler.getSlot(2).getStack().copy();
         handler.setStackInSlot(0, 2, itemStackWithNbtReference1);
 
-        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, GemCollection.INSTANCE.getGems().get(0).getIdentifier())));
+        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, GemCollection.INSTANCE.getGems().get(0).getIdentifier())));
         handler.setStackInSlot(1, 2, gemStack1);
         handler.updateResult();
         ItemStack itemStackWithNbtReference2 = handler.getSlot(2).getStack().copy();
@@ -180,8 +180,8 @@ public class GemRecipeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "iron_pickaxehead")));
-        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, GemCollection.INSTANCE.getGems().get(0).getIdentifier())));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead")));
+        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, GemCollection.INSTANCE.getGems().get(0).getIdentifier())));
 
 
         handler.setStackInSlot(0, 1, toolPartStack);

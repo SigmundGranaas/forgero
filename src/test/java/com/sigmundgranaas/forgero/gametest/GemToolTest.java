@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.gametest;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.HeadGem;
@@ -78,7 +78,7 @@ public class GemToolTest {
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));
 
-        ItemStack stack = new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "iron_pickaxe")));
+        ItemStack stack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxe")));
         stack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, nbt);
         return stack;
     }

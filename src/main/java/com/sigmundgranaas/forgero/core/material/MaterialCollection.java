@@ -21,6 +21,8 @@ public interface MaterialCollection {
     @NotNull
     List<ForgeroMaterial> getMaterialsAsList();
 
+    void updateMaterials(Map<String, ForgeroMaterial> materials);
+
     @NotNull
     List<PrimaryMaterial> getPrimaryMaterialsAsList();
 

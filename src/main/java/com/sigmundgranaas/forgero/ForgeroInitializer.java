@@ -12,15 +12,16 @@ import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Forgero implements ModInitializer {
+public class ForgeroInitializer implements ModInitializer {
     public static final String MOD_NAMESPACE = "forgero";
-    public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
+    public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
     public static String MOD_NAME = "Forgero";
 
     @Override
     public void onInitialize() {
         registerItems();
         registerRecipes();
+
         //MaterialManager.initializePrimaryMaterials();
     }
 
@@ -28,7 +29,7 @@ public class Forgero implements ModInitializer {
         ItemRegistry.INSTANCE.registerTools();
         ItemRegistry.INSTANCE.registerToolParts();
         ItemRegistry.INSTANCE.registerPatterns();
-        GemCollection.INSTANCE.getGems().forEach(gem -> Registry.register(Registry.ITEM, new Identifier(Forgero.MOD_NAMESPACE, gem.getIdentifier()), new GemItem(new FabricItemSettings().group(ItemGroup.MISC), gem)));
+        GemCollection.INSTANCE.getGems().forEach(gem -> Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()), new GemItem(new FabricItemSettings().group(ItemGroup.MISC), gem)));
     }
 
     private void registerRecipes() {

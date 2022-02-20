@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.client.texture;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier;
@@ -34,10 +34,10 @@ public class FabricTextureLoader implements TextureLoader {
             if (id instanceof PaletteTemplateIdentifier) {
                 return RawTexture.createRawTexture(id, getResource.apply(new Identifier(id.getFileNameWithExtension())).getInputStream());
             } else {
-                return RawTexture.createRawTexture(id, fileLoader.loadStreamFromFile(fileService.getFile(id)));
+                return RawTexture.createRawTexture(id, fileService.getStream(id));
             }
         } catch (IOException | URISyntaxException e) {
-            Forgero.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
+            ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
         }
     }
@@ -45,9 +45,9 @@ public class FabricTextureLoader implements TextureLoader {
     @Override
     public Texture getResource(PaletteIdentifier id) {
         try {
-            return RawTexture.createRawTexture(id, (fileLoader.loadStreamFromFile(fileService.getFile(id))));
+            return RawTexture.createRawTexture(id, (fileService.getStream(id)));
         } catch (IOException | URISyntaxException e) {
-            Forgero.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
+            ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
         }
     }

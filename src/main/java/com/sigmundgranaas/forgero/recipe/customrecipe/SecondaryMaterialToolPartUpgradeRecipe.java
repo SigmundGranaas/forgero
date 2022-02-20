@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
@@ -73,7 +73,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
 
         @Override
         public Identifier getIdentifier() {
-            return new Identifier(Forgero.MOD_NAMESPACE, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE.getName());
+            return new Identifier(ForgeroInitializer.MOD_NAMESPACE, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE.getName());
         }
 
         @Override

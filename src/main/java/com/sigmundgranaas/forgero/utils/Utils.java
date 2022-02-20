@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.utils;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
@@ -13,7 +13,7 @@ public class Utils {
         return "{\n" +
                 "  \"parent\": \"" + parent + "\",\n" +
                 "  \"textures\": {\n" +
-                "    \"layer0\": \"" + Forgero.MOD_NAMESPACE + ":item/" + path + "\"\n" +
+                "    \"layer0\": \"" + ForgeroInitializer.MOD_NAMESPACE + ":item/" + path + "\"\n" +
                 "  }\n" +
                 "}";
     }

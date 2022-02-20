@@ -40,6 +40,10 @@ public class MaterialCollectionImpl implements MaterialCollection {
         materials = loader.getMaterials();
     }
 
+    public void updateMaterials(Map<String, ForgeroMaterial> newMaterials) {
+
+    }
+
     private Map<String, ForgeroMaterial> getMaterials() {
         if (materials == null) {
             loadMaterials();

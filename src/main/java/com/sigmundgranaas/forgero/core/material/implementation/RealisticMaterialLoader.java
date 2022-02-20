@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.material.implementation;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.stream.JsonReader;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.core.material.MaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
@@ -18,12 +18,12 @@ import java.util.*;
 
 public record RealisticMaterialLoader(String materialPath) implements MaterialLoader {
     public static final HashMap<String, ForgeroMaterial> materialMap = new HashMap<>();
-    public static final Logger LOGGER = Forgero.LOGGER;
+    public static final Logger LOGGER = ForgeroInitializer.LOGGER;
     private static RealisticMaterialLoader INSTANCE;
 
     public static MaterialLoader getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RealisticMaterialLoader("/config/forgero/materials/realistic/realistic_materials.json");
+            INSTANCE = new RealisticMaterialLoader("/data/forgero/materials/realistic/realistic_materials.json");
         }
         return INSTANCE;
     }

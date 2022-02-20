@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item.items;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
@@ -39,7 +39,7 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
 
     @Override
     public Identifier getIdentifier() {
-        return new Identifier(Forgero.MOD_NAMESPACE, getToolPartIdentifierString());
+        return new Identifier(ForgeroInitializer.MOD_NAMESPACE, getToolPartIdentifierString());
     }
 
     @Override

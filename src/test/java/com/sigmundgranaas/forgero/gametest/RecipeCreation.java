@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.gametest;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
@@ -31,7 +31,7 @@ public class RecipeCreation {
 
     public static Item testHandleRecipe(Item ingredient, ServerPlayerEntity player) {
         CraftingScreenHandler handler = ((CraftingScreenHandler) player.currentScreenHandler);
-        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(Forgero.MOD_NAMESPACE, "handle_pattern_default"))));
+        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_pattern_default"))));
         handler.getSlot(3).setStack(new ItemStack(ingredient));
         handler.setStackInSlot(5, 1, new ItemStack(ingredient, 1));
         handler.setStackInSlot(7, 3, new ItemStack(ingredient));
@@ -55,17 +55,17 @@ public class RecipeCreation {
                 correct++;
             } else {
                 total++;
-                Forgero.LOGGER.error("Expected {}, but got {}", ((ToolPartItem) toolPart).getIdentifier(), output.asItem().getName());
+                ForgeroInitializer.LOGGER.error("Expected {}, but got {}", ((ToolPartItem) toolPart).getIdentifier(), output.asItem().getName());
                 //throw new GameTestException(String.format("Crafting recipe for %s is bad", ((ToolPartItem) toolPart).getIdentifier()));
             }
         }
 
         if (total == correct) {
-            Forgero.LOGGER.info("tested {} recipes, where {}/{} were correct", total, total, correct);
+            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total, total, correct);
             mockPlayer.closeHandledScreen();
             context.complete();
         } else {
-            Forgero.LOGGER.info("tested {} recipes, where {}/{} were correct", total, total, correct);
+            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total, total, correct);
             throw new GameTestException("recipe testing failed");
         }
     }
@@ -87,7 +87,7 @@ public class RecipeCreation {
                 total.getAndIncrement();
                 correct.getAndIncrement();
             } else if (actualOutput.getItem() != Items.AIR) {
-                Forgero.LOGGER.warn("expected {} to be output, but got {}. There is a possible conflict in the recipes", desiredOutput.toString(), actualOutput.toString());
+                ForgeroInitializer.LOGGER.warn("expected {} to be output, but got {}. There is a possible conflict in the recipes", desiredOutput.toString(), actualOutput.toString());
                 total.getAndIncrement();
             } else {
                 total.getAndIncrement();
@@ -95,11 +95,11 @@ public class RecipeCreation {
         });
 
         if (total.get() == correct.get()) {
-            Forgero.LOGGER.info("tested {} recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
             mockPlayer.closeHandledScreen();
             context.complete();
         } else {
-            Forgero.LOGGER.error("tested {} recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+            ForgeroInitializer.LOGGER.error("tested {} recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
             throw new GameTestException("recipe testing failed");
         }
     }
