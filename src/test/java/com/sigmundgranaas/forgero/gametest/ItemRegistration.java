@@ -1,8 +1,7 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
@@ -17,7 +16,7 @@ import net.minecraft.util.registry.Registry;
 public class ItemRegistration {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolsHaveBeenRegistered(TestContext context) {
-        ForgeroToolCollection.INSTANCE.getTools().forEach(forgeroTool -> {
+        ForgeroRegistry.getInstance().toolCollection().getTools().forEach(forgeroTool -> {
             Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getShortToolIdentifierString()));
             if (checkedTool == Items.AIR && !(checkedTool instanceof ForgeroToolItem)) {
                 String message = String.format("%s has not been registered correctly", forgeroTool.getToolIdentifierString());
@@ -31,7 +30,7 @@ public class ItemRegistration {
 
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolPartsHaveBeenRegistered(TestContext context) {
-        ForgeroToolPartCollection.INSTANCE.getToolParts().forEach(forgeroTool -> {
+        ForgeroRegistry.getInstance().toolPartCollection().getToolParts().forEach(forgeroTool -> {
             Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getToolPartIdentifier()));
             if (checkedTool == Items.AIR && !(checkedTool instanceof ToolPartItem)) {
                 String message = String.format("%s has not been registered correctly", forgeroTool.getToolPartIdentifier());

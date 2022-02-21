@@ -50,7 +50,7 @@ public class NBTFactoryImpl implements NBTFactory {
     public @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound) {
         String primaryMaterialString = compound.getString(ToolPartItem.PRIMARY_MATERIAL_IDENTIFIER);
-        PrimaryMaterial primary = (PrimaryMaterial) ForgeroRegistry.getINSTANCE().materialCollection().getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
+        PrimaryMaterial primary = (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
         String secondaryMaterialString = compound.getString(ToolPartItem.SECONDARY_MATERIAL_IDENTIFIER);
 
         String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
@@ -71,7 +71,7 @@ public class NBTFactoryImpl implements NBTFactory {
             case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, toolType);
         };
         if (!secondaryMaterialString.equals("empty")) {
-            builder.setSecondary((SecondaryMaterial) ForgeroRegistry.getINSTANCE().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
+            builder.setSecondary((SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
         }
 
 
@@ -175,7 +175,7 @@ public class NBTFactoryImpl implements NBTFactory {
     Gem getGemFromNbtString(String nbtGem) {
         String[] elements = nbtGem.split("_");
         assert (elements.length == 3);
-        Gem gem = ForgeroRegistry.getINSTANCE().gemCollection().getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
+        Gem gem = ForgeroRegistry.getInstance().gemCollection().getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
         return gem.createGem(Integer.parseInt(elements[0]));
     }
 

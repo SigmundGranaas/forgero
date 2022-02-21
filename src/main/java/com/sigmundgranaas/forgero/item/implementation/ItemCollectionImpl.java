@@ -27,7 +27,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<Item> getTools() {
         if (tools.isEmpty()) {
-            tools = ForgeroRegistry.getINSTANCE().toolCollection().getTools().stream().map(ItemFactory.INSTANCE::createTool).collect(Collectors.toList());
+            tools = ForgeroRegistry.getInstance().toolCollection().getTools().stream().map(ItemFactory.INSTANCE::createTool).collect(Collectors.toList());
         }
         return tools;
     }
@@ -40,7 +40,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<Item> getToolParts() {
         if (toolParts.isEmpty()) {
-            toolParts = ForgeroRegistry.getINSTANCE().toolPartCollection().getToolParts().stream().map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
+            toolParts = ForgeroRegistry.getInstance().toolPartCollection().getToolParts().stream().map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
         }
         return toolParts;
     }

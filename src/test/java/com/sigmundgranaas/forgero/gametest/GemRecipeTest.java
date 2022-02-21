@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroGemAdapterImpl;
@@ -29,7 +29,7 @@ public class GemRecipeTest {
 
         AtomicInteger total = new AtomicInteger();
         AtomicInteger correct = new AtomicInteger();
-        GemCollection.INSTANCE.getGems().forEach(gem -> {
+        ForgeroRegistry.getInstance().gemCollection().getGems().forEach(gem -> {
 
             for (int i = 1; i < 10; i++) {
                 Gem gem1 = gem.createGem(i);
@@ -73,7 +73,7 @@ public class GemRecipeTest {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void CannotCombineGemOfDifferentLevel(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
-        GemCollection.INSTANCE.getGems().forEach(gem -> {
+        ForgeroRegistry.getInstance().gemCollection().getGems().forEach(gem -> {
 
             Gem gem1 = gem.createGem(1);
             Gem gem2 = gem.createGem(2);
@@ -102,7 +102,7 @@ public class GemRecipeTest {
 
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void allGemsHaveBeenRegistered(TestContext context) {
-        GemCollection.INSTANCE.getGems().stream().map(gem -> Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()))).forEach(item -> {
+        ForgeroRegistry.getInstance().gemCollection().getGems().stream().map(gem -> Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()))).forEach(item -> {
             if (item == Items.AIR) {
                 throw new GameTestException("Not all gems have been registered correctly");
             }
@@ -114,7 +114,7 @@ public class GemRecipeTest {
     public void only1GemPerToolPart(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
 
-        GemCollection.INSTANCE.getGems().forEach(gem -> {
+        ForgeroRegistry.getInstance().gemCollection().getGems().forEach(gem -> {
             SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
             Gem gem1 = gem.createGem(1);
@@ -158,7 +158,7 @@ public class GemRecipeTest {
         ItemStack itemStackWithNbtReference1 = handler.getSlot(2).getStack().copy();
         handler.setStackInSlot(0, 2, itemStackWithNbtReference1);
 
-        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, GemCollection.INSTANCE.getGems().get(0).getIdentifier())));
+        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, ForgeroRegistry.getInstance().gemCollection().getGems().get(0).getIdentifier())));
         handler.setStackInSlot(1, 2, gemStack1);
         handler.updateResult();
         ItemStack itemStackWithNbtReference2 = handler.getSlot(2).getStack().copy();
@@ -181,7 +181,7 @@ public class GemRecipeTest {
 
 
         ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead")));
-        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, GemCollection.INSTANCE.getGems().get(0).getIdentifier())));
+        ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, ForgeroRegistry.getInstance().gemCollection().getGems().get(0).getIdentifier())));
 
 
         handler.setStackInSlot(0, 1, toolPartStack);

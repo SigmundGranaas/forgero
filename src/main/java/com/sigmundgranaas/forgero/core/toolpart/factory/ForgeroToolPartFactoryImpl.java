@@ -38,7 +38,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     @Override
     public @NotNull
     ForgeroToolPart createToolPart(@NotNull ForgeroToolPartIdentifier identifier) {
-        PrimaryMaterial material = (PrimaryMaterial) ForgeroRegistry.getINSTANCE().materialCollection().getMaterial(identifier.getMaterial());
+        PrimaryMaterial material = (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(identifier.getMaterial());
 
         return switch (identifier.getToolPartType()) {
             case HEAD -> createToolPartHead(identifier, material);

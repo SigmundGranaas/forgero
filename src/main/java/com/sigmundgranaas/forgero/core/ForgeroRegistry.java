@@ -32,10 +32,6 @@ public record ForgeroRegistry(MaterialCollection materialCollection,
         return INSTANCE;
     }
 
-    public static ForgeroRegistry getINSTANCE() {
-        return INSTANCE;
-    }
-
     @Override
     public MaterialCollection materialCollection() {
         return materialCollection;

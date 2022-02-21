@@ -51,7 +51,7 @@ public class ForgeroClient implements ClientModInitializer {
 
     private void registerToolPartModels() {
         ItemCollection itemCollection = ItemCollection.INSTANCE;
-        MaterialCollection materialCollection = ForgeroRegistry.getINSTANCE().materialCollection();
+        MaterialCollection materialCollection = ForgeroRegistry.getInstance().materialCollection();
 
         ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
 
@@ -73,7 +73,7 @@ public class ForgeroClient implements ClientModInitializer {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.SHOVEL), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
             }
         }
-        for (Gem gem : ForgeroRegistry.getINSTANCE().gemCollection().getGems()) {
+        for (Gem gem : ForgeroRegistry.getInstance().gemCollection().getGems()) {
             if (gem instanceof HeadGem) {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));

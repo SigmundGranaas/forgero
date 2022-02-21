@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.gem.gems.AdditiveDurabilityGem;
 import com.sigmundgranaas.forgero.core.gem.gems.AdditiveMiningSpeedGem;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
@@ -71,9 +71,9 @@ public class GemToolTest {
     }
 
     ItemStack createToolItemWithGem(Gem headGem) {
-        HeadState state = new HeadState(MaterialCollection.INSTANCE.getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), (HeadGem) headGem, ForgeroToolTypes.PICKAXE);
+        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), (HeadGem) headGem, ForgeroToolTypes.PICKAXE);
         ToolPartHead head = new PickaxeHead(state);
-        HandleState handleState = new HandleState(MaterialCollection.INSTANCE.getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
+        HandleState handleState = new HandleState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
         ToolPartHandle handle = new Handle(handleState);
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));
