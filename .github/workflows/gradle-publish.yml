@@ -41,5 +41,11 @@ jobs:
       with:
         arguments: publish
       env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Publish to CurseForge
+      run: ./gradlew curseforge
+      env:
+        CurseForgeApiKey: ${{ secrets.CURSEFORGEAPIKEY }}
+      
