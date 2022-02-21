@@ -1,14 +1,41 @@
 {
   "replace": false,
   "values": [
-    "forgero:oak_handle",
-    "forgero:birch_handle",
-    "forgero:spruce_handle",
-    "forgero:acacia_handle",
-    "forgero:stone_handle",
-    "forgero:iron_handle",
-    "forgero:gold_handle",
-    "forgero:diamond_handle",
-    "forgero:netherite_handle"
+    {
+      "id": "forgero:oak_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:birch_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:spruce_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:acacia_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:stone_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:iron_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:gold_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:diamond_handle",
+      "required": false
+    },
+    {
+      "id": "forgero:netherite_handle",
+      "required": false
+    }
   ]
 }
