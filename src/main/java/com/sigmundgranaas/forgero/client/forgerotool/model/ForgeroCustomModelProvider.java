@@ -55,7 +55,7 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

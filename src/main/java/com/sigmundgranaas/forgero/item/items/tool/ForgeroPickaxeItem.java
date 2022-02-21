@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -45,7 +45,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
 
     @Override
     public Identifier getIdentifier() {
-        return new Identifier(Forgero.MOD_NAMESPACE, tool.getToolIdentifierString());
+        return new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
 
     @Override
     protected String getOrCreateTranslationKey() {
-        return String.format("item.%s.%s_%s", Forgero.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
+        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
     @Override

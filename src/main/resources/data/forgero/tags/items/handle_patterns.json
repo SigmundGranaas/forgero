@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "forgero:handle_pattern_default"
+    {
+      "id": "forgero:handle_pattern_default",
+      "required": false
+    }
   ]
 }

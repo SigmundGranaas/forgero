@@ -7,7 +7,7 @@ class RealisticMaterialLoaderImplTest {
 
     @Test
     void loadAllMaterials() {
-        MaterialLoader loader = new RealisticMaterialLoader("/config/forgero/materials/realistic/realistic_materials.json");
+        MaterialLoader loader = new RealisticMaterialLoader("/data/forgero/materials/realistic/realistic_materials.json");
         var materials = loader.getMaterials();
         assert (materials.size() > 0);
     }

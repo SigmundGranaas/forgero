@@ -19,15 +19,16 @@
       "com.sigmundgranaas.forgero.client.ForgeroClient"
     ],
     "main": [
-      "com.sigmundgranaas.forgero.Forgero"
+      "com.sigmundgranaas.forgero.ForgeroInitializer"
     ]
   },
   "mixins": [
     "forgero.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.13.2",
+    "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": "1.18.1"
+    "minecraft": "1.18.x",
+    "java": ">=17"
   }
 }

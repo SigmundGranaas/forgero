@@ -66,7 +66,7 @@ public interface ToolPartStrategyFactory {
         } else if (primary instanceof SimplePrimaryMaterial && secondary instanceof SimpleSecondaryMaterial) {
             return new SimpleBindingStrategy((SimplePrimaryMaterial) primary, (SimpleSecondaryMaterial) secondary);
         } else {
-            throw new IllegalArgumentException(String.format("Unknown type of materials, primary: %s, secondary: %s", primary.getClass().getName(), secondary.getClass().getName()));
+            throw new IllegalArgumentException(String.format("Unknown type of materials.json, primary: %s, secondary: %s", primary.getClass().getName(), secondary.getClass().getName()));
         }
     }
 }

@@ -1,12 +1,16 @@
 package com.sigmundgranaas.forgero.client;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
-import com.sigmundgranaas.forgero.core.gem.*;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.gem.BindingGem;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.gem.HandleGem;
+import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -32,7 +36,7 @@ import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
-    public static final Logger LOGGER = LogManager.getLogger(Forgero.MOD_NAMESPACE);
+    public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
     public static Set<ModelIdentifier> modelSet = new HashSet<>();
 
     @Override
@@ -47,7 +51,7 @@ public class ForgeroClient implements ClientModInitializer {
 
     private void registerToolPartModels() {
         ItemCollection itemCollection = ItemCollection.INSTANCE;
-        MaterialCollection materialCollection = MaterialCollection.INSTANCE;
+        MaterialCollection materialCollection = ForgeroRegistry.getInstance().materialCollection();
 
         ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
 
@@ -69,7 +73,7 @@ public class ForgeroClient implements ClientModInitializer {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.SHOVEL), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
             }
         }
-        for (Gem gem : GemCollection.INSTANCE.getGems()) {
+        for (Gem gem : ForgeroRegistry.getInstance().gemCollection().getGems()) {
             if (gem instanceof HeadGem) {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
@@ -89,9 +93,9 @@ public class ForgeroClient implements ClientModInitializer {
 
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
             //modelSet.forEach(out);
-            List<ModelIdentifier> textures = registry.getTextures().stream().map(texture -> new ModelIdentifier(Forgero.MOD_NAMESPACE, texture.getIdentifier() + "texture_dummy", "inventory")).collect(Collectors.toList());
+            List<ModelIdentifier> textures = registry.getTextures().stream().map(texture -> new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, texture.getIdentifier() + "texture_dummy", "inventory")).collect(Collectors.toList());
             textures.forEach(out);
-            out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "transparent_base" + "texture_dummy", "inventory"));
+            out.accept(new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, "transparent_base" + "texture_dummy", "inventory"));
             //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "pickaxehead_gem" + "texture_dummy", "inventory"));
             //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "handle_gem" + "texture_dummy", "inventory"));
             //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "fullhandle_gem" + "texture_dummy", "inventory"));
@@ -103,19 +107,19 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private ModelIdentifier createToolPartModelIdentifier(PrimaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_primary_default" + "texture_dummy", "inventory");
+        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_primary_default" + "texture_dummy", "inventory");
 
     }
 
     private ModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_primary_default" + "texture_dummy", "inventory");
+        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_primary_default" + "texture_dummy", "inventory");
     }
 
     private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
+        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
     }
 
     private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart) {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
+        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
     }
 }

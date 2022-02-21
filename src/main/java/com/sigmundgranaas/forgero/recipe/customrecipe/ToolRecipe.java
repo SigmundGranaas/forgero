@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -102,7 +102,7 @@ public class ToolRecipe extends ShapedRecipe {
 
         @Override
         public Identifier getIdentifier() {
-            return new Identifier(Forgero.MOD_NAMESPACE, RecipeTypes.TOOL_RECIPE.getName());
+            return new Identifier(ForgeroInitializer.MOD_NAMESPACE, RecipeTypes.TOOL_RECIPE.getName());
         }
     }
 }

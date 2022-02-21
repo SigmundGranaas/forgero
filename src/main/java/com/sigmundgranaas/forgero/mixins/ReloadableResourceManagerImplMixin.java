@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureLoader;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
@@ -35,7 +35,7 @@ public abstract class ReloadableResourceManagerImplMixin {
     @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
 
-        if (id.getNamespace().equals(Forgero.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent") && !id.getPath().contains("pattern")) {
+        if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent") && !id.getPath().contains("pattern")) {
             FabricTextureIdentifierFactory factory = new FabricTextureIdentifierFactory();
 
             Optional<ToolPartModelTextureIdentifier> identifierResult = factory.createToolPartTextureIdentifier(id.getPath());
@@ -45,7 +45,7 @@ public abstract class ReloadableResourceManagerImplMixin {
 
                 Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 
-                Resource resource = new ResourceImpl(Forgero.MOD_NAMESPACE, id, toolPartTexture.getStream(), null);
+                Resource resource = new ResourceImpl(ForgeroInitializer.MOD_NAMESPACE, id, toolPartTexture.getStream(), null);
 
                 cir.setReturnValue(resource);
 

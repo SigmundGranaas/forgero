@@ -1,14 +1,41 @@
 {
   "replace": false,
   "values": [
-    "forgero:oak_pickaxehead",
-    "forgero:birch_pickaxehead",
-    "forgero:spruce_pickaxehead",
-    "forgero:acacia_pickaxehead",
-    "forgero:stone_pickaxehead",
-    "forgero:iron_pickaxehead",
-    "forgero:gold_pickaxehead",
-    "forgero:diamond_pickaxehead",
-    "forgero:netherite_pickaxehead"
+    {
+      "id": "forgero:oak_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:birch_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:spruce_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:acacia_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:stone_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:iron_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:gold_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:diamond_pickaxehead",
+      "required": false
+    },
+    {
+      "id": "forgero:netherite_pickaxehead",
+      "required": false
+    }
   ]
 }

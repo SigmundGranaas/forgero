@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.texture.palette;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier;
@@ -49,7 +49,7 @@ public class CachedPaletteService implements PaletteService {
                 return generatePalette(id);
             }
         } catch (IOException | URISyntaxException e) {
-            Forgero.LOGGER.error(e);
+            ForgeroInitializer.LOGGER.error(e);
             throw new IllegalArgumentException();
         }
 
@@ -60,7 +60,7 @@ public class CachedPaletteService implements PaletteService {
         try {
             paletteIdentifier = PaletteResourceRegistry.getInstance().getPalette(material).orElseThrow();
         } catch (NoSuchElementException e) {
-            Forgero.LOGGER.error("Unable to find Palette {} in palette registry, you have probably forgotten to add it", material);
+            ForgeroInitializer.LOGGER.error("Unable to find Palette {} in palette registry, you have probably forgotten to add it", material);
             throw e;
         }
         List<Texture> inclusions = getPalettes(paletteIdentifier.getPaletteIdentifiers().stream().map(identifier -> new PaletteTemplateIdentifier(identifier.getResource().replace(".png", ""))).collect(Collectors.toList()));
@@ -93,7 +93,7 @@ public class CachedPaletteService implements PaletteService {
 
 
         } catch (IOException e) {
-            Forgero.LOGGER.error(e);
+            ForgeroInitializer.LOGGER.error(e);
         }
     }
 

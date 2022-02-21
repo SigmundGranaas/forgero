@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.identifier.tool;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierType;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -12,7 +12,7 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
         super(ForgeroIdentifierType.TOOL);
         String[] elements = toolDescriptor.split("_");
         if (elements.length != 2) {
-            Forgero.LOGGER.warn("Unable to Create ForgeroToolIdentifier with: {}", toolDescriptor);
+            ForgeroInitializer.LOGGER.warn("Unable to Create ForgeroToolIdentifier with: {}", toolDescriptor);
             throw new IllegalArgumentException("Unable to Create ForgeroTolIdentifier with: " + toolDescriptor);
         }
         this.toolElements = elements;

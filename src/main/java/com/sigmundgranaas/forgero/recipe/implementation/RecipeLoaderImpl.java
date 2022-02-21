@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.recipe.implementation;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
@@ -19,7 +19,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
 
     public static RecipeLoader getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RecipeLoaderImpl("/config/forgero/templates/recipes");
+            INSTANCE = new RecipeLoaderImpl("/data/forgero/templates/recipes");
         }
         return INSTANCE;
     }
@@ -47,8 +47,8 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             recipes.put(RecipeTypes.TOOL_PART_GEM_UPGRADE, toolPartGemUpgrade);
             return recipes;
         } catch (NullPointerException | JsonIOException e) {
-            Forgero.LOGGER.error("Unable to read Materials from: {}", recipeFolderPath);
-            Forgero.LOGGER.error(e);
+            ForgeroInitializer.LOGGER.error("Unable to read Materials from: {}", recipeFolderPath);
+            ForgeroInitializer.LOGGER.error(e);
             throw new NoMaterialsException();
         }
     }

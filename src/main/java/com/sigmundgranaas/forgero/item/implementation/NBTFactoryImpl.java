@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -51,7 +50,7 @@ public class NBTFactoryImpl implements NBTFactory {
     public @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound) {
         String primaryMaterialString = compound.getString(ToolPartItem.PRIMARY_MATERIAL_IDENTIFIER);
-        PrimaryMaterial primary = (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
+        PrimaryMaterial primary = (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
         String secondaryMaterialString = compound.getString(ToolPartItem.SECONDARY_MATERIAL_IDENTIFIER);
 
         String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
@@ -72,7 +71,7 @@ public class NBTFactoryImpl implements NBTFactory {
             case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, toolType);
         };
         if (!secondaryMaterialString.equals("empty")) {
-            builder.setSecondary((SecondaryMaterial) MaterialCollection.INSTANCE.getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
+            builder.setSecondary((SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
         }
 
 
@@ -176,7 +175,7 @@ public class NBTFactoryImpl implements NBTFactory {
     Gem getGemFromNbtString(String nbtGem) {
         String[] elements = nbtGem.split("_");
         assert (elements.length == 3);
-        Gem gem = GemCollection.INSTANCE.getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
+        Gem gem = ForgeroRegistry.getInstance().gemCollection().getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
         return gem.createGem(Integer.parseInt(elements[0]));
     }
 

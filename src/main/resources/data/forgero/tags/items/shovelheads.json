@@ -1,14 +1,41 @@
 {
   "replace": false,
   "values": [
-    "forgero:oak_shovelhead",
-    "forgero:birch_shovelhead",
-    "forgero:spruce_shovelhead",
-    "forgero:acacia_shovelhead",
-    "forgero:stone_shovelhead",
-    "forgero:iron_shovelhead",
-    "forgero:gold_shovelhead",
-    "forgero:diamond_shovelhead",
-    "forgero:netherite_shovelhead"
+    {
+      "id": "forgero:oak_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:birch_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:spruce_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:acacia_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:stone_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:iron_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:gold_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:diamond_shovelhead",
+      "required": false
+    },
+    {
+      "id": "forgero:netherite_shovelhead",
+      "required": false
+    }
   ]
 }

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
@@ -19,7 +19,7 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     @Override
     public @Nullable
     UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
-        if (modelId.getNamespace().equals(Forgero.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
+        if (modelId.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
             String[] elements = modelId.getPath().split("_");
             if (ForgeroToolTypes.isTool(elements[1])) {
                 return new ToolModelVariant(collection);

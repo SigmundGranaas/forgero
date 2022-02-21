@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
@@ -37,7 +37,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
     public ItemStack craft(Inventory inventory) {
         ItemStack toolPartStack = null;
         String additionMaterialIdentifier = addition.toJson().getAsJsonObject().getAsJsonPrimitive("item").getAsString();
-        SecondaryMaterial secondaryMaterial = MaterialCollection.INSTANCE.getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredient().equals(additionMaterialIdentifier)).findFirst().orElse(new EmptySecondaryMaterial());
+        SecondaryMaterial secondaryMaterial = ForgeroRegistry.getInstance().materialCollection().getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredient().equals(additionMaterialIdentifier)).findFirst().orElse(new EmptySecondaryMaterial());
         for (int i = 0; i < inventory.size(); i++) {
             if (base.test(inventory.getStack(i))) {
                 toolPartStack = inventory.getStack(i);
@@ -73,7 +73,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
 
         @Override
         public Identifier getIdentifier() {
-            return new Identifier(Forgero.MOD_NAMESPACE, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE.getName());
+            return new Identifier(ForgeroInitializer.MOD_NAMESPACE, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE.getName());
         }
 
         @Override

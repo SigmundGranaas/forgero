@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
@@ -37,7 +38,8 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     @Override
     public @NotNull
     ForgeroToolPart createToolPart(@NotNull ForgeroToolPartIdentifier identifier) {
-        PrimaryMaterial material = (PrimaryMaterial) MaterialCollection.INSTANCE.getMaterial(identifier.getMaterial());
+        PrimaryMaterial material = (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(identifier.getMaterial());
+
         return switch (identifier.getToolPartType()) {
             case HEAD -> createToolPartHead(identifier, material);
             case HANDLE -> new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem()));

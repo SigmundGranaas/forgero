@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.core.toolpart;
 
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -12,20 +10,11 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class ForgeroToolPartCollectionImpl implements ForgeroToolPartCollection {
-    public static ForgeroToolPartCollection INSTANCE;
     private final List<ForgeroToolPart> toolParts;
 
     public ForgeroToolPartCollectionImpl(List<ForgeroToolPart> toolParts) {
         this.toolParts = toolParts;
     }
-
-    public static ForgeroToolPartCollection getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ForgeroToolPartCollectionImpl(ForgeroToolPartFactory.INSTANCE.createBaseToolParts(MaterialCollection.INSTANCE));
-        }
-        return INSTANCE;
-    }
-
 
     @Override
     public @NotNull

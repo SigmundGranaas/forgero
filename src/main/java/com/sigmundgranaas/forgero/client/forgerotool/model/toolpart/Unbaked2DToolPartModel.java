@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.ModelRotation;
@@ -41,7 +41,7 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
     }
 
     protected String getTextureBasePath() {
-        return Forgero.MOD_NAMESPACE + ":item/";
+        return ForgeroInitializer.MOD_NAMESPACE + ":item/";
     }
 
     protected JsonObject getTextures() {
@@ -72,6 +72,6 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
 
     @Override
     public ModelIdentifier getId() {
-        return new ModelIdentifier(Forgero.MOD_NAMESPACE, getIdentifier(), "inventory");
+        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, getIdentifier(), "inventory");
     }
 }

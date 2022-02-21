@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'maven-publish'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -78,12 +79,43 @@ publishing {
 
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/sigmundgranaas/forgero"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
         // Add repositories to publish to here.
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
 }
+
+
+curseforge {
+    apiKey = System.getenv("CurseForgeApiKey") ?: ""
+    project {
+        id = '581435'
+        changelogType = "markdown"
+        changelog = file('changelog.md')
+
+        releaseType = 'alpha'
+        addGameVersion project.minecraft_version
+        addGameVersion 'Fabric'
+        addGameVersion "Java 17"
+
+        mainArtifact(remapJar) {
+            displayName = "Forgero [Fabric]: $project.version"
+        }
+    }
+    options {
+        forgeGradleIntegration = false // defaults to true
+    }
+}
+
 sourceSets {
     forgero {
         compileClasspath += main.compileClasspath
