@@ -25,7 +25,7 @@ public class JsonFolderLoader {
 
     /**
      * @return List<MaterialPOJO>
-     * @throws NoMaterialsException - if the method cannot retrieve any materials
+     * @throws NoMaterialsException - if the method cannot retrieve any materials.json
      */
     public <T> List<T> loadMaterials(Class<T> type) {
 
@@ -54,7 +54,7 @@ public class JsonFolderLoader {
 
     /**
      * @return MaterialPOJO
-     * @throws NoMaterialsException - if the method cannot retrieve any materials
+     * @throws NoMaterialsException - if the method cannot retrieve any materials.json
      */
     public <T> Optional<T> loadMaterial(String filePath, Class<T> type) {
 

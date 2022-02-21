@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero;
 
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.item.items.GemItem;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
@@ -19,10 +20,9 @@ public class ForgeroInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ForgeroRegistry.getInstance().initializeDefaults();
         registerItems();
         registerRecipes();
-
-        //MaterialManager.initializePrimaryMaterials();
     }
 
     private void registerItems() {

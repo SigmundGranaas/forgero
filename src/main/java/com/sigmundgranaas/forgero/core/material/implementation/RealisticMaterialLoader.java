@@ -30,7 +30,7 @@ public record RealisticMaterialLoader(String materialPath) implements MaterialLo
 
     /**
      * @return List<MaterialPOJO>
-     * @throws NoMaterialsException - if the method cannot retrieve any materials
+     * @throws NoMaterialsException - if the method cannot retrieve any materials.json
      */
     public List<RealisticMaterialPOJO> loadMaterials() {
         try {
