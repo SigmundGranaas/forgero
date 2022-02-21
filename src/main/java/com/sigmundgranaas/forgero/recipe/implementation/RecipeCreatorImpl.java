@@ -4,15 +4,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.gem.*;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.gem.BindingGem;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.gem.HandleGem;
+import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.recipe.RecipeCreator;
@@ -37,12 +38,13 @@ public record RecipeCreatorImpl(
 
     public static RecipeCreator getInstance() {
         if (INSTANCE == null) {
+            ForgeroRegistry registry = ForgeroRegistry.getInstance();
             INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates(),
-                    ForgeroToolCollection.INSTANCE.getTools(),
-                    ForgeroToolPartCollection.INSTANCE.getToolParts(),
-                    MaterialCollection.INSTANCE.getPrimaryMaterialsAsList(),
-                    MaterialCollection.INSTANCE.getSecondaryMaterialsAsList(),
-                    GemCollection.INSTANCE.getGems());
+                    registry.toolCollection().getTools(),
+                    registry.toolPartCollection().getToolParts(),
+                    registry.materialCollection().getPrimaryMaterialsAsList(),
+                    registry.materialCollection().getSecondaryMaterialsAsList(),
+                    registry.gemCollection().getGems());
         }
         return INSTANCE;
     }

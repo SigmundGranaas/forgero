@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface MaterialCollection {
-    MaterialCollection INSTANCE = MaterialCollectionImpl.getInstance();
+    static MaterialCollection createCollection(Map<String, ForgeroMaterial> materials) {
+        return new MaterialCollectionImpl(materials);
+    }
 
     @NotNull
     Map<String, ForgeroMaterial> getMaterialsAsMap();
 
     @NotNull
     List<ForgeroMaterial> getMaterialsAsList();
-
-    void updateMaterials(Map<String, ForgeroMaterial> materials);
 
     @NotNull
     List<PrimaryMaterial> getPrimaryMaterialsAsList();

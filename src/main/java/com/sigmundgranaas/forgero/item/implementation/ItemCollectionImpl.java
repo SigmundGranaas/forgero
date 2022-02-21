@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
@@ -28,7 +27,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<Item> getTools() {
         if (tools.isEmpty()) {
-            tools = ForgeroToolCollection.INSTANCE.getTools().stream().map(ItemFactory.INSTANCE::createTool).collect(Collectors.toList());
+            tools = ForgeroRegistry.getINSTANCE().toolCollection().getTools().stream().map(ItemFactory.INSTANCE::createTool).collect(Collectors.toList());
         }
         return tools;
     }
@@ -41,7 +40,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<Item> getToolParts() {
         if (toolParts.isEmpty()) {
-            toolParts = ForgeroToolPartCollection.INSTANCE.getToolParts().stream().map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
+            toolParts = ForgeroRegistry.getINSTANCE().toolPartCollection().getToolParts().stream().map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
         }
         return toolParts;
     }

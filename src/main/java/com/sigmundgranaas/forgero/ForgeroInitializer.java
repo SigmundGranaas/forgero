@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.gem.GemCollection;
+import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.item.items.GemItem;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
@@ -16,11 +16,12 @@ import org.apache.logging.log4j.Logger;
 public class ForgeroInitializer implements ModInitializer {
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
-    public static String MOD_NAME = "Forgero";
 
     @Override
     public void onInitialize() {
-        ForgeroRegistry.getInstance().initializeDefaults();
+        ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
+        initializer.registerDefaultResources();
+        initializer.initializeForgeroResources();
         registerItems();
         registerRecipes();
     }
@@ -29,7 +30,7 @@ public class ForgeroInitializer implements ModInitializer {
         ItemRegistry.INSTANCE.registerTools();
         ItemRegistry.INSTANCE.registerToolParts();
         ItemRegistry.INSTANCE.registerPatterns();
-        GemCollection.INSTANCE.getGems().forEach(gem -> Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()), new GemItem(new FabricItemSettings().group(ItemGroup.MISC), gem)));
+        ForgeroRegistry.getINSTANCE().gemCollection().getGems().forEach(gem -> Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()), new GemItem(new FabricItemSettings().group(ItemGroup.MISC), gem)));
     }
 
     private void registerRecipes() {

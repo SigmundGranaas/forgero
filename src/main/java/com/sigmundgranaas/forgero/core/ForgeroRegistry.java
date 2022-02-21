@@ -1,54 +1,58 @@
 package com.sigmundgranaas.forgero.core;
 
-import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
-import com.sigmundgranaas.forgero.core.util.ListPOJO;
+import com.sigmundgranaas.forgero.core.gem.GemCollection;
+import com.sigmundgranaas.forgero.core.material.MaterialCollection;
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
 
-import java.util.Collections;
-import java.util.List;
-
-public class ForgeroRegistry {
+public record ForgeroRegistry(MaterialCollection materialCollection,
+                              GemCollection gemCollection,
+                              ForgeroToolCollection toolCollection,
+                              ForgeroToolPartCollection toolPartCollection) {
     private static ForgeroRegistry INSTANCE;
-    private List<String> materials;
-    private List<String> gems;
 
-    private ForgeroRegistry() {
-        this.materials = Collections.emptyList();
-        this.gems = Collections.emptyList();
+    public static ForgeroRegistry initializeRegistry(MaterialCollection materialCollection,
+                                                     GemCollection gemCollection,
+                                                     ForgeroToolCollection toolCollection,
+                                                     ForgeroToolPartCollection toolPartCollection) {
+        INSTANCE = new ForgeroRegistry(materialCollection,
+                gemCollection,
+                toolCollection,
+                toolPartCollection);
+
+        return INSTANCE;
     }
 
     public static ForgeroRegistry getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ForgeroRegistry();
+            ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
+            initializer.registerDefaultResources();
+            INSTANCE = initializer.initializeForgeroResources();
         }
         return INSTANCE;
     }
 
-    public void registerDefaultMaterials() {
-        JsonPOJOLoader
-                .loadPOJO("/data/forgero/materials/materials.json", ListPOJO.class)
-                .ifPresent(materialList -> materials = materialList.elements);
+    public static ForgeroRegistry getINSTANCE() {
+        return INSTANCE;
     }
 
-    public void registerDefaultGems() {
-        JsonPOJOLoader
-                .loadPOJO("/data/forgero/gems/gems.json", ListPOJO.class)
-                .ifPresent(gemList -> gems = gemList.elements);
+    @Override
+    public MaterialCollection materialCollection() {
+        return materialCollection;
     }
 
-    public List<String> getMaterials() {
-        return materials;
+    @Override
+    public GemCollection gemCollection() {
+        return gemCollection;
     }
 
-    public List<String> getGems() {
-        return gems;
+    @Override
+    public ForgeroToolCollection toolCollection() {
+        return toolCollection;
     }
 
-    boolean registerMaterial(String material) {
-        return false;
-    }
-
-    public void initializeDefaults() {
-        registerDefaultGems();
-        registerDefaultMaterials();
+    @Override
+    public ForgeroToolPartCollection toolPartCollection() {
+        return toolPartCollection;
     }
 }

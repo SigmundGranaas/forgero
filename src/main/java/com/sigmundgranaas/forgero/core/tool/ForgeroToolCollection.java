@@ -5,8 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface ForgeroToolCollection {
-    ForgeroToolCollection INSTANCE = ForgeroToolCollectionImpl.getInstance();
-
     @NotNull
     List<ForgeroTool> getTools();
 

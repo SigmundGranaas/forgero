@@ -8,8 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface ForgeroToolPartCollection {
-    ForgeroToolPartCollection INSTANCE = ForgeroToolPartCollectionImpl.getInstance();
-
     @NotNull
     List<ForgeroToolPart> getToolParts();
 

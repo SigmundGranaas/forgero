@@ -6,7 +6,11 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
-import com.sigmundgranaas.forgero.core.gem.*;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.gem.BindingGem;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.gem.HandleGem;
+import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -47,7 +51,7 @@ public class ForgeroClient implements ClientModInitializer {
 
     private void registerToolPartModels() {
         ItemCollection itemCollection = ItemCollection.INSTANCE;
-        MaterialCollection materialCollection = MaterialCollection.INSTANCE;
+        MaterialCollection materialCollection = ForgeroRegistry.getINSTANCE().materialCollection();
 
         ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
 
@@ -69,7 +73,7 @@ public class ForgeroClient implements ClientModInitializer {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.SHOVEL), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
             }
         }
-        for (Gem gem : GemCollection.INSTANCE.getGems()) {
+        for (Gem gem : ForgeroRegistry.getINSTANCE().gemCollection().getGems()) {
             if (gem instanceof HeadGem) {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));

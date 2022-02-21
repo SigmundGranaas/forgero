@@ -1,27 +1,16 @@
 package com.sigmundgranaas.forgero.core.tool;
 
-import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ForgeroToolCollectionImpl implements ForgeroToolCollection {
-    public static ForgeroToolCollection INSTANCE;
     private final List<ForgeroTool> tools;
 
     public ForgeroToolCollectionImpl(List<ForgeroTool> forgeroTools) {
         this.tools = forgeroTools;
     }
-
-    public static ForgeroToolCollection getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ForgeroToolCollectionImpl(ForgeroToolFactory.INSTANCE.createForgeroTools(ForgeroToolPartCollection.INSTANCE));
-        }
-        return INSTANCE;
-    }
-
 
     @Override
     public @NotNull
