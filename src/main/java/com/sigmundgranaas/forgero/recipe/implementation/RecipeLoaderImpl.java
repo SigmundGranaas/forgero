@@ -30,6 +30,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             JsonObject bindingRecipe = getRecipeAsJson(recipeFolderPath + "/binding.json");
             JsonObject handleRecipe = getRecipeAsJson(recipeFolderPath + "/handle.json");
             JsonObject pickaxeHeadRecipe = getRecipeAsJson(recipeFolderPath + "/pickaxehead.json");
+            JsonObject axeHeadRecipe = getRecipeAsJson(recipeFolderPath + "/axehead.json");
             JsonObject shovelHeadRecipe = getRecipeAsJson(recipeFolderPath + "/shovelhead.json");
             JsonObject toolRecipe = getRecipeAsJson(recipeFolderPath + "/tool.json");
             JsonObject toolWithBindingRecipe = getRecipeAsJson(recipeFolderPath + "/tool_with_binding.json");
@@ -45,6 +46,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             recipes.put(RecipeTypes.TOOL_WITH_BINDING_RECIPE, toolWithBindingRecipe);
             recipes.put(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE, toolPartSecondaryMaterialUpgrade);
             recipes.put(RecipeTypes.TOOL_PART_GEM_UPGRADE, toolPartGemUpgrade);
+            recipes.put(RecipeTypes.AXEHEAD_RECIPE, axeHeadRecipe);
             return recipes;
         } catch (NullPointerException | JsonIOException e) {
             ForgeroInitializer.LOGGER.error("Unable to read Materials from: {}", recipeFolderPath);

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "forgero:axehead_pattern_default",
+      "required": false
+    }
+  ]
+}

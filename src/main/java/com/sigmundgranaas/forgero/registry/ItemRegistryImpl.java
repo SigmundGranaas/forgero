@@ -23,11 +23,13 @@ public class ItemRegistryImpl implements ItemRegistry {
     public static final Tag<Item> BINDING_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "binding_patterns"));
     public static final Tag<Item> PICKAXEHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_patterns"));
     public static final Tag<Item> SHOVELHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_patterns"));
+    public static final Tag<Item> AXEHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_patterns"));
 
     private static final Item BINDING_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.BINDING_RECIPE);
     private static final Item HANDLE_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.HANDLE_RECIPE);
     private static final Item PICKAXEHEAD_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.PICKAXEHEAD_RECIPE);
     private static final Item SHOVELHEAD_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.SHOVELHEAD_RECIPE);
+    private static final Item AXEHEAD_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.AXEHEAD_RECIPE);
 
     private static ItemRegistry INSTANCE;
     private final ItemCollection collection;
@@ -74,5 +76,6 @@ public class ItemRegistryImpl implements ItemRegistry {
         Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_pattern_default"), HANDLE_PATTERN_DEFAULT);
         Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_pattern_default"), PICKAXEHEAD_PATTERN_DEFAULT);
         Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_pattern_default"), SHOVELHEAD_PATTERN_DEFAULT);
+        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_pattern_default"), AXEHEAD_PATTERN_DEFAULT);
     }
 }

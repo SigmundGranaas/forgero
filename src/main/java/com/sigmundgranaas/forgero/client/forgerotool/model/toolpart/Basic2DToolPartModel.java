@@ -27,6 +27,11 @@ public class Basic2DToolPartModel extends Unbaked2DToolPartModel {
 
     @Override
     public int getModelLayerIndex() {
-        return 0;
+        return switch (identifier.getTemplateTextureIdentifier().getToolPartModelLayer()) {
+            case PRIMARY -> 0;
+            case SECONDARY -> 1;
+            case GEM -> 2;
+            default -> 0;
+        };
     }
 }

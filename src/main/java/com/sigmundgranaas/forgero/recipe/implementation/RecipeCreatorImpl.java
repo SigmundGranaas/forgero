@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
@@ -28,6 +27,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//TODO Lots of deprecated methods are used to create recipes.
+//TODO THIS IS NOT OBJECT ORIENTED AT ALL, rework to use objects
 public record RecipeCreatorImpl(
         Map<RecipeTypes, JsonObject> recipeTemplates,
         List<ForgeroTool> tools,
@@ -121,11 +122,12 @@ public record RecipeCreatorImpl(
     }
 
     private List<RecipeWrapper> createToolPartHeadRecipe(ForgeroToolPart part) {
-        if (((ToolPartHead) part).getToolType() == ForgeroToolTypes.PICKAXE) {
-            return createRecipe(part, RecipeTypes.PICKAXEHEAD_RECIPE);
-        } else {
-            return createRecipe(part, RecipeTypes.SHOVELHEAD_RECIPE);
-        }
+        return switch (((ToolPartHead) part).getToolType()) {
+            case PICKAXE -> createRecipe(part, RecipeTypes.PICKAXEHEAD_RECIPE);
+            case SHOVEL -> createRecipe(part, RecipeTypes.SHOVELHEAD_RECIPE);
+            case AXE -> createRecipe(part, RecipeTypes.AXEHEAD_RECIPE);
+            case SWORD -> null;
+        };
     }
 
     private List<RecipeWrapper> createToolRecipe(ForgeroTool tool) {
