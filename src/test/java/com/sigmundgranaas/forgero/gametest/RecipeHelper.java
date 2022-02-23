@@ -38,6 +38,7 @@ public class RecipeHelper {
             case HANDLE_RECIPE -> true;
             case BINDING_RECIPE -> true;
             case PICKAXEHEAD_RECIPE -> true;
+            case AXEHEAD_RECIPE -> true;
             case SHOVELHEAD_RECIPE -> true;
             case TOOL_PART_SECONDARY_MATERIAL_UPGRADE -> false;
             case TOOL_PART_GEM_UPGRADE -> false;

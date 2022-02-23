@@ -25,11 +25,11 @@ public interface ToolPartStrategyFactory {
     }
 
     static HeadMaterialStrategy createToolPartHeadStrategy(ForgeroToolTypes head, PrimaryMaterial primary, SecondaryMaterial secondary) {
-        //TODO add complete branching
         if (primary instanceof RealisticPrimaryMaterial) {
             return switch (head) {
                 case PICKAXE -> new RealisticHeadStrategy((RealisticPrimaryMaterial) primary);
                 case SHOVEL -> new RealisticHeadStrategy((RealisticPrimaryMaterial) primary);
+                case AXE -> new RealisticHeadStrategy((RealisticPrimaryMaterial) primary);
                 case SWORD -> null;
             };
         } else if (primary instanceof SimplePrimaryMaterial && secondary instanceof SimpleSecondaryMaterial) {

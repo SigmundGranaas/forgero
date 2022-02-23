@@ -21,6 +21,7 @@ public enum ToolPartModelType {
 
     BINDING,
     PICKAXEBINDING,
+    AXEHEADBINDING,
     SHOVELBINDING;
 
     @SuppressWarnings("DuplicateBranchesInSwitch")
@@ -29,6 +30,7 @@ public enum ToolPartModelType {
             case HEAD -> switch (((ToolPartHead) toolPart).getToolType()) {
                 case PICKAXE -> PICKAXEHEAD;
                 case SHOVEL -> SHOVELHEAD;
+                case AXE -> AXEHEAD;
                 case SWORD -> PICKAXEHEAD;
             };
             case HANDLE -> HANDLE;
@@ -42,6 +44,11 @@ public enum ToolPartModelType {
                 case HEAD -> PICKAXEHEAD;
                 case HANDLE -> FULLHANDLE;
                 case BINDING -> PICKAXEBINDING;
+            };
+            case AXE -> switch (toolPart.getToolPartType()) {
+                case HEAD -> AXEHEAD;
+                case HANDLE -> MEDIUMHANDLE;
+                case BINDING -> AXEHEADBINDING;
             };
             case SHOVEL -> switch (toolPart.getToolPartType()) {
                 case HEAD -> SHOVELHEAD;

@@ -14,6 +14,10 @@
       "required": false
     },
     {
+      "id": "forgero:acacia_shovel",
+      "required": false
+    },
+    {
       "id": "forgero:stone_shovel",
       "required": false
     },

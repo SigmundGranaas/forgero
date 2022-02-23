@@ -15,10 +15,7 @@ import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.Handle;
 import com.sigmundgranaas.forgero.core.toolpart.handle.HandleState;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
-import com.sigmundgranaas.forgero.core.toolpart.head.PickaxeHead;
-import com.sigmundgranaas.forgero.core.toolpart.head.ShovelHead;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.core.toolpart.head.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -48,10 +45,10 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     private ToolPartHead createToolPartHead(@NotNull ForgeroToolPartIdentifier identifier, PrimaryMaterial material) {
-
         return switch (((ForgeroToolPartHeadIdentifier) identifier).getHeadType()) {
             case PICKAXE -> new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE));
             case SHOVEL -> new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.SHOVEL));
+            case AXE -> new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.AXE));
             case SWORD -> null;
         };
     }
@@ -95,6 +92,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
         List<ForgeroToolPart> toolParts = new ArrayList<>();
         toolParts.add(new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem())));
         toolParts.add(new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE)));
+        toolParts.add(new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.AXE)));
         toolParts.add(new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.SHOVEL)));
         toolParts.add(new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem())));
         return toolParts;

@@ -38,6 +38,7 @@ public interface ForgeroToolPart {
             case HEAD -> switch (((ToolPartHead) this).getToolType()) {
                 case PICKAXE -> RecipeTypes.PICKAXEHEAD_RECIPE;
                 case SHOVEL -> RecipeTypes.SHOVELHEAD_RECIPE;
+                case AXE -> RecipeTypes.AXEHEAD_RECIPE;
                 case SWORD -> null;
             };
             case BINDING -> RecipeTypes.BINDING_RECIPE;

@@ -2,20 +2,14 @@ package com.sigmundgranaas.forgero.core.toolpart.head;
 
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 
-public class PickaxeHead extends AbstractToolPartHead {
-    public PickaxeHead(HeadState state) {
+public class AxeHead extends AbstractToolPartHead {
+    public AxeHead(HeadState state) {
         super(state);
     }
 
     @Override
     public int getDurability() {
         return headStrategy.getDurability();
-    }
-
-
-    @Override
-    public ForgeroToolTypes getToolType() {
-        return ForgeroToolTypes.PICKAXE;
     }
 
     @Override
@@ -27,4 +21,11 @@ public class PickaxeHead extends AbstractToolPartHead {
     public float getAttackDamage() {
         return 1 + headStrategy.getAttackDamage();
     }
+
+    @Override
+    public ForgeroToolTypes getToolType() {
+        return ForgeroToolTypes.AXE;
+    }
+
+
 }

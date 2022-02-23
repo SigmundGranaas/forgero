@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.tool;
 public enum ForgeroToolTypes {
     PICKAXE,
     SHOVEL,
+    AXE,
     SWORD;
 
     public static boolean isTool(String element) {
