@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier;
-import com.sigmundgranaas.forgero.core.io.FileLoader;
 import com.sigmundgranaas.forgero.core.io.FileService;
 import com.sigmundgranaas.forgero.core.texture.RawTexture;
 import com.sigmundgranaas.forgero.core.texture.Texture;
@@ -16,14 +15,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+/**
+ * Class for loading textures from filesystem.
+ * This class is used to load template textures and palettes as well as a method for fetching Minecraft's assets.
+ *
+ */
 public class FabricTextureLoader implements TextureLoader {
-
     private final Function<Identifier, Resource> getResource;
-    private final FileLoader fileLoader;
     private final FileService fileService;
 
     public FabricTextureLoader(Function<Identifier, Resource> getResource) {
-        this.fileLoader = new FileLoader();
         this.getResource = getResource;
         this.fileService = new FileService();
     }

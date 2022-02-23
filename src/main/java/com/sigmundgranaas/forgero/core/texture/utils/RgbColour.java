@@ -3,12 +3,13 @@ package com.sigmundgranaas.forgero.core.texture.utils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Wrapper for making RGB value comparison easier
+ * Wrapper around RGB values in BufferedImage for making RGB value comparison easier
  */
 public class RgbColour implements Comparable<RgbColour> {
     private final int red;
     private final int green;
     private final int blue;
+    //Original value is kept because converting it back and forth using integers created some dumb errors
     private int original;
 
 
@@ -28,19 +29,6 @@ public class RgbColour implements Comparable<RgbColour> {
         this.green = green;
         this.blue = blue;
     }
-
-    public int getRed() {
-        return red;
-    }
-
-    public int getGreen() {
-        return green;
-    }
-
-    public int getBlue() {
-        return blue;
-    }
-
 
     public int getLightValue() {
         return (red + green + blue) / 3;

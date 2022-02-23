@@ -9,6 +9,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Raw texture is a base class representing a texture generated from an InputStream.
+ * This is used as the base class for the @Texture interface
+ */
 public record RawTexture(TextureIdentifier id,
                          BufferedImage image) implements Texture {
 

@@ -9,6 +9,13 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * Factory for creating textureidentifiers from Minecraft Identifiers.
+ * This class is not a part of the core library because it Identifiers needs an instance of Minecraft
+ *
+ *
+ * This class needs another rework for properly identifying textures that needs creation, and excluding textures that don't need it.
+ */
 public class FabricTextureIdentifierFactory implements TextureIdentifierFactory {
     @Override
     public ToolPartModelTextureIdentifier createToolPartTextureIdentifier(ForgeroToolPart part) {
