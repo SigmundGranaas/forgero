@@ -7,6 +7,11 @@ import com.sigmundgranaas.forgero.core.texture.TextureLoader;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Cached version of the Template Texture Service
+ *
+ * This service will fetch Template textures from file or from its internal cache.
+ */
 public class CachedTemplateTextureService implements TemplateTextureService {
     private final TextureLoader loader;
     private final Map<String, TemplateTexture> templateCache;

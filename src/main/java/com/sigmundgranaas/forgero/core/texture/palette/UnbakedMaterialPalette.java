@@ -5,17 +5,10 @@ import com.sigmundgranaas.forgero.core.texture.Texture;
 
 import java.util.List;
 
-@SuppressWarnings("ClassCanBeRecord")
-public class UnbakedMaterialPalette implements UnbakedPalette {
-    private final PaletteIdentifier id;
-    private final List<Texture> inclusions;
-    private final List<Texture> exclusions;
 
-    public UnbakedMaterialPalette(PaletteIdentifier id, List<Texture> inclusions, List<Texture> exclusions) {
-        this.id = id;
-        this.inclusions = inclusions;
-        this.exclusions = exclusions;
-    }
+public record UnbakedMaterialPalette(PaletteIdentifier id,
+                                     List<Texture> inclusions,
+                                     List<Texture> exclusions) implements UnbakedPalette {
 
     @Override
     public Palette bake() {

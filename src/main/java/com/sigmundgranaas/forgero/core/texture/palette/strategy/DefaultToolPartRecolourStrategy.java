@@ -10,7 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("ClassCanBeRecord")
+/**
+ * Default recolour strategy. This strategy won't ensure both dark shades wil be chosen for creating the outline of the tool.
+ */
 public class DefaultToolPartRecolourStrategy implements RecolourStrategy {
     protected final TemplateTexture template;
     protected final Palette palette;

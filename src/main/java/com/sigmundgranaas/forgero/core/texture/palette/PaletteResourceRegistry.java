@@ -5,6 +5,9 @@ import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifi
 
 import java.util.*;
 
+/**
+ * Registry for registering palettes and keeping track of which palettes should be generated, and which should be loaded from file.
+ */
 public class PaletteResourceRegistry {
     public static PaletteResourceRegistry INSTANCE;
     private final Map<String, PaletteResourceIdentifier> paletteIdentifierMap;

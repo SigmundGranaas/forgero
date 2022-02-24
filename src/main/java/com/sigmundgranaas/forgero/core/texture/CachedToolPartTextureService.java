@@ -8,6 +8,11 @@ import com.sigmundgranaas.forgero.core.texture.template.TemplateTexture;
 import com.sigmundgranaas.forgero.core.texture.template.TemplateTextureFactory;
 import com.sigmundgranaas.forgero.core.texture.template.TemplateTextureService;
 
+/**
+ * Cached version of the ToolPartTextureService
+ *
+ * This service will generate all requested textures, using cached Template and Palette Services
+ */
 public class CachedToolPartTextureService implements ToolPartTextureService {
     public static CachedToolPartTextureService INSTANCE;
     private final PaletteService paletteService;

@@ -2,13 +2,16 @@ package com.sigmundgranaas.forgero.core.texture;
 
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TextureIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
-import io.netty.util.internal.ConcurrentSet;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Registry for managing registered textures.
+ * If Textures are excluded from being generated from a palette, they need to be registered here first
+ */
 public class ForgeroToolPartTextureRegistry {
     private static ForgeroToolPartTextureRegistry INSTANCE;
     Set<String> toolPartTextureGenerationExclusionList;
@@ -17,7 +20,7 @@ public class ForgeroToolPartTextureRegistry {
 
     public ForgeroToolPartTextureRegistry(TextureIdentifierFactory factory, Set<String> toolPartTextureGenerationExclusionList) {
         this.factory = factory;
-        this.toolPartTextures = new ConcurrentSet<>();
+        this.toolPartTextures = new HashSet<>();
         this.toolPartTextureGenerationExclusionList = toolPartTextureGenerationExclusionList;
     }
 
@@ -28,20 +31,12 @@ public class ForgeroToolPartTextureRegistry {
         return INSTANCE;
     }
 
-    public ToolPartModelTextureIdentifier registerTexture(ToolPartModelTextureIdentifier textureIdentifier) {
+    public void registerTexture(ToolPartModelTextureIdentifier textureIdentifier) {
         toolPartTextures.add(textureIdentifier.getIdentifier());
-        return textureIdentifier;
     }
 
     public List<ToolPartModelTextureIdentifier> getTextures() {
         return toolPartTextures.stream().map(factory::createToolPartTextureIdentifier).filter(Optional::isPresent).map(Optional::get).toList();
-    }
-
-    public Optional<ToolPartModelTextureIdentifier> getTexture(String textureIdentifier) {
-        if (toolPartTextures.contains(textureIdentifier)) {
-            return factory.createToolPartTextureIdentifier(textureIdentifier);
-        }
-        return Optional.empty();
     }
 
     public boolean isGeneratedTexture(ToolPartModelTextureIdentifier textureIdentifier) {

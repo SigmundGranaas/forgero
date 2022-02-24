@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Class for storing TemplateTextures for Tool Parts
- * This class can create recouloured versions of its template data by using the createRecoulouredImage function.
+ * This class can create recoloured versions of its template data by using the createRecolouredImage function.
  */
 public class TemplateTexture implements Texture {
     private final List<PixelInformation> pixelValues;

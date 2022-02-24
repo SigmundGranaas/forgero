@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.core.io;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TemplateTextureIdentifier;
-import com.sigmundgranaas.forgero.core.texture.utils.TextureLoader;
 
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -27,7 +26,7 @@ public class FileService {
     }
 
     public InputStream getStream(TextureIdentifier id) throws URISyntaxException {
-        ClassLoader classLoader = TextureLoader.class.getClassLoader();
+        ClassLoader classLoader = FileService.class.getClassLoader();
         InputStream resource = classLoader.getResourceAsStream(getTexturePath(id));
         if (resource == null) {
             throw new IllegalArgumentException("file not found! " + getTexturePath(id));

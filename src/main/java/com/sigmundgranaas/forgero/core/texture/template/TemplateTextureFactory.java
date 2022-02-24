@@ -10,7 +10,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class for extracting a TemplateTexture from a raw image.
+ */
 public class TemplateTextureFactory {
+    /**
+     *
+     * Method for parsing raw images and extracting every pixel which is not transparent and storing this information inside a TemplateTexture.
+     *
+     * @param texture The raw Template texture
+     * @param id belonging to the texture being generated
+     * @return The generated TemplateTexture
+     */
     public TemplateTexture createTemplateTexture(Texture texture, TemplateTextureIdentifier id) {
         ArrayList<PixelInformation> pixelValues = new ArrayList<>();
         HashSet<RgbColour> greyScaleValueSet = new HashSet<>();

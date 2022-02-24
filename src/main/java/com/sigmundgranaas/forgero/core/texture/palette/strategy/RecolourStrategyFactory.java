@@ -5,6 +5,9 @@ import com.sigmundgranaas.forgero.core.texture.palette.Palette;
 import com.sigmundgranaas.forgero.core.texture.palette.RecolourStrategy;
 import com.sigmundgranaas.forgero.core.texture.template.TemplateTexture;
 
+/**
+ * Factory for choosing which strategy should be applied to any given tool parts
+ */
 public class RecolourStrategyFactory {
     public RecolourStrategy createStrategy(TemplateTexture template, Palette palette) {
         if (template.getId().getToolPartModelLayer() == ModelLayer.SECONDARY) {

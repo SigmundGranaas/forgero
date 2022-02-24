@@ -18,6 +18,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Cached service for generating or fetching Palettes
+ * <p>
+ * This service will cache all created Palettes.
+ * <p>
+ * Palettes are either generated from existing textures or loaded from an existing file.
+ */
 public class CachedPaletteService implements PaletteService {
     private final TextureLoader loader;
     private final PaletteFactory factory;
