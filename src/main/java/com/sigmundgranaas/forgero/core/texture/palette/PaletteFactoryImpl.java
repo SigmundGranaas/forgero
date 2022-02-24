@@ -11,6 +11,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class for extracting unique color values from textures and creating a palette from these images.
+ * <p>
+ * This supports exclusion images as well.
+ * This means that values present in the exclusion images will be removed in the final palette.
+ * Excluding images allows you to use textures from existing tools and avoiding creating a palette which includes the brown colours from the handle of a tool, or the oar of a boat texture.
+ */
 public class PaletteFactoryImpl implements PaletteFactory {
     //TODO Split into smaller methods
     public static MaterialPalette createColourPalette(UnbakedPalette palette) {

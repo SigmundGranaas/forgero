@@ -4,6 +4,9 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdenti
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Factory for generating palettes from sets of Images
+ */
 public interface PaletteFactory {
     Palette createPalette(UnbakedPalette palette);
 

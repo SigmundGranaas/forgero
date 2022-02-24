@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * MaterialPalette is a class which represents an image of a strip of colours.
+ * This class will create the BufferedImage of the Palette which is needed when exporting the palette
+ */
 public record MaterialPalette(List<RgbColour> colourValues,
                               PaletteIdentifier id) implements Palette, Texture {
 
