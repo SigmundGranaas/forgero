@@ -1,0 +1,52 @@
+{
+  "properties": {
+    "attributes": [
+      {
+        "attack_damage": {
+          "order": "END",
+          "type": "MULT",
+          "value": 1.2,
+          "condition": {
+            "target": "ENTITY",
+            "tag": "LIVING"
+          }
+        }
+      },
+      {
+        "attack_speed": {
+          "order": "BASE",
+          "type": "ADD",
+          "value": 3.0
+        }
+      },
+      {
+        "attack_speed": {
+          "order": "BASE",
+          "type": "ADD",
+          "value": 3.0,
+          "condition": {
+            "target": "ENVIRONMENT",
+            "tag": "DAY"
+          }
+        }
+      },
+      {
+        "attack_damage": {
+          "order": "BASE",
+          "type": "ADD",
+          "value": 3.0
+        }
+      }
+    ],
+    "passive": [
+      {
+        "type": "EMISSIVE",
+        "value": 3.0
+      },
+      {
+        "type": "GOLDEN"
+      }
+    ],
+    "active": []
+  }
+}
