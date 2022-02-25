@@ -1,9 +1,6 @@
 package com.sigmundgranaas.forgero.core.properties;
 
-import com.sigmundgranaas.forgero.core.properties.attribute.Attribute;
-import com.sigmundgranaas.forgero.core.properties.attribute.CalculationOrder;
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
-import com.sigmundgranaas.forgero.core.properties.attribute.TargetTag;
+import com.sigmundgranaas.forgero.core.properties.attribute.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,78 +10,58 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class propertyTest {
+    private final Function<Float, Float> EXAMPLE_CALCULATION = (current) -> current + 1;
+    private final Predicate<Target> EXAMPLE_CONDITION = (target) -> true;
+
     @Test
-    void testProperty() {
+    void testPropertyDamage() {
         PropertyStream toolProperties = createTestProperties();
-        Assertions.assertEquals(3f, toolProperties.applyAttribute(createDummyTarget(), AttributeType.MINING_SPEED));
+        Assertions.assertEquals(9f, toolProperties.applyAttribute(createDummyTarget(TargetTypes.ENTITY, Set.of("HUMAN")), AttributeType.ATTACK_DAMAGE));
     }
 
-    private Target createDummyTarget() {
+    private PropertyStream createTestProperties() {
+        Attribute exampleCalculation = createDefaultMiningSpeedAttribute();
+
+        Attribute damageAttribute = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
+                .applyCalculation((base) -> base + 1f)
+                .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
+                .build();
+
+        Attribute baseDamage = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
+                .applyCalculation((base) -> base + 5f)
+                .build();
+
+        Attribute damageAttributeConditional = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
+                .applyCalculation((base) -> base + base * 0.5f)
+                .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
+                .applyCondition((target -> target.getType() == TargetTypes.ENTITY &&
+                        target.getTag().isApplicable("HUMAN")))
+                .build();
+
+        return Property.stream(List.of(exampleCalculation, baseDamage, damageAttribute, damageAttributeConditional));
+    }
+
+    private Target createDummyTarget(TargetTypes type, Set<String> tags) {
         return new Target() {
             @Override
             public TargetTypes getType() {
-                return TargetTypes.BLOCK;
+                return type;
             }
 
             @Override
             public TargetTag getTag() {
-                return new TargetTag(Set.of("STONE", "IRON"));
+                return new TargetTag(tags);
             }
         };
     }
 
-    private PropertyStream createTestProperties() {
-        Property prop1 = new Attribute() {
-            @Override
-            public PropertyTypes getType() {
-                return PropertyTypes.ATTRIBUTES;
-            }
-
-            @Override
-            public CalculationOrder getOrder() {
-                return CalculationOrder.BASE;
-            }
-
-            @Override
-            public AttributeType getAttributeType() {
-                return AttributeType.MINING_SPEED;
-            }
-
-            @Override
-            public Function<Float, Float> getCalculation() {
-                return (value) -> value + 1;
-            }
-        };
-
-        Property prop2 = new Attribute() {
-            @Override
-            public PropertyTypes getType() {
-                return PropertyTypes.ATTRIBUTES;
-            }
-
-            @Override
-            public CalculationOrder getOrder() {
-                return CalculationOrder.END;
-            }
-
-            @Override
-            public Predicate<Target> getCondition() {
-                return (target ->
-                        target.getType() == TargetTypes.BLOCK
-                                && target.getTag().isApplicable("STONE")
-                );
-            }
-
-            @Override
-            public AttributeType getAttributeType() {
-                return AttributeType.MINING_SPEED;
-            }
-
-            @Override
-            public Function<Float, Float> getCalculation() {
-                return (value) -> value * 1.5f;
-            }
-        };
-        return Property.stream(List.of(prop1, prop1, prop2));
+    private Attribute createDefaultMiningSpeedAttribute() {
+        return new AttributeBuilder(AttributeType.MINING_SPEED)
+                .applyCalculation(EXAMPLE_CALCULATION)
+                .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
+                .applyCondition(EXAMPLE_CONDITION)
+                .build();
     }
+
+
 }

@@ -2,40 +2,36 @@
   "properties": {
     "attributes": [
       {
-        "attack_damage": {
-          "order": "END",
-          "type": "MULT",
-          "value": 1.2,
-          "condition": {
-            "target": "ENTITY",
-            "tag": "LIVING"
-          }
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "operation": "MULT",
+        "value": 1.2,
+        "condition": {
+          "target": "ENTITY",
+          "tag": "LIVING"
         }
       },
       {
-        "attack_speed": {
-          "order": "BASE",
-          "type": "ADD",
-          "value": 3.0
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADD",
+        "value": 3.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADD",
+        "value": 3.0,
+        "condition": {
+          "target": "ENVIRONMENT",
+          "tag": "DAY"
         }
       },
       {
-        "attack_speed": {
-          "order": "BASE",
-          "type": "ADD",
-          "value": 3.0,
-          "condition": {
-            "target": "ENVIRONMENT",
-            "tag": "DAY"
-          }
-        }
-      },
-      {
-        "attack_damage": {
-          "order": "BASE",
-          "type": "ADD",
-          "value": 3.0
-        }
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADD",
+        "value": 3.0
       }
     ],
     "passive": [
@@ -45,8 +41,17 @@
       },
       {
         "type": "GOLDEN"
+      },
+      {
+        "type": "CONDUCTIVE",
+        "value": 3.0
       }
     ],
-    "active": []
+    "active": [
+      {
+        "type": "thunder",
+        "value": 1.0
+      }
+    ]
   }
 }
