@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.properties.attribute;
 
+import com.sigmundgranaas.forgero.core.properties.Attribute;
 import com.sigmundgranaas.forgero.core.properties.AttributeType;
 import com.sigmundgranaas.forgero.core.properties.NumericOperation;
 import com.sigmundgranaas.forgero.core.properties.PropertyPOJO;
@@ -18,19 +19,19 @@ public class AttributeBuilder {
     }
 
     public static Attribute createAttributeFromPojo(PropertyPOJO.Attribute attributePOJO) {
-        AttributeBuilder builder = new AttributeBuilder(attributePOJO.getType())
-                .applyOrder(attributePOJO.getOrder());
+        AttributeBuilder builder = new AttributeBuilder(attributePOJO.type)
+                .applyOrder(attributePOJO.order);
 
-        if (attributePOJO.getCondition() != null) {
-            Predicate<Target> condition = (target) -> target.getType() == attributePOJO.getCondition().getTarget() &&
-                    target.getTag().isApplicable(attributePOJO.getCondition().getTag());
+        if (attributePOJO.condition != null) {
+            Predicate<Target> condition = (target) -> target.getType() == attributePOJO.condition.target &&
+                    target.getTag().isApplicable(attributePOJO.condition.tag);
             builder.applyCondition(condition);
         }
 
-        if (attributePOJO.getOperation() == NumericOperation.ADDITION) {
-            builder.applyCalculation((current) -> current + attributePOJO.getValue().floatValue());
-        } else if (attributePOJO.getOperation() == NumericOperation.MULTIPLICATION) {
-            builder.applyCalculation((current) -> current + current * attributePOJO.getValue().floatValue());
+        if (attributePOJO.operation == NumericOperation.ADDITION) {
+            builder.applyCalculation((current) -> current + attributePOJO.value);
+        } else if (attributePOJO.operation == NumericOperation.MULTIPLICATION) {
+            builder.applyCalculation((current) -> current + current * attributePOJO.value);
         }
         return builder.build();
     }

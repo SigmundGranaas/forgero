@@ -5,5 +5,5 @@ import com.sigmundgranaas.forgero.core.properties.TargetTypes;
 public interface Target {
     TargetTypes getType();
 
-    TargetTag getTag();
+    TargetTagSet getTag();
 }

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.properties;
 
-import com.sigmundgranaas.forgero.core.properties.attribute.Attribute;
 import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 

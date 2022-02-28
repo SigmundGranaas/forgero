@@ -6,8 +6,11 @@
   "ingredient": {
     "item": "minecraft:acacia_planks"
   },
-  "properties": [
-  ],
+  "properties": {
+    "attributes":[],
+    "passive:": [],
+    "active": []
+  },
   "palette": {
     "name": "acacia",
     "include": [

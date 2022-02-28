@@ -49,8 +49,8 @@ public class propertyTest {
             }
 
             @Override
-            public TargetTag getTag() {
-                return new TargetTag(tags);
+            public TargetTagSet getTag() {
+                return new TargetTagSet(tags);
             }
         };
     }

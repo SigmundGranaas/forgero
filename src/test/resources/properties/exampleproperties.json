@@ -1,4 +1,5 @@
 {
+
     "attributes": [
       {
         "type": "ATTACK_DAMAGE",
@@ -29,7 +30,7 @@
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
-        "operation": "ADD",
+        "operation": "ADDITION",
         "value": 3.0
       }
     ],
@@ -52,4 +53,6 @@
         "value": 1.0
       }
     ]
+
 }
+

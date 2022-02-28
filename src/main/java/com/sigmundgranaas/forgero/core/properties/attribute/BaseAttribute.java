@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.properties.attribute;
 
+import com.sigmundgranaas.forgero.core.properties.Attribute;
 import com.sigmundgranaas.forgero.core.properties.AttributeType;
 
 import java.util.function.Function;
