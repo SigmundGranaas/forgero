@@ -1,8 +1,5 @@
 package com.sigmundgranaas.forgero.core.properties;
 
-import com.sigmundgranaas.forgero.core.properties.attribute.CalculationOrder;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyPOJO {

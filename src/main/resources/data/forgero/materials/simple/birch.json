@@ -6,8 +6,11 @@
   "ingredient": {
     "item": "minecraft:birch_planks"
   },
-  "properties": [
-  ],
+  "properties": {
+    "attributes": [],
+    "passive:": [],
+    "active": []
+  },
   "palette": {
     "name": "birch",
     "include": [
@@ -18,6 +21,18 @@
     ]
   },
   "primary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.0
+        }
+      ],
+      "passive:": [],
+      "active": []
+    },
     "miningLevel": 0,
     "miningSpeed": 2.0,
     "attackDamage": 0.0,
@@ -25,6 +40,18 @@
   },
   "secondary": {
     "miningLevel": 0,
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.0
+        }
+      ],
+      "passive:": [],
+      "active": []
+    },
     "miningSpeedAddition": 0.2,
     "attackDamageAddition": 0.3,
     "attackSpeedAddition": 0.0

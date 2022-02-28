@@ -1,9 +1,6 @@
 package com.sigmundgranaas.forgero.core.properties.attribute;
 
-import com.sigmundgranaas.forgero.core.properties.Attribute;
-import com.sigmundgranaas.forgero.core.properties.AttributeType;
-import com.sigmundgranaas.forgero.core.properties.NumericOperation;
-import com.sigmundgranaas.forgero.core.properties.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.properties.*;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

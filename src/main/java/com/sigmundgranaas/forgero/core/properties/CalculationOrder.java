@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.properties.attribute;
+package com.sigmundgranaas.forgero.core.properties;
 
 public enum CalculationOrder {
     BASE(0),

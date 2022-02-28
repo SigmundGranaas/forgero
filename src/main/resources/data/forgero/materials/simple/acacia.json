@@ -7,7 +7,7 @@
     "item": "minecraft:acacia_planks"
   },
   "properties": {
-    "attributes":[],
+    "attributes": [],
     "passive:": [],
     "active": []
   },
@@ -21,12 +21,48 @@
     ]
   },
   "primary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.0
+        }
+      ],
+      "passive:": [],
+      "active": []
+    },
     "miningLevel": 0,
     "miningSpeed": 2.0,
     "attackDamage": 0.0,
     "attackSpeed": 0.0
   },
   "secondary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.1
+        }
+      ],
+      "passive:": [],
+      "active": []
+    },
     "miningLevel": 0,
     "miningSpeedAddition": 0.2,
     "attackDamageAddition": 0.2,

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.properties;
 
-import com.sigmundgranaas.forgero.core.properties.attribute.CalculationOrder;
 import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import org.jetbrains.annotations.NotNull;
 

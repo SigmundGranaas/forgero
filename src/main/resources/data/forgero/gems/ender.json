@@ -9,6 +9,23 @@
     "exclude": [
     ]
   },
+  "placement": [
+    "HEAD",
+    "HANDLE",
+    "BINDING"
+  ],
+  "properties": {
+    "attributes": [
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 1.0
+      }
+    ],
+    "passive:": [],
+    "active": []
+  },
   "type": "MINING_SPEED",
   "effect": "ADDITIVE",
   "amount": 1.0

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.material.material;
 
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
+import com.sigmundgranaas.forgero.core.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -25,19 +26,7 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     }
 
     @Override
-    public @NotNull List<String> getProperties() {
-        return Collections.emptyList();
-    }
-
-
-    public @NotNull
-    List<ResourceIdentifier> getPaletteIdentifiers() {
-        return Collections.emptyList();
-    }
-
-
-    public @NotNull
-    List<ResourceIdentifier> getPaletteExclusionIdentifiers() {
+    public @NotNull List<Property> getProperties() {
         return Collections.emptyList();
     }
 
@@ -51,7 +40,7 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     public String getIngredient() {
         return "empty";
     }
-    
+
 
     @Override
     public int getLuck() {

@@ -19,13 +19,13 @@ public record PropertyStream(
                 .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
     }
 
-    private Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
+    public Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
         return getAttributes()
                 .filter(attribute -> attributeType == attribute.getAttributeType())
                 .sorted(Attribute::compareTo);
     }
 
-    private Stream<Attribute> getAttributes() {
+    public Stream<Attribute> getAttributes() {
         return stream.filter(property -> property instanceof Attribute)
                 .map(Attribute.class::cast);
     }

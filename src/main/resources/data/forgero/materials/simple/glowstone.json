@@ -6,9 +6,18 @@
   "ingredient": {
     "item": "minecraft:glowstone_dust"
   },
-  "properties": [
-    "lightness"
-  ],
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2.0
+      }
+    ],
+    "passive:": [],
+    "active": []
+  },
   "palette": {
     "name": "glowstone",
     "include": [
@@ -18,6 +27,18 @@
     ]
   },
   "secondary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.0
+        }
+      ],
+      "passive:": [],
+      "active": []
+    },
     "miningLevel": 3,
     "miningSpeedAddition": 0.2,
     "attackDamageAddition": 1.0,

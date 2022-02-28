@@ -2,9 +2,12 @@ package com.sigmundgranaas.forgero.core.tool;
 
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.properties.Property;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public interface ForgeroTool {
     @NotNull
@@ -43,4 +46,6 @@ public interface ForgeroTool {
     void createToolDescription(ToolDescriptionWriter writer);
 
     double getAttackDamageAddition();
+
+    List<Property> getProperties();
 }

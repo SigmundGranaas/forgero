@@ -57,6 +57,7 @@ public class SimpleMaterialPOJO {
     }
 
     public static class Primary {
+        public PropertyPOJO properties;
         public int miningLevel;
         public int miningSpeed;
         public int attackSpeed;
@@ -64,6 +65,7 @@ public class SimpleMaterialPOJO {
     }
 
     public static class Secondary {
+        public PropertyPOJO properties;
         public int miningLevel;
         public float miningSpeedAddition;
         public float attackSpeedAddition;

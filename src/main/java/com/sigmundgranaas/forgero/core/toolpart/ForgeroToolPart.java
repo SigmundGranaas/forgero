@@ -15,6 +15,8 @@ public interface ForgeroToolPart {
 
     Gem getGem();
 
+    ToolPartState getState();
+
     int getDurability();
 
     String getToolPartName();

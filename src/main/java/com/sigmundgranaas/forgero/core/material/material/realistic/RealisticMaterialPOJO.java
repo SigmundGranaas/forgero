@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.material.material.realistic;
 
 import com.sigmundgranaas.forgero.core.material.material.MaterialType;
+import com.sigmundgranaas.forgero.core.properties.PropertyPOJO;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class RealisticMaterialPOJO {
     public int rarity;
     public MaterialType type;
     public int durability;
-    public List<String> properties;
+    public PropertyPOJO properties;
     public Ingredient ingredient;
     public Palette palette;
 
@@ -23,7 +24,6 @@ public class RealisticMaterialPOJO {
         pojo.rarity = 1;
         pojo.type = MaterialType.METAL;
         pojo.durability = 1;
-        pojo.properties = List.of();
         pojo.weight = 1;
         Palette palette = new Palette();
         palette.include = List.of();
