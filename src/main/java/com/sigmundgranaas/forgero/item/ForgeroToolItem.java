@@ -23,7 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public interface ForgeroToolItem extends DynamicAttributeTool {
-    public UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
+    static final UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
+
     FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
 
     Identifier getIdentifier();
@@ -56,8 +58,8 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
             ForgeroTool tool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(this.getTool());
 
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(TEST_UUID, "Attack Damage Addition", tool.getAttackDamageAddition(), EntityAttributeModifier.Operation.MULTIPLY_BASE));
-            //builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(), EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", tool.getAttackDamage() - getTool().getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed() - getTool().getAttackSpeed(), EntityAttributeModifier.Operation.ADDITION));
             //builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
             return builder.build();
         } else {

@@ -102,7 +102,7 @@
         },
         {
           "type": "ATTACK_DAMAGE",
-          "order": "MIDDLE",
+          "order": "BASE",
           "operation": "ADDITION",
           "value": 1.2,
           "condition": {
