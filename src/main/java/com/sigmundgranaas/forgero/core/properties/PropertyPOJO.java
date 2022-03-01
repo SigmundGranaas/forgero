@@ -24,7 +24,7 @@ public class PropertyPOJO {
 
     public static class Condition {
         public TargetTypes target;
-        public String tag;
+        public List<String> tag;
 
     }
 

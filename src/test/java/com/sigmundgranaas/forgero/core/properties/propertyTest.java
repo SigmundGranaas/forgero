@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.core.properties;
 
-import com.sigmundgranaas.forgero.core.properties.attribute.*;
+import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.properties.attribute.TargetTagSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +18,7 @@ public class propertyTest {
     @Test
     void testPropertyDamage() {
         PropertyStream toolProperties = createTestProperties();
-        Assertions.assertEquals(9f, toolProperties.applyAttribute(createDummyTarget(TargetTypes.ENTITY, Set.of("HUMAN")), AttributeType.ATTACK_DAMAGE));
+        Assertions.assertEquals(9f, toolProperties.applyAttribute(createDummyTarget(Set.of(TargetTypes.ENTITY), Set.of("HUMAN")), AttributeType.ATTACK_DAMAGE));
     }
 
     private PropertyStream createTestProperties() {
@@ -34,17 +36,17 @@ public class propertyTest {
         Attribute damageAttributeConditional = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
                 .applyCalculation((base) -> base + base * 0.5f)
                 .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
-                .applyCondition((target -> target.getType() == TargetTypes.ENTITY &&
+                .applyCondition((target -> target.getTypes().contains(TargetTypes.ENTITY) &&
                         target.getTag().isApplicable("HUMAN")))
                 .build();
 
         return Property.stream(List.of(exampleCalculation, baseDamage, damageAttribute, damageAttributeConditional));
     }
 
-    private Target createDummyTarget(TargetTypes type, Set<String> tags) {
+    private Target createDummyTarget(Set<TargetTypes> type, Set<String> tags) {
         return new Target() {
             @Override
-            public TargetTypes getType() {
+            public Set<TargetTypes> getTypes() {
                 return type;
             }
 

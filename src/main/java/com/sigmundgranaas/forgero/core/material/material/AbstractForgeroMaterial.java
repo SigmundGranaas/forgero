@@ -38,7 +38,9 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
         this.durability = material.durability;
         this.paletteIdentifiers = material.palette.include;
         this.paletteExclusionIdentifiers = material.palette.exclude;
-        this.properties = material.properties.attributes
+        this.properties = material
+                .properties
+                .attributes
                 .stream()
                 .map(AttributeBuilder::createAttributeFromPojo)
                 .collect(Collectors.toList());

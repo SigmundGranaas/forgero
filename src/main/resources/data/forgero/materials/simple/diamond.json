@@ -6,10 +6,16 @@
   "properties": {
     "attributes": [
       {
-        "type": "MINING_SPEED",
+        "type": "MINING_LEVEL",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 2.0
+        "value": 3.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
       }
     ],
     "passive:": [],
@@ -37,7 +43,50 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0
+          "value": 8.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 1561.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 3.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 600.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE",
+              "BINDING"
+            ]
+          }
         }
       ],
       "passive:": [],
@@ -53,9 +102,21 @@
       "attributes": [
         {
           "type": "MINING_SPEED",
-          "order": "BASE",
+          "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 2.0
+          "value": 1.0
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 1.0
+        },
+        {
+          "type": "DURABILITY",
+          "order": "END",
+          "operation": "MULTIPLICATION",
+          "value": 1.3
         }
       ],
       "passive:": [],

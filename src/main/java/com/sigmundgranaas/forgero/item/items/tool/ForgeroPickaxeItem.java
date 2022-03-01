@@ -96,7 +96,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ForgeroTool forgeroTool = toolAdapter.getTool(user.getActiveItem()).orElse(tool);
+        ForgeroTool forgeroTool = convertItemStack(user.getStackInHand(hand), getTool());
         if (!world.isClient) {
             Property.stream(forgeroTool.getProperties())
                     .getAttributes()

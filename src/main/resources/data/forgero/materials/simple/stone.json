@@ -9,10 +9,16 @@
   "properties": {
     "attributes": [
       {
-        "type": "MINING_SPEED",
+        "type": "MINING_LEVEL",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 2.0
+        "value": 1.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
       }
     ],
     "passive:": [],
@@ -37,7 +43,37 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0
+          "value": 3.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 100.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         }
       ],
       "passive:": [],
@@ -55,7 +91,19 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0
+          "value": 0.3
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 0.3
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 0.1
         }
       ],
       "passive:": [],

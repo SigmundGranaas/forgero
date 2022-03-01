@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.tool;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.properties.Property;
+import com.sigmundgranaas.forgero.core.properties.PropertyStream;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -48,4 +49,8 @@ public interface ForgeroTool {
     double getAttackDamageAddition();
 
     List<Property> getProperties();
+
+    default PropertyStream getPropertyStream() {
+        return Property.stream(getProperties());
+    }
 }

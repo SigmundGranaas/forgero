@@ -8,12 +8,6 @@
   },
   "properties": {
     "attributes": [
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 2.0
-      }
     ],
     "passive:": [],
     "active": []
@@ -34,7 +28,37 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0
+          "value": 2.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 24.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 1.5,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
         }
       ],
       "passive:": [],
@@ -50,9 +74,21 @@
       "attributes": [
         {
           "type": "MINING_SPEED",
-          "order": "BASE",
+          "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 2.0
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.1
         }
       ],
       "passive:": [],

@@ -30,4 +30,9 @@ public record BaseAttribute(AttributeType attribute,
     public Predicate<Target> getCondition() {
         return condition;
     }
+
+    @Override
+    public boolean applyCondition(Target target) {
+        return condition.test(target);
+    }
 }

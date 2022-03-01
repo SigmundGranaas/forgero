@@ -23,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public interface ForgeroToolItem extends DynamicAttributeTool {
-
     public UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
 
     Identifier getIdentifier();
 
@@ -76,7 +76,6 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
         return 0;
     }
 
-
     @Override
     default float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(getToolTags())) {
@@ -86,5 +85,9 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
         }
 
         return 1f;
+    }
+
+    default ForgeroTool convertItemStack(ItemStack toolStack, ForgeroTool baseTool) {
+        return adapter.getTool(toolStack).orElse(baseTool);
     }
 }

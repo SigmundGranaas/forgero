@@ -20,7 +20,7 @@ public class AttributeBuilder {
                 .applyOrder(attributePOJO.order);
 
         if (attributePOJO.condition != null) {
-            Predicate<Target> condition = (target) -> target.getType() == attributePOJO.condition.target &&
+            Predicate<Target> condition = (target) -> target.getTypes().contains(attributePOJO.condition.target) &&
                     target.getTag().isApplicable(attributePOJO.condition.tag);
             builder.applyCondition(condition);
         }
