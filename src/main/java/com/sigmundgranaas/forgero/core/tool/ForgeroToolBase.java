@@ -74,12 +74,12 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public float getAttackDamage(Target target) {
-        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_DAMAGE) + head.getAttackDamageBase();
     }
 
     @Override
     public float getAttackSpeed(Target target) {
-        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_SPEED);
+        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_SPEED) + head.getAttackSpeedBase();
     }
 
     @Override

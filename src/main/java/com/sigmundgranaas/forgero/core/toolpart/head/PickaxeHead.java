@@ -19,6 +19,16 @@ public class PickaxeHead extends AbstractToolPartHead {
     }
 
     @Override
+    public float getAttackSpeedBase() {
+        return -3.2f;
+    }
+
+    @Override
+    public float getAttackDamageBase() {
+        return 0f;
+    }
+
+    @Override
     public float getAttackSpeed() {
         return headStrategy.getAttackSpeed() - 2.8f;
     }

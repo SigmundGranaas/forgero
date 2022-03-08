@@ -27,9 +27,9 @@ public class ItemFactoryImpl implements ItemFactory {
     public Item createTool(ForgeroTool tool) {
         Target target = Target.createEmptyTarget();
         return switch (tool.getToolType()) {
-            case PICKAXE -> new ForgeroPickaxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), 1, tool.getAttackSpeed(target) - 2.8f, new Item.Settings().group(ItemGroup.TOOLS), tool);
-            case SHOVEL -> new ShovelItem(new SimpleToolMaterialAdapter(tool.getMaterial()), 1.5f, tool.getAttackSpeed(target) - 2.4f, new Item.Settings().group(ItemGroup.TOOLS), tool);
-            case AXE -> new ForgeroAxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), 1, tool.getAttackSpeed(target) - 3.0f, new Item.Settings().group(ItemGroup.TOOLS), tool);
+            case PICKAXE -> new ForgeroPickaxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
+            case SHOVEL -> new ShovelItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
+            case AXE -> new ForgeroAxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
             case SWORD -> null;
         };
     }

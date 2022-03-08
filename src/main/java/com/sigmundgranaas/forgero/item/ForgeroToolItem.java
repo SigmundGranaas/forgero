@@ -61,7 +61,9 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
             Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", tool.getAttackDamage(target) - getTool().getAttackDamage(target), EntityAttributeModifier.Operation.ADDITION));
-            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
+            if (tool.getAttackSpeed(target) != getTool().getAttackSpeed(target)) {
+                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
+            }
             //builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
             return builder.build();
         } else {

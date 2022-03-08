@@ -42,4 +42,13 @@ public class ShovelHead extends AbstractToolPartHead {
         return 1 + strategy.getAttackDamage();
     }
 
+    @Override
+    public float getAttackSpeedBase() {
+        return -3.0f;
+    }
+
+    @Override
+    public float getAttackDamageBase() {
+        return 1.5f;
+    }
 }

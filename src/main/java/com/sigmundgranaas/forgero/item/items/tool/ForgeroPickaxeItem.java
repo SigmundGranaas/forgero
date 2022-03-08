@@ -36,8 +36,8 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
     private final ForgeroTool tool;
 
-    public ForgeroPickaxeItem(ToolMaterial toolMaterial, int f, float g, Settings settings, ForgeroTool tool) {
-        super(toolMaterial, f, g, settings);
+    public ForgeroPickaxeItem(ToolMaterial toolMaterial, Settings settings, ForgeroTool tool) {
+        super(toolMaterial, (int) tool.getAttackDamage(Target.createEmptyTarget()), tool.getAttackSpeed(Target.createEmptyTarget()), settings);
         this.tool = tool;
     }
 
