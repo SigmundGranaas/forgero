@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.gem.gems.AdditiveDurabilityGem;
 import com.sigmundgranaas.forgero.core.gem.gems.AdditiveMiningSpeedGem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;

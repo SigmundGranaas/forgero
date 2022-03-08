@@ -33,29 +33,35 @@ public class propertyTest {
         Attribute exampleCalculation = createDefaultMiningSpeedAttribute();
 
         Attribute damageAttribute = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
-                .applyCalculation((base) -> base + 1f)
+                .applyValue(1)
+                .applyOperation(NumericOperation.ADDITION)
                 .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
                 .build();
 
         Attribute baseDamage = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
-                .applyCalculation((base) -> base + 5f)
+                .applyValue(5)
+                .applyOperation(NumericOperation.ADDITION)
+                .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
                 .build();
 
         Attribute damageAttributeConditional = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
-                .applyCalculation((base) -> base + base * 0.5f)
+                .applyValue(5)
+                .applyOperation(NumericOperation.MULTIPLICATION)
                 .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
-                .applyCondition((target -> target.isApplicable(Set.of("HUMAN"), TargetTypes.ENTITY)))
+                .applyCondition((Target target) -> target.isApplicable(Set.of("HUMAN"), TargetTypes.ENTITY))
                 .build();
 
         Attribute durabilityAttribute = new AttributeBuilder(AttributeType.DURABILITY)
-                .applyCalculation((base) -> base + 1000)
+                .applyValue(1000)
+                .applyOperation(NumericOperation.ADDITION)
                 .applyOrder(CalculationOrder.BASE)
                 .build();
 
         Attribute durabilityAttributeConditional = new AttributeBuilder(AttributeType.DURABILITY)
-                .applyCalculation((base) -> base + 1000)
+                .applyValue(1000)
+                .applyOperation(NumericOperation.ADDITION)
                 .applyOrder(CalculationOrder.MIDDLE)
-                .applyCondition(target -> target.isApplicable(Set.of("HANDLE"), TargetTypes.TOOL_PART_TYPE))
+                .applyCondition((Target target) -> target.isApplicable(Set.of("HANDLE"), TargetTypes.TOOL_PART_TYPE))
                 .build();
 
         return Property.stream(List.of(exampleCalculation, baseDamage, damageAttribute, damageAttributeConditional, durabilityAttribute, durabilityAttributeConditional));
@@ -67,7 +73,6 @@ public class propertyTest {
 
     private Attribute createDefaultMiningSpeedAttribute() {
         return new AttributeBuilder(AttributeType.MINING_SPEED)
-                .applyCalculation(EXAMPLE_CALCULATION)
                 .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
                 .applyCondition(EXAMPLE_CONDITION)
                 .build();

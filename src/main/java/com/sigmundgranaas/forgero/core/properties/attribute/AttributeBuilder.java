@@ -3,14 +3,15 @@ package com.sigmundgranaas.forgero.core.properties.attribute;
 import com.sigmundgranaas.forgero.core.properties.*;
 
 import java.util.HashSet;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class AttributeBuilder {
     private final AttributeType type;
     private CalculationOrder order = CalculationOrder.BASE;
     private Predicate<Target> condition = Attribute.DEFAULT_CONDITION;
-    private Function<Float, Float> calculation = Attribute.DEFAULT_ATTRIBUTE_CALCULATION;
+    private NumericOperation operation = NumericOperation.ADDITION;
+    private float value = 1;
+    private int level = 1;
 
     public AttributeBuilder(AttributeType type) {
         this.type = type;
@@ -35,22 +36,24 @@ public class AttributeBuilder {
             }
             builder.applyCondition(condition);
         }
+        builder.applyValue(attributePOJO.value);
+        builder.applyOperation(attributePOJO.operation);
 
-        if (attributePOJO.operation == NumericOperation.ADDITION) {
-            builder.applyCalculation((current) -> current + attributePOJO.value);
-        } else if (attributePOJO.operation == NumericOperation.MULTIPLICATION) {
-            builder.applyCalculation((current) -> current * attributePOJO.value);
-        }
         return builder.build();
+    }
+
+    public static AttributeBuilder createAttributeBuilderFromAttribute(Attribute attribute) {
+        AttributeBuilder builder = new AttributeBuilder(attribute.getAttributeType())
+                .applyOrder(attribute.getOrder());
+        builder.applyCondition(attribute.getCondition());
+        builder.applyValue(attribute.getValue());
+        builder.applyOperation(attribute.getOperation());
+        builder.applyLevel(attribute.getLevel());
+        return builder;
     }
 
     public AttributeBuilder applyCondition(Predicate<Target> condition) {
         this.condition = condition;
-        return this;
-    }
-
-    public AttributeBuilder applyCalculation(Function<Float, Float> calculation) {
-        this.calculation = calculation;
         return this;
     }
 
@@ -59,7 +62,22 @@ public class AttributeBuilder {
         return this;
     }
 
+    public AttributeBuilder applyOperation(NumericOperation operation) {
+        this.operation = operation;
+        return this;
+    }
+
+    public AttributeBuilder applyValue(float value) {
+        this.value = value;
+        return this;
+    }
+
+    public AttributeBuilder applyLevel(int level) {
+        this.level = level;
+        return this;
+    }
+
     public Attribute build() {
-        return new BaseAttribute(type, condition, calculation, order);
+        return new BaseAttribute(type, operation, value, condition, order, level);
     }
 }

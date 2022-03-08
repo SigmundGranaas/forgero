@@ -35,6 +35,12 @@ public interface Attribute extends Property, Comparable<Attribute> {
         return DEFAULT_CONDITION;
     }
 
+    NumericOperation getOperation();
+
+    float getValue();
+
+    int getLevel();
+
     default float applyAttribute(Target target, float currentAttribute) {
         if (this.getCondition().test(target)) {
             return this.getCalculation().apply(currentAttribute);

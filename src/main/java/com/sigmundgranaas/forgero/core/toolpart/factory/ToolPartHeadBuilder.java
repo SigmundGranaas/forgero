@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.core.toolpart.factory;
 
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.head.*;
 
 public class ToolPartHeadBuilder extends ToolPartBuilder {
@@ -26,7 +26,7 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
 
     @Override
     public ToolPartBuilder setGem(Gem newGem) {
-        if (newGem instanceof HeadGem) {
+        if (newGem.getPlacement().contains(ForgeroToolPartTypes.HEAD)) {
             super.gem = newGem;
         }
         return this;
@@ -34,9 +34,9 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
 
     @Override
     public AbstractToolPartHead createToolPart() {
-        HeadGem headGem;
-        if (gem instanceof HeadGem) {
-            headGem = (HeadGem) gem;
+        Gem headGem;
+        if (gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)) {
+            headGem = gem;
         } else {
             headGem = EmptyGem.createEmptyGem();
         }
