@@ -13,7 +13,7 @@ public interface ToolPartDescriptionWriter {
 
     void addMiningLevel(int miningLevel);
 
-    void addMiningMultiplier(float mulitipler);
+    void addMiningMultiplier(float multiplier);
 
     void createToolPartDescription(ForgeroToolPart part);
 }

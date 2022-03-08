@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.properties.attribute;
 import com.sigmundgranaas.forgero.core.properties.AttributeType;
 import com.sigmundgranaas.forgero.core.properties.NumericOperation;
 import com.sigmundgranaas.forgero.core.properties.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.properties.TargetTypes;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,8 +23,18 @@ public class AttributeBuilder {
                 .applyOrder(attributePOJO.getOrder());
 
         if (attributePOJO.getCondition() != null) {
-            Predicate<Target> condition = (target) -> target.getType() == attributePOJO.getCondition().getTarget() &&
-                    target.getTag().isApplicable(attributePOJO.getCondition().getTag());
+            Predicate<Target> condition;
+            if (attributePOJO.getCondition().getTarget() == TargetTypes.TOOL_PART) {
+                condition = (target) -> {
+                    if (!target.getTypes().contains(TargetTypes.TOOL_PART)) {
+                        return true;
+                    }
+                    return target.isApplicable(attributePOJO.getCondition().getTag(), TargetTypes.TOOL_PART);
+                };
+            } else {
+                condition = (target) ->
+                        target.isApplicable(attributePOJO.getCondition().getTag(), attributePOJO.getCondition().getTarget());
+            }
             builder.applyCondition(condition);
         }
 

@@ -34,25 +34,14 @@ public class propertyTest {
         Attribute damageAttributeConditional = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
                 .applyCalculation((base) -> base + base * 0.5f)
                 .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
-                .applyCondition((target -> target.getType() == TargetTypes.ENTITY &&
-                        target.getTag().isApplicable("HUMAN")))
+                .applyCondition((target -> target.isApplicable("HUMAN", TargetTypes.ENTITY)))
                 .build();
 
         return Property.stream(List.of(exampleCalculation, baseDamage, damageAttribute, damageAttributeConditional));
     }
 
     private Target createDummyTarget(TargetTypes type, Set<String> tags) {
-        return new Target() {
-            @Override
-            public TargetTypes getType() {
-                return type;
-            }
-
-            @Override
-            public TargetTag getTag() {
-                return new TargetTag(tags);
-            }
-        };
+        return new SingleTarget(type, tags);
     }
 
     private Attribute createDefaultMiningSpeedAttribute() {
