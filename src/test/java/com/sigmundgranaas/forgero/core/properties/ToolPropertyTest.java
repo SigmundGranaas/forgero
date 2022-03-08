@@ -43,4 +43,43 @@ public class ToolPropertyTest {
 
         Assertions.assertTrue(exampleTool.getPropertyStream().applyAttribute(Target.createEmptyTarget(), AttributeType.DURABILITY) > 3000);
     }
+
+    @Test
+    void testToolMiningSpeed() {
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), ForgeroToolTypes.PICKAXE);
+        headBuilder.setSecondary(DIAMOND_SECONDARY.get());
+
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get());
+        handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
+
+        ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
+
+        Assertions.assertEquals(10.0f, exampleTool.getPropertyStream().applyAttribute(Target.createEmptyTarget(), AttributeType.MINING_SPEED));
+    }
+
+    @Test
+    void testToolAttackSpeed() {
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), ForgeroToolTypes.PICKAXE);
+        headBuilder.setSecondary(DIAMOND_SECONDARY.get());
+
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get());
+        handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
+
+        ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
+
+        Assertions.assertEquals(0, exampleTool.getPropertyStream().applyAttribute(Target.createEmptyTarget(), AttributeType.ATTACK_SPEED));
+    }
+
+    @Test
+    void testToolAttackDamage() {
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), ForgeroToolTypes.PICKAXE);
+        headBuilder.setSecondary(DIAMOND_SECONDARY.get());
+
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get());
+        handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
+
+        ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
+
+        Assertions.assertEquals(5, exampleTool.getPropertyStream().applyAttribute(Target.createEmptyTarget(), AttributeType.ATTACK_DAMAGE));
+    }
 }
