@@ -9,6 +9,21 @@
     "exclude": [
     ]
   },
+  "placement": [
+    "HEAD"
+  ],
+  "properties": {
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 1.0
+      }
+    ],
+    "passive:": [],
+    "active": []
+  },
   "type": "ATTACK_DAMAGE",
   "effect": "ADDITIVE",
   "amount": 1.0

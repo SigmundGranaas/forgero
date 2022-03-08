@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.material.material.simple;
 
 import com.sigmundgranaas.forgero.core.material.material.MaterialType;
+import com.sigmundgranaas.forgero.core.properties.PropertyPOJO;
 
 import java.util.List;
 
@@ -9,12 +10,11 @@ public class SimpleMaterialPOJO {
     public int rarity;
     public MaterialType type;
     public int durability;
-    public List<String> properties;
+    public PropertyPOJO properties;
     public Ingredient ingredient;
     public Palette palette;
     public Primary primary;
     public Secondary secondary;
-
 
     public static SimpleMaterialPOJO createDefaultMaterialPOJO() {
         SimpleMaterialPOJO pojo = new SimpleMaterialPOJO();
@@ -22,7 +22,7 @@ public class SimpleMaterialPOJO {
         pojo.rarity = 1;
         pojo.type = MaterialType.METAL;
         pojo.durability = 50;
-        pojo.properties = List.of();
+        pojo.properties = new PropertyPOJO();
         Palette palette = new Palette();
         palette.include = List.of();
         palette.exclude = List.of();
@@ -57,6 +57,7 @@ public class SimpleMaterialPOJO {
     }
 
     public static class Primary {
+        public PropertyPOJO properties;
         public int miningLevel;
         public int miningSpeed;
         public int attackSpeed;
@@ -64,6 +65,7 @@ public class SimpleMaterialPOJO {
     }
 
     public static class Secondary {
+        public PropertyPOJO properties;
         public int miningLevel;
         public float miningSpeedAddition;
         public float attackSpeedAddition;

@@ -1,8 +1,6 @@
-package com.sigmundgranaas.forgero.core.properties.attribute;
+package com.sigmundgranaas.forgero.core.properties;
 
-import com.sigmundgranaas.forgero.core.properties.AttributeType;
-import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.PropertyTypes;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;

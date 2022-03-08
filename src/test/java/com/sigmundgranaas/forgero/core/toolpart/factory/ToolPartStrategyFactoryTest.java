@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticDuoM
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
+import com.sigmundgranaas.forgero.core.properties.Property;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.strategy.HandleMaterialStrategy;
 import com.sigmundgranaas.forgero.core.toolpart.strategy.realistic.RealisticBindingStrategy;
@@ -105,7 +106,7 @@ class ToolPartStrategyFactoryTest {
 
         @Override
         public @NotNull
-        List<String> getProperties() {
+        List<Property> getProperties() {
             return null;
         }
 

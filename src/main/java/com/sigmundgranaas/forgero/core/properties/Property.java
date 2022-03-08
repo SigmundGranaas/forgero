@@ -12,4 +12,6 @@ public interface Property {
     PropertyTypes getType();
 
     float applyAttribute(Target target, float currentAttribute);
+
+    boolean applyCondition(Target target);
 }

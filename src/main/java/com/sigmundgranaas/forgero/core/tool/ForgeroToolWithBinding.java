@@ -1,8 +1,14 @@
 package com.sigmundgranaas.forgero.core.tool;
 
+import com.sigmundgranaas.forgero.core.properties.Property;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ForgeroToolWithBinding extends ForgeroToolBase {
     private final ToolPartBinding binding;
@@ -40,5 +46,13 @@ public class ForgeroToolWithBinding extends ForgeroToolBase {
     public void createToolDescription(ToolDescriptionWriter writer) {
         super.createToolDescription(writer);
         writer.addBinding(binding);
+    }
+
+    @Override
+    public List<Property> getProperties() {
+        return Stream.of(super.getProperties(), binding.getState().getProperties())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
     }
 }

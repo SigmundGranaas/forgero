@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.core.properties.attribute;
 
+import com.sigmundgranaas.forgero.core.properties.Attribute;
 import com.sigmundgranaas.forgero.core.properties.AttributeType;
+import com.sigmundgranaas.forgero.core.properties.CalculationOrder;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,7 +15,7 @@ public record BaseAttribute(AttributeType attribute,
     public CalculationOrder getOrder() {
         return this.order;
     }
-    
+
     @Override
     public AttributeType getAttributeType() {
         return this.attribute;
@@ -27,5 +29,10 @@ public record BaseAttribute(AttributeType attribute,
     @Override
     public Predicate<Target> getCondition() {
         return condition;
+    }
+
+    @Override
+    public boolean applyCondition(Target target) {
+        return condition.test(target);
     }
 }

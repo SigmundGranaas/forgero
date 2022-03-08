@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.core.gem;
 
+import com.sigmundgranaas.forgero.core.properties.Property;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public interface Gem {
@@ -17,5 +21,9 @@ public interface Gem {
 
     default void createToolPartDescription(GemDescriptionWriter writer) {
         writer.createGemDescription(this);
+    }
+
+    default List<Property> getProperties() {
+        return Collections.emptyList();
     }
 }

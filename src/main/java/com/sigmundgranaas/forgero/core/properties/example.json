@@ -1,10 +1,9 @@
 {
-  "properties": {
     "attributes": [
       {
         "type": "ATTACK_DAMAGE",
         "order": "END",
-        "operation": "MULT",
+        "operation": "MULTIPLICATION",
         "value": 1.2,
         "condition": {
           "target": "ENTITY",
@@ -14,13 +13,13 @@
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
-        "operation": "ADD",
+        "operation": "ADDITION",
         "value": 3.0
       },
       {
         "type": "ATTACK_SPEED",
         "order": "BASE",
-        "operation": "ADD",
+        "operation": "ADDITION",
         "value": 3.0,
         "condition": {
           "target": "ENVIRONMENT",
@@ -53,5 +52,4 @@
         "value": 1.0
       }
     ]
-  }
 }
