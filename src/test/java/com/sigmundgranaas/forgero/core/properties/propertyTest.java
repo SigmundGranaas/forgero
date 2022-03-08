@@ -1,6 +1,9 @@
 package com.sigmundgranaas.forgero.core.properties;
 
-import com.sigmundgranaas.forgero.core.properties.attribute.*;
+import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.properties.attribute.SingleTarget;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.properties.attribute.ToolPartTarget;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +22,13 @@ public class propertyTest {
         Assertions.assertEquals(9f, toolProperties.applyAttribute(createDummyTarget(TargetTypes.ENTITY, Set.of("HUMAN")), AttributeType.ATTACK_DAMAGE));
     }
 
+    @Test
+    void testPropertyDurability() {
+        PropertyStream toolProperties = createTestProperties();
+        Target attributeTarget = new ToolPartTarget(Set.of("HANDLE"));
+        Assertions.assertEquals(2000, toolProperties.applyAttribute(attributeTarget, AttributeType.DURABILITY));
+    }
+
     private PropertyStream createTestProperties() {
         Attribute exampleCalculation = createDefaultMiningSpeedAttribute();
 
@@ -34,10 +44,21 @@ public class propertyTest {
         Attribute damageAttributeConditional = new AttributeBuilder(AttributeType.ATTACK_DAMAGE)
                 .applyCalculation((base) -> base + base * 0.5f)
                 .applyOrder(CalculationOrder.BASE_MULTIPLICATION)
-                .applyCondition((target -> target.isApplicable("HUMAN", TargetTypes.ENTITY)))
+                .applyCondition((target -> target.isApplicable(Set.of("HUMAN"), TargetTypes.ENTITY)))
                 .build();
 
-        return Property.stream(List.of(exampleCalculation, baseDamage, damageAttribute, damageAttributeConditional));
+        Attribute durabilityAttribute = new AttributeBuilder(AttributeType.DURABILITY)
+                .applyCalculation((base) -> base + 1000)
+                .applyOrder(CalculationOrder.BASE)
+                .build();
+
+        Attribute durabilityAttributeConditional = new AttributeBuilder(AttributeType.DURABILITY)
+                .applyCalculation((base) -> base + 1000)
+                .applyOrder(CalculationOrder.MIDDLE)
+                .applyCondition(target -> target.isApplicable(Set.of("HANDLE"), TargetTypes.TOOL_PART_TYPE))
+                .build();
+
+        return Property.stream(List.of(exampleCalculation, baseDamage, damageAttribute, damageAttributeConditional, durabilityAttribute, durabilityAttributeConditional));
     }
 
     private Target createDummyTarget(TargetTypes type, Set<String> tags) {
@@ -51,6 +72,4 @@ public class propertyTest {
                 .applyCondition(EXAMPLE_CONDITION)
                 .build();
     }
-
-
 }

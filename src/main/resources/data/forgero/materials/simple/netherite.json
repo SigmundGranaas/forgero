@@ -68,11 +68,24 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2100.0,
+          "value": 1500.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
               "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 750.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE",
+              "BINDING"
             ]
           }
         }

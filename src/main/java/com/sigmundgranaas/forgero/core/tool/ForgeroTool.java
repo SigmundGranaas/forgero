@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.properties.Property;
 import com.sigmundgranaas.forgero.core.properties.PropertyStream;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -32,15 +33,15 @@ public interface ForgeroTool {
     @NotNull
     ForgeroToolTypes getToolType();
 
-    int getDurability();
+    int getDurability(Target target);
 
-    float getAttackDamage();
+    float getAttackDamage(Target target);
 
-    float getAttackSpeed();
+    float getAttackSpeed(Target target);
 
-    float getMiningSpeedMultiplier();
+    float getMiningSpeedMultiplier(Target target);
 
-    int getMiningLevel();
+    int getMiningLevel(Target target);
 
     PrimaryMaterial getMaterial();
 
@@ -48,9 +49,9 @@ public interface ForgeroTool {
 
     double getAttackDamageAddition();
 
-    List<Property> getProperties();
+    List<Property> getProperties(Target target);
 
     default PropertyStream getPropertyStream() {
-        return Property.stream(getProperties());
+        return Property.stream(getProperties(Target.createEmptyTarget()));
     }
 }

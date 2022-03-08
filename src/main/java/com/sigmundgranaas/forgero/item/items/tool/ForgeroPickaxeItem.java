@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.properties.Property;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -98,7 +99,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ForgeroTool forgeroTool = convertItemStack(user.getStackInHand(hand), getTool());
         if (!world.isClient) {
-            Property.stream(forgeroTool.getProperties())
+            Property.stream(forgeroTool.getProperties(Target.createEmptyTarget()))
                     .getAttributes()
                     .forEach(attribute -> {
                         user.sendMessage(new LiteralText(String.format("Attribute type: %s, property_type: %s", attribute.getAttributeType().toString(), attribute.getType())), false);

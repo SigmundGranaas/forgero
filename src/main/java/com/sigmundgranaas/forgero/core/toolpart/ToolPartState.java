@@ -4,9 +4,8 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.TargetTypes;
 import com.sigmundgranaas.forgero.core.properties.attribute.Target;
-import com.sigmundgranaas.forgero.core.properties.attribute.TargetTagSet;
+import com.sigmundgranaas.forgero.core.properties.attribute.ToolPartTarget;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,27 +39,16 @@ public abstract class ToolPartState {
 
     public abstract ForgeroToolPartTypes getToolPartType();
 
-    public List<Property> getProperties() {
+    public List<Property> getProperties(Target target) {
         return Stream.of(primaryMaterial.getPrimaryProperties(),
                         secondaryMaterial.getSecondaryProperties(),
                         gem.getProperties())
                 .flatMap(Collection::stream)
-                .filter(property -> property.applyCondition(getToolPartConditionTarget()))
+                .filter(property -> property.applyCondition(target.combineTarget(getToolPartConditionTarget())))
                 .collect(Collectors.toList());
-
     }
 
     private Target getToolPartConditionTarget() {
-        return new Target() {
-            @Override
-            public Set<TargetTypes> getTypes() {
-                return Set.of(TargetTypes.TOOL_PART_TYPE);
-            }
-
-            @Override
-            public TargetTagSet getTag() {
-                return new TargetTagSet(Set.of(getToolPartType().toString()));
-            }
-        };
+        return new ToolPartTarget(Set.of(getToolPartType().toString()));
     }
 }

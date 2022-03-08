@@ -7,7 +7,7 @@ import java.util.Set;
 public record ToolPartTarget(Set<String> targets) implements Target {
     @Override
     public Set<TargetTypes> getTypes() {
-        return Set.of(TargetTypes.TOOL_PART);
+        return Set.of(TargetTypes.TOOL_PART_TYPE);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -40,12 +41,12 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
 
     default int getDurability(ItemStack stack) {
         ForgeroTool forgeroTool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(getTool());
-        return forgeroTool.getDurability();
+        return forgeroTool.getDurability(Target.createEmptyTarget());
     }
 
     default int getCustomItemBarStep(ItemStack stack) {
         ForgeroTool forgeroTool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(getTool());
-        return Math.round(13.0f - (float) stack.getDamage() * 13.0f / (float) forgeroTool.getDurability());
+        return Math.round(13.0f - (float) stack.getDamage() * 13.0f / (float) forgeroTool.getDurability(Target.createEmptyTarget()));
     }
 
     FabricToForgeroToolAdapter getToolAdapter();
@@ -57,9 +58,10 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
         if (slot.equals(EquipmentSlot.MAINHAND)) {
             ForgeroTool tool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(this.getTool());
 
+            Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", tool.getAttackDamage() - getTool().getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
-            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed() - getTool().getAttackSpeed(), EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", tool.getAttackDamage(target) - getTool().getAttackDamage(target), EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
             //builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
             return builder.build();
         } else {
@@ -71,7 +73,8 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
     default int getMiningLevel(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
-            int miningLevel = forgeroTool.getMiningLevel();
+            Target target = Target.createEmptyTarget();
+            int miningLevel = forgeroTool.getMiningLevel(target);
             return miningLevel;
         }
 
@@ -82,7 +85,8 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
     default float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
-            float miningSpeedMultiplier = forgeroTool.getMiningSpeedMultiplier();
+            Target target = Target.createEmptyTarget();
+            float miningSpeedMultiplier = forgeroTool.getMiningSpeedMultiplier(target);
             return miningSpeedMultiplier;
         }
 

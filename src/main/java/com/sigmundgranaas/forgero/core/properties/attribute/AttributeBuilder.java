@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.core.properties.attribute;
 
-import com.sigmundgranaas.forgero.core.properties.AttributeType;
-import com.sigmundgranaas.forgero.core.properties.NumericOperation;
-import com.sigmundgranaas.forgero.core.properties.PropertyPOJO;
-import com.sigmundgranaas.forgero.core.properties.TargetTypes;
+import com.sigmundgranaas.forgero.core.properties.*;
 
+import java.util.HashSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -19,29 +17,29 @@ public class AttributeBuilder {
     }
 
     public static Attribute createAttributeFromPojo(PropertyPOJO.Attribute attributePOJO) {
-        AttributeBuilder builder = new AttributeBuilder(attributePOJO.getType())
-                .applyOrder(attributePOJO.getOrder());
+        AttributeBuilder builder = new AttributeBuilder(attributePOJO.type)
+                .applyOrder(attributePOJO.order);
 
-        if (attributePOJO.getCondition() != null) {
+        if (attributePOJO.condition != null) {
             Predicate<Target> condition;
-            if (attributePOJO.getCondition().getTarget() == TargetTypes.TOOL_PART) {
+            if (attributePOJO.condition.target == TargetTypes.TOOL_PART_TYPE) {
                 condition = (target) -> {
-                    if (!target.getTypes().contains(TargetTypes.TOOL_PART)) {
+                    if (!target.getTypes().contains(TargetTypes.TOOL_PART_TYPE)) {
                         return true;
                     }
-                    return target.isApplicable(attributePOJO.getCondition().getTag(), TargetTypes.TOOL_PART);
+                    return target.isApplicable(new HashSet<>(attributePOJO.condition.tag), TargetTypes.TOOL_PART_TYPE);
                 };
             } else {
                 condition = (target) ->
-                        target.isApplicable(attributePOJO.getCondition().getTag(), attributePOJO.getCondition().getTarget());
+                        target.isApplicable(new HashSet<>(attributePOJO.condition.tag), attributePOJO.condition.target);
             }
             builder.applyCondition(condition);
         }
 
-        if (attributePOJO.getOperation() == NumericOperation.ADDITION) {
-            builder.applyCalculation((current) -> current + attributePOJO.getValue().floatValue());
-        } else if (attributePOJO.getOperation() == NumericOperation.MULTIPLICATION) {
-            builder.applyCalculation((current) -> current + current * attributePOJO.getValue().floatValue());
+        if (attributePOJO.operation == NumericOperation.ADDITION) {
+            builder.applyCalculation((current) -> current + attributePOJO.value);
+        } else if (attributePOJO.operation == NumericOperation.MULTIPLICATION) {
+            builder.applyCalculation((current) -> current * attributePOJO.value);
         }
         return builder.build();
     }

@@ -59,6 +59,18 @@
               "HANDLE"
             ]
           }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 1.2,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
         }
       ],
       "passive:": [],

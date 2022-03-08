@@ -38,6 +38,18 @@
         },
         {
           "type": "DURABILITY",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 1.4,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
           "value": 59.0,
