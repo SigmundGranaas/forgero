@@ -18,6 +18,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Rarity;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,22 +33,35 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
 
     @Override
     public void addSecondaryMaterial(SecondaryMaterial material) {
+        Rarity rarity = getRarityFromInt((int) Property.stream(material.getSecondaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
         MutableText mutableText = new LiteralText("  Secondary: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(Formatting.WHITE));
+        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
     @Override
     public void addGem(Gem gem) {
+        Rarity rarity = getRarityFromGemLevel(gem.getLevel());
         MutableText mutableText = new LiteralText("  Gem: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(Formatting.WHITE));
+        mutableText.append(new LiteralText(String.format("%s, level %s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
+    }
+
+    private Rarity getRarityFromGemLevel(int level) {
+        int index = level / 2;
+        if (level > 4) {
+            index = 4;
+        } else if (index <= 0) {
+            index = 1;
+        }
+        return Rarity.values()[index - 1];
     }
 
     @Override
     public void addPrimaryMaterial(PrimaryMaterial material) {
+        Rarity rarity = getRarityFromInt((int) Property.stream(material.getPrimaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
         MutableText mutableText = new LiteralText("  Primary: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(Formatting.WHITE));
+        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
@@ -69,7 +83,6 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
     @Override
     public void addToolPartProperties(PropertyStream stream) {
         tooltip.add(new LiteralText("Attributes: "));
-
         List<Property> properties = stream.collect(Collectors.toList());
         addAllAttribute(properties);
     }
@@ -95,6 +108,17 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
             miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
+    }
+
+    private Rarity getRarityFromInt(int rarity) {
+        if (rarity >= 100) {
+            return Rarity.EPIC;
+        } else if (rarity >= 80) {
+            return Rarity.RARE;
+        } else if (rarity >= 30) {
+            return Rarity.UNCOMMON;
+        }
+        return Rarity.COMMON;
     }
 
     private void addAttribute(List<Property> attributes, AttributeType type, String title) {
@@ -127,17 +151,16 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
     @Override
     public void addToolProperties(PropertyStream stream) {
         tooltip.add(new LiteralText("Attributes: "));
-
         List<Property> properties = stream.collect(Collectors.toList());
-
         addToolAttributes(properties);
     }
 
 
     @Override
     public void createGemDescription(Gem gem) {
+        Rarity rarity = getRarityFromGemLevel(gem.getLevel());
         MutableText mutableText = new LiteralText("Gem: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(Formatting.WHITE));
+        mutableText.append(new LiteralText(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
         addAllAttribute(gem.getProperties());
     }
