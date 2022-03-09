@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Interface for attributes which can affect the attributes of tools.
+ * Attributes are designed to be pooled together and calculated in a chain.
+ */
 public interface Attribute extends Property, Comparable<Attribute> {
     Predicate<Target> DEFAULT_CONDITION = (target) -> true;
     Function<Float, Float> DEFAULT_ATTRIBUTE_CALCULATION = (currentFloat) -> currentFloat;

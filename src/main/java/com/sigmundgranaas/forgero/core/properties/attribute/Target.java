@@ -7,6 +7,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The target interface represents a target for the conditions created in properties/attributes.
+ * Target types are defined in TargetTypes, and the tags is only a possible match.
+ * Both target type and tag needs match for the attribute to be applied when presented with a target.
+ * Attributes with no condition will ignore targets.
+ */
 public interface Target {
     static Target createEmptyTarget() {
         return new Target() {

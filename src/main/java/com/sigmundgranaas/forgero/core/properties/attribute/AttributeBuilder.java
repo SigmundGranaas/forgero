@@ -5,6 +5,10 @@ import com.sigmundgranaas.forgero.core.properties.*;
 import java.util.HashSet;
 import java.util.function.Predicate;
 
+/**
+ * Builder for building attributes. You can create fresh ones, from POJO or from an existing attribute.
+ * Use this to modify or create custom attributes.
+ */
 public class AttributeBuilder {
     private final AttributeType type;
     private CalculationOrder order = CalculationOrder.BASE;

@@ -2,6 +2,9 @@ package com.sigmundgranaas.forgero.core.properties;
 
 import java.util.List;
 
+/**
+ * POJO used for parsing all properties from JSON files.
+ */
 public class PropertyPOJO {
     public List<PropertyPOJO.Attribute> attributes;
     public List<PropertyPOJO.Passive> passive;

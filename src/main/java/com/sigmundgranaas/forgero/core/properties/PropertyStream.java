@@ -5,6 +5,10 @@ import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 
 import java.util.stream.Stream;
 
+/**
+ * The property stream is a special stream for handling property specific operations.
+ * This will make it easier to use this stream of properties by providing convenience methods like applyAttribute for reducing a specific attribute to a desired number.
+ */
 public record PropertyStream(
         Stream<Property> stream) implements ForwardingStream<Property> {
 

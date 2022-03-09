@@ -1,10 +1,17 @@
 package com.sigmundgranaas.forgero.core.properties.attribute;
 
-import com.sigmundgranaas.forgero.core.properties.*;
+import com.sigmundgranaas.forgero.core.properties.Attribute;
+import com.sigmundgranaas.forgero.core.properties.AttributeType;
+import com.sigmundgranaas.forgero.core.properties.CalculationOrder;
+import com.sigmundgranaas.forgero.core.properties.NumericOperation;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Base attribute class. This class is opinionated when it comes to how some attributes should be calculated, like MINING level.
+ * Special attribute classes will likely deal with special scenarios like MINING level.
+ */
 public record BaseAttribute(AttributeType attribute,
                             NumericOperation operation,
                             float value,
@@ -66,8 +73,4 @@ public record BaseAttribute(AttributeType attribute,
         return condition.test(target);
     }
 
-    @Override
-    public void createToolPartDescription(PropertyDescriptionWriter writer) {
-
-    }
 }

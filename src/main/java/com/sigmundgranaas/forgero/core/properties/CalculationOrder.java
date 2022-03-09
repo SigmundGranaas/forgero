@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.core.properties;
 
+/**
+ * Enum for describing in which order calculations should occur.
+ */
 public enum CalculationOrder {
     BASE(0),
     BASE_MULTIPLICATION(1),
