@@ -35,7 +35,7 @@ public class GameTestHelper {
     public static ForgeroPickaxeItem createDummyToolItem() {
         SimpleToolMaterialAdapter adapter = new SimpleToolMaterialAdapter(createDummyDuoMaterial());
         ForgeroTool tool = createDummyTool();
-        return new ForgeroPickaxeItem(adapter, 10, 10, new FabricItemSettings(), tool);
+        return new ForgeroPickaxeItem(adapter, new FabricItemSettings(), tool);
     }
 
     public static ToolPartHead createDummyToolPartHead() {

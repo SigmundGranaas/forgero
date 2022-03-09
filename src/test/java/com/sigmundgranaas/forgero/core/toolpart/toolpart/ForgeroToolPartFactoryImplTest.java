@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifier
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactoryImpl;
 import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
@@ -22,7 +21,7 @@ class ForgeroToolPartFactoryImplTest {
     @Test
     void testCreateToolPart() {
 
-        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE);
+        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
         ForgeroToolPart referenceToolPart = new PickaxeHead(state);
 
         ForgeroToolPartFactoryImpl factory = new ForgeroToolPartFactoryImpl();

@@ -1,19 +1,8 @@
 package com.sigmundgranaas.forgero.core.toolpart.head;
 
-import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticDuoMaterial;
-import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
-import com.sigmundgranaas.forgero.core.toolpart.strategy.realistic.RealisticHeadStrategy;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SimpleHeadStrategyTest {
-
-    RealisticHeadStrategy strategy;
-
-    @BeforeEach
-    void setUpDefaultMaterial() {
-        strategy = new RealisticHeadStrategy(new RealisticDuoMaterial(RealisticMaterialPOJO.createDefaultMaterialPOJO()));
-    }
 
 
     @Test
