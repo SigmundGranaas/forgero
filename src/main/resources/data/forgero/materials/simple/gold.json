@@ -7,6 +7,12 @@
   },
   "properties": {
     "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 60
+      }
     ],
     "passive:": [],
     "active": []

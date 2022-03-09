@@ -17,6 +17,12 @@
         }
       },
       {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 80
+      },
+      {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",

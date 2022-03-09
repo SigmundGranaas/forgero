@@ -32,6 +32,12 @@
             "HEAD"
           ]
         }
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 90
       }
     ],
     "passive:": [],

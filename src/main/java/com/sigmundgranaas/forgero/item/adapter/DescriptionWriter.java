@@ -83,9 +83,18 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
     private void addAllAttribute(List<Property> attributes) {
         addAttribute(attributes, AttributeType.ATTACK_DAMAGE, "Attack Damage");
         addAttribute(attributes, AttributeType.ATTACK_SPEED, "Attack Speed");
-        addAttribute(attributes, AttributeType.DURABILITY, "Durability");
+        addAttributeInt(attributes, AttributeType.DURABILITY, "Durability");
         addAttribute(attributes, AttributeType.MINING_SPEED, "Mining Speed");
-        addAttribute(attributes, AttributeType.MINING_LEVEL, "Mining Level");
+        addAttributeInt(attributes, AttributeType.MINING_LEVEL, "Mining Level");
+    }
+
+    private void addAttributeInt(List<Property> attributes, AttributeType type, String title) {
+        int result = (int) Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
+        if (result > 0) {
+            MutableText miningLevel = new LiteralText(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
+            tooltip.add(miningLevel);
+        }
     }
 
     private void addAttribute(List<Property> attributes, AttributeType type, String title) {

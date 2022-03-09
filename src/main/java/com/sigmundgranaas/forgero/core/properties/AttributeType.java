@@ -5,5 +5,6 @@ public enum AttributeType {
     ATTACK_DAMAGE,
     MINING_SPEED,
     MINING_LEVEL,
+    RARITY,
     DURABILITY;
 }

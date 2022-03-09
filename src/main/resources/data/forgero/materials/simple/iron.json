@@ -9,6 +9,12 @@
   "properties": {
     "attributes": [
       {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
         "type": "MINING_LEVEL",
         "order": "BASE",
         "operation": "ADDITION",
