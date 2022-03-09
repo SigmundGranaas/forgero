@@ -2,10 +2,43 @@
   "name": "Diamond",
   "rarity": 100,
   "type": "MINERAL",
-  "durability": 1561,
-  "properties": [
-    "sparkling"
-  ],
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 80
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 500,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HANDLE",
+            "BINDING"
+          ]
+        }
+      }
+    ],
+    "passive:": [],
+    "active": []
+  },
   "ingredient": {
     "item": "minecraft:diamond"
   },
@@ -22,15 +55,91 @@
     ]
   },
   "primary": {
-    "miningLevel": 3,
-    "miningSpeed": 8.0,
-    "attackDamage": 3.0,
-    "attackSpeed": 0.0
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 8.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 1000.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 3.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        }
+      ],
+      "passive:": [],
+      "active": []
+    }
   },
   "secondary": {
-    "miningLevel": 3,
-    "miningSpeedAddition": 1.0,
-    "attackDamageAddition": 1.0,
-    "attackSpeedAddition": 0.0
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 1.3,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        }
+      ],
+      "passive:": [],
+      "active": []
+    }
   }
 }

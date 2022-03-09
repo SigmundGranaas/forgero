@@ -16,12 +16,6 @@ public class PrimaryMaterialImpl extends AbstractForgeroMaterial implements Real
     }
 
     @Override
-    public int getDurability() {
-        return 0;
-    }
-
-
-    @Override
     public int getStiffness() {
         return 0;
     }

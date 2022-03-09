@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public interface FabricToForgeroToolPartAdapter {
     static FabricToForgeroToolPartAdapter createAdapter() {
         return new FabricToForgeroAdapter();

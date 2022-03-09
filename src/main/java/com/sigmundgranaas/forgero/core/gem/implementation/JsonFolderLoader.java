@@ -15,13 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class JsonFolderLoader {
-
-    private String path;
-
-    public JsonFolderLoader(String path) {
-        this.path = path;
-    }
+public record JsonFolderLoader(String path) {
 
     /**
      * @return List<MaterialPOJO>

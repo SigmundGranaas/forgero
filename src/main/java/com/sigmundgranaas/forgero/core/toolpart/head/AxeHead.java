@@ -8,24 +8,17 @@ public class AxeHead extends AbstractToolPartHead {
     }
 
     @Override
-    public int getDurability() {
-        return headStrategy.getDurability();
-    }
-
-    @Override
-    public float getAttackSpeed() {
-        return headStrategy.getAttackSpeed() - 2.8f;
-    }
-
-    @Override
-    public float getAttackDamage() {
-        return 1 + headStrategy.getAttackDamage();
-    }
-
-    @Override
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.AXE;
     }
 
+    @Override
+    public float getAttackSpeedBase() {
+        return -3.2f;
+    }
 
+    @Override
+    public float getAttackDamageBase() {
+        return 5.0f;
+    }
 }

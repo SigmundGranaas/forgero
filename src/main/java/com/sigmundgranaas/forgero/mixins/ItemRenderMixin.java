@@ -35,15 +35,10 @@ public abstract class ItemRenderMixin {
     @Inject(method = "renderBakedItemModel", at = @At("HEAD"), cancellable = true)
     public void renderBakedItemModel(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices, CallbackInfo ci) {
         if ((stack.getItem() instanceof ForgeroToolItem || stack.getItem() instanceof ToolPartItem) && numberOfDuplicates == 7) {
-            //
-            //model.getTransformation().getTransformation(ModelTransformation.Mode.GUI).apply(false, matrices);
-            //matrices.translate(+0.2, +0.2, 0.2);
-            //matrices.push();
-            //matrices.pop();
 
             VertexConsumerProvider.Immediate consumer = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
             RenderLayer renderLayer = RenderLayers.getItemLayer(stack, true);
-            //
+
 
             VertexConsumer vertexConsumer;
             if (stack.getItem() instanceof ForgeroToolItem) {
@@ -62,7 +57,7 @@ public abstract class ItemRenderMixin {
             random.setSeed(l);
             this.renderBakedItemQuads(matrices, vertexConsumer, model.getQuads(null, null, random), stack, light, overlay);
             numberOfDuplicates = 1;
-            //matrices.pop();
+
             ci.cancel();
         } else if (stack.getItem() instanceof ForgeroToolItem && stack.hasGlint()) {
             numberOfDuplicates++;

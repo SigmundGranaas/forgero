@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -23,8 +24,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public interface ForgeroToolItem extends DynamicAttributeTool {
+    UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
+    UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
 
-    public UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
 
     Identifier getIdentifier();
 
@@ -38,12 +41,12 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
 
     default int getDurability(ItemStack stack) {
         ForgeroTool forgeroTool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(getTool());
-        return forgeroTool.getDurability();
+        return forgeroTool.getDurability(Target.createEmptyTarget());
     }
 
     default int getCustomItemBarStep(ItemStack stack) {
         ForgeroTool forgeroTool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(getTool());
-        return Math.round(13.0f - (float) stack.getDamage() * 13.0f / (float) forgeroTool.getDurability());
+        return Math.round(13.0f - (float) stack.getDamage() * 13.0f / (float) forgeroTool.getDurability(Target.createEmptyTarget()));
     }
 
     FabricToForgeroToolAdapter getToolAdapter();
@@ -55,10 +58,12 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
         if (slot.equals(EquipmentSlot.MAINHAND)) {
             ForgeroTool tool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(this.getTool());
 
+            Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(TEST_UUID, "Attack Damage Addition", tool.getAttackDamageAddition(), EntityAttributeModifier.Operation.MULTIPLY_BASE));
-            //builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(), EntityAttributeModifier.Operation.ADDITION));
-            //builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", tool.getAttackDamage(target) - getTool().getAttackDamage(target), EntityAttributeModifier.Operation.ADDITION));
+            if (tool.getAttackSpeed(target) != getTool().getAttackSpeed(target)) {
+                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
+            }
             return builder.build();
         } else {
             return EMPTY;
@@ -69,22 +74,25 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
     default int getMiningLevel(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
-            int miningLevel = forgeroTool.getMiningLevel();
-            return miningLevel;
+            Target target = Target.createEmptyTarget();
+            return forgeroTool.getMiningLevel(target);
         }
 
         return 0;
     }
 
-
     @Override
     default float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
         if (tag.equals(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
-            float miningSpeedMultiplier = forgeroTool.getMiningSpeedMultiplier();
-            return miningSpeedMultiplier;
+            Target target = Target.createEmptyTarget();
+            return forgeroTool.getMiningSpeedMultiplier(target);
         }
 
         return 1f;
+    }
+
+    default ForgeroTool convertItemStack(ItemStack toolStack, ForgeroTool baseTool) {
+        return adapter.getTool(toolStack).orElse(baseTool);
     }
 }

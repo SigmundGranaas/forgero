@@ -8,13 +8,13 @@ public record ToolPartModelTextureIdentifier(String material,
                                              ToolPartModelType type,
                                              ModelLayer layer,
                                              String skin) implements TextureIdentifier {
-    public static String DEFAULT_SKIN_IDENTIFIER = "default";
-    public static int DEFAULT_SPLIT_IDENTIFIER_LENGTH = 4;
-    public static int MODEL_TYPE_INDEX = 1;
-    public static int MODEL_LAYER_INDEX = 2;
-    public static int MATERIAL_INDEX = 0;
-    public static int SKIN_INDEX = 3;
-    public static String DEFAULT_SPLIT_OPERATOR = "_";
+    public static final String DEFAULT_SKIN_IDENTIFIER = "default";
+    public static final int DEFAULT_SPLIT_IDENTIFIER_LENGTH = 4;
+    public static final int MODEL_TYPE_INDEX = 1;
+    public static final int MODEL_LAYER_INDEX = 2;
+    public static final int MATERIAL_INDEX = 0;
+    public static final int SKIN_INDEX = 3;
+    public static final String DEFAULT_SPLIT_OPERATOR = "_";
 
     @Override
     public String getFileNameWithExtension() {

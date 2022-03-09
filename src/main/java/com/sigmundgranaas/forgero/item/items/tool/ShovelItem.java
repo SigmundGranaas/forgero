@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -29,8 +30,8 @@ public class ShovelItem extends net.minecraft.item.ShovelItem implements Forgero
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
 
 
-    public ShovelItem(ToolMaterial toolMaterial, float f, float g, Settings settings, ForgeroTool tool) {
-        super(toolMaterial, f, g, settings);
+    public ShovelItem(ToolMaterial toolMaterial, Settings settings, ForgeroTool tool) {
+        super(toolMaterial, (int) tool.getAttackDamage(Target.createEmptyTarget()), tool.getAttackSpeed(Target.createEmptyTarget()), settings);
         this.tool = tool;
     }
 

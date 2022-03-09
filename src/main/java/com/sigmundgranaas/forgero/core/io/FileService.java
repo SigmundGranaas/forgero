@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdenti
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TemplateTextureIdentifier;
 
 import java.io.InputStream;
-import java.net.URISyntaxException;
 
 public class FileService {
 
@@ -25,7 +24,7 @@ public class FileService {
         }
     }
 
-    public InputStream getStream(TextureIdentifier id) throws URISyntaxException {
+    public InputStream getStream(TextureIdentifier id) {
         ClassLoader classLoader = FileService.class.getClassLoader();
         InputStream resource = classLoader.getResourceAsStream(getTexturePath(id));
         if (resource == null) {

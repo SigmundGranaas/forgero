@@ -2,12 +2,21 @@
   "name": "Birch",
   "rarity": 5,
   "type": "WOOD",
-  "durability": 59,
   "ingredient": {
     "item": "minecraft:birch_planks"
   },
-  "properties": [
-  ],
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3
+      }
+    ],
+    "passive:": [],
+    "active": []
+  },
   "palette": {
     "name": "birch",
     "include": [
@@ -18,15 +27,79 @@
     ]
   },
   "primary": {
-    "miningLevel": 0,
-    "miningSpeed": 2.0,
-    "attackDamage": 0.0,
-    "attackSpeed": 0.0
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 30.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 130.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 1.2,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
+        }
+      ],
+      "passive:": [],
+      "active": []
+    }
   },
   "secondary": {
-    "miningLevel": 0,
-    "miningSpeedAddition": 0.2,
-    "attackDamageAddition": 0.3,
-    "attackSpeedAddition": 0.0
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.3
+        }
+      ],
+      "passive:": [],
+      "active": []
+    }
   }
 }

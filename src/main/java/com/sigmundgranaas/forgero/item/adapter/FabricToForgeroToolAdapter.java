@@ -9,12 +9,14 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public interface FabricToForgeroToolAdapter {
     static FabricToForgeroToolAdapter createAdapter() {
         return new FabricToForgeroAdapter();
     }
 
     boolean isTool(Identifier id);
+
 
     boolean isTool(Item item);
 

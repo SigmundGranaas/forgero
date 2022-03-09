@@ -8,10 +8,13 @@ public interface ToolPartModelBuilder {
         return new ToolPartModelBuilderImpl();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     ToolPartModelBuilder addToolPart(FabricBakedModel toolPart);
 
+    @SuppressWarnings("UnusedReturnValue")
     ToolPartModelBuilder addSecondaryMaterial(FabricBakedModel secondaryMaterial);
 
+    @SuppressWarnings("UnusedReturnValue")
     ToolPartModelBuilder addGem(FabricBakedModel secondaryMaterial);
 
     FabricBakedModel build();

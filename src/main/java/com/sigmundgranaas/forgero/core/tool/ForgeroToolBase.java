@@ -3,15 +3,22 @@ package com.sigmundgranaas.forgero.core.tool;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.properties.AttributeType;
+import com.sigmundgranaas.forgero.core.properties.Property;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ForgeroToolBase implements ForgeroTool {
-    private final ToolPartHead head;
-    private final ToolPartHandle handle;
+    protected final ToolPartHead head;
+    protected final ToolPartHandle handle;
 
     public ForgeroToolBase(ToolPartHead head, ToolPartHandle handle) {
         this.handle = handle;
@@ -61,28 +68,28 @@ public class ForgeroToolBase implements ForgeroTool {
     }
 
     @Override
-    public int getDurability() {
-        return head.getDurability() + handle.getDurability() / 2;
+    public int getDurability(Target target) {
+        return (int) getPropertyStream().applyAttribute(target, AttributeType.DURABILITY);
     }
 
     @Override
-    public float getAttackDamage() {
-        return head.getAttackDamage();
+    public float getAttackDamage(Target target) {
+        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_DAMAGE) + head.getAttackDamageBase();
     }
 
     @Override
-    public float getAttackSpeed() {
-        return head.getAttackSpeed();
+    public float getAttackSpeed(Target target) {
+        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_SPEED) + head.getAttackSpeedBase();
     }
 
     @Override
-    public float getMiningSpeedMultiplier() {
-        return head.getMiningSpeedMultiplier();
+    public float getMiningSpeedMultiplier(Target target) {
+        return getPropertyStream().applyAttribute(target, AttributeType.MINING_SPEED);
     }
 
     @Override
-    public int getMiningLevel() {
-        return head.getMiningLevel();
+    public int getMiningLevel(Target target) {
+        return (int) getPropertyStream().applyAttribute(target, AttributeType.MINING_LEVEL);
     }
 
     @Override
@@ -94,10 +101,11 @@ public class ForgeroToolBase implements ForgeroTool {
     public void createToolDescription(ToolDescriptionWriter writer) {
         writer.addHead(head);
         writer.addHandle(handle);
+        writer.addToolProperties(getPropertyStream());
     }
 
     @Override
-    public double getAttackDamageAddition() {
-        return head.getAttackDamageAddition();
+    public List<Property> getProperties(Target target) {
+        return Stream.of(head.getState().getProperties(target), handle.getState().getProperties(target)).flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

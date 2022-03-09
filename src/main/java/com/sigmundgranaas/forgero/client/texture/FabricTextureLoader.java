@@ -13,12 +13,10 @@ import net.minecraft.util.Identifier;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 /**
  * Class for loading textures from filesystem.
  * This class is used to load template textures and palettes as well as a method for fetching Minecraft's assets.
- *
  */
 public class FabricTextureLoader implements TextureLoader {
     private final Function<Identifier, Resource> getResource;
@@ -37,7 +35,7 @@ public class FabricTextureLoader implements TextureLoader {
             } else {
                 return RawTexture.createRawTexture(id, fileService.getStream(id));
             }
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
         }
@@ -47,7 +45,7 @@ public class FabricTextureLoader implements TextureLoader {
     public Texture getResource(PaletteIdentifier id) {
         try {
             return RawTexture.createRawTexture(id, (fileService.getStream(id)));
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
         }

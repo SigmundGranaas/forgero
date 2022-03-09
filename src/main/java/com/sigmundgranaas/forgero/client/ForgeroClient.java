@@ -7,10 +7,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.gem.BindingGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.gem.HandleGem;
-import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -18,6 +15,7 @@ import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.fabricmc.api.ClientModInitializer;
@@ -76,18 +74,18 @@ public class ForgeroClient implements ClientModInitializer {
             }
         }
         for (Gem gem : ForgeroRegistry.getInstance().gemCollection().getGems()) {
-            if (gem instanceof HeadGem) {
+            if (gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)) {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.AXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
             }
-            if (gem instanceof BindingGem) {
+            if (gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)) {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.BINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.AXEHEADBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
             }
-            if (gem instanceof HandleGem) {
+            if (gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)) {
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.HANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHORTHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
                 registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.MEDIUMHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
@@ -96,34 +94,9 @@ public class ForgeroClient implements ClientModInitializer {
         }
 
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
-            //modelSet.forEach(out);
             List<ModelIdentifier> textures = registry.getTextures().stream().map(texture -> new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, texture.getIdentifier() + "texture_dummy", "inventory")).collect(Collectors.toList());
             textures.forEach(out);
             out.accept(new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, "transparent_base" + "texture_dummy", "inventory"));
-            //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "pickaxehead_gem" + "texture_dummy", "inventory"));
-            //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "handle_gem" + "texture_dummy", "inventory"));
-            //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "fullhandle_gem" + "texture_dummy", "inventory"));
         });
-    }
-
-    private void createGemModels(Gem gem) {
-
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(PrimaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_primary_default" + "texture_dummy", "inventory");
-
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_primary_default" + "texture_dummy", "inventory");
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
     }
 }

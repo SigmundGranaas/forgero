@@ -36,7 +36,7 @@ public record RealisticMaterialLoader(String materialPath) implements MaterialLo
         try {
             InputStream materialsStream = Utils.readJsonResourceAsString(materialPath);
 
-            //assert materialsStream != null;
+            assert materialsStream != null;
 
             JsonReader materialsJson = new JsonReader(new InputStreamReader(materialsStream));
             RealisticMaterialPOJO[] materials = new Gson().fromJson(materialsJson, RealisticMaterialPOJO[].class);

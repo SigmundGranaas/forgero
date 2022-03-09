@@ -5,10 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.gem.BindingGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.gem.HandleGem;
-import com.sigmundgranaas.forgero.core.gem.HeadGem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -74,9 +71,9 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createGemUpgradeRecipes(ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
-            case HEAD -> gems.stream().filter(gem -> gem instanceof HeadGem).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case HANDLE -> gems.stream().filter(gem -> gem instanceof HandleGem).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case BINDING -> gems.stream().filter(gem -> gem instanceof BindingGem).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HEAD -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HANDLE -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case BINDING -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
         };
     }
 

@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 
+@SuppressWarnings("unused")
 public interface ForgeroToolBuilder {
     static ForgeroToolBuilder createBuilder(ToolPartHead head, ToolPartHandle handle) {
         return new ForgeroToolBuilderImpl(head, handle);

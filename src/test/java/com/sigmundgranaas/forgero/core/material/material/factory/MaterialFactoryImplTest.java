@@ -24,16 +24,12 @@ class MaterialFactoryImplTest {
         Assertions.assertEquals(MaterialType.METAL, testMaterial.getType());
     }
 
-    @Test
-    void durability() {
-        Assertions.assertEquals(1, testMaterial.getDurability());
-    }
 
     @Test
     void properties() {
         Assertions.assertEquals(0, testMaterial.getProperties().size());
     }
-    
+
 
     @Test
     void ingredient() {

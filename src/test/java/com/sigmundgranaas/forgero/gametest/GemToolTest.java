@@ -3,13 +3,15 @@ package com.sigmundgranaas.forgero.gametest;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
+import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.gem.HeadGem;
-import com.sigmundgranaas.forgero.core.gem.gems.AdditiveDurabilityGem;
-import com.sigmundgranaas.forgero.core.gem.gems.AdditiveMiningSpeedGem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.core.properties.Attribute;
+import com.sigmundgranaas.forgero.core.properties.AttributeType;
+import com.sigmundgranaas.forgero.core.properties.NumericOperation;
+import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.Handle;
 import com.sigmundgranaas.forgero.core.toolpart.handle.HandleState;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -29,6 +31,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
+import java.util.List;
+
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithSmithingScreenHandler;
 
 public class GemToolTest {
@@ -40,7 +44,8 @@ public class GemToolTest {
         float baseDamage = baseTool.getMaxDamage();
 
         for (int i = 1; i < 10; i++) {
-            ItemStack tool = createToolItemWithGem(new AdditiveDurabilityGem(i, "emerald_gem"));
+            Attribute attribute = new AttributeBuilder(AttributeType.DURABILITY).applyOperation(NumericOperation.ADDITION).applyValue(100).build();
+            ItemStack tool = createToolItemWithGem(new ForgeroGem(i, "emerald_gem", List.of(attribute), List.of(ForgeroToolPartTypes.HANDLE, ForgeroToolPartTypes.HEAD, ForgeroToolPartTypes.BINDING)));
             if (tool.getMaxDamage() != baseDamage + i * 100) {
                 throw new GameTestException("Durability based on Gem is not taken into account");
             }
@@ -59,7 +64,8 @@ public class GemToolTest {
 
         float lastSpeed = baseSpeed;
         for (int i = 1; i < 10; i++) {
-            ItemStack tool = createToolItemWithGem(new AdditiveMiningSpeedGem(i, "lapis_gem"));
+            Attribute attribute = new AttributeBuilder(AttributeType.MINING_SPEED).applyOperation(NumericOperation.ADDITION).applyValue(1).build();
+            ItemStack tool = createToolItemWithGem(new ForgeroGem(i, "lapis_gem", List.of(attribute), List.of(ForgeroToolPartTypes.HANDLE, ForgeroToolPartTypes.HEAD, ForgeroToolPartTypes.BINDING)));
             float currentSpeed = tool.getMiningSpeedMultiplier(context.getBlockState(pos));
             if (currentSpeed <= lastSpeed) {
                 throw new GameTestException("Durability based on Gem is not taken into account");
@@ -71,7 +77,7 @@ public class GemToolTest {
     }
 
     ItemStack createToolItemWithGem(Gem headGem) {
-        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), (HeadGem) headGem, ForgeroToolTypes.PICKAXE);
+        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), headGem);
         ToolPartHead head = new PickaxeHead(state);
         HandleState handleState = new HandleState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
         ToolPartHandle handle = new Handle(handleState);

@@ -9,6 +9,23 @@
     "exclude": [
     ]
   },
+  "properties": {
+    "attributes": [
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 100.0
+      }
+    ],
+    "passive:": [],
+    "active": []
+  },
+  "placement": [
+    "HEAD",
+    "HANDLE",
+    "BINDING"
+  ],
   "type": "DURABILITY",
   "effect": "ADDITIVE",
   "amount": 100.0

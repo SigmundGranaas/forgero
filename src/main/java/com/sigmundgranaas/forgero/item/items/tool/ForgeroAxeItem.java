@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -29,8 +30,9 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem, DynamicA
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
     private final ForgeroTool tool;
 
-    public ForgeroAxeItem(ToolMaterial toolMaterial, int f, float g, Settings settings, ForgeroTool tool) {
-        super(toolMaterial, f, g, settings);
+    public ForgeroAxeItem(ToolMaterial toolMaterial, Settings settings, ForgeroTool tool) {
+        super(toolMaterial, (int) tool.getAttackDamage(Target.createEmptyTarget()), tool.getAttackSpeed(Target.createEmptyTarget()), settings);
+
         this.tool = tool;
     }
 
