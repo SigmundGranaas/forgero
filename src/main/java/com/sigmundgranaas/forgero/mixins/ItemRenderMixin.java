@@ -28,13 +28,10 @@ import java.util.Random;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRenderMixin {
-    //TODO Remove this garbage
-    //Apparently, items are rendered as duplicates seven times. I have no idea why this happens, but it really messes with the enchanting overlay.
-    private int numberOfDuplicates = 1;
 
     @Inject(method = "renderBakedItemModel", at = @At("HEAD"), cancellable = true)
     public void renderBakedItemModel(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices, CallbackInfo ci) {
-        if ((stack.getItem() instanceof ForgeroToolItem || stack.getItem() instanceof ToolPartItem) && numberOfDuplicates == 7) {
+        if ((stack.getItem() instanceof ForgeroToolItem || stack.getItem() instanceof ToolPartItem)) {
 
             VertexConsumerProvider.Immediate consumer = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
             RenderLayer renderLayer = RenderLayers.getItemLayer(stack, true);
@@ -56,11 +53,7 @@ public abstract class ItemRenderMixin {
             }
             random.setSeed(l);
             this.renderBakedItemQuads(matrices, vertexConsumer, model.getQuads(null, null, random), stack, light, overlay);
-            numberOfDuplicates = 1;
 
-            ci.cancel();
-        } else if (stack.getItem() instanceof ForgeroToolItem && stack.hasGlint()) {
-            numberOfDuplicates++;
             ci.cancel();
         }
     }
