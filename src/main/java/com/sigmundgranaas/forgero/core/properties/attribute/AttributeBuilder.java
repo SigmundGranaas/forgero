@@ -76,6 +76,7 @@ public class AttributeBuilder {
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public AttributeBuilder applyLevel(int level) {
         this.level = level;
         return this;

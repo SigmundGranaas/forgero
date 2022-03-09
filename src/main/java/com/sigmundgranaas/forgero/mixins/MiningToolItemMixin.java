@@ -36,14 +36,15 @@ public class MiningToolItemMixin {
     @Shadow
     private Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Inject(method = "<init>", at = @At("TAIL"))
     public void init(float attackDamage, float attackSpeed, ToolMaterial material, Tag<Block> effectiveBlocks, Item.Settings settings, CallbackInfo ci) {
         if (material instanceof SimpleToolMaterialAdapter) {
             this.attackDamage = attackDamage;
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
 
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_DAMAGE).stream().findFirst().get().getId(), "Tool modifier", (double) this.attackDamage, EntityAttributeModifier.Operation.ADDITION));
-            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst().get().getId(), "Tool modifier", (double) attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_DAMAGE).stream().findFirst().get().getId(), "Tool modifier", this.attackDamage, EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst().get().getId(), "Tool modifier", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
             this.attributeModifiers = builder.build();
         }
     }

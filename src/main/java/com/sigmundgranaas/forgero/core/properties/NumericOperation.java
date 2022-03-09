@@ -7,5 +7,5 @@ public enum NumericOperation {
     ADDITION,
     SUBTRACTION,
     MULTIPLICATION,
-    DIVISION;
+    DIVISION
 }

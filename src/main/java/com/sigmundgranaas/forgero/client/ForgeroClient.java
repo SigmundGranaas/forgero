@@ -94,34 +94,9 @@ public class ForgeroClient implements ClientModInitializer {
         }
 
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
-            //modelSet.forEach(out);
             List<ModelIdentifier> textures = registry.getTextures().stream().map(texture -> new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, texture.getIdentifier() + "texture_dummy", "inventory")).collect(Collectors.toList());
             textures.forEach(out);
             out.accept(new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, "transparent_base" + "texture_dummy", "inventory"));
-            //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "pickaxehead_gem" + "texture_dummy", "inventory"));
-            //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "handle_gem" + "texture_dummy", "inventory"));
-            //out.accept(new ModelIdentifier(Forgero.MOD_NAMESPACE, "fullhandle_gem" + "texture_dummy", "inventory"));
         });
-    }
-
-    private void createGemModels(Gem gem) {
-
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(PrimaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_primary_default" + "texture_dummy", "inventory");
-
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_primary_default" + "texture_dummy", "inventory");
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart, ForgeroToolTypes toolTypes) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart, toolTypes).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
-    }
-
-    private ModelIdentifier createToolPartModelIdentifier(SecondaryMaterial material, ForgeroToolPart toolPart) {
-        return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + ToolPartModelType.getModelType(toolPart).toFileName() + "_secondary_default" + "texture_dummy", "inventory");
     }
 }

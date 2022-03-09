@@ -101,7 +101,9 @@ public interface ForwardingStream<T> extends Stream<T> {
         return getStream().toArray();
     }
 
+
     @Override
+
     default <A> A[] toArray(IntFunction<A[]> generator) {
         return getStream().toArray(generator);
     }

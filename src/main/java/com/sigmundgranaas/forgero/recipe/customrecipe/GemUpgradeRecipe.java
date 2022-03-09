@@ -10,7 +10,6 @@ import com.sigmundgranaas.forgero.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
@@ -19,14 +18,8 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public class GemUpgradeRecipe extends SmithingRecipe {
-    private final Ingredient base;
-    private final Ingredient addition;
-
     public GemUpgradeRecipe(SmithingRecipeGetters recipe) {
         super(recipe.getId(), recipe.getBase(), recipe.getAddition(), recipe.getResult().copy());
-        Identifier id = recipe.getId();
-        this.base = recipe.getBase();
-        this.addition = recipe.getAddition();
     }
 
     public static Optional<Gem> getGem(Inventory inventory) {
@@ -35,12 +28,14 @@ public class GemUpgradeRecipe extends SmithingRecipe {
         ItemStack base = inventory.getStack(0);
         ItemStack addition = inventory.getStack(1);
         if (base.hasNbt() && base.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
+            //noinspection ConstantConditions
             baseGem = NBTFactory.INSTANCE.createGemFromNbt(base.getNbt());
         } else {
             baseGem = ((GemItem) base.getItem()).getGem();
         }
 
         if (addition.hasNbt() && addition.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
+            //noinspection ConstantConditions
             additionGem = NBTFactory.INSTANCE.createGemFromNbt(addition.getNbt());
         } else {
             additionGem = ((GemItem) addition.getItem()).getGem();

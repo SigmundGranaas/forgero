@@ -14,9 +14,9 @@ import java.util.Set;
  */
 public class ForgeroToolPartTextureRegistry {
     private static ForgeroToolPartTextureRegistry INSTANCE;
-    Set<String> toolPartTextureGenerationExclusionList;
-    Set<String> toolPartTextures;
-    TextureIdentifierFactory factory;
+    private final Set<String> toolPartTextureGenerationExclusionList;
+    private final Set<String> toolPartTextures;
+    private final TextureIdentifierFactory factory;
 
     public ForgeroToolPartTextureRegistry(TextureIdentifierFactory factory, Set<String> toolPartTextureGenerationExclusionList) {
         this.factory = factory;

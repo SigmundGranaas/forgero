@@ -10,12 +10,6 @@ public record ForgeroModelIdentifier(
         ToolPartModelType type,
         ModelLayer layer,
         String skin) implements ForgeroIdentifier {
-    public ForgeroModelIdentifier(String material, ToolPartModelType type, ModelLayer layer, String skin) {
-        this.material = material;
-        this.type = type;
-        this.layer = layer;
-        this.skin = skin;
-    }
 
     @Override
     public ForgeroIdentifierType getType() {

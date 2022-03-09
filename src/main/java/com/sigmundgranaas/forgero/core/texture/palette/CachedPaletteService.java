@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -49,15 +48,10 @@ public class CachedPaletteService implements PaletteService {
     }
 
     private Palette createPalette(PaletteIdentifier id) {
-        try {
-            if (PaletteResourceRegistry.getInstance().premadePalette(id)) {
-                return factory.createPalette(loader.getResource(id).getImage(), id);
-            } else {
-                return generatePalette(id);
-            }
-        } catch (IOException | URISyntaxException e) {
-            ForgeroInitializer.LOGGER.error(e);
-            throw new IllegalArgumentException();
+        if (PaletteResourceRegistry.getInstance().premadePalette(id)) {
+            return factory.createPalette(loader.getResource(id).getImage(), id);
+        } else {
+            return generatePalette(id);
         }
 
     }
@@ -75,7 +69,7 @@ public class CachedPaletteService implements PaletteService {
         return new Pair<>(inclusions, exclusions);
     }
 
-    private Palette generatePalette(PaletteIdentifier id) throws IOException, URISyntaxException {
+    private Palette generatePalette(PaletteIdentifier id) {
         Pair<List<Texture>, List<Texture>> reference = getPalettesFromMaterial(id.material());
         UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
         Palette palette = factory.createPalette(unbakedPalette);
@@ -94,6 +88,7 @@ public class CachedPaletteService implements PaletteService {
 
             File outputFile = new File(String.format("./%s.png", id.getIdentifier()));
             if (!outputFile.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 outputFile.createNewFile();
             }
             ImageIO.write(image, "png", outputFile);

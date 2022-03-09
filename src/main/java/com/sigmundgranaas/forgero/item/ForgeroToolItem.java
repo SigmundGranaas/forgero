@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public interface ForgeroToolItem extends DynamicAttributeTool {
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
-    static final UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
+    UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
 
     FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
 
@@ -64,7 +64,6 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
             if (tool.getAttackSpeed(target) != getTool().getAttackSpeed(target)) {
                 builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
             }
-            //builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", getAttackDamage(), EntityAttributeModifier.Operation.ADDITION));
             return builder.build();
         } else {
             return EMPTY;
@@ -76,8 +75,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
         if (tag.equals(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
             Target target = Target.createEmptyTarget();
-            int miningLevel = forgeroTool.getMiningLevel(target);
-            return miningLevel;
+            return forgeroTool.getMiningLevel(target);
         }
 
         return 0;
@@ -88,8 +86,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
         if (tag.equals(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
             Target target = Target.createEmptyTarget();
-            float miningSpeedMultiplier = forgeroTool.getMiningSpeedMultiplier(target);
-            return miningSpeedMultiplier;
+            return forgeroTool.getMiningSpeedMultiplier(target);
         }
 
         return 1f;

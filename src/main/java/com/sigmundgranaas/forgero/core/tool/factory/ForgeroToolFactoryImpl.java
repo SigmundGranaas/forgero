@@ -46,6 +46,7 @@ public class ForgeroToolFactoryImpl implements ForgeroToolFactory {
     public List<ForgeroTool> createForgeroTools(@NotNull ForgeroToolPartCollection collection) {
         List<ForgeroTool> tools = new ArrayList<>();
         for (ToolPartHead head : collection.getHeads()) {
+            //noinspection OptionalGetWithoutIsPresent
             tools.add(new ForgeroToolBase(head, collection.getHandles().stream().filter(handle -> handle.getPrimaryMaterial().getName().equals("oak")).findAny().get()));
         }
         return tools;

@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.properties.Property;
 import com.sigmundgranaas.forgero.core.properties.PropertyStream;
 import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -23,12 +22,8 @@ import net.minecraft.util.Rarity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescriptionWriter, GemDescriptionWriter {
-    private List<Text> tooltip;
-
-    public DescriptionWriter(List<Text> tooltip) {
-        this.tooltip = tooltip;
-    }
+public record DescriptionWriter(
+        List<Text> tooltip) implements ToolDescriptionWriter, ToolPartDescriptionWriter, GemDescriptionWriter {
 
 
     @Override
@@ -63,21 +58,6 @@ public class DescriptionWriter implements ToolDescriptionWriter, ToolPartDescrip
         MutableText mutableText = new LiteralText("  Primary: ").formatted(Formatting.GRAY);
         mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(rarity.formatting));
         tooltip.add(mutableText);
-    }
-
-    @Override
-    public void addMiningLevel(int miningLevel) {
-        //tooltip.add(new LiteralText(String.format("Mining level: %s", miningLevel)));
-    }
-
-    @Override
-    public void addMiningMultiplier(float multiplier) {
-        //tooltip.add(new LiteralText(String.format("Mining multiplier: %s", multiplier)));
-    }
-
-    @Override
-    public void createToolPartDescription(ForgeroToolPart part) {
-
     }
 
     @Override

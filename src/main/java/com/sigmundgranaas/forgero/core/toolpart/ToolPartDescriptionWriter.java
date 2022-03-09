@@ -12,11 +12,5 @@ public interface ToolPartDescriptionWriter {
 
     void addPrimaryMaterial(PrimaryMaterial material);
 
-    void addMiningLevel(int miningLevel);
-
-    void addMiningMultiplier(float multiplier);
-
-    void createToolPartDescription(ForgeroToolPart part);
-
     void addToolPartProperties(PropertyStream stream);
 }

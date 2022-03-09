@@ -4,5 +4,5 @@ public enum TargetTypes {
     ENTITY,
     TOOL_PART_TYPE,
     ENVIRONMENT,
-    BLOCK;
+    BLOCK
 }

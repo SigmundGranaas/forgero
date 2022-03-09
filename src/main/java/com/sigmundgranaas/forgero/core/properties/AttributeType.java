@@ -9,5 +9,5 @@ public enum AttributeType {
     MINING_SPEED,
     MINING_LEVEL,
     RARITY,
-    DURABILITY;
+    DURABILITY
 }

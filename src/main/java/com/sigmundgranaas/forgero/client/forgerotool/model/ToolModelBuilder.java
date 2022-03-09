@@ -13,6 +13,7 @@ public interface ToolModelBuilder {
 
     ToolModelBuilder addHandle(FabricBakedModel handle);
 
+    @SuppressWarnings("UnusedReturnValue")
     ToolModelBuilder addBinding(FabricBakedModel binding);
 
     FabricBakedModel getHeadModel();
