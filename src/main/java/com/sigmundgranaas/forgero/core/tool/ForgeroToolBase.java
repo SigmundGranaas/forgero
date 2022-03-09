@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ForgeroToolBase implements ForgeroTool {
-    private final ToolPartHead head;
-    private final ToolPartHandle handle;
+    protected final ToolPartHead head;
+    protected final ToolPartHandle handle;
 
     public ForgeroToolBase(ToolPartHead head, ToolPartHandle handle) {
         this.handle = handle;
@@ -101,6 +101,7 @@ public class ForgeroToolBase implements ForgeroTool {
     public void createToolDescription(ToolDescriptionWriter writer) {
         writer.addHead(head);
         writer.addHandle(handle);
+        writer.addToolProperties(getPropertyStream());
     }
 
     @Override

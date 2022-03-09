@@ -60,6 +60,6 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         ForgeroToolPart toolPart = FabricToForgeroToolPartAdapter.createAdapter().getToolPart(stack).orElse(part);
-        toolPart.createToolPartDescription(new DescriptionWriter(tooltip));
+        toolPart.createToolPartWithPropertiesDescription(new DescriptionWriter(tooltip));
     }
 }

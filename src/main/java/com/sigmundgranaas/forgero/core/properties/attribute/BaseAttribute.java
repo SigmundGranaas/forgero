@@ -1,9 +1,6 @@
 package com.sigmundgranaas.forgero.core.properties.attribute;
 
-import com.sigmundgranaas.forgero.core.properties.Attribute;
-import com.sigmundgranaas.forgero.core.properties.AttributeType;
-import com.sigmundgranaas.forgero.core.properties.CalculationOrder;
-import com.sigmundgranaas.forgero.core.properties.NumericOperation;
+import com.sigmundgranaas.forgero.core.properties.*;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -57,5 +54,10 @@ public record BaseAttribute(AttributeType attribute,
     @Override
     public boolean applyCondition(Target target) {
         return condition.test(target);
+    }
+
+    @Override
+    public void createToolPartDescription(PropertyDescriptionWriter writer) {
+
     }
 }

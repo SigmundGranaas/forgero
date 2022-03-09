@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.toolpart;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.properties.PropertyStream;
 
 public interface ToolPartDescriptionWriter {
     void addSecondaryMaterial(SecondaryMaterial material);
@@ -16,4 +17,6 @@ public interface ToolPartDescriptionWriter {
     void addMiningMultiplier(float multiplier);
 
     void createToolPartDescription(ForgeroToolPart part);
+
+    void addToolPartProperties(PropertyStream stream);
 }

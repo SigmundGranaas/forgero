@@ -45,8 +45,10 @@ public class ForgeroToolWithBinding extends ForgeroToolBase {
 
     @Override
     public void createToolDescription(ToolDescriptionWriter writer) {
-        super.createToolDescription(writer);
+        writer.addHead(head);
+        writer.addHandle(handle);
         writer.addBinding(binding);
+        writer.addToolProperties(getPropertyStream());
     }
 
     @Override
