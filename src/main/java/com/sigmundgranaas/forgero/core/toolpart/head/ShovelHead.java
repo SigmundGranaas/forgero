@@ -4,11 +4,9 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 public class ShovelHead extends AbstractToolPartHead {
-    private final HeadStrategy strategy;
 
     public ShovelHead(HeadState state) {
         super(state);
-        this.strategy = state.createHeadStrategy();
     }
 
     @Override
@@ -16,10 +14,6 @@ public class ShovelHead extends AbstractToolPartHead {
         return getToolType().getToolName();
     }
 
-    @Override
-    public int getDurability() {
-        return headStrategy.getDurability();
-    }
 
     @Override
     public ForgeroToolPartTypes getToolPartType() {
@@ -30,16 +24,6 @@ public class ShovelHead extends AbstractToolPartHead {
     @Override
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.SHOVEL;
-    }
-
-    @Override
-    public float getAttackSpeed() {
-        return strategy.getAttackSpeed() - 3.0f;
-    }
-
-    @Override
-    public float getAttackDamage() {
-        return 1 + strategy.getAttackDamage();
     }
 
     @Override

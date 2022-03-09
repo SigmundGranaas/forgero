@@ -4,39 +4,39 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.core.properties.AttributeType;
+import com.sigmundgranaas.forgero.core.properties.Property;
+import com.sigmundgranaas.forgero.core.properties.attribute.Target;
 import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
-import com.sigmundgranaas.forgero.core.toolpart.head.HeadStrategy;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public class SimpleToolMaterialAdapter implements ToolMaterial {
-    private final HeadStrategy strategy;
     private final HeadState state;
 
     public SimpleToolMaterialAdapter(PrimaryMaterial material) {
-        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), ForgeroToolTypes.PICKAXE);
-        this.strategy = state.createHeadStrategy();
+        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
+
     }
 
     @Override
     public int getDurability() {
-        return strategy.getDurability();
+        return (int) Property.stream(state.getProperties(Target.createEmptyTarget())).applyAttribute(Target.createEmptyTarget(), AttributeType.DURABILITY);
     }
 
     @Override
     public float getMiningSpeedMultiplier() {
-        return strategy.getMiningSpeedMultiplier();
+        return Property.stream(state.getProperties(Target.createEmptyTarget())).applyAttribute(Target.createEmptyTarget(), AttributeType.MINING_SPEED);
     }
 
     @Override
     public float getAttackDamage() {
-        return strategy.getAttackDamage();
+        return Property.stream(state.getProperties(Target.createEmptyTarget())).applyAttribute(Target.createEmptyTarget(), AttributeType.ATTACK_DAMAGE);
     }
 
     @Override
     public int getMiningLevel() {
-        return strategy.getMiningLevel();
+        return (int) Property.stream(state.getProperties(Target.createEmptyTarget())).applyAttribute(Target.createEmptyTarget(), AttributeType.MINING_LEVEL);
     }
 
     @Override

@@ -46,9 +46,7 @@ public interface ForgeroTool {
     PrimaryMaterial getMaterial();
 
     void createToolDescription(ToolDescriptionWriter writer);
-
-    double getAttackDamageAddition();
-
+    
     List<Property> getProperties(Target target);
 
     default PropertyStream getPropertyStream() {

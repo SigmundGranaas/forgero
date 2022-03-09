@@ -105,11 +105,6 @@ public class ForgeroToolBase implements ForgeroTool {
     }
 
     @Override
-    public double getAttackDamageAddition() {
-        return head.getAttackDamageAddition();
-    }
-
-    @Override
     public List<Property> getProperties(Target target) {
         return Stream.of(head.getState().getProperties(target), handle.getState().getProperties(target)).flatMap(Collection::stream).collect(Collectors.toList());
     }

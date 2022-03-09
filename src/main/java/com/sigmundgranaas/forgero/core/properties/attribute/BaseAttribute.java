@@ -23,6 +23,16 @@ public record BaseAttribute(AttributeType attribute,
 
     @Override
     public Function<Float, Float> getCalculation() {
+        if (attribute == AttributeType.MINING_LEVEL) {
+            return (current) -> {
+                if (current > value) {
+                    return current;
+                } else {
+                    return value;
+                }
+            };
+        }
+
         if (operation == NumericOperation.ADDITION) {
             return (current) -> current + (value * level);
         } else if (operation == NumericOperation.MULTIPLICATION) {

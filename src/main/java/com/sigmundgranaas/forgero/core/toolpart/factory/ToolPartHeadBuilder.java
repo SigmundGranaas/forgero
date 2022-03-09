@@ -40,7 +40,7 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
         } else {
             headGem = EmptyGem.createEmptyGem();
         }
-        HeadState state = new HeadState(primary, secondary, headGem, head);
+        HeadState state = new HeadState(primary, secondary, headGem);
         return switch (head) {
             case PICKAXE -> new PickaxeHead(state);
             case SHOVEL -> new ShovelHead(state);

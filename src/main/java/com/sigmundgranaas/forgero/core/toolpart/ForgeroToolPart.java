@@ -19,8 +19,6 @@ public interface ForgeroToolPart {
 
     ToolPartState getState();
 
-    int getDurability();
-
     String getToolPartName();
 
     String getToolPartIdentifier();

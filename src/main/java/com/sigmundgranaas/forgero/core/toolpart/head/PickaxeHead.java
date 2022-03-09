@@ -8,12 +8,6 @@ public class PickaxeHead extends AbstractToolPartHead {
     }
 
     @Override
-    public int getDurability() {
-        return headStrategy.getDurability();
-    }
-
-
-    @Override
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.PICKAXE;
     }
@@ -28,13 +22,4 @@ public class PickaxeHead extends AbstractToolPartHead {
         return 0f;
     }
 
-    @Override
-    public float getAttackSpeed() {
-        return headStrategy.getAttackSpeed() - 2.8f;
-    }
-
-    @Override
-    public float getAttackDamage() {
-        return 1 + headStrategy.getAttackDamage();
-    }
 }
