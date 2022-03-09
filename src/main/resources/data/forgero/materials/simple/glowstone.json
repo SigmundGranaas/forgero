@@ -2,7 +2,6 @@
   "name": "Glowstone",
   "rarity": 100,
   "type": "LEATHER",
-  "durability": 20,
   "ingredient": {
     "item": "minecraft:glowstone_dust"
   },
@@ -68,10 +67,6 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 2,
-    "miningSpeedAddition": 0.2,
-    "attackDamageAddition": 1.0,
-    "attackSpeedAddition": 0.5
+    }
   }
 }

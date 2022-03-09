@@ -2,7 +2,6 @@
   "name": "Birch",
   "rarity": 5,
   "type": "WOOD",
-  "durability": 59,
   "ingredient": {
     "item": "minecraft:birch_planks"
   },
@@ -75,11 +74,7 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 0,
-    "miningSpeed": 2.0,
-    "attackDamage": 0.0,
-    "attackSpeed": 0.0
+    }
   },
   "secondary": {
     "properties": {
@@ -99,10 +94,6 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 0,
-    "miningSpeedAddition": 0.2,
-    "attackDamageAddition": 0.3,
-    "attackSpeedAddition": 0.0
+    }
   }
 }

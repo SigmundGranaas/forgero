@@ -2,7 +2,6 @@
   "name": "Diamond",
   "rarity": 100,
   "type": "MINERAL",
-  "durability": 1561,
   "properties": {
     "attributes": [
       {
@@ -91,11 +90,7 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 3,
-    "miningSpeed": 8.0,
-    "attackDamage": 3.0,
-    "attackSpeed": 0.0
+    }
   },
   "secondary": {
     "properties": {
@@ -139,10 +134,6 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 3,
-    "miningSpeedAddition": 1.0,
-    "attackDamageAddition": 1.0,
-    "attackSpeedAddition": 0.0
+    }
   }
 }

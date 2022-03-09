@@ -2,7 +2,6 @@
   "name": "Oak",
   "rarity": 2,
   "type": "WOOD",
-  "durability": 59,
   "ingredient": {
     "item": "minecraft:oak_planks"
   },
@@ -61,11 +60,7 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 0,
-    "miningSpeed": 2.0,
-    "attackDamage": 0.0,
-    "attackSpeed": 0.0
+    }
   },
   "secondary": {
     "properties": {
@@ -91,10 +86,6 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 0,
-    "miningSpeedAddition": 0.2,
-    "attackDamageAddition": 0.2,
-    "attackSpeedAddition": 0.1
+    }
   }
 }

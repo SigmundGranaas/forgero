@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final String name;
     protected final int rarity;
-    protected final int durability;
     protected final List<String> paletteIdentifiers;
     protected final List<String> paletteExclusionIdentifiers;
     protected final List<Property> properties;
@@ -24,7 +23,6 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     public AbstractForgeroMaterial(RealisticMaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
         this.rarity = material.rarity;
-        this.durability = material.durability;
         this.paletteIdentifiers = material.palette.include;
         this.paletteExclusionIdentifiers = material.palette.exclude;
         this.properties = Collections.emptyList();
@@ -35,7 +33,6 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     public AbstractForgeroMaterial(SimpleMaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
         this.rarity = material.rarity;
-        this.durability = material.durability;
         this.paletteIdentifiers = material.palette.include;
         this.paletteExclusionIdentifiers = material.palette.exclude;
         this.properties = material
@@ -57,12 +54,6 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     public @NotNull String getName() {
         return name.toLowerCase();
     }
-
-    @Override
-    public int getDurability() {
-        return durability;
-    }
-
 
     @Override
     public MaterialType getType() {

@@ -10,8 +10,6 @@ public interface ForgeroMaterial {
 
     @NotNull String getName();
 
-    int getDurability();
-
     MaterialType getType();
 
     @NotNull List<Property> getProperties();

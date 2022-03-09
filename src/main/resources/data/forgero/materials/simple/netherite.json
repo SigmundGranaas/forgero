@@ -92,11 +92,7 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 4,
-    "miningSpeed": 9.0,
-    "attackDamage": 4.0,
-    "attackSpeed": 0.0
+    }
   },
   "secondary": {
     "properties": {
@@ -140,10 +136,6 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 4,
-    "miningSpeedAddition": 1.2,
-    "attackDamageAddition": 1.2,
-    "attackSpeedAddition": 0.0
+    }
   }
 }

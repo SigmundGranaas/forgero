@@ -2,7 +2,6 @@
   "name": "Stone",
   "rarity": 100,
   "type": "STONE",
-  "durability": 100,
   "ingredient": {
     "item": "minecraft:cobblestone"
   },
@@ -78,11 +77,7 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 1,
-    "miningSpeed": 3.0,
-    "attackDamage": 1.0,
-    "attackSpeed": 0.0
+    }
   },
   "secondary": {
     "properties": {
@@ -108,10 +103,6 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 1,
-    "miningSpeedAddition": 0.3,
-    "attackDamageAddition": 0.3,
-    "attackSpeedAddition": 0.1
+    }
   }
 }

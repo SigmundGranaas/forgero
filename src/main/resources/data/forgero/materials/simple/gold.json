@@ -2,7 +2,6 @@
   "name": "Gold",
   "rarity": 100,
   "type": "METAL",
-  "durability": 32,
   "ingredient": {
     "item": "minecraft:gold_ingot"
   },
@@ -61,11 +60,7 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 0,
-    "miningSpeed": 12.0,
-    "attackDamage": 0.0,
-    "attackSpeed": 0.0
+    }
   },
   "secondary": {
     "properties": {
@@ -121,10 +116,6 @@
       ],
       "passive:": [],
       "active": []
-    },
-    "miningLevel": 0,
-    "miningSpeedAddition": 3.0,
-    "attackDamageAddition": -0.2,
-    "attackSpeedAddition": 0.1
+    }
   }
 }

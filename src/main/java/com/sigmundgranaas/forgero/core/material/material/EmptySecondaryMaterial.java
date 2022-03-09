@@ -31,12 +31,6 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     }
 
     @Override
-    public int getDurability() {
-        return 0;
-    }
-
-
-    @Override
     public String getIngredient() {
         return "empty";
     }
@@ -52,23 +46,5 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
         return 0;
     }
 
-    @Override
-    public int getMiningLevel() {
-        return 0;
-    }
 
-    @Override
-    public float getMiningSpeedAddition() {
-        return 0;
-    }
-
-    @Override
-    public float getAttackDamageAddition() {
-        return 0;
-    }
-
-    @Override
-    public float getAttackSpeedAddition() {
-        return 0;
-    }
 }
