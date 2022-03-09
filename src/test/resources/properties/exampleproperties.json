@@ -7,7 +7,9 @@
       "value": 1.2,
       "condition": {
         "target": "ENTITY",
-        "tag": "LIVING"
+        "tag": [
+          "LIVING"
+        ]
       }
     },
     {
@@ -23,7 +25,9 @@
       "value": 3.0,
       "condition": {
         "target": "ENVIRONMENT",
-        "tag": "DAY"
+        "tag": [
+          "DAY"
+        ]
       }
     },
     {

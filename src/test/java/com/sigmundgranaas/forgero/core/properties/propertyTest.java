@@ -19,7 +19,7 @@ public class propertyTest {
     @Test
     void testPropertyDamage() {
         PropertyStream toolProperties = createTestProperties();
-        Assertions.assertEquals(9f, toolProperties.applyAttribute(createDummyTarget(TargetTypes.ENTITY, Set.of("HUMAN")), AttributeType.ATTACK_DAMAGE));
+        Assertions.assertEquals(30f, toolProperties.applyAttribute(createDummyTarget(TargetTypes.ENTITY, Set.of("HUMAN")), AttributeType.ATTACK_DAMAGE));
     }
 
     @Test
