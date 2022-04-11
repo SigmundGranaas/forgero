@@ -47,6 +47,7 @@ public abstract class ItemRenderMixin {
 
             Random random = new Random();
             long l = 42L;
+
             for (Direction direction : Direction.values()) {
                 random.setSeed(l);
                 this.renderBakedItemQuads(matrices, vertexConsumer, model.getQuads(null, direction, random), stack, light, overlay);

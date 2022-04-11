@@ -1,0 +1,17 @@
+{
+  "name": "default handle",
+  "type": "HANDLE",
+  "model": "handle_default",
+  "properties": {
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3.0
+      }
+    ],
+    "passive:": [],
+    "active": []
+  }
+}

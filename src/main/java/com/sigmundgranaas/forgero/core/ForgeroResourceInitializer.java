@@ -8,6 +8,9 @@ import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
 import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.pattern.PatternCollection;
+import com.sigmundgranaas.forgero.core.pattern.PatternLoader;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollectionImpl;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
@@ -44,9 +47,15 @@ public class ForgeroResourceInitializer {
     public ForgeroRegistry initializeForgeroResources() {
         MaterialCollection materialCollection = initializeMaterials();
         GemCollection gemCollection = initializeGems();
+        PatternCollection patternCollection = initializePatternCollection();
         ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection);
         ForgeroToolCollection toolCollection = initializeToolCollection(toolPartCollection);
         return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection);
+    }
+
+    private PatternCollection initializePatternCollection() {
+        List<Pattern> patterns = new PatternLoader().loadPatterns();
+        return new PatternCollection(patterns);
     }
 
     private ForgeroToolCollection initializeToolCollection(ForgeroToolPartCollection toolPartCollection) {
