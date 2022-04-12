@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;

@@ -1,13 +1,21 @@
 {
-  "name": "default pickaxehead",
-  "type": "PICKAXEHEAD",
+  "name": "default",
+  "type": "HEAD",
+  "toolType": "PICKAXE",
+  "rarity": 1,
   "properties": {
     "attributes": [
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 3.0
+        "value": 1.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": -2.8
       }
     ],
     "passive:": [],

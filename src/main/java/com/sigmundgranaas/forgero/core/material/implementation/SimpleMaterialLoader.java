@@ -25,8 +25,7 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
             List<SimpleMaterialPOJO> jsonMaterials = materials.stream()
                     .map(material -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/materials/simple/%s.json", material), SimpleMaterialPOJO.class))
                     .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList());
+                    .map(Optional::get).toList();
             jsonMaterials.forEach(pojo -> {
                 List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
                 List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());

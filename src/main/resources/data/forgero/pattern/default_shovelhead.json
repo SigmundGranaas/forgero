@@ -1,13 +1,21 @@
 {
-  "name": "default shovelhead",
-  "type": "SHOVELHEAD",
+  "name": "default",
+  "type": "HEAD",
+  "toolType": "SHOVEL",
+  "rarity": 1,
   "properties": {
     "attributes": [
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 3.0
+        "value": 1.5
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": -3.0
       }
     ],
     "passive:": [],

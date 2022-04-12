@@ -12,17 +12,22 @@ public record TemplateTextureIdentifier(
 
     @Override
     public String getFileNameWithExtension() {
-        return getIdentifier() + ".png";
+        return getFileNameWithoutExtension() + ".png";
     }
 
     @Override
     public String getFileNameWithoutExtension() {
-        return getIdentifier();
+        return String.format("%s_%s", toolPartModelType.toFileName(), layer.getFileName());
     }
 
     @Override
     public String getIdentifier() {
         return String.format("%s_%s_%s", toolPartModelType.toFileName(), layer.getFileName(), skin);
+    }
+
+    @Override
+    public String skin() {
+        return skin;
     }
 
     public ToolPartModelType getToolPartModelType() {

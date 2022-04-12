@@ -14,7 +14,7 @@ import java.util.Optional;
  * This class is not a part of the core library because its Identifiers needs an instance of Minecraft
  * <p>
  * <p>
- * This class needs another rework for properly identifying textures that needs creation, and excluding textures that don't need it.
+ * This class needs another rework for properly identifying textures that need creation, and excluding textures that don't need it.
  */
 public class FabricTextureIdentifierFactory implements TextureIdentifierFactory {
     @Override
@@ -26,12 +26,15 @@ public class FabricTextureIdentifierFactory implements TextureIdentifierFactory 
     public Optional<ToolPartModelTextureIdentifier> createToolPartTextureIdentifier(String part) {
         String[] elements = part.split(ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR);
         elements[0] = elements[0].split("/")[elements[0].split("/").length - 1];
+        if (elements.length == 3) {
+            elements = new String[]{elements[0], elements[1], "primary", elements[2]};
+        }
         elements[ToolPartModelTextureIdentifier.SKIN_INDEX] = elements[ToolPartModelTextureIdentifier.SKIN_INDEX].replace(".png", "");
         if (!ToolPartModelType.isModelIdentifier(elements)) {
             return Optional.empty();
         }
 
-        if (part.split(ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR).length == ToolPartModelTextureIdentifier.DEFAULT_SPLIT_IDENTIFIER_LENGTH) {
+        if (elements.length == ToolPartModelTextureIdentifier.DEFAULT_SPLIT_IDENTIFIER_LENGTH) {
             elements[0] = elements[0].split("/")[elements[0].split("/").length - 1];
             elements[ToolPartModelTextureIdentifier.SKIN_INDEX] = elements[ToolPartModelTextureIdentifier.SKIN_INDEX].replace(".png", "");
             return Optional.of(createIdentifier(elements));
@@ -47,5 +50,4 @@ public class FabricTextureIdentifierFactory implements TextureIdentifierFactory 
         String skin = elements[ToolPartModelTextureIdentifier.SKIN_INDEX];
         return new ToolPartModelTextureIdentifier(material, type, layer, skin);
     }
-
 }

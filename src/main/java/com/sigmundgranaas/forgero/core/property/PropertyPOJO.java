@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.properties;
+package com.sigmundgranaas.forgero.core.property;
 
 import java.util.List;
 

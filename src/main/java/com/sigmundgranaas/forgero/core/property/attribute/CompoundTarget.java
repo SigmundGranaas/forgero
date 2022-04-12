@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.core.properties.attribute;
+package com.sigmundgranaas.forgero.core.property.attribute;
 
-import com.sigmundgranaas.forgero.core.properties.TargetTypes;
+import com.sigmundgranaas.forgero.core.property.TargetTypes;
 
 import java.util.Set;
 

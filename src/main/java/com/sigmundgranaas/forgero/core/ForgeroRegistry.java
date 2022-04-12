@@ -2,23 +2,26 @@ package com.sigmundgranaas.forgero.core;
 
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
+import com.sigmundgranaas.forgero.core.pattern.PatternCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
 
 public record ForgeroRegistry(MaterialCollection materialCollection,
                               GemCollection gemCollection,
                               ForgeroToolCollection toolCollection,
-                              ForgeroToolPartCollection toolPartCollection) {
+                              ForgeroToolPartCollection toolPartCollection,
+                              PatternCollection patternCollection) {
     private static ForgeroRegistry INSTANCE;
 
     public static ForgeroRegistry initializeRegistry(MaterialCollection materialCollection,
                                                      GemCollection gemCollection,
                                                      ForgeroToolCollection toolCollection,
-                                                     ForgeroToolPartCollection toolPartCollection) {
+                                                     ForgeroToolPartCollection toolPartCollection, PatternCollection patternCollection) {
         INSTANCE = new ForgeroRegistry(materialCollection,
                 gemCollection,
                 toolCollection,
-                toolPartCollection);
+                toolPartCollection,
+                patternCollection);
 
         return INSTANCE;
     }
@@ -40,6 +43,11 @@ public record ForgeroRegistry(MaterialCollection materialCollection,
     @Override
     public GemCollection gemCollection() {
         return gemCollection;
+    }
+
+    @Override
+    public PatternCollection patternCollection() {
+        return patternCollection;
     }
 
     @Override

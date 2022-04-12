@@ -4,10 +4,10 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemDescriptionWriter;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.properties.AttributeType;
-import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.PropertyStream;
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyStream;
+import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
@@ -25,6 +25,17 @@ import java.util.stream.Collectors;
 public record DescriptionWriter(
         List<Text> tooltip) implements ToolDescriptionWriter, ToolPartDescriptionWriter, GemDescriptionWriter {
 
+
+    public static Rarity getRarityFromInt(int rarity) {
+        if (rarity >= 100) {
+            return Rarity.EPIC;
+        } else if (rarity >= 80) {
+            return Rarity.RARE;
+        } else if (rarity >= 30) {
+            return Rarity.UNCOMMON;
+        }
+        return Rarity.COMMON;
+    }
 
     @Override
     public void addSecondaryMaterial(SecondaryMaterial material) {
@@ -90,20 +101,9 @@ public record DescriptionWriter(
         }
     }
 
-    private Rarity getRarityFromInt(int rarity) {
-        if (rarity >= 100) {
-            return Rarity.EPIC;
-        } else if (rarity >= 80) {
-            return Rarity.RARE;
-        } else if (rarity >= 30) {
-            return Rarity.UNCOMMON;
-        }
-        return Rarity.COMMON;
-    }
-
     private void addAttribute(List<Property> attributes, AttributeType type, String title) {
         float result = Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
-        if (result > 0f) {
+        if (result != 0f) {
             MutableText miningLevel = new LiteralText(String.format("  %s : ", title)).formatted(Formatting.GRAY);
             miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);

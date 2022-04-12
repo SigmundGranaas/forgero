@@ -6,10 +6,10 @@ import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
-import com.sigmundgranaas.forgero.core.properties.Attribute;
-import com.sigmundgranaas.forgero.core.properties.AttributeType;
-import com.sigmundgranaas.forgero.core.properties.NumericOperation;
-import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.Handle;
@@ -77,7 +77,7 @@ public class GemToolTest {
     }
 
     ItemStack createToolItemWithGem(Gem headGem) {
-        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), headGem);
+        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), headGem, pattern);
         ToolPartHead head = new PickaxeHead(state);
         HandleState handleState = new HandleState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
         ToolPartHandle handle = new Handle(handleState);

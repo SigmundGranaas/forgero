@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.pattern;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 
 import java.io.IOException;
 import java.net.URI;
@@ -9,6 +10,7 @@ import java.nio.file.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class PatternLoader {
     public List<Pattern> loadPatterns() {
@@ -32,7 +34,6 @@ public class PatternLoader {
             // If this is thrown, then it means that we are running the JAR directly (example: not from an IDE)
             var env = new HashMap<String, String>();
             try {
-                System.out.println(uri);
                 dirPath = FileSystems.newFileSystem(uri, env).getPath(location);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -41,10 +42,8 @@ public class PatternLoader {
 
         try {
             assert dirPath != null;
-            Files.list(dirPath).forEach(file -> {
-                        System.out.println(file.getFileName());
-                    }
-            );
+            var pojos = Files.list(dirPath).map(path -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/pattern/%s", path.toFile().getName()), patternPOJO.class)).flatMap(Optional::stream).toList();
+            return pojos.stream().map(patternPOJO::createPatternFromPojo).toList();
         } catch (IOException e) {
             e.printStackTrace();
         }

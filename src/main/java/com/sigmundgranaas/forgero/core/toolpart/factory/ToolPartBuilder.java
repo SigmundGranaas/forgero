@@ -5,24 +5,28 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 
 public abstract class ToolPartBuilder {
     protected final PrimaryMaterial primary;
     protected SecondaryMaterial secondary;
     protected Gem gem;
+    protected Pattern pattern;
 
 
-    public ToolPartBuilder(PrimaryMaterial primary) {
+    public ToolPartBuilder(PrimaryMaterial primary, Pattern pattern) {
         this.primary = primary;
         this.secondary = new EmptySecondaryMaterial();
         this.gem = EmptyGem.createEmptyGem();
+        this.pattern = pattern;
     }
 
     public ToolPartBuilder(ForgeroToolPart part) {
         this.primary = part.getPrimaryMaterial();
         this.secondary = part.getSecondaryMaterial();
         this.gem = part.getGem();
+        this.pattern = part.getPattern();
     }
 
     public PrimaryMaterial getPrimary() {
@@ -43,6 +47,10 @@ public abstract class ToolPartBuilder {
     }
 
     public abstract ToolPartBuilder setGem(Gem newGem);
+
+    public Pattern getPattern() {
+        return pattern;
+    }
 
     public abstract ForgeroToolPart createToolPart();
 }

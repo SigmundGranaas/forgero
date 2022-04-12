@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.identifier.tool;
 
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierType;
+import com.sigmundgranaas.forgero.core.identifier.ForgeroPatternIdentifier;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 import java.util.Locale;
@@ -17,6 +18,11 @@ public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier imp
     @Override
     public ForgeroMaterialIdentifier getMaterial() {
         return (ForgeroMaterialIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolPartName.split("_")[0]);
+    }
+
+    @Override
+    public ForgeroPatternIdentifier getPattern() {
+        return new ForgeroPatternIdentifier(toolPartName);
     }
 
     @Override

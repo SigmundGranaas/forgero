@@ -2,39 +2,75 @@
   "replace": false,
   "values": [
     {
-      "id": "forgero:oak_handle",
+      "id": "forgero:oak_handle_default",
       "required": false
     },
     {
-      "id": "forgero:birch_handle",
+      "id": "forgero:birch_handle_default",
       "required": false
     },
     {
-      "id": "forgero:spruce_handle",
+      "id": "forgero:spruce_handle_default",
       "required": false
     },
     {
-      "id": "forgero:acacia_handle",
+      "id": "forgero:acacia_handle_default",
       "required": false
     },
     {
-      "id": "forgero:stone_handle",
+      "id": "forgero:stone_handle_default",
       "required": false
     },
     {
-      "id": "forgero:iron_handle",
+      "id": "forgero:iron_handle_default",
       "required": false
     },
     {
-      "id": "forgero:gold_handle",
+      "id": "forgero:gold_handle_default",
       "required": false
     },
     {
-      "id": "forgero:diamond_handle",
+      "id": "forgero:diamond_handle_default",
       "required": false
     },
     {
-      "id": "forgero:netherite_handle",
+      "id": "forgero:netherite_handle_default",
+      "required": false
+    },
+    {
+      "id": "forgero:oak_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:birch_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:spruce_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:acacia_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:stone_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:iron_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:gold_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:diamond_handle_dense",
+      "required": false
+    },
+    {
+      "id": "forgero:netherite_handle_dense",
       "required": false
     }
   ]

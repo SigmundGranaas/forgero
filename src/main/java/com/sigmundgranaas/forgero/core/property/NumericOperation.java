@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.properties;
+package com.sigmundgranaas.forgero.core.property;
 
 /**
  * The four different types of operations possible. Currently, only Addition and Multiplication are possible.

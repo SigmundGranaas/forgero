@@ -1,10 +1,10 @@
-package com.sigmundgranaas.forgero.core.properties;
+package com.sigmundgranaas.forgero.core.property;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;

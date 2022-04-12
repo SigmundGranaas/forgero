@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.core.properties.attribute;
+package com.sigmundgranaas.forgero.core.property.attribute;
 
-import com.sigmundgranaas.forgero.core.properties.*;
+import com.sigmundgranaas.forgero.core.property.*;
 
 import java.util.HashSet;
 import java.util.function.Predicate;

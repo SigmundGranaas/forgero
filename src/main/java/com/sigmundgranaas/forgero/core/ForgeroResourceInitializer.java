@@ -48,9 +48,9 @@ public class ForgeroResourceInitializer {
         MaterialCollection materialCollection = initializeMaterials();
         GemCollection gemCollection = initializeGems();
         PatternCollection patternCollection = initializePatternCollection();
-        ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection);
+        ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection, patternCollection);
         ForgeroToolCollection toolCollection = initializeToolCollection(toolPartCollection);
-        return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection);
+        return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection, patternCollection);
     }
 
     private PatternCollection initializePatternCollection() {
@@ -63,9 +63,9 @@ public class ForgeroResourceInitializer {
         return new ForgeroToolCollectionImpl(factory.createForgeroTools(toolPartCollection));
     }
 
-    private ForgeroToolPartCollection initializeToolParts(MaterialCollection materialCollection) {
+    private ForgeroToolPartCollection initializeToolParts(MaterialCollection materialCollection, PatternCollection collection) {
         ForgeroToolPartFactory factory = new ForgeroToolPartFactoryImpl();
-        return new ForgeroToolPartCollectionImpl(factory.createBaseToolParts(materialCollection));
+        return new ForgeroToolPartCollectionImpl(factory.createBaseToolParts(materialCollection, collection));
     }
 
     private GemCollection initializeGems() {

@@ -5,8 +5,9 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 
@@ -58,4 +59,6 @@ public interface ForgeroToolPart {
             case HANDLE -> RecipeTypes.HANDLE_RECIPE;
         };
     }
+
+    Pattern getPattern();
 }

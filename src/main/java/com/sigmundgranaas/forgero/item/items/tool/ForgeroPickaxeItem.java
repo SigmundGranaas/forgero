@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.item.items.tool;
 
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;

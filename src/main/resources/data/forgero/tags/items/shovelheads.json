@@ -2,39 +2,39 @@
   "replace": false,
   "values": [
     {
-      "id": "forgero:oak_shovelhead",
+      "id": "forgero:oak_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:birch_shovelhead",
+      "id": "forgero:birch_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:spruce_shovelhead",
+      "id": "forgero:spruce_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:acacia_shovelhead",
+      "id": "forgero:acacia_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:stone_shovelhead",
+      "id": "forgero:stone_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:iron_shovelhead",
+      "id": "forgero:iron_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:gold_shovelhead",
+      "id": "forgero:gold_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:diamond_shovelhead",
+      "id": "forgero:diamond_shovelhead_default",
       "required": false
     },
     {
-      "id": "forgero:netherite_shovelhead",
+      "id": "forgero:netherite_shovelhead_default",
       "required": false
     }
   ]

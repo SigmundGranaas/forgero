@@ -20,8 +20,7 @@ public record FileGemLoader(List<String> gems) implements GemLoader {
         List<GemPOJO> gemPojos = gems.stream()
                 .map(gem -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/gems/%s.json", gem), GemPOJO.class))
                 .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+                .map(Optional::get).toList();
         gemPojos.forEach(pojo -> {
             List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
             List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());

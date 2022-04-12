@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.core.properties;
+package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 
 import java.util.stream.Stream;

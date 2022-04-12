@@ -10,7 +10,6 @@ import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
-import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -54,15 +53,14 @@ public class ForgeroClient implements ClientModInitializer {
         ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
 
 
-        for (PrimaryMaterial material : materialCollection.getMaterialsAsList().stream().filter(material -> material instanceof PrimaryMaterial).map(PrimaryMaterial.class::cast).collect(Collectors.toList())) {
-            for (Item toolPart : itemCollection.getToolParts()) {
-                ForgeroToolPart part = ((ToolPartItem) toolPart).getPart();
-                registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.PICKAXE), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.SHOVEL), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.AXE), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-            }
+        for (Item toolPart : itemCollection.getToolParts()) {
+            ForgeroToolPart part = ((ToolPartItem) toolPart).getPart();
+            registry.registerTexture(new ToolPartModelTextureIdentifier(((ToolPartItem) toolPart).getPrimaryMaterial().getName(), ToolPartModelType.getModelType(part), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+            registry.registerTexture(new ToolPartModelTextureIdentifier(((ToolPartItem) toolPart).getPrimaryMaterial().getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.PICKAXE), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+            registry.registerTexture(new ToolPartModelTextureIdentifier(((ToolPartItem) toolPart).getPrimaryMaterial().getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.SHOVEL), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+            registry.registerTexture(new ToolPartModelTextureIdentifier(((ToolPartItem) toolPart).getPrimaryMaterial().getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.AXE), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
         }
+
 
         for (SecondaryMaterial material : materialCollection.getMaterialsAsList().stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).collect(Collectors.toList())) {
             for (Item toolPart : itemCollection.getToolParts()) {
@@ -74,22 +72,24 @@ public class ForgeroClient implements ClientModInitializer {
             }
         }
         for (Gem gem : ForgeroRegistry.getInstance().gemCollection().getGems()) {
-            if (gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)) {
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.AXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-            }
-            if (gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)) {
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.BINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.AXEHEADBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-            }
-            if (gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)) {
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.HANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHORTHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.MEDIUMHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
-                registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.FULLHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+            for (Item toolPart : itemCollection.getToolParts()) {
+                if (gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)) {
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.AXEHEAD, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                }
+                if (gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)) {
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.BINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.AXEHEADBINDING, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                }
+                if (gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)) {
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.HANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHORTHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.MEDIUMHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.FULLHANDLE, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER));
+                }
             }
         }
 

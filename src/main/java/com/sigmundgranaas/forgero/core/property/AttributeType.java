@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.properties;
+package com.sigmundgranaas.forgero.core.property;
 
 /**
  * Types for describing different attributes which can be improved by describing them in JSON.

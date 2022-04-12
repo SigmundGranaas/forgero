@@ -1,15 +1,10 @@
 {
-  "name": "default shovelhead",
-  "type": "SHOVELHEAD",
-  "model": "axehead_default",
+  "name": "default",
+  "type": "BINDING",
+  "model": "binding_default",
+  "rarity": 1,
   "properties": {
     "attributes": [
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 3.0
-      }
     ],
     "passive:": [],
     "active": []

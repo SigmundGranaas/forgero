@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.properties;
+package com.sigmundgranaas.forgero.core.property;
 
 /**
  * Enum for describing in which order calculations should occur.

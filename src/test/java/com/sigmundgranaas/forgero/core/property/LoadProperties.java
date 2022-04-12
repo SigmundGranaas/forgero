@@ -1,8 +1,8 @@
-package com.sigmundgranaas.forgero.core.properties;
+package com.sigmundgranaas.forgero.core.property;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,10 +26,10 @@ public class LoadProperties {
     void createAttributeFromJSON() {
         PropertyPOJO pojo = getExamplePropertyFromFile();
         Attribute attribute = AttributeBuilder.createAttributeFromPojo(pojo.attributes.get(0));
-        Assertions.assertEquals(attribute.getAttributeType(),pojo.attributes.get(0).type);
+        Assertions.assertEquals(attribute.getAttributeType(), pojo.attributes.get(0).type);
     }
 
-    PropertyPOJO getExamplePropertyFromFile(){
+    PropertyPOJO getExamplePropertyFromFile() {
         InputStream stream = LoadProperties.class.getResourceAsStream("/properties/exampleproperties.json");
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new InputStreamReader(stream));

@@ -5,8 +5,4 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 
 public interface ToolPartHead extends ForgeroToolPart {
     ForgeroToolTypes getToolType();
-
-    float getAttackSpeedBase();
-
-    float getAttackDamageBase();
 }

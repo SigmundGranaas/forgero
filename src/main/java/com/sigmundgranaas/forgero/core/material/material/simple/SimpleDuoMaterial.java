@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.material.material.simple;
 
 import com.sigmundgranaas.forgero.core.material.material.AbstractForgeroMaterial;
-import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 
 import java.util.Collection;
 import java.util.List;

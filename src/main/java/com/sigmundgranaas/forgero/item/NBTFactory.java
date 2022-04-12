@@ -11,6 +11,7 @@ public interface NBTFactory {
     NBTFactory INSTANCE = NBTFactoryImpl.getInstance();
     String PRIMARY_MATERIAL_NBT_IDENTIFIER = "PrimaryMaterial";
     String SECONDARY_MATERIAL_NBT_IDENTIFIER = "SecondaryMaterial";
+    String PATTERN_NBT_IDENTIFIER = "Pattern";
     String HEAD_NBT_IDENTIFIER = "Head";
     String HANDLE_NBT_IDENTIFIER = "Handle";
     String BINDING_NBT_IDENTIFIER = "Binding";

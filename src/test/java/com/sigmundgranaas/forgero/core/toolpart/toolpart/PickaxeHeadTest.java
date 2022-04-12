@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 public class PickaxeHeadTest {
     public static PickaxeHead createDefaultPickaxeHead() {
-        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
+        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern);
         return new PickaxeHead(state);
     }
 

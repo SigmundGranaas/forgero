@@ -15,8 +15,8 @@ public class FileService {
 
 
     private String getTexturePath(TextureIdentifier id) {
-        if (id instanceof TemplateTextureIdentifier) {
-            return "assets/forgero/templates/textures/" + id.getFileNameWithExtension();
+        if (id instanceof TemplateTextureIdentifier texture) {
+            return "assets/forgero/templates/textures/" + texture.skin() + "/" + id.getFileNameWithExtension();
         } else if (id instanceof PaletteIdentifier) {
             return "assets/forgero/templates/materials/" + id.getFileNameWithExtension();
         } else {

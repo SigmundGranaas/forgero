@@ -21,7 +21,7 @@ class ForgeroToolPartFactoryImplTest {
     @Test
     void testCreateToolPart() {
 
-        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
+        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern);
         ForgeroToolPart referenceToolPart = new PickaxeHead(state);
 
         ForgeroToolPartFactoryImpl factory = new ForgeroToolPartFactoryImpl();
