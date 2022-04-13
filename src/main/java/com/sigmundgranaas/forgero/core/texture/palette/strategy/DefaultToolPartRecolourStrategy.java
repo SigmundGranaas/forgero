@@ -72,6 +72,10 @@ public class DefaultToolPartRecolourStrategy implements RecolourStrategy {
             float normalized = scaleValue * i;
             int newIndex = Math.round(normalized);
 
+            if (newIndex == palette.getColourValues().size()) {
+                newIndex--;
+            }
+
             if (newIndex == 0 || i == 0) {
                 colourList.add(0, palette.getColourValues().get(0));
             } else {

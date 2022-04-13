@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.core.texture.template.TemplateTextureService;
 
 /**
  * Cached version of the ToolPartTextureService
- *
+ * <p>
  * This service will generate all requested textures, using cached Template and Palette Services
  */
 public class CachedToolPartTextureService implements ToolPartTextureService {
@@ -18,6 +18,10 @@ public class CachedToolPartTextureService implements ToolPartTextureService {
     private final PaletteService paletteService;
     private final TemplateTextureService templateService;
     private final RecolourStrategyFactory recolourStrategyFactory;
+
+    {
+
+    }
 
     public CachedToolPartTextureService(PaletteService paletteService, TemplateTextureService templateTextureService, RecolourStrategyFactory recolourStrategyFactory) {
         this.paletteService = paletteService;
@@ -42,6 +46,8 @@ public class CachedToolPartTextureService implements ToolPartTextureService {
         Palette palette = paletteService.getPalette(id.getPaletteIdentifier());
         TemplateTexture template = templateService.getTemplate(id.getTemplateTextureIdentifier());
         RecolourStrategy strategy = recolourStrategyFactory.createStrategy(template, palette);
+
         return new RawTexture(id, strategy.recolour());
+
     }
 }
