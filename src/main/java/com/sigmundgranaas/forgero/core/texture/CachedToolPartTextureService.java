@@ -46,8 +46,6 @@ public class CachedToolPartTextureService implements ToolPartTextureService {
         Palette palette = paletteService.getPalette(id.getPaletteIdentifier());
         TemplateTexture template = templateService.getTemplate(id.getTemplateTextureIdentifier());
         RecolourStrategy strategy = recolourStrategyFactory.createStrategy(template, palette);
-
         return new RawTexture(id, strategy.recolour());
-
     }
 }
