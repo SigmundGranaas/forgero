@@ -18,18 +18,15 @@ public class PatternLoader {
         URI uri = null;
         try {
             var etc = ForgeroInitializer.class.getResource(location);
-            System.out.println(etc);
             assert etc != null;
             uri = etc.toURI();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         Path dirPath = null;
-        System.out.println("dirPath");
         try {
             assert uri != null;
             dirPath = Paths.get(uri);
-            System.out.println(dirPath);
         } catch (FileSystemNotFoundException e) {
             // If this is thrown, then it means that we are running the JAR directly (example: not from an IDE)
             var env = new HashMap<String, String>();
