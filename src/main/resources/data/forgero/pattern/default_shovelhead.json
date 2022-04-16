@@ -2,6 +2,7 @@
   "name": "default",
   "type": "HEAD",
   "toolType": "SHOVEL",
+  "output": "shovelhead_default",
   "rarity": 1,
   "properties": {
     "attributes": [

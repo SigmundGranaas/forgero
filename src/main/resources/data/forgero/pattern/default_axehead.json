@@ -3,6 +3,7 @@
   "type": "HEAD",
   "toolType": "AXE",
   "rarity": 1,
+  "output": "axehead_default",
   "properties": {
     "attributes": [
       {

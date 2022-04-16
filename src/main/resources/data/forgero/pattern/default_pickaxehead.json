@@ -2,6 +2,7 @@
   "name": "default",
   "type": "HEAD",
   "toolType": "PICKAXE",
+  "output": "pickaxe_default",
   "rarity": 1,
   "properties": {
     "attributes": [

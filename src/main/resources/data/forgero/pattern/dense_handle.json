@@ -2,6 +2,7 @@
   "name": "dense",
   "type": "HANDLE",
   "model": "handle_dense",
+  "output": "handle_dense",
   "rarity": 50,
   "properties": {
     "attributes": [

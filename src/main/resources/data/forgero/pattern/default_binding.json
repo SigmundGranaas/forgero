@@ -2,6 +2,7 @@
   "name": "default",
   "type": "BINDING",
   "model": "binding_default",
+  "output": "binding_default",
   "rarity": 1,
   "properties": {
     "attributes": [

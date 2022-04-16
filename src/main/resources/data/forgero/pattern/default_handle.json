@@ -2,6 +2,7 @@
   "name": "default",
   "type": "HANDLE",
   "model": "handle_default",
+  "output": "handle_default",
   "rarity": 1,
   "properties": {
     "attributes": [

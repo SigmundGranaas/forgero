@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "toolPart_ingredient",
+      "amount": 3
+    },
+    {
+      "item": "forgero:pattern"
+    }
+  ],
+  "result": {
+    "item": "forgero:binding_pattern_default"
+  }
+}
