@@ -25,6 +25,7 @@ public class PatternLoader {
         }
         Path dirPath = null;
         try {
+
             assert uri != null;
             dirPath = Paths.get(uri);
         } catch (FileSystemNotFoundException e) {
@@ -39,7 +40,7 @@ public class PatternLoader {
 
         try {
             assert dirPath != null;
-            var pojos = Files.list(dirPath).map(path -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/pattern/%s", path.toFile().getName()), patternPOJO.class)).flatMap(Optional::stream).toList();
+            var pojos = Files.list(dirPath).map(path -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/pattern/%s", path.getFileName()), patternPOJO.class)).flatMap(Optional::stream).toList();
             return pojos.stream().map(patternPOJO::createPatternFromPojo).toList();
         } catch (IOException e) {
             e.printStackTrace();
