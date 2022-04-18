@@ -80,7 +80,7 @@ public record DescriptionWriter(
     }
 
     private void addToolAttributes(List<Property> attributes) {
-        addAttribute(attributes, AttributeType.DURABILITY, "Durability");
+        addAttributeInt(attributes, AttributeType.DURABILITY, "Durability");
         addAttribute(attributes, AttributeType.MINING_SPEED, "Mining Speed");
         addAttribute(attributes, AttributeType.MINING_LEVEL, "Mining Level");
     }

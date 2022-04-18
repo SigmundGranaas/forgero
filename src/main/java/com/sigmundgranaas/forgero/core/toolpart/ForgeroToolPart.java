@@ -8,8 +8,6 @@ import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
-import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 
 public interface ForgeroToolPart {
     PrimaryMaterial getPrimaryMaterial();
@@ -45,19 +43,6 @@ public interface ForgeroToolPart {
             writer.addGem(getGem());
         }
         writer.addToolPartProperties(Property.stream(getState().getProperties(Target.createEmptyTarget())));
-    }
-
-    default RecipeTypes getRecipeType() {
-        return switch (getToolPartType()) {
-            case HEAD -> switch (((ToolPartHead) this).getToolType()) {
-                case PICKAXE -> RecipeTypes.PICKAXEHEAD_RECIPE;
-                case SHOVEL -> RecipeTypes.SHOVELHEAD_RECIPE;
-                case AXE -> RecipeTypes.AXEHEAD_RECIPE;
-                case SWORD -> null;
-            };
-            case BINDING -> RecipeTypes.BINDING_RECIPE;
-            case HANDLE -> RecipeTypes.HANDLE_RECIPE;
-        };
     }
 
     Pattern getPattern();

@@ -13,7 +13,6 @@ import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
@@ -53,11 +52,10 @@ public record RecipeCreatorImpl(
 
     @Override
     public List<RecipeWrapper> createRecipes() {
-        List<RecipeWrapper> toolRecipes = tools.stream().map(this::createToolRecipe).flatMap(List::stream).collect(Collectors.toList());
-        //List<RecipeWrapper> toolPartRecipes = toolParts.stream().map(this::createToolPartRecipe).flatMap(List::stream).collect(Collectors.toList());
-        List<RecipeWrapper> toolPartSecondaryMaterialUpgradeRecipe = toolParts.stream().map(this::createSecondaryMaterialUpgradeRecipes).flatMap(List::stream).collect(Collectors.toList());
-        List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().map(this::createGemUpgradeRecipes).flatMap(List::stream).collect(Collectors.toList());
-        List<RecipeWrapper> toolPartPatternRecipes = patterns.stream().map(this::createPatternRecipes).flatMap(List::stream).collect(Collectors.toList());
+        List<RecipeWrapper> toolRecipes = tools.stream().map(this::createToolRecipe).flatMap(List::stream).toList();
+        List<RecipeWrapper> toolPartSecondaryMaterialUpgradeRecipe = toolParts.stream().map(this::createSecondaryMaterialUpgradeRecipes).flatMap(List::stream).toList();
+        List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().map(this::createGemUpgradeRecipes).flatMap(List::stream).toList();
+        List<RecipeWrapper> toolPartPatternRecipes = patterns.stream().map(this::createPatternRecipes).flatMap(List::stream).toList();
 
 
         var recipes = List.of(toolRecipes, toolPartSecondaryMaterialUpgradeRecipe, toolPartGemUpgradeRecipe, toolPartPatternRecipes);
@@ -95,13 +93,6 @@ public record RecipeCreatorImpl(
         return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolpartType + "_" + material.getName() + "_" + pattern.getPatternIdentifier()), template, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE);
     }
 
-    private List<RecipeWrapper> createToolPartRecipe(ForgeroToolPart toolPart) {
-        if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
-            return createToolPartHeadRecipe(toolPart);
-        } else {
-            return createHandleAndBindingRecipe(toolPart);
-        }
-    }
 
     private List<RecipeWrapper> createSecondaryMaterialUpgradeRecipes(ForgeroToolPart toolPart) {
         return secondaryMaterials.stream().filter(secondaryMaterial -> !secondaryMaterial.getName().equals(toolPart.getPrimaryMaterial().getName())).map(secondaryMaterial -> createSecondaryMaterialUpgradeRecipe(toolPart, secondaryMaterial)).collect(Collectors.toList());
@@ -131,39 +122,6 @@ public record RecipeCreatorImpl(
         return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_" + gem.getIdentifier() + "_gem_upgrade"), template, RecipeTypes.TOOL_PART_GEM_UPGRADE);
     }
 
-    private List<RecipeWrapper> createHandleAndBindingRecipe(ForgeroToolPart toolPart) {
-        if (toolPart.getToolPartType() == ForgeroToolPartTypes.HANDLE) {
-            return createRecipe(toolPart, RecipeTypes.HANDLE_RECIPE);
-        } else {
-            return createRecipe(toolPart, RecipeTypes.BINDING_RECIPE);
-        }
-    }
-
-    private List<RecipeWrapper> createRecipe(ForgeroToolPart toolPart, RecipeTypes templateIdentifier) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(templateIdentifier).toString()).getAsJsonObject();
-        JsonArray ingredients = template.getAsJsonArray("ingredients");
-        for (int i = 0; i < ingredients.size() - 1; i++) {
-            ((JsonObject) ingredients.get(i)).addProperty("item", toolPart.getPrimaryMaterial().getIngredient());
-        }
-        template.getAsJsonObject("result").addProperty("item", new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()).toString());
-        return List.of(new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()), template, templateIdentifier));
-    }
-
-    private List<RecipeWrapper> createToolPartRecipe(ForgeroToolPart toolPart, RecipeTypes templateIdentifier) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(templateIdentifier).toString()).getAsJsonObject();
-        template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", toolPart.getPrimaryMaterial().getIngredient());
-        template.getAsJsonObject("result").addProperty("item", new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()).toString());
-        return List.of(new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()), template, templateIdentifier));
-    }
-
-    private List<RecipeWrapper> createToolPartHeadRecipe(ForgeroToolPart part) {
-        return switch (((ToolPartHead) part).getToolType()) {
-            case PICKAXE -> createRecipe(part, RecipeTypes.PICKAXEHEAD_RECIPE);
-            case SHOVEL -> createRecipe(part, RecipeTypes.SHOVELHEAD_RECIPE);
-            case AXE -> createRecipe(part, RecipeTypes.AXEHEAD_RECIPE);
-            case SWORD -> null;
-        };
-    }
 
     private List<RecipeWrapper> createToolRecipe(ForgeroTool tool) {
         ArrayList<RecipeWrapper> toolRecipes = new ArrayList<>();

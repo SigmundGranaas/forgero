@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
-import com.sigmundgranaas.forgero.core.pattern.HeadPattern;
 import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -14,7 +13,6 @@ import com.sigmundgranaas.forgero.item.items.ToolPartItemImpl;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroAxeItem;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.item.items.tool.ShovelItem;
-import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 
@@ -46,16 +44,6 @@ public class ItemFactoryImpl implements ItemFactory {
 
     @Override
     public PatternItem createPattern(Pattern pattern) {
-        RecipeTypes recipeTypes = switch (pattern.getType()) {
-            case BINDING -> RecipeTypes.BINDING_RECIPE;
-            case HANDLE -> RecipeTypes.HANDLE_RECIPE;
-            case HEAD -> switch (((HeadPattern) pattern).getToolType()) {
-                case PICKAXE -> RecipeTypes.PICKAXEHEAD_RECIPE;
-                case SHOVEL -> RecipeTypes.SHOVELHEAD_RECIPE;
-                case AXE -> RecipeTypes.AXEHEAD_RECIPE;
-                case SWORD -> RecipeTypes.AXEHEAD_RECIPE;
-            };
-        };
-        return new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS).rarity(DescriptionWriter.getRarityFromInt(pattern.getRarity())), recipeTypes, pattern);
+        return new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS).rarity(DescriptionWriter.getRarityFromInt(pattern.getRarity())), pattern);
     }
 }
