@@ -1,7 +1,7 @@
 {
   "name": "default",
   "type": "HANDLE",
-  "model": "handle_default",
+  "model": "default",
   "output": "handle_default",
   "rarity": 1,
   "materialCount": 2,

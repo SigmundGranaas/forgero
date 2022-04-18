@@ -2,8 +2,9 @@
   "name": "default",
   "type": "HEAD",
   "toolType": "AXE",
-  "rarity": 1,
+  "model": "default",
   "output": "axehead_default",
+  "rarity": 1,
   "materialCount": 3,
   "properties": {
     "attributes": [

@@ -11,6 +11,7 @@ import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ public class ItemRegistryImpl implements ItemRegistry {
 
     @Override
     public void registerToolParts() {
-        collection.INSTANCE.getToolParts().forEach(this::registerToolPart);
+        collection.INSTANCE.getToolParts().stream().sorted(Comparator.comparingInt(toolpart -> ((ToolPartItem) toolpart).getPart().getPrimaryMaterial().getRarity())).forEach(this::registerToolPart);
     }
 
     @Override

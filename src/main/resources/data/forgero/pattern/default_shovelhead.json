@@ -2,6 +2,7 @@
   "name": "default",
   "type": "HEAD",
   "toolType": "SHOVEL",
+  "model": "default",
   "output": "shovelhead_default",
   "rarity": 1,
   "materialCount": 1,

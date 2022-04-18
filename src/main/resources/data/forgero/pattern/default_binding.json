@@ -1,7 +1,7 @@
 {
   "name": "default",
   "type": "BINDING",
-  "model": "binding_default",
+  "model": "default",
   "output": "binding_default",
   "rarity": 1,
   "materialCount": 2,

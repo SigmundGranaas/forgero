@@ -1,17 +1,17 @@
 {
-  "name": "dense",
+  "name": "reinforced",
   "type": "HANDLE",
   "model": "dense",
   "output": "handle_dense",
-  "rarity": 50,
-  "materialCount": 3,
+  "rarity": 70,
+  "materialCount": 4,
   "properties": {
     "attributes": [
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 100
+        "value": 200
       }
     ],
     "passive:": [],
