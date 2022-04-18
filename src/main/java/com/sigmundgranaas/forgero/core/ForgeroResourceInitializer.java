@@ -8,6 +8,9 @@ import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
 import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.pattern.PatternCollection;
+import com.sigmundgranaas.forgero.core.pattern.PatternLoader;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollectionImpl;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
@@ -44,9 +47,15 @@ public class ForgeroResourceInitializer {
     public ForgeroRegistry initializeForgeroResources() {
         MaterialCollection materialCollection = initializeMaterials();
         GemCollection gemCollection = initializeGems();
-        ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection);
+        PatternCollection patternCollection = initializePatternCollection();
+        ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection, patternCollection);
         ForgeroToolCollection toolCollection = initializeToolCollection(toolPartCollection);
-        return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection);
+        return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection, patternCollection);
+    }
+
+    private PatternCollection initializePatternCollection() {
+        List<Pattern> patterns = new PatternLoader().loadPatterns();
+        return new PatternCollection(patterns);
     }
 
     private ForgeroToolCollection initializeToolCollection(ForgeroToolPartCollection toolPartCollection) {
@@ -54,9 +63,9 @@ public class ForgeroResourceInitializer {
         return new ForgeroToolCollectionImpl(factory.createForgeroTools(toolPartCollection));
     }
 
-    private ForgeroToolPartCollection initializeToolParts(MaterialCollection materialCollection) {
+    private ForgeroToolPartCollection initializeToolParts(MaterialCollection materialCollection, PatternCollection collection) {
         ForgeroToolPartFactory factory = new ForgeroToolPartFactoryImpl();
-        return new ForgeroToolPartCollectionImpl(factory.createBaseToolParts(materialCollection));
+        return new ForgeroToolPartCollectionImpl(factory.createBaseToolParts(materialCollection, collection));
     }
 
     private GemCollection initializeGems() {

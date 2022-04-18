@@ -4,7 +4,7 @@
   "palette": {
     "name": "redstone",
     "include": [
-      "minecraft:textures/item/redstone.png"
+      "minecraft:textures/block/redstone_block.png"
     ],
     "exclude": [
     ]

@@ -2,39 +2,39 @@
   "replace": false,
   "values": [
     {
-      "id": "forgero:oak_axehead",
+      "id": "forgero:oak_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:birch_axehead",
+      "id": "forgero:birch_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:spruce_axehead",
+      "id": "forgero:spruce_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:acacia_axehead",
+      "id": "forgero:acacia_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:stone_axehead",
+      "id": "forgero:stone_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:iron_axehead",
+      "id": "forgero:iron_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:gold_axehead",
+      "id": "forgero:gold_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:diamond_axehead",
+      "id": "forgero:diamond_axehead_default",
       "required": false
     },
     {
-      "id": "forgero:netherite_axehead",
+      "id": "forgero:netherite_axehead_default",
       "required": false
     }
   ]

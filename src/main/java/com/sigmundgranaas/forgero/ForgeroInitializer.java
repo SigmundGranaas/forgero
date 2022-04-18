@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.item.items.GemItem;
+import com.sigmundgranaas.forgero.loot.TreasureChestLootInjector;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import net.fabricmc.api.ModInitializer;
@@ -24,6 +25,7 @@ public class ForgeroInitializer implements ModInitializer {
         initializer.initializeForgeroResources();
         registerItems();
         registerRecipes();
+        TreasureChestLootInjector.registerLootTable();
     }
 
     private void registerItems() {

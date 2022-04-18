@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.core.tool;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.properties.AttributeType;
-import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -74,12 +74,12 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public float getAttackDamage(Target target) {
-        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_DAMAGE) + head.getAttackDamageBase();
+        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
     }
 
     @Override
     public float getAttackSpeed(Target target) {
-        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_SPEED) + head.getAttackSpeedBase();
+        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_SPEED);
     }
 
     @Override

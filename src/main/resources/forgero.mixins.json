@@ -4,6 +4,7 @@
   "package": "com.sigmundgranaas.forgero.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "ItemPatternRemainderMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
     "ItemStackMixin",

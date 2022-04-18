@@ -27,7 +27,7 @@ public abstract class AbstractToolPartHead extends AbstractToolPart implements T
     }
 
     public String getToolPartIdentifier() {
-        return getPrimaryMaterial().getName() + "_" + getToolPartName();
+        return getPrimaryMaterial().getName() + "_" + getToolPartName() + "_" + getPattern().getVariant();
     }
 
     @Override

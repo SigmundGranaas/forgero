@@ -20,7 +20,7 @@ class DefaultForgeroToolTest {
 
     public static ForgeroToolBase getDefaultForgeroTool() {
         ToolPartHead head = (ToolPartHead) createToolPart(Constants.IRON_PICKAXEHEAD_IDENTIFIER);
-        ToolPartHandle handle = (ToolPartHandle) createToolPart("oak_handle");
+        ToolPartHandle handle = (ToolPartHandle) createToolPart("oak_handle_default");
         return new ForgeroToolBase(head, handle);
     }
 

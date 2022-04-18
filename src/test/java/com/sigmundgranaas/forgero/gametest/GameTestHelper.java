@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -20,6 +19,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.TestContext;
 
 import java.util.UUID;
+
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.HANDLE_PATTERN;
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_PATTERN;
 
 public class GameTestHelper {
     public static ServerPlayerEntity createDummyServerPlayer(TestContext context) {
@@ -40,12 +42,12 @@ public class GameTestHelper {
 
     public static ToolPartHead createDummyToolPartHead() {
         PrimaryMaterial material = new SimpleDuoMaterial(SimpleMaterialPOJO.createDefaultMaterialPOJO());
-        return ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(material, ForgeroToolTypes.PICKAXE).createToolPart();
+        return ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(material, PICKAXEHEAD_PATTERN.get()).createToolPart();
     }
 
     public static ToolPartHandle createDummyToolPartHandle() {
         PrimaryMaterial material = new SimpleDuoMaterial(SimpleMaterialPOJO.createDefaultMaterialPOJO());
-        return ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(material).createToolPart();
+        return ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(material, HANDLE_PATTERN.get()).createToolPart();
     }
 
     public static SimpleDuoMaterial createDummyDuoMaterial() {

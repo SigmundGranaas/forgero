@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.gem;
 
-import com.sigmundgranaas.forgero.core.properties.Property;
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 import java.util.Collections;

@@ -12,9 +12,11 @@ import com.sigmundgranaas.forgero.core.toolpart.handle.HandleState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.HANDLE_PATTERN;
+
 public class HandleTest {
     public static Handle createDefaultToolPartHandle() {
-        HandleState state = new HandleState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
+        HandleState state = new HandleState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_PATTERN.get());
 
         return new Handle(state);
     }

@@ -4,6 +4,10 @@
     {
       "id": "forgero:handle_pattern_default",
       "required": false
+    },
+    {
+      "id": "forgero:handle_pattern_dense",
+      "required": false
     }
   ]
 }

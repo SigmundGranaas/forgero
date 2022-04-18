@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.tool.factory;
 
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
-import com.sigmundgranaas.forgero.core.skin.ForgeroToolPartSkin;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolBase;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
@@ -32,10 +31,6 @@ public class ForgeroToolBuilderImpl implements ForgeroToolBuilder {
         return this;
     }
 
-    @Override
-    public ForgeroToolBuilder addSkin(ForgeroToolPartTypes toolpart, ForgeroToolPartSkin skin) {
-        return null;
-    }
 
     @Override
     public ForgeroTool createTool() {

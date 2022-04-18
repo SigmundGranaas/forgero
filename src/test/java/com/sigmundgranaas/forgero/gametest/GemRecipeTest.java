@@ -122,7 +122,7 @@ public class GemRecipeTest {
 
             ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getIdentifier())));
             ItemStack gemStack2 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getIdentifier())));
-            ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead")));
+            ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
 
             handler.setStackInSlot(0, 1, toolPartStack);
             handler.setStackInSlot(1, 1, gemStack1);
@@ -148,7 +148,7 @@ public class GemRecipeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead")));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
         ItemStack diamondSecondaryUpgrade = new ItemStack(Items.DIAMOND);
 
 
@@ -180,7 +180,7 @@ public class GemRecipeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead")));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
         ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, ForgeroRegistry.getInstance().gemCollection().getGems().get(0).getIdentifier())));
 
 

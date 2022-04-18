@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.properties.Property;
+import com.sigmundgranaas.forgero.core.property.Property;
 
 import java.util.Collections;
 import java.util.List;

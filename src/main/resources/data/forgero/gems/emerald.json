@@ -4,7 +4,7 @@
   "palette": {
     "name": "emerald",
     "include": [
-      "minecraft:textures/item/emerald.png"
+      "minecraft:textures/block/emerald_block.png"
     ],
     "exclude": [
     ]

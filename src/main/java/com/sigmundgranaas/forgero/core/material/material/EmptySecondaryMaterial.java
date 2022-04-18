@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.material.material;
 
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
-import com.sigmundgranaas.forgero.core.properties.Property;
+import com.sigmundgranaas.forgero.core.property.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -15,7 +15,8 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     }
 
     @Override
-    public @NotNull String getName() {
+    public @NotNull
+    String getName() {
         return "empty";
     }
 
@@ -26,7 +27,8 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     }
 
     @Override
-    public @NotNull List<Property> getProperties() {
+    public @NotNull
+    List<Property> getProperties() {
         return Collections.emptyList();
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "Leather",
-  "rarity": 100,
+  "rarity": 15,
   "type": "LEATHER",
   "ingredient": {
     "item": "minecraft:leather"

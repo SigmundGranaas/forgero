@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+  ],
+  "result": {
+    "item": "forgero:binding_pattern_default"
+  }
+}

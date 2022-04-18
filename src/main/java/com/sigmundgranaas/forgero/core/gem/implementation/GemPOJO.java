@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.gem.implementation;
 
-import com.sigmundgranaas.forgero.core.properties.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.property.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 import java.util.List;

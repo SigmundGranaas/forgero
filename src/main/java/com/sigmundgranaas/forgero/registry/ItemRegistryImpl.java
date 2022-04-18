@@ -3,17 +3,15 @@ package com.sigmundgranaas.forgero.registry;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
-import com.sigmundgranaas.forgero.item.ItemGroups;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
-import com.sigmundgranaas.forgero.item.items.PatternItem;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
-import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.item.Item;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,12 +22,7 @@ public class ItemRegistryImpl implements ItemRegistry {
     public static final Tag<Item> PICKAXEHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_patterns"));
     public static final Tag<Item> SHOVELHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_patterns"));
     public static final Tag<Item> AXEHEAD_PATTERNS = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_patterns"));
-
-    private static final Item BINDING_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.BINDING_RECIPE);
-    private static final Item HANDLE_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.HANDLE_RECIPE);
-    private static final Item PICKAXEHEAD_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.PICKAXEHEAD_RECIPE);
-    private static final Item SHOVELHEAD_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.SHOVELHEAD_RECIPE);
-    private static final Item AXEHEAD_PATTERN_DEFAULT = new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), RecipeTypes.AXEHEAD_RECIPE);
+    public static final Tag<Item> HANDLES = TagFactory.ITEM.create(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handles"));
 
     private static ItemRegistry INSTANCE;
     private final ItemCollection collection;
@@ -66,16 +59,14 @@ public class ItemRegistryImpl implements ItemRegistry {
 
     @Override
     public void registerToolParts() {
-        collection.INSTANCE.getToolParts().forEach(this::registerToolPart);
+        collection.INSTANCE.getToolParts().stream().sorted(Comparator.comparingInt(toolpart -> ((ToolPartItem) toolpart).getPart().getPrimaryMaterial().getRarity())).forEach(this::registerToolPart);
     }
 
     @Override
     public void registerPatterns() {
         Tag<Item> handles = HANDLE_PATTERNS;
-        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "binding_pattern_default"), BINDING_PATTERN_DEFAULT);
-        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_pattern_default"), HANDLE_PATTERN_DEFAULT);
-        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_pattern_default"), PICKAXEHEAD_PATTERN_DEFAULT);
-        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_pattern_default"), SHOVELHEAD_PATTERN_DEFAULT);
-        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_pattern_default"), AXEHEAD_PATTERN_DEFAULT);
+        collection.INSTANCE.INSTANCE.getPatterns().forEach(pattern -> {
+            Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getPattern().getPatternIdentifier()), pattern);
+        });
     }
 }

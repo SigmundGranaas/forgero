@@ -46,24 +46,24 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getPattern().getModel());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getPattern().getModel());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getPattern().getModel());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getPattern().getModel());
     }
 
     @Override
@@ -77,13 +77,13 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
             return new ForgeroMaterialIdentifierImpl(forgeroName);
         } else if (ForgeroToolTypes.isTool(elements[1])) {
             return new ForgeroToolIdentifierImpl(forgeroName);
-        } else if (elements.length == 2) {
-            return createForgeroToolIdentifier(forgeroName);
+        } else if (elements.length == 3) {
+            return createForgeroToolPartIdentifier(forgeroName);
         }
         throw new IllegalStateException("Unexpected value: " + elements.length);
     }
 
-    private ForgeroIdentifier createForgeroToolIdentifier(String forgeroName) {
+    private ForgeroIdentifier createForgeroToolPartIdentifier(String forgeroName) {
         if (forgeroName.contains("head")) {
             return new ForgeroToolPartHeadIdentifier(forgeroName);
         } else {

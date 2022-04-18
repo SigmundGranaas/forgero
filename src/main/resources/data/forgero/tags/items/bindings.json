@@ -2,39 +2,39 @@
   "replace": false,
   "values": [
     {
-      "id": "forgero:oak_binding",
+      "id": "forgero:oak_binding_default",
       "required": false
     },
     {
-      "id": "forgero:birch_binding",
+      "id": "forgero:birch_binding_default",
       "required": false
     },
     {
-      "id": "forgero:spruce_binding",
+      "id": "forgero:spruce_binding_default",
       "required": false
     },
     {
-      "id": "forgero:acacia_binding",
+      "id": "forgero:acacia_binding_default",
       "required": false
     },
     {
-      "id": "forgero:stone_binding",
+      "id": "forgero:stone_binding_default",
       "required": false
     },
     {
-      "id": "forgero:iron_binding",
+      "id": "forgero:iron_binding_default",
       "required": false
     },
     {
-      "id": "forgero:gold_binding",
+      "id": "forgero:gold_binding_default",
       "required": false
     },
     {
-      "id": "forgero:diamond_binding",
+      "id": "forgero:diamond_binding_default",
       "required": false
     },
     {
-      "id": "forgero:netherite_binding",
+      "id": "forgero:netherite_binding_default",
       "required": false
     }
   ]

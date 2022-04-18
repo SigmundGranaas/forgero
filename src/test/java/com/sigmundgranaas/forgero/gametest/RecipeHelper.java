@@ -35,17 +35,13 @@ public class RecipeHelper {
 
     public static boolean isCraftingTableRecipe(RecipeWrapper wrapper) {
         return switch (wrapper.getRecipeType()) {
-            case HANDLE_RECIPE -> true;
-            case BINDING_RECIPE -> true;
-            case PICKAXEHEAD_RECIPE -> true;
-            case AXEHEAD_RECIPE -> true;
-            case SHOVELHEAD_RECIPE -> true;
             case TOOL_PART_SECONDARY_MATERIAL_UPGRADE -> false;
             case TOOL_PART_GEM_UPGRADE -> false;
             case TOOL_RECIPE -> true;
             case GEM_UPGRADE_RECIPE -> false;
             case TOOL_PART_RECIPE -> true;
             case TOOL_WITH_BINDING_RECIPE -> true;
+            case TOOLPART_PATTERN_RECIPE -> true;
         };
     }
 
@@ -57,7 +53,14 @@ public class RecipeHelper {
             char emptyPattern = ' ';
             for (int j = 0; j < patternLine.length(); j++) {
                 if (patternLine.charAt(j) != emptyPattern) {
-                    String itemIdentifier = wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("item").getAsString();
+                    String itemIdentifier;
+                    if (wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).has("item")) {
+                        itemIdentifier = wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("item").getAsString();
+                    } else if (wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("tag").getAsString().contains("handle")) {
+                        itemIdentifier = "forgero:oak_handle_default";
+                    } else {
+                        itemIdentifier = "forgero:oak_binding_default";
+                    }
                     Identifier itemId = new Identifier(itemIdentifier);
                     ItemStack stack = new ItemStack(Registry.ITEM.get(itemId));
                     ingredients.add(new Pair<>((3 * i + j) + 1, stack));

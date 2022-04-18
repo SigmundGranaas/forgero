@@ -71,7 +71,7 @@ public enum ToolPartModelType {
     }
 
     public static boolean isItemModelIdentifier(String[] identifier) {
-        if (identifier.length == 2) {
+        if (identifier.length == 3) {
             for (ToolPartModelType value : ToolPartModelType.values()) {
                 if (value.name().toLowerCase().equals(identifier[1].toLowerCase(Locale.ROOT))) {
                     return true;

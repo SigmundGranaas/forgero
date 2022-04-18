@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.core.material.material;
 
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
-import com.sigmundgranaas.forgero.core.properties.Property;
-import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -51,7 +51,8 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     }
 
     @Override
-    public @NotNull String getName() {
+    public @NotNull
+    String getName() {
         return name.toLowerCase();
     }
 
@@ -61,7 +62,8 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     }
 
     @Override
-    public @NotNull List<Property> getProperties() {
+    public @NotNull
+    List<Property> getProperties() {
         return properties;
     }
 

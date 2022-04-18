@@ -12,13 +12,4 @@ public class AxeHead extends AbstractToolPartHead {
         return ForgeroToolTypes.AXE;
     }
 
-    @Override
-    public float getAttackSpeedBase() {
-        return -3.2f;
-    }
-
-    @Override
-    public float getAttackDamageBase() {
-        return 5.0f;
-    }
 }

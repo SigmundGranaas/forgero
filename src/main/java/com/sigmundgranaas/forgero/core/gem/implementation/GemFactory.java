@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.gem.implementation;
 
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.properties.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 
 import java.util.Locale;
 import java.util.stream.Collectors;
