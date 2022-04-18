@@ -53,7 +53,14 @@ public class RecipeHelper {
             char emptyPattern = ' ';
             for (int j = 0; j < patternLine.length(); j++) {
                 if (patternLine.charAt(j) != emptyPattern) {
-                    String itemIdentifier = wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("item").getAsString();
+                    String itemIdentifier;
+                    if (wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).has("item")) {
+                        itemIdentifier = wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("item").getAsString();
+                    } else if (wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("tag").getAsString().contains("handle")) {
+                        itemIdentifier = "forgero:oak_handle_default";
+                    } else {
+                        itemIdentifier = "forgero:oak_binding_default";
+                    }
                     Identifier itemId = new Identifier(itemIdentifier);
                     ItemStack stack = new ItemStack(Registry.ITEM.get(itemId));
                     ingredients.add(new Pair<>((3 * i + j) + 1, stack));

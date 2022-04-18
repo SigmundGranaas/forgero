@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
@@ -29,12 +30,12 @@ import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerW
 
 public class RecipeCreation {
 
-    public static Item testHandleRecipe(Item ingredient, ServerPlayerEntity player) {
+    public static Item testHandleRecipe(Item ingredient, Pattern pattern, ServerPlayerEntity player) {
         CraftingScreenHandler handler = ((CraftingScreenHandler) player.currentScreenHandler);
-        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_pattern_default"))));
-        handler.getSlot(3).setStack(new ItemStack(ingredient));
-        handler.setStackInSlot(5, 1, new ItemStack(ingredient, 1));
-        handler.setStackInSlot(7, 3, new ItemStack(ingredient));
+        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getPatternIdentifier()))));
+        for (int i = 0; i < pattern.getMaterialCount(); i++) {
+            handler.getSlot(i + 2).setStack(new ItemStack(ingredient));
+        }
 
         Item actualOutput = handler.getSlot(handler.getCraftingResultSlotIndex()).getStack().getItem();
         handler.clearCraftingSlots();
@@ -49,7 +50,7 @@ public class RecipeCreation {
         int correct = 0;
         for (Item toolPart : ItemCollection.INSTANCE.getToolParts().stream().filter(toolPart -> ((ToolPartItem) toolPart).getType() == ForgeroToolPartTypes.HANDLE).collect(Collectors.toList())
         ) {
-            Item output = testHandleRecipe(Registry.ITEM.get(new Identifier(((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient())), mockPlayer);
+            Item output = testHandleRecipe(Registry.ITEM.get(new Identifier(((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient())), ((ToolPartItem) toolPart).getPart().getPattern(), mockPlayer);
             if (output instanceof ToolPartItem && ((ToolPartItem) output).getPart().getToolPartIdentifier().equals(((ToolPartItem) toolPart).getPart().getToolPartIdentifier())) {
                 total++;
                 correct++;
@@ -61,16 +62,16 @@ public class RecipeCreation {
         }
 
         if (total == correct) {
-            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total, total, correct);
+            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total, correct, total);
             mockPlayer.closeHandledScreen();
             context.complete();
         } else {
-            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total, total, correct);
+            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total, correct, total);
             throw new GameTestException("recipe testing failed");
         }
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing", required = false)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing", required = true)
     public void testingGeneratedRecipes(TestContext context) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
         context.setBlockState(new BlockPos(1, 1, 1), Blocks.CRAFTING_TABLE);
