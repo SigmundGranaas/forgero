@@ -1,6 +1,6 @@
 {
   "name": "Stone",
-  "rarity": 100,
+  "rarity": 7,
   "type": "STONE",
   "ingredient": {
     "item": "minecraft:cobblestone"

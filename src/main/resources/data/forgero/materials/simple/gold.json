@@ -1,6 +1,6 @@
 {
   "name": "Gold",
-  "rarity": 100,
+  "rarity": 60,
   "type": "METAL",
   "ingredient": {
     "item": "minecraft:gold_ingot"
