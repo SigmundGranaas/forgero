@@ -29,7 +29,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
@@ -69,7 +68,7 @@ public class ForgeroClient implements ClientModInitializer {
         }
 
 
-        for (SecondaryMaterial material : materialCollection.getMaterialsAsList().stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).collect(Collectors.toList())) {
+        for (SecondaryMaterial material : materialCollection.getMaterialsAsList().stream().filter(material -> material instanceof SecondaryMaterial).map(SecondaryMaterial.class::cast).toList()) {
             for (Item toolPart : itemCollection.getToolParts()) {
                 ForgeroToolPart part = ((ToolPartItem) toolPart).getPart();
                 registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part), ModelLayer.SECONDARY, part.getPattern().getVariant()));
@@ -109,7 +108,7 @@ public class ForgeroClient implements ClientModInitializer {
             }
 
             ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
-                List<ModelIdentifier> textures = registry.getTextures().stream().map(texture -> new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, texture.getIdentifier() + "texture_dummy", "inventory")).collect(Collectors.toList());
+                List<ModelIdentifier> textures = registry.getTextures().stream().map(texture -> new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, texture.getIdentifier() + "texture_dummy", "inventory")).toList();
                 textures.forEach(out);
                 out.accept(new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, "transparent_base" + "texture_dummy", "inventory"));
             });

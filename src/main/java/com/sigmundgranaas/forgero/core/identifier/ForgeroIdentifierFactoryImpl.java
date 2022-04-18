@@ -46,24 +46,24 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getPattern().getVariant());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getPattern().getVariant());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getPattern().getVariant());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getPattern().getVariant());
     }
 
     @Override
