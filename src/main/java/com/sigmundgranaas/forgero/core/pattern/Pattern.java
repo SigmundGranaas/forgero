@@ -13,13 +13,15 @@ public class Pattern implements PropertyContainer {
     private final List<Property> properties;
     private final String model;
     private final int rarity;
+    private final int materialCount;
 
-    public Pattern(ForgeroToolPartTypes type, String name, List<Property> properties, int rarity, String model) {
+    public Pattern(ForgeroToolPartTypes type, String name, List<Property> properties, int rarity, String model, int materialCount) {
         this.type = type;
         this.name = name;
         this.properties = properties;
         this.rarity = rarity;
         this.model = model;
+        this.materialCount = materialCount;
     }
 
     @Override
@@ -53,5 +55,9 @@ public class Pattern implements PropertyContainer {
 
     public String getVariant() {
         return name;
+    }
+
+    public int getMaterialCount() {
+        return materialCount;
     }
 }

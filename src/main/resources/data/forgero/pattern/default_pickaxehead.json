@@ -4,6 +4,7 @@
   "toolType": "PICKAXE",
   "output": "pickaxe_default",
   "rarity": 1,
+  "materialCount": 3,
   "properties": {
     "attributes": [
       {

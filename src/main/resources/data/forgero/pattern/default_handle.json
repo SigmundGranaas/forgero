@@ -4,6 +4,7 @@
   "model": "handle_default",
   "output": "handle_default",
   "rarity": 1,
+  "materialCount": 2,
   "properties": {
     "attributes": [
     ],

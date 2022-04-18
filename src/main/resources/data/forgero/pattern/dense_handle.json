@@ -4,6 +4,7 @@
   "model": "handle_dense",
   "output": "handle_dense",
   "rarity": 50,
+  "materialCount": 3,
   "properties": {
     "attributes": [
       {

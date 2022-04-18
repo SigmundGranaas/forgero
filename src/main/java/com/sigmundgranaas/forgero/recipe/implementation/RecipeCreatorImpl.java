@@ -54,13 +54,13 @@ public record RecipeCreatorImpl(
     @Override
     public List<RecipeWrapper> createRecipes() {
         List<RecipeWrapper> toolRecipes = tools.stream().map(this::createToolRecipe).flatMap(List::stream).collect(Collectors.toList());
-        List<RecipeWrapper> toolPartRecipes = toolParts.stream().map(this::createToolPartRecipe).flatMap(List::stream).collect(Collectors.toList());
+        //List<RecipeWrapper> toolPartRecipes = toolParts.stream().map(this::createToolPartRecipe).flatMap(List::stream).collect(Collectors.toList());
         List<RecipeWrapper> toolPartSecondaryMaterialUpgradeRecipe = toolParts.stream().map(this::createSecondaryMaterialUpgradeRecipes).flatMap(List::stream).collect(Collectors.toList());
         List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().map(this::createGemUpgradeRecipes).flatMap(List::stream).collect(Collectors.toList());
         List<RecipeWrapper> toolPartPatternRecipes = patterns.stream().map(this::createPatternRecipes).flatMap(List::stream).collect(Collectors.toList());
 
 
-        var recipes = List.of(toolRecipes, toolPartRecipes, toolPartSecondaryMaterialUpgradeRecipe, toolPartGemUpgradeRecipe, toolPartPatternRecipes);
+        var recipes = List.of(toolRecipes, toolPartSecondaryMaterialUpgradeRecipe, toolPartGemUpgradeRecipe, toolPartPatternRecipes);
         return recipes.stream().flatMap(List::stream).collect(Collectors.toList());
     }
 
@@ -84,8 +84,14 @@ public record RecipeCreatorImpl(
         }
 
         template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", String.format("%s_%s_%s", material.getName(), toolpartType, pattern.getVariant())).toString());
-        ingredients.get(0).getAsJsonObject().addProperty("item", material.getIngredient());
-        ingredients.get(1).getAsJsonObject().addProperty("item", new Identifier("forgero", pattern.getPatternIdentifier()).toString());
+        JsonObject materialIngredient = new JsonObject();
+        materialIngredient.addProperty("item", material.getIngredient());
+        JsonObject patternIngredient = new JsonObject();
+        patternIngredient.addProperty("item", new Identifier("forgero", pattern.getPatternIdentifier()).toString());
+        for (int i = 0; i < pattern.getMaterialCount(); i++) {
+            ingredients.add(materialIngredient);
+        }
+        ingredients.add(patternIngredient);
         return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolpartType + "_" + material.getName() + "_" + pattern.getPatternIdentifier()), template, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE);
     }
 

@@ -4,6 +4,7 @@
   "model": "binding_default",
   "output": "binding_default",
   "rarity": 1,
+  "materialCount": 2,
   "properties": {
     "attributes": [
     ],

@@ -19,7 +19,7 @@ public class SimpleToolMaterialAdapter implements ToolMaterial {
     private final HeadState state;
 
     public SimpleToolMaterialAdapter(PrimaryMaterial material) {
-        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Pattern(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), 1, "default"));
+        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Pattern(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), 1, "default", 1));
 
     }
 

@@ -4,6 +4,7 @@
   "toolType": "AXE",
   "rarity": 1,
   "output": "axehead_default",
+  "materialCount": 3,
   "properties": {
     "attributes": [
       {

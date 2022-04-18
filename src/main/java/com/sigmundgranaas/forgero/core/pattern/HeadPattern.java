@@ -9,8 +9,8 @@ import java.util.List;
 public class HeadPattern extends Pattern {
     private final ForgeroToolTypes toolType;
 
-    public HeadPattern(ForgeroToolPartTypes type, String name, List<Property> properties, ForgeroToolTypes toolType, int rarity, String model) {
-        super(type, name, properties, rarity, model);
+    public HeadPattern(ForgeroToolPartTypes type, String name, List<Property> properties, ForgeroToolTypes toolType, int rarity, String model, int materialCount) {
+        super(type, name, properties, rarity, model, materialCount);
         this.toolType = toolType;
     }
 
