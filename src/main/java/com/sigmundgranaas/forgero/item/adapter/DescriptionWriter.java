@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemDescriptionWriter;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyStream;
@@ -143,5 +144,11 @@ public record DescriptionWriter(
         mutableText.append(new LiteralText(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
         addAllAttribute(gem.getProperties());
+    }
+
+    public void writePatternDescription(Pattern pattern) {
+        MutableText mutableText = new LiteralText("Material count: ").formatted(Formatting.GRAY);
+        mutableText.append(new LiteralText(String.format("%s", pattern.getMaterialCount())));
+        tooltip.add(mutableText);
     }
 }

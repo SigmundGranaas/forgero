@@ -30,6 +30,7 @@ public class PatternItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        new DescriptionWriter(tooltip).writePatternDescription(getPattern());
         new DescriptionWriter(tooltip).addToolPartProperties(Property.stream(pattern.getProperties(Target.createEmptyTarget())));
     }
 
