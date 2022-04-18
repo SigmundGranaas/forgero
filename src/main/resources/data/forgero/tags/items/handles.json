@@ -72,6 +72,42 @@
     {
       "id": "forgero:netherite_handle_dense",
       "required": false
+    },
+    {
+      "id": "forgero:oak_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:birch_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:spruce_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:acacia_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:stone_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:iron_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:gold_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:diamond_handle_reinforced",
+      "required": false
+    },
+    {
+      "id": "forgero:netherite_handle_reinforced",
+      "required": false
     }
   ]
 }
