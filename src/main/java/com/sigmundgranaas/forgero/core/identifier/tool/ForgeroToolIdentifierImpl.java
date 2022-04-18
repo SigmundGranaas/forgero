@@ -25,12 +25,12 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
 
     @Override
     public ForgeroToolPartHeadIdentifier getHead() {
-        return (ForgeroToolPartHeadIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolElements[0] + "_" + toolElements[1] + "head");
+        return (ForgeroToolPartHeadIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolElements[0] + "_" + toolElements[1] + "head" + "_default");
     }
 
     @Override
     public ForgeroToolPartIdentifier getHandle() {
-        return (ForgeroToolPartIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier("oak_handle");
+        return (ForgeroToolPartIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier("oak_handle_default");
     }
 
     @Override

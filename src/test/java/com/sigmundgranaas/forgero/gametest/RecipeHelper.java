@@ -35,17 +35,13 @@ public class RecipeHelper {
 
     public static boolean isCraftingTableRecipe(RecipeWrapper wrapper) {
         return switch (wrapper.getRecipeType()) {
-            case HANDLE_RECIPE -> true;
-            case BINDING_RECIPE -> true;
-            case PICKAXEHEAD_RECIPE -> true;
-            case AXEHEAD_RECIPE -> true;
-            case SHOVELHEAD_RECIPE -> true;
             case TOOL_PART_SECONDARY_MATERIAL_UPGRADE -> false;
             case TOOL_PART_GEM_UPGRADE -> false;
             case TOOL_RECIPE -> true;
             case GEM_UPGRADE_RECIPE -> false;
             case TOOL_PART_RECIPE -> true;
             case TOOL_WITH_BINDING_RECIPE -> true;
+            case TOOLPART_PATTERN_RECIPE -> true;
         };
     }
 

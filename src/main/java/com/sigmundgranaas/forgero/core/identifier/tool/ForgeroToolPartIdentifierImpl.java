@@ -22,7 +22,7 @@ public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier imp
 
     @Override
     public ForgeroPatternIdentifier getPattern() {
-        return new ForgeroPatternIdentifier(toolPartName);
+        return new ForgeroPatternIdentifier(String.format("%s_pattern_%s", toolPartName.split("_")[1].toLowerCase(Locale.ROOT), toolPartName.split("_")[2].toLowerCase(Locale.ROOT)));
     }
 
     @Override
@@ -37,6 +37,6 @@ public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier imp
 
     @Override
     public String getIdentifier() {
-        return null;
+        return toolPartName;
     }
 }

@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.property;
 
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartHandleBuilder;
@@ -17,10 +16,10 @@ import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.*;
 public class NetheriteToolPropertyTest {
     @Test
     void testToolDurability() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), ForgeroToolTypes.PICKAXE);
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -30,10 +29,10 @@ public class NetheriteToolPropertyTest {
 
     @Test
     void testToolDurabilityWithSecondary() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), ForgeroToolTypes.PICKAXE);
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
         headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
         handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -43,10 +42,10 @@ public class NetheriteToolPropertyTest {
 
     @Test
     void testToolMiningLevel() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), ForgeroToolTypes.AXE);
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -56,10 +55,10 @@ public class NetheriteToolPropertyTest {
 
     @Test
     void testToolMiningSpeed() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), ForgeroToolTypes.PICKAXE);
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());

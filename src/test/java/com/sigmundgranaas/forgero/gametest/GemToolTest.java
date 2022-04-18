@@ -33,6 +33,8 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.HANDLE_PATTERN;
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_PATTERN;
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithSmithingScreenHandler;
 
 public class GemToolTest {
@@ -77,9 +79,9 @@ public class GemToolTest {
     }
 
     ItemStack createToolItemWithGem(Gem headGem) {
-        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), headGem, pattern);
+        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), headGem, PICKAXEHEAD_PATTERN.get());
         ToolPartHead head = new PickaxeHead(state);
-        HandleState handleState = new HandleState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem());
+        HandleState handleState = new HandleState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_PATTERN.get());
         ToolPartHandle handle = new Handle(handleState);
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));

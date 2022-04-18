@@ -77,13 +77,13 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
             return new ForgeroMaterialIdentifierImpl(forgeroName);
         } else if (ForgeroToolTypes.isTool(elements[1])) {
             return new ForgeroToolIdentifierImpl(forgeroName);
-        } else if (elements.length == 2) {
-            return createForgeroToolIdentifier(forgeroName);
+        } else if (elements.length == 3) {
+            return createForgeroToolPartIdentifier(forgeroName);
         }
         throw new IllegalStateException("Unexpected value: " + elements.length);
     }
 
-    private ForgeroIdentifier createForgeroToolIdentifier(String forgeroName) {
+    private ForgeroIdentifier createForgeroToolPartIdentifier(String forgeroName) {
         if (forgeroName.contains("head")) {
             return new ForgeroToolPartHeadIdentifier(forgeroName);
         } else {
