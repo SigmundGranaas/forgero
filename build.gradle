@@ -102,7 +102,7 @@ curseforge {
         changelogType = "markdown"
         changelog = file('changelog.md')
 
-        releaseType = 'alpha'
+        releaseType = 'release'
         addGameVersion project.minecraft_version
         addGameVersion 'Fabric'
         addGameVersion "Java 17"

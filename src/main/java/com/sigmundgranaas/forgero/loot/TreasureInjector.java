@@ -113,7 +113,7 @@ public class TreasureInjector {
     }
 
     private LootPool.Builder registerToolPartsIntoPool(LootPool.Builder pool, ToolPartFilter toolPartFilter) {
-        for (ForgeroToolPart toolPart : toolPartFilter.toolParts) {
+        for (ForgeroToolPart toolPart : toolPartFilter.getToolParts()) {
             Item patternItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()));
             pool.with(ItemEntry.builder(patternItem).weight(1000 - getToolPartValue(toolPart)));
         }

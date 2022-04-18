@@ -19,9 +19,9 @@ public class ToolPartFilter {
     private final List<String> filteredMaterials = new ArrayList<>();
     private final Set<ForgeroToolTypes> filteredTools = new HashSet<>();
     private final Set<ForgeroToolPartTypes> filteredToolParts = new HashSet<>();
-    List<ForgeroToolPart> toolParts;
+    private final List<ForgeroToolPart> toolParts;
     private int upperLevel = 200;
-    private int lowerLevel = 0;
+    private int lowerLevel = -1;
 
     private ToolPartFilter(List<ForgeroToolPart> toolParts) {
         this.toolParts = toolParts;
@@ -85,7 +85,7 @@ public class ToolPartFilter {
 
     public List<ForgeroToolPart> getToolParts() {
         return toolParts.stream()
-                .filter(item -> lowerLevel < getToolPartValue(item) && getToolPartValue(item) > upperLevel)
+                .filter(item -> lowerLevel <= getToolPartValue(item) && getToolPartValue(item) < upperLevel)
                 .filter(item -> isFilteredMaterial(item.getPrimaryMaterial()))
                 .filter(this::isFilteredToolPartType)
                 .filter(this::isFilteredToolType)
