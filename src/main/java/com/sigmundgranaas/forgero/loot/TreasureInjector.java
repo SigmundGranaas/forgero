@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.loot;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
@@ -30,11 +31,22 @@ public class TreasureInjector {
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(10, 50))
                 );
+
+                table.pool(registerPatternsInPool(createStandardConstantPool(),
+                        PatternFilter.createPatternFilter()
+                                .filterToolType(ForgeroToolTypes.PICKAXE)
+                                .filterToolPartType(ALL_TOOL_PARTS)
+                                .filterLevel(0, 50))
+                );
             }
             if (id.equals(LootTables.END_CITY_TREASURE_CHEST)) {
                 table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
                         ToolPartFilter.createToolPartFilter()
                                 .filterToolPartType(ALL_TOOL_PARTS)
+                                .filterLevel(50, 100))
+                );
+                table.pool(registerPatternsInPool(createStandardConstantPool(),
+                        PatternFilter.createPatternFilter()
                                 .filterLevel(50, 100))
                 );
             }
@@ -44,6 +56,13 @@ public class TreasureInjector {
                                 .filterToolType(ForgeroToolTypes.SHOVEL)
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(20, 60))
+                );
+
+                table.pool(registerPatternsInPool(createStandardConstantPool(),
+                        PatternFilter.createPatternFilter()
+                                .filterToolType(ForgeroToolTypes.SHOVEL)
+                                .filterToolPartType(ALL_TOOL_PARTS)
+                                .filterLevel(0, 50))
                 );
             }
             if (id.equals(LootTables.SHIPWRECK_TREASURE_CHEST)) {
@@ -79,7 +98,10 @@ public class TreasureInjector {
                 //weapons and handles, ++,0-30
             }
             if (id.equals(LootTables.STRONGHOLD_LIBRARY_CHEST)) {
-
+                table.pool(registerPatternsInPool(createStandardConstantPool(),
+                        PatternFilter.createPatternFilter()
+                                .filterLevel(40, 80))
+                );
                 //all patterns, 40-80
             }
             if (id.equals(LootTables.WOODLAND_MANSION_CHEST)) {
@@ -87,6 +109,14 @@ public class TreasureInjector {
                         ToolPartFilter.createToolPartFilter()
                                 .filterToolType(List.of(ForgeroToolTypes.AXE))
                                 .filterToolPartType(ForgeroToolPartTypes.HANDLE)
+                                .filterLevel(20, 80))
+                );
+
+                table.pool(registerPatternsInPool(createStandardConstantPool(),
+                        PatternFilter.createPatternFilter()
+                                .filterToolType(ForgeroToolTypes.AXE)
+                                .filterToolType(ForgeroToolTypes.PICKAXE)
+                                .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(20, 80))
                 );
                 //weapons and axes and patterns - 20-80
@@ -98,6 +128,13 @@ public class TreasureInjector {
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(0, 60))
                 );
+                table.pool(registerPatternsInPool(createStandardConstantPool(),
+                        PatternFilter.createPatternFilter()
+                                .filterToolType(ForgeroToolTypes.AXE)
+                                .filterToolPartType(ALL_TOOL_PARTS)
+                                .filterLevel(0, 40))
+                );
+
                 //weapons and axes and patterns - 0-60
             }
             if (id.equals(LootTables.VILLAGE_TOOLSMITH_CHEST)) {
@@ -108,14 +145,31 @@ public class TreasureInjector {
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(0, 60))
                 );
+                table.pool(registerPatternsInPool(createStandardConstantPool(),
+                        PatternFilter.createPatternFilter()
+                                .filterToolType(ForgeroToolTypes.AXE)
+                                .filterToolType(ForgeroToolTypes.PICKAXE)
+                                .filterToolType(ForgeroToolTypes.SHOVEL)
+                                .filterToolPartType(ALL_TOOL_PARTS)
+                                .filterLevel(0, 40))
+                );
+
             }
         });
     }
 
     private LootPool.Builder registerToolPartsIntoPool(LootPool.Builder pool, ToolPartFilter toolPartFilter) {
         for (ForgeroToolPart toolPart : toolPartFilter.getToolParts()) {
-            Item patternItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()));
-            pool.with(ItemEntry.builder(patternItem).weight(1000 - getToolPartValue(toolPart)));
+            Item toolPartItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()));
+            pool.with(ItemEntry.builder(toolPartItem).weight(1000 - getToolPartValue(toolPart)));
+        }
+        return pool;
+    }
+
+    private LootPool.Builder registerPatternsInPool(LootPool.Builder pool, PatternFilter toolPartFilter) {
+        for (Pattern pattern : toolPartFilter.getPatterns()) {
+            Item patternItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getPatternIdentifier()));
+            pool.with(ItemEntry.builder(patternItem).weight(100 - pattern.getRarity()));
         }
         return pool;
     }
