@@ -9,8 +9,6 @@ import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
-import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,8 +22,8 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ShovelItem extends net.minecraft.item.ShovelItem implements ForgeroToolItem, DynamicAttributeTool {
-    final Tag<Item> toolType = FabricToolTags.SHOVELS;
+public class ShovelItem extends net.minecraft.item.ShovelItem implements ForgeroToolItem {
+
     private final ForgeroTool tool;
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
 
@@ -81,7 +79,7 @@ public class ShovelItem extends net.minecraft.item.ShovelItem implements Forgero
 
     @Override
     public Tag<Item> getToolTags() {
-        return toolType;
+        return null;
     }
 
     @Override

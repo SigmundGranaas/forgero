@@ -8,12 +8,10 @@ import com.sigmundgranaas.forgero.core.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
-import net.minecraft.resource.ReloadableResourceManagerImpl;
+import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceImpl;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,11 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.io.IOException;
 import java.util.Optional;
 
-@Mixin(ReloadableResourceManagerImpl.class)
+@Mixin(LifecycledResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin {
-    @Shadow
-    @Final
-    private static Logger LOGGER;
 
     @Shadow
     public abstract Resource getResource(Identifier id);
@@ -41,7 +36,7 @@ public abstract class ReloadableResourceManagerImplMixin {
             Optional<ToolPartModelTextureIdentifier> identifierResult = factory.createToolPartTextureIdentifier(id.getPath());
 
             if (identifierResult.isPresent() && ForgeroToolPartTextureRegistry.getInstance(factory).isGeneratedTexture(identifierResult.get())) {
-                TextureLoader loader = new FabricTextureLoader(((ReloadableResourceManagerImpl) (Object) this)::getResource);
+                TextureLoader loader = new FabricTextureLoader(((LifecycledResourceManagerImpl) (Object) this)::getResource);
 
                 Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 

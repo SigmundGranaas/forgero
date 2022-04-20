@@ -11,8 +11,6 @@ import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
-import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -30,9 +28,9 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Locale;
 
-public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, DynamicAttributeTool {
+public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem {
 
-    final Tag<Item> toolType = FabricToolTags.PICKAXES;
+
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
     private final ForgeroTool tool;
 
@@ -81,7 +79,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem, 
 
     @Override
     public Tag<Item> getToolTags() {
-        return toolType;
+        return null;
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
-import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
+import com.sigmundgranaas.forgero.toolhandler.DynamicTool;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public interface ForgeroToolItem extends DynamicAttributeTool {
+public interface ForgeroToolItem extends DynamicTool {
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
 
@@ -95,4 +95,6 @@ public interface ForgeroToolItem extends DynamicAttributeTool {
     default ForgeroTool convertItemStack(ItemStack toolStack, ForgeroTool baseTool) {
         return adapter.getTool(toolStack).orElse(baseTool);
     }
+
+
 }
