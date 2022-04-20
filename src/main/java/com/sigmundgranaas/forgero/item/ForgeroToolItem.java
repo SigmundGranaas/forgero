@@ -9,15 +9,15 @@ import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import com.sigmundgranaas.forgero.toolhandler.DynamicTool;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +26,12 @@ import java.util.UUID;
 public interface ForgeroToolItem extends DynamicTool {
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
-
     FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
+
+    @Override
+    default boolean isEffectiveOn(BlockState state) {
+        return state.isIn(getToolTags());
+    }
 
     Identifier getIdentifier();
 
@@ -51,7 +55,7 @@ public interface ForgeroToolItem extends DynamicTool {
 
     FabricToForgeroToolAdapter getToolAdapter();
 
-    Tag<Item> getToolTags();
+    TagKey<Block> getToolTags();
 
     @Override
     default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
@@ -70,20 +74,9 @@ public interface ForgeroToolItem extends DynamicTool {
         }
     }
 
-    @Override
-    default int getMiningLevel(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
-        if (tag.equals(getToolTags())) {
-            ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
-            Target target = Target.createEmptyTarget();
-            return forgeroTool.getMiningLevel(target);
-        }
 
-        return 0;
-    }
-
-    @Override
-    default float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, @Nullable LivingEntity user) {
-        if (tag.equals(getToolTags())) {
+    default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
+        if (state.isIn(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
             Target target = Target.createEmptyTarget();
             return forgeroTool.getMiningSpeedMultiplier(target);

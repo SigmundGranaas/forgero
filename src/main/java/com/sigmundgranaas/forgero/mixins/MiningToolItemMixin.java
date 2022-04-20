@@ -21,9 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MiningToolItem.class)
 public class MiningToolItemMixin {
-    @Final
-    @Shadow
-    protected float miningSpeed;
 
     @Mutable
     @Final
