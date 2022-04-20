@@ -48,7 +48,7 @@ public class DynamicToolItemStackMixin {
     public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
         if (this.item instanceof DynamicTool holder) {
             float customSpeed = holder.getMiningSpeedMultiplier(state, (ItemStack) (Object) this);
-            if (info.getReturnValueF() < customSpeed) {
+            if (info.getReturnValueF() <= customSpeed) {
                 info.setReturnValue(customSpeed);
             }
         }
