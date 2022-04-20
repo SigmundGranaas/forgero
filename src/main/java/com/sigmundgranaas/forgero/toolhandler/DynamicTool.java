@@ -40,4 +40,8 @@ public interface DynamicTool {
     default boolean isEffectiveOn(BlockState state) {
         return false;
     }
+
+    int getDurability(ItemStack stack);
+
+    int getCustomItemBarStep(ItemStack stack);
 }

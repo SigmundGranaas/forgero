@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.mixins;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.DynamicTool;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -93,8 +92,8 @@ public class DynamicToolItemStackMixin {
 
     @Inject(method = "getMaxDamage", at = @At("HEAD"), cancellable = true)
     public void getCustomDurability(CallbackInfoReturnable<Integer> cir) {
-        if (item instanceof ForgeroToolItem) {
-            cir.setReturnValue(((ForgeroToolItem) item).getDurability((ItemStack) (Object) this));
+        if (item instanceof DynamicTool tool) {
+            cir.setReturnValue(tool.getDurability((ItemStack) (Object) this));
         }
     }
 }
