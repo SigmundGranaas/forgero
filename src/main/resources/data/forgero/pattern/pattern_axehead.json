@@ -4,7 +4,7 @@
   "toolType": "AXE",
   "model": "default",
   "output": "axe_pattern",
-  "rarity": 1,
+  "rarity": 60,
   "materialCount": 3,
   "properties": {
     "attributes": [

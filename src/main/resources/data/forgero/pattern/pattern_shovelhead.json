@@ -4,7 +4,7 @@
   "toolType": "SHOVEL",
   "model": "default",
   "output": "shovel_pattern",
-  "rarity": 1,
+  "rarity": 60,
   "materialCount": 3,
   "properties": {
     "attributes": [

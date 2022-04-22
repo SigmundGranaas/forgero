@@ -4,18 +4,22 @@ import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ToolPartItemImpl extends Item implements ToolPartItem {
     private final PrimaryMaterial material;
@@ -27,6 +31,36 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
         this.material = material;
         this.type = type;
         this.part = part;
+    }
+
+
+    @Override
+    public Text getName() {
+        MutableText text;
+        if(!part.getPattern().getName().equals("default")){
+            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getPattern().getName())).append(" ");
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))))
+                    .append(" ");
+        }else{
+            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))).append(" ");
+        }
+        if(getToolPartType() == ForgeroToolPartTypes.HEAD){
+            String headType = switch (((ToolPartHead)part).getToolType()){
+                case AXE -> "axehead";
+                case PICKAXE -> "pickaxehead";
+                case SHOVEL -> "shovelhead";
+                case SWORD -> "sword";
+            };
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
+        }else{
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartType().getName())));
+        }
+    return text;
+    }
+
+    @Override
+    public Text getName(ItemStack stack) {
+        return getName();
     }
 
     public ForgeroToolPartTypes getToolPartType() {
