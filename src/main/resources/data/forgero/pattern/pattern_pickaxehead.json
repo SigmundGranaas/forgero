@@ -26,11 +26,9 @@
       {
         "type": "BLOCK_BREAKING_PATTERN",
         "pattern": [
-          "xxxxx",
-          "xxxxx",
-          "xxxxx",
-          "xxxxx",
-          "xxxxx"
+          "xxx",
+          "xxx",
+          "xxx"
         ]
       }
     ]

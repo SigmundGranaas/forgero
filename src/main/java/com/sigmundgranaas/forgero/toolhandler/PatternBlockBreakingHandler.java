@@ -16,13 +16,19 @@ public record PatternBlockBreakingHandler(PatternBreaking breakingPattern) {
     public float getHardness(BlockState rootState, BlockPos rootPos, BlockView world, PlayerEntity player) {
         float hardness = rootState.getHardness(world, rootPos);
         if (hardness == -1.0f) {
-            return 0.0f;
+            return hardness;
         }
+        float breakingSpeed = 0.0f;
         hardness = 0.0f;
-        for (Pair<BlockState, BlockPos> state : getAvailableBlocks(world, rootPos, player)) {
-            hardness += state.getLeft().getHardness(world, state.getRight());
+        var availableBlocks = getAvailableBlocks(world, rootPos, player);
+        for (Pair<BlockState, BlockPos> state : availableBlocks) {
+            // I don't know which parameters should be here
+            float harvestable = player.canHarvest(state.getLeft()) ? 30 : 100;
+            hardness += state.getLeft().getHardness(world, state.getRight()) * harvestable;
+            breakingSpeed += player.getBlockBreakingSpeed(state.getLeft());
         }
-        return hardness;
+        breakingSpeed = breakingSpeed / availableBlocks.size();
+        return breakingSpeed / hardness;
     }
 
     public List<Pair<BlockState, BlockPos>> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {

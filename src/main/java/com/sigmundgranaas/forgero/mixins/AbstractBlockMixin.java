@@ -32,10 +32,8 @@ public class AbstractBlockMixin {
                 if (f == -1.0F) {
                     cir.setReturnValue(0.0F);
                 } else {
-                    int i = player.canHarvest(state) ? 30 : 100;
-                    cir.setReturnValue(player.getBlockBreakingSpeed(state) / f / (float) i);
+                    cir.setReturnValue(f);
                 }
-
             }
         }
     }
