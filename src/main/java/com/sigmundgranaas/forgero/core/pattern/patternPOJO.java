@@ -2,12 +2,12 @@ package com.sigmundgranaas.forgero.core.pattern;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyPOJO;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.sigmundgranaas.forgero.core.property.PropertyBuilder.createPropertyListFromPOJO;
 
 public class patternPOJO {
     public String name;
@@ -19,7 +19,7 @@ public class patternPOJO {
     public int materialCount;
 
     public Pattern createPatternFromPojo() {
-        List<Property> propertyList = properties.attributes.stream().map(AttributeBuilder::createAttributeFromPojo).collect(Collectors.toList());
+        List<Property> propertyList = createPropertyListFromPOJO(properties);
         if (type == ForgeroToolPartTypes.HEAD) {
             return new HeadPattern(type, name, propertyList, toolType, rarity, model, materialCount);
         } else {

@@ -4,6 +4,10 @@
     {
       "id": "forgero:pickaxehead_pattern_default",
       "required": false
+    },
+    {
+      "id": "forgero:pickaxehead_pattern_pattern",
+      "required": false
     }
   ]
 }

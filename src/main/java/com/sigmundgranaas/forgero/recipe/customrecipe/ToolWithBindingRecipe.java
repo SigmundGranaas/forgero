@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
@@ -62,7 +61,7 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
         if (headItem.hasNbt() && headItem.getOrCreateNbt().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
             head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getOrCreateNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
         } else {
-            head = ((ForgeroToolItem) getOutput().getItem()).getHead();
+            head = (ToolPartHead) ((ToolPartItem) headItem.getItem()).getPart();
         }
 
         if (handleItem.hasNbt() && handleItem.getOrCreateNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
