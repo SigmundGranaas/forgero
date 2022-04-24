@@ -71,6 +71,41 @@
     {
       "id": "forgero:netherite_axehead_pattern",
       "required": false
+    },  {
+      "id": "forgero:oak_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:birch_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:spruce_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:acacia_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:stone_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:iron_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:gold_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:diamond_axehead_vein",
+      "required": false
+    },
+    {
+      "id": "forgero:netherite_axehead_vein",
+      "required": false
     }
   ]
 }

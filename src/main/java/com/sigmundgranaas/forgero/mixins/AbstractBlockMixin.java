@@ -2,11 +2,14 @@ package com.sigmundgranaas.forgero.mixins;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
+import com.sigmundgranaas.forgero.core.property.active.ActivePropertyType;
 import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
+import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.attribute.SingleTarget;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.PatternBlockBreakingHandler;
+import com.sigmundgranaas.forgero.toolhandler.VeinMiningHandler;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +31,13 @@ public class AbstractBlockMixin {
             ForgeroTool tool = toolItem.convertItemStack(player.getMainHandStack(), toolItem.getTool());
             var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
             if (!activeProperties.isEmpty()) {
-                float f = new PatternBlockBreakingHandler((PatternBreaking) activeProperties.get(0)).getHardness(state, pos, world, player);
+                float f;
+                if(activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN){
+                    f = new PatternBlockBreakingHandler((PatternBreaking) activeProperties.get(0)).getHardness(state, pos, world, player);
+                }else{
+                    f = new VeinMiningHandler((VeinBreaking) activeProperties.get(0)).getHardness(state, pos, world, player);
+                }
+
                 if (f == -1.0F) {
                     cir.setReturnValue(0.0F);
                 } else {

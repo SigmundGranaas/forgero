@@ -14,6 +14,7 @@ public class PropertyPOJO {
 
     public static class Active {
         public ActivePropertyType type;
+        public int depth;
         public String[] pattern;
     }
 
