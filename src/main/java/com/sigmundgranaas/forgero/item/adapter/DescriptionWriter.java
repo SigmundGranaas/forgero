@@ -165,8 +165,11 @@ public record DescriptionWriter(
     private void createVeinMiningDescription(VeinBreaking property) {
         MutableText mutableText = new LiteralText(" Vein mining").formatted(Formatting.GRAY);
         tooltip.add(mutableText);
+        MutableText blocks = new LiteralText("  Blocks: ").formatted(Formatting.GRAY);
+        blocks.append(new LiteralText(property.description()).formatted(Formatting.WHITE));
+        tooltip.add(blocks);
         MutableText depth = new LiteralText("  Depth: ").formatted(Formatting.GRAY);
-        depth.append(new LiteralText(String.valueOf(property.depth()))).formatted(Formatting.WHITE);
+        depth.append(new LiteralText(String.valueOf(property.depth())).formatted(Formatting.WHITE));
         tooltip.add(depth);
 
     }

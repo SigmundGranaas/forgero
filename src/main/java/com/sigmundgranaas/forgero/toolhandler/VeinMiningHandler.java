@@ -2,16 +2,22 @@ package com.sigmundgranaas.forgero.toolhandler;
 
 import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
+import net.fabricmc.fabric.impl.tag.convention.TagRegistration;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tag.TagKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+
+import static com.sigmundgranaas.forgero.registry.ItemRegistryImpl.VEIN_MINING_ORES;
 
 public record VeinMiningHandler(VeinBreaking veinMiningHandler) {
     public float getHardness(BlockState rootState, BlockPos rootPos, BlockView world, PlayerEntity player) {
@@ -46,7 +52,10 @@ public record VeinMiningHandler(VeinBreaking veinMiningHandler) {
             depth -= 1;
         }
 
-        calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
+        if(rootState.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(veinMiningHandler.tag())))){
+            calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
+
+        }
 
         for(BlockPos pos: blockSet){
             list.add(new Pair<>(world.getBlockState(pos), pos));
@@ -70,7 +79,8 @@ public record VeinMiningHandler(VeinBreaking veinMiningHandler) {
 
             if(world.getBlockState(newBlock).getBlock() == rootBlock
                     && isBreakableBlock(world, newBlock, player)
-            && !blockSet.contains(newBlock)){
+            && !blockSet.contains(newBlock)
+            ){
                 if(depth < 1){
                     return;
                 }

@@ -7,7 +7,7 @@ public class ActivePropertyBuilder {
         if(activePOJO.type == ActivePropertyType.BLOCK_BREAKING_PATTERN){
             return new PatternBreaking(activePOJO.pattern);
         }else{
-            return new VeinBreaking(activePOJO.depth);
+            return new VeinBreaking(activePOJO.depth, activePOJO.tag, activePOJO.description);
         }
     }
 }
