@@ -8,6 +8,11 @@ import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyStream;
+import com.sigmundgranaas.forgero.core.property.TargetTypes;
+import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
+import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
+import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.core.property.attribute.SingleTarget;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
@@ -20,6 +25,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,8 +80,11 @@ public record DescriptionWriter(
 
     @Override
     public void addToolPartProperties(PropertyStream stream) {
-        tooltip.add(new LiteralText("Attributes: "));
         List<Property> properties = stream.collect(Collectors.toList());
+
+        addActiveProperty(Property.stream(properties).getActiveProperties().toList());
+
+        tooltip.add(new LiteralText("Attributes: "));
         addAllAttribute(properties);
     }
 
@@ -131,9 +140,45 @@ public record DescriptionWriter(
 
     @Override
     public void addToolProperties(PropertyStream stream) {
-        tooltip.add(new LiteralText("Attributes: "));
         List<Property> properties = stream.collect(Collectors.toList());
+
+        addActiveProperty(Property.stream(properties).getActiveProperties().toList());
+        tooltip.add(new LiteralText("Attributes: "));
         addToolAttributes(properties);
+    }
+
+    private void addActiveProperty(List<ActiveProperty> activeProperties) {
+        if(activeProperties.size() > 0){
+            tooltip.add(new LiteralText("Properties: "));
+        }
+        activeProperties.forEach(this::createPropertyDescription);
+
+    }
+
+    private void createPropertyDescription(ActiveProperty property) {
+        switch (property.getActiveType()){
+            case VEIN_MINING_PATTERN -> createVeinMiningDescription((VeinBreaking)property);
+            case BLOCK_BREAKING_PATTERN -> createPatternMiningDescription((PatternBreaking)property);
+        };
+    }
+
+    private void createVeinMiningDescription(VeinBreaking property) {
+        MutableText mutableText = new LiteralText(" Vein mining").formatted(Formatting.GRAY);
+        tooltip.add(mutableText);
+        MutableText depth = new LiteralText("  Depth: ").formatted(Formatting.GRAY);
+        depth.append(new LiteralText(String.valueOf(property.depth()))).formatted(Formatting.WHITE);
+        tooltip.add(depth);
+
+    }
+
+    private void createPatternMiningDescription(PatternBreaking property) {
+        MutableText mutableText = new LiteralText(" Pattern Mining").formatted(Formatting.GRAY);
+        tooltip.add(mutableText);
+
+        for (String line:property.pattern()) {
+            MutableText patternText = new LiteralText(String.format("   %s", line)).formatted(Formatting.WHITE);
+            tooltip.add(patternText);
+        }
     }
 
 
@@ -143,12 +188,15 @@ public record DescriptionWriter(
         MutableText mutableText = new LiteralText("Gem: ").formatted(Formatting.GRAY);
         mutableText.append(new LiteralText(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
+
+        addActiveProperty(Property.stream(gem.getProperties()).getActiveProperties().toList());
+
         addAllAttribute(gem.getProperties());
     }
 
     public void writePatternDescription(Pattern pattern) {
-        MutableText mutableText = new LiteralText("Material count: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", pattern.getMaterialCount())));
+        MutableText mutableText = new LiteralText("Material count: ").formatted(Formatting.GRAY);mutableText.append(new LiteralText(String.format("%s", pattern.getMaterialCount())));
+
         tooltip.add(mutableText);
     }
 }
