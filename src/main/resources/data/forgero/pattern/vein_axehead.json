@@ -2,7 +2,7 @@
   "name": "vein",
   "type": "HEAD",
   "toolType": "AXE",
-  "model": "default",
+  "model": "vein",
   "output": "axe_vein",
   "rarity": 80,
   "materialCount": 3,
