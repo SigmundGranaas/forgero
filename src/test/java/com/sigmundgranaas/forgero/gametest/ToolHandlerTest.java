@@ -67,7 +67,7 @@ public class ToolHandlerTest {
         BlockPos targetPos = new BlockPos(1, 1, 0);
         BlockPos absolute = context.getAbsolutePos(targetPos);
         mockPlayer.teleport(context.getWorld(), absolute.getX(), absolute.getY() + 2, absolute.getZ(), 0, 0f);
-        mockPlayer.interactionManager.changeGameMode(GameMode.CREATIVE);
+        mockPlayer.interactionManager.changeGameMode(GameMode.SURVIVAL);
 
 
         boolean isDestroyed = true;
