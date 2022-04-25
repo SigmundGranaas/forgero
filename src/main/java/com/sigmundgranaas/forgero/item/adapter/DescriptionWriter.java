@@ -14,7 +14,6 @@ import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -41,16 +40,16 @@ public record DescriptionWriter(
     @Override
     public void addSecondaryMaterial(SecondaryMaterial material) {
         Rarity rarity = getRarityFromInt((int) Property.stream(material.getSecondaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
-        MutableText mutableText = new LiteralText("  Secondary: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(rarity.formatting));
+        MutableText mutableText = Text.literal("  Secondary: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s", material.getName())).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
     @Override
     public void addGem(Gem gem) {
         Rarity rarity = getRarityFromGemLevel(gem.getLevel());
-        MutableText mutableText = new LiteralText("  Gem: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s, level %s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
+        MutableText mutableText = Text.literal("  Gem: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s, level %s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
@@ -67,14 +66,14 @@ public record DescriptionWriter(
     @Override
     public void addPrimaryMaterial(PrimaryMaterial material) {
         Rarity rarity = getRarityFromInt((int) Property.stream(material.getPrimaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
-        MutableText mutableText = new LiteralText("  Primary: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(rarity.formatting));
+        MutableText mutableText = Text.literal("  Primary: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s", material.getName())).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
     @Override
     public void addToolPartProperties(PropertyStream stream) {
-        tooltip.add(new LiteralText("Attributes: "));
+        tooltip.add(Text.literal("Attributes: "));
         List<Property> properties = stream.collect(Collectors.toList());
         addAllAttribute(properties);
     }
@@ -96,8 +95,8 @@ public record DescriptionWriter(
     private void addAttributeInt(List<Property> attributes, AttributeType type, String title) {
         int result = (int) Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
         if (result > 0) {
-            MutableText miningLevel = new LiteralText(String.format("  %s : ", title)).formatted(Formatting.GRAY);
-            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = Text.literal(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
@@ -105,33 +104,33 @@ public record DescriptionWriter(
     private void addAttribute(List<Property> attributes, AttributeType type, String title) {
         float result = Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
         if (result != 0f) {
-            MutableText miningLevel = new LiteralText(String.format("  %s : ", title)).formatted(Formatting.GRAY);
-            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = Text.literal(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
 
     @Override
     public void addHead(ToolPartHead head) {
-        tooltip.add(new LiteralText("Head: "));
+        tooltip.add(Text.literal("Head: "));
         head.createToolPartDescription(this);
     }
 
     @Override
     public void addHandle(ToolPartHandle handle) {
-        tooltip.add(new LiteralText("Handle: "));
+        tooltip.add(Text.literal("Handle: "));
         handle.createToolPartDescription(this);
     }
 
     @Override
     public void addBinding(ToolPartBinding binding) {
-        tooltip.add(new LiteralText("Binding: "));
+        tooltip.add(Text.literal("Binding: "));
         binding.createToolPartDescription(this);
     }
 
     @Override
     public void addToolProperties(PropertyStream stream) {
-        tooltip.add(new LiteralText("Attributes: "));
+        tooltip.add(Text.literal("Attributes: "));
         List<Property> properties = stream.collect(Collectors.toList());
         addToolAttributes(properties);
     }
@@ -140,15 +139,15 @@ public record DescriptionWriter(
     @Override
     public void createGemDescription(Gem gem) {
         Rarity rarity = getRarityFromGemLevel(gem.getLevel());
-        MutableText mutableText = new LiteralText("Gem: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
+        MutableText mutableText = Text.literal("Gem: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
         addAllAttribute(gem.getProperties());
     }
 
     public void writePatternDescription(Pattern pattern) {
-        MutableText mutableText = new LiteralText("Material count: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", pattern.getMaterialCount())));
+        MutableText mutableText = Text.literal("Material count: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s", pattern.getMaterialCount())));
         tooltip.add(mutableText);
     }
 }

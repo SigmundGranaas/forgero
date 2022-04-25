@@ -9,9 +9,9 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.random.AbstractRandom;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -25,7 +25,7 @@ public class ToolModelVariant extends ForgeroCustomModelProvider {
     }
 
     @Override
-    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
+    public void emitItemQuads(ItemStack stack, Supplier<AbstractRandom> randomSupplier, RenderContext context) {
         bakedModelCollection.getToolModel(stack).emitItemQuads(stack, null, context);
     }
 

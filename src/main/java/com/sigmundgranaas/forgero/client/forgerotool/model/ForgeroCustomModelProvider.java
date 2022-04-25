@@ -19,6 +19,7 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.AbstractRandom;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,19 +44,14 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 
     public static Reader getReaderForResource(Identifier location) throws IOException {
         Identifier file = new Identifier(location.getNamespace(), location.getPath() + ".json");
-        Resource resource = MinecraftClient.getInstance().getResourceManager().getResource(file);
-        return new BufferedReader(new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
+        Optional<Resource> resource = MinecraftClient.getInstance().getResourceManager().getResource(file);
+        return new BufferedReader(new InputStreamReader(resource.get().getInputStream(), Charsets.UTF_8));
     }
 
 
     @Override
     public ModelTransformation getTransformation() {
         return loadTransformFromJson(new Identifier("minecraft:models/item/handheld"));
-    }
-
-    @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
-        return Collections.emptyList();
     }
 
     @Override
@@ -104,8 +100,12 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
     }
 
     @Override
-    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
+    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<AbstractRandom> randomSupplier, RenderContext context) {
 
     }
 
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, AbstractRandom random) {
+        return Collections.emptyList();
+    }
 }
