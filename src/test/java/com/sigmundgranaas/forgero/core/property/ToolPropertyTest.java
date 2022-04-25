@@ -34,6 +34,7 @@ public class ToolPropertyTest {
 
     public static Supplier<Pattern> HANDLE_PATTERN = () -> ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("handle_pattern_default")).findFirst().get();
     public static Supplier<HeadPattern> PICKAXEHEAD_PATTERN = () -> (HeadPattern) ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("pickaxehead_pattern_default")).findFirst().get();
+    public static Supplier<HeadPattern> PICKAXEHEAD_PATTERN_PATTERN = () -> (HeadPattern) ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("pickaxehead_pattern_pattern")).findFirst().get();
 
     @Test
     void testToolDurability() {
