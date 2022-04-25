@@ -2,13 +2,18 @@ package com.sigmundgranaas.forgero.mixins;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
+import com.sigmundgranaas.forgero.core.property.active.ActivePropertyType;
 import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
+import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.attribute.SingleTarget;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.PatternBlockBreakingHandler;
+import com.sigmundgranaas.forgero.toolhandler.VeinMiningHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Final;
@@ -19,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collections;
+import java.util.List;
 
 @Mixin(ClientPlayerInteractionManager.class)
 public abstract class PlayerInteractionManagerMixin {
@@ -44,7 +50,13 @@ public abstract class PlayerInteractionManagerMixin {
             ForgeroTool tool = toolItem.convertItemStack(client.player.getMainHandStack(), toolItem.getTool());
             var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
             if (!activeProperties.isEmpty()) {
-                var availableBlocks = new PatternBlockBreakingHandler((PatternBreaking) activeProperties.get(0)).getAvailableBlocks(this.client.world, pos, this.client.player);
+                List<Pair<BlockState, BlockPos>> availableBlocks;
+                if(activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN){
+                    availableBlocks  = new PatternBlockBreakingHandler((PatternBreaking) activeProperties.get(0)).getAvailableBlocks(this.client.world, pos, this.client.player);
+                }else{
+                    availableBlocks  = new VeinMiningHandler((VeinBreaking) activeProperties.get(0)).getAvailableBlocks(this.client.world, pos, this.client.player);
+                }
+
                 for (var block : availableBlocks) {
                     if (!block.getRight().equals(pos)) {
                         this.breakBlock(block.getRight());
@@ -57,7 +69,7 @@ public abstract class PlayerInteractionManagerMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;setBlockBreakingInfo(ILnet/minecraft/util/math/BlockPos;I)V"), method = "updateBlockBreakingProgress", cancellable = true)
     public void updateSecondaryBlocks(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
         if (this.client.player.getMainHandStack().getItem() instanceof ForgeroToolItem tool) {
-            this.client.world.setBlockBreakingInfo(this.client.player.getId(), new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), (int) (this.currentBreakingProgress * 10.0F) - 1);
+            //this.client.world.setBlockBreakingInfo(this.client.player.getId(), new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), (int) (this.currentBreakingProgress * 10.0F) - 1);
         }
     }
 }

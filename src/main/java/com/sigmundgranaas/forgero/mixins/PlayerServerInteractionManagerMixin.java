@@ -2,15 +2,20 @@ package com.sigmundgranaas.forgero.mixins;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
+import com.sigmundgranaas.forgero.core.property.active.ActivePropertyType;
 import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
+import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.attribute.SingleTarget;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.PatternBlockBreakingHandler;
+import com.sigmundgranaas.forgero.toolhandler.VeinMiningHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Final;
@@ -21,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collections;
+import java.util.List;
 
 @Mixin(ServerPlayerInteractionManager.class)
 public abstract class PlayerServerInteractionManagerMixin {
@@ -41,7 +47,12 @@ public abstract class PlayerServerInteractionManagerMixin {
             ForgeroTool tool = toolItem.convertItemStack(player.getMainHandStack(), toolItem.getTool());
             var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
             if (!activeProperties.isEmpty()) {
-                var availableBlocks = new PatternBlockBreakingHandler((PatternBreaking) activeProperties.get(0)).getAvailableBlocks(world, pos, player);
+                List<Pair<BlockState, BlockPos>> availableBlocks;
+                if(activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN){
+                    availableBlocks  = new PatternBlockBreakingHandler((PatternBreaking) activeProperties.get(0)).getAvailableBlocks(world, pos, player);
+                }else{
+                    availableBlocks  = new VeinMiningHandler((VeinBreaking) activeProperties.get(0)).getAvailableBlocks(world, pos, player);
+                }
                 for (var block : availableBlocks) {
                     if (!block.getRight().equals(pos)) {
                         this.finishMining(block.getRight(), action, "destroyed");

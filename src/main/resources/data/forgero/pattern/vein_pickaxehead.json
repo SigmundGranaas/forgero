@@ -1,10 +1,10 @@
 {
-  "name": "pattern",
+  "name": "vein",
   "type": "HEAD",
   "toolType": "PICKAXE",
   "model": "default",
-  "output": "pickaxe_pattern",
-  "rarity": 60,
+  "output": "pickaxe_vein",
+  "rarity": 80,
   "materialCount": 3,
   "properties": {
     "attributes": [
@@ -24,12 +24,10 @@
     "passive:": [],
     "active": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
-        "pattern": [
-          "xxx",
-          "xxx",
-          "xxx"
-        ]
+        "type": "VEIN_MINING_PATTERN",
+        "depth": 10,
+        "tag": "forgero:vein_mining_ores",
+        "description": "Ores"
       }
     ]
   }

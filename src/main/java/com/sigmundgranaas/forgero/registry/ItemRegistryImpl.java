@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -22,6 +23,8 @@ public class ItemRegistryImpl implements ItemRegistry {
     public static final TagKey<Item> SHOVELHEAD_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_patterns"));
     public static final TagKey<Item> AXEHEAD_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_patterns"));
     public static final TagKey<Item> HANDLES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handles"));
+    public static final TagKey<Block> VEIN_MINING_ORES = TagKey.of(Registry.BLOCK_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "vein_mining_ores"));
+
 
     private static ItemRegistry INSTANCE;
     private final ItemCollection collection;

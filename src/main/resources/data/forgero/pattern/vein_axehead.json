@@ -1,10 +1,10 @@
 {
-  "name": "pattern",
+  "name": "vein",
   "type": "HEAD",
-  "toolType": "PICKAXE",
+  "toolType": "AXE",
   "model": "default",
-  "output": "pickaxe_pattern",
-  "rarity": 60,
+  "output": "axe_vein",
+  "rarity": 80,
   "materialCount": 3,
   "properties": {
     "attributes": [
@@ -12,24 +12,22 @@
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 1.0
+        "value": 6.0
       },
       {
         "type": "ATTACK_SPEED",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": -2.8
+        "value": -3.0
       }
     ],
     "passive:": [],
     "active": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
-        "pattern": [
-          "xxx",
-          "xxx",
-          "xxx"
-        ]
+        "type": "VEIN_MINING_PATTERN",
+        "depth": 10,
+        "tag": "minecraft:logs",
+        "description": "Logs"
       }
     ]
   }

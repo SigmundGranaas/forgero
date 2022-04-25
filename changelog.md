@@ -1,4 +1,3 @@
-### Changlelog 0.4.2
+### Changlelog 0.5.0-RCA-1
 
-* Added support for 1.18.2
-* All recipes relying on tags are broken
+* Added support for Vein mining and Tools destroying predefined patterns, like 3x3

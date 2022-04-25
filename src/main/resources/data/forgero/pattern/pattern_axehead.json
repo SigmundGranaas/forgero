@@ -1,9 +1,9 @@
 {
   "name": "pattern",
   "type": "HEAD",
-  "toolType": "PICKAXE",
+  "toolType": "AXE",
   "model": "default",
-  "output": "pickaxe_pattern",
+  "output": "axe_pattern",
   "rarity": 60,
   "materialCount": 3,
   "properties": {
@@ -12,13 +12,13 @@
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 1.0
+        "value": 6.0
       },
       {
         "type": "ATTACK_SPEED",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": -2.8
+        "value": -3.0
       }
     ],
     "passive:": [],
