@@ -24,6 +24,7 @@ public class ItemRegistryImpl implements ItemRegistry {
     public static final TagKey<Item> AXEHEAD_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_patterns"));
     public static final TagKey<Item> HANDLES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handles"));
     public static final TagKey<Block> VEIN_MINING_ORES = TagKey.of(Registry.BLOCK_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "vein_mining_ores"));
+    public static final TagKey<Block> VEIN_MINING_SAND = TagKey.of(Registry.BLOCK_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "vein_mining_sand"));
 
 
     private static ItemRegistry INSTANCE;
