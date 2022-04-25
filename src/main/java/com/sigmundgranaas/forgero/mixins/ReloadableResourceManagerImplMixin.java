@@ -30,7 +30,7 @@ public abstract class ReloadableResourceManagerImplMixin {
     @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
 
-        if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent") && !id.getPath().contains("pattern")) {
+        if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent")) {
             FabricTextureIdentifierFactory factory = new FabricTextureIdentifierFactory();
 
             Optional<ToolPartModelTextureIdentifier> identifierResult = factory.createToolPartTextureIdentifier(id.getPath());

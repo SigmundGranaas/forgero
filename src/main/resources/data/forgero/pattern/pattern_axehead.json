@@ -2,7 +2,7 @@
   "name": "pattern",
   "type": "HEAD",
   "toolType": "AXE",
-  "model": "default",
+  "model": "pattern",
   "output": "axe_pattern",
   "rarity": 60,
   "materialCount": 3,

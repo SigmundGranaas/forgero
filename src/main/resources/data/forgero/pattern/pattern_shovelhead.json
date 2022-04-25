@@ -2,7 +2,7 @@
   "name": "pattern",
   "type": "HEAD",
   "toolType": "SHOVEL",
-  "model": "default",
+  "model": "pattern",
   "output": "shovel_pattern",
   "rarity": 60,
   "materialCount": 3,
