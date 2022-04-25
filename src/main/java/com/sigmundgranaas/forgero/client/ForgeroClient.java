@@ -15,6 +15,7 @@ import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.fabricmc.api.ClientModInitializer;
@@ -87,10 +88,8 @@ public class ForgeroClient implements ClientModInitializer {
                 for (Item toolPart : itemCollection.getToolParts()) {
                     ForgeroToolPart toolPartItem = ((ToolPartItem) toolPart).getPart();
 
-                    if (toolPartItem.getToolPartType() == ForgeroToolPartTypes.HEAD) {
-                        registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.PICKAXEHEAD, ModelLayer.GEM, toolPartItem.getPattern().getModel()));
-                        registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.SHOVELHEAD, ModelLayer.GEM, toolPartItem.getPattern().getModel()));
-                        registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.AXEHEAD, ModelLayer.GEM, toolPartItem.getPattern().getModel()));
+                    if (toolPartItem instanceof ToolPartHead head) {
+                        registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.getModelType(head, head.getToolType()), ModelLayer.GEM, toolPartItem.getPattern().getModel()));
                     }
                     if (toolPartItem.getToolPartType() == ForgeroToolPartTypes.BINDING) {
                         registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.BINDING, ModelLayer.GEM, toolPartItem.getPattern().getModel()));
