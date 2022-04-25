@@ -2,7 +2,7 @@
   "name": "vein",
   "type": "HEAD",
   "toolType": "PICKAXE",
-  "model": "default",
+  "model": "vein",
   "output": "pickaxe_vein",
   "rarity": 80,
   "materialCount": 3,
