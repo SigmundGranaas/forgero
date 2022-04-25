@@ -2,7 +2,7 @@
   "name": "vein",
   "type": "HEAD",
   "toolType": "SHOVEL",
-  "model": "default",
+  "model": "vein",
   "output": "shovel_vein",
   "rarity": 80,
   "materialCount": 3,
