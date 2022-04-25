@@ -16,7 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,26 +26,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
+/**
+ * Mixin originally used by The Fabric APIs dynamic attribute module, but has since been deprecated.
+ * This class is almost an identical copy of the mixin developed by the Fabric project.
+ * This is awaiting a rewrite to better suit the purpose of this mod, but is being kept while creating a new tool handler
+ * <p>
+ * All credits go to the original authors <a href="https://github.com/FabricMC/fabric/tree/1.18/fabric-tool-attribute-api-v1/src/main/java/net/fabricmc/fabric"></a>
+ */
 @Mixin(ItemStack.class)
-public class DynamicToolItemStackMixin {
-    @Shadow
-    @Final
-    @Deprecated
-    private Item item;
+public abstract class DynamicToolItemStackMixin {
+
     @Unique
     @Nullable
     private LivingEntity contextEntity = null;
 
+    @Shadow
+    public abstract Item getItem();
+
     @Inject(at = @At("RETURN"), method = "isSuitableFor", cancellable = true)
     public void isEffectiveOn(BlockState state, CallbackInfoReturnable<Boolean> info) {
-        if (this.item instanceof DynamicTool holder) {
+        if (this.getItem() instanceof DynamicTool holder) {
             info.setReturnValue(holder.isEffectiveOn(state));
         }
     }
 
     @Inject(at = @At("RETURN"), method = "getMiningSpeedMultiplier", cancellable = true)
     public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
-        if (this.item instanceof DynamicTool holder) {
+        if (this.getItem() instanceof DynamicTool holder) {
             float customSpeed = holder.getMiningSpeedMultiplier(state, (ItemStack) (Object) this);
             if (info.getReturnValueF() <= customSpeed) {
                 info.setReturnValue(customSpeed);
@@ -92,7 +98,7 @@ public class DynamicToolItemStackMixin {
 
     @Inject(method = "getMaxDamage", at = @At("HEAD"), cancellable = true)
     public void getCustomDurability(CallbackInfoReturnable<Integer> cir) {
-        if (item instanceof DynamicTool tool) {
+        if (this.getItem() instanceof DynamicTool tool) {
             cir.setReturnValue(tool.getDurability((ItemStack) (Object) this));
         }
     }
