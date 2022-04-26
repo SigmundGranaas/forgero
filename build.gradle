@@ -113,8 +113,8 @@ curseforge {
         mainArtifact(remapJar) {
             displayName = "Forgero [Fabric]: $project.version"
             relations {
-                embeddedLibrary 'advanced_runtime_resource_pack'
-                requiredDependency 'fabric'
+                embeddedLibrary 'arrp'
+                requiredDependency 'fabric-api'
             }
         }
     }
