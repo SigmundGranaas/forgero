@@ -37,25 +37,25 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
     @Override
     public Text getName() {
         MutableText text;
-        if(!part.getPattern().getName().equals("default")){
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getPattern().getName())).append(" ");
+        if (!part.getSchematic().getName().equals("default")) {
+            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getSchematic().getName())).append(" ");
             text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))))
                     .append(" ");
-        }else{
+        } else {
             text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))).append(" ");
         }
-        if(getToolPartType() == ForgeroToolPartTypes.HEAD){
-            String headType = switch (((ToolPartHead)part).getToolType()){
+        if (getToolPartType() == ForgeroToolPartTypes.HEAD) {
+            String headType = switch (((ToolPartHead) part).getToolType()) {
                 case AXE -> "axehead";
                 case PICKAXE -> "pickaxehead";
                 case SHOVEL -> "shovelhead";
                 case SWORD -> "sword";
             };
             text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
-        }else{
+        } else {
             text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartType().getName())));
         }
-    return text;
+        return text;
     }
 
     @Override

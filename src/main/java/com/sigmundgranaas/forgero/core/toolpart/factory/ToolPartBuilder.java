@@ -5,17 +5,17 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 
 public abstract class ToolPartBuilder {
     protected final PrimaryMaterial primary;
     protected SecondaryMaterial secondary;
     protected Gem gem;
-    protected Pattern pattern;
+    protected Schematic pattern;
 
 
-    public ToolPartBuilder(PrimaryMaterial primary, Pattern pattern) {
+    public ToolPartBuilder(PrimaryMaterial primary, Schematic pattern) {
         this.primary = primary;
         this.secondary = new EmptySecondaryMaterial();
         this.gem = EmptyGem.createEmptyGem();
@@ -26,7 +26,7 @@ public abstract class ToolPartBuilder {
         this.primary = part.getPrimaryMaterial();
         this.secondary = part.getSecondaryMaterial();
         this.gem = part.getGem();
-        this.pattern = part.getPattern();
+        this.pattern = part.getSchematic();
     }
 
     public PrimaryMaterial getPrimary() {
@@ -48,7 +48,7 @@ public abstract class ToolPartBuilder {
 
     public abstract ToolPartBuilder setGem(Gem newGem);
 
-    public Pattern getPattern() {
+    public Schematic getPattern() {
         return pattern;
     }
 

@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 
 public interface ForgeroToolPart {
     PrimaryMaterial getPrimaryMaterial();
@@ -45,5 +45,5 @@ public interface ForgeroToolPart {
         writer.addToolPartProperties(Property.stream(getState().getProperties(Target.createEmptyTarget())));
     }
 
-    Pattern getPattern();
+    Schematic getSchematic();
 }

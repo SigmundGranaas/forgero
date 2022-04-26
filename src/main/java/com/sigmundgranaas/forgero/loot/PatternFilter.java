@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.loot;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.pattern.HeadPattern;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
@@ -15,19 +15,19 @@ public class PatternFilter {
     private final List<String> filteredMaterials = new ArrayList<>();
     private final Set<ForgeroToolTypes> filteredTools = new HashSet<>();
     private final Set<ForgeroToolPartTypes> filteredToolParts = new HashSet<>();
-    private final List<Pattern> patterns;
+    private final List<Schematic> patterns;
     private int upperLevel = 200;
     private int lowerLevel = -1;
 
-    private PatternFilter(List<Pattern> patterns) {
+    private PatternFilter(List<Schematic> patterns) {
         this.patterns = patterns;
     }
 
     public static PatternFilter createPatternFilter() {
-        return new PatternFilter(ForgeroRegistry.getInstance().patternCollection().getPatterns());
+        return new PatternFilter(ForgeroRegistry.getInstance().schematicCollection().getSchematics());
     }
 
-    public static int getToolPartValue(Pattern part) {
+    public static int getToolPartValue(Schematic part) {
         return part.getRarity();
     }
 
@@ -64,7 +64,7 @@ public class PatternFilter {
         return this;
     }
 
-    public List<Pattern> getPatterns() {
+    public List<Schematic> getPatterns() {
         return patterns.stream()
                 .filter(item -> lowerLevel <= getToolPartValue(item) && getToolPartValue(item) < upperLevel)
                 .filter(this::isFilteredToolPartType)
@@ -72,17 +72,17 @@ public class PatternFilter {
                 .toList();
     }
 
-    private boolean isFilteredToolType(Pattern pattern) {
+    private boolean isFilteredToolType(Schematic pattern) {
         if (filteredTools.size() == 0) {
             return true;
-        } else if (pattern instanceof HeadPattern head) {
+        } else if (pattern instanceof HeadSchematic head) {
             return filteredTools.contains(head.getToolType());
         } else {
             return true;
         }
     }
 
-    private boolean isFilteredToolPartType(Pattern item) {
+    private boolean isFilteredToolPartType(Schematic item) {
         if (filteredToolParts.size() == 0) {
             return true;
         } else {

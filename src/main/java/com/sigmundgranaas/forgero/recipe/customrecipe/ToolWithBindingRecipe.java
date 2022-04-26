@@ -73,7 +73,7 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
         if (bindingItem.hasNbt() && bindingItem.getOrCreateNbt().contains(BINDING_NBT_IDENTIFIER)) {
             binding = (ToolPartBinding) NBTFactory.INSTANCE.createToolPartFromNBT(bindingItem.getOrCreateNbt().getCompound(BINDING_NBT_IDENTIFIER));
         } else {
-            binding = ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(((ToolPartItem) bindingItem.getItem()).getPrimaryMaterial(), ((ToolPartItem) bindingItem.getItem()).getPart().getPattern()).createToolPart();
+            binding = ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(((ToolPartItem) bindingItem.getItem()).getPrimaryMaterial(), ((ToolPartItem) bindingItem.getItem()).getPart().getSchematic()).createToolPart();
         }
 
         ForgeroTool tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle, binding);

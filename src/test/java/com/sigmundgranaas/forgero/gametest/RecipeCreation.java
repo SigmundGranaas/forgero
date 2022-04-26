@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
@@ -30,9 +30,9 @@ import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerW
 
 public class RecipeCreation {
 
-    public static Item testHandleRecipe(Item ingredient, Pattern pattern, ServerPlayerEntity player) {
+    public static Item testHandleRecipe(Item ingredient, Schematic pattern, ServerPlayerEntity player) {
         CraftingScreenHandler handler = ((CraftingScreenHandler) player.currentScreenHandler);
-        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getPatternIdentifier()))));
+        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getSchematicIdentifier()))));
         for (int i = 0; i < pattern.getMaterialCount(); i++) {
             handler.getSlot(i + 2).setStack(new ItemStack(ingredient));
         }
@@ -50,7 +50,7 @@ public class RecipeCreation {
         int correct = 0;
         for (Item toolPart : ItemCollection.INSTANCE.getToolParts().stream().filter(toolPart -> ((ToolPartItem) toolPart).getType() == ForgeroToolPartTypes.HANDLE).collect(Collectors.toList())
         ) {
-            Item output = testHandleRecipe(Registry.ITEM.get(new Identifier(((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient())), ((ToolPartItem) toolPart).getPart().getPattern(), mockPlayer);
+            Item output = testHandleRecipe(Registry.ITEM.get(new Identifier(((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient())), ((ToolPartItem) toolPart).getPart().getSchematic(), mockPlayer);
             if (output instanceof ToolPartItem && ((ToolPartItem) output).getPart().getToolPartIdentifier().equals(((ToolPartItem) toolPart).getPart().getToolPartIdentifier())) {
                 total++;
                 correct++;

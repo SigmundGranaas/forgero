@@ -17,12 +17,17 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class ItemRegistryImpl implements ItemRegistry {
-    public static final TagKey<Item> HANDLE_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_patterns"));
-    public static final TagKey<Item> BINDING_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "binding_patterns"));
-    public static final TagKey<Item> PICKAXEHEAD_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_patterns"));
-    public static final TagKey<Item> SHOVELHEAD_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_patterns"));
-    public static final TagKey<Item> AXEHEAD_PATTERNS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_patterns"));
+    public static final TagKey<Item> HANDLE_SCHEMATICS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handle_schematics"));
+    public static final TagKey<Item> BINDING_SCHEMATICS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "binding_schematics"));
+    public static final TagKey<Item> PICKAXEHEAD_SCHEMATICS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxehead_schematics"));
+    public static final TagKey<Item> SHOVELHEAD_SCHEMATICS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovelhead_schematics"));
+    public static final TagKey<Item> AXEHEAD_SCHEMATICS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axehead_schematics"));
     public static final TagKey<Item> HANDLES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handles"));
+    public static final TagKey<Item> BINDINGS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "bindings"));
+    public static final TagKey<Item> PICKAXES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxes"));
+    public static final TagKey<Item> SHOVELS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovels"));
+    public static final TagKey<Item> AXES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axes"));
+
     public static final TagKey<Block> VEIN_MINING_ORES = TagKey.of(Registry.BLOCK_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "vein_mining_ores"));
     public static final TagKey<Block> VEIN_MINING_SAND = TagKey.of(Registry.BLOCK_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "vein_mining_sand"));
 
@@ -66,9 +71,9 @@ public class ItemRegistryImpl implements ItemRegistry {
     }
 
     @Override
-    public void registerPatterns() {
-        collection.INSTANCE.INSTANCE.getPatterns().forEach(pattern -> {
-            Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getPattern().getPatternIdentifier()), pattern);
+    public void registerSchematics() {
+        collection.INSTANCE.INSTANCE.getSchematics().forEach(schematicItem -> {
+            Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, schematicItem.getSchematic().getSchematicIdentifier()), schematicItem);
         });
     }
 }

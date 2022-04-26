@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.loot;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
@@ -102,7 +102,7 @@ public class TreasureInjector {
                         PatternFilter.createPatternFilter()
                                 .filterLevel(40, 80))
                 );
-                //all patterns, 40-80
+                //all schematics, 40-80
             }
             if (id.equals(LootTables.WOODLAND_MANSION_CHEST)) {
                 table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
@@ -119,7 +119,7 @@ public class TreasureInjector {
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(20, 80))
                 );
-                //weapons and axes and patterns - 20-80
+                //weapons and axes and schematics - 20-80
             }
             if (id.equals(LootTables.VILLAGE_WEAPONSMITH_CHEST)) {
                 table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
@@ -135,10 +135,10 @@ public class TreasureInjector {
                                 .filterLevel(0, 40))
                 );
 
-                //weapons and axes and patterns - 0-60
+                //weapons and axes and schematics - 0-60
             }
             if (id.equals(LootTables.VILLAGE_TOOLSMITH_CHEST)) {
-                //TOOLS and patterns - 0-60
+                //TOOLS and schematics - 0-60
                 table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
                         ToolPartFilter.createToolPartFilter()
                                 .filterToolType(List.of(ForgeroToolTypes.AXE, ForgeroToolTypes.PICKAXE, ForgeroToolTypes.SHOVEL))
@@ -167,8 +167,8 @@ public class TreasureInjector {
     }
 
     private LootPool.Builder registerPatternsInPool(LootPool.Builder pool, PatternFilter toolPartFilter) {
-        for (Pattern pattern : toolPartFilter.getPatterns()) {
-            Item patternItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getPatternIdentifier()));
+        for (Schematic pattern : toolPartFilter.getPatterns()) {
+            Item patternItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getSchematicIdentifier()));
             pool.with(ItemEntry.builder(patternItem).weight(100 - pattern.getRarity()));
         }
         return pool;

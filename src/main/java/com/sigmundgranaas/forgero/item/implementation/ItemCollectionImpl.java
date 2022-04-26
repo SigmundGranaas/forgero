@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
-import com.sigmundgranaas.forgero.item.items.PatternItem;
+import com.sigmundgranaas.forgero.item.items.SchematicItem;
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class ItemCollectionImpl implements ItemCollection {
     public static ItemCollection INSTANCE;
     private List<Item> tools = new ArrayList<>();
     private List<Item> toolParts = new ArrayList<>();
-    private List<PatternItem> patterns = new ArrayList<>();
+    private List<SchematicItem> patterns = new ArrayList<>();
 
     public static ItemCollection getInstance() {
         if (INSTANCE == null) {
@@ -35,9 +35,9 @@ public class ItemCollectionImpl implements ItemCollection {
     }
 
     @Override
-    public List<PatternItem> getPatterns() {
+    public List<SchematicItem> getSchematics() {
         if (patterns.isEmpty()) {
-            patterns = ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().map(ItemFactory.INSTANCE::createPattern).collect(Collectors.toList());
+            patterns = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().map(ItemFactory.INSTANCE::createPattern).collect(Collectors.toList());
         }
         return patterns;
     }

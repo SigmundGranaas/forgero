@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.item.items.PatternItem;
+import com.sigmundgranaas.forgero.item.items.SchematicItem;
 import net.minecraft.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,7 +13,7 @@ public class ItemPatternRemainderMixin {
     @Inject(method = "hasRecipeRemainder", at = @At("HEAD"), cancellable = true)
     public void hasRecipeRemainder(CallbackInfoReturnable<Boolean> cir) {
         //noinspection ConstantConditions
-        if (((Object) this) instanceof PatternItem) {
+        if (((Object) this) instanceof SchematicItem) {
             cir.setReturnValue(true);
             cir.cancel();
         }
@@ -23,7 +23,7 @@ public class ItemPatternRemainderMixin {
     @Inject(method = "getRecipeRemainder", at = @At("HEAD"), cancellable = true)
     public void getRecipeRemainder(CallbackInfoReturnable<Item> cir) {
         //noinspection ConstantConditions
-        if (((Object) this) instanceof PatternItem) {
+        if (((Object) this) instanceof SchematicItem) {
             cir.setReturnValue((Item) (Object) this);
             cir.cancel();
         }

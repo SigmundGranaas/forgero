@@ -4,9 +4,9 @@ import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.HeadPattern;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
@@ -32,10 +32,10 @@ public class ToolPropertyTest {
     public static Supplier<PrimaryMaterial> IRON_PRIMARY = () -> (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("iron"));
     public static Supplier<SecondaryMaterial> IRON_SECONDARY = () -> (SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("iron"));
 
-    public static Supplier<Pattern> HANDLE_PATTERN = () -> ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("handle_pattern_default")).findFirst().get();
-    public static Supplier<HeadPattern> PICKAXEHEAD_PATTERN = () -> (HeadPattern) ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("pickaxehead_pattern_default")).findFirst().get();
-    public static Supplier<HeadPattern> PICKAXEHEAD_PATTERN_PATTERN = () -> (HeadPattern) ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("pickaxehead_pattern_pattern")).findFirst().get();
-    public static Supplier<HeadPattern> PICKAXEHEAD_PATTERN_VEIN = () -> (HeadPattern) ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("pickaxehead_pattern_vein")).findFirst().get();
+    public static Supplier<Schematic> HANDLE_PATTERN = () -> ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("handle_pattern_default")).findFirst().get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_PATTERN = () -> (HeadSchematic) ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("pickaxehead_pattern_default")).findFirst().get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_PATTERN_PATTERN = () -> (HeadSchematic) ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("pickaxehead_pattern_pattern")).findFirst().get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_PATTERN_VEIN = () -> (HeadSchematic) ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("pickaxehead_pattern_vein")).findFirst().get();
 
 
     @Test

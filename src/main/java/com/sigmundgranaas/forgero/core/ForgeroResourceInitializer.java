@@ -8,9 +8,9 @@ import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
 import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
-import com.sigmundgranaas.forgero.core.pattern.PatternCollection;
-import com.sigmundgranaas.forgero.core.pattern.PatternLoader;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
+import com.sigmundgranaas.forgero.core.schematic.SchematicLoader;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollectionImpl;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
@@ -47,15 +47,15 @@ public class ForgeroResourceInitializer {
     public ForgeroRegistry initializeForgeroResources() {
         MaterialCollection materialCollection = initializeMaterials();
         GemCollection gemCollection = initializeGems();
-        PatternCollection patternCollection = initializePatternCollection();
-        ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection, patternCollection);
+        SchematicCollection schematicCollection = initializeSchematicCollection();
+        ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection, schematicCollection);
         ForgeroToolCollection toolCollection = initializeToolCollection(toolPartCollection);
-        return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection, patternCollection);
+        return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection, schematicCollection);
     }
 
-    private PatternCollection initializePatternCollection() {
-        List<Pattern> patterns = new PatternLoader().loadPatterns();
-        return new PatternCollection(patterns);
+    private SchematicCollection initializeSchematicCollection() {
+        List<Schematic> schematics = new SchematicLoader().loadSchematics();
+        return new SchematicCollection(schematics);
     }
 
     private ForgeroToolCollection initializeToolCollection(ForgeroToolPartCollection toolPartCollection) {
@@ -63,7 +63,7 @@ public class ForgeroResourceInitializer {
         return new ForgeroToolCollectionImpl(factory.createForgeroTools(toolPartCollection));
     }
 
-    private ForgeroToolPartCollection initializeToolParts(MaterialCollection materialCollection, PatternCollection collection) {
+    private ForgeroToolPartCollection initializeToolParts(MaterialCollection materialCollection, SchematicCollection collection) {
         ForgeroToolPartFactory factory = new ForgeroToolPartFactoryImpl();
         return new ForgeroToolPartCollectionImpl(factory.createBaseToolParts(materialCollection, collection));
     }

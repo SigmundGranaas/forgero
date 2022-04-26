@@ -4,16 +4,14 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemDescriptionWriter;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyStream;
-import com.sigmundgranaas.forgero.core.property.TargetTypes;
 import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
-import com.sigmundgranaas.forgero.core.property.attribute.SingleTarget;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
@@ -25,7 +23,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -148,7 +145,7 @@ public record DescriptionWriter(
     }
 
     private void addActiveProperty(List<ActiveProperty> activeProperties) {
-        if(activeProperties.size() > 0){
+        if (activeProperties.size() > 0) {
             tooltip.add(new LiteralText("Properties: "));
         }
         activeProperties.forEach(this::createPropertyDescription);
@@ -156,10 +153,11 @@ public record DescriptionWriter(
     }
 
     private void createPropertyDescription(ActiveProperty property) {
-        switch (property.getActiveType()){
-            case VEIN_MINING_PATTERN -> createVeinMiningDescription((VeinBreaking)property);
-            case BLOCK_BREAKING_PATTERN -> createPatternMiningDescription((PatternBreaking)property);
-        };
+        switch (property.getActiveType()) {
+            case VEIN_MINING_PATTERN -> createVeinMiningDescription((VeinBreaking) property);
+            case BLOCK_BREAKING_PATTERN -> createPatternMiningDescription((PatternBreaking) property);
+        }
+        ;
     }
 
     private void createVeinMiningDescription(VeinBreaking property) {
@@ -178,7 +176,7 @@ public record DescriptionWriter(
         MutableText mutableText = new LiteralText(" Pattern Mining").formatted(Formatting.GRAY);
         tooltip.add(mutableText);
 
-        for (String line:property.pattern()) {
+        for (String line : property.pattern()) {
             MutableText patternText = new LiteralText(String.format("   %s", line)).formatted(Formatting.WHITE);
             tooltip.add(patternText);
         }
@@ -197,8 +195,9 @@ public record DescriptionWriter(
         addAllAttribute(gem.getProperties());
     }
 
-    public void writePatternDescription(Pattern pattern) {
-        MutableText mutableText = new LiteralText("Material count: ").formatted(Formatting.GRAY);mutableText.append(new LiteralText(String.format("%s", pattern.getMaterialCount())));
+    public void writeSchematicDescription(Schematic pattern) {
+        MutableText mutableText = new LiteralText("Material count: ").formatted(Formatting.GRAY);
+        mutableText.append(new LiteralText(String.format("%s", pattern.getMaterialCount())));
 
         tooltip.add(mutableText);
     }
