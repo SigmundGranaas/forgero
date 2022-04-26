@@ -13,7 +13,7 @@ import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
 import com.sigmundgranaas.forgero.core.toolpart.head.PickaxeHead;
 import org.junit.jupiter.api.Test;
 
-import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_PATTERN;
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_SCHEMATIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -21,7 +21,7 @@ class ForgeroToolPartFactoryImplTest {
 
     @Test
     void testCreateToolPart() {
-        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_PATTERN.get());
+        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC.get());
         ForgeroToolPart referenceToolPart = new PickaxeHead(state);
 
         ForgeroToolPartFactoryImpl factory = new ForgeroToolPartFactoryImpl();

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.implementation.ItemCollectionImpl;
-import com.sigmundgranaas.forgero.item.items.PatternItem;
+import com.sigmundgranaas.forgero.item.items.SchematicItem;
 import net.minecraft.item.Item;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public interface ItemCollection {
 
     List<Item> getTools();
 
-    List<PatternItem> getPatterns();
+    List<SchematicItem> getSchematics();
 
     List<ForgeroToolItem> getToolItems();
 

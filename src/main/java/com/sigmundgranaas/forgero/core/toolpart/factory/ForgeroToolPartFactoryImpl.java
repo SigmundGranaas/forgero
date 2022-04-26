@@ -6,9 +6,9 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.HeadPattern;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
-import com.sigmundgranaas.forgero.core.pattern.PatternCollection;
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.binding.Binding;
 import com.sigmundgranaas.forgero.core.toolpart.binding.BindingState;
@@ -37,40 +37,40 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     public @NotNull
     ForgeroToolPart createToolPart(@NotNull ForgeroToolPartIdentifier identifier) {
         PrimaryMaterial material = (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(identifier.getMaterial());
-        Pattern pattern = ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter((Pattern element) -> element.getPatternIdentifier().equals(identifier.getPattern().identifier())).findFirst().get();
+        Schematic schematic = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter((Schematic element) -> element.getSchematicIdentifier().equals(identifier.getSchematic().identifier())).findFirst().get();
 
         return switch (identifier.getToolPartType()) {
-            case HEAD -> createToolPartHead(material, (HeadPattern) pattern);
-            case HANDLE -> new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern));
-            case BINDING -> new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern));
+            case HEAD -> createToolPartHead(material, (HeadSchematic) schematic);
+            case HANDLE -> new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
+            case BINDING -> new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
         };
     }
 
-    private ToolPartHead createToolPartHead(PrimaryMaterial material, @NotNull HeadPattern pattern) {
-        return switch (pattern.getToolType()) {
-            case PICKAXE -> new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern));
-            case SHOVEL -> new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern));
-            case AXE -> new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern));
+    private ToolPartHead createToolPartHead(PrimaryMaterial material, @NotNull HeadSchematic schematic) {
+        return switch (schematic.getToolType()) {
+            case PICKAXE -> new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
+            case SHOVEL -> new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
+            case AXE -> new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
             case SWORD -> null;
         };
     }
 
     @Override
     public @NotNull
-    ToolPartHeadBuilder createToolPartHeadBuilder(@NotNull PrimaryMaterial material, HeadPattern pattern) {
-        return new ToolPartHeadBuilder(material, pattern);
+    ToolPartHeadBuilder createToolPartHeadBuilder(@NotNull PrimaryMaterial material, HeadSchematic schematic) {
+        return new ToolPartHeadBuilder(material, schematic);
     }
 
     @Override
     public @NotNull
-    ToolPartHandleBuilder createToolPartHandleBuilder(@NotNull PrimaryMaterial material, @NotNull Pattern pattern) {
-        return new ToolPartHandleBuilder(material, pattern);
+    ToolPartHandleBuilder createToolPartHandleBuilder(@NotNull PrimaryMaterial material, @NotNull Schematic schematic) {
+        return new ToolPartHandleBuilder(material, schematic);
     }
 
     @Override
     public @NotNull
-    ToolPartBindingBuilder createToolPartBindingBuilder(@NotNull PrimaryMaterial material, @NotNull Pattern pattern) {
-        return new ToolPartBindingBuilder(material, pattern);
+    ToolPartBindingBuilder createToolPartBindingBuilder(@NotNull PrimaryMaterial material, @NotNull Schematic schematic) {
+        return new ToolPartBindingBuilder(material, schematic);
     }
 
     @Override
@@ -86,33 +86,33 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
 
     @Override
     public @NotNull
-    List<ForgeroToolPart> createBaseToolParts(@NotNull MaterialCollection collection, PatternCollection patternCollection) {
+    List<ForgeroToolPart> createBaseToolParts(@NotNull MaterialCollection collection, SchematicCollection schematicCollection) {
         return collection
                 .getPrimaryMaterialsAsList()
                 .stream()
-                .map(material -> patternCollection
-                        .getPatterns()
+                .map(material -> schematicCollection
+                        .getSchematics()
                         .stream()
-                        .map(pattern -> createBaseToolPartsFromMaterial(material, pattern))
+                        .map(schematic -> createBaseToolPartsFromMaterial(material, schematic))
                         .flatMap(List::stream).toList())
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 
-    private List<ForgeroToolPart> createBaseToolPartsFromMaterial(PrimaryMaterial material, Pattern pattern) {
+    private List<ForgeroToolPart> createBaseToolPartsFromMaterial(PrimaryMaterial material, Schematic schematic) {
         List<ForgeroToolPart> toolParts = new ArrayList<>();
-        switch (pattern.getType()) {
+        switch (schematic.getType()) {
             case HEAD -> {
-                switch (((HeadPattern) pattern).getToolType()) {
-                    case AXE -> toolParts.add(new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern)));
-                    case SHOVEL -> toolParts.add(new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern)));
-                    case PICKAXE -> toolParts.add(new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern)));
+                switch (((HeadSchematic) schematic).getToolType()) {
+                    case AXE -> toolParts.add(new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
+                    case SHOVEL -> toolParts.add(new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
+                    case PICKAXE -> toolParts.add(new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
                     default -> {
                     }
                 }
             }
-            case HANDLE -> toolParts.add(new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern)));
-            case BINDING -> toolParts.add(new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), pattern)));
+            case HANDLE -> toolParts.add(new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
+            case BINDING -> toolParts.add(new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
         }
         return toolParts;
     }

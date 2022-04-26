@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.OAK_PRIMARY;
-import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_PATTERN;
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_SCHEMATIC;
 
 public class WoodenToolPropertyTest {
 
     @Test
     void testToolDurability() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -31,10 +31,10 @@ public class WoodenToolPropertyTest {
 
     @Test
     void testToolMiningLevel() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -44,10 +44,10 @@ public class WoodenToolPropertyTest {
 
     @Test
     void testToolMiningSpeed() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());

@@ -13,5 +13,5 @@ public interface ItemRegistry {
 
     void registerToolParts();
 
-    void registerPatterns();
+    void registerSchematics();
 }

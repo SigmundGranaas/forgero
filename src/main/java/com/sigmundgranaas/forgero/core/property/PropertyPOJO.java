@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
+import com.sigmundgranaas.forgero.core.property.active.ActivePropertyType;
+
 import java.util.List;
 
 /**
@@ -11,8 +13,11 @@ public class PropertyPOJO {
     public List<PropertyPOJO.Active> active;
 
     public static class Active {
-        public String type;
-        public float value;
+        public ActivePropertyType type;
+        public int depth;
+        public String tag;
+        public String description;
+        public String[] pattern;
     }
 
     public static class Attribute {

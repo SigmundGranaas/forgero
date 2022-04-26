@@ -4,12 +4,15 @@
   "package": "com.sigmundgranaas.forgero.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractBlockMixin",
     "DynamicToolItemStackMixin",
-    "ItemPatternRemainderMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
+    "ItemSchematicRemainderMixin",
     "MiningToolItemMixin",
     "ModelLoaderMixin",
+    "PlayerInteractionManagerMixin",
+    "PlayerServerInteractionManagerMixin",
     "RecipeManagerMixin",
     "ReloadableResourceManagerImplMixin",
     "SmithingRecipeMixin"

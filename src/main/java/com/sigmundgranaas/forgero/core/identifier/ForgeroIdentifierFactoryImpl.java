@@ -46,24 +46,24 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getPattern().getModel());
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getSchematic().getModel());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getPattern().getModel());
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getSchematic().getModel());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getPattern().getModel());
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getSchematic().getModel());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getPattern().getModel());
+        return new ForgeroModelIdentifier(secondaryMaterial.getName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getSchematic().getModel());
     }
 
     @Override

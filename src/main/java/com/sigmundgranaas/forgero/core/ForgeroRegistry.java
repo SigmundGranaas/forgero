@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core;
 
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
-import com.sigmundgranaas.forgero.core.pattern.PatternCollection;
+import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
 
@@ -10,13 +10,13 @@ public record ForgeroRegistry(MaterialCollection materialCollection,
                               GemCollection gemCollection,
                               ForgeroToolCollection toolCollection,
                               ForgeroToolPartCollection toolPartCollection,
-                              PatternCollection patternCollection) {
+                              SchematicCollection schematicCollection) {
     private static ForgeroRegistry INSTANCE;
 
     public static ForgeroRegistry initializeRegistry(MaterialCollection materialCollection,
                                                      GemCollection gemCollection,
                                                      ForgeroToolCollection toolCollection,
-                                                     ForgeroToolPartCollection toolPartCollection, PatternCollection patternCollection) {
+                                                     ForgeroToolPartCollection toolPartCollection, SchematicCollection patternCollection) {
         INSTANCE = new ForgeroRegistry(materialCollection,
                 gemCollection,
                 toolCollection,
@@ -45,9 +45,8 @@ public record ForgeroRegistry(MaterialCollection materialCollection,
         return gemCollection;
     }
 
-    @Override
-    public PatternCollection patternCollection() {
-        return patternCollection;
+    public SchematicCollection schematicCollection() {
+        return schematicCollection;
     }
 
     @Override
