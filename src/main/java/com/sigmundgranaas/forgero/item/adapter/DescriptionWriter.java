@@ -157,7 +157,6 @@ public record DescriptionWriter(
             case VEIN_MINING_PATTERN -> createVeinMiningDescription((VeinBreaking) property);
             case BLOCK_BREAKING_PATTERN -> createPatternMiningDescription((PatternBreaking) property);
         }
-        ;
     }
 
     private void createVeinMiningDescription(VeinBreaking property) {
