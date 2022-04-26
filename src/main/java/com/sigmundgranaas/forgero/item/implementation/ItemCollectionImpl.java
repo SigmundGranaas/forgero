@@ -17,7 +17,7 @@ public class ItemCollectionImpl implements ItemCollection {
     public static ItemCollection INSTANCE;
     private List<Item> tools = new ArrayList<>();
     private List<Item> toolParts = new ArrayList<>();
-    private List<SchematicItem> patterns = new ArrayList<>();
+    private List<SchematicItem> schematicItems = new ArrayList<>();
 
     public static ItemCollection getInstance() {
         if (INSTANCE == null) {
@@ -36,10 +36,10 @@ public class ItemCollectionImpl implements ItemCollection {
 
     @Override
     public List<SchematicItem> getSchematics() {
-        if (patterns.isEmpty()) {
-            patterns = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().map(ItemFactory.INSTANCE::createPattern).collect(Collectors.toList());
+        if (schematicItems.isEmpty()) {
+            schematicItems = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().map(ItemFactory.INSTANCE::createSchematic).collect(Collectors.toList());
         }
-        return patterns;
+        return schematicItems;
     }
 
     @Override

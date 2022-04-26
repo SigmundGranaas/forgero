@@ -12,21 +12,21 @@ public abstract class ToolPartBuilder {
     protected final PrimaryMaterial primary;
     protected SecondaryMaterial secondary;
     protected Gem gem;
-    protected Schematic pattern;
+    protected Schematic schematic;
 
 
     public ToolPartBuilder(PrimaryMaterial primary, Schematic pattern) {
         this.primary = primary;
         this.secondary = new EmptySecondaryMaterial();
         this.gem = EmptyGem.createEmptyGem();
-        this.pattern = pattern;
+        this.schematic = pattern;
     }
 
     public ToolPartBuilder(ForgeroToolPart part) {
         this.primary = part.getPrimaryMaterial();
         this.secondary = part.getSecondaryMaterial();
         this.gem = part.getGem();
-        this.pattern = part.getSchematic();
+        this.schematic = part.getSchematic();
     }
 
     public PrimaryMaterial getPrimary() {
@@ -48,8 +48,8 @@ public abstract class ToolPartBuilder {
 
     public abstract ToolPartBuilder setGem(Gem newGem);
 
-    public Schematic getPattern() {
-        return pattern;
+    public Schematic getSchematic() {
+        return schematic;
     }
 
     public abstract ForgeroToolPart createToolPart();

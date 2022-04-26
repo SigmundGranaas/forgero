@@ -32,8 +32,8 @@ public class TreasureInjector {
                                 .filterLevel(10, 50))
                 );
 
-                table.pool(registerPatternsInPool(createStandardConstantPool(),
-                        PatternFilter.createPatternFilter()
+                table.pool(registerSchematicInPool(createStandardConstantPool(),
+                        SchematicFilter.createSchematicFilter()
                                 .filterToolType(ForgeroToolTypes.PICKAXE)
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(0, 50))
@@ -45,8 +45,8 @@ public class TreasureInjector {
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(50, 100))
                 );
-                table.pool(registerPatternsInPool(createStandardConstantPool(),
-                        PatternFilter.createPatternFilter()
+                table.pool(registerSchematicInPool(createStandardConstantPool(),
+                        SchematicFilter.createSchematicFilter()
                                 .filterLevel(50, 100))
                 );
             }
@@ -58,8 +58,8 @@ public class TreasureInjector {
                                 .filterLevel(20, 60))
                 );
 
-                table.pool(registerPatternsInPool(createStandardConstantPool(),
-                        PatternFilter.createPatternFilter()
+                table.pool(registerSchematicInPool(createStandardConstantPool(),
+                        SchematicFilter.createSchematicFilter()
                                 .filterToolType(ForgeroToolTypes.SHOVEL)
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(0, 50))
@@ -98,8 +98,8 @@ public class TreasureInjector {
                 //weapons and handles, ++,0-30
             }
             if (id.equals(LootTables.STRONGHOLD_LIBRARY_CHEST)) {
-                table.pool(registerPatternsInPool(createStandardConstantPool(),
-                        PatternFilter.createPatternFilter()
+                table.pool(registerSchematicInPool(createStandardConstantPool(),
+                        SchematicFilter.createSchematicFilter()
                                 .filterLevel(40, 80))
                 );
                 //all schematics, 40-80
@@ -112,8 +112,8 @@ public class TreasureInjector {
                                 .filterLevel(20, 80))
                 );
 
-                table.pool(registerPatternsInPool(createStandardConstantPool(),
-                        PatternFilter.createPatternFilter()
+                table.pool(registerSchematicInPool(createStandardConstantPool(),
+                        SchematicFilter.createSchematicFilter()
                                 .filterToolType(ForgeroToolTypes.AXE)
                                 .filterToolType(ForgeroToolTypes.PICKAXE)
                                 .filterToolPartType(ALL_TOOL_PARTS)
@@ -128,8 +128,8 @@ public class TreasureInjector {
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(0, 60))
                 );
-                table.pool(registerPatternsInPool(createStandardConstantPool(),
-                        PatternFilter.createPatternFilter()
+                table.pool(registerSchematicInPool(createStandardConstantPool(),
+                        SchematicFilter.createSchematicFilter()
                                 .filterToolType(ForgeroToolTypes.AXE)
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(0, 40))
@@ -145,8 +145,8 @@ public class TreasureInjector {
                                 .filterToolPartType(ALL_TOOL_PARTS)
                                 .filterLevel(0, 60))
                 );
-                table.pool(registerPatternsInPool(createStandardConstantPool(),
-                        PatternFilter.createPatternFilter()
+                table.pool(registerSchematicInPool(createStandardConstantPool(),
+                        SchematicFilter.createSchematicFilter()
                                 .filterToolType(ForgeroToolTypes.AXE)
                                 .filterToolType(ForgeroToolTypes.PICKAXE)
                                 .filterToolType(ForgeroToolTypes.SHOVEL)
@@ -166,8 +166,8 @@ public class TreasureInjector {
         return pool;
     }
 
-    private LootPool.Builder registerPatternsInPool(LootPool.Builder pool, PatternFilter toolPartFilter) {
-        for (Schematic pattern : toolPartFilter.getPatterns()) {
+    private LootPool.Builder registerSchematicInPool(LootPool.Builder pool, SchematicFilter toolPartFilter) {
+        for (Schematic pattern : toolPartFilter.getSchematics()) {
             Item patternItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getSchematicIdentifier()));
             pool.with(ItemEntry.builder(patternItem).weight(100 - pattern.getRarity()));
         }

@@ -17,7 +17,7 @@ public class PropertyPOJO {
         public int depth;
         public String tag;
         public String description;
-        public String[] pattern;
+        public String[] schematic;
     }
 
     public static class Attribute {

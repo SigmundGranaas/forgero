@@ -124,11 +124,5 @@
   "item.forgero.diamond_gem": "Diamond gem",
   "item.forgero.redstone_gem": "Redstone gem",
   "item.forgero.lapis_gem": "Lapis Lazuli gem",
-  "item.forgero.ender_gem": "Ender gem",
-  "item.forgero.pickaxehead_pattern_default": "Pickaxe head pattern",
-  "item.forgero.shovelhead_pattern_default": "Shovel head pattern",
-  "item.forgero.handle_pattern_default": "Handle pattern",
-  "item.forgero.handle_pattern_dense": "Dense Handle pattern",
-  "item.forgero.binding_pattern_default": "Binding pattern",
-  "item.forgero.axehead_pattern_default": "Axe head pattern"
+  "item.forgero.ender_gem": "Ender gem"
 }

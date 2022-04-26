@@ -43,7 +43,7 @@ public class ItemFactoryImpl implements ItemFactory {
     }
 
     @Override
-    public SchematicItem createPattern(Schematic pattern) {
+    public SchematicItem createSchematic(Schematic pattern) {
         return new SchematicItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS).rarity(DescriptionWriter.getRarityFromInt(pattern.getRarity())), pattern);
     }
 }

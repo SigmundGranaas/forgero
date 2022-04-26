@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
-public class ItemPatternRemainderMixin {
+public class ItemSchematicRemainderMixin {
 
     @Inject(method = "hasRecipeRemainder", at = @At("HEAD"), cancellable = true)
     public void hasRecipeRemainder(CallbackInfoReturnable<Boolean> cir) {

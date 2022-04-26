@@ -27,6 +27,6 @@ public class ToolPartHandleBuilder extends ToolPartBuilder {
 
     @Override
     public Handle createToolPart() {
-        return new Handle(new HandleState(primary, secondary, gem, pattern));
+        return new Handle(new HandleState(primary, secondary, gem, schematic));
     }
 }

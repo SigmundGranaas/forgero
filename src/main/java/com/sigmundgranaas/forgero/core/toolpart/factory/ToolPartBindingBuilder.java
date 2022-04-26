@@ -27,6 +27,6 @@ public class ToolPartBindingBuilder extends ToolPartBuilder {
 
     @Override
     public Binding createToolPart() {
-        return new Binding(new BindingState(primary, secondary, gem, pattern));
+        return new Binding(new BindingState(primary, secondary, gem, schematic));
     }
 }

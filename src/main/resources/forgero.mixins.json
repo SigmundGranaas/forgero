@@ -6,9 +6,9 @@
   "mixins": [
     "AbstractBlockMixin",
     "DynamicToolItemStackMixin",
-    "ItemPatternRemainderMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
+    "ItemSchematicRemainderMixin",
     "MiningToolItemMixin",
     "ModelLoaderMixin",
     "PlayerInteractionManagerMixin",

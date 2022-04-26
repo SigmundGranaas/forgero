@@ -67,8 +67,8 @@ public class NBTFactoryImpl implements NBTFactory {
             toolType = ForgeroToolTypes.valueOf(toolTypeIdentifier.toUpperCase(Locale.ROOT));
         }
 
-        if (compound.contains(NBTFactory.PATTERN_NBT_IDENTIFIER)) {
-            patternIdentifier = compound.getString(NBTFactory.PATTERN_NBT_IDENTIFIER);
+        if (compound.contains(NBTFactory.SCHEMATIC_NBT_IDENTIFIER)) {
+            patternIdentifier = compound.getString(NBTFactory.SCHEMATIC_NBT_IDENTIFIER);
         } else {
             if (toolPartTypes == ForgeroToolPartTypes.HEAD) {
                 patternIdentifier = String.format("%s%s_pattern_default", toolType.getToolName(), toolPartTypeIdentifier.toLowerCase(Locale.ROOT));
@@ -166,7 +166,7 @@ public class NBTFactoryImpl implements NBTFactory {
         baseCompound.putString(GEM_NBT_IDENTIFIER, createGemNbtString(toolPart.getGem()));
         baseCompound.putString(TOOL_PART_TYPE_NBT_IDENTIFIER, toolPart.getToolPartType().toString());
         baseCompound.putString(TOOL_PART_IDENTIFIER, toolPart.getToolPartIdentifier());
-        baseCompound.putString(PATTERN_NBT_IDENTIFIER, toolPart.getSchematic().getSchematicIdentifier());
+        baseCompound.putString(SCHEMATIC_NBT_IDENTIFIER, toolPart.getSchematic().getSchematicIdentifier());
         if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
             baseCompound.putString(TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER, ((ToolPartHead) toolPart).getToolType().toString());
         }

@@ -14,5 +14,5 @@ public interface ItemFactory {
 
     Item createToolPart(ForgeroToolPart toolPart);
 
-    SchematicItem createPattern(Schematic pattern);
+    SchematicItem createSchematic(Schematic pattern);
 }

@@ -11,61 +11,61 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PatternFilter {
+public class SchematicFilter {
     private final List<String> filteredMaterials = new ArrayList<>();
     private final Set<ForgeroToolTypes> filteredTools = new HashSet<>();
     private final Set<ForgeroToolPartTypes> filteredToolParts = new HashSet<>();
-    private final List<Schematic> patterns;
+    private final List<Schematic> schematics;
     private int upperLevel = 200;
     private int lowerLevel = -1;
 
-    private PatternFilter(List<Schematic> patterns) {
-        this.patterns = patterns;
+    private SchematicFilter(List<Schematic> schematics) {
+        this.schematics = schematics;
     }
 
-    public static PatternFilter createPatternFilter() {
-        return new PatternFilter(ForgeroRegistry.getInstance().schematicCollection().getSchematics());
+    public static SchematicFilter createSchematicFilter() {
+        return new SchematicFilter(ForgeroRegistry.getInstance().schematicCollection().getSchematics());
     }
 
     public static int getToolPartValue(Schematic part) {
         return part.getRarity();
     }
 
-    public PatternFilter filterToolPartType(ForgeroToolPartTypes type) {
+    public SchematicFilter filterToolPartType(ForgeroToolPartTypes type) {
         filteredToolParts.add(type);
         return this;
     }
 
-    public PatternFilter filterToolType(ForgeroToolTypes type) {
+    public SchematicFilter filterToolType(ForgeroToolTypes type) {
         filteredToolParts.add(ForgeroToolPartTypes.HEAD);
         filteredTools.add(type);
         return this;
     }
 
-    public PatternFilter filterToolPartType(List<ForgeroToolPartTypes> types) {
+    public SchematicFilter filterToolPartType(List<ForgeroToolPartTypes> types) {
         filteredToolParts.addAll(types);
         return this;
     }
 
-    public PatternFilter filterToolType(List<ForgeroToolTypes> types) {
+    public SchematicFilter filterToolType(List<ForgeroToolTypes> types) {
         filteredToolParts.add(ForgeroToolPartTypes.HEAD);
         filteredTools.addAll(types);
         return this;
     }
 
-    public PatternFilter filterLevel(int upperLevel) {
+    public SchematicFilter filterLevel(int upperLevel) {
         this.upperLevel = upperLevel;
         return this;
     }
 
-    public PatternFilter filterLevel(int lowerLevel, int upperLevel) {
+    public SchematicFilter filterLevel(int lowerLevel, int upperLevel) {
         this.upperLevel = upperLevel;
         this.lowerLevel = lowerLevel;
         return this;
     }
 
-    public List<Schematic> getPatterns() {
-        return patterns.stream()
+    public List<Schematic> getSchematics() {
+        return schematics.stream()
                 .filter(item -> lowerLevel <= getToolPartValue(item) && getToolPartValue(item) < upperLevel)
                 .filter(this::isFilteredToolPartType)
                 .filter(this::isFilteredToolType)
