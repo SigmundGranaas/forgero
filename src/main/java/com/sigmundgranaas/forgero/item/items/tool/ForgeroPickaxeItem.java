@@ -88,11 +88,6 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem {
         return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
-    @Override
-    public int getItemBarStep(ItemStack stack) {
-        return getCustomItemBarStep(stack);
-    }
-
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {

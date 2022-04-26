@@ -41,12 +41,7 @@ public class ShovelItem extends net.minecraft.item.ShovelItem implements Forgero
         forgeroTool.createToolDescription(new DescriptionWriter(tooltip));
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
-
-    @Override
-    public int getItemBarStep(ItemStack stack) {
-        return getCustomItemBarStep(stack);
-    }
-
+    
     @Override
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.SHOVEL;

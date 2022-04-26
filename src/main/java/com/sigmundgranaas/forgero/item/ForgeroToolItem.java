@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
-import com.sigmundgranaas.forgero.toolhandler.DynamicTool;
+import com.sigmundgranaas.forgero.toolhandler.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public interface ForgeroToolItem extends DynamicTool {
+public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
     FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
@@ -48,10 +48,6 @@ public interface ForgeroToolItem extends DynamicTool {
         return forgeroTool.getDurability(Target.createEmptyTarget());
     }
 
-    default int getCustomItemBarStep(ItemStack stack) {
-        ForgeroTool forgeroTool = FabricToForgeroToolAdapter.createAdapter().getTool(stack).orElse(getTool());
-        return Math.round(13.0f - (float) stack.getDamage() * 13.0f / (float) forgeroTool.getDurability(Target.createEmptyTarget()));
-    }
 
     FabricToForgeroToolAdapter getToolAdapter();
 
@@ -88,6 +84,5 @@ public interface ForgeroToolItem extends DynamicTool {
     default ForgeroTool convertItemStack(ItemStack toolStack, ForgeroTool baseTool) {
         return adapter.getTool(toolStack).orElse(baseTool);
     }
-
-
+    
 }

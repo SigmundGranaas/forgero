@@ -2,7 +2,10 @@ package com.sigmundgranaas.forgero.mixins;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.toolhandler.DynamicTool;
+import com.sigmundgranaas.forgero.toolhandler.DynamicAttributeTool;
+import com.sigmundgranaas.forgero.toolhandler.DynamicDurability;
+import com.sigmundgranaas.forgero.toolhandler.DynamicEffectiveNess;
+import com.sigmundgranaas.forgero.toolhandler.DynamicMiningSpeed;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -43,16 +46,19 @@ public abstract class DynamicToolItemStackMixin {
     @Shadow
     public abstract Item getItem();
 
+    @Shadow
+    public abstract int getDamage();
+
     @Inject(at = @At("RETURN"), method = "isSuitableFor", cancellable = true)
     public void isEffectiveOn(BlockState state, CallbackInfoReturnable<Boolean> info) {
-        if (this.getItem() instanceof DynamicTool holder) {
+        if (this.getItem() instanceof DynamicEffectiveNess holder) {
             info.setReturnValue(holder.isEffectiveOn(state));
         }
     }
 
     @Inject(at = @At("RETURN"), method = "getMiningSpeedMultiplier", cancellable = true)
     public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
-        if (this.getItem() instanceof DynamicTool holder) {
+        if (this.getItem() instanceof DynamicMiningSpeed holder) {
             float customSpeed = holder.getMiningSpeedMultiplier(state, (ItemStack) (Object) this);
             if (info.getReturnValueF() <= customSpeed) {
                 info.setReturnValue(customSpeed);
@@ -81,7 +87,7 @@ public abstract class DynamicToolItemStackMixin {
         ItemStack stack = (ItemStack) (Object) this;
 
         // Only perform our custom operations if the tool being operated on is dynamic.
-        if (stack.getItem() instanceof DynamicTool holder) {
+        if (stack.getItem() instanceof DynamicAttributeTool holder) {
             // The Multimap passed in is not ordered, so we need to re-assemble the vanilla and modded attributes
             // into a custom, ordered Multimap. If this step is not done, and both vanilla + modded attributes
             // exist at once, the item tooltip attribute lines will randomly switch positions.
@@ -98,8 +104,15 @@ public abstract class DynamicToolItemStackMixin {
 
     @Inject(method = "getMaxDamage", at = @At("HEAD"), cancellable = true)
     public void getCustomDurability(CallbackInfoReturnable<Integer> cir) {
-        if (this.getItem() instanceof DynamicTool tool) {
+        if (this.getItem() instanceof DynamicDurability tool) {
             cir.setReturnValue(tool.getDurability((ItemStack) (Object) this));
+        }
+    }
+
+    @Inject(method = "getItemBarStep", at = @At("HEAD"), cancellable = true)
+    public void getItemBarStep(CallbackInfoReturnable<Integer> cir) {
+        if (this.getItem() instanceof DynamicDurability tool) {
+            cir.setReturnValue(Math.round(13.0f - (float) getDamage() * 13.0f / (float) tool.getDurability((ItemStack) (Object) this)));
         }
     }
 }

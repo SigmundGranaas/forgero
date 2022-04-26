@@ -81,12 +81,6 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
     protected String getOrCreateTranslationKey() {
         return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
-
-    @Override
-    public int getItemBarStep(ItemStack stack) {
-        return getCustomItemBarStep(stack);
-    }
-
-
+    
 
 }
