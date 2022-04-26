@@ -15,29 +15,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public record VeinMiningHandler(VeinBreaking veinMiningHandler) {
-    public float getHardness(BlockState rootState, BlockPos rootPos, BlockView world, PlayerEntity player) {
-        float hardness = rootState.getHardness(world, rootPos);
-        if (hardness == -1.0f) {
-            return hardness;
-        }
-        float breakingSpeed = 0.0f;
-        hardness = 0.0f;
-        var availableBlocks = getAvailableBlocks(world, rootPos, player);
-        for (Pair<BlockState, BlockPos> state : availableBlocks) {
-            // I don't know which parameters should be here
-            float harvestable = player.canHarvest(state.getLeft()) ? 30 : 100;
-            hardness += state.getLeft().getHardness(world, state.getRight()) * harvestable;
-            breakingSpeed += player.getBlockBreakingSpeed(state.getLeft());
-        }
-        breakingSpeed = breakingSpeed / availableBlocks.size();
-        return breakingSpeed / hardness;
+import static com.sigmundgranaas.forgero.toolhandler.BlockBreakingHandler.isBreakableBlock;
+
+public class VeinMiningStrategy implements BlockBreakingStrategy {
+    private final VeinBreaking handler;
+
+    public VeinMiningStrategy(VeinBreaking handler) {
+        this.handler = handler;
     }
 
+    @Override
     public List<Pair<BlockState, BlockPos>> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
         BlockState rootState = world.getBlockState(rootPos);
         Block rootBlock = world.getBlockState(rootPos).getBlock();
-        int depth = veinMiningHandler.depth();
+        int depth = handler.depth();
         var list = new ArrayList<Pair<BlockState, BlockPos>>();
         var blockSet = new HashSet<BlockPos>();
         var queue = new PriorityQueue<BlockPos>();
@@ -48,7 +39,7 @@ public record VeinMiningHandler(VeinBreaking veinMiningHandler) {
             depth -= 1;
         }
 
-        if (rootState.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(veinMiningHandler.tag())))) {
+        if (rootState.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(handler.tag())))) {
             calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
         }
 
@@ -100,17 +91,4 @@ public record VeinMiningHandler(VeinBreaking veinMiningHandler) {
         calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
     }
 
-
-    boolean isBreakableBlock(BlockView world, BlockPos pos, PlayerEntity player) {
-        BlockState state = world.getBlockState(pos);
-        if (state.isAir()) {
-            return false;
-        } else if (state.getHardness(world, pos) <= 0) {
-            return false;
-        } else if (player.canHarvest(state)) {
-            return true;
-        } else {
-            return true;
-        }
-    }
 }

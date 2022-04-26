@@ -12,25 +12,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public record PatternBlockBreakingHandler(PatternBreaking breakingPattern) {
-    public float getHardness(BlockState rootState, BlockPos rootPos, BlockView world, PlayerEntity player) {
-        float hardness = rootState.getHardness(world, rootPos);
-        if (hardness == -1.0f) {
-            return hardness;
-        }
-        float breakingSpeed = 0.0f;
-        hardness = 0.0f;
-        var availableBlocks = getAvailableBlocks(world, rootPos, player);
-        for (Pair<BlockState, BlockPos> state : availableBlocks) {
-            // I don't know which parameters should be here
-            float harvestable = player.canHarvest(state.getLeft()) ? 30 : 100;
-            hardness += state.getLeft().getHardness(world, state.getRight()) * harvestable;
-            breakingSpeed += player.getBlockBreakingSpeed(state.getLeft());
-        }
-        breakingSpeed = breakingSpeed / availableBlocks.size();
-        return breakingSpeed / hardness;
+public class PatternBreakingStrategy implements BlockBreakingStrategy {
+    private final PatternBreaking breakingPattern;
+
+    public PatternBreakingStrategy(PatternBreaking breakingPattern) {
+        this.breakingPattern = breakingPattern;
     }
 
+    @Override
     public List<Pair<BlockState, BlockPos>> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
         Direction dir = Direction.getEntityFacingOrder(player)[0];
         var list = new ArrayList<Pair<BlockState, BlockPos>>();

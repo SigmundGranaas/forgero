@@ -8,8 +8,9 @@ import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.attribute.SingleTarget;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
-import com.sigmundgranaas.forgero.toolhandler.PatternBlockBreakingHandler;
-import com.sigmundgranaas.forgero.toolhandler.VeinMiningHandler;
+import com.sigmundgranaas.forgero.toolhandler.BlockBreakingHandler;
+import com.sigmundgranaas.forgero.toolhandler.PatternBreakingStrategy;
+import com.sigmundgranaas.forgero.toolhandler.VeinMiningStrategy;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -48,10 +49,10 @@ public abstract class PlayerServerInteractionManagerMixin {
             var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
             if (!activeProperties.isEmpty()) {
                 List<Pair<BlockState, BlockPos>> availableBlocks;
-                if(activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN){
-                    availableBlocks  = new PatternBlockBreakingHandler((PatternBreaking) activeProperties.get(0)).getAvailableBlocks(world, pos, player);
-                }else{
-                    availableBlocks  = new VeinMiningHandler((VeinBreaking) activeProperties.get(0)).getAvailableBlocks(world, pos, player);
+                if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
+                    availableBlocks = new BlockBreakingHandler(new PatternBreakingStrategy((PatternBreaking) activeProperties.get(0))).getAvailableBlocks(world, pos, player);
+                } else {
+                    availableBlocks = new BlockBreakingHandler(new VeinMiningStrategy((VeinBreaking) activeProperties.get(0))).getAvailableBlocks(world, pos, player);
                 }
                 for (var block : availableBlocks) {
                     if (!block.getRight().equals(pos)) {
