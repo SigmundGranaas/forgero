@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.GeneratedJsonLoader;
-import com.sigmundgranaas.forgero.utils.Utils;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
@@ -11,9 +9,6 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 import java.util.Set;
@@ -29,16 +24,6 @@ public class ModelLoaderMixin implements GeneratedJsonLoader {
     @Shadow
     private Map<Identifier, UnbakedModel> unbakedModels;
 
-
-    @Inject(method = "loadModelFromJson", at = @At("HEAD"), cancellable = true)
-    public void loadModelFromJson(Identifier id, CallbackInfoReturnable<JsonUnbakedModel> cir) {
-        if (id.getPath().contains("texture_dummy") || ToolPartModelType.isModelIdentifier(id.getPath().split("_"))) {
-            String modelJson = Utils.createModelJson(id.getPath().replace("texture_dummy", ""), "minecraft:item/handheld");
-            JsonUnbakedModel model = JsonUnbakedModel.deserialize(modelJson);
-            cir.setReturnValue(model);
-            cir.cancel();
-        }
-    }
 
     @Override
     public void loadGeneratedJson(JsonUnbakedModel unbakedModel, ModelIdentifier id) {

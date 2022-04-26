@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.item.items.GemItem;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
+import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.ItemGroup;
@@ -27,6 +28,10 @@ public class ForgeroInitializer implements ModInitializer {
         registerRecipes();
         new TreasureInjector().registerLoot();
         //TreasureChestLootInjector.registerLootTable();
+
+
+        new DynamicResourceGenerator().generateResources();
+
     }
 
     private void registerItems() {
