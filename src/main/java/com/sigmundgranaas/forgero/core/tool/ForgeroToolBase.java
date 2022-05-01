@@ -84,7 +84,7 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public float getMiningSpeedMultiplier(Target target) {
-        return getPropertyStream().applyAttribute(target, AttributeType.MINING_SPEED);
+        return getPropertyStream(target).applyAttribute(target, AttributeType.MINING_SPEED);
     }
 
     @Override

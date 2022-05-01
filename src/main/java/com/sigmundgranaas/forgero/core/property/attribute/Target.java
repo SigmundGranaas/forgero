@@ -3,9 +3,8 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The target interface represents a target for the conditions created in properties/attributes.
@@ -18,7 +17,7 @@ public interface Target {
         return new Target() {
             @Override
             public boolean isApplicable(Set<String> tag, TargetTypes type) {
-                return true;
+                return false;
             }
 
             @Override
@@ -42,9 +41,6 @@ public interface Target {
     Set<String> getTags();
 
     default Target combineTarget(Target target) {
-        return new CompoundTarget(Stream.concat(target.getTypes().stream(), getTypes().stream())
-                .collect(Collectors.toSet()),
-                Stream.concat(target.getTags().stream(), getTags().stream())
-                        .collect(Collectors.toSet()));
+        return new CompoundTarget(List.of(this, target));
     }
 }

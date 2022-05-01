@@ -52,4 +52,8 @@ public interface ForgeroTool {
     default PropertyStream getPropertyStream() {
         return Property.stream(getProperties(Target.createEmptyTarget()));
     }
+
+    default PropertyStream getPropertyStream(Target target) {
+        return Property.stream(getProperties(target));
+    }
 }
