@@ -74,7 +74,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
         if (state.isIn(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
-            Target target = Target.createEmptyTarget();
+            Target target = new BlockBreakingEfficiencyTarget(state);
             return forgeroTool.getMiningSpeedMultiplier(target);
         }
 
@@ -84,5 +84,5 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     default ForgeroTool convertItemStack(ItemStack toolStack, ForgeroTool baseTool) {
         return adapter.getTool(toolStack).orElse(baseTool);
     }
-    
+
 }

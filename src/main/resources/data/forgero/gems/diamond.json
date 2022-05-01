@@ -21,6 +21,18 @@
         "order": "BASE",
         "operation": "ADDITION",
         "value": 100.0
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "END",
+        "operation": "ADDITION",
+        "value": 10.0,
+        "condition": {
+          "target": "BLOCK",
+          "tag": [
+            "minecraft:pickaxe_mineable"
+          ]
+        }
       }
     ],
     "passive:": [],
