@@ -1,3 +1,3 @@
-### Changelog 0.5.1
+### Changelog 0.5.2
 
-* Eliminated most z-fighting on tool models
+* Made pattern names translatable
