@@ -17,7 +17,7 @@ public interface Target {
         return new Target() {
             @Override
             public boolean isApplicable(Set<String> tag, TargetTypes type) {
-                return true;
+                return false;
             }
 
             @Override

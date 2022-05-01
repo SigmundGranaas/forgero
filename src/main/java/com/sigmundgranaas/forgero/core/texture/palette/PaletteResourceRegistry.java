@@ -31,6 +31,8 @@ public class PaletteResourceRegistry {
         addPremadePalette("netherite");
         addPremadePalette("redstone");
         addPremadePalette("glowstone");
+        addPremadePalette("stoneheart");
+        addPremadePalette("blazedstoneheart");
     }
 
     public static PaletteResourceRegistry getInstance() {
