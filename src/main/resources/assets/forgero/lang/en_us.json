@@ -20,6 +20,8 @@
   "item.forgero.dense": "Dense",
   "item.forgero.reinforced": "Reinforced",
   "item.forgero.vein": "Vein mining",
+  "item.forgero.pattern": "Pattern mining",
+  "item.forgero.weakvein": "Weak Vein mining",
   "item.forgero.oak_handle_default": "Oak handle",
   "item.forgero.birch_handle_default": "Birch handle",
   "item.forgero.spruce_handle_default": "Spruce handle",
