@@ -1,3 +1,3 @@
-### Changlelog 0.5.0
+### Changlelog 0.5.1
 
-* Added support for block break
+* Eliminated most z-fighting on tool models
