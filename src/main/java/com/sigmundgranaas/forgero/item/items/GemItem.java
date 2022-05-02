@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroGemAdapterImpl;
 import net.minecraft.client.item.TooltipContext;
@@ -28,5 +29,14 @@ public class GemItem extends Item {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         Gem newGem = new FabricToForgeroGemAdapterImpl().getGem(stack).orElse(this.gem);
         newGem.createToolPartDescription(new DescriptionWriter(tooltip));
+    }
+
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        if (stack.hasNbt() && NBTFactory.INSTANCE.createGemFromNbt(stack.getOrCreateNbt()).getLevel() > 6) {
+            return true;
+        } else {
+            return super.hasGlint(stack);
+        }
     }
 }
