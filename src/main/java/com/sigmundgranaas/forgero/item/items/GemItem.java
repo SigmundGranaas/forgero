@@ -33,7 +33,7 @@ public class GemItem extends Item {
 
     @Override
     public boolean hasGlint(ItemStack stack) {
-        if (stack.hasNbt() && NBTFactory.INSTANCE.createGemFromNbt(stack.getOrCreateNbt()).getLevel() > 6) {
+        if (stack.hasNbt() && NBTFactory.INSTANCE.createGemFromNbt(stack.getOrCreateNbt()).getLevel() > 7) {
             return true;
         } else {
             return super.hasGlint(stack);
