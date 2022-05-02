@@ -74,7 +74,7 @@ public class CachedPaletteService implements PaletteService {
         UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
         Palette palette = factory.createPalette(unbakedPalette);
         paletteCache.put(id.getIdentifier(), palette);
-        exportPalette(palette, id);
+        //exportPalette(palette, id);
         return palette;
 
     }

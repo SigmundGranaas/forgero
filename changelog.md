@@ -1,5 +1,4 @@
-### Changelog 0.5.2
+### Changelog 0.5.3
 
-* Made pattern names translatable
-* Added support for BLOCK tags in tool part attributes
-* Added stoneheart and stoneheart blazed gem, which imporves mining speed against stones
+* Fixed a bug causing diamond to use oak palette
+* Fixed a bug causing the mod to nus use AARP's pregen system

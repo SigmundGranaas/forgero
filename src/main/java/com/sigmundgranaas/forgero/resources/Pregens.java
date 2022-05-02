@@ -25,7 +25,8 @@ import net.minecraft.util.Identifier;
 
 
 public class Pregens implements RRPPreGenEntrypoint {
-    public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:textures");
+    public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:resource");
+
 
     @Override
     public void pregen() {
@@ -83,7 +84,7 @@ public class Pregens implements RRPPreGenEntrypoint {
                 }
             }
 
-            registry.getTextures().forEach(texture -> RESOURCE_PACK.addTexture(new Identifier(ForgeroInitializer.MOD_NAMESPACE, texture.getIdentifier()), CachedToolPartTextureService.getInstance(new FabricTextureLoader((textureId) -> null)).getTexture(texture).getImage()));
+            registry.getTextures().forEach(texture -> RESOURCE_PACK.addTexture(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier()), CachedToolPartTextureService.getInstance(new FabricTextureLoader((textureId) -> null)).getTexture(texture).getImage()));
         }
 
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
