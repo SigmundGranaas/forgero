@@ -1,17 +1,11 @@
 package com.sigmundgranaas.forgero;
 
-import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
-import com.sigmundgranaas.forgero.item.items.GemItem;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +32,7 @@ public class ForgeroInitializer implements ModInitializer {
         ItemRegistry.INSTANCE.registerTools();
         ItemRegistry.INSTANCE.registerToolParts();
         ItemRegistry.INSTANCE.registerSchematics();
-        ForgeroRegistry.getInstance().gemCollection().getGems().forEach(gem -> Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()), new GemItem(new FabricItemSettings().group(ItemGroup.MISC), gem)));
+        ItemRegistry.INSTANCE.registerGems();
     }
 
     private void registerRecipes() {

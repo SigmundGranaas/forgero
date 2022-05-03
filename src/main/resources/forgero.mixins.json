@@ -10,6 +10,7 @@
     "ItemRenderContextMixin",
     "ItemRenderMixin",
     "ItemSchematicRemainderMixin",
+    "ItemStackDropGemOnBreakMixin",
     "MiningToolItemMixin",
     "ModelLoaderMixin",
     "PiglinBrainMixin",
