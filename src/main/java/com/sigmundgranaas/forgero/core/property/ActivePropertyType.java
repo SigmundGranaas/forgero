@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.active;
+package com.sigmundgranaas.forgero.core.property;
 
 public enum ActivePropertyType {
     BLOCK_BREAKING_PATTERN,

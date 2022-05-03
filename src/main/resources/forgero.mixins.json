@@ -12,6 +12,7 @@
     "ItemSchematicRemainderMixin",
     "MiningToolItemMixin",
     "ModelLoaderMixin",
+    "PiglinBrainMixin",
     "PlayerInteractionManagerMixin",
     "PlayerServerInteractionManagerMixin",
     "RecipeManagerMixin",

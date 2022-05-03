@@ -7,6 +7,8 @@
   "rarity": 1,
   "materialCount": 3,
   "properties": {
+    "passive:": [],
+    "active": [],
     "attributes": [
       {
         "type": "ATTACK_DAMAGE",
@@ -20,8 +22,6 @@
         "operation": "ADDITION",
         "value": -3.0
       }
-    ],
-    "passive:": [],
-    "active": []
+    ]
   }
 }
