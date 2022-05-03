@@ -35,7 +35,7 @@
         }
       }
     ],
-    "passive:": [],
+    "passive": [],
     "active": []
   },
   "type": "DURABILITY",

@@ -32,7 +32,7 @@
         }
       }
     ],
-    "passive:": [],
+    "passive": [],
     "active": []
   },
   "palette": {
@@ -71,7 +71,7 @@
           "value": 0.5
         }
       ],
-      "passive:": [],
+      "passive": [],
       "active": []
     }
   }

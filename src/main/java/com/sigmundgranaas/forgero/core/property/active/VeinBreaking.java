@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.active;
 
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
 
 public record VeinBreaking(int depth, String tag, String description) implements ActiveProperty {
     @Override

@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
+import com.sigmundgranaas.forgero.item.items.GemItem;
 import com.sigmundgranaas.forgero.item.items.SchematicItem;
 import net.minecraft.item.Item;
 
@@ -18,6 +19,7 @@ public class ItemCollectionImpl implements ItemCollection {
     private List<Item> tools = new ArrayList<>();
     private List<Item> toolParts = new ArrayList<>();
     private List<SchematicItem> schematicItems = new ArrayList<>();
+    private List<GemItem> gemItems = new ArrayList();
 
     public static ItemCollection getInstance() {
         if (INSTANCE == null) {
@@ -40,6 +42,14 @@ public class ItemCollectionImpl implements ItemCollection {
             schematicItems = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().map(ItemFactory.INSTANCE::createSchematic).collect(Collectors.toList());
         }
         return schematicItems;
+    }
+
+    @Override
+    public List<GemItem> getGems() {
+        if (gemItems.isEmpty()) {
+            gemItems = ForgeroRegistry.getInstance().gemCollection().getGems().stream().map(ItemFactory.INSTANCE::createGem).collect(Collectors.toList());
+        }
+        return gemItems;
     }
 
     @Override

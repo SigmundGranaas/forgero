@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.active;
 
+import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
 
 public record PatternBreaking(String[] pattern) implements ActiveProperty {

@@ -27,8 +27,8 @@
         }
       }
     ],
-    "passive:": [],
-    "active": []
+    "active": [],
+    "passive": []
   },
   "palette": {
     "name": "iron",
@@ -84,8 +84,8 @@
           }
         }
       ],
-      "passive:": [],
-      "active": []
+      "active": [],
+      "passive": []
     }
   },
   "secondary": {
@@ -110,8 +110,8 @@
           "value": 1.2
         }
       ],
-      "passive:": [],
-      "active": []
+      "active": [],
+      "passive": []
     }
   }
 }
