@@ -188,6 +188,7 @@ public class NBTFactoryImpl implements NBTFactory {
     public @NotNull
     NbtCompound createNBTFromGem(@NotNull Gem gem, NbtCompound compound) {
         compound.putString(NBTFactoryImpl.GEM_NBT_IDENTIFIER, createGemNbtString(gem));
+        compound.putFloat("CustomModelData", gem.getLevel());
         return compound;
     }
 
