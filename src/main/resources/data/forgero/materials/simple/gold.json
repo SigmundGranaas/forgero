@@ -14,8 +14,14 @@
         "value": 60
       }
     ],
-    "passive:": [],
-    "active": []
+    "passive": [
+      {
+        "type": "STATIC",
+        "tag": "GOLDEN"
+      }
+    ],
+    "active": [
+    ]
   },
   "palette": {
     "name": "gold",
@@ -64,7 +70,7 @@
           }
         }
       ],
-      "passive:": [],
+      "passive": [],
       "active": []
     }
   },
@@ -120,7 +126,7 @@
           "value": 0.9
         }
       ],
-      "passive:": [],
+      "passive": [],
       "active": []
     }
   }

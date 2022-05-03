@@ -18,7 +18,15 @@ public interface Property {
 
     PropertyTypes getType();
 
-    float applyAttribute(Target target, float currentAttribute);
+    default float applyAttribute(Target target, float currentAttribute) {
+        return currentAttribute;
+    }
 
-    boolean applyCondition(Target target);
+    ;
+
+    default boolean applyCondition(Target target) {
+        return true;
+    }
+
+    ;
 }

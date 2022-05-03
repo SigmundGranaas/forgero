@@ -19,7 +19,8 @@ public class JsonPOJOLoader {
         InputStream materialsStream = Utils.readJsonResourceAsString(filePath);
         if (materialsStream != null) {
             JsonReader materialsJson = new JsonReader(new InputStreamReader(materialsStream));
-            return Optional.of(new Gson().fromJson(materialsJson, type));
+            T gson = new Gson().fromJson(materialsJson, type);
+            return Optional.of(gson);
         } else {
             ForgeroInitializer.LOGGER.error("Unable to load: {}", filePath);
             return Optional.empty();

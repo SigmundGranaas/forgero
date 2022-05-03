@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.property.active.ActivePropertyType;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -8,8 +8,11 @@ import java.util.List;
  * POJO used for parsing all properties from JSON files.
  */
 public class PropertyPOJO {
+    @SerializedName("attributes")
     public List<PropertyPOJO.Attribute> attributes;
-    public List<PropertyPOJO.Passive> passive;
+    @SerializedName(value = "passiveProperties", alternate = "passive")
+    public List<PropertyPOJO.Passive> passiveProperties;
+    @SerializedName(value = "active")
     public List<PropertyPOJO.Active> active;
 
     public static class Active {
@@ -29,16 +32,15 @@ public class PropertyPOJO {
 
     }
 
+    public static class Passive {
+        public PassivePropertyType type;
+        public String tag;
+    }
 
     public static class Condition {
         public TargetTypes target;
         public List<String> tag;
-
     }
 
-    public static class Passive {
-        public String type;
-        public float value;
 
-    }
 }

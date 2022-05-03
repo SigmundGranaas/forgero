@@ -40,7 +40,7 @@
         "value": 90
       }
     ],
-    "passive:": [],
+    "passive": [],
     "active": []
   },
   "primary": {
@@ -96,7 +96,7 @@
           }
         }
       ],
-      "passive:": [],
+      "passive": [],
       "active": []
     }
   },
@@ -140,7 +140,7 @@
           }
         }
       ],
-      "passive:": [],
+      "passive": [],
       "active": []
     }
   }

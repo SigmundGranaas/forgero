@@ -3,13 +3,12 @@ package com.sigmundgranaas.forgero.core.material.material;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.PropertyBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final String name;
@@ -35,12 +34,8 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
         this.rarity = material.rarity;
         this.paletteIdentifiers = material.palette.include;
         this.paletteExclusionIdentifiers = material.palette.exclude;
-        this.properties = material
-                .properties
-                .attributes
-                .stream()
-                .map(AttributeBuilder::createAttributeFromPojo)
-                .collect(Collectors.toList());
+        this.properties = PropertyBuilder.createPropertyListFromPOJO(material.properties);
+
         this.type = material.type;
         this.ingredient = material.ingredient.item;
     }
