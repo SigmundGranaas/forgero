@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core;
 
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.gem.implementation.FileGemLoader;
@@ -21,6 +22,7 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactoryImpl;
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 import com.sigmundgranaas.forgero.core.util.ListPOJO;
+import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,20 @@ public class ForgeroResourceInitializer {
     public void registerDefaultResources() {
         registerDefaultMaterials();
         registerDefaultGems();
+
+        try {
+            FabricLoader
+                    .getInstance()
+                    .getAllMods()
+                    .forEach(modContainer -> {
+                        var elements = new SchematicLoader().loadSchematicFromContainer(modContainer);
+                        for (Schematic schematic : elements) {
+                            //ForgeroInitializer.LOGGER.info("{} schematic loaded", schematic.getSchematicIdentifier());
+                        }
+                    });
+        } catch (Exception e) {
+            ForgeroInitializer.LOGGER.error(e);
+        }
     }
 
     public ForgeroRegistry initializeForgeroResources() {
@@ -55,8 +71,10 @@ public class ForgeroResourceInitializer {
 
     private SchematicCollection initializeSchematicCollection() {
         List<Schematic> schematics = new SchematicLoader().loadSchematics();
+
         return new SchematicCollection(schematics);
     }
+
 
     private ForgeroToolCollection initializeToolCollection(ForgeroToolPartCollection toolPartCollection) {
         ForgeroToolFactory factory = new ForgeroToolFactoryImpl();

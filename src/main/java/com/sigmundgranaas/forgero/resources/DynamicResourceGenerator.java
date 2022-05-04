@@ -17,6 +17,7 @@ public class DynamicResourceGenerator {
     public void generateResources() {
         generateTags();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
+
     }
 
     public void generateTags() {
