@@ -15,8 +15,8 @@ record ForgeroResourceModContainerService() {
 
     public List<ModContainerFileLoader> getForgeroResourceContainers() {
         return getContainers().stream()
-                .filter(container -> container.getMetadata().containsCustomValue(FORGERO_RESOURCE_IDENTIFIER))
-                .filter(container -> container.getMetadata().getCustomValue(FORGERO_RESOURCE_IDENTIFIER).getAsBoolean())
+                .filter(container -> container.getMetadata().getName().equals("Minecraft") || container.getMetadata().containsCustomValue(FORGERO_RESOURCE_IDENTIFIER))
+                .filter(container -> container.getMetadata().getName().equals("Minecraft") || container.getMetadata().getCustomValue(FORGERO_RESOURCE_IDENTIFIER).getAsBoolean())
                 .map(ModContainerFileLoader::new).toList();
     }
 }

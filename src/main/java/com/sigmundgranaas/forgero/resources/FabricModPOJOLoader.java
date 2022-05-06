@@ -19,7 +19,7 @@ public class FabricModPOJOLoader<T> {
 
     public List<T> loadPojosFromMods() {
         var resourceContainers = new ForgeroResourceModContainerService().getForgeroResourceContainers();
-        List<Path> paths = resourceContainers.stream().map(container -> container.getResources(location)).flatMap(Collection::stream).toList();
+        List<Path> paths = resourceContainers.stream().map(container -> container.getResourcesInFolder(location)).flatMap(Collection::stream).toList();
         return loadPojoFromPaths(paths);
     }
 

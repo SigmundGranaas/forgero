@@ -70,13 +70,17 @@ public class CachedPaletteService implements PaletteService {
     }
 
     private Palette generatePalette(PaletteIdentifier id) {
-        Pair<List<Texture>, List<Texture>> reference = getPalettesFromMaterial(id.material());
-        UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
-        Palette palette = factory.createPalette(unbakedPalette);
-        paletteCache.put(id.getIdentifier(), palette);
-        //exportPalette(palette, id);
-        return palette;
+        try {
+            Pair<List<Texture>, List<Texture>> reference = getPalettesFromMaterial(id.material());
+            UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
+            Palette palette = factory.createPalette(unbakedPalette);
+            paletteCache.put(id.getIdentifier(), palette);
+            //exportPalette(palette, id);
+            return palette;
 
+        } catch (Exception e) {
+            return ArrayList::new;
+        }
     }
 
     private void exportPalette(Palette palette, PaletteIdentifier id) {

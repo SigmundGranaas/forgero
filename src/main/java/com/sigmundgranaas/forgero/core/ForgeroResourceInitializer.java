@@ -1,12 +1,14 @@
 package com.sigmundgranaas.forgero.core;
 
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
+import com.sigmundgranaas.forgero.core.gem.implementation.FileGemLoader;
 import com.sigmundgranaas.forgero.core.gem.implementation.GemCollectionImpl;
 import com.sigmundgranaas.forgero.core.gem.implementation.GemFactory;
 import com.sigmundgranaas.forgero.core.gem.implementation.GemPOJO;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
+import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
@@ -47,8 +49,8 @@ public class ForgeroResourceInitializer {
     }
 
     public void registerDefaultResources() {
-        registerDefaultMaterials();
-        registerDefaultGems();
+        //registerDefaultMaterials();
+        //registerDefaultGems();
 
     }
 
@@ -93,6 +95,9 @@ public class ForgeroResourceInitializer {
         GemFactory factory = new GemFactory();
         var gems = pojos.stream().map(factory::createGem).collect(Collectors.toList());
 
+        if (pojos.isEmpty()) {
+            gems = new FileGemLoader(List.of("diamond", "emerald", "lapis")).loadGems();
+        }
         return new GemCollectionImpl(gems);
     }
 
@@ -107,6 +112,12 @@ public class ForgeroResourceInitializer {
         });
         pojos.stream().sorted(Comparator.comparingInt(material -> material.rarity)).forEach(material -> materials.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
 
+
+        if (materials.isEmpty()) {
+            return new MaterialCollectionImpl(new SimpleMaterialLoader(List.of("iron", "oak", "diamond", "netherite")).getMaterials());
+
+        }
+
         return new MaterialCollectionImpl(materials);
     }
 
@@ -117,7 +128,6 @@ public class ForgeroResourceInitializer {
     public boolean excludeMaterial(String materials) {
         return materialsExclusions.add(materials);
     }
-
 
     public void registerDefaultMaterials() {
         JsonPOJOLoader

@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.io;
 import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.TemplateTextureIdentifier;
+import com.sigmundgranaas.forgero.resources.FabricModFileLoader;
 
 import java.io.InputStream;
 
@@ -26,11 +27,14 @@ public class FileService {
 
     public InputStream getStream(TextureIdentifier id) {
         ClassLoader classLoader = FileService.class.getClassLoader();
+
+        var inputStream = new FabricModFileLoader().loadFileFromMods(getTexturePath(id));
+
         InputStream resource = classLoader.getResourceAsStream(getTexturePath(id));
-        if (resource == null) {
+        if (inputStream.isEmpty()) {
             throw new IllegalArgumentException("file not found! " + getTexturePath(id));
         } else {
-            return resource;
+            return inputStream.get();
         }
     }
 }
