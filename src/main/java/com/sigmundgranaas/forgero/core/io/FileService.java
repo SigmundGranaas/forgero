@@ -26,11 +26,11 @@ public class FileService {
     }
 
     public InputStream getStream(TextureIdentifier id) {
-        ClassLoader classLoader = FileService.class.getClassLoader();
+        //ClassLoader classLoader = FileService.class.getClassLoader();
 
         var inputStream = new FabricModFileLoader().loadFileFromMods(getTexturePath(id));
 
-        InputStream resource = classLoader.getResourceAsStream(getTexturePath(id));
+        //InputStream resource = classLoader.getResourceAsStream(getTexturePath(id));
         if (inputStream.isEmpty()) {
             throw new IllegalArgumentException("file not found! " + getTexturePath(id));
         } else {

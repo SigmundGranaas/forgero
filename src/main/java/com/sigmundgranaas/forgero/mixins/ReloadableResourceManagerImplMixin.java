@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.core.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
-import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceImpl;
@@ -38,15 +37,15 @@ public abstract class ReloadableResourceManagerImplMixin {
 
             if (identifierResult.isPresent() && ForgeroToolPartTextureRegistry.getInstance(factory).isGeneratedTexture(identifierResult.get())) {
 
-                if (!PaletteResourceRegistry.getInstance().premadePalette(identifierResult.get().getPaletteIdentifier())) {
-                    TextureLoader loader = new FabricTextureLoader(((LifecycledResourceManagerImpl) (Object) this)::getResource);
+                //if (!PaletteResourceRegistry.getInstance().premadePalette(identifierResult.get().getPaletteIdentifier())) {
+                TextureLoader loader = new FabricTextureLoader(((LifecycledResourceManagerImpl) (Object) this)::getResource);
 
-                    Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
+                Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 
-                    Resource resource = new ResourceImpl(ForgeroInitializer.MOD_NAMESPACE, id, toolPartTexture.getStream(), null);
+                Resource resource = new ResourceImpl(ForgeroInitializer.MOD_NAMESPACE, id, toolPartTexture.getStream(), null);
 
-                    cir.setReturnValue(resource);
-                }
+                cir.setReturnValue(resource);
+                // }
             }
         }
     }

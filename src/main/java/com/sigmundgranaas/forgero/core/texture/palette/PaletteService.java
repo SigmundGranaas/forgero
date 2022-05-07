@@ -7,4 +7,6 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdenti
  */
 public interface PaletteService {
     Palette getPalette(PaletteIdentifier id);
+
+    void clearCache();
 }

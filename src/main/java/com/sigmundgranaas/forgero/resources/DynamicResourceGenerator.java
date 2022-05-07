@@ -3,11 +3,16 @@ package com.sigmundgranaas.forgero.resources;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.tags.JTag;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
 
@@ -17,6 +22,20 @@ public class DynamicResourceGenerator {
     public void generateResources() {
         generateTags();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
+
+
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public void reload(ResourceManager manager) {
+                ForgeroInitializer.LOGGER.info("Clearing Forgero texture caches");
+                CachedToolPartTextureService.getInstance(null).clearCache();
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return new Identifier("forgero", "resources");
+            }
+        });
 
     }
 
