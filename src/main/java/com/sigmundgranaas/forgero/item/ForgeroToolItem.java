@@ -84,5 +84,4 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     default ForgeroTool convertItemStack(ItemStack toolStack, ForgeroTool baseTool) {
         return adapter.getTool(toolStack).orElse(baseTool);
     }
-
 }
