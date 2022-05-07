@@ -14,7 +14,7 @@ public interface ForgeroIdentifierFactory {
 
     ForgeroIdentifier createForgeroIdentifier(Identifier identifier);
 
-    ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ToolPartModelType type);
+    ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ForgeroToolPart part, ToolPartModelType type);
 
     ForgeroIdentifier createForgeroIdentifier(String identifier);
 

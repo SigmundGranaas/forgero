@@ -1,16 +1,24 @@
 package com.sigmundgranaas.forgero.core;
 
-import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.gem.implementation.FileGemLoader;
 import com.sigmundgranaas.forgero.core.gem.implementation.GemCollectionImpl;
+import com.sigmundgranaas.forgero.core.gem.implementation.GemFactory;
+import com.sigmundgranaas.forgero.core.gem.implementation.GemPOJO;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
 import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
+import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
+import com.sigmundgranaas.forgero.core.material.material.factory.MaterialFactory;
+import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
 import com.sigmundgranaas.forgero.core.schematic.SchematicLoader;
+import com.sigmundgranaas.forgero.core.schematic.SchematicPOJO;
+import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollectionImpl;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
@@ -21,10 +29,11 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactoryImpl;
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 import com.sigmundgranaas.forgero.core.util.ListPOJO;
+import com.sigmundgranaas.forgero.resources.FabricModPOJOLoader;
+import com.sigmundgranaas.forgero.resources.ResourceLocations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ForgeroResourceInitializer {
     private final List<String> registeredMaterials;
@@ -40,8 +49,9 @@ public class ForgeroResourceInitializer {
     }
 
     public void registerDefaultResources() {
-        registerDefaultMaterials();
-        registerDefaultGems();
+        //registerDefaultMaterials();
+        //registerDefaultGems();
+
     }
 
     public ForgeroRegistry initializeForgeroResources() {
@@ -54,9 +64,15 @@ public class ForgeroResourceInitializer {
     }
 
     private SchematicCollection initializeSchematicCollection() {
-        List<Schematic> schematics = new SchematicLoader().loadSchematics();
+        var pojos = new FabricModPOJOLoader<>(SchematicPOJO.class, ResourceLocations.SCHEMATIC_LOCATION).loadPojosFromMods();
+        List<Schematic> schematics = pojos.stream().map(SchematicPOJO::createSchematicFromPojo).toList();
+
+        if (schematics.isEmpty()) {
+            schematics = new SchematicLoader().loadSchematics();
+        }
         return new SchematicCollection(schematics);
     }
+
 
     private ForgeroToolCollection initializeToolCollection(ForgeroToolPartCollection toolPartCollection) {
         ForgeroToolFactory factory = new ForgeroToolFactoryImpl();
@@ -69,12 +85,39 @@ public class ForgeroResourceInitializer {
     }
 
     private GemCollection initializeGems() {
-        List<Gem> gems = new FileGemLoader(registeredGems).loadGems();
+        var pojos = new FabricModPOJOLoader<>(GemPOJO.class, ResourceLocations.GEM_LOCATION).loadPojosFromMods();
+
+        pojos.forEach(pojo -> {
+            List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+            List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+            PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
+        });
+        GemFactory factory = new GemFactory();
+        var gems = pojos.stream().map(factory::createGem).collect(Collectors.toList());
+
+        if (pojos.isEmpty()) {
+            gems = new FileGemLoader(List.of("diamond", "emerald", "lapis")).loadGems();
+        }
         return new GemCollectionImpl(gems);
     }
 
     private MaterialCollection initializeMaterials() {
-        Map<String, ForgeroMaterial> materials = new SimpleMaterialLoader(registeredMaterials).getMaterials();
+        Map<String, ForgeroMaterial> materials = new HashMap<>();
+        var pojos = new FabricModPOJOLoader<>(SimpleMaterialPOJO.class, ResourceLocations.MATERIAL_LOCATION).loadPojosFromMods();
+
+        pojos.forEach(pojo -> {
+            List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+            List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+            PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
+        });
+        pojos.stream().sorted(Comparator.comparingInt(material -> material.rarity)).forEach(material -> materials.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
+
+
+        if (materials.isEmpty()) {
+            return new MaterialCollectionImpl(new SimpleMaterialLoader(List.of("iron", "oak", "diamond", "netherite")).getMaterials());
+
+        }
+
         return new MaterialCollectionImpl(materials);
     }
 
@@ -85,7 +128,6 @@ public class ForgeroResourceInitializer {
     public boolean excludeMaterial(String materials) {
         return materialsExclusions.add(materials);
     }
-
 
     public void registerDefaultMaterials() {
         JsonPOJOLoader

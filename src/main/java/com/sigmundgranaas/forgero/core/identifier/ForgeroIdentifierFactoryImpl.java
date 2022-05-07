@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.identifier.model.ForgeroModelIdentifier;
-import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.tool.*;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -67,8 +66,8 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
     }
 
     @Override
-    public ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ToolPartModelType type) {
-        return new ForgeroModelIdentifier(gem.getName(), type, ModelLayer.GEM, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+    public ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ForgeroToolPart part, ToolPartModelType type) {
+        return new ForgeroModelIdentifier(gem.getName(), type, ModelLayer.GEM, part.getSchematic().getModel());
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {

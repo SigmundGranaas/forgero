@@ -13,4 +13,6 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModel
  */
 public interface ToolPartTextureService {
     Texture getTexture(ToolPartModelTextureIdentifier id);
+
+    void clearCache();
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * Cached version of the Template Texture Service
- *
+ * <p>
  * This service will fetch Template textures from file or from its internal cache.
  */
 public class CachedTemplateTextureService implements TemplateTextureService {
@@ -30,6 +30,10 @@ public class CachedTemplateTextureService implements TemplateTextureService {
         } else {
             return createTemplateTexture(id);
         }
+    }
+
+    public void clearCache() {
+        templateCache.clear();
     }
 
     private TemplateTexture createTemplateTexture(TemplateTextureIdentifier id) {

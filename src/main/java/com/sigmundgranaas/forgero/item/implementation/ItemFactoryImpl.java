@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.passive.StaticPassiveType;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
@@ -31,18 +32,26 @@ public class ItemFactoryImpl implements ItemFactory {
 
     @Override
     public Item createTool(ForgeroTool tool) {
-        Target target = Target.createEmptyTarget();
+        Item.Settings settings = new Item.Settings().group(ItemGroup.TOOLS);
+        if (tool.getPropertyStream().getStaticPassiveProperties().anyMatch(property -> property.getStaticType() == StaticPassiveType.FIREPROOF)) {
+            settings.fireproof();
+        }
+
         return switch (tool.getToolType()) {
-            case PICKAXE -> new ForgeroPickaxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
-            case SHOVEL -> new ShovelItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
-            case AXE -> new ForgeroAxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
+            case PICKAXE -> new ForgeroPickaxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
+            case SHOVEL -> new ShovelItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
+            case AXE -> new ForgeroAxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
             case SWORD -> null;
         };
     }
 
     @Override
     public Item createToolPart(ForgeroToolPart toolPart) {
-        return new ToolPartItemImpl(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), toolPart.getPrimaryMaterial(), toolPart.getToolPartType(), toolPart);
+        Item.Settings settings = new Item.Settings().group(ItemGroup.TOOLS);
+        if (Property.stream(toolPart.getPrimaryMaterial().getPrimaryProperties()).getStaticPassiveProperties().anyMatch(property -> property.getStaticType() == StaticPassiveType.FIREPROOF)) {
+            settings.fireproof();
+        }
+        return new ToolPartItemImpl(settings, toolPart.getPrimaryMaterial(), toolPart.getToolPartType(), toolPart);
     }
 
     @Override

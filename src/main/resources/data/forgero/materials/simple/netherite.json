@@ -40,7 +40,12 @@
         "value": 90
       }
     ],
-    "passive": [],
+    "passive": [
+      {
+        "type": "STATIC",
+        "tag": "FIREPROOF"
+      }
+    ],
     "active": []
   },
   "primary": {

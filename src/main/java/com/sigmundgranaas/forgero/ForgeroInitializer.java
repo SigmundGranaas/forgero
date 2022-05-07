@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero;
 
+import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
@@ -20,10 +21,8 @@ public class ForgeroInitializer implements ModInitializer {
         initializer.initializeForgeroResources();
         registerItems();
         registerRecipes();
+        new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
-        //TreasureChestLootInjector.registerLootTable();
-
-
         new DynamicResourceGenerator().generateResources();
 
     }
@@ -34,6 +33,7 @@ public class ForgeroInitializer implements ModInitializer {
         ItemRegistry.INSTANCE.registerSchematics();
         ItemRegistry.INSTANCE.registerGems();
     }
+
 
     private void registerRecipes() {
         RecipeRegistry.INSTANCE.registerRecipeSerializers();

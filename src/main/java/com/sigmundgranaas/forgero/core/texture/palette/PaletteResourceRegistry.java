@@ -15,24 +15,7 @@ public class PaletteResourceRegistry {
 
     private PaletteResourceRegistry() {
         this.premadePalettes = new HashSet<>();
-        paletteIdentifierMap = new HashMap<>();
-        addPremadePalette("iron");
-        addPremadePalette("acacia");
-        addPremadePalette("stone");
-        addPremadePalette("oak");
-        addPremadePalette("spruce");
-        addPremadePalette("diamond");
-        addPremadePalette("gold");
-        addPremadePalette("ender");
-        addPremadePalette("emerald");
-        addPremadePalette("birch");
-        addPremadePalette("lapis");
-        addPremadePalette("leather");
-        addPremadePalette("netherite");
-        addPremadePalette("redstone");
-        addPremadePalette("glowstone");
-        addPremadePalette("stoneheart");
-        addPremadePalette("blazedstoneheart");
+        this.paletteIdentifierMap = new HashMap<>();
     }
 
     public static PaletteResourceRegistry getInstance() {

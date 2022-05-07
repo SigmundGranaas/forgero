@@ -1,5 +1,7 @@
-### Changelog 0.5.4
+### Changelog 0.6.0
 
-* Added support for Passive attributes
-* Piglins won't attack you if you are holding something made with gold
-* Gems will now be dropped when tools are destroyed
+* Added Crimson wood, warped wood, granite, andesite, copper
+* Added a command to create a testing station for forgero
+* Implemented a new system for registering resources from other mods
+* Added Fireproof for Netherite tools and toolparts
+* Fixed redundant recipe creation for tools with bindings

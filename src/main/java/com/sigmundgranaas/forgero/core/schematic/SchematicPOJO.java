@@ -4,12 +4,14 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.util.ForgeroResourcePOJO;
 
 import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.property.PropertyBuilder.createPropertyListFromPOJO;
+import static com.sigmundgranaas.forgero.resources.ResourceLocations.SCHEMATIC_LOCATION;
 
-public class SchematicPOJO {
+public class SchematicPOJO implements ForgeroResourcePOJO {
     public String name;
     public ForgeroToolPartTypes type;
     public ForgeroToolTypes toolType;
@@ -25,5 +27,10 @@ public class SchematicPOJO {
         } else {
             return new Schematic(type, name, propertyList, rarity, model, materialCount);
         }
+    }
+
+    @Override
+    public String getResourceLocation() {
+        return SCHEMATIC_LOCATION;
     }
 }

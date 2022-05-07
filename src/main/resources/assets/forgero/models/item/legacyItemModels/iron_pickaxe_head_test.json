@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "forgero:item/iron_pickaxe_head"
-  }
-}

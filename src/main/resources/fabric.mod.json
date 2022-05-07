@@ -19,7 +19,7 @@
       "com.sigmundgranaas.forgero.client.ForgeroClient"
     ],
     "rrp:pregen": [
-      "com.sigmundgranaas.forgero.resources.Pregens"
+      "com.sigmundgranaas.forgero.resources.ForgeroTextures"
     ],
     "main": [
       "com.sigmundgranaas.forgero.ForgeroInitializer"
@@ -33,5 +33,8 @@
     "fabric": "*",
     "minecraft": "1.18.x",
     "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
   }
 }

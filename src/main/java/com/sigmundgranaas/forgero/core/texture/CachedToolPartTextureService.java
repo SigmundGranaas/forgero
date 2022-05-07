@@ -19,10 +19,6 @@ public class CachedToolPartTextureService implements ToolPartTextureService {
     private final TemplateTextureService templateService;
     private final RecolourStrategyFactory recolourStrategyFactory;
 
-    {
-
-    }
-
     public CachedToolPartTextureService(PaletteService paletteService, TemplateTextureService templateTextureService, RecolourStrategyFactory recolourStrategyFactory) {
         this.paletteService = paletteService;
         this.templateService = templateTextureService;
@@ -39,6 +35,12 @@ public class CachedToolPartTextureService implements ToolPartTextureService {
             INSTANCE = new CachedToolPartTextureService(paletteService, templateTextureService, strategyFactory);
         }
         return INSTANCE;
+    }
+
+    @Override
+    public void clearCache() {
+        paletteService.clearCache();
+        templateService.clearCache();
     }
 
     @Override
