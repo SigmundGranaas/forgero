@@ -18,7 +18,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithSmithingScreenHandler;
 
@@ -26,12 +25,11 @@ public class GemRecipeTest {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void allGemsCanBeUpgradedToLevel10(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
-
-        AtomicInteger total = new AtomicInteger();
-        AtomicInteger correct = new AtomicInteger();
-        ForgeroRegistry.getInstance().gemCollection().getGems().forEach(gem -> {
-
-            for (int i = 1; i < 10; i++) {
+        var gems = ForgeroRegistry.getInstance().gemCollection().getGems();
+        int total = gems.size() * 9;
+        int correct = gems.stream().map(gem -> {
+            int partialSum = 0;
+            for (int i = 1; i <= 9; i++) {
                 Gem gem1 = gem.createGem(i);
                 Gem gem2 = gem.createGem(i);
 
@@ -49,23 +47,20 @@ public class GemRecipeTest {
 
                 if (craftedGem.isPresent() && craftedGem.get().getLevel() == i + 1 && craftedGem.get().getIdentifier().equals(gem1.getIdentifier())
                 ) {
-                    total.getAndIncrement();
-                    correct.getAndIncrement();
+                    partialSum++;
                 } else if (craftedGem.isEmpty()) {
                     ForgeroInitializer.LOGGER.warn("expected {} to be output, but got {}. There is a possible conflict in the recipes", "a gem", actualOutput.toString());
-                    total.getAndIncrement();
-                } else {
-                    total.getAndIncrement();
                 }
             }
-        });
+            return partialSum;
+        }).reduce(0, Integer::sum);
 
-        if (total.get() == correct.get()) {
-            ForgeroInitializer.LOGGER.info("tested {} gem upgrade recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+        if (total == correct) {
+            ForgeroInitializer.LOGGER.info("tested {} gem upgrade recipes, where {}/{} were correct", total, correct, total);
             mockPlayer.closeHandledScreen();
             context.complete();
         } else {
-            ForgeroInitializer.LOGGER.error("tested {} gem upgrade recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+            ForgeroInitializer.LOGGER.error("tested {} gem upgrade recipes, where {}/{} were correct", total, correct, total);
             throw new GameTestException("gem upgrade testing failed");
         }
     }

@@ -6,6 +6,8 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
+import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
+import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CraftingTableBlock;
@@ -21,7 +23,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.gametest.GameTestHelper.createDummyServerPlayer;
@@ -71,36 +72,87 @@ public class RecipeCreation {
         }
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing", required = true)
-    public void testingGeneratedRecipes(TestContext context) {
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing tools", required = true)
+    public void testingToolRecipe(TestContext context) {
+        testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOL_RECIPE);
+    }
+
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing tools with binding", required = true)
+    public void testingToolWithBindingRecipe(TestContext context) {
+        testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOL_WITH_BINDING_RECIPE);
+    }
+
+
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing toolparts", required = true)
+    public void testingToolPart(TestContext context) {
+        testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOL_PART_RECIPE);
+    }
+
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing schematics", required = true)
+    public void testingSchematicRecipes(TestContext context) {
+        testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
+    }
+
+
+    public void testingGeneratedRecipes(TestContext context, RecipeTypes type) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
         context.setBlockState(new BlockPos(1, 1, 1), Blocks.CRAFTING_TABLE);
         CraftingTableBlock craftingTableBlock = (CraftingTableBlock) context.getBlockState(new BlockPos(1, 1, 1)).getBlock();
         mockPlayer.currentScreenHandler = craftingTableBlock.createScreenHandlerFactory(craftingTableBlock.getDefaultState(), context.getWorld(), new BlockPos(1, 1, 1)).createMenu(0, mockPlayer.getInventory(), mockPlayer);
-        AtomicInteger total = new AtomicInteger();
-        AtomicInteger correct = new AtomicInteger();
-        RecipeCollection.INSTANCE.getRecipes().stream().filter(RecipeHelper::isCraftingTableRecipe).forEach(recipe -> {
+        var recipes = RecipeCollection.INSTANCE.getRecipes().stream().filter(recipe -> recipe.getRecipeType() == type).toList();
+        int total = recipes.size();
+        int correct = 0;
+        for (RecipeWrapper recipe : recipes) {
+
             var parsedRecipe = parseCraftingTableRecipe(recipe);
             var desiredOutput = RecipeHelper.getDesiredOutPut(recipe);
             var actualOutput = RecipeHelper.craftRecipe(parsedRecipe, mockPlayer);
 
             if (desiredOutput.getItem() == actualOutput.getItem()) {
-                total.getAndIncrement();
-                correct.getAndIncrement();
+                total++;
+                correct++;
             } else if (actualOutput.getItem() != Items.AIR) {
                 ForgeroInitializer.LOGGER.warn("expected {} to be output, but got {}. There is a possible conflict in the recipes", desiredOutput.toString(), actualOutput.toString());
-                total.getAndIncrement();
-            } else {
-                total.getAndIncrement();
             }
-        });
-
-        if (total.get() == correct.get()) {
-            ForgeroInitializer.LOGGER.info("tested {} recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+        }
+        if (total == correct) {
+            ForgeroInitializer.LOGGER.info("tested {} {} recipes, where {}/{} were correct", total, type.toString(), correct, total);
             mockPlayer.closeHandledScreen();
             context.complete();
         } else {
-            ForgeroInitializer.LOGGER.error("tested {} recipes, where {}/{} were correct", total.get(), correct.get(), total.get());
+            ForgeroInitializer.LOGGER.error("tested {} {} recipes, where {}/{} were correct", total, type.toString(), correct, total);
+            throw new GameTestException("recipe testing failed");
+        }
+    }
+
+    public void testingGeneratedRecipesStreamReduce(TestContext context, RecipeTypes type) {
+        ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
+        context.setBlockState(new BlockPos(1, 1, 1), Blocks.CRAFTING_TABLE);
+        CraftingTableBlock craftingTableBlock = (CraftingTableBlock) context.getBlockState(new BlockPos(1, 1, 1)).getBlock();
+        mockPlayer.currentScreenHandler = craftingTableBlock.createScreenHandlerFactory(craftingTableBlock.getDefaultState(), context.getWorld(), new BlockPos(1, 1, 1)).createMenu(0, mockPlayer.getInventory(), mockPlayer);
+        var recipes = RecipeCollection.INSTANCE.getRecipes().stream().filter(recipe -> recipe.getRecipeType() == type).toList();
+        int total = recipes.size();
+        int correct = recipes.stream().map(recipe -> {
+            var parsedRecipe = parseCraftingTableRecipe(recipe);
+            var desiredOutput = RecipeHelper.getDesiredOutPut(recipe);
+            var actualOutput = RecipeHelper.craftRecipe(parsedRecipe, mockPlayer);
+
+            if (desiredOutput.getItem() == actualOutput.getItem()) {
+                return 1;
+            } else if (actualOutput.getItem() != Items.AIR) {
+                ForgeroInitializer.LOGGER.warn("expected {} to be output, but got {}. There is a possible conflict in the recipes", desiredOutput.toString(), actualOutput.toString());
+
+                return 0;
+            }
+            return 0;
+        }).reduce(0, Integer::sum);
+
+        if (total == correct) {
+            ForgeroInitializer.LOGGER.info("tested {} {} recipes, where {}/{} were correct", total, type.toString(), correct, total);
+            mockPlayer.closeHandledScreen();
+            context.complete();
+        } else {
+            ForgeroInitializer.LOGGER.error("tested {} {} recipes, where {}/{} were correct", total, type.toString(), correct, total);
             throw new GameTestException("recipe testing failed");
         }
     }
