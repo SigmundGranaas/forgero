@@ -49,7 +49,8 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
                 case AXE -> "axehead";
                 case PICKAXE -> "pickaxehead";
                 case SHOVEL -> "shovelhead";
-                case SWORD -> "sword";
+                case SWORD -> "swordhead";
+                case HOE -> "hoehead";
             };
             text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
         } else {

@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
@@ -23,13 +24,13 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ShovelItem extends net.minecraft.item.ShovelItem implements ForgeroToolItem {
+public class ForgeroShovelItem extends ShovelItem implements ForgeroToolItem {
 
     private final ForgeroTool tool;
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
 
 
-    public ShovelItem(ToolMaterial toolMaterial, Settings settings, ForgeroTool tool) {
+    public ForgeroShovelItem(ToolMaterial toolMaterial, Settings settings, ForgeroTool tool) {
         super(toolMaterial, (int) tool.getAttackDamage(Target.createEmptyTarget()), tool.getAttackSpeed(Target.createEmptyTarget()), settings);
         this.tool = tool;
     }
@@ -41,7 +42,7 @@ public class ShovelItem extends net.minecraft.item.ShovelItem implements Forgero
         forgeroTool.createToolDescription(new DescriptionWriter(tooltip));
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
-    
+
     @Override
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.SHOVEL;

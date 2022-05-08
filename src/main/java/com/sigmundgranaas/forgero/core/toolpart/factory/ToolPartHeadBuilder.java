@@ -46,7 +46,8 @@ public class ToolPartHeadBuilder extends ToolPartBuilder {
             case PICKAXE -> new PickaxeHead(state);
             case SHOVEL -> new ShovelHead(state);
             case AXE -> new AxeHead(state);
-            case SWORD -> null;
+            case SWORD -> new SwordHead(state);
+            case HOE -> new HoeHead(state);
         };
     }
 }

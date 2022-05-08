@@ -54,8 +54,8 @@
           }
         },
         {
-          "type": "DURABILITY",
-          "order": "MINING_SPEED",
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
           "operation": "MULTIPLICATION",
           "value": 1.2,
           "condition": {

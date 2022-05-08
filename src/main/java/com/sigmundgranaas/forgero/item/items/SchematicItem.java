@@ -43,6 +43,7 @@ public class SchematicItem extends Item {
                 case PICKAXE -> "pickaxehead";
                 case SHOVEL -> "shovelhead";
                 case SWORD -> "sword";
+                case HOE -> "hoe";
             };
             text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
         } else {

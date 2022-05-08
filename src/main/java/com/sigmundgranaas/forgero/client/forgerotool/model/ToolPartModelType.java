@@ -13,6 +13,9 @@ public enum ToolPartModelType {
     PICKAXEHEAD,
     SHOVELHEAD,
     AXEHEAD,
+    SWORDHEAD,
+    HOEHEAD,
+
 
     HANDLE,
     FULLHANDLE,
@@ -21,6 +24,8 @@ public enum ToolPartModelType {
 
     BINDING,
     PICKAXEBINDING,
+    SWORDBINDING,
+    HOEBINDING,
     AXEHEADBINDING,
     SHOVELBINDING;
 
@@ -31,7 +36,8 @@ public enum ToolPartModelType {
                 case PICKAXE -> PICKAXEHEAD;
                 case SHOVEL -> SHOVELHEAD;
                 case AXE -> AXEHEAD;
-                case SWORD -> PICKAXEHEAD;
+                case SWORD -> SWORDHEAD;
+                case HOE -> HOEHEAD;
             };
             case HANDLE -> HANDLE;
             case BINDING -> BINDING;
@@ -55,7 +61,16 @@ public enum ToolPartModelType {
                 case HANDLE -> MEDIUMHANDLE;
                 case BINDING -> SHOVELBINDING;
             };
-            case SWORD -> PICKAXEHEAD;
+            case SWORD -> switch (toolPart.getToolPartType()) {
+                case HEAD -> SWORDHEAD;
+                case HANDLE -> SHORTHANDLE;
+                case BINDING -> SWORDBINDING;
+            };
+            case HOE -> switch (toolPart.getToolPartType()) {
+                case HEAD -> HOEHEAD;
+                case HANDLE -> FULLHANDLE;
+                case BINDING -> HOEBINDING;
+            };
         };
     }
 
