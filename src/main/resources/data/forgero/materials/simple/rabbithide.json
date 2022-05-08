@@ -1,9 +1,9 @@
 {
-  "name": "Leather",
+  "name": "Rabbit hide",
   "rarity": 15,
   "type": "LEATHER",
   "ingredient": {
-    "item": "minecraft:leather"
+    "item": "minecraft:rabbit_hide"
   },
   "properties": {
     "attributes": [
@@ -20,7 +20,7 @@
   "palette": {
     "name": "leather",
     "include": [
-      "minecraft:textures/item/leather.png"
+      "minecraft:textures/item/rabbit_hide.png"
     ],
     "exclude": []
   },
@@ -31,7 +31,7 @@
           "type": "MINING_SPEED",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 2.5,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -43,7 +43,7 @@
           "type": "ATTACK_DAMAGE",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": -1.0,
+          "value": -2.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -52,10 +52,22 @@
           }
         },
         {
+          "type": "DURABILITY",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 150,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "BINDING"
+            ]
+          }
+        },
+        {
           "type": "ATTACK_SPEED",
           "order": "MIDDLE",
           "operation": "MULTIPLICATION",
-          "value": 1.2,
+          "value": 1.6,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
