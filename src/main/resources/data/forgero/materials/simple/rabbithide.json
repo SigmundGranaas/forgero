@@ -1,5 +1,5 @@
 {
-  "name": "Rabbit hide",
+  "name": "Rabbithide",
   "rarity": 15,
   "type": "LEATHER",
   "ingredient": {
@@ -18,7 +18,7 @@
     "active": []
   },
   "palette": {
-    "name": "leather",
+    "name": "rabbithide",
     "include": [
       "minecraft:textures/item/rabbit_hide.png"
     ],

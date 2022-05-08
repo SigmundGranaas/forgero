@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core;
 
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.gem.implementation.FileGemLoader;
 import com.sigmundgranaas.forgero.core.gem.implementation.GemCollectionImpl;
@@ -104,12 +105,17 @@ public class ForgeroResourceInitializer {
     private MaterialCollection initializeMaterials() {
         Map<String, ForgeroMaterial> materials = new HashMap<>();
         var pojos = new FabricModPOJOLoader<>(SimpleMaterialPOJO.class, ResourceLocations.MATERIAL_LOCATION).loadPojosFromMods();
+        try {
+            pojos.forEach(pojo -> {
+                List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+                List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+                PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
+            });
+        } catch (NullPointerException e) {
+            ForgeroInitializer.LOGGER.error("Error occurred trying to load materials. Likely due to Malformed JSON");
+            ForgeroInitializer.LOGGER.error(e);
+        }
 
-        pojos.forEach(pojo -> {
-            List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
-            List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
-            PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
-        });
         pojos.stream().sorted(Comparator.comparingInt(material -> material.rarity)).forEach(material -> materials.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
 
 
