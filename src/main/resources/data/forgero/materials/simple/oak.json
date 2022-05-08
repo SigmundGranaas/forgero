@@ -55,7 +55,19 @@
           "type": "DURABILITY",
           "order": "MIDDLE",
           "operation": "MULTIPLICATION",
-          "value": 1.4,
+          "value": 1.2,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 1.1,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
