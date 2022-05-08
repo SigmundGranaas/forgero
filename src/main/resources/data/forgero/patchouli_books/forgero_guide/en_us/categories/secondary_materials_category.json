@@ -1,0 +1,7 @@
+{
+  "parent": "forgero:materials_category",
+  "name": "Secondary Materials",
+  "description": "This is a test category for testing!",
+  "icon": "minecraft:leather",
+  "sortnum": 2
+}

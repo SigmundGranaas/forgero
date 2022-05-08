@@ -1,0 +1,16 @@
+{
+  "name": "Axehead Schematic",
+  "icon": "forgero:axehead_schematic_default",
+  "category": "forgero:schematic_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The default axehead schematic creates a basic pickaxehead"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:axehead_schematic_default",
+      "recipe2": "forgero:axehead_schematic_default_from_axehead"
+    }
+  ]
+}

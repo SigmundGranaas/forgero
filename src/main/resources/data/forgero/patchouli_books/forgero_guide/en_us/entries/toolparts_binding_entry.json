@@ -1,0 +1,17 @@
+{
+  "name": "Binding",
+  "icon": "forgero:gold_binding_default",
+  "category": "forgero:toolparts_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The binding is an optional part of the tool, and will give some beneficial stats to your tools, as well as another slot for gems."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting bindings",
+      "recipe": "forgero:binding_gold_binding_schematic_default",
+      "recipe2": "forgero:binding_diamond_binding_schematic_default"
+    }
+  ]
+}

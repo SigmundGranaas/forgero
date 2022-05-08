@@ -13,6 +13,7 @@ group = project.maven_group
 
 repositories {
     mavenCentral()
+    maven { url 'https://maven.blamejared.com' }
     maven {
         url = uri("https://storage.googleapis.com/devan-maven/")
     }
@@ -31,6 +32,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "vazkii.patchouli:Patchouli:1.18.2-67-FABRIC"
     modImplementation("net.devtech:arrp:0.5.7")
     include "net.devtech:arrp:0.5.7"
     // Fabric API. This is technically optional, but you probably want it anyway.
@@ -115,6 +117,7 @@ curseforge {
             relations {
                 embeddedLibrary 'arrp'
                 requiredDependency 'fabric-api'
+                optionalDependency 'patchouli'
             }
         }
     }

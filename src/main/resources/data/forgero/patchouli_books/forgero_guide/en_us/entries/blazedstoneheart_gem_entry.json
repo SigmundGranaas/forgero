@@ -1,0 +1,22 @@
+{
+  "name": "Blazed Stoneheart Gem",
+  "icon": "forgero:blazedstoneheart_gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This gem increases mining speed against rocks in the nether."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Blazed stoneheart gem, level 8",
+      "item": "forgero:blazedstoneheart_gem{Gem:'8_blazedstoneheart_gem', CustomModelData:8}",
+      "text": "A blazed stoneheart gem gem upgraded to level 8"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a blazed stoneheart gem",
+      "recipe": "forgero:blazedstoneheart_gem"
+    }
+  ]
+}
