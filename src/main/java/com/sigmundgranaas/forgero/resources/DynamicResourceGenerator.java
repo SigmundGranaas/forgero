@@ -47,8 +47,9 @@ public class DynamicResourceGenerator {
 
 
         addToolPartTags(ForgeroToolPartTypes.HANDLE, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/handle_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/handles"));
+        addToolPartTags(ForgeroToolPartTypes.HEAD, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/head_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/heads"));
         addToolPartTags(ForgeroToolPartTypes.BINDING, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/binding_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/bindings"));
-
+        addGemTags();
     }
 
 
@@ -76,6 +77,19 @@ public class DynamicResourceGenerator {
                 .map(pattern -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getSchematicIdentifier()))
                 .forEach(pickaxeheadsSchematics::add);
         RESOURCE_PACK.addTag(patternsTagId, pickaxeheadsSchematics);
+    }
+
+    private void addGemTags() {
+        Identifier gemTagId = new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/gems");
+        JTag gems = new JTag();
+        ForgeroRegistry
+                .getInstance()
+                .gemCollection()
+                .getGems()
+                .stream()
+                .map(gem -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()))
+                .forEach(gems::add);
+        RESOURCE_PACK.addTag(gemTagId, gems);
     }
 
     private void addToolPartTags(ForgeroToolPartTypes type, Identifier patternsTagId, Identifier toolPartTagID) {
