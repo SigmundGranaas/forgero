@@ -194,7 +194,9 @@ public class NBTFactoryImpl implements NBTFactory {
 
     Gem getGemFromNbtString(String nbtGem) {
         String[] elements = nbtGem.split("_");
-        assert (elements.length == 3);
+        if (elements.length < 3) {
+            return EmptyGem.createEmptyGem();
+        }
         Gem gem = ForgeroRegistry.getInstance().gemCollection().getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
         return gem.createGem(Integer.parseInt(elements[0]));
     }

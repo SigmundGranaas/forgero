@@ -1,0 +1,12 @@
+{
+  "type": "patchouli:shapeless_book_recipe",
+  "ingredients": [
+    {
+      "tag": "forgero:handles"
+    },
+    {
+      "item": "minecraft:book"
+    }
+  ],
+  "book": "forgero:forgero_guide"
+}

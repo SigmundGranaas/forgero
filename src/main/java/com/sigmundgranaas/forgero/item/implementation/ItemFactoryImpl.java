@@ -47,7 +47,7 @@ public class ItemFactoryImpl implements ItemFactory {
 
     @Override
     public Item createToolPart(ForgeroToolPart toolPart) {
-        Item.Settings settings = new Item.Settings().group(ItemGroup.TOOLS);
+        Item.Settings settings = new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS);
         if (Property.stream(toolPart.getPrimaryMaterial().getPrimaryProperties()).getStaticPassiveProperties().anyMatch(property -> property.getStaticType() == StaticPassiveType.FIREPROOF)) {
             settings.fireproof();
         }

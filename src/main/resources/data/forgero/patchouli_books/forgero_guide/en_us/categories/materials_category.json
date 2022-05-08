@@ -1,0 +1,6 @@
+{
+  "name": "Materials",
+  "description": "Materials are the core ingredients used when crafting tools. There are two types of materials used, Primary and secondary materials. Primary materials are used for the core of trhe weapon, while secondary materials can be used as upgrades",
+  "icon": "minecraft:iron_ingot",
+  "sortnum": 2
+}
