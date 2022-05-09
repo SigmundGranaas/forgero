@@ -2,7 +2,10 @@ package com.sigmundgranaas.forgero.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -19,9 +22,13 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.tag.TagKey;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
@@ -85,4 +92,26 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     default ForgeroTool convertItemStack(ItemStack toolStack, ForgeroTool baseTool) {
         return adapter.getTool(toolStack).orElse(baseTool);
     }
+
+
+    default Text getForgeroTranslatableToolName() {
+        ForgeroTool tool = getTool();
+        MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName().toLowerCase(Locale.ROOT))).append(" ");
+        Schematic schematic = tool.getToolHead().getSchematic();
+        if (!schematic.getName().equals("default")) {
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getName())).append(" "));
+        }
+
+        String headType = switch (((HeadSchematic) schematic).getToolType()) {
+            case AXE -> "axe";
+            case PICKAXE -> "pickaxe";
+            case SHOVEL -> "shovel";
+            case SWORD -> "sword";
+            case HOE -> "hoe";
+        };
+        text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
+
+        return text;
+    }
+
 }

@@ -55,6 +55,17 @@ public class ForgeroShovelItem extends ShovelItem implements ForgeroToolItem {
 
 
     @Override
+    public Text getName() {
+        return getForgeroTranslatableToolName();
+    }
+
+    @Override
+    public Text getName(ItemStack stack) {
+        return getForgeroTranslatableToolName();
+    }
+
+
+    @Override
     public Identifier getIdentifier() {
         return new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString());
     }

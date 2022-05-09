@@ -1,4 +1,4 @@
-### Changelog 0.7.0-RCA
+### Changelog 0.7.0
 
 * Forgero Beta release
 * Added the sword
