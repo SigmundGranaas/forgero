@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.ToolTarget;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -115,6 +117,7 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public List<Property> getProperties(Target target) {
-        return Stream.of(head.getState().getProperties(target), handle.getState().getProperties(target)).flatMap(Collection::stream).collect(Collectors.toList());
+        Target toolTarget = target.combineTarget(new ToolTarget(Set.of(getToolType().toString())));
+        return Stream.of(head.getState().getProperties(toolTarget), handle.getState().getProperties(toolTarget)).flatMap(Collection::stream).collect(Collectors.toList());
     }
 }
