@@ -47,6 +47,8 @@ public interface ForgeroTool {
 
     void createToolDescription(ToolDescriptionWriter writer);
 
+    void createWeaponDescription(ToolDescriptionWriter writer);
+
     List<Property> getProperties(Target target);
 
     default PropertyStream getPropertyStream() {

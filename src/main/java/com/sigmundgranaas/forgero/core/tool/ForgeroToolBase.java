@@ -69,12 +69,14 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public int getDurability(Target target) {
-        return (int) getPropertyStream(target).applyAttribute(target, AttributeType.DURABILITY);
+        int durability = (int) getPropertyStream(target).applyAttribute(target, AttributeType.DURABILITY);
+        return Math.max(durability, 1);
     }
 
     @Override
     public float getAttackDamage(Target target) {
-        return getPropertyStream(target).applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+        float damage = getPropertyStream(target).applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+        return damage > 1 ? damage : 1f;
     }
 
     @Override
@@ -102,6 +104,13 @@ public class ForgeroToolBase implements ForgeroTool {
         writer.addHead(head);
         writer.addHandle(handle);
         writer.addToolProperties(getPropertyStream());
+    }
+
+    @Override
+    public void createWeaponDescription(ToolDescriptionWriter writer) {
+        writer.addHead(head);
+        writer.addHandle(handle);
+        writer.addSwordProperties(getPropertyStream());
     }
 
     @Override

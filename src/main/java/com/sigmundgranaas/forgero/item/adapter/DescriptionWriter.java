@@ -141,7 +141,18 @@ public record DescriptionWriter(
 
         addActiveProperty(Property.stream(properties).getActiveProperties().toList());
         tooltip.add(new LiteralText("Attributes: "));
+
         addToolAttributes(properties);
+    }
+
+
+    public void addSwordProperties(PropertyStream stream) {
+        List<Property> properties = stream.collect(Collectors.toList());
+
+        addActiveProperty(Property.stream(properties).getActiveProperties().toList());
+        tooltip.add(new LiteralText("Attributes: "));
+
+        addAttributeInt(properties.stream().toList(), AttributeType.DURABILITY, "Durability");
     }
 
     private void addActiveProperty(List<ActiveProperty> activeProperties) {

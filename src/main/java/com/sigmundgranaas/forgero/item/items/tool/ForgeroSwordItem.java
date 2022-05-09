@@ -36,7 +36,7 @@ public class ForgeroSwordItem extends SwordItem implements ForgeroToolItem {
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         ForgeroTool forgeroTool = toolAdapter.getTool(itemStack).orElse(tool);
-        forgeroTool.createToolDescription(new DescriptionWriter(tooltip));
+        forgeroTool.createWeaponDescription(new DescriptionWriter(tooltip));
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 
