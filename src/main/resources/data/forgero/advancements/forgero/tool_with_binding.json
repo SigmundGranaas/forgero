@@ -1,5 +1,5 @@
 {
-  "parent": "forgero:forgero/toolpart",
+  "parent": "forgero:forgero/binding",
   "display": {
     "icon": {
       "item": "forgero:axehead_schematic_default"

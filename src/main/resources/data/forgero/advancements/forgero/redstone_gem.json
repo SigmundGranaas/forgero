@@ -1,14 +1,14 @@
 {
-  "parent": "forgero:forgero/toolpart",
+  "parent": "forgero:forgero/gem",
   "display": {
     "icon": {
-      "item": "forgero:oak_handle_default"
+      "item": "forgero:redstone_gem"
     },
     "title": {
-      "translate": "advancements.forgero.handle.title"
+      "translate": "advancements.forgero.gem.title"
     },
     "description": {
-      "translate": "advancements.forgero.handle.description"
+      "translate": "advancements.forgero.gem.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:handles"
+            "tag": "forgero:gems"
           }
         ]
       }

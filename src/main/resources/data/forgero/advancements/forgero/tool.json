@@ -2,13 +2,13 @@
   "parent": "forgero:forgero/toolpart",
   "display": {
     "icon": {
-      "item": "forgero:oak_handle_default"
+      "item": "forgero:iron_pickaxe"
     },
     "title": {
-      "translate": "advancements.forgero.handle.title"
+      "translate": "advancements.forgero.tool.title"
     },
     "description": {
-      "translate": "advancements.forgero.handle.description"
+      "translate": "advancements.forgero.tool.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -16,12 +16,22 @@
     "hidden": false
   },
   "criteria": {
-    "default": {
+    "axes": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forgero:handles"
+            "tag": "fabric:axes"
+          }
+        ]
+      }
+    },
+    "pickaxes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "fabric:pickaxes"
           }
         ]
       }
@@ -29,7 +39,8 @@
   },
   "requirements": [
     [
-      "default"
+      "axes",
+      "pickaxes"
     ]
   ]
 }
