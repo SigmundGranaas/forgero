@@ -76,8 +76,8 @@ public record RecipeCreatorImpl(
                 case PICKAXE -> "pickaxehead";
                 case SHOVEL -> "shovelhead";
                 case AXE -> "axehead";
-                case SWORD -> "sword";
-                case HOE -> "hoe";
+                case SWORD -> "swordhead";
+                case HOE -> "hoehead";
             };
         } else {
             toolpartType = schematic.getType().getName();

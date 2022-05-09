@@ -60,6 +60,8 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
                         registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.PICKAXE), ModelLayer.SECONDARY, part.getSchematic().getModel()));
                         registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.SHOVEL), ModelLayer.SECONDARY, part.getSchematic().getModel()));
                         registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.AXE), ModelLayer.SECONDARY, part.getSchematic().getModel()));
+                        registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.SWORD), ModelLayer.SECONDARY, part.getSchematic().getModel()));
+                        registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(part, ForgeroToolTypes.HOE), ModelLayer.SECONDARY, part.getSchematic().getModel()));
                     }
                     if (part.getToolPartType() == ForgeroToolPartTypes.HANDLE) {
                         registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.MEDIUMHANDLE, ModelLayer.SECONDARY, part.getSchematic().getModel()));
