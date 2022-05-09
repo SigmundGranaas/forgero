@@ -17,6 +17,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.MiningToolItem;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -72,7 +73,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
 
     default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
-        if (state.isIn(getToolTags())) {
+        if (stack.getItem() instanceof MiningToolItem && state.isIn(getToolTags())) {
             ForgeroTool forgeroTool = getToolAdapter().getTool(stack).orElse(getTool());
             Target target = new BlockBreakingEfficiencyTarget(state);
             return forgeroTool.getMiningSpeedMultiplier(target);
