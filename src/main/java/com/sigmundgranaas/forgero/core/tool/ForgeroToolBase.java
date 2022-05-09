@@ -5,7 +5,8 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.ToolTarget;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -69,17 +71,19 @@ public class ForgeroToolBase implements ForgeroTool {
 
     @Override
     public int getDurability(Target target) {
-        return (int) getPropertyStream().applyAttribute(target, AttributeType.DURABILITY);
+        int durability = (int) getPropertyStream(target).applyAttribute(target, AttributeType.DURABILITY);
+        return Math.max(durability, 1);
     }
 
     @Override
     public float getAttackDamage(Target target) {
-        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+        float damage = getPropertyStream(target).applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+        return damage > 1 ? damage : 1f;
     }
 
     @Override
     public float getAttackSpeed(Target target) {
-        return getPropertyStream().applyAttribute(target, AttributeType.ATTACK_SPEED);
+        return getPropertyStream(target).applyAttribute(target, AttributeType.ATTACK_SPEED);
     }
 
     @Override
@@ -105,7 +109,15 @@ public class ForgeroToolBase implements ForgeroTool {
     }
 
     @Override
+    public void createWeaponDescription(ToolDescriptionWriter writer) {
+        writer.addHead(head);
+        writer.addHandle(handle);
+        writer.addSwordProperties(getPropertyStream());
+    }
+
+    @Override
     public List<Property> getProperties(Target target) {
-        return Stream.of(head.getState().getProperties(target), handle.getState().getProperties(target)).flatMap(Collection::stream).collect(Collectors.toList());
+        Target toolTarget = target.combineTarget(new ToolTarget(Set.of(getToolType().toString())));
+        return Stream.of(head.getState().getProperties(toolTarget), handle.getState().getProperties(toolTarget)).flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

@@ -1,3 +1,10 @@
-### Changelog 0.6.1
+### Changelog 0.7.0
 
-* Added support for a Patchouli guide book
+* Forgero Beta release
+* Added the sword
+* Added the hoe
+* Added the vein mining hoe
+* Added rabbit hide
+* Added x,y,z and any direction for pattern mining
+* Added tool type attribute filter
+* Added Entity type attribute filter

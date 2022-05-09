@@ -15,7 +15,7 @@ public record BlockBreakingHandler(
         BlockState state = world.getBlockState(pos);
         if (state.isAir()) {
             return false;
-        } else if (state.getHardness(world, pos) <= 0) {
+        } else if (state.getHardness(world, pos) < 0) {
             return false;
         } else if (player.canHarvest(state)) {
             return true;

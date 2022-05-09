@@ -34,15 +34,6 @@ public abstract class PlayerInteractionManagerMixin {
     private MinecraftClient client;
 
     @Shadow
-    @Final
-    private BlockPos currentBreakingPos;
-
-    @Shadow
-    @Final
-    private float currentBreakingProgress;
-
-
-    @Shadow
     public abstract boolean breakBlock(BlockPos pos);
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;breakBlock(Lnet/minecraft/util/math/BlockPos;)Z"), method = "updateBlockBreakingProgress", cancellable = true)

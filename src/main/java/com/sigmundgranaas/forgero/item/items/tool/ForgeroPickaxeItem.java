@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -57,6 +57,17 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem {
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.PICKAXE;
     }
+
+    @Override
+    public Text getName() {
+        return getForgeroTranslatableToolName();
+    }
+
+    @Override
+    public Text getName(ItemStack stack) {
+        return getForgeroTranslatableToolName();
+    }
+
 
     @Override
     public ForgeroTool getTool() {

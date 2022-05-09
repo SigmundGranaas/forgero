@@ -16,12 +16,32 @@
     "hidden": false
   },
   "criteria": {
-    "default": {
+    "default_handle": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forgero:handles"
+            "tag": "forgero:handle_schematics"
+          }
+        ]
+      }
+    },
+    "default_head": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:head_schematics"
+          }
+        ]
+      }
+    },
+    "default_binding": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:binding_schematics"
           }
         ]
       }
@@ -29,7 +49,9 @@
   },
   "requirements": [
     [
-      "default"
+      "default_handle",
+      "default_binding",
+      "default_head"
     ]
   ]
 }

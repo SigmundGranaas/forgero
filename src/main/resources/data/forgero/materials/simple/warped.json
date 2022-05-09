@@ -33,7 +33,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 3.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -62,6 +62,30 @@
             "target": "TOOL_PART_TYPE",
             "tag": [
               "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "END",
+          "operation": "MULTIPLICATION",
+          "value": 1.2,
+          "condition": {
+            "target": "BLOCK",
+            "tag": [
+              "minecraft:base_stone_nether"
+            ]
+          }
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "END",
+          "operation": "MULTIPLICATION",
+          "value": 0.8,
+          "condition": {
+            "target": "BLOCK",
+            "tag": [
+              "minecraft:base_stone_overworld"
             ]
           }
         }

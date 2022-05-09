@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.property.active;
 import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyTypes;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
 
 public interface ActiveProperty extends Property {
     @Override

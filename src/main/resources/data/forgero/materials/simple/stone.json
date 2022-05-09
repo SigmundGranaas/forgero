@@ -76,7 +76,22 @@
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
-              "HEAD"
+              "HEAD",
+              "HANDLE",
+              "BINDING"
+            ]
+          }
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 0.90,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "BINDING",
+              "HANDLE"
             ]
           }
         }

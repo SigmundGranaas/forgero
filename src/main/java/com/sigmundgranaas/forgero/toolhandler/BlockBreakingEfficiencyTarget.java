@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.toolhandler;
 
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import net.minecraft.block.BlockState;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;

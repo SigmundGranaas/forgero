@@ -1,0 +1,68 @@
+{
+  "parent": "forgero:forgero/schematic",
+  "display": {
+    "icon": {
+      "item": "forgero:axehead_schematic_default"
+    },
+    "title": {
+      "translate": "advancements.forgero.schematic_pattern.title"
+    },
+    "description": {
+      "translate": "advancements.forgero.schematic_pattern.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "default_axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "forgero:axe_schematic_pattern"
+          }
+        ]
+      }
+    },
+    "default_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "forgero:pickaxe_schematic_pattern"
+          }
+        ]
+      }
+    },
+    "default_shovel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "forgero:shovel_schematic_pattern"
+          }
+        ]
+      }
+    },
+    "default_hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "forgero:hoe_schematic_pattern"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "default_hoe",
+      "default_shovel",
+      "default_pickaxe",
+      "default_axe"
+    ]
+  ]
+}

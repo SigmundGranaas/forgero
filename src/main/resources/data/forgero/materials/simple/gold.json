@@ -43,7 +43,13 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 12.0
+          "value": 12.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         },
         {
           "type": "DURABILITY",
@@ -66,6 +72,18 @@
             "target": "TOOL_PART_TYPE",
             "tag": [
               "HANDLE"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 300,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "BINDING"
             ]
           }
         }

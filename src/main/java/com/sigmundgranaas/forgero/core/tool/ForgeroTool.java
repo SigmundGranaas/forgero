@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyStream;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +46,8 @@ public interface ForgeroTool {
     PrimaryMaterial getMaterial();
 
     void createToolDescription(ToolDescriptionWriter writer);
+
+    void createWeaponDescription(ToolDescriptionWriter writer);
 
     List<Property> getProperties(Target target);
 

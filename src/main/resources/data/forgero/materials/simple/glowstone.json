@@ -17,7 +17,7 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 5
+        "value": 65
       },
       {
         "type": "MINING_LEVEL",

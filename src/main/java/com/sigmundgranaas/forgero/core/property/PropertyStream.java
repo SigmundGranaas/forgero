@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.Static;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;

@@ -7,10 +7,10 @@ import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyStream;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ToolDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
@@ -141,7 +141,18 @@ public record DescriptionWriter(
 
         addActiveProperty(Property.stream(properties).getActiveProperties().toList());
         tooltip.add(new LiteralText("Attributes: "));
+
         addToolAttributes(properties);
+    }
+
+
+    public void addSwordProperties(PropertyStream stream) {
+        List<Property> properties = stream.collect(Collectors.toList());
+
+        addActiveProperty(Property.stream(properties).getActiveProperties().toList());
+        tooltip.add(new LiteralText("Attributes: "));
+
+        addAttributeInt(properties.stream().toList(), AttributeType.DURABILITY, "Durability");
     }
 
     private void addActiveProperty(List<ActiveProperty> activeProperties) {

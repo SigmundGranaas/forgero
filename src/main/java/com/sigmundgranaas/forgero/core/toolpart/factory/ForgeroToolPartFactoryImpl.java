@@ -47,11 +47,14 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     private ToolPartHead createToolPartHead(PrimaryMaterial material, @NotNull HeadSchematic schematic) {
+        HeadState state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic);
+
         return switch (schematic.getToolType()) {
-            case PICKAXE -> new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
-            case SHOVEL -> new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
-            case AXE -> new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
-            case SWORD -> null;
+            case PICKAXE -> new PickaxeHead(state);
+            case SHOVEL -> new ShovelHead(state);
+            case AXE -> new AxeHead(state);
+            case SWORD -> new SwordHead(state);
+            case HOE -> new HoeHead(state);
         };
     }
 
@@ -103,12 +106,13 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
         List<ForgeroToolPart> toolParts = new ArrayList<>();
         switch (schematic.getType()) {
             case HEAD -> {
+                HeadState state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic);
                 switch (((HeadSchematic) schematic).getToolType()) {
-                    case AXE -> toolParts.add(new AxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
-                    case SHOVEL -> toolParts.add(new ShovelHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
-                    case PICKAXE -> toolParts.add(new PickaxeHead(new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
-                    default -> {
-                    }
+                    case AXE -> toolParts.add(new AxeHead(state));
+                    case SHOVEL -> toolParts.add(new ShovelHead(state));
+                    case PICKAXE -> toolParts.add(new PickaxeHead(state));
+                    case SWORD -> toolParts.add(new SwordHead(state));
+                    case HOE -> toolParts.add(new HoeHead(state));
                 }
             }
             case HANDLE -> toolParts.add(new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
