@@ -28,6 +28,18 @@
         "order": "BASE",
         "operation": "ADDITION",
         "value": -3.0
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 100.0,
+        "condition": {
+          "target": "ENTITY",
+          "tag": [
+            "minecraft:cow"
+          ]
+        }
       }
     ]
   }

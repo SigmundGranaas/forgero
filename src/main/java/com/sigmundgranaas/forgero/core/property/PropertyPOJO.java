@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class PropertyPOJO {
         public int depth;
         public String tag;
         public String description;
+        public BreakingDirection direction;
         public String[] pattern;
     }
 

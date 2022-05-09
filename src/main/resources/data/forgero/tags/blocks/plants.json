@@ -24,6 +24,10 @@
     {
       "id": "#minecraft:leaves",
       "required": false
+    },
+    {
+      "id": "#minecraft:flowers",
+      "required": false
     }
   ]
 }

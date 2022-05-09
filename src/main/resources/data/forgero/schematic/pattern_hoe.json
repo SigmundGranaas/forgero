@@ -25,6 +25,7 @@
     "active": [
       {
         "type": "BLOCK_BREAKING_PATTERN",
+        "direction": "Y",
         "pattern": [
           "   x   ",
           "  xxx  ",

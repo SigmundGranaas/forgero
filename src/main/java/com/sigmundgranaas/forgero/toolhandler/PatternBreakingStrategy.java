@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.toolhandler;
 
+import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.core.property.active.PatternBreaking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,16 +40,21 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
             for (int j = 0; j < breakingPattern.pattern()[i].length(); j++) {
                 if (breakingPattern.pattern()[i].charAt(j) == 'x' || breakingPattern.pattern()[i].charAt(j) == 'X') {
                     BlockPos newPos;
-                    if (dir == Direction.EAST || dir == Direction.WEST) {
-                        newPos = new BlockPos(rootPos.getX(), rootPos.getY() + i - centerY, rootPos.getZ() + j - centerX);
+                    if (breakingPattern.direction() == BreakingDirection.ANY) {
+                        if (dir == Direction.EAST || dir == Direction.WEST) {
+                            newPos = new BlockPos(rootPos.getX(), rootPos.getY() + i - centerY, rootPos.getZ() + j - centerX);
 
-                    } else if (dir == Direction.NORTH || dir == Direction.SOUTH) {
-                        newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY() + i - centerY, rootPos.getZ());
+                        } else if (dir == Direction.NORTH || dir == Direction.SOUTH) {
+                            newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY() + i - centerY, rootPos.getZ());
 
+                        } else {
+                            newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ() + i - centerY);
+
+                        }
                     } else {
                         newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ() + i - centerY);
-
                     }
+
                     BlockState newState = world.getBlockState(newPos);
                     if (!newState.isAir() && player.canHarvest(newState)) {
                         list.add(new Pair<>(newState, newPos));

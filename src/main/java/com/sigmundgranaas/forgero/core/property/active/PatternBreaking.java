@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.property.active;
 
 import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
 
-public record PatternBreaking(String[] pattern) implements ActiveProperty {
+public record PatternBreaking(String[] pattern, BreakingDirection direction) implements ActiveProperty {
 
     @Override
     public float applyAttribute(Target target, float currentAttribute) {

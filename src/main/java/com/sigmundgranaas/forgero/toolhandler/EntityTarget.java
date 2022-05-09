@@ -2,18 +2,15 @@ package com.sigmundgranaas.forgero.toolhandler;
 
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.entity.EntityType;
 
 import java.util.Collections;
 import java.util.Set;
 
-public record BlockBreakingEfficiencyTarget(BlockState state) implements Target {
+public record EntityTarget(EntityType<?> targetType) implements Target {
     @Override
     public Set<TargetTypes> getTypes() {
-        return Set.of(TargetTypes.BLOCK);
+        return Set.of(TargetTypes.ENTITY);
     }
 
     @Override
@@ -23,9 +20,10 @@ public record BlockBreakingEfficiencyTarget(BlockState state) implements Target 
 
     @Override
     public boolean isApplicable(Set<String> tag, TargetTypes type) {
-        if (type == TargetTypes.BLOCK) {
+        if (type == TargetTypes.ENTITY) {
             for (String stringTag : tag) {
-                if (state.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(stringTag)))) {
+                var entityType = EntityType.get(stringTag);
+                if (entityType.isPresent() && entityType.get() == targetType) {
                     return true;
                 }
             }

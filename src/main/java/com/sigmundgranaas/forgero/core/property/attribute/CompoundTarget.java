@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
 
 import java.util.List;
