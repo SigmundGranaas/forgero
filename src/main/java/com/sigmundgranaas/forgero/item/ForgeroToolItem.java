@@ -110,7 +110,6 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
             case HOE -> "hoe";
         };
         text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
-
         return text;
     }
 
