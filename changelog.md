@@ -1,3 +1,7 @@
-### Changelog 0.6.1
+### Changelog 0.7.0-RCA
 
-* Added support for a Patchouli guide book
+* Forgero Beta release
+* Added the sword
+* Added the hoe
+* Added the vein mining hoe
+* Added rabbit hide
