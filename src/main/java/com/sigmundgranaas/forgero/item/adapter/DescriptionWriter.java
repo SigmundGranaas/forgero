@@ -186,7 +186,7 @@ public record DescriptionWriter(
         MutableText mutableText = new LiteralText(" Pattern Mining").formatted(Formatting.GRAY);
         tooltip.add(mutableText);
 
-        for (String line : property.pattern()) {
+        for (String line : property.getPattern()) {
             MutableText patternText = new LiteralText(String.format("   %s", line)).formatted(Formatting.WHITE);
             tooltip.add(patternText);
         }
