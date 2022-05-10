@@ -26,6 +26,7 @@
       {
         "type": "BLOCK_BREAKING_PATTERN",
         "direction": "Y",
+        "tag": "forgero:plants",
         "pattern": [
           "   x   ",
           "  xxx  ",
