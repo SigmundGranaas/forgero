@@ -1,9 +1,9 @@
 {
-  "name": "Glowstone",
-  "rarity": 60,
-  "type": "MINERAL",
+  "name": "PhantomMembrane",
+  "rarity": 70,
+  "type": "LEATHER",
   "ingredient": {
-    "item": "minecraft:glowstone_dust"
+    "item": "minecraft:phantom_membrane"
   },
   "properties": {
     "attributes": [
@@ -11,34 +11,22 @@
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 20.0
+        "value": 200.0
       },
       {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
         "value": 65
-      },
-      {
-        "type": "MINING_LEVEL",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 2.0,
-        "condition": {
-          "target": "TOOL_PART_TYPE",
-          "tag": [
-            "HEAD"
-          ]
-        }
       }
     ],
     "passive": [],
     "active": []
   },
   "palette": {
-    "name": "glowstone",
+    "name": "phantommembrane",
     "include": [
-      "minecraft:textures/item/glowstone_dust.png"
+      "minecraft:textures/item/phantom_membrane.png"
     ],
     "exclude": [
     ]
@@ -50,7 +38,7 @@
           "type": "MINING_SPEED",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 2.0
         },
         {
           "type": "ATTACK_DAMAGE",
@@ -60,7 +48,7 @@
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
-              "HEAD"
+              "HANDLE"
             ]
           }
         },
