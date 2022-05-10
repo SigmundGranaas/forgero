@@ -36,8 +36,6 @@ public abstract class PlayerServerInteractionManagerMixin {
     protected ServerPlayerEntity player;
     @Shadow
     protected ServerWorld world;
-    @Shadow
-    private int tickCounter;
 
     @Shadow
     public abstract void finishMining(BlockPos pos, PlayerActionC2SPacket.Action action, String reason);
@@ -59,8 +57,6 @@ public abstract class PlayerServerInteractionManagerMixin {
                         this.finishMining(block.getRight(), action, "destroyed");
                     }
                 }
-
-
             }
         }
     }
