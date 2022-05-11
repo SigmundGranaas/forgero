@@ -16,4 +16,6 @@ public interface ItemRegistry {
     void registerSchematics();
 
     void registerGems();
+
+    void registerOtherItems();
 }
