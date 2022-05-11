@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.core.property.passive;
 
-import com.sigmundgranaas.forgero.core.property.PassivePropertyType;
-
 public record StaticProperty(StaticPassiveType type) implements PassiveProperty, Static {
     @Override
     public PassivePropertyType getPassiveType() {

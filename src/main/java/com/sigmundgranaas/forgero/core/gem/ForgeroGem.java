@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ForgeroGem implements Gem {
     private final int gemLevel;
@@ -65,13 +66,14 @@ public class ForgeroGem implements Gem {
 
     @Override
     public List<Property> getProperties() {
-        return propertyList.stream()
-                .filter(property -> property instanceof Attribute)
+        var leveledAttribute = propertyList.stream().filter(property -> property instanceof Attribute)
                 .map(Attribute.class::cast)
                 .map(attribute -> {
                     AttributeBuilder builder = AttributeBuilder.createAttributeBuilderFromAttribute(attribute);
                     builder.applyLevel(gemLevel);
                     return builder.build();
-                }).collect(Collectors.toList());
+                }).toList();
+        var otherAttributes = propertyList.stream().filter(property -> !(property instanceof Attribute)).toList();
+        return Stream.of(leveledAttribute, otherAttributes).flatMap(List::stream).collect(Collectors.toList());
     }
 }
