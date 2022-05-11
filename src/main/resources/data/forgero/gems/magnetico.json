@@ -2,7 +2,7 @@
   "name": "magnetico",
   "item_identifier": "forgero:item/magnetico_gem",
   "palette": {
-    "name": "copper",
+    "name": "magnetico",
     "include": [
       "minecraft:textures/item/copper_ingot.png"
     ],
