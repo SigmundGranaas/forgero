@@ -25,8 +25,8 @@ public abstract class LivingEntityMagneticMixin {
             if (!properties.isEmpty()) {
 
                 MagneticHandler handler = new MagneticHandler(((LivingEntity) (Object) this));
-                var entities = handler.getNearbyEntities(properties.size());
-                handler.pullEntities(0.1, entities, 2);
+                var entities = handler.getNearbyEntities(properties.size() + 2);
+                handler.pullEntities(5, entities);
 
             }
 
