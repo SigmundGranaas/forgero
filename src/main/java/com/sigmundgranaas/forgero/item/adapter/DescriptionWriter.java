@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemDescriptionWriter;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -20,10 +21,12 @@ import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public record DescriptionWriter(
@@ -45,7 +48,7 @@ public record DescriptionWriter(
     public void addSecondaryMaterial(SecondaryMaterial material) {
         Rarity rarity = getRarityFromInt((int) Property.stream(material.getSecondaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
         MutableText mutableText = new LiteralText("  Secondary: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(rarity.formatting));
+        mutableText.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
@@ -71,7 +74,7 @@ public record DescriptionWriter(
     public void addPrimaryMaterial(PrimaryMaterial material) {
         Rarity rarity = getRarityFromInt((int) Property.stream(material.getPrimaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
         MutableText mutableText = new LiteralText("  Primary: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", material.getName())).formatted(rarity.formatting));
+        mutableText.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
@@ -196,7 +199,7 @@ public record DescriptionWriter(
     @Override
     public void createGemDescription(Gem gem) {
         Rarity rarity = getRarityFromGemLevel(gem.getLevel());
-        MutableText mutableText = new LiteralText("Gem: ").formatted(Formatting.GRAY);
+        MutableText mutableText = new TranslatableText(String.format("item.%s.gem", ForgeroInitializer.MOD_NAMESPACE)).append(": ").formatted(Formatting.GRAY);
         mutableText.append(new LiteralText(String.format("%s, level%s", gem.getName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
 
