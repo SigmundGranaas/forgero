@@ -27,7 +27,7 @@ import java.util.function.Predicate;
  * limitations under the License.
  * <p>
  *
- * <a href="https://github.com/Luligabi1/Incantationem">Original work </a>
+ * <a href="https://github.com/Luligabi1/Incantationem">Original work</a>
  */
 
 
@@ -48,8 +48,11 @@ public class MagneticHandler {
 
     public void pullEntities(int power, List<Entity> entities) {
         for (Entity nearbyEntity : entities) {
-            if (!nearbyEntity.getBlockPos().equals(rootEntity.getBlockPos())) {
-                Vec3d velocity = nearbyEntity.getPos().relativize(new Vec3d(rootVec.x + 0.5, rootVec.y + 0.5, rootVec.z + 0.5)).normalize().multiply(0.02f * power);
+            double dist = nearbyEntity.getPos().distanceTo(rootVec);
+            if (dist < 1) {
+                nearbyEntity.addVelocity(0, 0, 0);
+            } else {
+                Vec3d velocity = nearbyEntity.getPos().relativize(rootVec).normalize().multiply(0.02f * power);
                 nearbyEntity.addVelocity(velocity.x, velocity.y, velocity.z);
             }
         }
