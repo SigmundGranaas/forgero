@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.mixins;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.MagneticHandler;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,7 +26,7 @@ public abstract class LivingEntityMagneticMixin {
             if (!properties.isEmpty()) {
 
                 MagneticHandler handler = new MagneticHandler(((LivingEntity) (Object) this));
-                var entities = handler.getNearbyEntities(properties.size() + 2);
+                var entities = handler.getNearbyEntities(properties.size() + 2, entity -> entity instanceof ItemEntity);
                 handler.pullEntities(5, entities);
 
             }

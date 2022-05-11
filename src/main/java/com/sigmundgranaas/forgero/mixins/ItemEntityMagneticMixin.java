@@ -25,7 +25,7 @@ public abstract class ItemEntityMagneticMixin {
             ItemEntity itemEntity = ((ItemEntity) (Object) this);
             if (!properties.isEmpty()) {
                 MagneticHandler handler = new MagneticHandler(itemEntity);
-                var entities = handler.getNearbyEntities(properties.size() + 2);
+                var entities = handler.getNearbyEntities(properties.size() + 2, entity -> entity instanceof ItemEntity);
                 handler.pullEntities(5, entities);
             }
         }
