@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.item.items.tool;
 
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -13,17 +12,13 @@ import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -99,17 +94,4 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem {
         return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
-
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ForgeroTool forgeroTool = convertItemStack(user.getStackInHand(hand), getTool());
-        if (!world.isClient) {
-            Property.stream(forgeroTool.getProperties(Target.createEmptyTarget()))
-                    .getAttributes()
-                    .forEach(attribute -> {
-                        user.sendMessage(new LiteralText(String.format("Attribute type: %s, property_type: %s", attribute.getAttributeType().toString(), attribute.getType())), false);
-                    });
-        }
-        return super.use(world, user, hand);
-    }
 }
