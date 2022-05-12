@@ -7,23 +7,23 @@
     "AbstractBlockMixin",
     "DynamicToolItemStackMixin",
     "ItemEntityMagneticMixin",
-    "ItemModelGeneratorMixin",
-    "ItemRenderContextMixin",
-    "ItemRenderMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",
     "LivingEntityMagneticMixin",
     "MiningToolItemMixin",
-    "ModelLoaderMixin",
     "PiglinBrainMixin",
     "PlayerEntityAttackMixin",
     "PlayerInteractionManagerMixin",
     "PlayerServerInteractionManagerMixin",
     "RecipeManagerMixin",
-    "ReloadableResourceManagerImplMixin",
     "SmithingRecipeMixin"
   ],
   "client": [
+    "ItemModelGeneratorMixin",
+    "ItemRenderContextMixin",
+    "ItemRenderMixin",
+    "ModelLoaderMixin",
+    "ReloadableResourceManagerImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1
