@@ -17,6 +17,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -84,8 +85,9 @@ public class ForgeroSwordItem extends SwordItem implements ForgeroToolItem {
 
     @Override
     public TagKey<Block> getToolTags() {
-        return null;
+        return TagKey.of(Registry.BLOCK_KEY, new Identifier("minecraft", "cobweb"));
     }
+
 
     @Override
     protected String getOrCreateTranslationKey() {
