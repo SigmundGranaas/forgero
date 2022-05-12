@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
+import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.Static;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
@@ -49,5 +50,10 @@ public record PropertyStream(
     public Stream<Static> getStaticPassiveProperties() {
         return getPassiveProperties().filter(property -> property instanceof Static)
                 .map(Static.class::cast);
+    }
+
+    public Stream<LeveledProperty> getLeveledPassiveProperties() {
+        return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
+                .map(LeveledProperty.class::cast);
     }
 }

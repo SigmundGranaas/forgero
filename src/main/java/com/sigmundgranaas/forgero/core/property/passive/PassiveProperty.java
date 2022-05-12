@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.property.passive;
 
-import com.sigmundgranaas.forgero.core.property.PassivePropertyType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyTypes;
 

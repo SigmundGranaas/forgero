@@ -6,11 +6,13 @@
   "mixins": [
     "AbstractBlockMixin",
     "DynamicToolItemStackMixin",
+    "ItemEntityMagneticMixin",
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",
+    "LivingEntityMagneticMixin",
     "MiningToolItemMixin",
     "ModelLoaderMixin",
     "PiglinBrainMixin",

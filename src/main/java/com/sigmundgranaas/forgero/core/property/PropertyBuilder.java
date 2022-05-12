@@ -17,7 +17,7 @@ public class PropertyBuilder {
             properties.addAll(pojo.active.stream().map(ActivePropertyBuilder::createAttributeFromPojo).toList());
 
         }
-        if (pojo.passiveProperties != null) {
+        if (pojo.passiveProperties != null && !pojo.passiveProperties.isEmpty()) {
             properties.addAll(pojo.passiveProperties.stream().map(PassivePropertyBuilder::createPassivePropertyFromPojo).toList());
         }
         return properties;

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.property;
 
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyType;
 
 import java.util.List;
 

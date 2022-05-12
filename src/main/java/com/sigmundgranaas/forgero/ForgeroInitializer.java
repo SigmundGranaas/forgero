@@ -32,6 +32,7 @@ public class ForgeroInitializer implements ModInitializer {
         ItemRegistry.INSTANCE.registerToolParts();
         ItemRegistry.INSTANCE.registerSchematics();
         ItemRegistry.INSTANCE.registerGems();
+        ItemRegistry.INSTANCE.registerOtherItems();
     }
 
 

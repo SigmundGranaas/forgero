@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -86,5 +87,10 @@ public class ItemRegistryImpl implements ItemRegistry {
         collection.INSTANCE.getGems().forEach(gemItem -> {
             Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, gemItem.getGem().getIdentifier()), gemItem);
         });
+    }
+
+    @Override
+    public void registerOtherItems() {
+        Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "magnetico"), new Item(new Item.Settings().group(ItemGroup.MISC)));
     }
 }
