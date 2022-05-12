@@ -1,7 +1,10 @@
-### Changelog 0.7.2
+### Changelog 0.7.3
 
 # Forgero Beta release
 
+* Fixed swords crashing when used on certain blocks
+* Removed right click debug text from pickaxes
+* Moved Mixins to client side
 * Added the magnetico gem, which will pull item entities towards you, and itself, if left in the world
 * Added block tag filter to pattern mining property
 * Added phantom membrane as a secondary material
