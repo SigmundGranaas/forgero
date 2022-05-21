@@ -1,7 +1,9 @@
-### Changelog 0.7.3
+### Changelog 0.7.4
 
 # Forgero Beta release
 
+* Fixed Tags not applied to vanilla tools (greensad)
+* Added chinese translation (xiaxin113)
 * Fixed swords crashing when used on certain blocks
 * Removed right click debug text from pickaxes
 * Moved Mixins to client side
