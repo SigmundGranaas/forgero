@@ -43,7 +43,21 @@ public class DynamicResourceGenerator {
         //RESOURCE_PACK.addTag(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "blocks/vein_mining_sand"), new JTag().add(new Identifier("minecraft:sand")));
         addToolPartHeadTags(ForgeroToolTypes.PICKAXE, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/pickaxehead_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/pickaxeheads"));
         addToolPartHeadTags(ForgeroToolTypes.AXE, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/axehead_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/axeheads"));
-        addToolPartHeadTags(ForgeroToolTypes.SHOVEL, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/shovel_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/shovels"));
+        addToolPartHeadTags(ForgeroToolTypes.SHOVEL, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/shovelhead_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/shovelheads"));
+        addToolPartHeadTags(ForgeroToolTypes.HOE, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/hoehead_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/hoeheads"));
+        addToolPartHeadTags(ForgeroToolTypes.SWORD, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/swordhead_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/swordheads"));
+
+        for (ForgeroToolTypes type : ForgeroToolTypes.values()) {
+            JTag toolTag = new JTag();
+            ForgeroRegistry.getInstance()
+                    .toolCollection().getTools()
+                    .stream()
+                    .filter(tool -> tool.getToolType() == type)
+                    .map(tool -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString()))
+                    .forEach(toolTag::add);
+
+            RESOURCE_PACK.addTag(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/" + type.getToolName().toLowerCase() + "s"), toolTag);
+        }
 
 
         addToolPartTags(ForgeroToolPartTypes.HANDLE, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/handle_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/handles"));
@@ -54,7 +68,7 @@ public class DynamicResourceGenerator {
 
 
     private void addToolPartHeadTags(ForgeroToolTypes type, Identifier patternsTagId, Identifier headTagId) {
-        JTag pickaxeheads = new JTag();
+        JTag pickaxeHeads = new JTag();
         ForgeroRegistry
                 .getInstance()
                 .toolPartCollection()
@@ -62,8 +76,8 @@ public class DynamicResourceGenerator {
                 .stream()
                 .filter(part -> part.getToolType() == ForgeroToolTypes.PICKAXE)
                 .map(head -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, head.getToolPartIdentifier()))
-                .forEach(pickaxeheads::add);
-        RESOURCE_PACK.addTag(headTagId, pickaxeheads);
+                .forEach(pickaxeHeads::add);
+        RESOURCE_PACK.addTag(headTagId, pickaxeHeads);
 
         JTag pickaxeheadsSchematics = new JTag();
         ForgeroRegistry

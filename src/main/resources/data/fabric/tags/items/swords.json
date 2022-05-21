@@ -2,31 +2,31 @@
   "replace": false,
   "values": [
     {
-      "id": "#forgero:pickaxes",
+      "id": "#forgero:swords",
       "required": false
     },
     {
-      "id": "minecraft:wooden_pickaxe",
+      "id": "minecraft:wooden_sword",
       "required": false
     },
     {
-      "id": "minecraft:stone_pickaxe",
+      "id": "minecraft:stone_sword",
       "required": false
     },
     {
-      "id": "minecraft:iron_pickaxe",
+      "id": "minecraft:iron_sword",
       "required": false
     },
     {
-      "id": "minecraft:golden_pickaxe",
+      "id": "minecraft:golden_sword",
       "required": false
     },
     {
-      "id": "minecraft:diamond_pickaxe",
+      "id": "minecraft:diamond_sword",
       "required": false
     },
     {
-      "id": "minecraft:netherite_pickaxe",
+      "id": "minecraft:netherite_sword",
       "required": false
     }
   ]

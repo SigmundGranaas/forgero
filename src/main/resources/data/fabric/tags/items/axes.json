@@ -2,39 +2,31 @@
   "replace": false,
   "values": [
     {
-      "id": "forgero:oak_axe",
+      "id": "#forgero:axes",
       "required": false
     },
     {
-      "id": "forgero:acacia_axe",
+      "id": "minecraft:wooden_axe",
       "required": false
     },
     {
-      "id": "forgero:spruce_axe",
+      "id": "minecraft:stone_axe",
       "required": false
     },
     {
-      "id": "forgero:birch_axe",
+      "id": "minecraft:iron_axe",
       "required": false
     },
     {
-      "id": "forgero:stone_axe",
+      "id": "minecraft:golden_axe",
       "required": false
     },
     {
-      "id": "forgero:iron_axe",
+      "id": "minecraft:diamond_axe",
       "required": false
     },
     {
-      "id": "forgero:gold_axe",
-      "required": false
-    },
-    {
-      "id": "forgero:diamond_axe",
-      "required": false
-    },
-    {
-      "id": "forgero:netherite_axe",
+      "id": "minecraft:netherite_axe",
       "required": false
     }
   ]
