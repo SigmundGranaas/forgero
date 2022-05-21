@@ -29,6 +29,8 @@ public class ItemRegistryImpl implements ItemRegistry {
     public static final TagKey<Item> PICKAXES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "pickaxes"));
     public static final TagKey<Item> SHOVELS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "shovels"));
     public static final TagKey<Item> AXES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "axes"));
+    public static final TagKey<Item> HOES = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "hoes"));
+    public static final TagKey<Item> SWORDS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "swords"));
     public static final TagKey<Item> HEADS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "heads"));
     public static final TagKey<Item> GEMS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "gems"));
 
