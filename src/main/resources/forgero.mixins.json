@@ -13,7 +13,6 @@
     "MiningToolItemMixin",
     "PiglinBrainMixin",
     "PlayerEntityAttackMixin",
-    "PlayerInteractionManagerMixin",
     "PlayerServerInteractionManagerMixin",
     "RecipeManagerMixin",
     "SmithingRecipeMixin"
@@ -21,6 +20,7 @@
   "client": [
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
+    "PlayerInteractionManagerMixin",
     "ItemRenderMixin",
     "ModelLoaderMixin",
     "ReloadableResourceManagerImplMixin"
