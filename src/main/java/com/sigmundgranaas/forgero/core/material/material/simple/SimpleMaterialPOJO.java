@@ -1,15 +1,13 @@
 package com.sigmundgranaas.forgero.core.material.material.simple;
 
+import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 import com.sigmundgranaas.forgero.core.property.PropertyPOJO;
 
 import java.util.List;
 
-public class SimpleMaterialPOJO {
-    public String name;
-    public int rarity;
+public class SimpleMaterialPOJO extends ForgeroDataResource {
     public MaterialType type;
-    public PropertyPOJO properties;
     public Ingredient ingredient;
     public Palette palette;
     public Primary primary;
@@ -18,7 +16,6 @@ public class SimpleMaterialPOJO {
     public static SimpleMaterialPOJO createDefaultMaterialPOJO() {
         SimpleMaterialPOJO pojo = new SimpleMaterialPOJO();
         pojo.name = "Default";
-        pojo.rarity = 1;
         pojo.type = MaterialType.METAL;
         pojo.properties = new PropertyPOJO();
         Palette palette = new Palette();
