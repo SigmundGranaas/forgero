@@ -1,6 +1,5 @@
 {
   "name": "Acacia",
-  "rarity": 12,
   "type": "WOOD",
   "ingredient": {
     "item": "minecraft:acacia_planks"
