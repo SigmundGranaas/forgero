@@ -47,11 +47,6 @@
       }
     }
   },
-  "rewards": {
-    "loot": [
-      "forgero:grant_book_on_advancement"
-    ]
-  },
   "requirements": [
     [
       "handles",

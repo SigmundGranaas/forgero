@@ -31,7 +31,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
 
     public AbstractForgeroMaterial(SimpleMaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
-        this.rarity = material.rarity;
+        this.rarity = 0;
         this.paletteIdentifiers = material.palette.include;
         this.paletteExclusionIdentifiers = material.palette.exclude;
         this.properties = PropertyBuilder.createPropertyListFromPOJO(material.properties);

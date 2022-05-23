@@ -6,13 +6,15 @@ import com.sigmundgranaas.forgero.core.material.MaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
-import com.sigmundgranaas.forgero.core.material.material.factory.MaterialFactory;
 import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public record SimpleMaterialLoader(List<String> materials) implements MaterialLoader {
@@ -31,7 +33,7 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
                 List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
                 PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
             });
-            jsonMaterials.stream().sorted(Comparator.comparingInt(material -> material.rarity)).forEach(material -> materialMap.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
+            //jsonMaterials.stream().sorted(Comparator.comparingInt(material -> material.rarity)).forEach(material -> materialMap.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
         }
         return materialMap;
     }

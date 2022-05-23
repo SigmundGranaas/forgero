@@ -33,7 +33,9 @@ import com.sigmundgranaas.forgero.core.util.ListPOJO;
 import com.sigmundgranaas.forgero.resources.FabricModPOJOLoader;
 import com.sigmundgranaas.forgero.resources.ResourceLocations;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ForgeroResourceInitializer {
@@ -103,7 +105,7 @@ public class ForgeroResourceInitializer {
     }
 
     private MaterialCollection initializeMaterials() {
-        Map<String, ForgeroMaterial> materials = new HashMap<>();
+        Map<String, ForgeroMaterial> materials;
         var pojos = new FabricModPOJOLoader<>(SimpleMaterialPOJO.class, ResourceLocations.MATERIAL_LOCATION).loadPojosFromMods();
         try {
             pojos.forEach(pojo -> {
@@ -116,7 +118,9 @@ public class ForgeroResourceInitializer {
             ForgeroInitializer.LOGGER.error(e);
         }
 
-        pojos.stream().sorted(Comparator.comparingInt(material -> material.rarity)).forEach(material -> materials.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
+        materials = pojos.stream()
+                .map(MaterialFactory.INSTANCE::createMaterial)
+                .collect(Collectors.toMap(ForgeroMaterial::getName, material -> material));
 
 
         if (materials.isEmpty()) {
