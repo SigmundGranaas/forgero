@@ -12,6 +12,5 @@ public class GemFactory {
         String name = gemPOJO.name.toLowerCase(Locale.ROOT);
         var properties = PropertyBuilder.createPropertyListFromPOJO(gemPOJO.properties);
         return new ForgeroGem(1, name + "_gem", properties, gemPOJO.placement);
-
     }
 }

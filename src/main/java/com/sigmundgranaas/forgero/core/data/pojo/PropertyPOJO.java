@@ -13,7 +13,7 @@ import java.util.List;
 public class PropertyPOJO {
     @SerializedName("attributes")
     public List<PropertyPOJO.Attribute> attributes;
-    @SerializedName(value = "passiveProperties", alternate = "passive")
+    @SerializedName(value = "passiveProperties", alternate = {"passive", "passive_properties"})
     public List<PropertyPOJO.Passive> passiveProperties;
     @SerializedName(value = "active")
     public List<PropertyPOJO.Active> active;
@@ -45,6 +45,4 @@ public class PropertyPOJO {
         public TargetTypes target;
         public List<String> tag;
     }
-
-
 }

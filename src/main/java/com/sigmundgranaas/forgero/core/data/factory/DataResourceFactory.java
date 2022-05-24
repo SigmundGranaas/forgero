@@ -22,17 +22,20 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
     Map<String, T> pojos = new HashMap<>();
     Set<String> availableNameSpaces = new HashSet<>();
 
-    public DataResourceFactory() {
-    }
 
     public DataResourceFactory(List<T> pojos, Set<String> availableNameSpaces) {
-        this.pojos = pojos.stream().collect(Collectors.toMap(pojo -> pojo.name, pojo -> pojo));
+        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo));
         this.availableNameSpaces = availableNameSpaces;
     }
 
-
     public static <T> T replaceAttributesDefault(T attribute1, T attribute2, T defaultAttribute) {
         if (attribute1 == null && attribute2 == null)
+            return defaultAttribute;
+        else return Objects.requireNonNullElse(attribute1, attribute2);
+    }
+
+    public static int replaceAttributesDefault(int attribute1, int attribute2, int defaultAttribute) {
+        if (attribute1 == 0 && attribute2 == 0)
             return defaultAttribute;
         else return Objects.requireNonNullElse(attribute1, attribute2);
     }

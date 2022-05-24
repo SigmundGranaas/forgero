@@ -21,4 +21,8 @@ public class ForgeroDataResource {
     public SchemaVersion version = SchemaVersion.V1;
     @SerializedName(value = "abstract_resource", alternate = "abstractResource")
     public boolean abstractResource = false;
+
+    public String getName() {
+        return name;
+    }
 }

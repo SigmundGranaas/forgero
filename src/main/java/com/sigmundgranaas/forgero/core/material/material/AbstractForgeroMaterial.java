@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.data.pojo.SimpleMaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final MaterialType type;
     protected final String ingredient;
 
-    public AbstractForgeroMaterial(SimpleMaterialPOJO material) {
+    public AbstractForgeroMaterial(MaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
         this.rarity = 0;
         this.paletteIdentifiers = material.palette.include;

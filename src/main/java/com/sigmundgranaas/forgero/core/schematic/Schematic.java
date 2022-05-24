@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.schematic;
 
+import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -11,15 +12,17 @@ public class Schematic implements PropertyContainer {
     private final ForgeroToolPartTypes type;
     private final String name;
     private final List<Property> properties;
-    private final String model;
+
     private final int rarity;
+    private final String model;
+
     private final int materialCount;
 
-    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, int rarity, String model, int materialCount) {
+    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, String model, int materialCount) {
         this.type = type;
         this.name = name;
         this.properties = properties;
-        this.rarity = rarity;
+        this.rarity = (int) Property.stream(properties).applyAttribute(Target.EMPTY, AttributeType.RARITY);
         this.model = model;
         this.materialCount = materialCount;
     }

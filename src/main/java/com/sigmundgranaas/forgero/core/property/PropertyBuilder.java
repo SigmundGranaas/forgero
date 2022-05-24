@@ -11,6 +11,10 @@ import java.util.List;
 public class PropertyBuilder {
     public static List<Property> createPropertyListFromPOJO(PropertyPOJO pojo) {
         List<Property> properties = new ArrayList<>();
+        if (pojo == null) {
+            return properties;
+        }
+
         if (pojo.attributes != null) {
             properties.addAll(pojo.attributes.stream().map(AttributeBuilder::createAttributeFromPojo).toList());
         }
