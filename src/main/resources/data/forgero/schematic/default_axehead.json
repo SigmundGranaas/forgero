@@ -1,6 +1,7 @@
 {
   "name": "default",
   "type": "HEAD",
+  "resource_type": "SCHEMATIC",
   "toolType": "AXE",
   "model": "default",
   "output": "axehead_default",

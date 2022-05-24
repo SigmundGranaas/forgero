@@ -10,6 +10,7 @@ public class ForgeroDataResource {
     public static List<String> DEFAULT_DEPENDENCIES = List.of("minecraft", "forgero");
     public String name;
     @Nullable
+    @SerializedName(value = "dependencies", alternate = "dependency")
     public List<String> dependencies = DEFAULT_DEPENDENCIES;
     @Nullable
     public PropertyPOJO properties;

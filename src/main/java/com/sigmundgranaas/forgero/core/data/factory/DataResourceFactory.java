@@ -9,6 +9,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES;
+
 /**
  * Abstract class for managing the creation of Forgero content from data files.
  * This class handles the general structure and logic in data files.
@@ -19,13 +21,18 @@ import java.util.stream.Stream;
  * @param <R> The resulting resource type
  */
 public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
-    Map<String, T> pojos = new HashMap<>();
-    Set<String> availableNameSpaces = new HashSet<>();
+    Map<String, T> pojos;
+    Set<String> availableNameSpaces;
 
 
     public DataResourceFactory(List<T> pojos, Set<String> availableNameSpaces) {
         this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo));
         this.availableNameSpaces = availableNameSpaces;
+    }
+
+    public DataResourceFactory(List<T> pojos) {
+        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo));
+        this.availableNameSpaces = new HashSet<>(DEFAULT_DEPENDENCIES);
     }
 
     public static <T> T replaceAttributesDefault(T attribute1, T attribute2, T defaultAttribute) {
@@ -66,16 +73,13 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         if (pojo.abstractResource) {
             return Optional.empty();
         }
+        Optional<T> createdPojo = pojo.parent == null ? Optional.of(mergeStandalone(pojo)) : assemblePojoFromParent(pojo);
 
-        if (!resolveDependencies(pojo)) {
-            ForgeroInitializer.LOGGER.warn("Unable to create resource {} of type {}, because of missing dependencies: {}", pojo.name, pojo.resourceType, pojo.dependencies);
+        if (createdPojo.isPresent() && validatePojo(createdPojo.get())) {
+            return createdPojo.flatMap(this::createResource);
+        } else {
             return Optional.empty();
         }
-
-        if (pojo.parent == null) {
-            return createResource(pojo);
-        }
-        return assemblePojoFromParent(pojo).flatMap(this::createResource);
     }
 
     /**
@@ -118,8 +122,19 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         return mergePojos(parent, child, base);
     }
 
-    private boolean resolveDependencies(T pojo) {
+    private T mergeStandalone(T child) {
+        return mergePojosBase(child, child);
+    }
+
+    protected boolean resolveDependencies(T pojo) {
         return pojo.dependencies == null || availableNameSpaces.containsAll(pojo.dependencies);
+    }
+
+    protected boolean validatePojo(T pojo) {
+        if (!resolveDependencies(pojo)) {
+            ForgeroInitializer.LOGGER.error("Unable to create resource {} of type {}, because of missing dependencies: {}", pojo.name, pojo.resourceType, pojo.dependencies);
+            return false;
+        } else return true;
     }
 
     protected abstract Optional<R> createResource(T pojo);

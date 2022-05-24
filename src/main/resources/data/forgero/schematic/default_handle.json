@@ -1,6 +1,7 @@
 {
   "name": "default",
   "type": "HANDLE",
+  "resource_type": "SCHEMATIC",
   "model": "default",
   "output": "handle_default",
   "rarity": 1,

@@ -1,0 +1,24 @@
+{
+  "name": "testpattern",
+  "parent": "default_shovelhead",
+  "dependencies": [
+    "testmod"
+  ],
+  "type": "HEAD",
+  "toolType": "SHOVEL",
+  "model": "pattern",
+  "output": "shovel_pattern",
+  "materialCount": 3,
+  "properties": {
+    "active": [
+      {
+        "type": "BLOCK_BREAKING_PATTERN",
+        "pattern": [
+          "xxx",
+          "xxx",
+          "xxx"
+        ]
+      }
+    ]
+  }
+}

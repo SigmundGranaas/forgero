@@ -1,6 +1,7 @@
 {
   "name": "default",
   "type": "HEAD",
+  "resource_type": "SCHEMATIC",
   "toolType": "PICKAXE",
   "model": "default",
   "output": "pickaxe_default",

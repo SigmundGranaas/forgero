@@ -12,6 +12,10 @@ public class SchematicPOJO extends ForgeroDataResource {
 
     @Override
     public String getName() {
-        return toolType + type.getName() + "_" + super.getName();
+        if (toolType == null) {
+            return super.getName() + "_" + type.getName();
+        } else {
+            return super.getName() + "_" + toolType.getToolName() + type.getName();
+        }
     }
 }

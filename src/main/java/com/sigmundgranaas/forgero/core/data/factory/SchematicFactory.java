@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
+import com.sigmundgranaas.forgero.core.data.ResourceType;
 import com.sigmundgranaas.forgero.core.data.pojo.SchematicPOJO;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
@@ -33,7 +34,7 @@ public class SchematicFactory extends DataResourceFactory<SchematicPOJO, Schemat
         basePojo.model = replaceAttributesDefault(child.model, parent.model, null);
         basePojo.toolType = replaceAttributesDefault(child.toolType, parent.toolType, null);
         basePojo.type = replaceAttributesDefault(child.type, parent.type, null);
-
+        basePojo.resourceType = ResourceType.SCHEMATIC;
         return basePojo;
     }
 
