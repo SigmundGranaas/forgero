@@ -95,8 +95,8 @@ public class ForgeroResourceInitializer {
             List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
             PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
         });
-        GemFactory factory = new GemFactory();
-        var gems = pojos.stream().map(factory::createGem).collect(Collectors.toList());
+        GemFactory factory = new GemFactory(pojos, Set.of("minecraft", "forgero"));
+        var gems = pojos.stream().map(factory::buildResource).flatMap(Optional::stream).collect(Collectors.toList());
 
         if (pojos.isEmpty()) {
             gems = new FileGemLoader(List.of("diamond", "emerald", "lapis")).loadGems();
