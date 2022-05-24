@@ -5,13 +5,15 @@ import com.sigmundgranaas.forgero.core.data.pojo.PropertyPOJO;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 
 public class ForgeroDataResource {
-    public static List<String> DEFAULT_DEPENDENCIES = List.of("minecraft", "forgero");
+    public static List<String> DEFAULT_DEPENDENCIES_LIST = List.of("minecraft", "forgero");
+    public static Set<String> DEFAULT_DEPENDENCIES_SET = Set.of("minecraft", "forgero");
     public String name;
     @Nullable
     @SerializedName(value = "dependencies", alternate = "dependency")
-    public List<String> dependencies = DEFAULT_DEPENDENCIES;
+    public List<String> dependencies = DEFAULT_DEPENDENCIES_LIST;
     @Nullable
     public PropertyPOJO properties;
     @SerializedName(value = "resource_type", alternate = "resourceType")

@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES;
+import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES_LIST;
 
 /**
  * Abstract class for managing the creation of Forgero content from data files.
@@ -32,7 +32,7 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
 
     public DataResourceFactory(List<T> pojos) {
         this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo));
-        this.availableNameSpaces = new HashSet<>(DEFAULT_DEPENDENCIES);
+        this.availableNameSpaces = new HashSet<>(DEFAULT_DEPENDENCIES_LIST);
     }
 
     public static <T> T replaceAttributesDefault(T attribute1, T attribute2, T defaultAttribute) {

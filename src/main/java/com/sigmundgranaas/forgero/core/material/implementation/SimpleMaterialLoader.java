@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.core.material.implementation;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.factory.MaterialFactory;
 import com.sigmundgranaas.forgero.core.data.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialLoader;
@@ -25,7 +27,7 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
     public Map<String, ForgeroMaterial> getMaterials() {
         if (materialMap.isEmpty()) {
             List<MaterialPOJO> jsonMaterials = materials.stream()
-                    .map(material -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/materials/simple/%s.json", material), MaterialPOJO.class))
+                    .map(material -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/materials/%s.json", material), MaterialPOJO.class))
                     .filter(Optional::isPresent)
                     .map(Optional::get).toList();
             jsonMaterials.forEach(pojo -> {
@@ -33,7 +35,8 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
                 List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
                 PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
             });
-            //jsonMaterials.stream().sorted(Comparator.comparingInt(material.json -> material.json.rarity)).forEach(material.json -> materialMap.put(material.json.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material.json)));
+            var factory = MaterialFactory.createFactory(jsonMaterials, ForgeroDataResource.DEFAULT_DEPENDENCIES_SET);
+            return jsonMaterials.stream().map(factory::buildResource).flatMap(Optional::stream).collect(Collectors.toMap(ForgeroMaterial::getName, (material) -> material));
         }
         return materialMap;
     }
