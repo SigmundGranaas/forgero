@@ -1,33 +1,18 @@
 {
   "name": "Andesite",
-  "rarity": 9,
-  "type": "STONE",
+  "parent": "stoned",
   "ingredient": {
     "item": "minecraft:andesite"
   },
   "properties": {
     "attributes": [
       {
-        "type": "MINING_LEVEL",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 1.0,
-        "condition": {
-          "target": "TOOL_PART_TYPE",
-          "tag": [
-            "HEAD"
-          ]
-        }
-      },
-      {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
         "value": 7
       }
-    ],
-    "passive": [],
-    "active": []
+    ]
   },
   "palette": {
     "name": "andesite",
@@ -91,9 +76,7 @@
             ]
           }
         }
-      ],
-      "passive": [],
-      "active": []
+      ]
     }
   },
   "secondary": {
@@ -117,9 +100,7 @@
           "operation": "ADDITION",
           "value": 0.1
         }
-      ],
-      "passive": [],
-      "active": []
+      ]
     }
   }
 }

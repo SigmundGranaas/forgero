@@ -1,0 +1,31 @@
+{
+  "parent": "material",
+  "name": "stoned",
+  "type": "STONE",
+  "abstract_resource": true,
+  "ingredient": {
+    "item": "minecraft:stone"
+  },
+  "palette": {
+    "name": "stoned",
+    "include": [
+      "minecraft:textures/block/stone.png"
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 1.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      }
+    ]
+  }
+}

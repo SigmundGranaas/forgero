@@ -33,9 +33,7 @@ import com.sigmundgranaas.forgero.core.util.ListPOJO;
 import com.sigmundgranaas.forgero.resources.FabricModPOJOLoader;
 import com.sigmundgranaas.forgero.resources.ResourceLocations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ForgeroResourceInitializer {
@@ -109,23 +107,26 @@ public class ForgeroResourceInitializer {
         var pojos = new FabricModPOJOLoader<>(SimpleMaterialPOJO.class, ResourceLocations.MATERIAL_LOCATION).loadPojosFromMods();
         try {
             pojos.forEach(pojo -> {
-                List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
-                List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
-                PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
+                if (!pojo.abstractResource) {
+                    List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+                    List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
+                    PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
+
+                }
             });
         } catch (NullPointerException e) {
             ForgeroInitializer.LOGGER.error("Error occurred trying to load materials. Likely due to Malformed JSON");
             ForgeroInitializer.LOGGER.error(e);
         }
+        MaterialFactory factory = MaterialFactory.createFactory(pojos, Set.of("minecraft", "forgero"));
 
         materials = pojos.stream()
-                .map(MaterialFactory.INSTANCE::createMaterial)
+                .map(factory::createMaterial)
+                .flatMap(Optional::stream)
                 .collect(Collectors.toMap(ForgeroMaterial::getName, material -> material));
-
 
         if (materials.isEmpty()) {
             return new MaterialCollectionImpl(new SimpleMaterialLoader(List.of("iron", "oak", "diamond", "netherite")).getMaterials());
-
         }
 
         return new MaterialCollectionImpl(materials);

@@ -1,8 +1,8 @@
 {
-  "name": "Acacia",
-  "type": "WOOD",
+  "name": "Granite",
+  "parent": "stoned",
   "ingredient": {
-    "item": "minecraft:acacia_planks"
+    "item": "minecraft:granite"
   },
   "properties": {
     "attributes": [
@@ -10,19 +10,18 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 5
+        "value": 7
       }
     ],
     "passive": [],
     "active": []
   },
   "palette": {
-    "name": "acacia",
+    "name": "granite",
     "include": [
-      "minecraft:textures/item/acacia_boat.png"
+      "minecraft:textures/block/granite.png"
     ],
     "exclude": [
-      "minecraft:textures/item/oak_boat.png"
     ]
   },
   "primary": {
@@ -32,7 +31,19 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 3.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 1.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -44,34 +55,25 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 59.0,
+          "value": 120.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
-              "HEAD"
+              "HEAD",
+              "HANDLE",
+              "BINDING"
             ]
           }
         },
         {
           "type": "MINING_SPEED",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 2.0,
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 0.85,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
-              "HANDLE"
-            ]
-          }
-        },
-        {
-          "type": "ATTACK_SPEED",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 0.5,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
+              "BINDING",
               "HANDLE"
             ]
           }
@@ -86,19 +88,19 @@
       "attributes": [
         {
           "type": "MINING_SPEED",
-          "order": "MIDDLE",
+          "order": "BASE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 0.3
         },
         {
           "type": "ATTACK_DAMAGE",
-          "order": "MIDDLE",
+          "order": "BASE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 0.3
         },
         {
           "type": "ATTACK_SPEED",
-          "order": "MIDDLE",
+          "order": "BASE",
           "operation": "ADDITION",
           "value": 0.1
         }

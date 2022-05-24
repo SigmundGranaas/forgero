@@ -1,0 +1,15 @@
+{
+  "parent": "material",
+  "name": "wood",
+  "type": "WOOD",
+  "abstract_resource": true,
+  "ingredient": {
+    "item": "minecraft:oak_planks"
+  },
+  "palette": {
+    "name": "wood",
+    "include": [
+      "minecraft:textures/item/oak_boat.png"
+    ]
+  }
+}

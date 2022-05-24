@@ -1,9 +1,8 @@
 {
-  "name": "Birch",
-  "rarity": 5,
-  "type": "WOOD",
+  "name": "Stone",
+  "parent": "stoned",
   "ingredient": {
-    "item": "minecraft:birch_planks"
+    "item": "minecraft:cobblestone"
   },
   "properties": {
     "attributes": [
@@ -11,19 +10,22 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 5
+        "value": 7
       }
     ],
     "passive": [],
     "active": []
   },
   "palette": {
-    "name": "birch",
+    "name": "stone",
     "include": [
-      "minecraft:textures/item/birch_boat.png"
+      "minecraft:textures/item/stone_sword.png",
+      "minecraft:textures/item/stone_shovel.png"
     ],
     "exclude": [
-      "minecraft:textures/item/oak_boat.png"
+      "minecraft:textures/item/golden_sword.png",
+      "minecraft:textures/item/diamond_sword.png",
+      "minecraft:textures/item/diamond_shovel.png"
     ]
   },
   "primary": {
@@ -33,7 +35,19 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 3.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 1.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -45,35 +59,13 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 60.0,
+          "value": 100.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
-              "HEAD"
-            ]
-          }
-        },
-        {
-          "type": "DURABILITY",
-          "order": "MIDDLE",
-          "operation": "MULTIPLICATION",
-          "value": 1.2,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HANDLE"
-            ]
-          }
-        },
-        {
-          "type": "DURABILITY",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 50,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HANDLE"
+              "HEAD",
+              "HANDLE",
+              "BINDING"
             ]
           }
         },
@@ -81,10 +73,11 @@
           "type": "MINING_SPEED",
           "order": "MIDDLE",
           "operation": "MULTIPLICATION",
-          "value": 1.1,
+          "value": 0.90,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
+              "BINDING",
               "HANDLE"
             ]
           }
@@ -99,15 +92,21 @@
       "attributes": [
         {
           "type": "MINING_SPEED",
-          "order": "MIDDLE",
+          "order": "BASE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 0.3
         },
         {
           "type": "ATTACK_DAMAGE",
-          "order": "MIDDLE",
+          "order": "BASE",
           "operation": "ADDITION",
           "value": 0.3
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 0.1
         }
       ],
       "passive": [],

@@ -7,14 +7,16 @@ import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.core.material.MaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.factory.MaterialFactory;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
 import com.sigmundgranaas.forgero.utils.Utils;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public record RealisticMaterialLoader(String materialPath) implements MaterialLoader {
     public static final HashMap<String, ForgeroMaterial> materialMap = new HashMap<>();
@@ -51,8 +53,8 @@ public record RealisticMaterialLoader(String materialPath) implements MaterialLo
     @Override
     public Map<String, ForgeroMaterial> getMaterials() {
         if (materialMap.isEmpty()) {
-            List<RealisticMaterialPOJO> jsonMaterials = loadMaterials();
-            jsonMaterials.forEach(material -> materialMap.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
+            //List<RealisticMaterialPOJO> jsonMaterials = loadMaterials();
+            //jsonMaterials.forEach(material -> materialMap.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
         }
         return materialMap;
     }

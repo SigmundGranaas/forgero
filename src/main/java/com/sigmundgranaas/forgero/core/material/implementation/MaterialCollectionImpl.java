@@ -17,10 +17,8 @@ import java.util.stream.Collectors;
 
 /**
  * A singleton implementation of MaterialCollection
- * Will load material when creating
  */
 public class MaterialCollectionImpl implements MaterialCollection {
-    private static MaterialCollectionImpl INSTANCE;
     private final Map<String, ForgeroMaterial> materials;
 
     public MaterialCollectionImpl(Map<String, ForgeroMaterial> materials) {

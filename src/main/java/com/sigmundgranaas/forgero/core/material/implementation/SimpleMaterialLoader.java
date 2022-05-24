@@ -33,7 +33,7 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
                 List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
                 PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
             });
-            //jsonMaterials.stream().sorted(Comparator.comparingInt(material -> material.rarity)).forEach(material -> materialMap.put(material.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material)));
+            //jsonMaterials.stream().sorted(Comparator.comparingInt(material.json -> material.json.rarity)).forEach(material.json -> materialMap.put(material.json.name.toLowerCase(Locale.ROOT), MaterialFactory.INSTANCE.createMaterial(material.json)));
         }
         return materialMap;
     }

@@ -49,7 +49,7 @@ class MaterialCollectionImplTest {
         ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING));
     }
 
-    // Core modules, like material, should not depend on classes from Minecraft.
+    // Core modules, like material.json, should not depend on classes from Minecraft.
     @Test
     void assertMaterialsIsNotToolMaterial() {
         ForgeroRegistry.getInstance().materialCollection().getMaterialsAsList().forEach(material -> Assertions.assertFalse(material instanceof ToolMaterial));
