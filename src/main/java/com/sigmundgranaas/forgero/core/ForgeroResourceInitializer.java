@@ -118,10 +118,10 @@ public class ForgeroResourceInitializer {
             ForgeroInitializer.LOGGER.error("Error occurred trying to load materials. Likely due to Malformed JSON");
             ForgeroInitializer.LOGGER.error(e);
         }
-        MaterialFactory factory = MaterialFactory.createFactory(pojos, Set.of("minecraft", "forgero"));
+        var factory = MaterialFactory.createFactory(pojos, Set.of("minecraft", "forgero"));
 
         materials = pojos.stream()
-                .map(factory::createMaterial)
+                .map(factory::buildResource)
                 .flatMap(Optional::stream)
                 .collect(Collectors.toMap(ForgeroMaterial::getName, material -> material));
 

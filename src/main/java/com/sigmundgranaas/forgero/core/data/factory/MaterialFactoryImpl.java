@@ -8,21 +8,18 @@ import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleSecondaryMaterialImpl;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-public class MaterialFactoryImpl implements MaterialFactory {
+public class MaterialFactoryImpl extends DataResourceFactory<SimpleMaterialPOJO, ForgeroMaterial> implements MaterialFactory {
     private static MaterialFactoryImpl INSTANCE;
-    Map<String, SimpleMaterialPOJO> materialPOJOS = new HashMap<>();
-    Set<String> availableNameSpaces = new HashSet<>();
 
     public MaterialFactoryImpl() {
     }
 
     public MaterialFactoryImpl(List<SimpleMaterialPOJO> pojos, Set<String> availableNameSpaces) {
-        this.materialPOJOS = pojos.stream().collect(Collectors.toMap(pojo -> pojo.name, pojo -> pojo));
-        this.availableNameSpaces = availableNameSpaces;
+        super(pojos, availableNameSpaces);
     }
 
 
@@ -33,49 +30,7 @@ public class MaterialFactoryImpl implements MaterialFactory {
         return INSTANCE;
     }
 
-    public static <T> T replaceAttributesDefault(T attribute1, T attribute2, T defaultAttribute) {
-        if (attribute1 == null && attribute2 == null)
-            return defaultAttribute;
-        else return Objects.requireNonNullElse(attribute1, attribute2);
-    }
-
-    public static <T> T attributeOrDefault(T attribute1, T defaultAttribute) {
-        return Objects.requireNonNullElse(attribute1, defaultAttribute);
-    }
-
-    public static <T> List<T> mergeAttributes(List<T> attribute1, List<T> attribute2) {
-        if (attribute1 == null && attribute2 == null)
-            return Collections.emptyList();
-        else if (attribute1 != null && attribute2 != null) {
-            return Stream.of(attribute1, attribute2).flatMap(List::stream).distinct().toList();
-        } else return Objects.requireNonNullElse(attribute1, attribute2);
-    }
-
-    @Override
-    public Optional<ForgeroMaterial> createMaterial(SimpleMaterialPOJO material) {
-        if (material.abstractResource) {
-            return Optional.empty();
-        }
-        if (material.parent == null) {
-            return createMaterialFromPojo(material);
-        }
-        return assemblePojoFromParent(material).flatMap(this::createMaterialFromPojo);
-    }
-
-    private Optional<SimpleMaterialPOJO> assemblePojoFromParent(SimpleMaterialPOJO material) {
-        if (material.parent == null) {
-            return Optional.of(material);
-        }
-        if (materialPOJOS.containsKey(material.parent)) {
-            var parentOpt = assemblePojoFromParent(materialPOJOS.get(material.parent));
-            return parentOpt
-                    .map(simpleMaterialPOJO -> mergePojos(simpleMaterialPOJO, material))
-                    .or(() -> Optional.of(material));
-        }
-        return Optional.empty();
-    }
-
-    private SimpleMaterialPOJO mergePojos(SimpleMaterialPOJO parent, SimpleMaterialPOJO material) {
+    protected SimpleMaterialPOJO mergePojos(SimpleMaterialPOJO parent, SimpleMaterialPOJO material) {
         var newMaterial = new SimpleMaterialPOJO();
         //Some attributes should always be fetched from the child
         newMaterial.name = replaceAttributesDefault(material.name, parent.name, null);
@@ -103,14 +58,12 @@ public class MaterialFactoryImpl implements MaterialFactory {
         return newMaterial;
     }
 
-    private Optional<ForgeroMaterial> createMaterialFromPojo(SimpleMaterialPOJO material) {
-        if (material.dependencies != null && !availableNameSpaces.containsAll(material.dependencies)) {
-            return Optional.empty();
-        }
-        if (material.primary != null) {
-            return Optional.of(new SimpleDuoMaterial(material));
+    @Override
+    protected Optional<ForgeroMaterial> createResource(SimpleMaterialPOJO pojo) {
+        if (pojo.primary != null) {
+            return Optional.of(new SimpleDuoMaterial(pojo));
         } else {
-            return Optional.of(new SimpleSecondaryMaterialImpl(material));
+            return Optional.of(new SimpleSecondaryMaterialImpl(pojo));
         }
     }
 }
