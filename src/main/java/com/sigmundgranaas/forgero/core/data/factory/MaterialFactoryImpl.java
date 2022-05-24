@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
-import com.sigmundgranaas.forgero.core.data.SchemaVersion;
-import com.sigmundgranaas.forgero.core.data.pojo.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.data.pojo.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
@@ -30,32 +28,23 @@ public class MaterialFactoryImpl extends DataResourceFactory<SimpleMaterialPOJO,
         return INSTANCE;
     }
 
-    protected SimpleMaterialPOJO mergePojos(SimpleMaterialPOJO parent, SimpleMaterialPOJO material) {
-        var newMaterial = new SimpleMaterialPOJO();
+    protected SimpleMaterialPOJO mergePojos(SimpleMaterialPOJO parent, SimpleMaterialPOJO material, SimpleMaterialPOJO basePojo) {
         //Some attributes should always be fetched from the child
-        newMaterial.name = replaceAttributesDefault(material.name, parent.name, null);
-        newMaterial.version = replaceAttributesDefault(material.version, parent.version, SchemaVersion.V1);
-        newMaterial.parent = material.parent;
-        newMaterial.resourceType = ResourceType.MATERIAL;
-        newMaterial.type = replaceAttributesDefault(material.type, parent.type, null);
-        newMaterial.primary = material.primary;
-        newMaterial.secondary = material.secondary;
-        newMaterial.palette = material.palette;
+        basePojo.resourceType = ResourceType.MATERIAL;
+        basePojo.type = replaceAttributesDefault(material.type, parent.type, null);
+        basePojo.primary = material.primary;
+        basePojo.secondary = material.secondary;
+        basePojo.palette = material.palette;
 
         //TODO create a proper way of handling ingredients
-        newMaterial.ingredient = replaceAttributesDefault(material.ingredient, parent.ingredient, null);
+        basePojo.ingredient = replaceAttributesDefault(material.ingredient, parent.ingredient, null);
 
+        return basePojo;
+    }
 
-        //merging dependencies
-        newMaterial.dependencies = mergeAttributes(material.dependencies, parent.dependencies);
-
-        //Merging properties
-        newMaterial.properties = new PropertyPOJO();
-        newMaterial.properties.active = mergeAttributes(attributeOrDefault(material.properties, new PropertyPOJO()).active, attributeOrDefault(parent.properties, new PropertyPOJO()).active);
-        newMaterial.properties.passiveProperties = mergeAttributes(attributeOrDefault(material.properties, new PropertyPOJO()).passiveProperties, attributeOrDefault(parent.properties, new PropertyPOJO()).passiveProperties);
-        newMaterial.properties.attributes = mergeAttributes(attributeOrDefault(material.properties, new PropertyPOJO()).attributes, attributeOrDefault(parent.properties, new PropertyPOJO()).attributes);
-
-        return newMaterial;
+    @Override
+    protected SimpleMaterialPOJO createDefaultPojo() {
+        return new SimpleMaterialPOJO();
     }
 
     @Override

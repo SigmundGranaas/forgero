@@ -1,6 +1,9 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.SchemaVersion;
+import com.sigmundgranaas.forgero.core.data.pojo.PropertyPOJO;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +29,7 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         this.pojos = pojos.stream().collect(Collectors.toMap(pojo -> pojo.name, pojo -> pojo));
         this.availableNameSpaces = availableNameSpaces;
     }
+
 
     public static <T> T replaceAttributesDefault(T attribute1, T attribute2, T defaultAttribute) {
         if (attribute1 == null && attribute2 == null)
@@ -56,22 +60,20 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
      * @return Optional Resource built from the pojo.
      */
     public Optional<R> buildResource(T pojo) {
-        if (pojo.abstractResource || !resolveDependencies(pojo)) {
+        if (pojo.abstractResource) {
             return Optional.empty();
         }
+
+        if (!resolveDependencies(pojo)) {
+            ForgeroInitializer.LOGGER.warn("Unable to create resource {} of type {}, because of missing dependencies: {}", pojo.name, pojo.resourceType, pojo.dependencies);
+            return Optional.empty();
+        }
+
         if (pojo.parent == null) {
             return createResource(pojo);
         }
         return assemblePojoFromParent(pojo).flatMap(this::createResource);
     }
-
-    private boolean resolveDependencies(T pojo) {
-        return pojo.dependencies == null || availableNameSpaces.containsAll(pojo.dependencies);
-    }
-
-    protected abstract Optional<R> createResource(T pojo);
-
-    protected abstract T mergePojos(T parent, T child);
 
     /**
      * Recursive method for handling parent relationships between resources.
@@ -87,9 +89,39 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         if (pojos.containsKey(pojo.parent)) {
             var parentOpt = assemblePojoFromParent(pojos.get(pojo.parent));
             return parentOpt
-                    .map(simpleMaterialPOJO -> mergePojos(simpleMaterialPOJO, pojo))
+                    .map(simpleMaterialPOJO -> mergePojosBase(simpleMaterialPOJO, pojo))
                     .or(() -> Optional.of(pojo));
         }
         return Optional.empty();
     }
+
+    private T mergePojosBase(T parent, T child) {
+        T base = createDefaultPojo();
+        //Some attributes should always be fetched from the child
+        base.name = replaceAttributesDefault(child.name, parent.name, null);
+        base.version = replaceAttributesDefault(child.version, parent.version, SchemaVersion.V1);
+        base.parent = child.parent;
+
+
+        //merging dependencies
+        base.dependencies = mergeAttributes(child.dependencies, parent.dependencies);
+
+        //Merging properties
+        base.properties = new PropertyPOJO();
+        base.properties.active = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).active, attributeOrDefault(parent.properties, new PropertyPOJO()).active);
+        base.properties.passiveProperties = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).passiveProperties, attributeOrDefault(parent.properties, new PropertyPOJO()).passiveProperties);
+        base.properties.attributes = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).attributes, attributeOrDefault(parent.properties, new PropertyPOJO()).attributes);
+
+        return mergePojos(parent, child, base);
+    }
+
+    private boolean resolveDependencies(T pojo) {
+        return pojo.dependencies == null || availableNameSpaces.containsAll(pojo.dependencies);
+    }
+
+    protected abstract Optional<R> createResource(T pojo);
+
+    protected abstract T mergePojos(T parent, T child, T basePojo);
+
+    protected abstract T createDefaultPojo();
 }
