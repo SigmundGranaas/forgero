@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material.factory;
 
+import com.sigmundgranaas.forgero.core.data.factory.MaterialFactoryImpl;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;

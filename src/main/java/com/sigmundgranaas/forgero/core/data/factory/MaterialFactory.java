@@ -1,7 +1,7 @@
-package com.sigmundgranaas.forgero.core.material.material.factory;
+package com.sigmundgranaas.forgero.core.data.factory;
 
+import com.sigmundgranaas.forgero.core.data.pojo.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 
 import java.util.List;
 import java.util.Optional;

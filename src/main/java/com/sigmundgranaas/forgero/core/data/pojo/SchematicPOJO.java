@@ -1,7 +1,8 @@
-package com.sigmundgranaas.forgero.core.schematic;
+package com.sigmundgranaas.forgero.core.data.pojo;
 
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.util.ForgeroResourcePOJO;

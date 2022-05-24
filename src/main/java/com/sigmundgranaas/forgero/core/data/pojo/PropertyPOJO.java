@@ -1,6 +1,7 @@
-package com.sigmundgranaas.forgero.core.property;
+package com.sigmundgranaas.forgero.core.data.pojo;
 
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.core.property.*;
 import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyType;
 

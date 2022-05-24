@@ -1,14 +1,13 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticSecondaryMaterial;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterial;
+import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
-public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecondaryMaterial, SimpleSecondaryMaterial {
+public class EmptySecondaryMaterial implements SecondaryMaterial, SimpleSecondaryMaterial {
     @Override
     public int getRarity() {
         return 0;
@@ -36,17 +35,4 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, RealisticSecon
     public String getIngredient() {
         return "empty";
     }
-
-
-    @Override
-    public int getLuck() {
-        return 0;
-    }
-
-    @Override
-    public int getGrip() {
-        return 0;
-    }
-
-
 }

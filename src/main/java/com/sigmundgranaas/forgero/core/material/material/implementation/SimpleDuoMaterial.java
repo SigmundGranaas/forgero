@@ -1,5 +1,6 @@
-package com.sigmundgranaas.forgero.core.material.material.simple;
+package com.sigmundgranaas.forgero.core.material.material.implementation;
 
+import com.sigmundgranaas.forgero.core.data.pojo.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.AbstractForgeroMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyBuilder;

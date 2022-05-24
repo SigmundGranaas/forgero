@@ -1,12 +1,12 @@
-package com.sigmundgranaas.forgero.core.material.material.factory;
+package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
 import com.sigmundgranaas.forgero.core.data.SchemaVersion;
+import com.sigmundgranaas.forgero.core.data.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.pojo.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleDuoMaterial;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleSecondaryMaterialImpl;
-import com.sigmundgranaas.forgero.core.property.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
+import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleSecondaryMaterialImpl;
 
 import java.util.*;
 import java.util.stream.Collectors;

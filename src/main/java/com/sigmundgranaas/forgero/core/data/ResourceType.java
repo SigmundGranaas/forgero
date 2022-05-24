@@ -4,5 +4,6 @@ public enum ResourceType {
     GEM,
     MATERIAL,
     SCHEMATIC,
-    NBT
+    NBT,
+    CONFIGURATION
 }

@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.gem.implementation;
 
+import com.sigmundgranaas.forgero.core.data.factory.GemFactory;
+import com.sigmundgranaas.forgero.core.data.pojo.GemPOJO;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemLoader;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;

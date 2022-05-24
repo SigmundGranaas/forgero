@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.core.material.implementation;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.data.pojo.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 import org.apache.logging.log4j.Logger;

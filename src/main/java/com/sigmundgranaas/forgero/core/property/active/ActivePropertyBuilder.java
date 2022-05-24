@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.active;
 
+import com.sigmundgranaas.forgero.core.data.pojo.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
-import com.sigmundgranaas.forgero.core.property.PropertyPOJO;
 
 public class ActivePropertyBuilder {
     public static ActiveProperty createAttributeFromPojo(PropertyPOJO.Active activePOJO) {

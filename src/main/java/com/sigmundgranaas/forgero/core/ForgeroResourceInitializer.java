@@ -1,11 +1,14 @@
 package com.sigmundgranaas.forgero.core;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.data.factory.GemFactory;
+import com.sigmundgranaas.forgero.core.data.factory.MaterialFactory;
+import com.sigmundgranaas.forgero.core.data.pojo.GemPOJO;
+import com.sigmundgranaas.forgero.core.data.pojo.SchematicPOJO;
+import com.sigmundgranaas.forgero.core.data.pojo.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.gem.implementation.FileGemLoader;
 import com.sigmundgranaas.forgero.core.gem.implementation.GemCollectionImpl;
-import com.sigmundgranaas.forgero.core.gem.implementation.GemFactory;
-import com.sigmundgranaas.forgero.core.gem.implementation.GemPOJO;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
@@ -13,12 +16,9 @@ import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoa
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
-import com.sigmundgranaas.forgero.core.material.material.factory.MaterialFactory;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
 import com.sigmundgranaas.forgero.core.schematic.SchematicLoader;
-import com.sigmundgranaas.forgero.core.schematic.SchematicPOJO;
 import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollectionImpl;
