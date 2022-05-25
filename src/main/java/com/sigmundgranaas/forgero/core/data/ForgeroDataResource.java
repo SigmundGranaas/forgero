@@ -25,6 +25,9 @@ public class ForgeroDataResource {
     @SerializedName(value = "abstract_resource", alternate = "abstractResource")
     public boolean abstractResource = false;
 
+    @SerializedName(value = "required")
+    public boolean required = false;
+
     public String getName() {
         return name;
     }

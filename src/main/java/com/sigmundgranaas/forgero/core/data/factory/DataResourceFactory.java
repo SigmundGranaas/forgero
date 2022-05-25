@@ -107,6 +107,7 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         //Some attributes should always be fetched from the child
         base.name = replaceAttributesDefault(child.name, parent.name, null);
         base.version = replaceAttributesDefault(child.version, parent.version, SchemaVersion.V1);
+        base.required = replaceAttributesDefault(child.required, parent.required, false);
         base.parent = child.parent;
 
 
@@ -137,9 +138,13 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
 
     protected boolean validatePojo(T pojo) {
         if (!resolveDependencies(pojo)) {
-            ForgeroInitializer.LOGGER.error("Unable to create resource {} of type {}, because of missing dependencies: {}", pojo.name, pojo.resourceType, pojo.dependencies);
+            if (pojo.required) {
+                ForgeroInitializer.LOGGER.error("Unable to create resource {} of type {}, because of missing dependencies: {}", pojo.name, pojo.resourceType, pojo.dependencies);
+            }
             return false;
-        } else return true;
+        }
+
+        return true;
     }
 
     protected abstract Optional<R> createResource(T pojo);

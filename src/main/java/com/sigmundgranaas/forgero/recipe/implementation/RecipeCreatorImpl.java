@@ -84,7 +84,7 @@ public record RecipeCreatorImpl(
             template.add("ingredients", ingredients);
 
 
-            template.addProperty("book", "forgero_guide");
+            template.addProperty("book", "forgero:forgero_guide");
             return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "forgero_guide_book_recipe_" + toolPartTag), template, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
         }).toList();
     }
