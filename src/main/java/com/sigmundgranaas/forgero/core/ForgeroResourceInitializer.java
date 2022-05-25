@@ -32,6 +32,7 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactoryIm
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 import com.sigmundgranaas.forgero.core.util.ListPOJO;
 import com.sigmundgranaas.forgero.resources.FabricModPOJOLoader;
+import com.sigmundgranaas.forgero.resources.ForgeroResourceModContainerService;
 import com.sigmundgranaas.forgero.resources.ResourceLocations;
 
 import java.util.*;
@@ -43,11 +44,14 @@ public class ForgeroResourceInitializer {
     private final List<String> registeredGems;
     private final List<String> gemExclusions;
 
+    private final Set<String> availableDependencies;
+
     public ForgeroResourceInitializer() {
         this.materialsExclusions = new ArrayList<>();
         this.gemExclusions = new ArrayList<>();
         this.registeredMaterials = new ArrayList<>();
         this.registeredGems = new ArrayList<>();
+        this.availableDependencies = new ForgeroResourceModContainerService().getAllModsAsSet();
     }
 
     public void registerDefaultResources() {
@@ -95,7 +99,7 @@ public class ForgeroResourceInitializer {
             List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
             PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
         });
-        GemFactory factory = new GemFactory(pojos, Set.of("minecraft", "forgero"));
+        GemFactory factory = new GemFactory(pojos, this.availableDependencies);
         var gems = pojos.stream().map(factory::buildResource).flatMap(Optional::stream).collect(Collectors.toList());
 
         if (pojos.isEmpty()) {
@@ -120,7 +124,7 @@ public class ForgeroResourceInitializer {
             ForgeroInitializer.LOGGER.error("Error occurred trying to load materials. Likely due to Malformed JSON");
             ForgeroInitializer.LOGGER.error(e);
         }
-        var factory = MaterialFactory.createFactory(pojos, Set.of("minecraft", "forgero"));
+        var factory = MaterialFactory.createFactory(pojos, this.availableDependencies);
 
         materials = pojos.stream()
                 .map(factory::buildResource)
