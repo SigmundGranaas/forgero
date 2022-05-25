@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
-import com.sigmundgranaas.forgero.core.data.pojo.GemPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPOJO;
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.property.PropertyBuilder;
 
 import java.util.List;
 import java.util.Locale;

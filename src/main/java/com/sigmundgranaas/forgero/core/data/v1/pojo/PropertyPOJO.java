@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.data.pojo;
+package com.sigmundgranaas.forgero.core.data.v1.pojo;
 
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.property.*;

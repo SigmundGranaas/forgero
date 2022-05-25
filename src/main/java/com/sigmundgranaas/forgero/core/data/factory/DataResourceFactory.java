@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.data.factory;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.SchemaVersion;
-import com.sigmundgranaas.forgero.core.data.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -127,7 +127,12 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
     }
 
     protected boolean resolveDependencies(T pojo) {
-        return pojo.dependencies == null || availableNameSpaces.containsAll(pojo.dependencies);
+        if (pojo.dependencies == null && availableNameSpaces.contains("minecraft")) {
+            return true;
+        } else if (pojo.dependencies == null) {
+            return false;
+        }
+        return availableNameSpaces.containsAll(pojo.dependencies);
     }
 
     protected boolean validatePojo(T pojo) {

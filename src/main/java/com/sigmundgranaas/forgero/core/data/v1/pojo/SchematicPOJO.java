@@ -1,10 +1,12 @@
-package com.sigmundgranaas.forgero.core.data.pojo;
+package com.sigmundgranaas.forgero.core.data.v1.pojo;
 
 import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import org.jetbrains.annotations.NotNull;
 
 public class SchematicPOJO extends ForgeroDataResource {
+    @NotNull
     public ForgeroToolPartTypes type;
     public ForgeroToolTypes toolType;
     public String model;

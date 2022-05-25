@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.mojang.authlib.GameProfile;
-import com.sigmundgranaas.forgero.core.data.pojo.MaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;

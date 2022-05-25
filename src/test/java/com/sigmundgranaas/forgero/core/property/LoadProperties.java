@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.property;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.sigmundgranaas.forgero.core.data.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

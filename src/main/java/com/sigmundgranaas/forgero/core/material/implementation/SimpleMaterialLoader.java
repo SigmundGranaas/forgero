@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.material.implementation;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.factory.MaterialFactory;
-import com.sigmundgranaas.forgero.core.data.pojo.MaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
@@ -40,10 +40,4 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
         }
         return materialMap;
     }
-
-
 }
-
-
-
-

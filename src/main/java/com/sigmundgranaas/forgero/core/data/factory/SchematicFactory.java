@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
-import com.sigmundgranaas.forgero.core.data.pojo.SchematicPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPOJO;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.sigmundgranaas.forgero.core.property.PropertyBuilder.createPropertyListFromPOJO;
+import static com.sigmundgranaas.forgero.core.data.factory.PropertyBuilder.createPropertyListFromPOJO;
 
 public class SchematicFactory extends DataResourceFactory<SchematicPOJO, Schematic> {
     public SchematicFactory(List<SchematicPOJO> pojos, Set<String> availableNameSpaces) {

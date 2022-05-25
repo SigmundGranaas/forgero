@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.schematic;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
-import com.sigmundgranaas.forgero.core.data.pojo.SchematicPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPOJO;
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 
 import java.io.IOException;

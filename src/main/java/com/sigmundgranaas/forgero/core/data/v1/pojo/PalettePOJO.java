@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.data.pojo;
+package com.sigmundgranaas.forgero.core.data.v1.pojo;
 
 import java.util.List;
 
