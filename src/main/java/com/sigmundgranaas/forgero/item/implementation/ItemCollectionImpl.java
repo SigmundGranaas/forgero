@@ -19,7 +19,7 @@ public class ItemCollectionImpl implements ItemCollection {
     private List<Item> tools = new ArrayList<>();
     private List<Item> toolParts = new ArrayList<>();
     private List<SchematicItem> schematicItems = new ArrayList<>();
-    private List<GemItem> gemItems = new ArrayList();
+    private List<GemItem> gemItems = new ArrayList<>();
 
     public static ItemCollection getInstance() {
         if (INSTANCE == null) {
