@@ -18,6 +18,7 @@ import com.sigmundgranaas.forgero.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -58,9 +59,34 @@ public record RecipeCreatorImpl(
         List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().map(this::createGemUpgradeRecipes).flatMap(List::stream).toList();
         List<RecipeWrapper> toolPartSchematicRecipes = schematics.stream().map(this::createSchematicRecipes).flatMap(List::stream).toList();
 
+        List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
+        if (FabricLoader.getInstance().isModLoaded("patchouli")) {
+            guidebooksRecipes = createGuideBookRecipes();
+        }
 
-        var recipes = List.of(toolRecipes, toolPartSecondaryMaterialUpgradeRecipe, toolPartGemUpgradeRecipe, toolPartSchematicRecipes);
+        var recipes = List.of(toolRecipes, toolPartSecondaryMaterialUpgradeRecipe, toolPartGemUpgradeRecipe, toolPartSchematicRecipes, guidebooksRecipes);
         return recipes.stream().flatMap(List::stream).collect(Collectors.toList());
+    }
+
+    private List<? extends RecipeWrapper> createGuideBookRecipes() {
+        var tags = List.of("bindings", "heads", "handles");
+        return tags.stream().map(toolPartTag -> {
+            JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
+            template.addProperty("type", "patchouli:shapeless_book_recipe");
+            JsonArray ingredients = template.getAsJsonArray("ingredients");
+            JsonObject tag = new JsonObject();
+            tag.addProperty("tag", "forgero:" + toolPartTag);
+            JsonObject book = new JsonObject();
+            book.addProperty("item", "minecraft:book");
+
+            ingredients.add(book);
+            ingredients.add(tag);
+            template.add("ingredients", ingredients);
+
+
+            template.addProperty("book", "forgero_guide");
+            return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "forgero_guide_book_recipe_" + toolPartTag), template, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
+        }).toList();
     }
 
     private List<RecipeWrapper> createSchematicRecipes(Schematic schematic) {
@@ -102,9 +128,12 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createGemUpgradeRecipes(ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
-            case HEAD -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case HANDLE -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case BINDING -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HEAD ->
+                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HANDLE ->
+                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case BINDING ->
+                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
         };
     }
 
