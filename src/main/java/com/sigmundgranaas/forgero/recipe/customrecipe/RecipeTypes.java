@@ -9,6 +9,9 @@ public enum RecipeTypes {
     GEM_UPGRADE_RECIPE,
     TOOL_PART_RECIPE,
     TOOL_WITH_BINDING_RECIPE,
+
+    MISC_SHAPELESS,
+
     TOOLPART_SCHEMATIC_RECIPE;
 
     String getName() {
