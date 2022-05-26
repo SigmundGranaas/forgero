@@ -28,7 +28,7 @@ public class FabricModPOJOLoader<T> {
         return paths
                 .stream()
                 .map(path -> JsonPOJOLoader
-                        .loadPOJO(String.format("/%s%s", location, path.getFileName()), type))
+                        .loadPOJO(String.format("/%s%s", location, path.toString().split(location)[1]), type))
                 .flatMap(Optional::stream)
                 .toList();
     }
