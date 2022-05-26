@@ -95,7 +95,7 @@ public class CachedPaletteService implements PaletteService {
 
         try {
 
-            File outputFile = new File(String.format("./%s.png", id.getIdentifier()));
+            File outputFile = new File(String.format("./%s_palette.png", id.getIdentifier()));
             if (!outputFile.exists()) {
                 //noinspection ResultOfMethodCallIgnored
                 outputFile.createNewFile();
