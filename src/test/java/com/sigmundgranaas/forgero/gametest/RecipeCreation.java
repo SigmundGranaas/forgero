@@ -83,7 +83,7 @@ public class RecipeCreation {
     }
 
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing schematics", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing schematics", required = false)
     public void testingSchematicRecipes(TestContext context) {
         testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
     }
