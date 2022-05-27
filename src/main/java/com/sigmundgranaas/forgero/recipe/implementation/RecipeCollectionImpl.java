@@ -39,6 +39,7 @@ public class RecipeCollectionImpl implements RecipeCollection {
                 ToolWithBindingRecipe.ToolWithBindingRecipeSerializer.INSTANCE,
                 SecondaryMaterialToolPartUpgradeRecipe.Serializer.INSTANCE,
                 GemUpgradeRecipe.Serializer.INSTANCE,
-                GemToolPartUpgradeRecipe.Serializer.INSTANCE);
+                GemToolPartUpgradeRecipe.Serializer.INSTANCE,
+                SchematicToolPartRecipe.SchematicToolPartRecipeSerializer.INSTANCE);
     }
 }

@@ -56,7 +56,7 @@ public record RecipeCreatorImpl(
     public List<RecipeWrapper> createRecipes() {
         List<RecipeWrapper> toolRecipes = tools.stream().map(this::createToolRecipe).flatMap(List::stream).toList();
         List<RecipeWrapper> toolPartSecondaryMaterialUpgradeRecipe = toolParts.stream().map(this::createSecondaryMaterialUpgradeRecipes).flatMap(List::stream).toList();
-        List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().map(this::createGemUpgradeRecipes).flatMap(List::stream).toList();
+        List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().filter(toolParts -> toolParts.getSchematic().getName().equals("default")).map(this::createGemUpgradeRecipes).flatMap(List::stream).toList();
         List<RecipeWrapper> toolPartSchematicRecipes = schematics.stream().map(this::createSchematicRecipes).flatMap(List::stream).toList();
 
         List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
@@ -109,7 +109,7 @@ public record RecipeCreatorImpl(
             toolpartType = schematic.getType().getName();
         }
 
-        template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", String.format("%s_%s_%s", material.getName(), toolpartType, schematic.getVariant())).toString());
+        template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", String.format("%s_%s_%s", material.getName(), toolpartType, "default")).toString());
         JsonObject materialIngredient = new JsonObject();
         materialIngredient.addProperty("item", material.getIngredient());
         JsonObject schematicIngredient = new JsonObject();
@@ -118,7 +118,7 @@ public record RecipeCreatorImpl(
             ingredients.add(materialIngredient);
         }
         ingredients.add(schematicIngredient);
-        return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolpartType + "_" + material.getName() + "_" + schematic.getSchematicIdentifier()), template, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE);
+        return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolpartType + "_" + material.getName() + "_" + schematic.getSchematicIdentifier()), template, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
     }
 
 

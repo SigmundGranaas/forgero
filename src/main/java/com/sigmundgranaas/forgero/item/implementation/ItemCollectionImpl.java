@@ -60,7 +60,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<Item> getToolParts() {
         if (toolParts.isEmpty()) {
-            toolParts = ForgeroRegistry.getInstance().toolPartCollection().getToolParts().stream().map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
+            toolParts = ForgeroRegistry.getInstance().toolPartCollection().getToolParts().stream().filter(toolPart -> toolPart.getSchematic().getName().equals("default")).map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
         }
         return toolParts;
     }

@@ -41,8 +41,10 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
 
         return switch (identifier.getToolPartType()) {
             case HEAD -> createToolPartHead(material, (HeadSchematic) schematic);
-            case HANDLE -> new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
-            case BINDING -> new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
+            case HANDLE ->
+                    new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
+            case BINDING ->
+                    new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic));
         };
     }
 
@@ -96,6 +98,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
                 .map(material -> schematicCollection
                         .getSchematics()
                         .stream()
+                        .filter(schematic -> schematic.getName().equals("default"))
                         .map(schematic -> createBaseToolPartsFromMaterial(material, schematic))
                         .flatMap(List::stream).toList())
                 .flatMap(List::stream)
@@ -115,8 +118,10 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
                     case HOE -> toolParts.add(new HoeHead(state));
                 }
             }
-            case HANDLE -> toolParts.add(new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
-            case BINDING -> toolParts.add(new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
+            case HANDLE ->
+                    toolParts.add(new Handle(new HandleState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
+            case BINDING ->
+                    toolParts.add(new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
         }
         return toolParts;
     }
