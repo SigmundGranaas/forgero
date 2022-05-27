@@ -57,7 +57,7 @@ public record RecipeCreatorImpl(
         List<RecipeWrapper> toolRecipes = tools.stream().map(this::createToolRecipe).flatMap(List::stream).toList();
         List<RecipeWrapper> toolPartSecondaryMaterialUpgradeRecipe = toolParts.stream().map(this::createSecondaryMaterialUpgradeRecipes).flatMap(List::stream).toList();
         List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().filter(toolParts -> toolParts.getSchematic().getName().equals("default")).map(this::createGemUpgradeRecipes).flatMap(List::stream).toList();
-        List<RecipeWrapper> toolPartSchematicRecipes = schematics.stream().map(this::createSchematicRecipes).flatMap(List::stream).toList();
+        List<RecipeWrapper> toolPartSchematicRecipes = createToolPartSchematicRecipes().stream().toList();
 
         List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
         if (FabricLoader.getInstance().isModLoaded("patchouli")) {
@@ -91,6 +91,40 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createSchematicRecipes(Schematic schematic) {
         return materials.stream().map(material -> createRecipeFromMaterialAndSchematic(material, schematic)).collect(Collectors.toList());
+    }
+
+    private List<RecipeWrapper> createToolPartSchematicRecipes() {
+        return toolParts.stream().map(this::createRecipeFromToolPart).collect(Collectors.toList());
+    }
+
+    private RecipeWrapper createRecipeFromToolPart(ForgeroToolPart toolPart) {
+        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
+        JsonArray ingredients = template.getAsJsonArray("ingredients");
+        String schematicTag;
+        if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
+            schematicTag = switch (((ToolPartHead) toolPart).getToolType()) {
+                case PICKAXE -> "forgero:pickaxehead_schematics";
+                case SHOVEL -> "forgero:shovelhead_schematics";
+                case AXE -> "forgero:axehead_schematics";
+                case SWORD -> "forgero:swordhead_schematics";
+                case HOE -> "forgero:hoehead_schematics";
+            };
+        } else if (toolPart.getToolPartType() == ForgeroToolPartTypes.BINDING) {
+            schematicTag = "forgero:binding_schematics";
+        } else {
+            schematicTag = "forgero:handle_schematics";
+        }
+        JsonObject materialIngredient = new JsonObject();
+        materialIngredient.addProperty("item", toolPart.getPrimaryMaterial().getIngredient());
+        template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
+        for (int i = 0; i < toolPart.getSchematic().getMaterialCount(); i++) {
+            ingredients.add(materialIngredient);
+        }
+        JsonObject schematicTagObject = new JsonObject();
+        schematicTagObject.addProperty("tag", schematicTag);
+        ingredients.add(schematicTagObject);
+
+        return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()), template, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
     }
 
     private RecipeWrapper createRecipeFromMaterialAndSchematic(PrimaryMaterial material, Schematic schematic) {

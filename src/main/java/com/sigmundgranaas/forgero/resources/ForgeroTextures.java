@@ -57,6 +57,14 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
         }
     }
 
+    private void registerToolPartModelsSecondary(ForgeroToolPartTextureRegistry registry) {
+        for (Schematic schematic : ForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
+            for (SecondaryMaterial material : ForgeroRegistry.getInstance().materialCollection().getSecondaryMaterialsAsList()) {
+                registerModel(registry, schematic, material, ModelLayer.SECONDARY);
+            }
+        }
+    }
+
     private void registerModel(ForgeroToolPartTextureRegistry registry, Schematic schematic, ForgeroMaterial material, ModelLayer layer) {
         registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.getModelType(schematic), layer, schematic.getModel()));
         if (schematic.getType() == ForgeroToolPartTypes.BINDING) {
@@ -68,14 +76,6 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
             registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.MEDIUMHANDLE, layer, schematic.getModel()));
             registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.FULLHANDLE, layer, schematic.getModel()));
             registry.registerTexture(new ToolPartModelTextureIdentifier(material.getName(), ToolPartModelType.SHORTHANDLE, layer, schematic.getModel()));
-        }
-    }
-
-    private void registerToolPartModelsSecondary(ForgeroToolPartTextureRegistry registry) {
-        for (Schematic schematic : ForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
-            for (SecondaryMaterial material : ForgeroRegistry.getInstance().materialCollection().getSecondaryMaterialsAsList()) {
-                registerModel(registry, schematic, material, ModelLayer.SECONDARY);
-            }
         }
     }
 
