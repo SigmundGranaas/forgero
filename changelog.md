@@ -1,7 +1,9 @@
-### Changelog 0.8.0-rc-2
+### Changelog 0.8.0-rc-3
 
 # Forgero Beta release
 
+* Significant speed increase when loading recipes
+* Added support for custom schematics and properties embedded in NBT's
 * Created palettes for all materials from mythic metals
 * Fixed mythic metal translations
 * Added experimental support for Mythic Metals
