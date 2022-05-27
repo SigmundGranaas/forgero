@@ -21,8 +21,7 @@
     "name": "oak",
     "include": [
       "minecraft:textures/item/oak_boat.png"
-    ],
-    "exclude": []
+    ]
   },
   "primary": {
     "properties": {

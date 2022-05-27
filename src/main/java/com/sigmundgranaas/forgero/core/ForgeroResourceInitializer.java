@@ -95,6 +95,7 @@ public class ForgeroResourceInitializer {
         var pojos = new FabricModPOJOLoader<>(GemPOJO.class, ResourceLocations.GEM_LOCATION).loadPojosFromMods();
 
         pojos.forEach(pojo -> {
+
             List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
             List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
             PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
