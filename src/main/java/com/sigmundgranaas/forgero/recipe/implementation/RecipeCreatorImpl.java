@@ -130,9 +130,9 @@ public record RecipeCreatorImpl(
     private RecipeWrapper createRecipeFromMaterialAndSchematic(PrimaryMaterial material, Schematic schematic) {
         JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
         JsonArray ingredients = template.getAsJsonArray("ingredients");
-        String toolpartType;
+        String toolPartType;
         if (schematic.getType() == ForgeroToolPartTypes.HEAD) {
-            toolpartType = switch (((HeadSchematic) schematic).getToolType()) {
+            toolPartType = switch (((HeadSchematic) schematic).getToolType()) {
                 case PICKAXE -> "pickaxehead";
                 case SHOVEL -> "shovelhead";
                 case AXE -> "axehead";
@@ -140,10 +140,10 @@ public record RecipeCreatorImpl(
                 case HOE -> "hoehead";
             };
         } else {
-            toolpartType = schematic.getType().getName();
+            toolPartType = schematic.getType().getName();
         }
 
-        template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", String.format("%s_%s_%s", material.getName(), toolpartType, "default")).toString());
+        template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", String.format("%s_%s_%s", material.getName(), toolPartType, "default")).toString());
         JsonObject materialIngredient = new JsonObject();
         materialIngredient.addProperty("item", material.getIngredient());
         JsonObject schematicIngredient = new JsonObject();
@@ -152,7 +152,7 @@ public record RecipeCreatorImpl(
             ingredients.add(materialIngredient);
         }
         ingredients.add(schematicIngredient);
-        return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolpartType + "_" + material.getName() + "_" + schematic.getSchematicIdentifier()), template, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
+        return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPartType + "_" + material.getName() + "_" + schematic.getSchematicIdentifier()), template, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
     }
 
 

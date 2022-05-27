@@ -45,9 +45,9 @@ public class SchematicToolPartRecipe extends ShapelessRecipe {
             case HEAD ->
                     ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(((ToolPartItemImpl) getOutput().getItem()).getPrimaryMaterial(), (HeadSchematic) ((SchematicItem) schematic.getItem()).getSchematic()).createToolPart();
             case HANDLE ->
-                    ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(((ToolPartItemImpl) getOutput().getItem()).getPrimaryMaterial(), ((SchematicItem) schematic.getItem()).getSchematic()).createToolPart();
-            case BINDING ->
                     ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(((ToolPartItemImpl) getOutput().getItem()).getPrimaryMaterial(), ((SchematicItem) schematic.getItem()).getSchematic()).createToolPart();
+            case BINDING ->
+                    ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(((ToolPartItemImpl) getOutput().getItem()).getPrimaryMaterial(), ((SchematicItem) schematic.getItem()).getSchematic()).createToolPart();
         };
 
         ItemStack forgeroToolInstanceStack = getOutput().copy();
