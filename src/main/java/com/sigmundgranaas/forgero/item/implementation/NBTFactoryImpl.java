@@ -261,7 +261,7 @@ public class NBTFactoryImpl implements NBTFactory {
         pojo.depth = compound.getInt("Depth");
         pojo.description = compound.getString("Description");
         pojo.direction = BreakingDirection.valueOf("Direction");
-        pojo.pattern = (String[]) compound.getList("Pattern", NbtElement.STRING_TYPE).stream().map(NbtElement::asString).toList().toArray();
+        pojo.pattern = compound.getList("Pattern", NbtElement.STRING_TYPE).stream().map(NbtElement::asString).toList().toArray(new String[0]);
         return ActivePropertyBuilder.createAttributeFromPojo(pojo);
     }
 
