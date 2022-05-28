@@ -7,25 +7,30 @@ import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifier
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
 import net.minecraft.item.ToolMaterial;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class MaterialCollectionImplTest {
+    @BeforeEach
+    void initialiseResources() {
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+    }
 
     @Test
     void LoadMaterialsAsList() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+
         assert (ForgeroRegistry.MATERIAL.list().size() > 0);
     }
 
     @Test
     void LoadMaterialsAsMap() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+
         assert (ForgeroRegistry.MATERIAL.getResourcesAsMap().size() > 0);
     }
 
     @Test
     void getPrimaryMaterialsAsList() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+
         ForgeroRegistry.MATERIAL.list().forEach(Assertions::assertNotNull);
     }
 

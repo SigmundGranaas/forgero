@@ -3,13 +3,19 @@ package com.sigmundgranaas.forgero.core.gem;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GemCollectionImplTest {
 
+    @BeforeEach
+    void initialiseResources() {
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+    }
+
     @Test
     void getGems() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+
         var collection = ForgeroRegistry.GEM.list();
         Assertions.assertTrue(collection.size() > 1);
     }
