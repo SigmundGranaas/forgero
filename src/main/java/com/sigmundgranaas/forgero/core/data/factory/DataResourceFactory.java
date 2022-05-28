@@ -55,7 +55,7 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         if (attribute1 == null && attribute2 == null)
             return Collections.emptyList();
         else if (attribute1 != null && attribute2 != null) {
-            return Stream.of(attribute1, attribute2).flatMap(List::stream).distinct().toList();
+            return Stream.of(attribute1, attribute2).flatMap(List::stream).toList();
         } else return Objects.requireNonNullElse(attribute1, attribute2);
     }
 
