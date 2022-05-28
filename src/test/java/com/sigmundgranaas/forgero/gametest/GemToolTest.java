@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
@@ -37,9 +38,9 @@ import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEH
 public class GemToolTest {
 
     public static ItemStack createToolItemWithGem(Gem headGem) {
-        HeadState state = new HeadState(LegacyForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), headGem, PICKAXEHEAD_SCHEMATIC.get());
+        HeadState state = new HeadState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), headGem, PICKAXEHEAD_SCHEMATIC.get());
         ToolPartHead head = new PickaxeHead(state);
-        HandleState handleState = new HandleState(LegacyForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
+        HandleState handleState = new HandleState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
         ToolPartHandle handle = new Handle(handleState);
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));

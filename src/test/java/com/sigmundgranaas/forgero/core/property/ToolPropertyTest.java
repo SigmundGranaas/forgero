@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
@@ -18,22 +18,22 @@ import org.junit.jupiter.api.Test;
 import java.util.function.Supplier;
 
 public class ToolPropertyTest {
-    public static Supplier<PrimaryMaterial> DIAMOND_PRIMARY = () -> (PrimaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("diamond"));
-    public static Supplier<SecondaryMaterial> DIAMOND_SECONDARY = () -> (SecondaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("diamond"));
+    public static Supplier<PrimaryMaterial> DIAMOND_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("diamond").get();
+    public static Supplier<SecondaryMaterial> DIAMOND_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("diamond").get();
 
-    public static Supplier<PrimaryMaterial> OAK_PRIMARY = () -> (PrimaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("oak"));
-    public static Supplier<SecondaryMaterial> OAK_SECONDARY = () -> (SecondaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("oak"));
+    public static Supplier<PrimaryMaterial> OAK_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("oak").get();
+    public static Supplier<SecondaryMaterial> OAK_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("oak").get();
 
-    public static Supplier<PrimaryMaterial> NETHERITE_PRIMARY = () -> (PrimaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("netherite"));
-    public static Supplier<SecondaryMaterial> NETHERITE_SECONDARY = () -> (SecondaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("netherite"));
+    public static Supplier<PrimaryMaterial> NETHERITE_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("netherite").get();
+    public static Supplier<SecondaryMaterial> NETHERITE_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("netherite").get();
 
-    public static Supplier<PrimaryMaterial> IRON_PRIMARY = () -> (PrimaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("iron"));
-    public static Supplier<SecondaryMaterial> IRON_SECONDARY = () -> (SecondaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("iron"));
+    public static Supplier<PrimaryMaterial> IRON_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("iron").get();
+    public static Supplier<SecondaryMaterial> IRON_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("iron").get();
 
-    public static Supplier<Schematic> HANDLE_SCHEMATIC = () -> LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("handle_schematic_default")).findFirst().get();
-    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC = () -> (HeadSchematic) LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("pickaxehead_schematic_default")).findFirst().get();
-    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC_PATTERN = () -> (HeadSchematic) LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("pickaxehead_schematic_pattern")).findFirst().get();
-    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC_VEIN = () -> (HeadSchematic) LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(pattern -> pattern.getSchematicIdentifier().equals("pickaxehead_schematic_vein")).findFirst().get();
+    public static Supplier<Schematic> HANDLE_SCHEMATIC = () -> ForgeroRegistry.SCHEMATIC.getResource("handle_schematic_default").get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC = () -> ForgeroRegistry.SCHEMATIC.getHeadSchematic("pickaxehead_schematic_default").get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC_PATTERN = () -> ForgeroRegistry.SCHEMATIC.getHeadSchematic("pickaxehead_schematic_pattern").get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC_VEIN = () -> ForgeroRegistry.SCHEMATIC.getHeadSchematic("pickaxehead_schematic_vein").get();
 
 
     @Test

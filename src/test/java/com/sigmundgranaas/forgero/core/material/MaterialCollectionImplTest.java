@@ -1,8 +1,9 @@
 package com.sigmundgranaas.forgero.core.material;
 
 import com.sigmundgranaas.forgero.Constants;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
 import net.minecraft.item.ToolMaterial;
 import org.junit.jupiter.api.Assertions;
@@ -12,45 +13,48 @@ class MaterialCollectionImplTest {
 
     @Test
     void LoadMaterialsAsList() {
-        assert (LegacyForgeroRegistry.getInstance().materialCollection().getMaterialsAsList().size() > 0);
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        assert (ForgeroRegistry.MATERIAL.list().size() > 0);
     }
 
     @Test
     void LoadMaterialsAsMap() {
-
-        assert (LegacyForgeroRegistry.getInstance().materialCollection().getMaterialsAsList().size() > 0);
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        assert (ForgeroRegistry.MATERIAL.getResourcesAsMap().size() > 0);
     }
 
     @Test
     void getPrimaryMaterialsAsList() {
-        LegacyForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().forEach(Assertions::assertNotNull);
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        ForgeroRegistry.MATERIAL.list().forEach(Assertions::assertNotNull);
     }
 
     @Test
     void getSecondaryMaterialsAsList() {
-        LegacyForgeroRegistry.getInstance().materialCollection().getSecondaryMaterialsAsList().forEach(Assertions::assertNotNull);
+        ForgeroRegistry.MATERIAL.getSecondaryMaterials().forEach(Assertions::assertNotNull);
     }
 
     @Test
     void getMaterialFromToolIdentifier() {
-        LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER));
-
+        var material = ForgeroRegistry.MATERIAL.getMaterial(new ForgeroToolPartIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER));
+        assert (material.isPresent());
     }
 
     @Test
     void getMaterialFromToolPartIdentifier() {
-        LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroToolPartIdentifierImpl(Constants.IRON_PICKAXEHEAD_IDENTIFIER));
-
+        var material = ForgeroRegistry.MATERIAL.getMaterial(new ForgeroToolPartIdentifierImpl(Constants.IRON_PICKAXEHEAD_IDENTIFIER));
+        assert (material.isPresent());
     }
 
     @Test
     void getMaterialFromMaterialIdentifier() {
-        LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING));
+        var material = ForgeroRegistry.MATERIAL.getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING));
+        assert (material.isPresent());
     }
 
     // Core modules, like material.json, should not depend on classes from Minecraft.
     @Test
     void assertMaterialsIsNotToolMaterial() {
-        LegacyForgeroRegistry.getInstance().materialCollection().getMaterialsAsList().forEach(material -> Assertions.assertFalse(material instanceof ToolMaterial));
+        ForgeroRegistry.MATERIAL.list().forEach(material -> Assertions.assertFalse(material instanceof ToolMaterial));
     }
 }

@@ -18,16 +18,16 @@ public class ConcurrentMaterialRegistry extends ConcurrentResourceRegistry<Forge
 
     @Override
     public @NotNull Optional<ForgeroMaterial> getMaterial(ForgeroToolIdentifier identifier) {
-        return Optional.empty();
+        return getResource(identifier.getMaterial().getName());
     }
 
     @Override
     public @NotNull Optional<ForgeroMaterial> getMaterial(ForgeroToolPartIdentifier identifier) {
-        return Optional.empty();
+        return getResource(identifier.getMaterial().getName());
     }
 
     @Override
     public @NotNull Optional<ForgeroMaterial> getMaterial(ForgeroMaterialIdentifier identifier) {
-        return Optional.empty();
+        return getResource(identifier.getName());
     }
 }
