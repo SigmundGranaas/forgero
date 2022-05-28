@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.tool.factory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolBase;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -43,11 +43,17 @@ public class ForgeroToolFactoryImpl implements ForgeroToolFactory {
     }
 
     @Override
-    public List<ForgeroTool> createForgeroTools(@NotNull ForgeroToolPartCollection collection) {
+    public List<ForgeroTool> createForgeroTools(@NotNull List<ForgeroToolPart> collection) {
         List<ForgeroTool> tools = new ArrayList<>();
-        for (ToolPartHead head : collection.getHeads().stream().filter(toolPartHead -> toolPartHead.getSchematic().getName().equals("default")).toList()) {
+        for (ToolPartHead head : collection.stream()
+                .filter(toolPart -> toolPart instanceof ToolPartHead)
+                .map(ToolPartHead.class::cast)
+                .filter(toolPartHead -> toolPartHead.getSchematic().getName().equals("default")).toList()) {
             //noinspection OptionalGetWithoutIsPresent
-            tools.add(new ForgeroToolBase(head, collection.getHandles().stream().filter(handle -> handle.getPrimaryMaterial().getName().equals("oak")).findAny().get()));
+            tools.add(new ForgeroToolBase(head, collection.stream()
+                    .filter(toolPart -> toolPart instanceof ToolPartHandle)
+                    .map(ToolPartHandle.class::cast)
+                    .filter(handle -> handle.getPrimaryMaterial().getName().equals("oak")).findAny().get()));
         }
         return tools;
     }

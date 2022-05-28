@@ -69,11 +69,11 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
     public void loadResources(ForgeroResourceInitializer initializer) {
         clear();
         var registry = initializer.initializeForgeroResources();
-        toolRegistry.updateRegistry(registry.toolCollection().getTools());
-        toolPartRegistry.updateRegistry(registry.toolPartCollection().getToolParts());
-        schematicRegistry.updateRegistry(registry.schematicCollection().getSchematics());
-        gemRegistry.updateRegistry(registry.gemCollection().getGems());
-        materialRegistry.updateRegistry(registry.materialCollection().getMaterialsAsList());
+        toolRegistry.updateRegistry(registry.toolCollection());
+        toolPartRegistry.updateRegistry(registry.toolPartCollection());
+        schematicRegistry.updateRegistry(registry.schematicCollection());
+        gemRegistry.updateRegistry(registry.gemCollection());
+        materialRegistry.updateRegistry(registry.materialCollection().values().stream().toList());
     }
 
     @Override

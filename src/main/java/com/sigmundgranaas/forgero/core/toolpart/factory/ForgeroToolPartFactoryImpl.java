@@ -3,12 +3,10 @@ package com.sigmundgranaas.forgero.core.toolpart.factory;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
-import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.binding.Binding;
 import com.sigmundgranaas.forgero.core.toolpart.binding.BindingState;
@@ -20,6 +18,7 @@ import com.sigmundgranaas.forgero.core.toolpart.head.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,12 +90,10 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
 
     @Override
     public @NotNull
-    List<ForgeroToolPart> createBaseToolParts(@NotNull MaterialCollection collection, SchematicCollection schematicCollection) {
+    List<ForgeroToolPart> createBaseToolParts(@NotNull Collection<PrimaryMaterial> collection, List<Schematic> schematicCollection) {
         return collection
-                .getPrimaryMaterialsAsList()
                 .stream()
                 .map(material -> schematicCollection
-                        .getSchematics()
                         .stream()
                         .filter(schematic -> schematic.getName().equals("default"))
                         .map(schematic -> createBaseToolPartsFromMaterial(material, schematic))

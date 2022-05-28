@@ -7,27 +7,22 @@ import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPOJO;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPOJO;
-import com.sigmundgranaas.forgero.core.gem.GemCollection;
+import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.implementation.FileGemLoader;
-import com.sigmundgranaas.forgero.core.gem.implementation.GemCollectionImpl;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
-import com.sigmundgranaas.forgero.core.material.implementation.MaterialCollectionImpl;
 import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
+import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
 import com.sigmundgranaas.forgero.core.registry.ForgeroResources;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
-import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
 import com.sigmundgranaas.forgero.core.schematic.SchematicLoader;
 import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollectionImpl;
+import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactoryImpl;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollectionImpl;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactoryImpl;
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
@@ -62,15 +57,15 @@ public class ForgeroResourceInitializer {
     }
 
     public ForgeroResources initializeForgeroResources() {
-        MaterialCollection materialCollection = initializeMaterials();
-        GemCollection gemCollection = initializeGems();
-        SchematicCollection schematicCollection = initializeSchematicCollection();
-        ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection, schematicCollection);
-        ForgeroToolCollection toolCollection = initializeToolCollection(toolPartCollection);
+        var materialCollection = initializeMaterials();
+        var gemCollection = initializeGems();
+        var schematicCollection = initializeSchematicCollection();
+        var toolPartCollection = initializeToolParts(materialCollection, schematicCollection);
+        var toolCollection = initializeToolCollection(toolPartCollection);
         return new ForgeroResources(materialCollection, gemCollection, toolCollection, toolPartCollection, schematicCollection);
     }
 
-    private SchematicCollection initializeSchematicCollection() {
+    private List<Schematic> initializeSchematicCollection() {
         var pojos = new FabricModPOJOLoader<>(SchematicPOJO.class, ResourceLocations.SCHEMATIC_LOCATION).loadPojosFromMods();
         var factory = new SchematicFactory(pojos, Set.of("forgero", "minecraft"));
         List<Schematic> schematics = pojos.stream().map(factory::buildResource).flatMap(Optional::stream).toList();
@@ -78,21 +73,21 @@ public class ForgeroResourceInitializer {
         if (schematics.isEmpty()) {
             schematics = new SchematicLoader().loadSchematics();
         }
-        return new SchematicCollection(schematics);
+        return schematics;
     }
 
 
-    private ForgeroToolCollection initializeToolCollection(ForgeroToolPartCollection toolPartCollection) {
+    private List<ForgeroTool> initializeToolCollection(List<ForgeroToolPart> toolPartCollection) {
         ForgeroToolFactory factory = new ForgeroToolFactoryImpl();
-        return new ForgeroToolCollectionImpl(factory.createForgeroTools(toolPartCollection));
+        return factory.createForgeroTools(toolPartCollection);
     }
 
-    private ForgeroToolPartCollection initializeToolParts(MaterialCollection materialCollection, SchematicCollection collection) {
+    private List<ForgeroToolPart> initializeToolParts(Map<String, ForgeroMaterial> materialCollection, List<Schematic> collection) {
         ForgeroToolPartFactory factory = new ForgeroToolPartFactoryImpl();
-        return new ForgeroToolPartCollectionImpl(factory.createBaseToolParts(materialCollection, collection));
+        return factory.createBaseToolParts(materialCollection.values().stream().filter(material -> material instanceof PrimaryMaterial).map(PrimaryMaterial.class::cast).toList(), collection);
     }
 
-    private GemCollection initializeGems() {
+    private List<Gem> initializeGems() {
         var pojos = new FabricModPOJOLoader<>(GemPOJO.class, ResourceLocations.GEM_LOCATION).loadPojosFromMods();
 
         pojos.forEach(pojo -> {
@@ -107,10 +102,10 @@ public class ForgeroResourceInitializer {
         if (pojos.isEmpty()) {
             gems = new FileGemLoader(List.of("diamond", "emerald", "lapis")).loadGems();
         }
-        return new GemCollectionImpl(gems);
+        return gems;
     }
 
-    private MaterialCollection initializeMaterials() {
+    private Map<String, ForgeroMaterial> initializeMaterials() {
         Map<String, ForgeroMaterial> materials;
         var pojos = new FabricModPOJOLoader<>(MaterialPOJO.class, ResourceLocations.MATERIAL_LOCATION).loadPojosFromMods();
         try {
@@ -134,10 +129,10 @@ public class ForgeroResourceInitializer {
                 .collect(Collectors.toMap(ForgeroMaterial::getName, material -> material));
 
         if (materials.isEmpty()) {
-            return new MaterialCollectionImpl(new SimpleMaterialLoader(List.of("iron", "oak", "diamond", "netherite")).getMaterials());
+            return new SimpleMaterialLoader(List.of("iron", "oak", "diamond", "netherite")).getMaterials();
         }
 
-        return new MaterialCollectionImpl(materials);
+        return materials;
     }
 
     public boolean excludeGem(String gem) {
