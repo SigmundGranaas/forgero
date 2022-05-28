@@ -49,6 +49,9 @@ public class RecipeCreation {
         int correct = 0;
         for (Item toolPart : ItemCollection.INSTANCE.getToolParts().stream().filter(toolPart -> ((ToolPartItem) toolPart).getType() == ForgeroToolPartTypes.HANDLE).toList()
         ) {
+            if (((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient().item == null) {
+                break;
+            }
             Item output = testHandleRecipe(Registry.ITEM.get(new Identifier(((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient().item)), ((ToolPartItem) toolPart).getPart().getSchematic(), mockPlayer);
             if (output instanceof ToolPartItem && ((ToolPartItem) output).getPart().getToolPartIdentifier().equals(((ToolPartItem) toolPart).getPart().getToolPartIdentifier())) {
                 total++;
