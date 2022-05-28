@@ -40,7 +40,7 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource> impl
 
     @Override
     public @NotNull Optional<T> getResource(String identifier) {
-        return Optional.of(getResources().get(identifier));
+        return Optional.ofNullable(getResources().get(identifier));
     }
 
     @Override

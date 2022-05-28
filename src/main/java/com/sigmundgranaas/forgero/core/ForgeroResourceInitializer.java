@@ -17,6 +17,7 @@ import com.sigmundgranaas.forgero.core.material.implementation.SimpleMaterialLoa
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
+import com.sigmundgranaas.forgero.core.registry.impl.ForgeroResources;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
 import com.sigmundgranaas.forgero.core.schematic.SchematicLoader;

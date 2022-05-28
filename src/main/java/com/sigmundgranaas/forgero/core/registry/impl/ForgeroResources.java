@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core;
+package com.sigmundgranaas.forgero.core.registry.impl;
 
 import com.sigmundgranaas.forgero.core.gem.GemCollection;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
