@@ -109,7 +109,7 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         base.version = replaceAttributesDefault(child.version, parent.version, SchemaVersion.V1);
         base.required = replaceAttributesDefault(child.required, parent.required, false);
         base.parent = child.parent;
-        base.order = replaceAttributesDefault(child.order, parent.order, 0);
+        base.order = Math.max(child.order, parent.order);
 
 
         //merging dependencies
