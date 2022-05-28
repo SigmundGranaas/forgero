@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.gem;
 
-import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

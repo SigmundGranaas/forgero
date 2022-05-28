@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
@@ -48,7 +47,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<GemItem> getGems() {
         if (gemItems.isEmpty()) {
-            gemItems = LegacyForgeroRegistry.getInstance().gemCollection().getGems().stream().map(ItemFactory.INSTANCE::createGem).collect(Collectors.toList());
+            gemItems = ForgeroRegistry.GEM.list().stream().map(ItemFactory.INSTANCE::createGem).collect(Collectors.toList());
         }
         return gemItems;
     }

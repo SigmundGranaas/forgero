@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
@@ -39,14 +39,14 @@ public record RecipeCreatorImpl(
 
     public static RecipeCreator getInstance() {
         if (INSTANCE == null) {
-            LegacyForgeroRegistry registry = LegacyForgeroRegistry.getInstance();
+
             INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates(),
-                    registry.toolCollection().getTools(),
-                    registry.toolPartCollection().getToolParts(),
-                    registry.materialCollection().getPrimaryMaterialsAsList(),
-                    registry.schematicCollection().getSchematics(),
-                    registry.materialCollection().getSecondaryMaterialsAsList(),
-                    registry.gemCollection().getGems()
+                    ForgeroRegistry.TOOL.list(),
+                    ForgeroRegistry.TOOL_PART.list(),
+                    ForgeroRegistry.MATERIAL.getPrimaryMaterials(),
+                    ForgeroRegistry.SCHEMATIC.list(),
+                    ForgeroRegistry.MATERIAL.getSecondaryMaterials(),
+                    ForgeroRegistry.GEM.list()
             );
         }
         return INSTANCE;

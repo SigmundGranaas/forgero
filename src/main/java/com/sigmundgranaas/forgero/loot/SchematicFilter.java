@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.loot;
 
-import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -24,7 +24,7 @@ public class SchematicFilter {
     }
 
     public static SchematicFilter createSchematicFilter() {
-        return new SchematicFilter(LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics());
+        return new SchematicFilter(ForgeroRegistry.SCHEMATIC.list());
     }
 
     public static int getToolPartValue(Schematic part) {

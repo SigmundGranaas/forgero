@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.toolpart.toolpart;
 
 import com.sigmundgranaas.forgero.Constants;
-import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdentifier;

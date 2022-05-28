@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
-import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
@@ -36,8 +36,8 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     @Override
     public @NotNull
     ForgeroToolPart createToolPart(@NotNull ForgeroToolPartIdentifier identifier) {
-        PrimaryMaterial material = (PrimaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(identifier.getMaterial());
-        Schematic schematic = LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter((Schematic element) -> element.getSchematicIdentifier().equals(identifier.getSchematic().identifier())).findFirst().get();
+        PrimaryMaterial material = ForgeroRegistry.MATERIAL.getPrimaryMaterial(identifier.getMaterial().getName()).get();
+        Schematic schematic = ForgeroRegistry.SCHEMATIC.getResource(identifier.getSchematic().identifier()).get();
 
         return switch (identifier.getToolPartType()) {
             case HEAD -> createToolPartHead(material, (HeadSchematic) schematic);
