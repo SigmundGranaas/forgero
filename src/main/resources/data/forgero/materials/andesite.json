@@ -1,0 +1,106 @@
+{
+  "name": "Andesite",
+  "parent": "stoned",
+  "ingredient": {
+    "item": "minecraft:andesite"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 7
+      }
+    ]
+  },
+  "palette": {
+    "name": "andesite",
+    "include": [
+      "minecraft:textures/block/andesite.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "primary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 3.5,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 1.5,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 90.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD",
+              "HANDLE",
+              "BINDING"
+            ]
+          }
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "MULTIPLICATION",
+          "value": 0.90,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "BINDING",
+              "HANDLE"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "secondary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 0.3
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 0.3
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 0.1
+        }
+      ]
+    }
+  }
+}

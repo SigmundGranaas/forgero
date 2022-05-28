@@ -6,11 +6,13 @@ import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.resources.external.Patchouli;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.tags.JTag;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -23,6 +25,9 @@ public class DynamicResourceGenerator {
         generateTags();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
 
+        if (FabricLoader.getInstance().isModLoaded("patchouli")) {
+            new Patchouli().registerResources(RESOURCE_PACK);
+        }
 
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
@@ -49,8 +54,7 @@ public class DynamicResourceGenerator {
 
         for (ForgeroToolTypes type : ForgeroToolTypes.values()) {
             JTag toolTag = new JTag();
-            ForgeroRegistry.getInstance()
-                    .toolCollection().getTools()
+            ForgeroRegistry.TOOL.list()
                     .stream()
                     .filter(tool -> tool.getToolType() == type)
                     .map(tool -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString()))
@@ -69,9 +73,7 @@ public class DynamicResourceGenerator {
 
     private void addToolPartHeadTags(ForgeroToolTypes type, Identifier patternsTagId, Identifier headTagId) {
         JTag pickaxeHeads = new JTag();
-        ForgeroRegistry
-                .getInstance()
-                .toolPartCollection()
+        ForgeroRegistry.TOOL_PART
                 .getHeads()
                 .stream()
                 .filter(part -> part.getToolType() == ForgeroToolTypes.PICKAXE)
@@ -80,10 +82,7 @@ public class DynamicResourceGenerator {
         RESOURCE_PACK.addTag(headTagId, pickaxeHeads);
 
         JTag pickaxeheadsSchematics = new JTag();
-        ForgeroRegistry
-                .getInstance()
-                .schematicCollection()
-                .getSchematics()
+        ForgeroRegistry.SCHEMATIC.list()
                 .stream()
                 .filter(pattern -> pattern.getType() == ForgeroToolPartTypes.HEAD)
                 .map(HeadSchematic.class::cast)
@@ -96,12 +95,9 @@ public class DynamicResourceGenerator {
     private void addGemTags() {
         Identifier gemTagId = new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/gems");
         JTag gems = new JTag();
-        ForgeroRegistry
-                .getInstance()
-                .gemCollection()
-                .getGems()
+        ForgeroRegistry.GEM.list()
                 .stream()
-                .map(gem -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getIdentifier()))
+                .map(gem -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getStringIdentifier()))
                 .forEach(gems::add);
         RESOURCE_PACK.addTag(gemTagId, gems);
     }
@@ -109,10 +105,8 @@ public class DynamicResourceGenerator {
     private void addToolPartTags(ForgeroToolPartTypes type, Identifier patternsTagId, Identifier toolPartTagID) {
         JTag toolparts = new JTag();
 
-        ForgeroRegistry
-                .getInstance()
-                .toolPartCollection()
-                .getToolParts()
+        ForgeroRegistry.TOOL_PART
+                .list()
                 .stream()
                 .filter(toolpart -> toolpart.getToolPartType() == type)
                 .map(toolpart -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolpart.getToolPartIdentifier()))
@@ -120,11 +114,7 @@ public class DynamicResourceGenerator {
         RESOURCE_PACK.addTag(toolPartTagID, toolparts);
 
         JTag toolPartSchematics = new JTag();
-        ForgeroRegistry
-                .getInstance()
-                .schematicCollection()
-                .getSchematics()
-                .stream()
+        ForgeroRegistry.SCHEMATIC.list().stream()
                 .filter(pattern -> pattern.getType() == type)
                 .map(pattern -> new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getSchematicIdentifier()))
                 .forEach(toolPartSchematics::add);

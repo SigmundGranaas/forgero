@@ -1,5 +1,6 @@
 {
   "name": "default",
+  "resource_type": "SCHEMATIC",
   "type": "HEAD",
   "toolType": "SHOVEL",
   "model": "default",

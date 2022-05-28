@@ -31,12 +31,12 @@ public class FabricTextureLoader implements TextureLoader {
     public Texture getResource(TextureIdentifier id) {
         try {
             if (id instanceof PaletteTemplateIdentifier) {
-                return RawTexture.createRawTexture(id, getResource.apply(new Identifier(id.getFileNameWithExtension())).getInputStream());
+                return RawTexture.createRawTexture(id, getResource.apply((new Identifier(id.getFileNameWithExtension()))).getInputStream());
             } else {
                 return RawTexture.createRawTexture(id, fileService.getStream(id));
             }
         } catch (IOException e) {
-            ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
+            ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getFileNameWithExtension(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
         }
     }
@@ -46,7 +46,7 @@ public class FabricTextureLoader implements TextureLoader {
         try {
             return RawTexture.createRawTexture(id, (fileService.getStream(id)));
         } catch (IOException e) {
-            ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getIdentifier(), e);
+            ForgeroInitializer.LOGGER.error("Unable to load {} palette due to {}, Falling back to default image", id.getIdentifier(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
         }
     }

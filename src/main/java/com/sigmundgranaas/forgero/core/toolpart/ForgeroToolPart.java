@@ -1,15 +1,18 @@
 package com.sigmundgranaas.forgero.core.toolpart;
 
+import com.sigmundgranaas.forgero.core.ForgeroResource;
+import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 
-public interface ForgeroToolPart {
+public interface ForgeroToolPart extends ForgeroResource, PropertyContainer {
     PrimaryMaterial getPrimaryMaterial();
 
     SecondaryMaterial getSecondaryMaterial();
@@ -46,4 +49,19 @@ public interface ForgeroToolPart {
     }
 
     Schematic getSchematic();
+
+    @Override
+    default String getStringIdentifier() {
+        return getToolPartIdentifier();
+    }
+
+    @Override
+    default String getName() {
+        return getToolPartName();
+    }
+
+    @Override
+    default ForgeroResourceType getResourceType() {
+        return ForgeroResourceType.TOOL_PART;
+    }
 }

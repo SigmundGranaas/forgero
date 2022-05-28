@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+
 import java.util.List;
 
 /**
@@ -14,17 +16,18 @@ public interface Property {
         return new PropertyStream(properties.stream());
     }
 
+    static PropertyPOJO pojo(List<Property> properties) {
+        return new PropertyPOJO();
+    }
+
     PropertyTypes getType();
 
     default float applyAttribute(Target target, float currentAttribute) {
         return currentAttribute;
     }
 
-    ;
-
     default boolean applyCondition(Target target) {
         return true;
     }
 
-    ;
 }

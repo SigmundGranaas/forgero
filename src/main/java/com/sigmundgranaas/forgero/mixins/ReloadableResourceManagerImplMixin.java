@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceImpl;
@@ -38,7 +39,7 @@ public abstract class ReloadableResourceManagerImplMixin {
             if (identifierResult.isPresent() && ForgeroToolPartTextureRegistry.getInstance(factory).isGeneratedTexture(identifierResult.get())) {
 
                 //if (!PaletteResourceRegistry.getInstance().premadePalette(identifierResult.get().getPaletteIdentifier())) {
-                TextureLoader loader = new FabricTextureLoader(((LifecycledResourceManagerImpl) (Object) this)::getResource);
+                TextureLoader loader = new FabricTextureLoader(MinecraftClient.getInstance().getResourceManager()::getResource);
 
                 Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 

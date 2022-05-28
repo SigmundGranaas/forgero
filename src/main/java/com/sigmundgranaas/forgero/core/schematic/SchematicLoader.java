@@ -1,16 +1,15 @@
 package com.sigmundgranaas.forgero.core.schematic;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPOJO;
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class SchematicLoader {
     public List<Schematic> loadSchematics() {
@@ -41,7 +40,9 @@ public class SchematicLoader {
         try {
             assert dirPath != null;
             var pojos = Files.list(dirPath).map(path -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/schematic/%s", path.getFileName()), SchematicPOJO.class)).flatMap(Optional::stream).toList();
-            return pojos.stream().map(SchematicPOJO::createSchematicFromPojo).toList();
+            var factory = new SchematicFactory(pojos, Set.of("forgero", "minecraft"));
+            return pojos.stream().map(factory::buildResource).flatMap(Optional::stream).toList();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

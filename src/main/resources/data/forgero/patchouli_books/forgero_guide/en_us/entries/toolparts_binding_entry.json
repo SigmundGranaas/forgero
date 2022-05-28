@@ -10,8 +10,8 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting bindings",
-      "recipe": "forgero:binding_gold_binding_schematic_default",
-      "recipe2": "forgero:binding_diamond_binding_schematic_default"
+      "recipe": "forgero:gold_binding_default",
+      "recipe2": "forgero:diamond_binding_default"
     }
   ]
 }

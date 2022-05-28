@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
@@ -8,11 +10,16 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartHeadBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.*;
 
 public class IronToolPropertyTest {
+    @BeforeEach
+    void initialiseResources() {
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+    }
 
     @Test
     void testToolDurability() {

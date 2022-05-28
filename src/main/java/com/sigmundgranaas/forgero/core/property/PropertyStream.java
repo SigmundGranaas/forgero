@@ -26,6 +26,10 @@ public record PropertyStream(
                 .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
     }
 
+    public float applyAttribute(AttributeType attributeType) {
+        return applyAttribute(Target.createEmptyTarget(), attributeType);
+    }
+
     public Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
         return getAttributes()
                 .filter(attribute -> attributeType == attribute.getAttributeType())

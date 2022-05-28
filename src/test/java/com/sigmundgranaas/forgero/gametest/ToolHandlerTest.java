@@ -32,9 +32,9 @@ import static com.sigmundgranaas.forgero.gametest.GameTestHelper.createDummyServ
 public class ToolHandlerTest {
 
     public static ItemStack createToolItemWithSchematic() {
-        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC_PATTERN.get());
+        HeadState state = new HeadState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC_PATTERN.get());
         ToolPartHead head = new PickaxeHead(state);
-        HandleState handleState = new HandleState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
+        HandleState handleState = new HandleState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
         ToolPartHandle handle = new Handle(handleState);
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));
@@ -45,9 +45,9 @@ public class ToolHandlerTest {
     }
 
     public static ItemStack createToolItemWithVeinMining() {
-        HeadState state = new HeadState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC_VEIN.get());
+        HeadState state = new HeadState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC_VEIN.get());
         ToolPartHead head = new PickaxeHead(state);
-        HandleState handleState = new HandleState(ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
+        HandleState handleState = new HandleState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
         ToolPartHandle handle = new Handle(handleState);
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));

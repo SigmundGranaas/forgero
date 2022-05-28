@@ -1,6 +1,7 @@
 {
   "name": "default",
   "type": "HEAD",
+  "resource_type": "SCHEMATIC",
   "toolType": "HOE",
   "model": "default",
   "output": "hoe_default",

@@ -1,27 +1,12 @@
 {
   "name": "pattern",
+  "parent": "default_hoehead",
   "type": "HEAD",
   "toolType": "HOE",
   "model": "vein",
   "output": "hoe_vein",
-  "rarity": 60,
   "materialCount": 3,
   "properties": {
-    "attributes": [
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": -3.0
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": -0.2
-      }
-    ],
-    "passive:": [],
     "active": [
       {
         "type": "BLOCK_BREAKING_PATTERN",

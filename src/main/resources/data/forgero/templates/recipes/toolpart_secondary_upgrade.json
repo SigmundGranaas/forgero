@@ -4,7 +4,6 @@
     "item": "BASE_ITEM"
   },
   "addition": {
-    "item": "SECONDARY_MATERIAL"
   },
   "result": {
     "item": "UPGRADED_BASE_TOOL_PART"

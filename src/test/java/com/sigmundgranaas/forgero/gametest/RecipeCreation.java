@@ -23,8 +23,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
-import java.util.stream.Collectors;
-
 import static com.sigmundgranaas.forgero.gametest.GameTestHelper.createDummyServerPlayer;
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.parseCraftingTableRecipe;
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithCraftingScreenHandler;
@@ -49,9 +47,12 @@ public class RecipeCreation {
 
         int total = 0;
         int correct = 0;
-        for (Item toolPart : ItemCollection.INSTANCE.getToolParts().stream().filter(toolPart -> ((ToolPartItem) toolPart).getType() == ForgeroToolPartTypes.HANDLE).collect(Collectors.toList())
+        for (Item toolPart : ItemCollection.INSTANCE.getToolParts().stream().filter(toolPart -> ((ToolPartItem) toolPart).getType() == ForgeroToolPartTypes.HANDLE).toList()
         ) {
-            Item output = testHandleRecipe(Registry.ITEM.get(new Identifier(((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient())), ((ToolPartItem) toolPart).getPart().getSchematic(), mockPlayer);
+            if (((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient().item == null) {
+                break;
+            }
+            Item output = testHandleRecipe(Registry.ITEM.get(new Identifier(((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient().item)), ((ToolPartItem) toolPart).getPart().getSchematic(), mockPlayer);
             if (output instanceof ToolPartItem && ((ToolPartItem) output).getPart().getToolPartIdentifier().equals(((ToolPartItem) toolPart).getPart().getToolPartIdentifier())) {
                 total++;
                 correct++;
@@ -83,12 +84,7 @@ public class RecipeCreation {
     }
 
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing toolparts", required = true)
-    public void testingToolPart(TestContext context) {
-        testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOL_PART_RECIPE);
-    }
-
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing schematics", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing schematics", required = false)
     public void testingSchematicRecipes(TestContext context) {
         testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
     }

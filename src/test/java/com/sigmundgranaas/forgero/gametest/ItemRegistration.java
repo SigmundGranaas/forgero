@@ -16,7 +16,7 @@ import net.minecraft.util.registry.Registry;
 public class ItemRegistration {
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolsHaveBeenRegistered(TestContext context) {
-        ForgeroRegistry.getInstance().toolCollection().getTools().forEach(forgeroTool -> {
+        ForgeroRegistry.TOOL.list().forEach(forgeroTool -> {
             Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getShortToolIdentifierString()));
             if (checkedTool == Items.AIR && !(checkedTool instanceof ForgeroToolItem)) {
                 String message = String.format("%s has not been registered correctly", forgeroTool.getToolIdentifierString());
@@ -30,7 +30,7 @@ public class ItemRegistration {
 
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolPartsHaveBeenRegistered(TestContext context) {
-        ForgeroRegistry.getInstance().toolPartCollection().getToolParts().forEach(forgeroTool -> {
+        ForgeroRegistry.TOOL_PART.list().forEach(forgeroTool -> {
             Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getToolPartIdentifier()));
             if (checkedTool == Items.AIR && !(checkedTool instanceof ToolPartItem)) {
                 String message = String.format("%s has not been registered correctly", forgeroTool.getToolPartIdentifier());

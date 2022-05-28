@@ -1,6 +1,6 @@
 {
   "name": "Crafting a tool part",
-  "icon": "forgero:acacia_handle_dense",
+  "icon": "forgero:acacia_handle_default",
   "category": "forgero:getting_started_category",
   "pages": [
     {
@@ -10,20 +10,20 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting heads",
-      "recipe": "forgero:pickaxehead_iron_pickaxehead_schematic_default",
-      "recipe2": "forgero:axehead_netherite_axehead_schematic_default"
+      "recipe": "forgero:iron_pickaxehead_default",
+      "recipe2": "forgero:netherite_axehead_default"
     },
     {
       "type": "patchouli:crafting",
       "title": "Crafting handles",
-      "recipe": "forgero:handle_iron_handle_schematic_dense",
-      "recipe2": "forgero:handle_acacia_handle_schematic_default"
+      "recipe": "forgero:iron_handle_default",
+      "recipe2": "forgero:acacia_handle_default"
     },
     {
       "type": "patchouli:crafting",
       "title": "Crafting bindings",
-      "recipe": "forgero:binding_gold_binding_schematic_default",
-      "recipe2": "forgero:binding_diamond_binding_schematic_default"
+      "recipe": "forgero:gold_binding_default",
+      "recipe2": "forgero:diamond_binding_default"
     }
   ]
 }

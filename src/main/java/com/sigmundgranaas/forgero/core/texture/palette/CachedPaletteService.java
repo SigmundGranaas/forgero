@@ -80,7 +80,7 @@ public class CachedPaletteService implements PaletteService {
             UnbakedPalette unbakedPalette = new UnbakedMaterialPalette(id, reference.getLeft(), reference.getRight());
             Palette palette = factory.createPalette(unbakedPalette);
             paletteCache.put(id.getIdentifier(), palette);
-            exportPalette(palette, id);
+            //exportPalette(palette, id);
             return palette;
 
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class CachedPaletteService implements PaletteService {
 
         try {
 
-            File outputFile = new File(String.format("./%s.png", id.getIdentifier()));
+            File outputFile = new File(String.format("./%s_palette.png", id.getIdentifier()));
             if (!outputFile.exists()) {
                 //noinspection ResultOfMethodCallIgnored
                 outputFile.createNewFile();

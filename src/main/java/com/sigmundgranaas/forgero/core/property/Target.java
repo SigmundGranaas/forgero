@@ -13,6 +13,8 @@ import java.util.Set;
  * Attributes with no condition will ignore targets.
  */
 public interface Target {
+    static Target EMPTY = createEmptyTarget();
+
     static Target createEmptyTarget() {
         return new Target() {
             @Override

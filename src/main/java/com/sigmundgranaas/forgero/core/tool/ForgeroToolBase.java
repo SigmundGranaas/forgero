@@ -51,6 +51,12 @@ public class ForgeroToolBase implements ForgeroTool {
         return (ForgeroToolIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(getToolIdentifierString());
     }
 
+
+    @Override
+    public @NotNull String getStringIdentifier() {
+        return getToolIdentifierString();
+    }
+
     @Override
     public @NotNull
     String getShortToolIdentifierString() {
@@ -91,10 +97,6 @@ public class ForgeroToolBase implements ForgeroTool {
         return getPropertyStream(target).applyAttribute(target, AttributeType.MINING_SPEED);
     }
 
-    @Override
-    public int getMiningLevel(Target target) {
-        return (int) getPropertyStream().applyAttribute(target, AttributeType.MINING_LEVEL);
-    }
 
     @Override
     public PrimaryMaterial getMaterial() {
@@ -116,7 +118,7 @@ public class ForgeroToolBase implements ForgeroTool {
     }
 
     @Override
-    public List<Property> getProperties(Target target) {
+    public @NotNull List<Property> getProperties(Target target) {
         Target toolTarget = target.combineTarget(new ToolTarget(Set.of(getToolType().toString())));
         return Stream.of(head.getState().getProperties(toolTarget), handle.getState().getProperties(toolTarget)).flatMap(Collection::stream).collect(Collectors.toList());
     }

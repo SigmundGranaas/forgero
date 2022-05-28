@@ -1,12 +1,16 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
-import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.property.*;
+import com.sigmundgranaas.forgero.core.property.active.ActivePropertyBuilder;
+import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyBuilder;
+import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyType;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -20,13 +24,19 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.core.util.ForgeroDefaults;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 public class NBTFactoryImpl implements NBTFactory {
 
@@ -45,14 +55,14 @@ public class NBTFactoryImpl implements NBTFactory {
     }
 
     public static String createGemNbtString(Gem gem) {
-        return String.format("%s_%s", gem.getLevel(), gem.getIdentifier());
+        return String.format("%s_%s", gem.getLevel(), gem.getStringIdentifier());
     }
 
     @Override
     public @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound) {
         String primaryMaterialString = compound.getString(ToolPartItem.PRIMARY_MATERIAL_IDENTIFIER);
-        PrimaryMaterial primary = (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
+        PrimaryMaterial primary = ForgeroRegistry.MATERIAL.getPrimaryMaterial(primaryMaterialString).orElse(ForgeroDefaults.getDefaultPrimaryMaterial());
         String secondaryMaterialString = compound.getString(ToolPartItem.SECONDARY_MATERIAL_IDENTIFIER);
 
         String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
@@ -78,8 +88,7 @@ public class NBTFactoryImpl implements NBTFactory {
 
         }
 
-
-        Schematic pattern = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(element -> element.getSchematicIdentifier().equals(patternIdentifier)).findFirst().get();
+        Schematic pattern = ForgeroRegistry.SCHEMATIC.getResource(patternIdentifier).get();
 
         ToolPartBuilder builder = switch (toolPartTypes) {
             case HANDLE -> ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(primary, pattern);
@@ -87,7 +96,7 @@ public class NBTFactoryImpl implements NBTFactory {
             case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, (HeadSchematic) pattern);
         };
         if (!secondaryMaterialString.equals("empty")) {
-            builder.setSecondary((SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
+            builder.setSecondary(ForgeroRegistry.MATERIAL.getSecondaryMaterial(secondaryMaterialString).get());
         }
 
 
@@ -192,14 +201,181 @@ public class NBTFactoryImpl implements NBTFactory {
         return compound;
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public @NotNull Optional<Schematic> createSchematicFromNbt(@NotNull NbtCompound compound) {
+        if (compound.contains(SCHEMATIC_NBT_IDENTIFIER)) {
+            if (compound.get(SCHEMATIC_NBT_IDENTIFIER).getType() == NbtElement.STRING_TYPE) {
+                return ForgeroRegistry.SCHEMATIC.getResource(compound.getString(SCHEMATIC_NBT_IDENTIFIER));
+            } else if (compound.get(SCHEMATIC_NBT_IDENTIFIER).getType() == NbtElement.COMPOUND_TYPE) {
+                NbtCompound schematicCompound = compound.getCompound(SCHEMATIC_NBT_IDENTIFIER);
+                ForgeroToolPartTypes type = ForgeroToolPartTypes.valueOf(schematicCompound.getString("Type"));
+                String name = schematicCompound.getString("Name");
+                String model = schematicCompound.getString("Model");
+                int materialCount = schematicCompound.getInt("MaterialCount");
+                List<Property> properties = createPropertiesFromNbt(schematicCompound.getCompound("Properties"));
+
+                if (type == ForgeroToolPartTypes.HEAD) {
+                    ForgeroToolTypes toolType = ForgeroToolTypes.valueOf(schematicCompound.getString("ToolType"));
+                    return Optional.of(new HeadSchematic(type, name, properties, toolType, model, materialCount));
+                }
+                return Optional.of(new Schematic(type, name, properties, model, materialCount));
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public @NotNull List<Property> createPropertiesFromNbt(@NotNull NbtCompound compound) {
+        if (compound.contains(NBTFactory.PROPERTY_IDENTIFIER)) {
+            var properties = new ArrayList<Property>();
+            var propertyCompound = compound.getCompound(NBTFactory.PROPERTY_IDENTIFIER);
+            if (propertyCompound.contains(NBTFactory.ATTRIBUTES_IDENTIFIER)) {
+                NbtList list = propertyCompound.getList(ATTRIBUTES_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                properties.addAll(createPropertyFromNbt(list, comp -> createAttributeFromNbt(compound)));
+            }
+            if (propertyCompound.contains(NBTFactory.ACTIVE_IDENTIFIER)) {
+                NbtList list = propertyCompound.getList(ACTIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                properties.addAll(createPropertyFromNbt(list, comp -> createActivePropertyFromNbt(compound)));
+            }
+            if (propertyCompound.contains(NBTFactory.PASSIVE_IDENTIFIER)) {
+                NbtList list = propertyCompound.getList(PASSIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                properties.addAll(createPropertyFromNbt(list, comp -> createPassivePropertyFromNbt(compound)));
+            }
+            return properties;
+        }
+        return Collections.emptyList();
+    }
+
+    private Property createPassivePropertyFromNbt(NbtCompound compound) {
+        var pojo = new PropertyPOJO.Passive();
+        pojo.type = PassivePropertyType.valueOf(compound.getString("Type"));
+        pojo.tag = compound.getString("Tag");
+        return PassivePropertyBuilder.createPassivePropertyFromPojo(pojo);
+    }
+
+    private Property createActivePropertyFromNbt(NbtCompound compound) {
+        var pojo = new PropertyPOJO.Active();
+        pojo.type = ActivePropertyType.valueOf(compound.getString("Type"));
+        pojo.tag = compound.getString("Tag");
+        pojo.depth = compound.getInt("Depth");
+        pojo.description = compound.getString("Description");
+        pojo.direction = BreakingDirection.valueOf("Direction");
+        pojo.pattern = compound.getList("Pattern", NbtElement.STRING_TYPE).stream().map(NbtElement::asString).toList().toArray(new String[0]);
+        return ActivePropertyBuilder.createAttributeFromPojo(pojo);
+    }
+
+    private Collection<Property> createPropertyFromNbt(NbtList list, Function<NbtCompound, Property> converter) {
+        var properties = new ArrayList<Property>();
+        for (int i = 0; i < list.size(); i++) {
+            properties.add(converter.apply(list.getCompound(i)));
+        }
+        return properties;
+    }
+
+    private Attribute createAttributeFromNbt(NbtCompound compound) {
+        var pojo = new PropertyPOJO.Attribute();
+        pojo.value = compound.getFloat("Value");
+        pojo.operation = NumericOperation.valueOf(compound.getString("Operation"));
+        pojo.order = CalculationOrder.valueOf(compound.getString("Order"));
+        pojo.type = AttributeType.valueOf(compound.getString("Type"));
+        if (compound.contains("Condition")) {
+            var conditionCompound = compound.getCompound("Condition");
+            pojo.condition = new PropertyPOJO.Condition();
+            pojo.condition.target = TargetTypes.valueOf(conditionCompound.getString("target"));
+            NbtList list = conditionCompound.getList("Tag", NbtElement.STRING_TYPE);
+            pojo.condition.tag = new ArrayList<>(list.stream().map(NbtElement::asString).toList());
+        }
+        return AttributeBuilder.createAttributeFromPojo(pojo);
+    }
+
+
+    @Override
+    public @NotNull NbtCompound createNbtFromProperties(@NotNull PropertyPOJO properties) {
+        NbtCompound compound = new NbtCompound();
+        if (properties.passiveProperties.size() > 0) {
+            NbtList list = new NbtList();
+            properties.passiveProperties.forEach(passive -> list.add(createPassiveNbtCompound(passive)));
+            compound.put(PASSIVE_IDENTIFIER, list);
+        }
+        if (properties.active.size() > 0) {
+            NbtList list = new NbtList();
+            properties.active.forEach(active -> list.add(createActiveNbtCompound(active)));
+            compound.put(ACTIVE_IDENTIFIER, list);
+        }
+        if (properties.attributes.size() > 0) {
+            NbtList list = new NbtList();
+            properties.attributes.forEach(attribute -> list.add(createAttributeNbtCompound(attribute)));
+            compound.put(ATTRIBUTES_IDENTIFIER, list);
+        }
+
+        return compound;
+    }
+
+    private NbtElement createAttributeNbtCompound(PropertyPOJO.Attribute attribute) {
+        NbtCompound compound = new NbtCompound();
+        compound.putString("Type", attribute.type.toString());
+        compound.putFloat("Value", attribute.value);
+        compound.putString("Operation", attribute.operation.toString());
+        compound.putString("Order", attribute.order.toString());
+        if (attribute.condition != null) {
+            NbtCompound condition = new NbtCompound();
+            compound.putString("Target", attribute.condition.target.toString());
+            NbtList list = new NbtList();
+            attribute.condition.tag.forEach(tag -> list.add(NbtString.of(tag)));
+            compound.put("Tag", list);
+            compound.put("Condition", condition);
+        }
+        return compound;
+    }
+
+    private NbtElement createActiveNbtCompound(PropertyPOJO.Active active) {
+        NbtCompound compound = new NbtCompound();
+        compound.putString("Tag", active.tag);
+        compound.putString("Type", active.type.toString());
+        applyIfNotNull(active.depth, () -> compound.putInt("Depth", active.depth));
+        applyIfNotNull(active.description, () -> compound.putString("Description", active.description));
+        var list = new NbtList();
+        Arrays.stream(active.pattern).forEach(string -> list.add(NbtString.of(string)));
+        applyIfNotNull(active.pattern, () -> compound.put("Pattern", list));
+        applyIfNotNull(active.direction, () -> compound.putString("Direction", active.direction.toString()));
+        return compound;
+    }
+
+    public void applyIfNotNull(@Nullable Object test, Runnable action) {
+        if (test != null) {
+            action.run();
+        }
+    }
+
+    private NbtElement createPassiveNbtCompound(PropertyPOJO.Passive passive) {
+        NbtCompound compound = new NbtCompound();
+        compound.putString("Tag", passive.tag);
+        compound.putString("Type", passive.type.toString());
+        return compound;
+    }
+
+    @Override
+    public @NotNull NbtCompound createNBTFromSchematic(@NotNull Schematic schematic) {
+        NbtCompound schematicCompound = new NbtCompound();
+        schematicCompound.putString("Name", schematic.getName());
+        schematicCompound.putInt("MaterialCount", schematic.getMaterialCount());
+        schematicCompound.putString("Model", schematic.getModel());
+        schematicCompound.put("Property", createNbtFromProperties(Property.pojo(schematic.getProperties())));
+        if (schematic instanceof HeadSchematic headSchematic) {
+            schematicCompound.putString("ToolType", headSchematic.getToolType().toString());
+        }
+        schematicCompound.putString("Type", schematic.getType().toString());
+        return schematicCompound;
+    }
+
     Gem getGemFromNbtString(String nbtGem) {
         String[] elements = nbtGem.split("_");
         if (elements.length < 3) {
             return EmptyGem.createEmptyGem();
         }
-        Gem gem = ForgeroRegistry.getInstance().gemCollection().getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
+        Gem gem = ForgeroRegistry.GEM.getResource(String.format("%s_%s", elements[1], elements[2])).orElse(EmptyGem.createEmptyGem());
         return gem.createGem(Integer.parseInt(elements[0]));
     }
-
 }
 

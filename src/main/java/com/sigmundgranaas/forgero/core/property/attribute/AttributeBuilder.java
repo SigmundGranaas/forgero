@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.property.*;
 
 import java.util.HashSet;

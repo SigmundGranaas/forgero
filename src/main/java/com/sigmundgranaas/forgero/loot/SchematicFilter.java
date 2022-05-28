@@ -24,7 +24,7 @@ public class SchematicFilter {
     }
 
     public static SchematicFilter createSchematicFilter() {
-        return new SchematicFilter(ForgeroRegistry.getInstance().schematicCollection().getSchematics());
+        return new SchematicFilter(ForgeroRegistry.SCHEMATIC.list());
     }
 
     public static int getToolPartValue(Schematic part) {

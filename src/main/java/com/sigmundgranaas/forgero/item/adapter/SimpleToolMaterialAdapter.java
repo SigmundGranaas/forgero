@@ -19,7 +19,7 @@ public class SimpleToolMaterialAdapter implements ToolMaterial {
     private final HeadState state;
 
     public SimpleToolMaterialAdapter(PrimaryMaterial material) {
-        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Schematic(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), 1, "default", 1));
+        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Schematic(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), "default", 1));
 
     }
 
@@ -51,7 +51,11 @@ public class SimpleToolMaterialAdapter implements ToolMaterial {
     @Override
     public Ingredient getRepairIngredient() {
         JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("item", state.getPrimaryMaterial().getIngredient());
+        if (state.getPrimaryMaterial().getIngredient().tag == null) {
+            ingredient.addProperty("item", state.getPrimaryMaterial().getIngredient().item);
+        } else {
+            ingredient.addProperty("tag", state.getPrimaryMaterial().getIngredient().tag);
+        }
         return Ingredient.fromJson(ingredient);
     }
 }

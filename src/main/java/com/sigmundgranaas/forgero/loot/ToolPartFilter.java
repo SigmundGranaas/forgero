@@ -28,7 +28,7 @@ public class ToolPartFilter {
     }
 
     public static ToolPartFilter createToolPartFilter() {
-        return new ToolPartFilter(ForgeroRegistry.getInstance().toolPartCollection().getToolParts());
+        return new ToolPartFilter(ForgeroRegistry.TOOL_PART.list());
     }
 
     public static int getToolPartValue(ForgeroToolPart part) {

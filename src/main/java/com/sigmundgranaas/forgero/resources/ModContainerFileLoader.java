@@ -21,8 +21,8 @@ public class ModContainerFileLoader {
     public List<Path> getResourcesInFolder(String resourceLocation) {
         var optionalPath = container.findPath(resourceLocation);
         if (optionalPath.isPresent()) {
-            try {
-                return Files.list(optionalPath.get()).toList();
+            try (var filesStream = Files.walk(optionalPath.get(), 4)) {
+                return filesStream.filter(Files::isRegularFile).toList();
             } catch (IOException e) {
                 ForgeroInitializer.LOGGER.error("Unable to list files from {}", resourceLocation);
                 ForgeroInitializer.LOGGER.error(e);

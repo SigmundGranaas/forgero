@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.ToolPartTarget;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,7 +48,7 @@ public abstract class ToolPartState implements PropertyContainer {
 
     public abstract ForgeroToolPartTypes getToolPartType();
 
-    public List<Property> getProperties(Target target) {
+    public @NotNull List<Property> getProperties(Target target) {
         return Stream.of(primaryMaterial.getPrimaryProperties(),
                         secondaryMaterial.getSecondaryProperties(),
                         gem.getProperties(),
@@ -55,6 +56,12 @@ public abstract class ToolPartState implements PropertyContainer {
                 .flatMap(Collection::stream)
                 .filter(property -> property.applyCondition(target.combineTarget(getToolPartConditionTarget())))
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public @NotNull List<Property> getRootProperties() {
+        return getProperties(Target.createEmptyTarget());
     }
 
     private Target getToolPartConditionTarget() {

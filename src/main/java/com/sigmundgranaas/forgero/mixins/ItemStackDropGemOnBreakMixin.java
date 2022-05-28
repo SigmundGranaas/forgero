@@ -41,7 +41,7 @@ public abstract class ItemStackDropGemOnBreakMixin {
     }
 
     private ItemStack createItemStackFromGem(Gem gem) {
-        ItemStack output = new ItemStack(ItemCollection.INSTANCE.getGems().stream().filter(gemItem -> gemItem.getGem().getIdentifier().equals(gem.getIdentifier())).findAny().get());
+        ItemStack output = new ItemStack(ItemCollection.INSTANCE.getGems().stream().filter(gemItem -> gemItem.getGem().getStringIdentifier().equals(gem.getStringIdentifier())).findAny().get());
         NBTFactory.INSTANCE.createNBTFromGem(gem, output.getOrCreateNbt());
         return output;
     }
