@@ -77,6 +77,18 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
     }
 
     @Override
+    public void loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
+        if (toolRegistry.isEmpty()
+                || toolRegistry.isEmpty()
+                || schematicRegistry.isEmpty()
+                || getGemRegistry().isEmpty()
+                || materialRegistry.isEmpty()) {
+
+            loadResources(initializer);
+        }
+    }
+
+    @Override
     public void updateResources() {
 
     }

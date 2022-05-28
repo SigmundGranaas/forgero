@@ -17,6 +17,8 @@ public interface ForgeroRegistry {
 
     void loadResources(ForgeroResourceInitializer initializer);
 
+    void loadResourcesIfEmpty(ForgeroResourceInitializer initializer);
+
     void updateResources();
 
     void clear();

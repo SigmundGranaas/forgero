@@ -10,8 +10,8 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting handles",
-      "recipe": "forgero:handle_iron_handle_schematic_dense",
-      "recipe2": "forgero:handle_acacia_handle_schematic_default"
+      "recipe": "forgero:iron_handle_default",
+      "recipe2": "forgero:acacia_handle_default"
     }
   ]
 }

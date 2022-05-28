@@ -18,7 +18,7 @@ public class ForgeroInitializer implements ModInitializer {
     @Override
     public void onInitialize() {
         ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
-        ForgeroRegistry.INSTANCE.loadResources(initializer);
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(initializer);
 
         
         //initializer.registerDefaultResources();

@@ -59,6 +59,10 @@ public interface ForgeroResourceRegistry<T extends ForgeroResource> {
 
     void clear();
 
+    default boolean isEmpty() {
+        return getResourcesAsMap().isEmpty();
+    }
+
     @NotNull
     default <R extends T> ImmutableMap<String, R> getSubTypeAsMap(Class<R> type) {
         return getMapSubTypeAsMap(getResourcesAsMap().values(), type);
