@@ -28,6 +28,8 @@ public class ForgeroDataResource {
     @SerializedName(value = "required")
     public boolean required = false;
 
+    public int order = 0;
+
     public String getName() {
         return name;
     }

@@ -5,6 +5,8 @@ import com.sigmundgranaas.forgero.core.registry.impl.ConcurrentForgeroRegistry;
 
 /**
  * The root registry for Forgero. All available resource will be stored within the child registries.
+ * Defaults to a ConcurrentRegistry, which makes it Thread safe.
+ * use loadResourcesIfEmpty
  */
 public interface ForgeroRegistry {
     ForgeroRegistry INSTANCE = ConcurrentForgeroRegistry.getInstance();
@@ -15,9 +17,9 @@ public interface ForgeroRegistry {
     ToolPartRegistry TOOL_PART = INSTANCE.getToolPartRegistry();
     ToolRegistry TOOL = INSTANCE.getToolRegistry();
 
-    void loadResources(ForgeroResourceInitializer initializer);
+    ForgeroRegistry loadResources(ForgeroResourceInitializer initializer);
 
-    void loadResourcesIfEmpty(ForgeroResourceInitializer initializer);
+    ForgeroRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer);
 
     void updateResources();
 

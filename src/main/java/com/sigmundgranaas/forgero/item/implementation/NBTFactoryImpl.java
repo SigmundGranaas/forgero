@@ -5,7 +5,8 @@ import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.*;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 public class NBTFactoryImpl implements NBTFactory {
 
@@ -222,10 +224,49 @@ public class NBTFactoryImpl implements NBTFactory {
     @Override
     public @NotNull List<Property> createPropertiesFromNbt(@NotNull NbtCompound compound) {
         if (compound.contains(NBTFactory.PROPERTY_IDENTIFIER)) {
-            return Collections.emptyList();
+            var properties = new ArrayList<Property>();
+            var propertyCompound = compound.getCompound(NBTFactory.PROPERTY_IDENTIFIER);
+            if (propertyCompound.contains(NBTFactory.ATTRIBUTES_IDENTIFIER)) {
+                NbtList list = propertyCompound.getList(ATTRIBUTES_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                properties.addAll(createPropertyFromNbt(list, comp -> createAttributeFromNbt(compound)));
+            }
+            if (propertyCompound.contains(NBTFactory.ACTIVE_IDENTIFIER)) {
+                NbtList list = propertyCompound.getList(ACTIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                properties.addAll(createPropertyFromNbt(list, comp -> createAttributeFromNbt(compound)));
+            }
+            if (propertyCompound.contains(NBTFactory.PASSIVE_IDENTIFIER)) {
+                NbtList list = propertyCompound.getList(PASSIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                properties.addAll(createPropertyFromNbt(list, comp -> createAttributeFromNbt(compound)));
+            }
+            return properties;
         }
         return Collections.emptyList();
     }
+
+    private Collection<Property> createPropertyFromNbt(NbtList list, Function<NbtCompound, Property> converter) {
+        var properties = new ArrayList<Property>();
+        for (int i = 0; i < list.size(); i++) {
+            properties.add(converter.apply(list.getCompound(i)));
+        }
+        return properties;
+    }
+
+    private Attribute createAttributeFromNbt(NbtCompound compound) {
+        var pojo = new PropertyPOJO.Attribute();
+        pojo.value = compound.getFloat("Value");
+        pojo.operation = NumericOperation.valueOf(compound.getString("Operation"));
+        pojo.order = CalculationOrder.valueOf(compound.getString("Order"));
+        pojo.type = AttributeType.valueOf(compound.getString("Type"));
+        if (compound.contains("Condition")) {
+            var conditionCompound = compound.getCompound("Condition");
+            pojo.condition = new PropertyPOJO.Condition();
+            pojo.condition.target = TargetTypes.valueOf(conditionCompound.getString("target"));
+            NbtList list = conditionCompound.getList("Tag", NbtElement.STRING_TYPE);
+            pojo.condition.tag = new ArrayList<>(list.stream().map(NbtElement::asString).toList());
+        }
+        return AttributeBuilder.createAttributeFromPojo(pojo);
+    }
+
 
     @Override
     public @NotNull NbtCompound createNbtFromProperties(@NotNull PropertyPOJO properties) {

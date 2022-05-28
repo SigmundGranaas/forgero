@@ -7,7 +7,8 @@ import com.sigmundgranaas.forgero.core.registry.*;
 import java.util.HashMap;
 
 /**
- * Concurrent registry for handling all Forgero resources
+ * Concurrent registry for handling all Forgero resources.
+ * All registries contained are thread safe
  */
 public class ConcurrentForgeroRegistry implements ForgeroRegistry {
     private volatile static ConcurrentForgeroRegistry INSTANCE;
@@ -66,7 +67,7 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
     }
 
     @Override
-    public void loadResources(ForgeroResourceInitializer initializer) {
+    public ConcurrentForgeroRegistry loadResources(ForgeroResourceInitializer initializer) {
         clear();
         var registry = initializer.initializeForgeroResources();
         toolRegistry.updateRegistry(registry.toolCollection());
@@ -74,10 +75,11 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
         schematicRegistry.updateRegistry(registry.schematicCollection());
         gemRegistry.updateRegistry(registry.gemCollection());
         materialRegistry.updateRegistry(registry.materialCollection().values().stream().toList());
+        return this;
     }
 
     @Override
-    public void loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
+    public ConcurrentForgeroRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
         if (toolRegistry.isEmpty()
                 || toolRegistry.isEmpty()
                 || schematicRegistry.isEmpty()
@@ -86,6 +88,7 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
 
             loadResources(initializer);
         }
+        return this;
     }
 
     @Override

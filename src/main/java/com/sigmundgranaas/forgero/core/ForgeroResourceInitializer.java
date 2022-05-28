@@ -34,6 +34,11 @@ import com.sigmundgranaas.forgero.resources.ResourceLocations;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Deprecated resource initializer. Will be reworked
+ * <p>
+ * Loads all resources from configuration files picked up from support Mod Containers
+ */
 public class ForgeroResourceInitializer {
     private final List<String> registeredMaterials;
     private final List<String> materialsExclusions;
@@ -114,7 +119,6 @@ public class ForgeroResourceInitializer {
                     List<ResourceIdentifier> inclusions = pojo.palette.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
                     List<ResourceIdentifier> exclusions = pojo.palette.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.palette.name), paletteIdentifiers)).collect(Collectors.toList());
                     PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
-
                 }
             });
         } catch (NullPointerException e) {

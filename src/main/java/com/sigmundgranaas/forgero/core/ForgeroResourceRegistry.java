@@ -10,7 +10,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+/**
+ * A resource Registry to control Forgero resource types. See MaterialRegistry, ToolPartRegistry etc...
+ *
+ * @param <T> The type of Resource this registry controls
+ */
 public interface ForgeroResourceRegistry<T extends ForgeroResource> {
     static <T extends ForgeroResource> Map<String, T> convertListToMap(Collection<T> resourceList) {
         return resourceList.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, resource -> resource));

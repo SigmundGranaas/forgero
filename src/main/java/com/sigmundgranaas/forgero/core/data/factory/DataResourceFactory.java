@@ -26,12 +26,12 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
 
 
     public DataResourceFactory(List<T> pojos, Set<String> availableNameSpaces) {
-        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo));
+        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> current.order > next.order ? current : next));
         this.availableNameSpaces = availableNameSpaces;
     }
 
     public DataResourceFactory(List<T> pojos) {
-        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo));
+        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> current.order > next.order ? current : next));
         this.availableNameSpaces = new HashSet<>(DEFAULT_DEPENDENCIES_LIST);
     }
 
@@ -109,6 +109,7 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         base.version = replaceAttributesDefault(child.version, parent.version, SchemaVersion.V1);
         base.required = replaceAttributesDefault(child.required, parent.required, false);
         base.parent = child.parent;
+        base.order = replaceAttributesDefault(child.order, parent.order, 0);
 
 
         //merging dependencies
