@@ -8,10 +8,11 @@ import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 
-public interface ForgeroToolPart extends ForgeroResource {
+public interface ForgeroToolPart extends ForgeroResource, PropertyContainer {
     PrimaryMaterial getPrimaryMaterial();
 
     SecondaryMaterial getSecondaryMaterial();
