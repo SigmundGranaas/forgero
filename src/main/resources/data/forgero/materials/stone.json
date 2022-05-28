@@ -2,7 +2,7 @@
   "name": "Stone",
   "parent": "stoned",
   "ingredient": {
-    "item": "minecraft:cobblestone"
+    "tag": "minecraft:stone_tool_materials"
   },
   "properties": {
     "attributes": [

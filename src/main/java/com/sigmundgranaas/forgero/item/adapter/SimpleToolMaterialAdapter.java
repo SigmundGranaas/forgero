@@ -51,7 +51,11 @@ public class SimpleToolMaterialAdapter implements ToolMaterial {
     @Override
     public Ingredient getRepairIngredient() {
         JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("item", state.getPrimaryMaterial().getIngredient());
+        if (state.getPrimaryMaterial().getIngredient().tag == null) {
+            ingredient.addProperty("item", state.getPrimaryMaterial().getIngredient().item);
+        } else {
+            ingredient.addProperty("tag", state.getPrimaryMaterial().getIngredient().tag);
+        }
         return Ingredient.fromJson(ingredient);
     }
 }

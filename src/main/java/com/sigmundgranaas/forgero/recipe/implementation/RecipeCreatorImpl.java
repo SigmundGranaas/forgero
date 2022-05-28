@@ -115,7 +115,12 @@ public record RecipeCreatorImpl(
             schematicTag = "forgero:handle_schematics";
         }
         JsonObject materialIngredient = new JsonObject();
-        materialIngredient.addProperty("item", toolPart.getPrimaryMaterial().getIngredient());
+        if (toolPart.getPrimaryMaterial().getIngredient().tag == null) {
+            materialIngredient.addProperty("item", toolPart.getPrimaryMaterial().getIngredient().item);
+        } else {
+            materialIngredient.addProperty("tag", toolPart.getPrimaryMaterial().getIngredient().tag);
+        }
+
         template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
         for (int i = 0; i < toolPart.getSchematic().getMaterialCount(); i++) {
             ingredients.add(materialIngredient);
@@ -145,7 +150,12 @@ public record RecipeCreatorImpl(
 
         template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", String.format("%s_%s_%s", material.getName(), toolPartType, "default")).toString());
         JsonObject materialIngredient = new JsonObject();
-        materialIngredient.addProperty("item", material.getIngredient());
+        if (material.getIngredient().tag == null) {
+            materialIngredient.addProperty("item", material.getIngredient().item);
+        } else {
+            materialIngredient.addProperty("tag", material.getIngredient().tag);
+        }
+
         JsonObject schematicIngredient = new JsonObject();
         schematicIngredient.addProperty("item", new Identifier("forgero", schematic.getSchematicIdentifier()).toString());
         for (int i = 0; i < schematic.getMaterialCount(); i++) {
@@ -174,7 +184,13 @@ public record RecipeCreatorImpl(
     private RecipeWrapper createSecondaryMaterialUpgradeRecipe(ForgeroToolPart toolPart, SecondaryMaterial material) {
         JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE).toString()).getAsJsonObject();
         template.getAsJsonObject("base").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
-        template.getAsJsonObject("addition").addProperty("item", material.getIngredient());
+
+        if (material.getIngredient().tag == null) {
+            template.getAsJsonObject("addition").addProperty("item", material.getIngredient().item);
+        } else {
+            template.getAsJsonObject("addition").addProperty("tag", material.getIngredient().tag);
+        }
+
         template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
         return new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier() + "_" + material.getName() + "_secondary_upgrade"), template, RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE);
     }

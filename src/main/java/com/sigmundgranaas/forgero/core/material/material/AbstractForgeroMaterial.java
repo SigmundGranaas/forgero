@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
 import com.sigmundgranaas.forgero.core.data.factory.PropertyBuilder;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.IngredientPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.property.Property;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final List<String> paletteExclusionIdentifiers;
     protected final List<Property> properties;
     protected final MaterialType type;
-    protected final String ingredient;
+    protected final IngredientPojo ingredient;
 
     public AbstractForgeroMaterial(MaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
@@ -25,7 +26,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
         this.properties = PropertyBuilder.createPropertyListFromPOJO(material.properties);
 
         this.type = material.type;
-        this.ingredient = material.ingredient.item;
+        this.ingredient = material.ingredient;
     }
 
 
@@ -52,7 +53,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     }
 
     @Override
-    public String getIngredient() {
+    public IngredientPojo getIngredient() {
         return ingredient;
     }
 }

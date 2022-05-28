@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MaterialPOJO extends ForgeroDataResource {
     public MaterialType type;
-    public Ingredient ingredient;
+    public IngredientPojo ingredient;
     public PalettePOJO palette;
     public Primary primary;
     public Secondary secondary;
@@ -24,14 +24,10 @@ public class MaterialPOJO extends ForgeroDataResource {
         pojo.primary = new Primary();
         pojo.secondary = new Secondary();
 
-        Ingredient ingredient = new Ingredient();
+        IngredientPojo ingredient = new IngredientPojo();
         ingredient.item = "ingredient";
         pojo.ingredient = ingredient;
         return pojo;
-    }
-
-    public static class Ingredient {
-        public String item;
     }
 
     public static class Primary {

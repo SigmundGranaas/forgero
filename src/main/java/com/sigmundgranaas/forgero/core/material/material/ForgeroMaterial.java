@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.material.material;
 
 import com.sigmundgranaas.forgero.core.ForgeroResource;
 import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.IngredientPojo;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -21,7 +22,7 @@ public interface ForgeroMaterial extends ForgeroResource, PropertyContainer {
     @NotNull
     List<Property> getProperties();
 
-    String getIngredient();
+    IngredientPojo getIngredient();
 
     @Override
     default ForgeroResourceType getResourceType() {

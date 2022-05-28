@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.util;
 
 import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.IngredientPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
@@ -53,8 +54,10 @@ public interface ForgeroDefaults {
             }
 
             @Override
-            public String getIngredient() {
-                return "minecraft:stick";
+            public IngredientPojo getIngredient() {
+                var pojo = new IngredientPojo();
+                pojo.item = "minecraft:stick";
+                return pojo;
             }
         };
     }

@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.IngredientPojo;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleSecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, SimpleSecondar
     }
 
     @Override
-    public String getIngredient() {
-        return "empty";
+    public IngredientPojo getIngredient() {
+        return new IngredientPojo();
     }
 }
