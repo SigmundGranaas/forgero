@@ -6,7 +6,11 @@ import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.*;
+import com.sigmundgranaas.forgero.core.property.active.ActivePropertyBuilder;
+import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyBuilder;
+import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyType;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -232,15 +236,33 @@ public class NBTFactoryImpl implements NBTFactory {
             }
             if (propertyCompound.contains(NBTFactory.ACTIVE_IDENTIFIER)) {
                 NbtList list = propertyCompound.getList(ACTIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
-                properties.addAll(createPropertyFromNbt(list, comp -> createAttributeFromNbt(compound)));
+                properties.addAll(createPropertyFromNbt(list, comp -> createActivePropertyFromNbt(compound)));
             }
             if (propertyCompound.contains(NBTFactory.PASSIVE_IDENTIFIER)) {
                 NbtList list = propertyCompound.getList(PASSIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
-                properties.addAll(createPropertyFromNbt(list, comp -> createAttributeFromNbt(compound)));
+                properties.addAll(createPropertyFromNbt(list, comp -> createPassivePropertyFromNbt(compound)));
             }
             return properties;
         }
         return Collections.emptyList();
+    }
+
+    private Property createPassivePropertyFromNbt(NbtCompound compound) {
+        var pojo = new PropertyPOJO.Passive();
+        pojo.type = PassivePropertyType.valueOf(compound.getString("Type"));
+        pojo.tag = compound.getString("Tag");
+        return PassivePropertyBuilder.createPassivePropertyFromPojo(pojo);
+    }
+
+    private Property createActivePropertyFromNbt(NbtCompound compound) {
+        var pojo = new PropertyPOJO.Active();
+        pojo.type = ActivePropertyType.valueOf(compound.getString("Type"));
+        pojo.tag = compound.getString("Tag");
+        pojo.depth = compound.getInt("Depth");
+        pojo.description = compound.getString("Description");
+        pojo.direction = BreakingDirection.valueOf("Direction");
+        pojo.pattern = (String[]) compound.getList("Pattern", NbtElement.STRING_TYPE).stream().map(NbtElement::asString).toList().toArray();
+        return ActivePropertyBuilder.createAttributeFromPojo(pojo);
     }
 
     private Collection<Property> createPropertyFromNbt(NbtList list, Function<NbtCompound, Property> converter) {
@@ -313,7 +335,9 @@ public class NBTFactoryImpl implements NBTFactory {
         compound.putString("Type", active.type.toString());
         applyIfNotNull(active.depth, () -> compound.putInt("Depth", active.depth));
         applyIfNotNull(active.description, () -> compound.putString("Description", active.description));
-        applyIfNotNull(active.pattern, () -> compound.putString("Pattern", active.description));
+        var list = new NbtList();
+        Arrays.stream(active.pattern).forEach(string -> list.add(NbtString.of(string)));
+        applyIfNotNull(active.pattern, () -> compound.put("Pattern", list));
         applyIfNotNull(active.direction, () -> compound.putString("Direction", active.direction.toString()));
         return compound;
     }
