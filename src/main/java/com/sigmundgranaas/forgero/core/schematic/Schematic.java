@@ -1,14 +1,17 @@
 package com.sigmundgranaas.forgero.core.schematic;
 
+import com.sigmundgranaas.forgero.core.ForgeroResource;
+import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class Schematic implements PropertyContainer {
+public class Schematic implements ForgeroResource, PropertyContainer {
     private final ForgeroToolPartTypes type;
     private final String name;
     private final List<Property> properties;
@@ -28,16 +31,27 @@ public class Schematic implements PropertyContainer {
     }
 
     @Override
-    public List<Property> getProperties(Target target) {
+    public @NotNull List<Property> getProperties(Target target) {
         return properties;
     }
 
+    @Deprecated
     public String getSchematicIdentifier() {
+        return getStringIdentifier();
+    }
+
+    @Override
+    public String getStringIdentifier() {
         return String.format("%s_schematic_%s", type.getName(), name);
     }
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public ForgeroResourceType getResourceType() {
+        return ForgeroResourceType.SCHEMATIC;
     }
 
     public List<Property> getProperties() {

@@ -28,6 +28,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
         this.ingredient = material.ingredient.item;
     }
 
+
     @Override
     public int getRarity() {
         return rarity;

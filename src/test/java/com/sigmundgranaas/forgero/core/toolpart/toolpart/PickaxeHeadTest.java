@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.toolpart.toolpart;
 
 import com.sigmundgranaas.forgero.Constants;
-import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
@@ -15,7 +15,7 @@ import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEH
 
 public class PickaxeHeadTest {
     public static PickaxeHead createDefaultPickaxeHead() {
-        HeadState state = new HeadState((PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC.get());
+        HeadState state = new HeadState((PrimaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(Constants.IRON_IDENTIFIER_STRING)), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC.get());
         return new PickaxeHead(state);
     }
 

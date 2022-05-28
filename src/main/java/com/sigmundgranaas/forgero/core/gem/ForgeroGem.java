@@ -33,7 +33,7 @@ public class ForgeroGem implements Gem {
     }
 
     @Override
-    public String getIdentifier() {
+    public String getStringIdentifier() {
         return identifier;
     }
 
@@ -44,7 +44,7 @@ public class ForgeroGem implements Gem {
 
     @Override
     public Optional<Gem> upgradeGem(Gem newGem) {
-        if (equals(newGem) && newGem.getIdentifier().equals(this.getIdentifier())) {
+        if (equals(newGem) && newGem.getStringIdentifier().equals(this.getStringIdentifier())) {
             return Optional.of(this.createGem(getLevel() + 1));
         }
         return Optional.empty();
@@ -52,16 +52,16 @@ public class ForgeroGem implements Gem {
 
     @Override
     public Gem createGem(int level) {
-        return new ForgeroGem(level, getIdentifier(), propertyList, placement);
+        return new ForgeroGem(level, getStringIdentifier(), propertyList, placement);
     }
 
     public boolean equals(Gem newGem) {
-        return identifier.equals(newGem.getIdentifier()) && newGem.getLevel() == getLevel();
+        return identifier.equals(newGem.getStringIdentifier()) && newGem.getLevel() == getLevel();
     }
 
     @Override
     public String getName() {
-        return getIdentifier().split("_")[0];
+        return getStringIdentifier().split("_")[0];
     }
 
     @Override

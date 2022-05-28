@@ -60,13 +60,13 @@ public class ForgeroResourceInitializer {
 
     }
 
-    public ForgeroRegistry initializeForgeroResources() {
+    public LegacyForgeroRegistry initializeForgeroResources() {
         MaterialCollection materialCollection = initializeMaterials();
         GemCollection gemCollection = initializeGems();
         SchematicCollection schematicCollection = initializeSchematicCollection();
         ForgeroToolPartCollection toolPartCollection = initializeToolParts(materialCollection, schematicCollection);
         ForgeroToolCollection toolCollection = initializeToolCollection(toolPartCollection);
-        return ForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection, schematicCollection);
+        return LegacyForgeroRegistry.initializeRegistry(materialCollection, gemCollection, toolCollection, toolPartCollection, schematicCollection);
     }
 
     private SchematicCollection initializeSchematicCollection() {

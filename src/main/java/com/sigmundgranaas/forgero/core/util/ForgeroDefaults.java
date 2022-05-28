@@ -1,5 +1,6 @@
-package com.sigmundgranaas.forgero.core;
+package com.sigmundgranaas.forgero.core.util;
 
+import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
@@ -7,6 +8,7 @@ import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartState;
@@ -21,8 +23,18 @@ public interface ForgeroDefaults {
     static PrimaryMaterial getDefaultPrimaryMaterial() {
         return new PrimaryMaterial() {
             @Override
+            public @NotNull List<Property> getProperties(Target target) {
+                return Collections.emptyList();
+            }
+
+            @Override
             public int getRarity() {
                 return 0;
+            }
+
+            @Override
+            public String getStringIdentifier() {
+                return "DEFAULT";
             }
 
             @Override
@@ -53,6 +65,21 @@ public interface ForgeroDefaults {
 
     static ToolPartHandle getDefaultHandle() {
         return new ToolPartHandle() {
+            @Override
+            public String getStringIdentifier() {
+                return getName();
+            }
+
+            @Override
+            public String getName() {
+                return "default";
+            }
+
+            @Override
+            public ForgeroResourceType getResourceType() {
+                return ForgeroResourceType.TOOL_PART;
+            }
+
             @Override
             public PrimaryMaterial getPrimaryMaterial() {
                 return getDefaultPrimaryMaterial();

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
-import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
@@ -51,14 +51,14 @@ public class NBTFactoryImpl implements NBTFactory {
     }
 
     public static String createGemNbtString(Gem gem) {
-        return String.format("%s_%s", gem.getLevel(), gem.getIdentifier());
+        return String.format("%s_%s", gem.getLevel(), gem.getStringIdentifier());
     }
 
     @Override
     public @NotNull
     ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound) {
         String primaryMaterialString = compound.getString(ToolPartItem.PRIMARY_MATERIAL_IDENTIFIER);
-        PrimaryMaterial primary = (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
+        PrimaryMaterial primary = (PrimaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(ForgeroIdentifierFactory.INSTANCE.createForgeroMaterialIdentifier(primaryMaterialString));
         String secondaryMaterialString = compound.getString(ToolPartItem.SECONDARY_MATERIAL_IDENTIFIER);
 
         String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
@@ -85,7 +85,7 @@ public class NBTFactoryImpl implements NBTFactory {
         }
 
 
-        Schematic pattern = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(element -> element.getSchematicIdentifier().equals(patternIdentifier)).findFirst().get();
+        Schematic pattern = LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().filter(element -> element.getSchematicIdentifier().equals(patternIdentifier)).findFirst().get();
 
         ToolPartBuilder builder = switch (toolPartTypes) {
             case HANDLE -> ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(primary, pattern);
@@ -93,7 +93,7 @@ public class NBTFactoryImpl implements NBTFactory {
             case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, (HeadSchematic) pattern);
         };
         if (!secondaryMaterialString.equals("empty")) {
-            builder.setSecondary((SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
+            builder.setSecondary((SecondaryMaterial) LegacyForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl(secondaryMaterialString)));
         }
 
 
@@ -203,7 +203,7 @@ public class NBTFactoryImpl implements NBTFactory {
     public @NotNull Optional<Schematic> createSchematicFromNbt(@NotNull NbtCompound compound) {
         if (compound.contains(SCHEMATIC_NBT_IDENTIFIER)) {
             if (compound.get(SCHEMATIC_NBT_IDENTIFIER).getType() == NbtElement.STRING_TYPE) {
-                return ForgeroRegistry.getInstance().schematicCollection().getSchematics()
+                return LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics()
                         .stream()
                         .filter(schematic -> schematic.getSchematicIdentifier().equals(compound.getString(SCHEMATIC_NBT_IDENTIFIER)))
                         .findAny();
@@ -315,7 +315,7 @@ public class NBTFactoryImpl implements NBTFactory {
         if (elements.length < 3) {
             return EmptyGem.createEmptyGem();
         }
-        Gem gem = ForgeroRegistry.getInstance().gemCollection().getGems().stream().filter(gem1 -> gem1.getIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
+        Gem gem = LegacyForgeroRegistry.getInstance().gemCollection().getGems().stream().filter(gem1 -> gem1.getStringIdentifier().equals(String.format("%s_%s", elements[1], elements[2]))).findFirst().orElse(EmptyGem.createEmptyGem());
         return gem.createGem(Integer.parseInt(elements[0]));
     }
 

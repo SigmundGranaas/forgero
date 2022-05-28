@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.loot;
 
-import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -28,7 +28,7 @@ public class ToolPartFilter {
     }
 
     public static ToolPartFilter createToolPartFilter() {
-        return new ToolPartFilter(ForgeroRegistry.getInstance().toolPartCollection().getToolParts());
+        return new ToolPartFilter(LegacyForgeroRegistry.getInstance().toolPartCollection().getToolParts());
     }
 
     public static int getToolPartValue(ForgeroToolPart part) {

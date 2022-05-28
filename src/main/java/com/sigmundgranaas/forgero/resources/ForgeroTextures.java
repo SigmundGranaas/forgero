@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.resources;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
-import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialCollection;
@@ -36,7 +36,7 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
             PaletteResourceRegistry.getInstance().addPremadePalette(path.getFileName().toString().replace("_palette.png", ""));
         }
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            MaterialCollection materialCollection = ForgeroRegistry.getInstance().materialCollection();
+            MaterialCollection materialCollection = LegacyForgeroRegistry.getInstance().materialCollection();
             ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
 
             //registry.getTextures().stream().filter(id -> PaletteResourceRegistry.getInstance().premadePalette(id.getPaletteIdentifier())).forEach(texture -> RESOURCE_PACK.addTexture(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier()), CachedToolPartTextureService.getInstance(new FabricTextureLoader((textureId) -> MinecraftClient.getInstance().getResourceManager().getResource(textureId))).getTexture(texture).getImage()));
@@ -50,16 +50,16 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
     }
 
     private void registerToolPartModelsPrimary(ForgeroToolPartTextureRegistry registry) {
-        for (Schematic schematic : ForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
-            for (PrimaryMaterial material : ForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList()) {
+        for (Schematic schematic : LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
+            for (PrimaryMaterial material : LegacyForgeroRegistry.getInstance().materialCollection().getPrimaryMaterialsAsList()) {
                 registerModel(registry, schematic, material, ModelLayer.PRIMARY);
             }
         }
     }
 
     private void registerToolPartModelsSecondary(ForgeroToolPartTextureRegistry registry) {
-        for (Schematic schematic : ForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
-            for (SecondaryMaterial material : ForgeroRegistry.getInstance().materialCollection().getSecondaryMaterialsAsList()) {
+        for (Schematic schematic : LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
+            for (SecondaryMaterial material : LegacyForgeroRegistry.getInstance().materialCollection().getSecondaryMaterialsAsList()) {
                 registerModel(registry, schematic, material, ModelLayer.SECONDARY);
             }
         }
@@ -80,8 +80,8 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
     }
 
     private void registerToolPartGemModels(ForgeroToolPartTextureRegistry registry) {
-        for (Schematic schematic : ForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
-            for (Gem gem : ForgeroRegistry.getInstance().gemCollection().getGems()) {
+        for (Schematic schematic : LegacyForgeroRegistry.getInstance().schematicCollection().getSchematics()) {
+            for (Gem gem : LegacyForgeroRegistry.getInstance().gemCollection().getGems()) {
                 if (schematic instanceof HeadSchematic head) {
                     registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getName(), ToolPartModelType.getModelType(head.getToolType(), schematic.getType()), ModelLayer.GEM, schematic.getModel()));
                 }

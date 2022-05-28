@@ -87,7 +87,7 @@ public class ItemRegistryImpl implements ItemRegistry {
     @Override
     public void registerGems() {
         collection.INSTANCE.getGems().forEach(gemItem -> {
-            Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, gemItem.getGem().getIdentifier()), gemItem);
+            Registry.register(Registry.ITEM, new Identifier(ForgeroInitializer.MOD_NAMESPACE, gemItem.getGem().getStringIdentifier()), gemItem);
         });
     }
 

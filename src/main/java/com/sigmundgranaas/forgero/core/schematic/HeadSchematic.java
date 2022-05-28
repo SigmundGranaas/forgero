@@ -16,6 +16,11 @@ public class HeadSchematic extends Schematic {
 
     @Override
     public String getSchematicIdentifier() {
+        return getStringIdentifier();
+    }
+
+    @Override
+    public String getStringIdentifier() {
         return String.format("%shead_schematic_%s", toolType.getToolName(), getName());
     }
 

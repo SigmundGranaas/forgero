@@ -1,61 +1,34 @@
 package com.sigmundgranaas.forgero.core;
 
-import com.sigmundgranaas.forgero.core.gem.GemCollection;
-import com.sigmundgranaas.forgero.core.material.MaterialCollection;
-import com.sigmundgranaas.forgero.core.schematic.SchematicCollection;
-import com.sigmundgranaas.forgero.core.tool.ForgeroToolCollection;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
+import com.sigmundgranaas.forgero.core.registry.*;
+import com.sigmundgranaas.forgero.core.registry.impl.ConcurrentForgeroRegistry;
 
-public record ForgeroRegistry(MaterialCollection materialCollection,
-                              GemCollection gemCollection,
-                              ForgeroToolCollection toolCollection,
-                              ForgeroToolPartCollection toolPartCollection,
-                              SchematicCollection schematicCollection) {
-    private static ForgeroRegistry INSTANCE;
+/**
+ * The root registry for Forgero. All available resource will be stored within the child registries.
+ */
+public interface ForgeroRegistry {
+    ForgeroRegistry INSTANCE = ConcurrentForgeroRegistry.getInstance();
 
-    public static ForgeroRegistry initializeRegistry(MaterialCollection materialCollection,
-                                                     GemCollection gemCollection,
-                                                     ForgeroToolCollection toolCollection,
-                                                     ForgeroToolPartCollection toolPartCollection, SchematicCollection patternCollection) {
-        INSTANCE = new ForgeroRegistry(materialCollection,
-                gemCollection,
-                toolCollection,
-                toolPartCollection,
-                patternCollection);
+    MaterialRegistry MATERIAL = INSTANCE.getMaterialRegistry();
+    GemRegistry GEM = INSTANCE.getGemRegistry();
+    SchematicRegistry SCHEMATIC = INSTANCE.getSchematicRegistry();
+    ToolPartRegistry TOOL_PART = INSTANCE.getToolPartRegistry();
+    ToolRegistry TOOL = INSTANCE.getToolRegistry();
 
-        return INSTANCE;
-    }
+    void loadResources(ForgeroResourceInitializer initializer);
 
-    public static ForgeroRegistry getInstance() {
-        if (INSTANCE == null) {
-            ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
-            initializer.registerDefaultResources();
-            INSTANCE = initializer.initializeForgeroResources();
-        }
-        return INSTANCE;
-    }
+    void updateResources();
 
-    @Override
-    public MaterialCollection materialCollection() {
-        return materialCollection;
-    }
+    void clear();
 
-    @Override
-    public GemCollection gemCollection() {
-        return gemCollection;
-    }
+    MaterialRegistry getMaterialRegistry();
 
-    public SchematicCollection schematicCollection() {
-        return schematicCollection;
-    }
+    GemRegistry getGemRegistry();
 
-    @Override
-    public ForgeroToolCollection toolCollection() {
-        return toolCollection;
-    }
+    ToolRegistry getToolRegistry();
 
-    @Override
-    public ForgeroToolPartCollection toolPartCollection() {
-        return toolPartCollection;
-    }
+    ToolPartRegistry getToolPartRegistry();
+
+    SchematicRegistry getSchematicRegistry();
+
 }

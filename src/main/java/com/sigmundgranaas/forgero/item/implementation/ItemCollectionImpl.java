@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.LegacyForgeroRegistry;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemCollection;
@@ -31,7 +32,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<Item> getTools() {
         if (tools.isEmpty()) {
-            tools = ForgeroRegistry.getInstance().toolCollection().getTools().stream().map(ItemFactory.INSTANCE::createTool).collect(Collectors.toList());
+            tools = ForgeroRegistry.TOOL.list().stream().map(ItemFactory.INSTANCE::createTool).collect(Collectors.toList());
         }
         return tools;
     }
@@ -39,7 +40,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<SchematicItem> getSchematics() {
         if (schematicItems.isEmpty()) {
-            schematicItems = ForgeroRegistry.getInstance().schematicCollection().getSchematics().stream().map(ItemFactory.INSTANCE::createSchematic).collect(Collectors.toList());
+            schematicItems = ForgeroRegistry.SCHEMATIC.list().stream().map(ItemFactory.INSTANCE::createSchematic).collect(Collectors.toList());
         }
         return schematicItems;
     }
@@ -47,7 +48,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<GemItem> getGems() {
         if (gemItems.isEmpty()) {
-            gemItems = ForgeroRegistry.getInstance().gemCollection().getGems().stream().map(ItemFactory.INSTANCE::createGem).collect(Collectors.toList());
+            gemItems = LegacyForgeroRegistry.getInstance().gemCollection().getGems().stream().map(ItemFactory.INSTANCE::createGem).collect(Collectors.toList());
         }
         return gemItems;
     }
@@ -60,7 +61,7 @@ public class ItemCollectionImpl implements ItemCollection {
     @Override
     public List<Item> getToolParts() {
         if (toolParts.isEmpty()) {
-            toolParts = ForgeroRegistry.getInstance().toolPartCollection().getToolParts().stream().filter(toolPart -> toolPart.getSchematic().getName().equals("default")).map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
+            toolParts = ForgeroRegistry.TOOL_PART.list().stream().filter(toolPart -> toolPart.getSchematic().getName().equals("default")).map(ItemFactory.INSTANCE::createToolPart).collect(Collectors.toList());
         }
         return toolParts;
     }

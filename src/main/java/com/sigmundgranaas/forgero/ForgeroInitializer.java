@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.command.CommandRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
@@ -17,8 +18,11 @@ public class ForgeroInitializer implements ModInitializer {
     @Override
     public void onInitialize() {
         ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
-        initializer.registerDefaultResources();
-        initializer.initializeForgeroResources();
+        ForgeroRegistry.INSTANCE.loadResources(initializer);
+
+        
+        //initializer.registerDefaultResources();
+        //initializer.initializeForgeroResources();
         registerItems();
         registerRecipes();
         new CommandRegistry().registerCommand();

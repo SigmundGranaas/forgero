@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -52,7 +53,7 @@ public class ForgeroToolWithBinding extends ForgeroToolBase {
     }
 
     @Override
-    public List<Property> getProperties(Target target) {
+    public @NotNull List<Property> getProperties(Target target) {
         return Stream.of(super.getProperties(target), binding.getState().getProperties(target))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
