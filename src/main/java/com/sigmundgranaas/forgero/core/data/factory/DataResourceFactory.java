@@ -117,9 +117,9 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
 
         //Merging properties
         base.properties = new PropertyPOJO();
-        base.properties.active = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).active, attributeOrDefault(parent.properties, new PropertyPOJO()).active);
-        base.properties.passiveProperties = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).passiveProperties, attributeOrDefault(parent.properties, new PropertyPOJO()).passiveProperties);
-        base.properties.attributes = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).attributes, attributeOrDefault(parent.properties, new PropertyPOJO()).attributes);
+        base.properties.active = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).active, attributeOrDefault(parent.properties, new PropertyPOJO()).active).stream().distinct().toList();
+        base.properties.passiveProperties = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).passiveProperties, attributeOrDefault(parent.properties, new PropertyPOJO()).passiveProperties).stream().distinct().toList();
+        base.properties.attributes = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).attributes, attributeOrDefault(parent.properties, new PropertyPOJO()).attributes).stream().distinct().toList();
 
         return mergePojos(parent, child, base);
     }

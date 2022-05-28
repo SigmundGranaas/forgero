@@ -13,9 +13,7 @@
         "operation": "ADDITION",
         "value": 2
       }
-    ],
-    "passive": [],
-    "active": []
+    ]
   },
   "palette": {
     "name": "oak",
