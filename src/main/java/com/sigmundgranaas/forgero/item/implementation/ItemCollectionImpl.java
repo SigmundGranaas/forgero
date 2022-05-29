@@ -73,10 +73,10 @@ public class ItemCollectionImpl implements ItemCollection {
     public List<Item> getToolParts() {
         if (toolParts.isEmpty()) {
             toolParts = ForgeroRegistry.TOOL_PART.list().stream()
-                    .filter(toolPart -> toolPart.getSchematic().getName().equals("default"))
+                    .filter(toolPart -> toolPart.getSchematic().getResourceName().equals("default"))
                     .map(ItemFactory.INSTANCE::createToolPart)
                     .sorted(Comparator.comparing(toolPartItem -> (int) Property.stream(((ToolPartItem) toolPartItem).getPart().getState().getRootProperties()).applyAttribute(AttributeType.RARITY))
-                            .thenComparing(toolPartItem -> ((ToolPartItem) toolPartItem).getPart().getPrimaryMaterial().getName()))
+                            .thenComparing(toolPartItem -> ((ToolPartItem) toolPartItem).getPart().getPrimaryMaterial().getResourceName()))
                     .collect(Collectors.toList());
         }
         return toolParts;

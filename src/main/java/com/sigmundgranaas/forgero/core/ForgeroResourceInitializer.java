@@ -130,7 +130,7 @@ public class ForgeroResourceInitializer {
         materials = pojos.stream()
                 .map(factory::buildResource)
                 .flatMap(Optional::stream)
-                .collect(Collectors.toMap(ForgeroMaterial::getName, material -> material));
+                .collect(Collectors.toMap(ForgeroMaterial::getResourceName, material -> material));
 
         if (materials.isEmpty()) {
             return new SimpleMaterialLoader(List.of("iron", "oak", "diamond", "netherite")).getMaterials();

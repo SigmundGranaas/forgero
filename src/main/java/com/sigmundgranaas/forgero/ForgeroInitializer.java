@@ -20,7 +20,6 @@ public class ForgeroInitializer implements ModInitializer {
         ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
         ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(initializer);
 
-        
         //initializer.registerDefaultResources();
         //initializer.initializeForgeroResources();
         registerItems();

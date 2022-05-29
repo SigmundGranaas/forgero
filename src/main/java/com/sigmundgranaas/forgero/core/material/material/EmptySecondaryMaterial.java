@@ -16,7 +16,7 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, SimpleSecondar
 
     @Override
     public @NotNull
-    String getName() {
+    String getResourceName() {
         return "empty";
     }
 

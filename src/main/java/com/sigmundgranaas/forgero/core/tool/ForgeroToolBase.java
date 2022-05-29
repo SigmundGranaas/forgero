@@ -60,13 +60,13 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull
     String getShortToolIdentifierString() {
-        return head.getPrimaryMaterial().getName() + "_" + head.getToolType().getToolName();
+        return head.getPrimaryMaterial().getResourceName() + "_" + head.getToolType().getToolName();
     }
 
     @Override
     public @NotNull
     String getToolIdentifierString() {
-        return String.format("%s_%s", head.getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
+        return String.format("%s_%s", head.getPrimaryMaterial().getResourceName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
     @Override

@@ -69,7 +69,7 @@ public class ToolPartFilter {
     }
 
     public ToolPartFilter filterMaterial(PrimaryMaterial material) {
-        filteredMaterials.add(material.getName());
+        filteredMaterials.add(material.getResourceName());
         return this;
     }
 
@@ -114,7 +114,7 @@ public class ToolPartFilter {
         if (filteredMaterials.size() == 0) {
             return true;
         } else {
-            return filteredMaterials.stream().anyMatch(filtered -> material.getName().equals(filtered));
+            return filteredMaterials.stream().anyMatch(filtered -> material.getResourceName().equals(filtered));
         }
     }
 }

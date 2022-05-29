@@ -49,7 +49,7 @@ public interface ForgeroTool extends ForgeroResource, PropertyContainer {
     void createWeaponDescription(ToolDescriptionWriter writer);
 
     @Override
-    default String getName() {
+    default String getResourceName() {
         return getStringIdentifier();
     }
 

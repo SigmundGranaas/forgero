@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.HoeItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
@@ -19,6 +20,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -91,8 +93,13 @@ public class ForgeroHoeItem extends HoeItem implements ForgeroToolItem {
     }
 
     @Override
+    public @NotNull Item getItem() {
+        return this;
+    }
+
+    @Override
     protected String getOrCreateTranslationKey() {
-        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, getHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
+        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, getHead().getPrimaryMaterial().getResourceName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
 

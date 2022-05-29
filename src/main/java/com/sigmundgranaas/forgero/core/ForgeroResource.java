@@ -8,7 +8,7 @@ package com.sigmundgranaas.forgero.core;
 public interface ForgeroResource {
     String getStringIdentifier();
 
-    String getName();
+    String getResourceName();
 
     ForgeroResourceType getResourceType();
 }

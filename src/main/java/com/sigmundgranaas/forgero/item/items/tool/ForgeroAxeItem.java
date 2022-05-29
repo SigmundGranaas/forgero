@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -12,6 +13,7 @@ import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
@@ -19,6 +21,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -47,9 +50,15 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
         return new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString());
     }
 
+
     @Override
     public Text getName() {
         return getForgeroTranslatableToolName();
+    }
+
+    @Override
+    public ForgeroResourceType getResourceType() {
+        return ForgeroResourceType.TOOL;
     }
 
     @Override
@@ -88,8 +97,13 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
     }
 
     @Override
+    public @NotNull Item getItem() {
+        return this;
+    }
+
+    @Override
     protected String getOrCreateTranslationKey() {
-        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
+        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
 

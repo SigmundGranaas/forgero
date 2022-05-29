@@ -37,7 +37,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
 
     @Override
     public @NotNull
-    String getName() {
+    String getResourceName() {
         return name.toLowerCase();
     }
 

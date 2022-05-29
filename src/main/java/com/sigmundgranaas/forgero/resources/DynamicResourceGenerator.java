@@ -84,13 +84,13 @@ public class DynamicResourceGenerator {
             ForgeroRegistry.MATERIAL.getPrimaryMaterials().forEach(material -> {
                 JTag toolTag = new JTag();
                 if (material.getType() == MaterialType.WOOD) {
-                    woodTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + type.getToolName()));
+                    woodTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getResourceName() + "_" + type.getToolName()));
                 } else {
-                    toolTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + type.getToolName()));
-                    if (Registry.ITEM.containsId(new Identifier("minecraft", material.getName() + "_" + type.getToolName()))) {
-                        toolTag.add(new Identifier("minecraft", material.getName() + "_" + type.getToolName()));
+                    toolTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getResourceName() + "_" + type.getToolName()));
+                    if (Registry.ITEM.containsId(new Identifier("minecraft", material.getResourceName() + "_" + type.getToolName()))) {
+                        toolTag.add(new Identifier("minecraft", material.getResourceName() + "_" + type.getToolName()));
                     }
-                    RESOURCE_PACK.addTag(new Identifier("c", "items/" + material.getName() + "_" + type.getToolName()), toolTag);
+                    RESOURCE_PACK.addTag(new Identifier("c", "items/" + material.getResourceName() + "_" + type.getToolName()), toolTag);
                 }
             });
             woodTag.add(new Identifier("minecraft", "wooden" + "_" + type.getToolName()));

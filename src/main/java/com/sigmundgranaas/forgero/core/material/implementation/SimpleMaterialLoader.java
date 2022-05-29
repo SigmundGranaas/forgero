@@ -36,7 +36,7 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
                 PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.palette.name, inclusions, exclusions));
             });
             var factory = MaterialFactory.createFactory(jsonMaterials, ForgeroDataResource.DEFAULT_DEPENDENCIES_SET);
-            return jsonMaterials.stream().map(factory::buildResource).flatMap(Optional::stream).collect(Collectors.toMap(ForgeroMaterial::getName, (material) -> material));
+            return jsonMaterials.stream().map(factory::buildResource).flatMap(Optional::stream).collect(Collectors.toMap(ForgeroMaterial::getResourceName, (material) -> material));
         }
         return materialMap;
     }
