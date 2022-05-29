@@ -6,27 +6,27 @@
       "required": false
     },
     {
-      "id": "minecraft:wooden_sword",
+      "id": "#c:wooden_sword",
       "required": false
     },
     {
-      "id": "minecraft:stone_sword",
+      "id": "#c:stone_sword",
       "required": false
     },
     {
-      "id": "minecraft:iron_sword",
+      "id": "#c:iron_sword",
       "required": false
     },
     {
-      "id": "minecraft:golden_sword",
+      "id": "#c:golden_sword",
       "required": false
     },
     {
-      "id": "minecraft:diamond_sword",
+      "id": "#c:diamond_sword",
       "required": false
     },
     {
-      "id": "minecraft:netherite_sword",
+      "id": "#c:netherite_sword",
       "required": false
     }
   ]

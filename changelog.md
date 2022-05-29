@@ -1,4 +1,4 @@
-### Changelog 0.8.0
+### Changelog 0.8.1
 
 # Forgero Beta release
 
