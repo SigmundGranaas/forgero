@@ -2,6 +2,8 @@
 
 # Forgero Beta release
 
+* Added a common tag for all tools
+* Fixed the bug where you cannot apply secondary materials
 * Created a static V1 schema - THIS WILL LIKELY BREAK EARLIER SAVES
 * Added experimental support for Mythic Metals
 * Enabled tags as ingredients for materials
