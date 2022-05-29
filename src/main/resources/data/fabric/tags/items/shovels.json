@@ -6,27 +6,27 @@
       "required": false
     },
     {
-      "id": "minecraft:wooden_shovel",
+      "id": "#c:wooden_shovel",
       "required": false
     },
     {
-      "id": "minecraft:stone_shovel",
+      "id": "#c:stone_shovel",
       "required": false
     },
     {
-      "id": "minecraft:iron_shovel",
+      "id": "#c:iron_shovel",
       "required": false
     },
     {
-      "id": "minecraft:golden_shovel",
+      "id": "#c:golden_shovel",
       "required": false
     },
     {
-      "id": "minecraft:diamond_shovel",
+      "id": "#c:diamond_shovel",
       "required": false
     },
     {
-      "id": "minecraft:netherite_shovel",
+      "id": "#c:netherite_shovel",
       "required": false
     }
   ]

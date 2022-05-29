@@ -12,6 +12,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +34,8 @@ public class ItemRegistryImpl implements ItemRegistry {
     public static final TagKey<Item> SWORDS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "swords"));
     public static final TagKey<Item> HEADS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "heads"));
     public static final TagKey<Item> GEMS = TagKey.of(Registry.ITEM_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "gems"));
+    public static final List<TagKey<Item>> TOOL_MATERIAL_VARIANTS_TAGS = new ArrayList();
+
 
     public static final TagKey<Block> VEIN_MINING_ORES = TagKey.of(Registry.BLOCK_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "vein_mining_ores"));
     public static final TagKey<Block> VEIN_MINING_SAND = TagKey.of(Registry.BLOCK_KEY, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "vein_mining_sand"));
@@ -67,6 +70,8 @@ public class ItemRegistryImpl implements ItemRegistry {
     @Override
     public void registerTools() {
         collection.INSTANCE.getTools().forEach(this::registerTool);
+        TOOL_MATERIAL_VARIANTS_TAGS.add(TagKey.of(Registry.ITEM_KEY, new Identifier("c", "wooden_pickaxe")));
+        collection.INSTANCE.getTools().stream().forEach(tool -> TOOL_MATERIAL_VARIANTS_TAGS.add(TagKey.of(Registry.ITEM_KEY, new Identifier("c", ((ForgeroToolItem) tool).getTool().getToolIdentifierString()))));
         List<Item> pickaxes = collection.INSTANCE.getTools().stream().filter(item -> item instanceof ForgeroPickaxeItem).collect(Collectors.toList());
         //ToolManagerImpl.tag(FabricToolTags.PICKAXES).register(new ModdedToolsVanillaBlocksToolHandler(pickaxes));
 

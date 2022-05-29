@@ -1,9 +1,12 @@
 package com.sigmundgranaas.forgero.resources;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.texture.CachedToolPartTextureService;
+import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.resources.external.Patchouli;
@@ -16,6 +19,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+
+import java.util.Arrays;
 
 
 public class DynamicResourceGenerator {
@@ -52,6 +58,8 @@ public class DynamicResourceGenerator {
         addToolPartHeadTags(ForgeroToolTypes.HOE, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/hoehead_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/hoeheads"));
         addToolPartHeadTags(ForgeroToolTypes.SWORD, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/swordhead_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/swordheads"));
 
+        createCommonToolVariantTags(ForgeroRegistry.TOOL.list());
+
         for (ForgeroToolTypes type : ForgeroToolTypes.values()) {
             JTag toolTag = new JTag();
             ForgeroRegistry.TOOL.list()
@@ -68,6 +76,26 @@ public class DynamicResourceGenerator {
         addToolPartTags(ForgeroToolPartTypes.HEAD, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/head_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/heads"));
         addToolPartTags(ForgeroToolPartTypes.BINDING, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/binding_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/bindings"));
         addGemTags();
+    }
+
+    private void createCommonToolVariantTags(ImmutableList<ForgeroTool> list) {
+        Arrays.stream(ForgeroToolTypes.values()).forEach(type -> {
+            JTag woodTag = new JTag();
+            ForgeroRegistry.MATERIAL.getPrimaryMaterials().forEach(material -> {
+                JTag toolTag = new JTag();
+                if (material.getType() == MaterialType.WOOD) {
+                    woodTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + type.getToolName()));
+                } else {
+                    toolTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getName() + "_" + type.getToolName()));
+                    if (Registry.ITEM.containsId(new Identifier("minecraft", material.getName() + "_" + type.getToolName()))) {
+                        toolTag.add(new Identifier("minecraft", material.getName() + "_" + type.getToolName()));
+                    }
+                    RESOURCE_PACK.addTag(new Identifier("c", "items/" + material.getName() + "_" + type.getToolName()), toolTag);
+                }
+            });
+            woodTag.add(new Identifier("minecraft", "wooden" + "_" + type.getToolName()));
+            RESOURCE_PACK.addTag(new Identifier("c", "items/" + "wooden" + "_" + type.getToolName()), woodTag);
+        });
     }
 
 
