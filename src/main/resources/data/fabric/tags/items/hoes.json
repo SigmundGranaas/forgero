@@ -6,27 +6,27 @@
       "required": false
     },
     {
-      "id": "minecraft:wooden_hoe",
+      "id": "#c:wooden_hoe",
       "required": false
     },
     {
-      "id": "minecraft:stone_hoe",
+      "id": "#c:stone_hoe",
       "required": false
     },
     {
-      "id": "minecraft:iron_hoe",
+      "id": "#c:iron_hoe",
       "required": false
     },
     {
-      "id": "minecraft:golden_hoe",
+      "id": "#c:golden_hoe",
       "required": false
     },
     {
-      "id": "minecraft:diamond_hoe",
+      "id": "#c:diamond_hoe",
       "required": false
     },
     {
-      "id": "minecraft:netherite_hoe",
+      "id": "#c:netherite_hoe",
       "required": false
     }
   ]
