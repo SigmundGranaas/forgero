@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero;
 import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
+import com.sigmundgranaas.forgero.registry.CustomItemRegistry;
 import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.registry.impl.MineCraftRegistryHandler;
@@ -20,7 +21,7 @@ public class ForgeroInitializer implements ModInitializer {
         var registry = ForgeroItemRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
         registry.register(new MineCraftRegistryHandler());
 
-
+        new CustomItemRegistry().register();
         registerRecipes();
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
