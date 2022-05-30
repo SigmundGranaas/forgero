@@ -20,6 +20,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -90,8 +91,13 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem {
     }
 
     @Override
+    public @NotNull ForgeroPickaxeItem getItem() {
+        return this;
+    }
+
+    @Override
     protected String getOrCreateTranslationKey() {
-        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
+        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
 }

@@ -12,7 +12,7 @@ import net.minecraft.item.Item;
 public interface ItemFactory {
     ItemFactory INSTANCE = ItemFactoryImpl.getInstance();
 
-    Item createTool(ForgeroTool tool);
+    ForgeroToolItem createTool(ForgeroTool tool);
 
     Item createToolPart(ForgeroToolPart toolPart);
 

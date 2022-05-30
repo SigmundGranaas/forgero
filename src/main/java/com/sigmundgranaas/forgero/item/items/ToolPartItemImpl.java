@@ -37,12 +37,12 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
     @Override
     public Text getName() {
         MutableText text;
-        if (!part.getSchematic().getName().equals("default")) {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getSchematic().getName())).append(" ");
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))))
+        if (!part.getSchematic().getResourceName().equals("default")) {
+            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getSchematic().getResourceName())).append(" ");
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))))
                     .append(" ");
         } else {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getName().toLowerCase(Locale.ROOT))).append(" ");
+            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
         }
         if (getToolPartType() == ForgeroToolPartTypes.HEAD) {
             String headType = switch (((ToolPartHead) part).getToolType()) {
@@ -90,6 +90,11 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
     @Override
     public ForgeroToolPart getPart() {
         return part;
+    }
+
+    @Override
+    public ToolPartItemImpl getItem() {
+        return this;
     }
 
     @Override

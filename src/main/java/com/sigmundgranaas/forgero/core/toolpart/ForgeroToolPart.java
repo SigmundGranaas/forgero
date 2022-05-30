@@ -56,7 +56,7 @@ public interface ForgeroToolPart extends ForgeroResource, PropertyContainer {
     }
 
     @Override
-    default String getName() {
+    default String getResourceName() {
         return getToolPartName();
     }
 

@@ -67,6 +67,15 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
     }
 
     @Override
+    public boolean isEmpty() {
+        return (toolRegistry.isEmpty()
+                || toolRegistry.isEmpty()
+                || schematicRegistry.isEmpty()
+                || getGemRegistry().isEmpty()
+                || materialRegistry.isEmpty());
+    }
+
+    @Override
     public ConcurrentForgeroRegistry loadResources(ForgeroResourceInitializer initializer) {
         clear();
         var registry = initializer.initializeForgeroResources();
@@ -80,12 +89,7 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
 
     @Override
     public ConcurrentForgeroRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
-        if (toolRegistry.isEmpty()
-                || toolRegistry.isEmpty()
-                || schematicRegistry.isEmpty()
-                || getGemRegistry().isEmpty()
-                || materialRegistry.isEmpty()) {
-
+        if (isEmpty()) {
             loadResources(initializer);
         }
         return this;

@@ -1,11 +1,13 @@
 package com.sigmundgranaas.forgero.core.property;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.Static;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 /**
@@ -59,5 +61,11 @@ public record PropertyStream(
     public Stream<LeveledProperty> getLeveledPassiveProperties() {
         return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
                 .map(LeveledProperty.class::cast);
+    }
+
+    public static <T extends PropertyContainer> ImmutableList<T> sortedByRarity(ImmutableList<T> list) {
+        return list.stream()
+                .sorted(Comparator.comparing(container -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY)))
+                .collect(ImmutableList.toImmutableList());
     }
 }

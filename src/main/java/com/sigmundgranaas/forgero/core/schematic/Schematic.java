@@ -45,7 +45,7 @@ public class Schematic implements ForgeroResource, PropertyContainer {
         return String.format("%s_schematic_%s", type.getName(), name);
     }
 
-    public String getName() {
+    public String getResourceName() {
         return name;
     }
 

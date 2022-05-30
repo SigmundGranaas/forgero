@@ -21,7 +21,7 @@ public class HeadSchematic extends Schematic {
 
     @Override
     public String getStringIdentifier() {
-        return String.format("%shead_schematic_%s", toolType.getToolName(), getName());
+        return String.format("%shead_schematic_%s", toolType.getToolName(), getResourceName());
     }
 
     public ForgeroToolTypes getToolType() {

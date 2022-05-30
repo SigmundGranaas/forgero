@@ -95,7 +95,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
                 .stream()
                 .map(material -> schematicCollection
                         .stream()
-                        .filter(schematic -> schematic.getName().equals("default"))
+                        .filter(schematic -> schematic.getResourceName().equals("default"))
                         .map(schematic -> createBaseToolPartsFromMaterial(material, schematic))
                         .flatMap(List::stream).toList())
                 .flatMap(List::stream)

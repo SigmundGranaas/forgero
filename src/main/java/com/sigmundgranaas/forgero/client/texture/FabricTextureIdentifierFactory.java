@@ -19,7 +19,7 @@ import java.util.Optional;
 public class FabricTextureIdentifierFactory implements TextureIdentifierFactory {
     @Override
     public ToolPartModelTextureIdentifier createToolPartTextureIdentifier(ForgeroToolPart part) {
-        return new ToolPartModelTextureIdentifier(part.getPrimaryMaterial().getName(), ToolPartModelType.getModelType(part), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
+        return new ToolPartModelTextureIdentifier(part.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(part), ModelLayer.PRIMARY, ToolPartModelTextureIdentifier.DEFAULT_SKIN_IDENTIFIER);
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A resource Registry to control Forgero resource types. See MaterialRegistry, ToolPartRegistry etc...
@@ -49,6 +50,10 @@ public interface ForgeroResourceRegistry<T extends ForgeroResource> {
 
     default ImmutableList<T> list() {
         return getResourcesAsList();
+    }
+
+    default Stream<T> stream() {
+        return getResourcesAsList().stream();
     }
 
     ImmutableMap<String, T> getResourcesAsMap();

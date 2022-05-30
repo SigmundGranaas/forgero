@@ -60,7 +60,7 @@ public class ForgeroGem implements Gem {
     }
 
     @Override
-    public String getName() {
+    public String getResourceName() {
         return getStringIdentifier().split("_")[0];
     }
 

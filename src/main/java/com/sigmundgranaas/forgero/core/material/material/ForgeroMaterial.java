@@ -15,7 +15,7 @@ public interface ForgeroMaterial extends ForgeroResource, PropertyContainer {
     int getRarity();
 
     @NotNull
-    String getName();
+    String getResourceName();
 
     MaterialType getType();
 
@@ -31,7 +31,7 @@ public interface ForgeroMaterial extends ForgeroResource, PropertyContainer {
 
     @Override
     default String getStringIdentifier() {
-        return getName();
+        return getResourceName();
     }
 
     @Override

@@ -25,6 +25,8 @@ public interface ForgeroRegistry {
 
     void clear();
 
+    boolean isEmpty();
+
     MaterialRegistry getMaterialRegistry();
 
     GemRegistry getGemRegistry();

@@ -47,7 +47,7 @@ public class SchematicDataTest {
         var schematicOpt = factory.buildResource(pojo);
         assertTrue(schematicOpt.isPresent());
 
-        assertEquals(pojo.name, schematicOpt.get().getName());
+        assertEquals(pojo.name, schematicOpt.get().getResourceName());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class SchematicDataTest {
 
         assertTrue(schematicOpt.isEmpty());
     }
-    
+
     @Test
     void minecraftDependencySucceeds() {
         var pojo = createDefaultSchematicPojo();

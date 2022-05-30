@@ -39,7 +39,7 @@ public interface ForgeroDefaults {
             }
 
             @Override
-            public @NotNull String getName() {
+            public @NotNull String getResourceName() {
                 return "DEFAULT";
             }
 
@@ -70,11 +70,11 @@ public interface ForgeroDefaults {
         return new ToolPartHandle() {
             @Override
             public String getStringIdentifier() {
-                return getName();
+                return this.getResourceName();
             }
 
             @Override
-            public String getName() {
+            public String getResourceName() {
                 return "default";
             }
 

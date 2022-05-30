@@ -2,12 +2,11 @@ package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
+import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CraftingTableBlock;
@@ -47,7 +46,7 @@ public class RecipeCreation {
 
         int total = 0;
         int correct = 0;
-        for (Item toolPart : ItemCollection.INSTANCE.getToolParts().stream().filter(toolPart -> ((ToolPartItem) toolPart).getType() == ForgeroToolPartTypes.HANDLE).toList()
+        for (Item toolPart : ForgeroItemRegistry.TOOL_PART_ITEM.getHandles().stream().map(ToolPartItem::getItem).toList()
         ) {
             if (((ToolPartItem) toolPart).getPrimaryMaterial().getIngredient().item == null) {
                 break;

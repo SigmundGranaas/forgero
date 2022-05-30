@@ -170,8 +170,8 @@ public class NBTFactoryImpl implements NBTFactory {
     public @NotNull
     NbtCompound createNBTFromToolPart(@NotNull ForgeroToolPart toolPart) {
         NbtCompound baseCompound = new NbtCompound();
-        baseCompound.putString(PRIMARY_MATERIAL_NBT_IDENTIFIER, toolPart.getPrimaryMaterial().getName());
-        baseCompound.putString(SECONDARY_MATERIAL_NBT_IDENTIFIER, toolPart.getSecondaryMaterial().getName());
+        baseCompound.putString(PRIMARY_MATERIAL_NBT_IDENTIFIER, toolPart.getPrimaryMaterial().getResourceName());
+        baseCompound.putString(SECONDARY_MATERIAL_NBT_IDENTIFIER, toolPart.getSecondaryMaterial().getResourceName());
         baseCompound.putString(GEM_NBT_IDENTIFIER, createGemNbtString(toolPart.getGem()));
         baseCompound.putString(TOOL_PART_TYPE_NBT_IDENTIFIER, toolPart.getToolPartType().toString());
         baseCompound.putString(TOOL_PART_IDENTIFIER, toolPart.getToolPartIdentifier());
@@ -358,7 +358,7 @@ public class NBTFactoryImpl implements NBTFactory {
     @Override
     public @NotNull NbtCompound createNBTFromSchematic(@NotNull Schematic schematic) {
         NbtCompound schematicCompound = new NbtCompound();
-        schematicCompound.putString("Name", schematic.getName());
+        schematicCompound.putString("Name", schematic.getResourceName());
         schematicCompound.putInt("MaterialCount", schematic.getMaterialCount());
         schematicCompound.putString("Model", schematic.getModel());
         schematicCompound.put("Property", createNbtFromProperties(Property.pojo(schematic.getProperties())));
