@@ -19,7 +19,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -46,7 +46,11 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
             if (material.getIngredient().tag == null) {
                 return material.getIngredient().item.equals(Registry.ITEM.getId(addition.getItem()).toString());
             } else {
-                return addition.getItem().getRegistryEntry().isIn(TagKey.of(Registry.ITEM_KEY, new Identifier(material.getIngredient().tag)));
+                try {
+                    return addition.isIn(ServerTagManagerHolder.getTagManager().getTag(Registry.ITEM_KEY, new Identifier(material.getIngredient().tag), (tag) -> new Exception()));
+                } catch (Exception e) {
+                    return false;
+                }
             }
         }).findFirst().orElse(new EmptySecondaryMaterial());
         for (int i = 0; i < inventory.size(); i++) {

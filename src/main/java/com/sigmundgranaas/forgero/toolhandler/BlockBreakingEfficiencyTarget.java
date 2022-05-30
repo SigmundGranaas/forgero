@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.toolhandler;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
 import net.minecraft.block.BlockState;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -25,8 +25,9 @@ public record BlockBreakingEfficiencyTarget(BlockState state) implements Target 
     public boolean isApplicable(Set<String> tag, TargetTypes type) {
         if (type == TargetTypes.BLOCK) {
             for (String stringTag : tag) {
-                if (state.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(stringTag)))) {
-                    return true;
+                try {
+                    return state.isIn(ServerTagManagerHolder.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier(stringTag), (t) -> new Exception()));
+                } catch (Exception ignored) {
                 }
             }
         }

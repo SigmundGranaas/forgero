@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.active;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -15,6 +15,10 @@ public class TaggedPatternBreaking extends PatternBreaking {
 
     @Override
     public boolean checkBlock(BlockState state) {
-        return state.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(tag)));
+        try {
+            return state.isIn(ServerTagManagerHolder.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier(tag), (tag) -> new Exception()));
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
@@ -39,10 +39,12 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
             depth -= 1;
         }
 
-        if (rootState.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(handler.tag())))) {
-            calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
+        try {
+            if (rootState.isIn(ServerTagManagerHolder.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier(handler.tag()), (t) -> new Exception()))) {
+                calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
+            }
+        } catch (Exception ignored) {
         }
-
         for (BlockPos pos : blockSet) {
             list.add(new Pair<>(world.getBlockState(pos), pos));
         }

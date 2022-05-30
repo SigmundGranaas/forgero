@@ -10,7 +10,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.Tag;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -34,7 +34,7 @@ public class MiningToolItemMixin {
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void init(float attackDamage, float attackSpeed, ToolMaterial material, TagKey<Block> effectiveBlocks, Item.Settings settings, CallbackInfo ci) {
+    public void init(float attackDamage, float attackSpeed, ToolMaterial material, Tag<Block> effectiveBlocks, Item.Settings settings, CallbackInfo ci) {
         if (material instanceof SimpleToolMaterialAdapter) {
             this.attackDamage = attackDamage;
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();

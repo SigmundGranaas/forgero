@@ -15,7 +15,7 @@ import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.Tag;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -87,7 +87,7 @@ public class ForgeroHoeItem extends HoeItem implements ForgeroToolItem {
     }
 
     @Override
-    public TagKey<Block> getToolTags() {
+    public Tag<Block> getToolTags() {
         return BlockTags.HOE_MINEABLE;
     }
 

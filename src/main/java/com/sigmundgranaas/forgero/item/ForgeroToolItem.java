@@ -24,7 +24,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.Tag;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -78,7 +78,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
     FabricToForgeroToolAdapter getToolAdapter();
 
-    TagKey<Block> getToolTags();
+    Tag<Block> getToolTags();
 
     @Override
     default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {

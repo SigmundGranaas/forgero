@@ -14,10 +14,10 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.tag.TagKey;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.Tag;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,8 +85,8 @@ public class ForgeroSwordItem extends SwordItem implements ForgeroToolItem {
     }
 
     @Override
-    public TagKey<Block> getToolTags() {
-        return TagKey.of(Registry.BLOCK_KEY, new Identifier("minecraft", "cobweb"));
+    public Tag<Block> getToolTags() {
+        return BlockTags.WOOL;
     }
 
     @Override
