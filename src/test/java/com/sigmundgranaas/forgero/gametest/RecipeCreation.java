@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.gametest;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;

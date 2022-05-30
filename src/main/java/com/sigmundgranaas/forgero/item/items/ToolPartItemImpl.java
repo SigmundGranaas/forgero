@@ -93,7 +93,7 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
     }
 
     @Override
-    public Item getItem() {
+    public ToolPartItemImpl getItem() {
         return this;
     }
 

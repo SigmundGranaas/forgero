@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.HoeItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
@@ -93,7 +92,7 @@ public class ForgeroHoeItem extends HoeItem implements ForgeroToolItem {
     }
 
     @Override
-    public @NotNull Item getItem() {
+    public @NotNull ForgeroHoeItem getItem() {
         return this;
     }
 

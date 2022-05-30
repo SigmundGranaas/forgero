@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ItemGroups;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
@@ -30,7 +31,7 @@ public class ItemFactoryImpl implements ItemFactory {
     }
 
     @Override
-    public Item createTool(ForgeroTool tool) {
+    public ForgeroToolItem createTool(ForgeroTool tool) {
         Item.Settings settings = new Item.Settings().group(ItemGroup.TOOLS);
         if (tool.getPropertyStream().getStaticPassiveProperties().anyMatch(property -> property.getStaticType() == StaticPassiveType.FIREPROOF)) {
             settings.fireproof();

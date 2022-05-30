@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero;
 import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
-import com.sigmundgranaas.forgero.registry.ForgeroFabricRegistry;
-import com.sigmundgranaas.forgero.registry.ItemRegistry;
+import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
+import com.sigmundgranaas.forgero.registry.impl.MineCraftRegistryHandler;
 import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
@@ -17,26 +17,16 @@ public class ForgeroInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ForgeroFabricRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        var registry = ForgeroItemRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        registry.register(new MineCraftRegistryHandler());
 
-        //initializer.registerDefaultResources();
-        //initializer.initializeForgeroResources();
-        registerItems();
+
         registerRecipes();
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
         new DynamicResourceGenerator().generateResources();
 
     }
-
-    private void registerItems() {
-        ItemRegistry.INSTANCE.registerTools();
-        ItemRegistry.INSTANCE.registerToolParts();
-        ItemRegistry.INSTANCE.registerSchematics();
-        ItemRegistry.INSTANCE.registerGems();
-        ItemRegistry.INSTANCE.registerOtherItems();
-    }
-
 
     private void registerRecipes() {
         RecipeRegistry.INSTANCE.registerRecipeSerializers();

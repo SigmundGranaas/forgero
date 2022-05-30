@@ -3,17 +3,20 @@ package com.sigmundgranaas.forgero.registry.impl;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.registry.*;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
-import com.sigmundgranaas.forgero.registry.ForgeroFabricRegistry;
-import com.sigmundgranaas.forgero.registry.ToolItemRegistry;
-import com.sigmundgranaas.forgero.registry.ToolPartItemRegistry;
+import com.sigmundgranaas.forgero.registry.*;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.HashMap;
 
-public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
-    private volatile static ConcurrentForgeroFabricRegistry INSTANCE;
+/**
+ *
+ */
+@ThreadSafe
+public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
+    private volatile static ConcurrentForgeroItemRegistry INSTANCE;
 
     private final ToolItemRegistry toolItemRegistry = new ConcurrentToolItemRegistry(new HashMap<>());
     private final ToolPartItemRegistry toolPartItemRegistry = new ConcurrentToolPartItemRegistry(new HashMap<>());
@@ -22,15 +25,15 @@ public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
 
     ForgeroRegistry forgeroRegistry;
 
-    private ConcurrentForgeroFabricRegistry() {
+    private ConcurrentForgeroItemRegistry() {
         this.forgeroRegistry = ForgeroRegistry.INSTANCE;
     }
 
-    public static ConcurrentForgeroFabricRegistry getInstance() {
+    public static ConcurrentForgeroItemRegistry getInstance() {
         if (INSTANCE == null) {
-            synchronized (ConcurrentForgeroFabricRegistry.class) {
+            synchronized (ConcurrentForgeroItemRegistry.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new ConcurrentForgeroFabricRegistry();
+                    INSTANCE = new ConcurrentForgeroItemRegistry();
                 }
             }
         }
@@ -38,7 +41,7 @@ public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
     }
 
     @Override
-    public ForgeroFabricRegistry loadResources(ForgeroResourceInitializer initializer) {
+    public ForgeroItemRegistry loadResources(ForgeroResourceInitializer initializer) {
         forgeroRegistry.loadResources(initializer);
         schematicItemRegistry.updateRegistry(SCHEMATIC.list().stream()
                 .map(ItemFactory.INSTANCE::createSchematic)
@@ -48,9 +51,9 @@ public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
                 .toList());
         toolItemRegistry.updateRegistry(TOOL.list().stream()
                 .map(ItemFactory.INSTANCE::createTool)
-                .map(ForgeroToolItem.class::cast)
                 .toList());
         toolPartItemRegistry.updateRegistry(TOOL_PART.list().stream()
+                .filter(toolPart -> toolPart.getSchematic().getResourceName().contains("default"))
                 .map(ItemFactory.INSTANCE::createToolPart)
                 .map(ToolPartItem.class::cast)
                 .toList());
@@ -58,7 +61,8 @@ public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
     }
 
     @Override
-    public ForgeroFabricRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
+    @NotNull
+    public ForgeroItemRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
         if (isEmpty()) {
             loadResources(initializer);
         }
@@ -81,9 +85,21 @@ public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return forgeroRegistry.isEmpty()
+                || toolItemRegistry.isEmpty()
+                || toolPartItemRegistry.isEmpty()
+                || schematicItemRegistry.isEmpty()
+                || gemItemRegistry.isEmpty();
     }
 
+
+    @Override
+    public void register(RegistryHandler handler) {
+        toolItemRegistry.register(handler);
+        toolPartItemRegistry.register(handler);
+        gemItemRegistry.register(handler);
+        schematicItemRegistry.register(handler);
+    }
 
     @Override
     public GemItemRegistry getGemItemRegistry() {

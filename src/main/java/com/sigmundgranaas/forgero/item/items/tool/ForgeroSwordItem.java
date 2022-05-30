@@ -11,7 +11,6 @@ import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
@@ -91,10 +90,9 @@ public class ForgeroSwordItem extends SwordItem implements ForgeroToolItem {
     }
 
     @Override
-    public @NotNull Item getItem() {
+    public @NotNull ForgeroSwordItem getItem() {
         return this;
     }
-
 
     @Override
     protected String getOrCreateTranslationKey() {

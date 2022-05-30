@@ -13,7 +13,6 @@ import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
@@ -97,7 +96,7 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
     }
 
     @Override
-    public @NotNull Item getItem() {
+    public @NotNull ForgeroAxeItem getItem() {
         return this;
     }
 

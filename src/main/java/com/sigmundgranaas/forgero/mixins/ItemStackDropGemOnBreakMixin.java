@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolWithBinding;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
-import com.sigmundgranaas.forgero.item.ItemCollection;
 import com.sigmundgranaas.forgero.item.NBTFactory;
+import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,7 +41,7 @@ public abstract class ItemStackDropGemOnBreakMixin {
     }
 
     private ItemStack createItemStackFromGem(Gem gem) {
-        ItemStack output = new ItemStack(ItemCollection.INSTANCE.getGems().stream().filter(gemItem -> gemItem.getGem().getStringIdentifier().equals(gem.getStringIdentifier())).findAny().get());
+        ItemStack output = new ItemStack(ForgeroItemRegistry.GEM_ITEM.stream().filter(gemItem -> gemItem.getGem().getStringIdentifier().equals(gem.getStringIdentifier())).findAny().get());
         NBTFactory.INSTANCE.createNBTFromGem(gem, output.getOrCreateNbt());
         return output;
     }

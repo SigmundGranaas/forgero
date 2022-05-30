@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
@@ -14,10 +13,13 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
+import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
@@ -41,12 +43,12 @@ public record RecipeCreatorImpl(
         if (INSTANCE == null) {
 
             INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates(),
-                    ForgeroRegistry.TOOL.list(),
-                    ForgeroRegistry.TOOL_PART.list(),
-                    ForgeroRegistry.MATERIAL.getPrimaryMaterials(),
-                    ForgeroRegistry.SCHEMATIC.list(),
-                    ForgeroRegistry.MATERIAL.getSecondaryMaterials(),
-                    ForgeroRegistry.GEM.list()
+                    ForgeroItemRegistry.TOOL_ITEM.stream().map(ForgeroToolItem::getTool).toList(),
+                    ForgeroItemRegistry.TOOL_PART_ITEM.stream().map(ToolPartItem::getPart).toList(),
+                    ForgeroItemRegistry.MATERIAL.getPrimaryMaterials(),
+                    ForgeroItemRegistry.SCHEMATIC.list(),
+                    ForgeroItemRegistry.MATERIAL.getSecondaryMaterials(),
+                    ForgeroItemRegistry.GEM.list()
             );
         }
         return INSTANCE;

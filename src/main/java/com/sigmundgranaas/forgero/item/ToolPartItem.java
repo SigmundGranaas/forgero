@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgero.core.ForgeroResource;
 import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
-public interface ToolPartItem extends ForgeroResource {
+public interface ToolPartItem extends ForgeroItem<Item>, PropertyContainer {
     String PRIMARY_MATERIAL_IDENTIFIER = "PrimaryMaterial";
     String SECONDARY_MATERIAL_IDENTIFIER = "SecondaryMaterial";
     String GEM_IDENTIFIER = "ForgeroModifier";
