@@ -3,6 +3,9 @@ package com.sigmundgranaas.forgero.registry.impl;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.registry.*;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.ItemFactory;
+import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.registry.ForgeroFabricRegistry;
 import com.sigmundgranaas.forgero.registry.ToolItemRegistry;
 import com.sigmundgranaas.forgero.registry.ToolPartItemRegistry;
@@ -37,6 +40,20 @@ public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
     @Override
     public ForgeroFabricRegistry loadResources(ForgeroResourceInitializer initializer) {
         forgeroRegistry.loadResources(initializer);
+        schematicItemRegistry.updateRegistry(SCHEMATIC.list().stream()
+                .map(ItemFactory.INSTANCE::createSchematic)
+                .toList());
+        gemItemRegistry.updateRegistry(GEM.list().stream()
+                .map(ItemFactory.INSTANCE::createGem)
+                .toList());
+        toolItemRegistry.updateRegistry(TOOL.list().stream()
+                .map(ItemFactory.INSTANCE::createTool)
+                .map(ForgeroToolItem.class::cast)
+                .toList());
+        toolPartItemRegistry.updateRegistry(TOOL_PART.list().stream()
+                .map(ItemFactory.INSTANCE::createToolPart)
+                .map(ToolPartItem.class::cast)
+                .toList());
         return this;
     }
 
@@ -45,7 +62,6 @@ public class ConcurrentForgeroFabricRegistry implements ForgeroFabricRegistry {
         if (isEmpty()) {
             loadResources(initializer);
         }
-
         return this;
     }
 
