@@ -8,10 +8,10 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.minecraft.item.Item;
+import net.minecraft.loot.ConstantLootTableRange;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -176,6 +176,6 @@ public class TreasureInjector {
 
     private LootPool.Builder createStandardConstantPool() {
         return FabricLootPoolBuilder.builder()
-                .rolls(ConstantLootNumberProvider.create(1));
+                .rolls(new ConstantLootTableRange(1));
     }
 }

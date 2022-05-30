@@ -88,7 +88,7 @@ public class ForgeroShovelItem extends ShovelItem implements ForgeroToolItem {
 
     @Override
     public Tag<Block> getToolTags() {
-        return BlockTags.SHOVEL_MINEABLE;
+        return BlockTags.ANVIL;
     }
 
     @Override

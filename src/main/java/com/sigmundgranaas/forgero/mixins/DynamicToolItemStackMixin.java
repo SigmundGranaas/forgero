@@ -108,11 +108,4 @@ public abstract class DynamicToolItemStackMixin {
             cir.setReturnValue(tool.getDurability((ItemStack) (Object) this));
         }
     }
-
-    @Inject(method = "getItemBarStep", at = @At("HEAD"), cancellable = true)
-    public void getItemBarStep(CallbackInfoReturnable<Integer> cir) {
-        if (this.getItem() instanceof DynamicDurability tool) {
-            cir.setReturnValue(Math.round(13.0f - (float) getDamage() * 13.0f / (float) tool.getDurability((ItemStack) (Object) this)));
-        }
-    }
 }

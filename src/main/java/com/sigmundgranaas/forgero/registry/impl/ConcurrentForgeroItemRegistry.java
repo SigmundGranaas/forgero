@@ -8,13 +8,12 @@ import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.registry.*;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.concurrent.ThreadSafe;
 import java.util.HashMap;
 
 /**
  *
  */
-@ThreadSafe
+
 public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
     private volatile static ConcurrentForgeroItemRegistry INSTANCE;
 

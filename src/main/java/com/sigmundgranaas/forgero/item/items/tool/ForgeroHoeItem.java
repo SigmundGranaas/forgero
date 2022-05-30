@@ -88,7 +88,7 @@ public class ForgeroHoeItem extends HoeItem implements ForgeroToolItem {
 
     @Override
     public Tag<Block> getToolTags() {
-        return BlockTags.HOE_MINEABLE;
+        return BlockTags.WOOL;
     }
 
     @Override

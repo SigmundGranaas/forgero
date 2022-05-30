@@ -73,7 +73,7 @@ public record RecipeCreatorImpl(
     private List<? extends RecipeWrapper> createGuideBookRecipes() {
         var tags = List.of("bindings", "heads", "handles");
         return tags.stream().map(toolPartTag -> {
-            JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
+            JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
             template.addProperty("type", "patchouli:shapeless_book_recipe");
             JsonArray ingredients = template.getAsJsonArray("ingredients");
             JsonObject tag = new JsonObject();
@@ -100,7 +100,7 @@ public record RecipeCreatorImpl(
     }
 
     private RecipeWrapper createRecipeFromToolPart(ForgeroToolPart toolPart) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
         JsonArray ingredients = template.getAsJsonArray("ingredients");
         String schematicTag;
         if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
@@ -135,7 +135,7 @@ public record RecipeCreatorImpl(
     }
 
     private RecipeWrapper createRecipeFromMaterialAndSchematic(PrimaryMaterial material, Schematic schematic) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
         JsonArray ingredients = template.getAsJsonArray("ingredients");
         String toolPartType;
         if (schematic.getType() == ForgeroToolPartTypes.HEAD) {
@@ -184,7 +184,7 @@ public record RecipeCreatorImpl(
     }
 
     private RecipeWrapper createSecondaryMaterialUpgradeRecipe(ForgeroToolPart toolPart, SecondaryMaterial material) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE).toString()).getAsJsonObject();
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE).toString()).getAsJsonObject();
         template.getAsJsonObject("base").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
 
         if (material.getIngredient().tag == null) {
@@ -198,7 +198,7 @@ public record RecipeCreatorImpl(
     }
 
     private RecipeWrapper createGemUpgradeRecipe(ForgeroToolPart toolPart, Gem gem) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOL_PART_GEM_UPGRADE).toString()).getAsJsonObject();
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_PART_GEM_UPGRADE).toString()).getAsJsonObject();
         template.getAsJsonObject("base").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
         template.getAsJsonObject("addition").addProperty("item", new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getStringIdentifier()).toString());
         template.getAsJsonObject("result").addProperty("item", new Identifier("forgero", toolPart.getToolPartIdentifier()).toString());
@@ -223,7 +223,7 @@ public record RecipeCreatorImpl(
     }
 
     private RecipeWrapper createBaseToolRecipe(ForgeroTool tool, ToolPartHead head, PrimaryMaterial handleMaterial) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOL_RECIPE).toString()).getAsJsonObject();
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_RECIPE).toString()).getAsJsonObject();
         template.getAsJsonObject("key").getAsJsonObject("H").addProperty("item", new Identifier(ForgeroInitializer.MOD_NAMESPACE, head.getToolPartIdentifier()).toString());
         template.getAsJsonObject("key").getAsJsonObject("I").remove("item");
         template.getAsJsonObject("key").getAsJsonObject("I").addProperty("tag", new Identifier(ForgeroInitializer.MOD_NAMESPACE, "handles").toString());
@@ -232,7 +232,7 @@ public record RecipeCreatorImpl(
     }
 
     private RecipeWrapper createToolWithBindingRecipe(ForgeroTool tool, ToolPartHead head, PrimaryMaterial handleMaterial) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOL_WITH_BINDING_RECIPE).toString()).getAsJsonObject();
+        JsonObject template = new JsonParser().parse(recipeTemplates.get(RecipeTypes.TOOL_WITH_BINDING_RECIPE).toString()).getAsJsonObject();
 
         template.getAsJsonObject("key").getAsJsonObject("I").remove("item");
         template.getAsJsonObject("key").getAsJsonObject("B").remove("item");

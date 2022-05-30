@@ -79,7 +79,7 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
     }
 
     @Override
-    public Sprite getParticleSprite() {
+    public Sprite getSprite() {
         return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(new Identifier("block/cobblestone"));
     }
 

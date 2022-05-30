@@ -11,8 +11,6 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.Optional;
-
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class CommandRegistry {
@@ -31,13 +29,13 @@ public class CommandRegistry {
                             .executes(context -> {
                                 BlockPos pos = context.getSource().getPlayer().getBlockPos().add(1, -1, 0);
                                 BlockState initialState = context.getSource().getWorld().getBlockState(pos);
-                                Optional<Structure> station = context.getSource().getWorld().getStructureManager().getStructure(new Identifier("forgero:forgerostation"));
+                                Structure station = context.getSource().getWorld().getStructureManager().getStructure(new Identifier("forgero:forgerostation"));
                                 context.getSource().getWorld().setBlockState(pos, Blocks.STRUCTURE_BLOCK.getDefaultState());
-                                if (station.isPresent() && !context.getSource().getWorld().isClient) {
-                                    var structureBlock = new StructureBlockBlockEntity(pos, context.getSource().getWorld().getBlockState(pos));
+                                if (!context.getSource().getWorld().isClient) {
+                                    var structureBlock = new StructureBlockBlockEntity();
                                     structureBlock.setStructureName(new Identifier("forgero:forgerostation"));
                                     structureBlock.loadStructure(context.getSource().getWorld());
-                                    structureBlock.place(context.getSource().getWorld(), true, station.get());
+                                    structureBlock.place(context.getSource().getWorld(), true, station);
                                     context.getSource().sendFeedback(new LiteralText("Placed Forgero testing station"), true);
                                     context.getSource().getWorld().setBlockState(pos, initialState);
                                     //station.get().place(context.getSource().getWorld(), pos, pos, new StructurePlacementData(), new Random(), 0);

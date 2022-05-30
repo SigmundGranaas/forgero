@@ -28,13 +28,10 @@ import com.sigmundgranaas.forgero.core.util.ForgeroDefaults;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -205,9 +202,9 @@ public class NBTFactoryImpl implements NBTFactory {
     @Override
     public @NotNull Optional<Schematic> createSchematicFromNbt(@NotNull NbtCompound compound) {
         if (compound.contains(SCHEMATIC_NBT_IDENTIFIER)) {
-            if (compound.get(SCHEMATIC_NBT_IDENTIFIER).getType() == NbtElement.STRING_TYPE) {
+            if (NbtTypes.byId(compound.get(SCHEMATIC_NBT_IDENTIFIER).getType()) == NbtString.TYPE) {
                 return ForgeroRegistry.SCHEMATIC.getResource(compound.getString(SCHEMATIC_NBT_IDENTIFIER));
-            } else if (compound.get(SCHEMATIC_NBT_IDENTIFIER).getType() == NbtElement.COMPOUND_TYPE) {
+            } else if (NbtTypes.byId(compound.get(SCHEMATIC_NBT_IDENTIFIER).getType()) == NbtCompound.TYPE) {
                 NbtCompound schematicCompound = compound.getCompound(SCHEMATIC_NBT_IDENTIFIER);
                 ForgeroToolPartTypes type = ForgeroToolPartTypes.valueOf(schematicCompound.getString("Type"));
                 String name = schematicCompound.getString("Name");
@@ -231,15 +228,15 @@ public class NBTFactoryImpl implements NBTFactory {
             var properties = new ArrayList<Property>();
             var propertyCompound = compound.getCompound(NBTFactory.PROPERTY_IDENTIFIER);
             if (propertyCompound.contains(NBTFactory.ATTRIBUTES_IDENTIFIER)) {
-                NbtList list = propertyCompound.getList(ATTRIBUTES_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                NbtList list = propertyCompound.getList(ATTRIBUTES_IDENTIFIER, 9);
                 properties.addAll(createPropertyFromNbt(list, comp -> createAttributeFromNbt(compound)));
             }
             if (propertyCompound.contains(NBTFactory.ACTIVE_IDENTIFIER)) {
-                NbtList list = propertyCompound.getList(ACTIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                NbtList list = propertyCompound.getList(ACTIVE_IDENTIFIER, 9);
                 properties.addAll(createPropertyFromNbt(list, comp -> createActivePropertyFromNbt(compound)));
             }
             if (propertyCompound.contains(NBTFactory.PASSIVE_IDENTIFIER)) {
-                NbtList list = propertyCompound.getList(PASSIVE_IDENTIFIER, NbtElement.COMPOUND_TYPE);
+                NbtList list = propertyCompound.getList(PASSIVE_IDENTIFIER, 9);
                 properties.addAll(createPropertyFromNbt(list, comp -> createPassivePropertyFromNbt(compound)));
             }
             return properties;
@@ -261,7 +258,7 @@ public class NBTFactoryImpl implements NBTFactory {
         pojo.depth = compound.getInt("Depth");
         pojo.description = compound.getString("Description");
         pojo.direction = BreakingDirection.valueOf("Direction");
-        pojo.pattern = compound.getList("Pattern", NbtElement.STRING_TYPE).stream().map(NbtElement::asString).toList().toArray(new String[0]);
+        pojo.pattern = compound.getList("Pattern", 8).stream().map(NbtElement::asString).toList().toArray(new String[0]);
         return ActivePropertyBuilder.createAttributeFromPojo(pojo);
     }
 
@@ -283,7 +280,7 @@ public class NBTFactoryImpl implements NBTFactory {
             var conditionCompound = compound.getCompound("Condition");
             pojo.condition = new PropertyPOJO.Condition();
             pojo.condition.target = TargetTypes.valueOf(conditionCompound.getString("target"));
-            NbtList list = conditionCompound.getList("Tag", NbtElement.STRING_TYPE);
+            NbtList list = conditionCompound.getList("Tag", 8);
             pojo.condition.tag = new ArrayList<>(list.stream().map(NbtElement::asString).toList());
         }
         return AttributeBuilder.createAttributeFromPojo(pojo);

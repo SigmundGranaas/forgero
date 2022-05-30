@@ -87,7 +87,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem {
 
     @Override
     public Tag<Block> getToolTags() {
-        return BlockTags.PICKAXE_MINEABLE;
+        return BlockTags.WOOL;
     }
 
     @Override

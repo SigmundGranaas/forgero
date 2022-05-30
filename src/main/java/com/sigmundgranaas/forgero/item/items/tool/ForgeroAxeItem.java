@@ -92,7 +92,7 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
 
     @Override
     public Tag<Block> getToolTags() {
-        return BlockTags.AXE_MINEABLE;
+        return BlockTags.WOOL;
     }
 
     @Override

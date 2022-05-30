@@ -35,7 +35,7 @@ public class ToolRecipe extends ShapedRecipe {
         List<Ingredient> ingredients = super.getIngredients();
 
         for (Ingredient ingredient : ingredients) {
-            if (ingredient.getMatchingStacks().length > 0) {
+            if (ingredient.getMatchingStacksClient().length > 0) {
                 for (int craftingSlot = 0; craftingSlot < craftingInventory.size(); craftingSlot++) {
                     if (ingredient.test(craftingInventory.getStack(craftingSlot))) {
                         ItemStack toolPart = craftingInventory.getStack(craftingSlot);
@@ -55,16 +55,16 @@ public class ToolRecipe extends ShapedRecipe {
         ToolPartHead head;
         ToolPartHandle handle;
 
-        if (headItem.hasNbt() && headItem.getOrCreateNbt().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
-            assert headItem.getNbt() != null;
-            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
+        if (headItem.hasTag() && headItem.getOrCreateTag().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
+            assert headItem.getTag() != null;
+            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getTag().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
         } else {
             head = (ToolPartHead) ((ToolPartItem) headItem.getItem()).getPart();
         }
 
-        if (handleItem.hasNbt() && handleItem.getOrCreateNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
-            assert handleItem.getNbt() != null;
-            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getNbt().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
+        if (handleItem.hasTag() && handleItem.getOrCreateTag().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
+            assert handleItem.getTag() != null;
+            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getTag().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
         } else {
             handle = (ToolPartHandle) ((ToolPartItem) handleItem.getItem()).getPart();
         }

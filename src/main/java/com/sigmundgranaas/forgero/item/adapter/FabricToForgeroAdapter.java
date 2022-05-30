@@ -46,9 +46,9 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
     @Override
     public Optional<ForgeroTool> getTool(ItemStack itemStack) {
         if (itemStack.getItem() instanceof ForgeroToolItem) {
-            if (itemStack.getOrCreateNbt().contains(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER)) {
-                assert itemStack.getNbt() != null;
-                return Optional.of(NBTFactory.INSTANCE.createToolFromNBT((ForgeroToolItem) itemStack.getItem(), itemStack.getNbt()));
+            if (itemStack.getOrCreateTag().contains(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER)) {
+                assert itemStack.getTag() != null;
+                return Optional.of(NBTFactory.INSTANCE.createToolFromNBT((ForgeroToolItem) itemStack.getItem(), itemStack.getTag()));
             } else {
                 return Optional.of(getTool((ForgeroToolItem) itemStack.getItem()));
             }
@@ -99,9 +99,9 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
     @Override
     public Optional<ForgeroToolPart> getToolPart(ItemStack itemStack) {
         if (itemStack.getItem() instanceof ToolPartItem) {
-            if (itemStack.getOrCreateNbt().contains(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))) {
-                assert itemStack.getNbt() != null;
-                return Optional.of(NBTFactory.INSTANCE.createToolPartFromNBT(itemStack.getNbt().getCompound(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))));
+            if (itemStack.getOrCreateTag().contains(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))) {
+                assert itemStack.getTag() != null;
+                return Optional.of(NBTFactory.INSTANCE.createToolPartFromNBT(itemStack.getOrCreateTag().getCompound(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))));
             } else {
                 return Optional.of(((ToolPartItem) itemStack.getItem()).getPart());
             }
