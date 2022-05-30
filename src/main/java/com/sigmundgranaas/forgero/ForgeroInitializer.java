@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.registry.ItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
+import com.sigmundgranaas.forgero.resources.external.KubeJsIntegration;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,8 +20,9 @@ public class ForgeroInitializer implements ModInitializer {
     public void onInitialize() {
         ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
         ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(initializer);
+        var kubejs = new KubeJsIntegration();
 
-        
+
         //initializer.registerDefaultResources();
         //initializer.initializeForgeroResources();
         registerItems();
