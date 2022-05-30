@@ -1,7 +1,9 @@
-### Changelog 0.8.1
+### Changelog 0.8.2
 
 # Forgero Beta release
 
+* Cleaned up some files
+* Reworked the Item registry
 * Added a common tag for all tools
 * Fixed the bug where you cannot apply secondary materials
 * Created a static V1 schema - THIS WILL LIKELY BREAK EARLIER SAVES
