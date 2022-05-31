@@ -36,22 +36,27 @@ public abstract class PlayerInteractionManagerMixin {
     @Shadow
     public abstract boolean breakBlock(BlockPos pos);
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;breakBlock(Lnet/minecraft/util/math/BlockPos;)Z"), method = "updateBlockBreakingProgress", cancellable = true)
-    public void calcBlockBreakingDelta(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
-        if (this.client.player.getMainHandStack().getItem() instanceof ForgeroToolItem toolItem) {
-            ForgeroTool tool = toolItem.convertItemStack(client.player.getMainHandStack(), toolItem.getTool());
-            var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
-            if (!activeProperties.isEmpty()) {
-                List<Pair<BlockState, BlockPos>> availableBlocks;
-                if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
-                    availableBlocks = new BlockBreakingHandler(new PatternBreakingStrategy((PatternBreaking) activeProperties.get(0))).getAvailableBlocks(this.client.world, pos, this.client.player);
-                } else {
-                    availableBlocks = new BlockBreakingHandler(new VeinMiningStrategy((VeinBreaking) activeProperties.get(0))).getAvailableBlocks(this.client.world, pos, this.client.player);
-                }
+    @Shadow
+    private float currentBreakingProgress;
 
-                for (var block : availableBlocks) {
-                    if (!block.getRight().equals(pos)) {
-                        this.breakBlock(block.getRight());
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", shift = At.Shift.AFTER), method = "updateBlockBreakingProgress")
+    public void calcBlockBreakingDelta(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+        if (this.currentBreakingProgress >= 1.0F) {
+            if (this.client.player.getMainHandStack().getItem() instanceof ForgeroToolItem toolItem) {
+                ForgeroTool tool = toolItem.convertItemStack(client.player.getMainHandStack(), toolItem.getTool());
+                var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
+                if (!activeProperties.isEmpty()) {
+                    List<Pair<BlockState, BlockPos>> availableBlocks;
+                    if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
+                        availableBlocks = new BlockBreakingHandler(new PatternBreakingStrategy((PatternBreaking) activeProperties.get(0))).getAvailableBlocks(this.client.world, pos, this.client.player);
+                    } else {
+                        availableBlocks = new BlockBreakingHandler(new VeinMiningStrategy((VeinBreaking) activeProperties.get(0))).getAvailableBlocks(this.client.world, pos, this.client.player);
+                    }
+
+                    for (var block : availableBlocks) {
+                        if (!block.getRight().equals(pos)) {
+                            this.breakBlock(block.getRight());
+                        }
                     }
                 }
             }

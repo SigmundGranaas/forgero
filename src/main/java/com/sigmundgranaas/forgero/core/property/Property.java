@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public interface Property {
-    static PropertyStream stream(List<Property> properties) {
+    public static PropertyStream stream(List<Property> properties) {
         return new PropertyStream(properties.stream());
     }
 
