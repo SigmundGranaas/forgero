@@ -43,7 +43,7 @@ public class MagneticHandler {
     public List<Entity> getNearbyEntities(int range, Predicate<Entity> predicate) {
         BlockPos pos1 = new BlockPos(rootVec.x + range, rootVec.y + range, rootVec.z + range);
         BlockPos pos2 = new BlockPos(rootVec.x - range, rootVec.y - range, rootVec.z - range);
-        return rootEntity.getWorld().getOtherEntities(rootEntity, new Box(pos1, pos2), predicate);
+        return rootEntity.world.getOtherEntities(rootEntity, new Box(pos1, pos2), predicate);
     }
 
     public void pullEntities(int power, List<Entity> entities) {

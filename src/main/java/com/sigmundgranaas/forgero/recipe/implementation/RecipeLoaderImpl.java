@@ -51,6 +51,6 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
     }
 
     private JsonObject getRecipeAsJson(String path) {
-        return (JsonObject) JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(Utils.readJsonResourceAsString(path))));
+        return (JsonObject) new JsonParser().parse(new InputStreamReader(Objects.requireNonNull(Utils.readJsonResourceAsString(path))));
     }
 }

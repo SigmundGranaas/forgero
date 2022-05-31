@@ -34,10 +34,10 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "vazkii.patchouli:Patchouli:1.18.1-65-FABRIC"
+    modImplementation "vazkii.patchouli:Patchouli:1.17.1-59-FABRIC"
     modImplementation("net.devtech:arrp:0.5.4")
 
-    include "net.devtech:arrp:0.5.7"
+    include "net.devtech:arrp:0.5.4"
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
