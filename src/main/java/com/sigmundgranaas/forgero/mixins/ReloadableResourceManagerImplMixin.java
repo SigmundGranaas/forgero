@@ -11,7 +11,6 @@ import com.sigmundgranaas.forgero.core.texture.TextureLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceImpl;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,9 +25,9 @@ import java.util.Optional;
 public abstract class ReloadableResourceManagerImplMixin {
 
     @Shadow
-    public abstract Resource getResource(Identifier id);
+    public abstract Optional<Resource> getResource(Identifier id);
 
-    @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
 
         if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent")) {
@@ -43,7 +42,7 @@ public abstract class ReloadableResourceManagerImplMixin {
 
                 Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 
-                Resource resource = new ResourceImpl(ForgeroInitializer.MOD_NAMESPACE, id, toolPartTexture.getStream(), null);
+                Resource resource = new Resource(id.getNamespace(), toolPartTexture::getStream, null);
 
                 cir.setReturnValue(resource);
                 // }

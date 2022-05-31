@@ -18,10 +18,8 @@ import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 
@@ -47,16 +45,16 @@ public record DescriptionWriter(
     @Override
     public void addSecondaryMaterial(SecondaryMaterial material) {
         Rarity rarity = getRarityFromInt((int) Property.stream(material.getSecondaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
-        MutableText mutableText = new LiteralText("  Secondary: ").formatted(Formatting.GRAY);
-        mutableText.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
+        MutableText mutableText = Text.translatable("  Secondary: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
     @Override
     public void addGem(Gem gem) {
         Rarity rarity = getRarityFromGemLevel(gem.getLevel());
-        MutableText mutableText = new LiteralText("  Gem: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s, level %s", gem.getResourceName(), gem.getLevel())).formatted(rarity.formatting));
+        MutableText mutableText = Text.literal("  Gem: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s, level %s", gem.getResourceName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
@@ -73,8 +71,8 @@ public record DescriptionWriter(
     @Override
     public void addPrimaryMaterial(PrimaryMaterial material) {
         Rarity rarity = getRarityFromInt((int) Property.stream(material.getPrimaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
-        MutableText mutableText = new LiteralText("  Primary: ").formatted(Formatting.GRAY);
-        mutableText.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
+        MutableText mutableText = Text.literal("  Primary: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
         tooltip.add(mutableText);
     }
 
@@ -84,7 +82,7 @@ public record DescriptionWriter(
 
         addActiveProperty(Property.stream(properties).getActiveProperties().toList());
 
-        tooltip.add(new LiteralText("Attributes: "));
+        tooltip.add(Text.translatable("Attributes: "));
         addAllAttribute(properties);
     }
 
@@ -105,8 +103,8 @@ public record DescriptionWriter(
     private void addAttributeInt(List<Property> attributes, AttributeType type, String title) {
         int result = (int) Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
         if (result > 0) {
-            MutableText miningLevel = new LiteralText(String.format("  %s : ", title)).formatted(Formatting.GRAY);
-            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = Text.literal(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
@@ -114,27 +112,27 @@ public record DescriptionWriter(
     private void addAttribute(List<Property> attributes, AttributeType type, String title) {
         float result = Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
         if (result != 0f) {
-            MutableText miningLevel = new LiteralText(String.format("  %s : ", title)).formatted(Formatting.GRAY);
-            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = Text.literal(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
 
     @Override
     public void addHead(ToolPartHead head) {
-        tooltip.add(new LiteralText("Head: "));
+        tooltip.add(Text.literal("Head: "));
         head.createToolPartDescription(this);
     }
 
     @Override
     public void addHandle(ToolPartHandle handle) {
-        tooltip.add(new LiteralText("Handle: "));
+        tooltip.add(Text.literal("Handle: "));
         handle.createToolPartDescription(this);
     }
 
     @Override
     public void addBinding(ToolPartBinding binding) {
-        tooltip.add(new LiteralText("Binding: "));
+        tooltip.add(Text.literal("Binding: "));
         binding.createToolPartDescription(this);
     }
 
@@ -143,7 +141,7 @@ public record DescriptionWriter(
         List<Property> properties = stream.collect(Collectors.toList());
 
         addActiveProperty(Property.stream(properties).getActiveProperties().toList());
-        tooltip.add(new LiteralText("Attributes: "));
+        tooltip.add(Text.literal("Attributes: "));
 
         addToolAttributes(properties);
     }
@@ -153,14 +151,14 @@ public record DescriptionWriter(
         List<Property> properties = stream.collect(Collectors.toList());
 
         addActiveProperty(Property.stream(properties).getActiveProperties().toList());
-        tooltip.add(new LiteralText("Attributes: "));
+        tooltip.add(Text.literal("Attributes: "));
 
         addAttributeInt(properties.stream().toList(), AttributeType.DURABILITY, "Durability");
     }
 
     private void addActiveProperty(List<ActiveProperty> activeProperties) {
         if (activeProperties.size() > 0) {
-            tooltip.add(new LiteralText("Properties: "));
+            tooltip.add(Text.literal("Properties: "));
         }
         activeProperties.forEach(this::createPropertyDescription);
 
@@ -174,23 +172,23 @@ public record DescriptionWriter(
     }
 
     private void createVeinMiningDescription(VeinBreaking property) {
-        MutableText mutableText = new LiteralText(" Vein mining").formatted(Formatting.GRAY);
+        MutableText mutableText = Text.literal(" Vein mining").formatted(Formatting.GRAY);
         tooltip.add(mutableText);
-        MutableText blocks = new LiteralText("  Blocks: ").formatted(Formatting.GRAY);
-        blocks.append(new LiteralText(property.description()).formatted(Formatting.WHITE));
+        MutableText blocks = Text.literal("  Blocks: ").formatted(Formatting.GRAY);
+        blocks.append(Text.literal(property.description()).formatted(Formatting.WHITE));
         tooltip.add(blocks);
-        MutableText depth = new LiteralText("  Depth: ").formatted(Formatting.GRAY);
-        depth.append(new LiteralText(String.valueOf(property.depth())).formatted(Formatting.WHITE));
+        MutableText depth = Text.literal("  Depth: ").formatted(Formatting.GRAY);
+        depth.append(Text.literal(String.valueOf(property.depth())).formatted(Formatting.WHITE));
         tooltip.add(depth);
 
     }
 
     private void createPatternMiningDescription(PatternBreaking property) {
-        MutableText mutableText = new LiteralText(" Pattern Mining").formatted(Formatting.GRAY);
+        MutableText mutableText = Text.literal(" Pattern Mining").formatted(Formatting.GRAY);
         tooltip.add(mutableText);
 
         for (String line : property.getPattern()) {
-            MutableText patternText = new LiteralText(String.format("   %s", line)).formatted(Formatting.WHITE);
+            MutableText patternText = Text.literal(String.format("   %s", line)).formatted(Formatting.WHITE);
             tooltip.add(patternText);
         }
     }
@@ -199,8 +197,8 @@ public record DescriptionWriter(
     @Override
     public void createGemDescription(Gem gem) {
         Rarity rarity = getRarityFromGemLevel(gem.getLevel());
-        MutableText mutableText = new TranslatableText(String.format("item.%s.gem", ForgeroInitializer.MOD_NAMESPACE)).append(": ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s, level%s", gem.getResourceName(), gem.getLevel())).formatted(rarity.formatting));
+        MutableText mutableText = Text.literal(String.format("item.%s.gem", ForgeroInitializer.MOD_NAMESPACE)).append(": ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s, level%s", gem.getResourceName(), gem.getLevel())).formatted(rarity.formatting));
         tooltip.add(mutableText);
 
         addActiveProperty(Property.stream(gem.getProperties()).getActiveProperties().toList());
@@ -209,8 +207,8 @@ public record DescriptionWriter(
     }
 
     public void writeSchematicDescription(Schematic pattern) {
-        MutableText mutableText = new LiteralText("Material count: ").formatted(Formatting.GRAY);
-        mutableText.append(new LiteralText(String.format("%s", pattern.getMaterialCount())));
+        MutableText mutableText = Text.literal("Material count: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s", pattern.getMaterialCount())));
 
         tooltip.add(mutableText);
     }

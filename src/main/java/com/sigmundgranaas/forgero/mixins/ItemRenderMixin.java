@@ -13,7 +13,8 @@ import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.SimpleRandom;
+import net.minecraft.util.math.random.LocalRandom;
+import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -45,7 +46,8 @@ public abstract class ItemRenderMixin {
                 vertexConsumer = ItemRenderer.getItemGlintConsumer(consumer, renderLayer, true, stack.hasGlint());
             }
 
-            SimpleRandom random = new SimpleRandom(123124234L);
+            Random random = new LocalRandom(123124234L) {
+            };
             long l = 42L;
 
             for (Direction direction : Direction.values()) {

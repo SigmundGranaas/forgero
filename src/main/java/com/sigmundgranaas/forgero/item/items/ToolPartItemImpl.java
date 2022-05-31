@@ -13,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -38,11 +37,11 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
     public Text getName() {
         MutableText text;
         if (!part.getSchematic().getResourceName().equals("default")) {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getSchematic().getResourceName())).append(" ");
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))))
+            text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getSchematic().getResourceName())).append(" ");
+            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))))
                     .append(" ");
         } else {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
+            text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
         }
         if (getToolPartType() == ForgeroToolPartTypes.HEAD) {
             String headType = switch (((ToolPartHead) part).getToolType()) {
@@ -52,9 +51,9 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
                 case SWORD -> "swordhead";
                 case HOE -> "hoehead";
             };
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
+            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
         } else {
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartType().getName())));
+            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartType().getName())));
         }
         return text;
     }

@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.command;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.StructureBlockBlockEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.structure.Structure;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -18,8 +18,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class CommandRegistry {
     public void registerCommand() {
 
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, test) -> {
             dispatcher.register(CommandManager.literal("forgero").executes(context -> {
                 ForgeroInitializer.LOGGER.info("Called Forgero command with no arguments");
 
@@ -38,7 +37,7 @@ public class CommandRegistry {
                                     structureBlock.setStructureName(new Identifier("forgero:forgerostation"));
                                     structureBlock.loadStructure(context.getSource().getWorld());
                                     structureBlock.place(context.getSource().getWorld(), true, station.get());
-                                    context.getSource().sendFeedback(new LiteralText("Placed Forgero testing station"), true);
+                                    context.getSource().sendFeedback(Text.literal("Placed Forgero testing station"), true);
                                     context.getSource().getWorld().setBlockState(pos, initialState);
                                     //station.get().place(context.getSource().getWorld(), pos, pos, new StructurePlacementData(), new Random(), 0);
                                 }

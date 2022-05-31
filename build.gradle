@@ -1,11 +1,10 @@
 plugins {
-    id "fabric-loom" version "0.11.33"
+    id "idea"
+    id "fabric-loom" version "0.12.38"
     id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-
-archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
@@ -26,13 +25,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:23.0.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testCompileOnly('org.junit.jupiter:junit-jupiter:5.8.2')
+    compileOnlyApi('org.jetbrains:annotations:23.0.0')
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "vazkii.patchouli:Patchouli:1.18.2-67-FABRIC"
+    //modImplementation "vazkii.patchouli:Patchouli:1.18.2-67-FABRIC"
     modImplementation("net.devtech:arrp:0.5.7")
 
     include "net.devtech:arrp:0.5.7"
