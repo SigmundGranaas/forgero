@@ -51,7 +51,7 @@ public class SchematicToolPartRecipe extends ShapelessRecipe {
         };
 
         ItemStack forgeroToolInstanceStack = getOutput().copy();
-        forgeroToolInstanceStack.getOrCreateNbt().put(NBTFactory.getToolPartNBTIdentifier(part), NBTFactory.INSTANCE.createNBTFromToolPart(part));
+        forgeroToolInstanceStack.getOrCreateTag().put(NBTFactory.getToolPartNBTIdentifier(part), NBTFactory.INSTANCE.createNBTFromToolPart(part));
         return forgeroToolInstanceStack;
     }
 

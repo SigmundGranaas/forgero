@@ -39,7 +39,7 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
         List<Ingredient> ingredients = super.getIngredients();
 
         for (int ingredientSlot = 0; ingredientSlot < ingredients.size(); ingredientSlot++) {
-            if (ingredients.get(ingredientSlot).getMatchingStacks().length > 0) {
+            if (ingredients.get(ingredientSlot).getMatchingStacksClient().length > 0) {
                 ItemStack toolPart = craftingInventory.getStack(ingredientSlot);
                 if (headItem == null) {
                     headItem = toolPart;
@@ -58,20 +58,20 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
         ToolPartHead head;
         ToolPartHandle handle;
         ToolPartBinding binding;
-        if (headItem.hasNbt() && headItem.getOrCreateNbt().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
-            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getOrCreateNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
+        if (headItem.hasTag() && headItem.getOrCreateTag().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
+            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getOrCreateTag().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
         } else {
             head = (ToolPartHead) ((ToolPartItem) headItem.getItem()).getPart();
         }
 
-        if (handleItem.hasNbt() && handleItem.getOrCreateNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
-            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getOrCreateNbt().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
+        if (handleItem.hasTag() && handleItem.getOrCreateTag().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
+            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getOrCreateTag().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
         } else {
             handle = (ToolPartHandle) ((ToolPartItem) handleItem.getItem()).getPart();
         }
 
-        if (bindingItem.hasNbt() && bindingItem.getOrCreateNbt().contains(BINDING_NBT_IDENTIFIER)) {
-            binding = (ToolPartBinding) NBTFactory.INSTANCE.createToolPartFromNBT(bindingItem.getOrCreateNbt().getCompound(BINDING_NBT_IDENTIFIER));
+        if (bindingItem.hasTag() && bindingItem.getOrCreateTag().contains(BINDING_NBT_IDENTIFIER)) {
+            binding = (ToolPartBinding) NBTFactory.INSTANCE.createToolPartFromNBT(bindingItem.getOrCreateTag().getCompound(BINDING_NBT_IDENTIFIER));
         } else {
             binding = ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(((ToolPartItem) bindingItem.getItem()).getPrimaryMaterial(), ((ToolPartItem) bindingItem.getItem()).getPart().getSchematic()).createToolPart();
         }
@@ -79,7 +79,7 @@ public class ToolWithBindingRecipe extends ShapedRecipe {
         ForgeroTool tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle, binding);
 
         ItemStack forgeroToolInstanceStack = new ItemStack(getOutput().getItem());
-        forgeroToolInstanceStack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromTool(tool));
+        forgeroToolInstanceStack.getOrCreateTag().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromTool(tool));
         return forgeroToolInstanceStack;
     }
 

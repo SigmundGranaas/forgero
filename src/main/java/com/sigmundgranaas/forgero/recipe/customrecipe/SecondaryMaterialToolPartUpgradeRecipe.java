@@ -47,7 +47,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
                 return material.getIngredient().item.equals(Registry.ITEM.getId(addition.getItem()).toString());
             } else {
                 try {
-                    return addition.isIn(ServerTagManagerHolder.getTagManager().getTag(Registry.ITEM_KEY, new Identifier(material.getIngredient().tag), (tag) -> new Exception()));
+                    return ServerTagManagerHolder.getTagManager().getItems().getTag(new Identifier(material.getIngredient().tag)).contains(addition.getItem());
                 } catch (Exception e) {
                     return false;
                 }
@@ -67,7 +67,7 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
         ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(toolPart).setSecondary(secondaryMaterial);
 
         ItemStack result = super.craft(inventory);
-        result.getOrCreateNbt().put(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) toolPartStack.getItem()).getPart()), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
+        result.getOrCreateTag().put(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) toolPartStack.getItem()).getPart()), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
 
         return result;
     }

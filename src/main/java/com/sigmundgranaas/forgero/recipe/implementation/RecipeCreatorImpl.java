@@ -63,7 +63,7 @@ public record RecipeCreatorImpl(
 
         List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
         if (FabricLoader.getInstance().isModLoaded("patchouli")) {
-            guidebooksRecipes = createGuideBookRecipes();
+            //guidebooksRecipes = createGuideBookRecipes();
         }
 
         var recipes = List.of(toolRecipes, toolPartSecondaryMaterialUpgradeRecipe, toolPartGemUpgradeRecipe, toolPartSchematicRecipes, guidebooksRecipes);

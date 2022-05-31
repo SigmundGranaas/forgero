@@ -27,16 +27,16 @@ public class GemUpgradeRecipe extends SmithingRecipe {
         Gem additionGem;
         ItemStack base = inventory.getStack(0);
         ItemStack addition = inventory.getStack(1);
-        if (base.hasNbt() && base.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
+        if (base.hasTag() && base.getOrCreateTag().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
             //noinspection ConstantConditions
-            baseGem = NBTFactory.INSTANCE.createGemFromNbt(base.getNbt());
+            baseGem = NBTFactory.INSTANCE.createGemFromNbt(base.getTag());
         } else {
             baseGem = ((GemItem) base.getItem()).getGem();
         }
 
-        if (addition.hasNbt() && addition.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
+        if (addition.hasTag() && addition.getOrCreateTag().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
             //noinspection ConstantConditions
-            additionGem = NBTFactory.INSTANCE.createGemFromNbt(addition.getNbt());
+            additionGem = NBTFactory.INSTANCE.createGemFromNbt(addition.getTag());
         } else {
             additionGem = ((GemItem) addition.getItem()).getGem();
         }
@@ -57,7 +57,7 @@ public class GemUpgradeRecipe extends SmithingRecipe {
         Gem resultingGem = getGem(inventory).orElse(((GemItem) getOutput().getItem()).getGem());
 
         ItemStack output = getOutput().copy();
-        NBTFactory.INSTANCE.createNBTFromGem(resultingGem, output.getOrCreateNbt());
+        NBTFactory.INSTANCE.createNBTFromGem(resultingGem, output.getOrCreateTag());
         return output;
     }
 

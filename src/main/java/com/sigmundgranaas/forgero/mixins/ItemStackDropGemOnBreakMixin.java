@@ -42,7 +42,7 @@ public abstract class ItemStackDropGemOnBreakMixin {
 
     private ItemStack createItemStackFromGem(Gem gem) {
         ItemStack output = new ItemStack(ForgeroItemRegistry.GEM_ITEM.stream().filter(gemItem -> gemItem.getGem().getStringIdentifier().equals(gem.getStringIdentifier())).findAny().get());
-        NBTFactory.INSTANCE.createNBTFromGem(gem, output.getOrCreateNbt());
+        NBTFactory.INSTANCE.createNBTFromGem(gem, output.getOrCreateTag());
         return output;
     }
 

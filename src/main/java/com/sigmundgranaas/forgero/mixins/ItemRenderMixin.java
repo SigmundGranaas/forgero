@@ -39,7 +39,7 @@ public abstract class ItemRenderMixin {
 
             VertexConsumer vertexConsumer;
             if (stack.getItem() instanceof ForgeroToolItem) {
-                boolean glintModelTool = model.getParticleSprite().getId().getPath().contains("handle") && !model.getParticleSprite().getId().getPath().contains("secondary") && !model.getParticleSprite().getId().getPath().contains("gem") && stack.hasGlint();
+                boolean glintModelTool = model.getSprite().getId().getPath().contains("handle") && !model.getSprite().getId().getPath().contains("secondary") && !model.getSprite().getId().getPath().contains("gem") && stack.hasGlint();
                 vertexConsumer = ItemRenderer.getItemGlintConsumer(consumer, renderLayer, true, glintModelTool);
             } else {
                 vertexConsumer = ItemRenderer.getItemGlintConsumer(consumer, renderLayer, true, stack.hasGlint());

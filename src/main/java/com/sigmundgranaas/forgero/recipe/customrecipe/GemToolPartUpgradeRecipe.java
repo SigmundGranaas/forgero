@@ -32,7 +32,7 @@ public class GemToolPartUpgradeRecipe extends SmithingRecipe {
     @Override
     public boolean matches(Inventory inventory, World world) {
         if (super.matches(inventory, world)) {
-            NbtCompound toolNbt = inventory.getStack(0).getOrCreateNbt();
+            NbtCompound toolNbt = inventory.getStack(0).getOrCreateTag();
             String gemType = toolNbt.getCompound(getToolPartType(toolNbt)).getString(NBTFactory.GEM_NBT_IDENTIFIER);
             return gemType.equals("") || gemType.equals(NBTFactoryImpl.createGemNbtString(EmptyGem.createEmptyGem()));
         }
@@ -59,7 +59,7 @@ public class GemToolPartUpgradeRecipe extends SmithingRecipe {
         ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(toolpart).setGem(gem);
 
         ItemStack result = super.craft(inventory);
-        result.getOrCreateNbt().put(NBTFactory.getToolPartNBTIdentifier(toolpart), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
+        result.getOrCreateTag().put(NBTFactory.getToolPartNBTIdentifier(toolpart), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
         return result;
     }
 

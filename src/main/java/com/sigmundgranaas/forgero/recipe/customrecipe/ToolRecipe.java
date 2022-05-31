@@ -73,7 +73,7 @@ public class ToolRecipe extends ShapedRecipe {
         ForgeroTool tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle);
 
         ItemStack forgeroToolInstanceStack = getOutput().copy();
-        forgeroToolInstanceStack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromTool(tool));
+        forgeroToolInstanceStack.getOrCreateTag().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromTool(tool));
         return forgeroToolInstanceStack;
     }
 

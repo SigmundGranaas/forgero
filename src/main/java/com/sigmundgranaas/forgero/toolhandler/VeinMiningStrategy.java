@@ -9,7 +9,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +39,7 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
         }
 
         try {
-            if (rootState.isIn(ServerTagManagerHolder.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier(handler.tag()), (t) -> new Exception()))) {
+            if (rootState.isIn(ServerTagManagerHolder.getTagManager().getBlocks().getTag(new Identifier(handler.tag())))) {
                 calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
             }
         } catch (Exception ignored) {

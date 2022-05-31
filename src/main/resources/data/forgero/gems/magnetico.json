@@ -4,7 +4,7 @@
   "palette": {
     "name": "magnetico",
     "include": [
-      "minecraft:textures/item/copper_ingot.png"
+      "minecraft:textures/item/iron_ingot.png"
     ],
     "exclude": [
     ]
