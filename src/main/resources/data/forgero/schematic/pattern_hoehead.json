@@ -1,0 +1,27 @@
+{
+  "name": "pattern",
+  "parent": "default_hoehead",
+  "type": "HEAD",
+  "toolType": "HOE",
+  "model": "vein",
+  "output": "hoe_vein",
+  "materialCount": 3,
+  "properties": {
+    "active": [
+      {
+        "type": "BLOCK_BREAKING_PATTERN",
+        "direction": "Y",
+        "tag": "forgero:plants",
+        "pattern": [
+          "   x   ",
+          "  xxx  ",
+          " xxxxx ",
+          "xxxxxxx",
+          " xxxxx ",
+          "  xxx  ",
+          "   x   "
+        ]
+      }
+    ]
+  }
+}

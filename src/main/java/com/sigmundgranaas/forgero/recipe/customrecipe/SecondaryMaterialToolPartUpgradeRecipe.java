@@ -19,7 +19,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
 
@@ -38,19 +40,27 @@ public class SecondaryMaterialToolPartUpgradeRecipe extends SmithingRecipe {
     @Override
     public ItemStack craft(Inventory inventory) {
         ItemStack toolPartStack = null;
-        String additionMaterialIdentifier = addition.toJson().getAsJsonObject().getAsJsonPrimitive("item").getAsString();
-        SecondaryMaterial secondaryMaterial = ForgeroRegistry.getInstance().materialCollection().getSecondaryMaterialsAsList().stream().filter(material -> material.getIngredient().equals(additionMaterialIdentifier)).findFirst().orElse(new EmptySecondaryMaterial());
+        //String additionMaterialIdentifier = addition.toJson().getAsJsonObject().getAsJsonPrimitive("item").getAsString();
+        ItemStack addition = inventory.getStack(1);
+        SecondaryMaterial secondaryMaterial = ForgeroRegistry.MATERIAL.getSecondaryMaterials().stream().filter(material -> {
+            if (material.getIngredient().tag == null) {
+                return material.getIngredient().item.equals(Registry.ITEM.getId(addition.getItem()).toString());
+            } else {
+                return addition.getItem().getRegistryEntry().isIn(TagKey.of(Registry.ITEM_KEY, new Identifier(material.getIngredient().tag)));
+            }
+        }).findFirst().orElse(new EmptySecondaryMaterial());
         for (int i = 0; i < inventory.size(); i++) {
             if (base.test(inventory.getStack(i))) {
                 toolPartStack = inventory.getStack(i);
             }
         }
+
         assert toolPartStack != null;
 
-        ForgeroToolPart toolpart = FabricToForgeroToolPartAdapter.createAdapter().getToolPart(toolPartStack).orElse(((ToolPartItem) toolPartStack.getItem()).getPart());
+        ForgeroToolPart toolPart = FabricToForgeroToolPartAdapter.createAdapter().getToolPart(toolPartStack).orElse(((ToolPartItem) toolPartStack.getItem()).getPart());
 
 
-        ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(toolpart).setSecondary(secondaryMaterial);
+        ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(toolPart).setSecondary(secondaryMaterial);
 
         ItemStack result = super.craft(inventory);
         result.getOrCreateNbt().put(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) toolPartStack.getItem()).getPart()), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));

@@ -8,8 +8,10 @@ import com.sigmundgranaas.forgero.core.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.TextureLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceImpl;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,26 +26,27 @@ import java.util.Optional;
 public abstract class ReloadableResourceManagerImplMixin {
 
     @Shadow
-    public abstract Optional<Resource> getResource(Identifier id);
+    public abstract Resource getResource(Identifier id);
 
-    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
-    public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) throws IOException {
+    @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
+    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
 
-        if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent") && !id.getPath().contains("pattern")) {
+        if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent")) {
             FabricTextureIdentifierFactory factory = new FabricTextureIdentifierFactory();
 
             Optional<ToolPartModelTextureIdentifier> identifierResult = factory.createToolPartTextureIdentifier(id.getPath());
 
             if (identifierResult.isPresent() && ForgeroToolPartTextureRegistry.getInstance(factory).isGeneratedTexture(identifierResult.get())) {
-                TextureLoader loader = new FabricTextureLoader(((LifecycledResourceManagerImpl) (Object) this)::getResource);
+
+                //if (!PaletteResourceRegistry.getInstance().premadePalette(identifierResult.get().getPaletteIdentifier())) {
+                TextureLoader loader = new FabricTextureLoader(MinecraftClient.getInstance().getResourceManager()::getResource);
 
                 Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 
-                Resource resource = new Resource(id.toString(), toolPartTexture::getStream);
+                Resource resource = new ResourceImpl(ForgeroInitializer.MOD_NAMESPACE, id, toolPartTexture.getStream(), null);
 
-                cir.setReturnValue(Optional.of(resource));
-
-
+                cir.setReturnValue(resource);
+                // }
             }
         }
     }

@@ -67,15 +67,20 @@
 
 
 <!-- ABOUT FORGERO -->
+
 ## About
 
-[![Forgero][product-screenshot]](https://www.curseforge.com/minecraft/mc-mods/forgero)
+<div align="center">
+  <a href="https://www.curseforge.com/minecraft/mc-mods/forgero">
+    <img src="assets/Banner.png" alt="Logo" >
+  </a>
+<div/>
 
-Forgero was created to fill a gap in the mods available for Fabric.
-The aim of the mod is to give tool creation and customization in Minecraft a greater depth.
-
+Forgero was created to fill a gap in the mods available for Fabric. The aim of the mod is to give tool creation and
+customization in Minecraft a greater depth.
 
 Key features:
+
 * A wide variety of materials can be used to craft every part of a tool (But some are better suited than others)
 * Unique patterns which will enhance the look and attributes of your tools
 * Vanilla friendly, this mod generates textures from palettes created from Minecraft's own textures
@@ -84,8 +89,6 @@ Key features:
 * Support for adding and customizing materials, patterns and gems entirely trough config files
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
@@ -99,19 +102,21 @@ This project is created with Fabric, and its toolchain
 
 
 <!-- GETTING STARTED -->
+
 ## Getting Started with modding
 
-Modding Minecraft is very easy using the tools developed by the modding community. 
+Modding Minecraft is very easy using the tools developed by the modding community.
 
 ### Prerequisites
 
 If you wish to run this project without using and IDE, you need to install java 17, and Gradle
+
 * [Azul OpenJDK 17](https://www.azul.com/downloads/?package=jdk)
 * [Gradle](https://gradle.org/)
 
 ### Installation
 
-Setting up Forgero is best done using 
+Setting up Forgero is best done using
 
 1. Clone the project from this repository
    ```sh
@@ -121,7 +126,7 @@ Setting up Forgero is best done using
      ```sh
    install intellij from: https://www.jetbrains.com/idea/download/
    ```
-   
+
 3. Open Forgero in Intellij
    ```sh
    new > project from existing sources > choose forgero folder
@@ -135,6 +140,7 @@ Setting up Forgero is best done using
 
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 Forgero is in active development, and features are being added frequently.
@@ -147,30 +153,33 @@ Forgero is in active development, and features are being added frequently.
 - [ ] Support for enhanced tool properties, like golden and a 3x3 breaking area
 - [ ] Rework model system to avoid flickering textures
 
-
-See the [open issues](https://github.com/sigmundgranaas/forgero/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/sigmundgranaas/forgero/issues) for a full list of proposed features (and known
+issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again! Your contributions are **Greatly appreciated**
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also
+simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again! Your
+contributions are **Greatly appreciated**
 
 1. [Fork](https://github.com/sigmundgranaas/forgero/fork) the Project to your Github account
 2. Set up the project as described in the installation section
 3. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 5. Push to the Branch (`git push origin feature/AmazingFeature`)
-6. Open a [Pull request](https://github.com/sigmundgranaas/forgero/pulls) here 
+6. Open a [Pull request](https://github.com/sigmundgranaas/forgero/pulls) here
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
@@ -180,6 +189,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 
 <!-- CONTACT -->
+
 ## Contact
 
 Sigmund Granaas Sandring
@@ -191,6 +201,7 @@ Project Link: [https://github.com/sigmundgranaas/forgero](https://github.com/sig
 
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
 Creating this project could not have been done without the prior work of the community.
@@ -201,23 +212,35 @@ Creating this project could not have been done without the prior work of the com
 * [Minecraft](https://www.minecraft.net)
 * [Readme template](ttps://github.com/othneildrew/Best-README-Template/)
 
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/sigmundgranaas/forgero.svg?style=for-the-badge
+
 [contributors-url]: https://github.com/sigmundgranaas/forgero/graphs/contributors
+
 [forks-shield]: https://img.shields.io/github/forks/sigmundgranaas/forgero.svg?style=for-the-badge
+
 [forks-url]: https://github.com/sigmundgranaas/forgero/network/members
+
 [stars-shield]: https://img.shields.io/github/stars/sigmundgranaas/forgero.svg?style=for-the-badge
+
 [stars-url]: https://github.com/sigmundgranaas/forgero/stargazers
+
 [issues-shield]: https://img.shields.io/github/issues/sigmundgranaas/forgero.svg?style=for-the-badge
+
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+
 [license-shield]: https://img.shields.io/github/license/sigmundgranaas/forgero.svg?style=for-the-badge
+
 [license-url]: https://github.com/sigmundgranaas/forgero/blob/master/LICENSE.txt
+
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+
 [linkedin-url]: https://linkedin.com/in/sigmundgranaas
-[product-screenshot]: assets/crafting.png
+
+[product-screenshot]: assets/Banner.png

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ForgeroGem implements Gem {
     private final int gemLevel;
@@ -32,7 +33,7 @@ public class ForgeroGem implements Gem {
     }
 
     @Override
-    public String getIdentifier() {
+    public String getStringIdentifier() {
         return identifier;
     }
 
@@ -43,7 +44,7 @@ public class ForgeroGem implements Gem {
 
     @Override
     public Optional<Gem> upgradeGem(Gem newGem) {
-        if (equals(newGem) && newGem.getIdentifier().equals(this.getIdentifier())) {
+        if (equals(newGem) && newGem.getStringIdentifier().equals(this.getStringIdentifier())) {
             return Optional.of(this.createGem(getLevel() + 1));
         }
         return Optional.empty();
@@ -51,27 +52,28 @@ public class ForgeroGem implements Gem {
 
     @Override
     public Gem createGem(int level) {
-        return new ForgeroGem(level, getIdentifier(), propertyList, placement);
+        return new ForgeroGem(level, getStringIdentifier(), propertyList, placement);
     }
 
     public boolean equals(Gem newGem) {
-        return identifier.equals(newGem.getIdentifier()) && newGem.getLevel() == getLevel();
+        return identifier.equals(newGem.getStringIdentifier()) && newGem.getLevel() == getLevel();
     }
 
     @Override
-    public String getName() {
-        return getIdentifier().split("_")[0];
+    public String getResourceName() {
+        return getStringIdentifier().split("_")[0];
     }
 
     @Override
     public List<Property> getProperties() {
-        return propertyList.stream()
-                .filter(property -> property instanceof Attribute)
+        var leveledAttribute = propertyList.stream().filter(property -> property instanceof Attribute)
                 .map(Attribute.class::cast)
                 .map(attribute -> {
                     AttributeBuilder builder = AttributeBuilder.createAttributeBuilderFromAttribute(attribute);
                     builder.applyLevel(gemLevel);
                     return builder.build();
-                }).collect(Collectors.toList());
+                }).toList();
+        var otherAttributes = propertyList.stream().filter(property -> !(property instanceof Attribute)).toList();
+        return Stream.of(leveledAttribute, otherAttributes).flatMap(List::stream).collect(Collectors.toList());
     }
 }

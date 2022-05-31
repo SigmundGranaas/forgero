@@ -1,17 +1,18 @@
 package com.sigmundgranaas.forgero.core.tool;
 
+import com.sigmundgranaas.forgero.core.ForgeroResource;
+import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.PropertyStream;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public interface ForgeroTool {
+public interface ForgeroTool extends ForgeroResource, PropertyContainer {
     @NotNull
     ToolPartHead getToolHead();
 
@@ -41,15 +42,27 @@ public interface ForgeroTool {
 
     float getMiningSpeedMultiplier(Target target);
 
-    int getMiningLevel(Target target);
-
     PrimaryMaterial getMaterial();
 
     void createToolDescription(ToolDescriptionWriter writer);
 
-    List<Property> getProperties(Target target);
+    void createWeaponDescription(ToolDescriptionWriter writer);
+
+    @Override
+    default String getResourceName() {
+        return getStringIdentifier();
+    }
+
+    @Override
+    default ForgeroResourceType getResourceType() {
+        return ForgeroResourceType.TOOL;
+    }
 
     default PropertyStream getPropertyStream() {
         return Property.stream(getProperties(Target.createEmptyTarget()));
+    }
+
+    default PropertyStream getPropertyStream(Target target) {
+        return Property.stream(getProperties(target));
     }
 }

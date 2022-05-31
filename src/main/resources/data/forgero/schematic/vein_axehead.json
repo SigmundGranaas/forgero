@@ -1,0 +1,34 @@
+{
+  "name": "vein",
+  "type": "HEAD",
+  "toolType": "AXE",
+  "model": "vein",
+  "output": "axe_vein",
+  "rarity": 80,
+  "materialCount": 3,
+  "properties": {
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 6.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": -3.0
+      }
+    ],
+    "passive:": [],
+    "active": [
+      {
+        "type": "VEIN_MINING_PATTERN",
+        "depth": 10,
+        "tag": "minecraft:logs",
+        "description": "Logs"
+      }
+    ]
+  }
+}

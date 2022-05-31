@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.tool.factory;
 
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartCollection;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
@@ -19,5 +19,5 @@ public interface ForgeroToolFactory {
 
     ForgeroTool createForgeroTool(@NotNull ForgeroToolIdentifier identifier);
 
-    List<ForgeroTool> createForgeroTools(@NotNull ForgeroToolPartCollection collection);
+    List<ForgeroTool> createForgeroTools(@NotNull List<ForgeroToolPart> collection);
 }

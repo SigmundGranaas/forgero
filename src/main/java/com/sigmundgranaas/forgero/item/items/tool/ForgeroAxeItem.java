@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -19,6 +20,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -45,6 +47,22 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
     @Override
     public Identifier getIdentifier() {
         return new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString());
+    }
+
+
+    @Override
+    public Text getName() {
+        return getForgeroTranslatableToolName();
+    }
+
+    @Override
+    public ForgeroResourceType getResourceType() {
+        return ForgeroResourceType.TOOL;
+    }
+
+    @Override
+    public Text getName(ItemStack stack) {
+        return getForgeroTranslatableToolName();
     }
 
     @Override
@@ -78,13 +96,13 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
     }
 
     @Override
-    protected String getOrCreateTranslationKey() {
-        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getName(), getToolType().toString().toLowerCase(Locale.ROOT));
+    public @NotNull ForgeroAxeItem getItem() {
+        return this;
     }
 
     @Override
-    public int getItemBarStep(ItemStack stack) {
-        return getCustomItemBarStep(stack);
+    protected String getOrCreateTranslationKey() {
+        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName(), getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
 

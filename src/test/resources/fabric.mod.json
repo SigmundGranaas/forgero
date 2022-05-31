@@ -3,7 +3,7 @@
   "id": "test",
   "version": "${version}",
   "environment": "*",
-  "description": "Forgero gametests",
+  "description": "Forgero game tests",
   "license": "MIT",
   "authors": [
     "SigmundGranaas"
@@ -13,7 +13,9 @@
       "com.sigmundgranaas.forgero.gametest.RecipeCreation",
       "com.sigmundgranaas.forgero.gametest.ItemRegistration",
       "com.sigmundgranaas.forgero.gametest.GemRecipeTest",
-      "com.sigmundgranaas.forgero.gametest.GemToolTest"
+      "com.sigmundgranaas.forgero.gametest.GemToolTest",
+      "com.sigmundgranaas.forgero.gametest.ToolHandlerTest",
+      "com.sigmundgranaas.forgero.gametest.SecondaryUpgradeTest"
     ]
   }
 }

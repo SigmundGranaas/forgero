@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
@@ -9,18 +10,23 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartHeadBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.*;
 
 public class IronToolPropertyTest {
+    @BeforeEach
+    void initialiseResources() {
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+    }
 
     @Test
     void testToolDurability() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -30,10 +36,10 @@ public class IronToolPropertyTest {
 
     @Test
     void testToolDurabilityWithSecondary() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -43,10 +49,10 @@ public class IronToolPropertyTest {
 
     @Test
     void testToolMiningLevel() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -56,10 +62,10 @@ public class IronToolPropertyTest {
 
     @Test
     void testToolMiningSpeed() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(IRON_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         //headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         //handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());

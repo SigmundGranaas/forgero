@@ -14,4 +14,6 @@ public interface ToolDescriptionWriter {
     void addBinding(ToolPartBinding binding);
 
     void addToolProperties(PropertyStream stream);
+
+    void addSwordProperties(PropertyStream stream);
 }

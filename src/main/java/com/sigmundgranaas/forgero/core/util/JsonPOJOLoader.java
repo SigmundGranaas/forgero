@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.utils.Utils;
@@ -17,9 +18,15 @@ public class JsonPOJOLoader {
      */
     public static <T> Optional<T> loadPOJO(String filePath, Class<T> type) {
         InputStream materialsStream = Utils.readJsonResourceAsString(filePath);
-        if (materialsStream != null) {
-            JsonReader materialsJson = new JsonReader(new InputStreamReader(materialsStream));
-            return Optional.of(new Gson().fromJson(materialsJson, type));
+        if (materialsStream != null && filePath.contains(".json")) {
+            try {
+                JsonReader materialsJson = new JsonReader(new InputStreamReader(materialsStream));
+                T gson = new Gson().fromJson(materialsJson, type);
+                return Optional.of(gson);
+            } catch (JsonSyntaxException e) {
+                ForgeroInitializer.LOGGER.error("Unable to parse: {}", filePath);
+                return Optional.empty();
+            }
         } else {
             ForgeroInitializer.LOGGER.error("Unable to load: {}", filePath);
             return Optional.empty();

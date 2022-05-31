@@ -1,0 +1,12 @@
+{
+  "version": "V1",
+  "name": "material",
+  "resource_type": "MATERIAL",
+  "abstract_resource": true,
+  "palette": {
+    "name": "default",
+    "include": [
+      "minecraft:textures/item/oak_boat.png"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "default",
+  "type": "HANDLE",
+  "resource_type": "SCHEMATIC",
+  "model": "default",
+  "output": "handle_default",
+  "rarity": 1,
+  "materialCount": 2,
+  "properties": {
+    "attributes": [],
+    "passive:": [],
+    "active": []
+  }
+}

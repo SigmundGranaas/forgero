@@ -3,11 +3,12 @@ package com.sigmundgranaas.forgero.core.toolpart;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.ToolPartTarget;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,13 +20,13 @@ public abstract class ToolPartState implements PropertyContainer {
     final PrimaryMaterial primaryMaterial;
     final SecondaryMaterial secondaryMaterial;
     final Gem gem;
-    final Pattern pattern;
+    final Schematic schematic;
 
-    public ToolPartState(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial, Gem gem, Pattern pattern) {
+    public ToolPartState(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial, Gem gem, Schematic schematic) {
         this.primaryMaterial = primaryMaterial;
         this.secondaryMaterial = secondaryMaterial;
         this.gem = gem;
-        this.pattern = pattern;
+        this.schematic = schematic;
     }
 
 
@@ -41,20 +42,26 @@ public abstract class ToolPartState implements PropertyContainer {
         return gem;
     }
 
-    public Pattern getPattern() {
-        return pattern;
+    public Schematic getSchematic() {
+        return schematic;
     }
 
     public abstract ForgeroToolPartTypes getToolPartType();
 
-    public List<Property> getProperties(Target target) {
+    public @NotNull List<Property> getProperties(Target target) {
         return Stream.of(primaryMaterial.getPrimaryProperties(),
                         secondaryMaterial.getSecondaryProperties(),
                         gem.getProperties(),
-                        pattern.getProperties(target))
+                        schematic.getProperties(target))
                 .flatMap(Collection::stream)
                 .filter(property -> property.applyCondition(target.combineTarget(getToolPartConditionTarget())))
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public @NotNull List<Property> getRootProperties() {
+        return getProperties(Target.createEmptyTarget());
     }
 
     private Target getToolPartConditionTarget() {

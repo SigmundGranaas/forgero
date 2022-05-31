@@ -2,39 +2,31 @@
   "replace": false,
   "values": [
     {
-      "id": "forgero:oak_pickaxe",
+      "id": "#forgero:pickaxes",
       "required": false
     },
     {
-      "id": "forgero:spruce_pickaxe",
+      "id": "#c:wooden_pickaxe",
       "required": false
     },
     {
-      "id": "forgero:acacia_pickaxe",
+      "id": "#c:stone_pickaxe",
       "required": false
     },
     {
-      "id": "forgero:birch_pickaxe",
+      "id": "#c:iron_pickaxe",
       "required": false
     },
     {
-      "id": "forgero:stone_pickaxe",
+      "id": "#c:golden_pickaxe",
       "required": false
     },
     {
-      "id": "forgero:iron_pickaxe",
+      "id": "#c:diamond_pickaxe",
       "required": false
     },
     {
-      "id": "forgero:gold_pickaxe",
-      "required": false
-    },
-    {
-      "id": "forgero:diamond_pickaxe",
-      "required": false
-    },
-    {
-      "id": "forgero:netherite_pickaxe",
+      "id": "#c:netherite_pickaxe",
       "required": false
     }
   ]

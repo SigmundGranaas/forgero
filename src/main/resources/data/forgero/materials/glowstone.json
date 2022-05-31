@@ -1,0 +1,78 @@
+{
+  "name": "Glowstone",
+  "rarity": 60,
+  "type": "MINERAL",
+  "ingredient": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 20.0
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 65
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      }
+    ],
+    "passive": [],
+    "active": []
+  },
+  "palette": {
+    "name": "glowstone",
+    "include": [
+      "minecraft:textures/item/glowstone_dust.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "secondary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.5
+        }
+      ],
+      "passive": [],
+      "active": []
+    }
+  }
+}

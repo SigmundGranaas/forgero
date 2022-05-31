@@ -18,6 +18,9 @@
     "client": [
       "com.sigmundgranaas.forgero.client.ForgeroClient"
     ],
+    "rrp:pregen": [
+      "com.sigmundgranaas.forgero.resources.ForgeroTextures"
+    ],
     "main": [
       "com.sigmundgranaas.forgero.ForgeroInitializer"
     ]
@@ -30,5 +33,8 @@
     "fabric": "*",
     "minecraft": "1.19.x",
     "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
   }
 }

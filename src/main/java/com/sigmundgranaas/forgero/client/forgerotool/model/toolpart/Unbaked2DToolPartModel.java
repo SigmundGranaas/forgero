@@ -7,10 +7,13 @@ import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.ModelRotation;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
+import net.minecraft.client.render.model.json.ModelElement;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.util.math.Direction;
 
+import java.util.Random;
 import java.util.function.Function;
 
 public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
@@ -46,6 +49,7 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
 
     protected JsonObject getTextures() {
         JsonObject textures = new JsonObject();
+
         for (int i = 0; i <= getModelLayerIndex(); i++) {
             if (i == getModelLayerIndex()) {
                 textures.addProperty("layer" + i, getTextureBasePath() + getIdentifier());
@@ -53,7 +57,6 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
                 textures.addProperty("layer" + i, getTextureBasePath() + TRANSPARENT_BASE_IDENTIFIER);
             }
         }
-        textures.addProperty("particle", getTextureBasePath() + getIdentifier());
         return textures;
     }
 
@@ -66,6 +69,29 @@ public abstract class Unbaked2DToolPartModel implements UnbakedToolPartModel {
         JsonUnbakedModel model = this.buildUnbakedJsonModel();
         ModelIdentifier id = this.getId();
         JsonUnbakedModel generated_model = ITEM_MODEL_GENERATOR.create(textureGetter, model);
+        var elements = generated_model.getElements();
+        for (ModelElement element : elements) {
+            if (element.faces.containsKey(Direction.WEST)) {
+                float rand = new Random().nextFloat();
+                element.from.add(rand * -0.01f, 0, 0);
+                element.to.add(rand * -0.01f, 0, 0);
+            }
+            if (element.faces.containsKey(Direction.EAST)) {
+                float rand = new Random().nextFloat();
+                element.from.add(rand * 0.01f, 0, 0);
+                element.to.add(rand * 0.01f, 0, 0);
+            }
+            if (element.faces.containsKey(Direction.UP)) {
+                float rand = new Random().nextFloat();
+                element.from.add(0, rand * -0.01f, 0);
+                element.to.add(0, rand * -0.01f, 0);
+            }
+            if (element.faces.containsKey(Direction.DOWN)) {
+                float rand = new Random().nextFloat();
+                element.from.add(0, rand * 0.01f, 0);
+                element.to.add(0, rand * 0.01f, 0);
+            }
+        }
         //((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
         return (FabricBakedModel) generated_model.bake(loader, model, textureGetter, ModelRotation.X0_Y0, id, true);
     }

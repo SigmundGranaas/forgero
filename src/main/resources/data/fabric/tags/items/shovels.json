@@ -2,39 +2,31 @@
   "replace": false,
   "values": [
     {
-      "id": "forgero:oak_shovel",
+      "id": "#forgero:shovels",
       "required": false
     },
     {
-      "id": "forgero:spruce_shovel",
+      "id": "#c:wooden_shovel",
       "required": false
     },
     {
-      "id": "forgero:birch_shovel",
+      "id": "#c:stone_shovel",
       "required": false
     },
     {
-      "id": "forgero:acacia_shovel",
+      "id": "#c:iron_shovel",
       "required": false
     },
     {
-      "id": "forgero:stone_shovel",
+      "id": "#c:golden_shovel",
       "required": false
     },
     {
-      "id": "forgero:iron_shovel",
+      "id": "#c:diamond_shovel",
       "required": false
     },
     {
-      "id": "forgero:gold_shovel",
-      "required": false
-    },
-    {
-      "id": "forgero:diamond_shovel",
-      "required": false
-    },
-    {
-      "id": "forgero:netherite_shovel",
+      "id": "#c:netherite_shovel",
       "required": false
     }
   ]

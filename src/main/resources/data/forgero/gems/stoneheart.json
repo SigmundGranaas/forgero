@@ -1,0 +1,34 @@
+{
+  "name": "stoneheart",
+  "item_identifier": "forgero:item/stoneheart_gem",
+  "palette": {
+    "name": "stone",
+    "include": [
+      "minecraft:textures/block/diamond_block.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "placement": [
+    "HEAD",
+    "BINDING"
+  ],
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_SPEED",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 1.2,
+        "condition": {
+          "target": "BLOCK",
+          "tag": [
+            "minecraft:base_stone_overworld"
+          ]
+        }
+      }
+    ],
+    "passive": [],
+    "active": []
+  }
+}

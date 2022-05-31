@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
@@ -25,6 +24,7 @@ public class ToolRecipe extends ShapedRecipe {
     public ToolRecipe(ShapedRecipe recipe) {
         super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
     }
+
 
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
@@ -59,7 +59,7 @@ public class ToolRecipe extends ShapedRecipe {
             assert headItem.getNbt() != null;
             head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
         } else {
-            head = ((ForgeroToolItem) getOutput().getItem()).getHead();
+            head = (ToolPartHead) ((ToolPartItem) headItem.getItem()).getPart();
         }
 
         if (handleItem.hasNbt() && handleItem.getOrCreateNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {

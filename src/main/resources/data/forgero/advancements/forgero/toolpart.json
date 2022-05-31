@@ -1,0 +1,57 @@
+{
+  "parent": "forgero:forgero/root",
+  "display": {
+    "icon": {
+      "item": "forgero:oak_swordhead_default"
+    },
+    "title": {
+      "translate": "advancements.forgero.toolpart.title"
+    },
+    "description": {
+      "translate": "advancements.forgero.toolpart.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "heads": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:heads"
+          }
+        ]
+      }
+    },
+    "bindings": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:heads"
+          }
+        ]
+      }
+    },
+    "handles": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:handles"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "handles",
+      "bindings",
+      "heads"
+    ]
+  ]
+}

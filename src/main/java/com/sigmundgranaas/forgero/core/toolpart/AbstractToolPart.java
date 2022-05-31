@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.toolpart;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 
 public abstract class AbstractToolPart implements ForgeroToolPart {
     protected final ToolPartState state;
@@ -19,8 +19,8 @@ public abstract class AbstractToolPart implements ForgeroToolPart {
     }
 
     @Override
-    public Pattern getPattern() {
-        return this.state.getPattern();
+    public Schematic getSchematic() {
+        return this.state.getSchematic();
     }
 
     @Override
@@ -30,7 +30,7 @@ public abstract class AbstractToolPart implements ForgeroToolPart {
 
     @Override
     public String getToolPartIdentifier() {
-        return state.getPrimaryMaterial().getName() + "_" + getToolPartName() + "_" + getPattern().getVariant();
+        return state.getPrimaryMaterial().getResourceName() + "_" + getToolPartName() + "_" + getSchematic().getVariant();
     }
 
     @Override

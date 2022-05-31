@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "tag": "forgero:swordheads"
+    }
+  ],
+  "result": {
+    "item": "forgero:swordhead_schematic_default"
+  }
+}

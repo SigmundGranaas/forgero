@@ -1,0 +1,21 @@
+{
+  "name": "pattern",
+  "parent": "default_pickaxehead",
+  "type": "HEAD",
+  "toolType": "PICKAXE",
+  "model": "pattern",
+  "output": "pickaxe_pattern",
+  "materialCount": 3,
+  "properties": {
+    "active": [
+      {
+        "type": "BLOCK_BREAKING_PATTERN",
+        "pattern": [
+          "xxx",
+          "xxx",
+          "xxx"
+        ]
+      }
+    ]
+  }
+}

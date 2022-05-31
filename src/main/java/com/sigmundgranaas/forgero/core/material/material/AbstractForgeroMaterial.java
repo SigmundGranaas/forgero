@@ -1,15 +1,13 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.material.material.realistic.RealisticMaterialPOJO;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.factory.PropertyBuilder;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.IngredientPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final String name;
@@ -18,32 +16,19 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     protected final List<String> paletteExclusionIdentifiers;
     protected final List<Property> properties;
     protected final MaterialType type;
-    protected final String ingredient;
+    protected final IngredientPojo ingredient;
 
-    public AbstractForgeroMaterial(RealisticMaterialPOJO material) {
+    public AbstractForgeroMaterial(MaterialPOJO material) {
         this.name = material.name.toLowerCase(Locale.ROOT);
-        this.rarity = material.rarity;
+        this.rarity = 0;
         this.paletteIdentifiers = material.palette.include;
         this.paletteExclusionIdentifiers = material.palette.exclude;
-        this.properties = Collections.emptyList();
+        this.properties = PropertyBuilder.createPropertyListFromPOJO(material.properties);
+
         this.type = material.type;
-        this.ingredient = material.ingredient.item;
+        this.ingredient = material.ingredient;
     }
 
-    public AbstractForgeroMaterial(SimpleMaterialPOJO material) {
-        this.name = material.name.toLowerCase(Locale.ROOT);
-        this.rarity = material.rarity;
-        this.paletteIdentifiers = material.palette.include;
-        this.paletteExclusionIdentifiers = material.palette.exclude;
-        this.properties = material
-                .properties
-                .attributes
-                .stream()
-                .map(AttributeBuilder::createAttributeFromPojo)
-                .collect(Collectors.toList());
-        this.type = material.type;
-        this.ingredient = material.ingredient.item;
-    }
 
     @Override
     public int getRarity() {
@@ -52,7 +37,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
 
     @Override
     public @NotNull
-    String getName() {
+    String getResourceName() {
         return name.toLowerCase();
     }
 
@@ -68,7 +53,7 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
     }
 
     @Override
-    public String getIngredient() {
+    public IngredientPojo getIngredient() {
         return ingredient;
     }
 }

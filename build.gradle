@@ -12,6 +12,12 @@ group = project.maven_group
 repositories {
     mavenCentral()
 
+    maven { url 'https://maven.blamejared.com' }
+    maven {
+        url = uri("https://storage.googleapis.com/devan-maven/")
+    }
+
+
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -20,14 +26,16 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:22.0.0'
+    implementation 'org.jetbrains:annotations:23.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "vazkii.patchouli:Patchouli:1.18.2-67-FABRIC"
+    modImplementation("net.devtech:arrp:0.5.7")
 
+    include "net.devtech:arrp:0.5.7"
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
@@ -103,6 +111,11 @@ curseforge {
 
         mainArtifact(remapJar) {
             displayName = "Forgero [Fabric]: $project.version"
+            relations {
+                embeddedLibrary 'arrp'
+                requiredDependency 'fabric-api'
+                optionalDependency 'patchouli'
+            }
         }
     }
     options {

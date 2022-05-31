@@ -1,0 +1,29 @@
+{
+  "name": "Crafting a tool part",
+  "icon": "forgero:acacia_handle_default",
+  "category": "forgero:getting_started_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "There are three types of tool parts: heads, handles and bindings. Creating a toolpart requires a schematic for that specific toolpart. The schematic will tell you how much material is needed for creating it. The material used when creating the toolpart will give it it's primary look, as well as some core attributes. The recipes are shapeless, but you need to fill out the correct amount of material!"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting heads",
+      "recipe": "forgero:iron_pickaxehead_default",
+      "recipe2": "forgero:netherite_axehead_default"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting handles",
+      "recipe": "forgero:iron_handle_default",
+      "recipe2": "forgero:acacia_handle_default"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting bindings",
+      "recipe": "forgero:gold_binding_default",
+      "recipe2": "forgero:diamond_binding_default"
+    }
+  ]
+}

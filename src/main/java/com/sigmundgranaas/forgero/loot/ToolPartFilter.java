@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
@@ -28,7 +28,7 @@ public class ToolPartFilter {
     }
 
     public static ToolPartFilter createToolPartFilter() {
-        return new ToolPartFilter(ForgeroRegistry.getInstance().toolPartCollection().getToolParts());
+        return new ToolPartFilter(ForgeroRegistry.TOOL_PART.list());
     }
 
     public static int getToolPartValue(ForgeroToolPart part) {
@@ -69,7 +69,7 @@ public class ToolPartFilter {
     }
 
     public ToolPartFilter filterMaterial(PrimaryMaterial material) {
-        filteredMaterials.add(material.getName());
+        filteredMaterials.add(material.getResourceName());
         return this;
     }
 
@@ -114,7 +114,7 @@ public class ToolPartFilter {
         if (filteredMaterials.size() == 0) {
             return true;
         } else {
-            return filteredMaterials.stream().anyMatch(filtered -> material.getName().equals(filtered));
+            return filteredMaterials.stream().anyMatch(filtered -> material.getResourceName().equals(filtered));
         }
     }
 }

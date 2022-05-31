@@ -15,8 +15,7 @@ public class PaletteResourceRegistry {
 
     private PaletteResourceRegistry() {
         this.premadePalettes = new HashSet<>();
-        paletteIdentifierMap = new HashMap<>();
-        addPremadePalette("iron");
+        this.paletteIdentifierMap = new HashMap<>();
     }
 
     public static PaletteResourceRegistry getInstance() {

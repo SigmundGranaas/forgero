@@ -1,0 +1,17 @@
+{
+  "name": "Heads",
+  "icon": "forgero:iron_pickaxehead_default",
+  "category": "forgero:toolparts_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The tool part head is an essential part of the tool, as it will decide which type of tool you will craft."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting heads",
+      "recipe": "forgero:iron_pickaxehead_default",
+      "recipe2": "forgero:netherite_axehead_default"
+    }
+  ]
+}

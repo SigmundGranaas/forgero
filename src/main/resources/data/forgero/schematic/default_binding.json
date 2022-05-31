@@ -1,0 +1,13 @@
+{
+  "name": "default",
+  "type": "BINDING",
+  "resource_type": "SCHEMATIC",
+  "model": "default",
+  "output": "binding_default",
+  "materialCount": 2,
+  "properties": {
+    "attributes": [],
+    "passive:": [],
+    "active": []
+  }
+}

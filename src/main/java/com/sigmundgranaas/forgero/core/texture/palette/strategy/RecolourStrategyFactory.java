@@ -10,6 +10,9 @@ import com.sigmundgranaas.forgero.core.texture.template.TemplateTexture;
  */
 public class RecolourStrategyFactory {
     public RecolourStrategy createStrategy(TemplateTexture template, Palette palette) {
+        if (palette.getColourValues().isEmpty()) {
+            return new EmptyRecolourStrategy(template);
+        }
         if (template.getId().getToolPartModelLayer() == ModelLayer.SECONDARY) {
             return switch (template.getId().getToolPartModelType()) {
                 case BINDING -> new SecondaryToolPartRecolourStrategy(template, palette);

@@ -1,7 +1,10 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model;
 
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 
 import java.util.Locale;
@@ -13,6 +16,9 @@ public enum ToolPartModelType {
     PICKAXEHEAD,
     SHOVELHEAD,
     AXEHEAD,
+    SWORDHEAD,
+    HOEHEAD,
+
 
     HANDLE,
     FULLHANDLE,
@@ -21,41 +27,72 @@ public enum ToolPartModelType {
 
     BINDING,
     PICKAXEBINDING,
+    SWORDBINDING,
+    HOEBINDING,
     AXEHEADBINDING,
     SHOVELBINDING;
 
-    @SuppressWarnings("DuplicateBranchesInSwitch")
+
     public static ToolPartModelType getModelType(ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
             case HEAD -> switch (((ToolPartHead) toolPart).getToolType()) {
                 case PICKAXE -> PICKAXEHEAD;
                 case SHOVEL -> SHOVELHEAD;
                 case AXE -> AXEHEAD;
-                case SWORD -> PICKAXEHEAD;
+                case SWORD -> SWORDHEAD;
+                case HOE -> HOEHEAD;
             };
             case HANDLE -> HANDLE;
             case BINDING -> BINDING;
         };
     }
 
+    public static ToolPartModelType getModelType(Schematic schematic) {
+        return switch (schematic.getType()) {
+            case HEAD -> switch (((HeadSchematic) schematic).getToolType()) {
+                case PICKAXE -> PICKAXEHEAD;
+                case SHOVEL -> SHOVELHEAD;
+                case AXE -> AXEHEAD;
+                case SWORD -> SWORDHEAD;
+                case HOE -> HOEHEAD;
+            };
+            case HANDLE -> HANDLE;
+            case BINDING -> BINDING;
+        };
+    }
+
+
     public static ToolPartModelType getModelType(ForgeroToolPart toolPart, ForgeroToolTypes toolType) {
+        return getModelType(toolType, toolPart.getToolPartType());
+    }
+
+    public static ToolPartModelType getModelType(ForgeroToolTypes toolType, ForgeroToolPartTypes part) {
         return switch (toolType) {
-            case PICKAXE -> switch (toolPart.getToolPartType()) {
+            case PICKAXE -> switch (part) {
                 case HEAD -> PICKAXEHEAD;
                 case HANDLE -> FULLHANDLE;
                 case BINDING -> PICKAXEBINDING;
             };
-            case AXE -> switch (toolPart.getToolPartType()) {
+            case AXE -> switch (part) {
                 case HEAD -> AXEHEAD;
                 case HANDLE -> MEDIUMHANDLE;
                 case BINDING -> AXEHEADBINDING;
             };
-            case SHOVEL -> switch (toolPart.getToolPartType()) {
+            case SHOVEL -> switch (part) {
                 case HEAD -> SHOVELHEAD;
                 case HANDLE -> MEDIUMHANDLE;
                 case BINDING -> SHOVELBINDING;
             };
-            case SWORD -> PICKAXEHEAD;
+            case SWORD -> switch (part) {
+                case HEAD -> SWORDHEAD;
+                case HANDLE -> SHORTHANDLE;
+                case BINDING -> SWORDBINDING;
+            };
+            case HOE -> switch (part) {
+                case HEAD -> HOEHEAD;
+                case HANDLE -> FULLHANDLE;
+                case BINDING -> HOEBINDING;
+            };
         };
     }
 

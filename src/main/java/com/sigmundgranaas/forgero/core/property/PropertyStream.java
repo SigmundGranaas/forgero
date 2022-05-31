@@ -1,8 +1,13 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
+import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
+import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
+import com.sigmundgranaas.forgero.core.property.passive.Static;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 /**
@@ -23,6 +28,10 @@ public record PropertyStream(
                 .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
     }
 
+    public float applyAttribute(AttributeType attributeType) {
+        return applyAttribute(Target.createEmptyTarget(), attributeType);
+    }
+
     public Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
         return getAttributes()
                 .filter(attribute -> attributeType == attribute.getAttributeType())
@@ -32,5 +41,31 @@ public record PropertyStream(
     public Stream<Attribute> getAttributes() {
         return stream.filter(property -> property instanceof Attribute)
                 .map(Attribute.class::cast);
+    }
+
+    public Stream<ActiveProperty> getActiveProperties() {
+        return stream.filter(property -> property instanceof ActiveProperty)
+                .map(ActiveProperty.class::cast);
+    }
+
+    public Stream<PassiveProperty> getPassiveProperties() {
+        return stream.filter(property -> property instanceof PassiveProperty)
+                .map(PassiveProperty.class::cast);
+    }
+
+    public Stream<Static> getStaticPassiveProperties() {
+        return getPassiveProperties().filter(property -> property instanceof Static)
+                .map(Static.class::cast);
+    }
+
+    public Stream<LeveledProperty> getLeveledPassiveProperties() {
+        return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
+                .map(LeveledProperty.class::cast);
+    }
+
+    public static <T extends PropertyContainer> ImmutableList<T> sortedByRarity(ImmutableList<T> list) {
+        return list.stream()
+                .sorted(Comparator.comparing(container -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY)))
+                .collect(ImmutableList.toImmutableList());
     }
 }

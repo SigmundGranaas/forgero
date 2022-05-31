@@ -49,11 +49,11 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
     }
 
     private FabricBakedModel getGemModel(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
-        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(toolPart.getGem(), ToolPartModelType.getModelType(toolPart, toolType)).getIdentifier())).orElse(new EmptyBakedModel());
+        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(toolPart.getGem(), toolPart, ToolPartModelType.getModelType(toolPart, toolType)).getIdentifier())).orElse(new EmptyBakedModel());
     }
 
     private FabricBakedModel getGemModel(ForgeroToolPart toolPart) {
-        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(toolPart.getGem(), ToolPartModelType.getModelType(toolPart)).getIdentifier())).orElse(new EmptyBakedModel());
+        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(toolPart.getGem(), toolPart, ToolPartModelType.getModelType(toolPart)).getIdentifier())).orElse(new EmptyBakedModel());
     }
 
     private FabricBakedModel getBaseModel(ForgeroToolTypes type, ForgeroToolPart part) {

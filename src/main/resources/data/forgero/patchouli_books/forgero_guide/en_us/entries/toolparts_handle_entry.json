@@ -1,0 +1,17 @@
+{
+  "name": "Handles",
+  "icon": "forgero:acacia_handle_default",
+  "category": "forgero:toolparts_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The handle is an essential part of the tool, but it's stats are less significant than the head"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting handles",
+      "recipe": "forgero:iron_handle_default",
+      "recipe2": "forgero:acacia_handle_default"
+    }
+  ]
+}

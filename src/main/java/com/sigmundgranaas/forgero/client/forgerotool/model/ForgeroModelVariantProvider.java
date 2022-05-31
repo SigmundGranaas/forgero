@@ -21,7 +21,8 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
         if (modelId.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
             String[] elements = modelId.getPath().split("_");
-            if (ForgeroToolTypes.isTool(elements[1])) {
+
+            if (elements.length > 1 && ForgeroToolTypes.isTool(elements[1])) {
                 return new ToolModelVariant(collection);
             } else if (ToolPartModelType.isItemModelIdentifier(elements)) {
                 return new ToolPartModelVariant(collection);

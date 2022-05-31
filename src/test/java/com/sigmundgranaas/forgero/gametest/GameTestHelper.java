@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.mojang.authlib.GameProfile;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleDuoMaterial;
-import com.sigmundgranaas.forgero.core.material.material.simple.SimpleMaterialPOJO;
+import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
@@ -20,8 +20,8 @@ import net.minecraft.test.TestContext;
 
 import java.util.UUID;
 
-import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.HANDLE_PATTERN;
-import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_PATTERN;
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.HANDLE_SCHEMATIC;
+import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_SCHEMATIC;
 
 public class GameTestHelper {
     public static ServerPlayerEntity createDummyServerPlayer(TestContext context) {
@@ -41,16 +41,16 @@ public class GameTestHelper {
     }
 
     public static ToolPartHead createDummyToolPartHead() {
-        PrimaryMaterial material = new SimpleDuoMaterial(SimpleMaterialPOJO.createDefaultMaterialPOJO());
-        return ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(material, PICKAXEHEAD_PATTERN.get()).createToolPart();
+        PrimaryMaterial material = new SimpleDuoMaterial(MaterialPOJO.createDefaultMaterialPOJO());
+        return ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(material, PICKAXEHEAD_SCHEMATIC.get()).createToolPart();
     }
 
     public static ToolPartHandle createDummyToolPartHandle() {
-        PrimaryMaterial material = new SimpleDuoMaterial(SimpleMaterialPOJO.createDefaultMaterialPOJO());
-        return ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(material, HANDLE_PATTERN.get()).createToolPart();
+        PrimaryMaterial material = new SimpleDuoMaterial(MaterialPOJO.createDefaultMaterialPOJO());
+        return ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(material, HANDLE_SCHEMATIC.get()).createToolPart();
     }
 
     public static SimpleDuoMaterial createDummyDuoMaterial() {
-        return new SimpleDuoMaterial(SimpleMaterialPOJO.createDefaultMaterialPOJO());
+        return new SimpleDuoMaterial(MaterialPOJO.createDefaultMaterialPOJO());
     }
 }

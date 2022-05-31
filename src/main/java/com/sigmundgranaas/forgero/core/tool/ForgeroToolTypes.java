@@ -4,6 +4,7 @@ public enum ForgeroToolTypes {
     PICKAXE,
     SHOVEL,
     AXE,
+    HOE,
     SWORD;
 
     public static boolean isTool(String element) {

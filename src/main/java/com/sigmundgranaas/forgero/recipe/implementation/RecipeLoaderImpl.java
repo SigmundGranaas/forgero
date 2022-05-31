@@ -33,7 +33,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             JsonObject toolWithBindingRecipe = getRecipeAsJson(recipeFolderPath + "/tool_with_binding.json");
             JsonObject toolPartSecondaryMaterialUpgrade = getRecipeAsJson(recipeFolderPath + "/toolpart_secondary_upgrade.json");
             JsonObject toolPartGemUpgrade = getRecipeAsJson(recipeFolderPath + "/toolpart_gem_upgrade.json");
-            JsonObject toolPartPatternRecipe = getRecipeAsJson(recipeFolderPath + "/toolpart_pattern_recipe.json");
+            JsonObject toolPartPatternRecipe = getRecipeAsJson(recipeFolderPath + "/toolpart_schematic_recipe.json");
 
 
             recipes.put(RecipeTypes.TOOL_RECIPE, toolRecipe);
@@ -41,7 +41,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             recipes.put(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE, toolPartSecondaryMaterialUpgrade);
             recipes.put(RecipeTypes.TOOL_PART_GEM_UPGRADE, toolPartGemUpgrade);
 
-            recipes.put(RecipeTypes.TOOLPART_PATTERN_RECIPE, toolPartPatternRecipe);
+            recipes.put(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE, toolPartPatternRecipe);
             return recipes;
         } catch (NullPointerException | JsonIOException e) {
             ForgeroInitializer.LOGGER.error("Unable to read recipes from: {}", recipeFolderPath);

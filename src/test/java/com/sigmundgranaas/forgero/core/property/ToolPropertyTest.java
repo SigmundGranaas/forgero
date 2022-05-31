@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
+import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgero.core.pattern.HeadPattern;
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
@@ -15,32 +14,41 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartHeadBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
 
 public class ToolPropertyTest {
-    public static Supplier<PrimaryMaterial> DIAMOND_PRIMARY = () -> (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("diamond"));
-    public static Supplier<SecondaryMaterial> DIAMOND_SECONDARY = () -> (SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("diamond"));
+    @BeforeEach
+    void initialiseResources() {
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+    }
 
-    public static Supplier<PrimaryMaterial> OAK_PRIMARY = () -> (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("oak"));
-    public static Supplier<SecondaryMaterial> OAK_SECONDARY = () -> (SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("oak"));
+    public static Supplier<PrimaryMaterial> DIAMOND_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("diamond").get();
+    public static Supplier<SecondaryMaterial> DIAMOND_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("diamond").get();
 
-    public static Supplier<PrimaryMaterial> NETHERITE_PRIMARY = () -> (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("netherite"));
-    public static Supplier<SecondaryMaterial> NETHERITE_SECONDARY = () -> (SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("netherite"));
+    public static Supplier<PrimaryMaterial> OAK_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("oak").get();
+    public static Supplier<SecondaryMaterial> OAK_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("oak").get();
 
-    public static Supplier<PrimaryMaterial> IRON_PRIMARY = () -> (PrimaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("iron"));
-    public static Supplier<SecondaryMaterial> IRON_SECONDARY = () -> (SecondaryMaterial) ForgeroRegistry.getInstance().materialCollection().getMaterial(new ForgeroMaterialIdentifierImpl("iron"));
+    public static Supplier<PrimaryMaterial> NETHERITE_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("netherite").get();
+    public static Supplier<SecondaryMaterial> NETHERITE_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("netherite").get();
 
-    public static Supplier<Pattern> HANDLE_PATTERN = () -> ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("handle_pattern_default")).findFirst().get();
-    public static Supplier<HeadPattern> PICKAXEHEAD_PATTERN = () -> (HeadPattern) ForgeroRegistry.getInstance().patternCollection().getPatterns().stream().filter(pattern -> pattern.getPatternIdentifier().equals("pickaxehead_pattern_default")).findFirst().get();
+    public static Supplier<PrimaryMaterial> IRON_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("iron").get();
+    public static Supplier<SecondaryMaterial> IRON_SECONDARY = () -> ForgeroRegistry.MATERIAL.getSecondaryMaterial("iron").get();
+
+    public static Supplier<Schematic> HANDLE_SCHEMATIC = () -> ForgeroRegistry.SCHEMATIC.getResource("handle_schematic_default").get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC = () -> ForgeroRegistry.SCHEMATIC.getHeadSchematic("pickaxehead_schematic_default").get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC_PATTERN = () -> ForgeroRegistry.SCHEMATIC.getHeadSchematic("pickaxehead_schematic_pattern").get();
+    public static Supplier<HeadSchematic> PICKAXEHEAD_SCHEMATIC_VEIN = () -> ForgeroRegistry.SCHEMATIC.getHeadSchematic("pickaxehead_schematic_vein").get();
+
 
     @Test
     void testToolDurability() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -50,23 +58,23 @@ public class ToolPropertyTest {
 
     @Test
     void testToolMiningSpeed() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
 
-        Assertions.assertEquals(10.0f, exampleTool.getPropertyStream().applyAttribute(Target.createEmptyTarget(), AttributeType.MINING_SPEED));
+        Assertions.assertEquals(10.0f, exampleTool.getPropertyStream().applyAttribute(Target.createEmptyTarget(), AttributeType.MINING_SPEED), 2);
     }
 
     @Test
     void testToolAttackSpeed() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());
@@ -76,10 +84,10 @@ public class ToolPropertyTest {
 
     @Test
     void testToolAttackDamage() {
-        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_PATTERN.get());
+        ToolPartBuilder headBuilder = new ToolPartHeadBuilder(NETHERITE_PRIMARY.get(), PICKAXEHEAD_SCHEMATIC.get());
         headBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
-        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_PATTERN.get());
+        ToolPartBuilder handleBuilder = new ToolPartHandleBuilder(OAK_PRIMARY.get(), HANDLE_SCHEMATIC.get());
         handleBuilder.setSecondary(DIAMOND_SECONDARY.get());
 
         ForgeroTool exampleTool = ForgeroToolFactory.INSTANCE.createForgeroTool((ToolPartHead) headBuilder.createToolPart(), (ToolPartHandle) handleBuilder.createToolPart());

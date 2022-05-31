@@ -1,0 +1,35 @@
+{
+  "parent": "forgero:forgero/toolpart",
+  "display": {
+    "icon": {
+      "item": "forgero:iron_pickaxehead_default"
+    },
+    "title": {
+      "translate": "advancements.forgero.head.title"
+    },
+    "description": {
+      "translate": "advancements.forgero.head.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "default": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:heads"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "default"
+    ]
+  ]
+}

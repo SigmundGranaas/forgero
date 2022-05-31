@@ -1,18 +1,22 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
-import com.sigmundgranaas.forgero.core.pattern.Pattern;
-import com.sigmundgranaas.forgero.core.property.attribute.Target;
+import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.passive.StaticPassiveType;
+import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ItemGroups;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.SimpleToolMaterialAdapter;
-import com.sigmundgranaas.forgero.item.items.PatternItem;
+import com.sigmundgranaas.forgero.item.items.GemItem;
+import com.sigmundgranaas.forgero.item.items.SchematicItem;
 import com.sigmundgranaas.forgero.item.items.ToolPartItemImpl;
-import com.sigmundgranaas.forgero.item.items.tool.ForgeroAxeItem;
-import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
-import com.sigmundgranaas.forgero.item.items.tool.ShovelItem;
+import com.sigmundgranaas.forgero.item.items.tool.*;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 
@@ -27,23 +31,40 @@ public class ItemFactoryImpl implements ItemFactory {
     }
 
     @Override
-    public Item createTool(ForgeroTool tool) {
-        Target target = Target.createEmptyTarget();
+    public ForgeroToolItem createTool(ForgeroTool tool) {
+        Item.Settings settings = new Item.Settings().group(ItemGroup.TOOLS);
+        if (tool.getPropertyStream().getStaticPassiveProperties().anyMatch(property -> property.getStaticType() == StaticPassiveType.FIREPROOF)) {
+            settings.fireproof();
+        }
+        if (tool.getToolType() == ForgeroToolTypes.SWORD) {
+            settings.group(ItemGroup.COMBAT);
+        }
+
         return switch (tool.getToolType()) {
-            case PICKAXE -> new ForgeroPickaxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
-            case SHOVEL -> new ShovelItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
-            case AXE -> new ForgeroAxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), new Item.Settings().group(ItemGroup.TOOLS), tool);
-            case SWORD -> null;
+            case PICKAXE -> new ForgeroPickaxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
+            case SHOVEL -> new ForgeroShovelItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
+            case AXE -> new ForgeroAxeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
+            case SWORD -> new ForgeroSwordItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
+            case HOE -> new ForgeroHoeItem(new SimpleToolMaterialAdapter(tool.getMaterial()), settings, tool);
         };
     }
 
     @Override
     public Item createToolPart(ForgeroToolPart toolPart) {
-        return new ToolPartItemImpl(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS), toolPart.getPrimaryMaterial(), toolPart.getToolPartType(), toolPart);
+        Item.Settings settings = new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS);
+        if (Property.stream(toolPart.getPrimaryMaterial().getPrimaryProperties()).getStaticPassiveProperties().anyMatch(property -> property.getStaticType() == StaticPassiveType.FIREPROOF)) {
+            settings.fireproof();
+        }
+        return new ToolPartItemImpl(settings, toolPart.getPrimaryMaterial(), toolPart.getToolPartType(), toolPart);
     }
 
     @Override
-    public PatternItem createPattern(Pattern pattern) {
-        return new PatternItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS).rarity(DescriptionWriter.getRarityFromInt(pattern.getRarity())), pattern);
+    public SchematicItem createSchematic(Schematic pattern) {
+        return new SchematicItem(new Item.Settings().group(ItemGroups.FORGERO_TOOL_PARTS).rarity(DescriptionWriter.getRarityFromInt(pattern.getRarity())), pattern);
+    }
+
+    @Override
+    public GemItem createGem(Gem gem) {
+        return new GemItem(new FabricItemSettings().group(ItemGroup.MISC), gem);
     }
 }

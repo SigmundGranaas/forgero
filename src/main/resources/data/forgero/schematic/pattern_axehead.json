@@ -1,0 +1,21 @@
+{
+  "name": "pattern",
+  "parent": "default_axehead",
+  "type": "HEAD",
+  "toolType": "AXE",
+  "model": "pattern",
+  "output": "axe_pattern",
+  "materialCount": 3,
+  "properties": {
+    "active": [
+      {
+        "type": "BLOCK_BREAKING_PATTERN",
+        "pattern": [
+          "xxx",
+          "xxx",
+          "xxx"
+        ]
+      }
+    ]
+  }
+}

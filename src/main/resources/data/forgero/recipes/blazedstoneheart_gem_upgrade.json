@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:blazedstoneheart_gem"
+  },
+  "addition": {
+    "item": "forgero:blazedstoneheart_gem"
+  },
+  "result": {
+    "item": "forgero:blazedstoneheart_gem"
+  }
+}
+

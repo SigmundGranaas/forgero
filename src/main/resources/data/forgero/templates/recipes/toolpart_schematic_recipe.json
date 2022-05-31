@@ -1,0 +1,8 @@
+{
+  "type": "forgero:toolpart_schematic_recipe",
+  "ingredients": [
+  ],
+  "result": {
+    "item": "forgero:binding_schematic_default"
+  }
+}
