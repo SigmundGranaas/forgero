@@ -1,12 +1,12 @@
-package com.sigmundgranaas.forgero.core;
+package com.sigmundgranaas.forgero.core.resource;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.factory.GemFactory;
 import com.sigmundgranaas.forgero.core.data.factory.MaterialFactory;
 import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPOJO;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.implementation.FileGemLoader;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
@@ -28,7 +28,7 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactoryIm
 import com.sigmundgranaas.forgero.core.util.JsonPOJOLoader;
 import com.sigmundgranaas.forgero.core.util.ListPOJO;
 import com.sigmundgranaas.forgero.resources.FabricModPOJOLoader;
-import com.sigmundgranaas.forgero.resources.ForgeroResourceModContainerService;
+import com.sigmundgranaas.forgero.resources.ModContainerService;
 import com.sigmundgranaas.forgero.resources.ResourceLocations;
 
 import java.util.*;
@@ -52,7 +52,7 @@ public class ForgeroResourceInitializer {
         this.gemExclusions = new ArrayList<>();
         this.registeredMaterials = new ArrayList<>();
         this.registeredGems = new ArrayList<>();
-        this.availableDependencies = new ForgeroResourceModContainerService().getAllModsAsSet();
+        this.availableDependencies = new ModContainerService().getAllModsAsSet();
     }
 
     public void registerDefaultResources() {
@@ -71,7 +71,7 @@ public class ForgeroResourceInitializer {
     }
 
     private List<Schematic> initializeSchematicCollection() {
-        var pojos = new FabricModPOJOLoader<>(SchematicPOJO.class, ResourceLocations.SCHEMATIC_LOCATION).loadPojosFromMods();
+        var pojos = new FabricModPOJOLoader<>(SchematicPojo.class, ResourceLocations.SCHEMATIC_LOCATION).loadPojosFromMods();
         var factory = new SchematicFactory(pojos, Set.of("forgero", "minecraft"));
         List<Schematic> schematics = pojos.stream().map(factory::buildResource).flatMap(Optional::stream).toList();
 
@@ -80,7 +80,6 @@ public class ForgeroResourceInitializer {
         }
         return schematics;
     }
-
 
     private List<ForgeroTool> initializeToolCollection(List<ForgeroToolPart> toolPartCollection) {
         ForgeroToolFactory factory = new ForgeroToolFactoryImpl();
@@ -93,7 +92,7 @@ public class ForgeroResourceInitializer {
     }
 
     private List<Gem> initializeGems() {
-        var pojos = new FabricModPOJOLoader<>(GemPOJO.class, ResourceLocations.GEM_LOCATION).loadPojosFromMods();
+        var pojos = new FabricModPOJOLoader<>(GemPojo.class, ResourceLocations.GEM_LOCATION).loadPojosFromMods();
 
         pojos.forEach(pojo -> {
 
@@ -112,7 +111,7 @@ public class ForgeroResourceInitializer {
 
     private Map<String, ForgeroMaterial> initializeMaterials() {
         Map<String, ForgeroMaterial> materials;
-        var pojos = new FabricModPOJOLoader<>(MaterialPOJO.class, ResourceLocations.MATERIAL_LOCATION).loadPojosFromMods();
+        var pojos = new FabricModPOJOLoader<>(MaterialPojo.class, ResourceLocations.MATERIAL_LOCATION).loadPojosFromMods();
         try {
             pojos.forEach(pojo -> {
                 if (!pojo.abstractResource) {

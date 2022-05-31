@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ public interface Property {
         return new PropertyStream(properties.stream());
     }
 
-    static PropertyPOJO pojo(List<Property> properties) {
-        return new PropertyPOJO();
+    static PropertyPojo pojo(List<Property> properties) {
+        return new PropertyPojo();
     }
 
     PropertyTypes getType();

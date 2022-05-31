@@ -10,13 +10,13 @@ import java.util.List;
 /**
  * POJO used for parsing all properties from JSON files.
  */
-public class PropertyPOJO {
+public class PropertyPojo {
     @SerializedName("attributes")
-    public List<PropertyPOJO.Attribute> attributes;
+    public List<PropertyPojo.Attribute> attributes;
     @SerializedName(value = "passiveProperties", alternate = {"passive", "passive_properties"})
-    public List<PropertyPOJO.Passive> passiveProperties;
+    public List<PropertyPojo.Passive> passiveProperties;
     @SerializedName(value = "active")
-    public List<PropertyPOJO.Active> active;
+    public List<PropertyPojo.Active> active;
 
     public static class Active {
         public ActivePropertyType type;
@@ -32,7 +32,7 @@ public class PropertyPOJO {
         public CalculationOrder order;
         public NumericOperation operation;
         public float value;
-        public PropertyPOJO.Condition condition;
+        public PropertyPojo.Condition condition;
 
     }
 

@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.jetbrains.annotations.NotNull;
 
-public class SchematicPOJO extends ForgeroDataResource {
+public class SchematicPojo extends ForgeroDataResource {
     @NotNull
     public ForgeroToolPartTypes type;
     public ForgeroToolTypes toolType;

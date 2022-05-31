@@ -1,17 +1,18 @@
 package com.sigmundgranaas.forgero.core.schematic;
 
-import com.sigmundgranaas.forgero.core.ForgeroResource;
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class Schematic implements ForgeroResource, PropertyContainer {
+public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContainer {
     private final ForgeroToolPartTypes type;
     private final String name;
     private final List<Property> properties;
@@ -52,6 +53,11 @@ public class Schematic implements ForgeroResource, PropertyContainer {
     @Override
     public ForgeroResourceType getResourceType() {
         return ForgeroResourceType.SCHEMATIC;
+    }
+
+    @Override
+    public SchematicPojo toDataResource() {
+        return null;
     }
 
     public List<Property> getProperties() {

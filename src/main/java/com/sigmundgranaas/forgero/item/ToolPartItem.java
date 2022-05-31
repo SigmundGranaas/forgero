@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import net.minecraft.item.Item;

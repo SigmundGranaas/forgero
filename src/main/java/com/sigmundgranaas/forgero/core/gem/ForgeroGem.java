@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.gem;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
@@ -62,6 +63,11 @@ public class ForgeroGem implements Gem {
     @Override
     public String getResourceName() {
         return getStringIdentifier().split("_")[0];
+    }
+
+    @Override
+    public GemPojo toDataResource() {
+        return null;
     }
 
     @Override

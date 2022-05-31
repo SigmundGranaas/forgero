@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.gem.implementation;
 
 import com.sigmundgranaas.forgero.core.data.factory.GemFactory;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.gem.GemLoader;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
@@ -19,8 +19,8 @@ public record FileGemLoader(List<String> gems) implements GemLoader {
 
     @Override
     public List<Gem> loadGems() {
-        List<GemPOJO> gemPojos = gems.stream()
-                .map(gem -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/gems/%s.json", gem), GemPOJO.class))
+        List<GemPojo> gemPojos = gems.stream()
+                .map(gem -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/gems/%s.json", gem), GemPojo.class))
                 .filter(Optional::isPresent)
                 .map(Optional::get).toList();
         gemPojos.forEach(pojo -> {

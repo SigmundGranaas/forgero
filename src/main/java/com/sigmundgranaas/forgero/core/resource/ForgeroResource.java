@@ -1,13 +1,14 @@
-package com.sigmundgranaas.forgero.core;
+package com.sigmundgranaas.forgero.core.resource;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 
 /**
  * The base Interface for all resource objects used by forgero
  * <p>
  * Tools, Tool Parts, materials, Gem, and Schematics
  */
-public interface ForgeroResource {
+public interface ForgeroResource<R extends ForgeroDataResource> {
     String getStringIdentifier();
 
     default String getNameSpace() {
@@ -17,4 +18,6 @@ public interface ForgeroResource {
     String getResourceName();
 
     ForgeroResourceType getResourceType();
+
+    R toDataResource();
 }

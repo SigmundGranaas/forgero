@@ -1,10 +1,11 @@
 package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
@@ -27,7 +28,6 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
 
     public SchematicItem(Settings settings, Schematic pattern) {
         super(settings);
-
         this.schematic = pattern;
     }
 
@@ -35,13 +35,13 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
     public Text getName() {
         MutableText text;
         if (!getSchematic().getResourceName().equals("default")) {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" ");
+            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, getSchematic().getResourceName())).append(" ");
 
         } else {
             text = new LiteralText("");
         }
-        if (schematic.getType() == ForgeroToolPartTypes.HEAD) {
-            String headType = switch (((HeadSchematic) schematic).getToolType()) {
+        if (getSchematic().getType() == ForgeroToolPartTypes.HEAD) {
+            String headType = switch (((HeadSchematic) getSchematic()).getToolType()) {
                 case AXE -> "axehead";
                 case PICKAXE -> "pickaxehead";
                 case SHOVEL -> "shovelhead";
@@ -50,7 +50,7 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
             };
             text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
         } else {
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getType().getName()))).append(" ");
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, getSchematic().getType().getName()))).append(" ");
         }
         text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, "schematic")));
         return text;
@@ -65,21 +65,21 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         new DescriptionWriter(tooltip).writeSchematicDescription(getSchematic());
-        new DescriptionWriter(tooltip).addToolPartProperties(Property.stream(schematic.getProperties(Target.createEmptyTarget())));
+        new DescriptionWriter(tooltip).addToolPartProperties(Property.stream(getSchematic().getProperties(Target.createEmptyTarget())));
     }
 
     public Schematic getSchematic() {
-        return schematic;
+        return ForgeroRegistry.SCHEMATIC.getResource(schematic);
     }
 
     @Override
     public String getStringIdentifier() {
-        return schematic.getStringIdentifier();
+        return getSchematic().getStringIdentifier();
     }
 
     @Override
     public String getResourceName() {
-        return schematic.getResourceName();
+        return getSchematic().getResourceName();
     }
 
     @Override

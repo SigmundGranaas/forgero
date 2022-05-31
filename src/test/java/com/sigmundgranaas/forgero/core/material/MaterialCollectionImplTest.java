@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.core.material;
 
 import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceInitializer;
 import net.minecraft.item.ToolMaterial;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

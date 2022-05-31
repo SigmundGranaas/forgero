@@ -20,7 +20,7 @@ public abstract class AbstractToolPart implements ForgeroToolPart {
 
     @Override
     public Schematic getSchematic() {
-        return this.state.getSchematic();
+        return state.getSchematic();
     }
 
     @Override

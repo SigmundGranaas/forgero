@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.item.items;
 
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.item.ForgeroItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
@@ -16,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GemItem extends Item implements ForgeroItem<GemItem>, PropertyContainer {
+public class GemItem extends Item implements ForgeroItem<GemItem, GemPojo>, PropertyContainer {
     private final Gem gem;
 
     public GemItem(Settings settings, Gem gem) {
@@ -56,6 +58,11 @@ public class GemItem extends Item implements ForgeroItem<GemItem>, PropertyConta
     @Override
     public ForgeroResourceType getResourceType() {
         return ForgeroResourceType.GEM;
+    }
+
+    @Override
+    public ForgeroDataResource toDataResource() {
+        return null;
     }
 
     @Override

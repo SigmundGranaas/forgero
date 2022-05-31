@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -38,7 +38,7 @@ public interface PropertyContainer {
     }
 
     @NotNull
-    default List<PropertyPOJO> convertRootProperties() {
+    default List<PropertyPojo> convertRootProperties() {
         return Collections.emptyList();
     }
 }

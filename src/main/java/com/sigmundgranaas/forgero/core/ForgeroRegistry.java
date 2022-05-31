@@ -17,9 +17,9 @@ public interface ForgeroRegistry {
     ToolPartRegistry TOOL_PART = INSTANCE.getToolPartRegistry();
     ToolRegistry TOOL = INSTANCE.getToolRegistry();
 
-    ForgeroRegistry loadResources(ForgeroResourceInitializer initializer);
+    ForgeroRegistry loadResources(ForgeroResourceLoader loader);
 
-    ForgeroRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer);
+    ForgeroRegistry loadResourcesIfEmpty(ForgeroResourceLoader loader);
 
     void updateResources();
 

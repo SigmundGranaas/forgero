@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;

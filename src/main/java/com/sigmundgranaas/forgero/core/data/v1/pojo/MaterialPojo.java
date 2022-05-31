@@ -5,18 +5,18 @@ import com.sigmundgranaas.forgero.core.material.material.MaterialType;
 
 import java.util.List;
 
-public class MaterialPOJO extends ForgeroDataResource {
+public class MaterialPojo extends ForgeroDataResource {
     public MaterialType type;
     public IngredientPojo ingredient;
     public PalettePOJO palette;
     public Primary primary;
     public Secondary secondary;
 
-    public static MaterialPOJO createDefaultMaterialPOJO() {
-        MaterialPOJO pojo = new MaterialPOJO();
+    public static MaterialPojo createDefaultMaterialPOJO() {
+        MaterialPojo pojo = new MaterialPojo();
         pojo.name = "Default";
         pojo.type = MaterialType.METAL;
-        pojo.properties = new PropertyPOJO();
+        pojo.properties = new PropertyPojo();
         PalettePOJO palette = new PalettePOJO();
         palette.include = List.of();
         palette.exclude = List.of();
@@ -31,10 +31,10 @@ public class MaterialPOJO extends ForgeroDataResource {
     }
 
     public static class Primary {
-        public PropertyPOJO properties;
+        public PropertyPojo properties;
     }
 
     public static class Secondary {
-        public PropertyPOJO properties;
+        public PropertyPojo properties;
     }
 }

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.registry.impl;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroResourceLoader;
 import com.sigmundgranaas.forgero.core.registry.*;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class ConcurrentForgeroRegistry implements ForgeroRegistry {
     private volatile static ConcurrentForgeroRegistry INSTANCE;
-    private final GemRegistry gemRegistry = new ConcurrenGemRegistry(new HashMap<>());
+    private final GemRegistry gemRegistry = new ConcurrentGemRegistry(new HashMap<>());
     private final MaterialRegistry materialRegistry = new ConcurrentMaterialRegistry(new HashMap<>());
 
     private final ToolPartRegistry toolPartRegistry = new ConcurrentToolPartRegistry(new HashMap<>());
@@ -71,29 +71,29 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
         return (toolRegistry.isEmpty()
                 || toolRegistry.isEmpty()
                 || schematicRegistry.isEmpty()
-                || getGemRegistry().isEmpty()
+                || gemRegistry.isEmpty()
                 || materialRegistry.isEmpty());
     }
 
     @Override
-    public ConcurrentForgeroRegistry loadResources(ForgeroResourceInitializer initializer) {
+    public ConcurrentForgeroRegistry loadResources(ForgeroResourceLoader loader) {
         clear();
-        var registry = initializer.initializeForgeroResources();
-        toolRegistry.updateRegistry(registry.toolCollection());
-        toolPartRegistry.updateRegistry(registry.toolPartCollection());
-        schematicRegistry.updateRegistry(registry.schematicCollection());
-        gemRegistry.updateRegistry(registry.gemCollection());
-        materialRegistry.updateRegistry(registry.materialCollection().values().stream().toList());
+        toolRegistry.replaceRegistry(loader.getToolLoader().loadResources());
+        toolPartRegistry.replaceRegistry(loader.getToolPartLoader().loadResources());
+        schematicRegistry.replaceRegistry(loader.getSchematicLoader().loadResources());
+        gemRegistry.replaceRegistry(loader.getGemLoader().loadResources());
+        materialRegistry.replaceRegistry(loader.getMaterialLoader().loadResources());
         return this;
     }
 
     @Override
-    public ConcurrentForgeroRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
+    public ForgeroRegistry loadResourcesIfEmpty(ForgeroResourceLoader loader) {
         if (isEmpty()) {
-            loadResources(initializer);
+            loadResources(loader);
         }
         return this;
     }
+
 
     @Override
     public void updateResources() {

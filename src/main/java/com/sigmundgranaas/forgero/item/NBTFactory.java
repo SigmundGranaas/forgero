@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
@@ -69,7 +69,7 @@ public interface NBTFactory {
     List<Property> createPropertiesFromNbt(@NotNull NbtCompound compound);
 
     @NotNull
-    NbtCompound createNbtFromProperties(@NotNull PropertyPOJO properties);
+    NbtCompound createNbtFromProperties(@NotNull PropertyPojo properties);
 
     @NotNull
     NbtCompound createNBTFromSchematic(@NotNull Schematic schematic);

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.material.material.implementation;
 
 import com.sigmundgranaas.forgero.core.data.factory.PropertyBuilder;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.material.material.AbstractForgeroMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 
@@ -14,7 +14,7 @@ public class SimpleSecondaryMaterialImpl extends AbstractForgeroMaterial impleme
 
     private final List<Property> properties;
 
-    public SimpleSecondaryMaterialImpl(MaterialPOJO material) {
+    public SimpleSecondaryMaterialImpl(MaterialPojo material) {
         super(material);
 
         this.properties = PropertyBuilder.createPropertyListFromPOJO(material.secondary.properties);

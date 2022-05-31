@@ -1,9 +1,12 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.SchemaVersion;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,7 +23,7 @@ import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_D
  * @param <T> The type of the POJO object
  * @param <R> The resulting resource type
  */
-public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
+public abstract class DataResourceFactory<T extends ForgeroDataResource, R extends ForgeroResource<T>> implements ForgeroResourceFactory<R, T> {
     Map<String, T> pojos;
     Set<String> availableNameSpaces;
 
@@ -33,6 +36,14 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
     public DataResourceFactory(List<T> pojos) {
         this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> current.order > next.order ? current : next));
         this.availableNameSpaces = new HashSet<>(DEFAULT_DEPENDENCIES_LIST);
+    }
+
+    @Override
+    public ImmutableList<R> createResources() {
+        return pojos.values().stream()
+                .map(this::createResource)
+                .flatMap(Optional::stream)
+                .collect(ImmutableList.toImmutableList());
     }
 
     public static <T> T replaceAttributesDefault(T attribute1, T attribute2, T defaultAttribute) {
@@ -116,10 +127,10 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
         base.dependencies = mergeAttributes(child.dependencies, parent.dependencies);
 
         //Merging properties
-        base.properties = new PropertyPOJO();
-        base.properties.active = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).active, attributeOrDefault(parent.properties, new PropertyPOJO()).active).stream().distinct().toList();
-        base.properties.passiveProperties = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).passiveProperties, attributeOrDefault(parent.properties, new PropertyPOJO()).passiveProperties).stream().distinct().toList();
-        base.properties.attributes = mergeAttributes(attributeOrDefault(child.properties, new PropertyPOJO()).attributes, attributeOrDefault(parent.properties, new PropertyPOJO()).attributes).stream().distinct().toList();
+        base.properties = new PropertyPojo();
+        base.properties.active = mergeAttributes(attributeOrDefault(child.properties, new PropertyPojo()).active, attributeOrDefault(parent.properties, new PropertyPojo()).active).stream().distinct().toList();
+        base.properties.passiveProperties = mergeAttributes(attributeOrDefault(child.properties, new PropertyPojo()).passiveProperties, attributeOrDefault(parent.properties, new PropertyPojo()).passiveProperties).stream().distinct().toList();
+        base.properties.attributes = mergeAttributes(attributeOrDefault(child.properties, new PropertyPojo()).attributes, attributeOrDefault(parent.properties, new PropertyPojo()).attributes).stream().distinct().toList();
 
         return mergePojos(parent, child, base);
     }
@@ -147,8 +158,6 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R> {
 
         return true;
     }
-
-    protected abstract Optional<R> createResource(T pojo);
 
     protected abstract T mergePojos(T parent, T child, T basePojo);
 
