@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.registry.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroResource;
 import com.sigmundgranaas.forgero.core.ForgeroResourceRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,15 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource> impl
     @Override
     public @NotNull Optional<T> getResource(String identifier) {
         return Optional.ofNullable(getResources().get(identifier));
+    }
+
+    @Override
+    public @NotNull T getResource(T resource) {
+        T updatedResource = getResources().get(resource.getStringIdentifier());
+        if (updatedResource == null && !resources.isEmpty()) {
+            ForgeroInitializer.LOGGER.warn("state is corrupted, registry does not contain original resources");
+        }
+        return resource;
     }
 
     @Override

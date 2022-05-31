@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.toolpart.handle;
 
-import com.sigmundgranaas.forgero.core.toolpart.AbstractToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ReloadableToolPart;
 
-public class Handle extends AbstractToolPart implements ToolPartHandle {
+public class Handle extends ReloadableToolPart implements ToolPartHandle {
 
 
     public Handle(HandleState state) {

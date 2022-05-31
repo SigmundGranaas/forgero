@@ -112,7 +112,6 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
         return adapter.getTool(toolStack).orElse(getTool());
     }
 
-
     default Text getForgeroTranslatableToolName() {
         ForgeroTool tool = getTool();
         MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName().toLowerCase(Locale.ROOT))).append(" ");

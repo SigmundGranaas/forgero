@@ -46,6 +46,9 @@ public interface ForgeroResourceRegistry<T extends ForgeroResource> {
     @NotNull
     Optional<T> getResource(String identifier);
 
+    @NotNull
+    T getResource(T resource);
+
     ImmutableList<T> getResourcesAsList();
 
     default ImmutableList<T> list() {
