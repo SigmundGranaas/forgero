@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.tool.factory;
 
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPojo;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolBase;
@@ -12,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ForgeroToolFactoryImpl implements ForgeroToolFactory {
     private static ForgeroToolFactory INSTANCE;
@@ -56,5 +59,15 @@ public class ForgeroToolFactoryImpl implements ForgeroToolFactory {
                     .filter(handle -> handle.getPrimaryMaterial().getResourceName().equals("oak")).findAny().get()));
         }
         return tools;
+    }
+
+    @Override
+    public Optional<ForgeroTool> createResource(ToolPojo data) {
+        return Optional.empty();
+    }
+
+    @Override
+    public ImmutableList<ForgeroTool> createResources() {
+        return ImmutableList.<ForgeroTool>builder().build();
     }
 }

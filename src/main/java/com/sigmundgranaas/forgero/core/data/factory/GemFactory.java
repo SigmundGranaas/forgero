@@ -25,7 +25,8 @@ public class GemFactory extends DataResourceFactory<GemPojo, Gem> {
 
     @Override
     public ImmutableList<Gem> createResources() {
-        return null;
+        return ImmutableList.<Gem>builder().build();
+
     }
 
     @Override

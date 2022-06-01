@@ -34,4 +34,6 @@ public class SimpleDuoMaterial extends AbstractForgeroMaterial implements Simple
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
+
+
 }

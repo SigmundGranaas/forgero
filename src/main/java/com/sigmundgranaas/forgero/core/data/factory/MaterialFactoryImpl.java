@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleSecondaryMaterialImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class MaterialFactoryImpl extends DataResourceFactory<MaterialPojo, Forge
         basePojo.secondary = material.secondary;
         basePojo.palette = material.palette;
 
-        //TODO create a proper way of handling ingredients
+
         basePojo.ingredient = replaceAttributesDefault(material.ingredient, parent.ingredient, null);
 
         return basePojo;
@@ -37,11 +38,13 @@ public class MaterialFactoryImpl extends DataResourceFactory<MaterialPojo, Forge
     }
 
     @Override
-    public Optional<ForgeroMaterial> createResource(MaterialPojo pojo) {
+    public @NotNull Optional<ForgeroMaterial> createResource(MaterialPojo pojo) {
         if (pojo.primary != null) {
             return Optional.of(new SimpleDuoMaterial(pojo));
-        } else {
+        } else if (pojo.secondary != null) {
             return Optional.of(new SimpleSecondaryMaterialImpl(pojo));
+        } else {
+            return Optional.empty();
         }
     }
 }

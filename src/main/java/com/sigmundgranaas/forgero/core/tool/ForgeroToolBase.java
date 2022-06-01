@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.tool;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPojo;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -55,6 +56,11 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull String getStringIdentifier() {
         return getToolIdentifierString();
+    }
+
+    @Override
+    public ToolPojo toDataResource() {
+        return new ToolPojo();
     }
 
     @Override

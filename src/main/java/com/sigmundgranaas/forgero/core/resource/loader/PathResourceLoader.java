@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceFactory;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.resource.ResourcePathProvider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class PathResourceLoader<T extends ForgeroResource<R>, R extends ForgeroD
     }
 
     @Override
-    public ImmutableList<T> loadResources() {
+    public @NotNull ImmutableList<T> loadResources() {
         if (resources.isEmpty()) {
             var pojos = pathProvider.getPaths(type).stream()
                     .map(fileLoader::loadFile)
