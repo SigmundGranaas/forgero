@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
-import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.data.ResourceType;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
 import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -17,16 +17,10 @@ public class GemFactory extends DataResourceFactory<GemPojo, Gem> {
     }
 
     @Override
-    public Optional<Gem> createResource(GemPojo pojo) {
+    public @NotNull Optional<Gem> createResource(GemPojo pojo) {
         String name = pojo.name.toLowerCase(Locale.ROOT);
         var properties = PropertyBuilder.createPropertyListFromPOJO(pojo.properties);
         return Optional.of(new ForgeroGem(1, name + "_gem", properties, pojo.placement));
-    }
-
-    @Override
-    public ImmutableList<Gem> createResources() {
-        return ImmutableList.<Gem>builder().build();
-
     }
 
     @Override

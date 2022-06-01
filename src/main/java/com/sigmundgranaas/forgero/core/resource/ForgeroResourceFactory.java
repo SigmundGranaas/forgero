@@ -10,6 +10,8 @@ public interface ForgeroResourceFactory<R extends ForgeroResource<T>, T extends 
     @NotNull
     Optional<R> createResource(T data);
 
+    Optional<R> buildResource(T pojo);
+
     @NotNull
     ImmutableList<R> createResources();
 }

@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class SchematicFactory extends DataResourceFactory<SchematicPojo, Schemat
     }
 
     @Override
+    @NotNull
     public Optional<Schematic> createResource(SchematicPojo pojo) {
         List<Property> propertyList = createPropertyListFromPOJO(pojo.properties);
         if (pojo.type == ForgeroToolPartTypes.HEAD) {

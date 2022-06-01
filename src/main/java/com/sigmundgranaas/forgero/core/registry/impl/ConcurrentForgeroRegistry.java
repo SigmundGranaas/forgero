@@ -81,8 +81,8 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
         schematicRegistry.replaceRegistry(loader.getSchematicLoader().loadResources());
         gemRegistry.replaceRegistry(loader.getGemLoader().loadResources());
         materialRegistry.replaceRegistry(loader.getMaterialLoader().loadResources());
-        toolRegistry.replaceRegistry(loader.getToolLoader().loadResources());
         toolPartRegistry.replaceRegistry(loader.getToolPartLoader().loadResources());
+        toolRegistry.replaceRegistry(loader.getToolLoader().loadResources());
         return this;
     }
 

@@ -30,7 +30,7 @@ public abstract class AbstractToolPart implements ForgeroToolPart {
 
     @Override
     public String getToolPartIdentifier() {
-        return state.getPrimaryMaterial().getResourceName() + "_" + getToolPartName() + "_" + getSchematic().getVariant();
+        return getPrimaryMaterial().getResourceName() + "_" + getToolPartName() + "_" + getSchematic().getVariant();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.data.SchemaVersion;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,9 +40,10 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R exten
     }
 
     @Override
+    @NotNull
     public ImmutableList<R> createResources() {
         return pojos.values().stream()
-                .map(this::createResource)
+                .map(this::buildResource)
                 .flatMap(Optional::stream)
                 .collect(ImmutableList.toImmutableList());
     }

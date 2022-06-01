@@ -42,12 +42,6 @@ public class ForgeroSwordItem extends SwordItem implements ForgeroToolItem {
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 
-
-    @Override
-    public Identifier getIdentifier() {
-        return new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString());
-    }
-
     @Override
     public ForgeroToolTypes getToolType() {
         return ForgeroToolTypes.SWORD;

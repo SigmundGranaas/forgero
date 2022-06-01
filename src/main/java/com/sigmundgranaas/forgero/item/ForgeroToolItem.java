@@ -46,9 +46,12 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
         return state.isIn(getToolTags());
     }
 
-    Identifier getIdentifier();
-
     ForgeroToolTypes getToolType();
+
+
+    default Identifier getIdentifier() {
+        return new Identifier(getNameSpace(), getTool().getToolIdentifierString());
+    }
 
     ForgeroTool getTool();
 
@@ -59,7 +62,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
     @Override
     default String getStringIdentifier() {
-        return getIdentifier().getPath();
+        return getTool().getStringIdentifier();
     }
 
     @Override

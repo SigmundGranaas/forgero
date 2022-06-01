@@ -26,7 +26,6 @@ public class MaterialFactoryImpl extends DataResourceFactory<MaterialPojo, Forge
         basePojo.secondary = material.secondary;
         basePojo.palette = material.palette;
 
-
         basePojo.ingredient = replaceAttributesDefault(material.ingredient, parent.ingredient, null);
 
         return basePojo;

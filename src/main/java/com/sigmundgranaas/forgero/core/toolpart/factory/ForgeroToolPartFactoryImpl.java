@@ -127,11 +127,18 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     @Override
+    @NotNull
     public Optional<ForgeroToolPart> createResource(ToolPartPojo data) {
         return Optional.empty();
     }
 
     @Override
+    public Optional<ForgeroToolPart> buildResource(ToolPartPojo pojo) {
+        return Optional.empty();
+    }
+
+    @Override
+    @NotNull
     public ImmutableList<ForgeroToolPart> createResources() {
         return ImmutableList.<ForgeroToolPart>builder().build();
     }
