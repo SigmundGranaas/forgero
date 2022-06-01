@@ -20,4 +20,8 @@ public interface ForgeroResource<R extends ForgeroDataResource> {
     ForgeroResourceType getResourceType();
 
     R toDataResource();
+
+    default ForgeroResource<R> getResource() {
+        return this;
+    }
 }

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.registry.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPartPojo;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 import static com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes.*;
 
-public class ConcurrentToolPartItemRegistry extends ConcurrentItemResourceRegistry<ToolPartItem> implements ToolPartItemRegistry {
+public class ConcurrentToolPartItemRegistry extends ConcurrentItemResourceRegistry<ToolPartItem, ToolPartPojo> implements ToolPartItemRegistry {
     ConcurrentToolPartItemRegistry(Map<String, ToolPartItem> resources) {
         super(resources);
     }

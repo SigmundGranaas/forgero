@@ -78,11 +78,11 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
     @Override
     public ConcurrentForgeroRegistry loadResources(ForgeroResourceLoader loader) {
         clear();
-        toolRegistry.replaceRegistry(loader.getToolLoader().loadResources());
-        toolPartRegistry.replaceRegistry(loader.getToolPartLoader().loadResources());
         schematicRegistry.replaceRegistry(loader.getSchematicLoader().loadResources());
         gemRegistry.replaceRegistry(loader.getGemLoader().loadResources());
         materialRegistry.replaceRegistry(loader.getMaterialLoader().loadResources());
+        toolRegistry.replaceRegistry(loader.getToolLoader().loadResources());
+        toolPartRegistry.replaceRegistry(loader.getToolPartLoader().loadResources());
         return this;
     }
 
@@ -96,7 +96,11 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
 
 
     @Override
-    public void updateResources() {
-
+    public void updateResources(ForgeroResourceLoader loader) {
+        schematicRegistry.updateRegistry(loader.getSchematicLoader().loadResources());
+        gemRegistry.updateRegistry(loader.getGemLoader().loadResources());
+        materialRegistry.updateRegistry(loader.getMaterialLoader().loadResources());
+        toolPartRegistry.updateRegistry(loader.getToolPartLoader().loadResources());
+        toolRegistry.updateRegistry(loader.getToolLoader().loadResources());
     }
 }

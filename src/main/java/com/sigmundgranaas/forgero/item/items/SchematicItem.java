@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, PropertyContainer {
+public class SchematicItem extends Item implements ForgeroItem<SchematicItem, SchematicPojo>, PropertyContainer {
     private final Schematic schematic;
 
     public SchematicItem(Settings settings, Schematic pattern) {
@@ -85,6 +86,11 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
     @Override
     public ForgeroResourceType getResourceType() {
         return ForgeroResourceType.SCHEMATIC;
+    }
+
+    @Override
+    public SchematicPojo toDataResource() {
+        return getSchematic().toDataResource();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.item;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPartPojo;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
@@ -8,7 +9,7 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
-public interface ToolPartItem extends ForgeroItem<Item>, PropertyContainer {
+public interface ToolPartItem extends ForgeroItem<Item, ToolPartPojo>, PropertyContainer {
     String PRIMARY_MATERIAL_IDENTIFIER = "PrimaryMaterial";
     String SECONDARY_MATERIAL_IDENTIFIER = "SecondaryMaterial";
     String GEM_IDENTIFIER = "ForgeroModifier";

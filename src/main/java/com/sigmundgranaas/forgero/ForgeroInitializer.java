@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
-import com.sigmundgranaas.forgero.core.resource.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.schematic.SchematicLoader;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
@@ -15,6 +14,8 @@ import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.registry.impl.MineCraftRegistryHandler;
 import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
+import com.sigmundgranaas.forgero.resources.FabricResourceLoader;
+import com.sigmundgranaas.forgero.resources.ModContainerService;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -37,7 +38,8 @@ public class ForgeroInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        var registry = ForgeroItemRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        var loader = new FabricResourceLoader(new ModContainerService().getForgeroResourceNamespaces());
+        var registry = ForgeroItemRegistry.INSTANCE.loadResourcesIfEmpty(loader);
         registry.register(new MineCraftRegistryHandler());
         resourceReloader();
         new CustomItemRegistry().register();

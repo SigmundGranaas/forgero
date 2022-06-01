@@ -20,6 +20,8 @@ public class PathResourceLoader<T extends ForgeroResource<R>, R extends ForgeroD
     protected final PojoFileLoaderImpl<R> fileLoader;
     protected final ForgeroResourceType type;
 
+    private ImmutableList<T> resources = new ImmutableList.Builder<T>().build();
+
     public PathResourceLoader(ResourcePathProvider pathProvider, Consumer<R> handler, Function<List<R>, ForgeroResourceFactory<T, R>> factory, PojoFileLoaderImpl<R> fileLoader, ForgeroResourceType type) {
         this.pathProvider = pathProvider;
         this.handler = handler;
@@ -39,13 +41,15 @@ public class PathResourceLoader<T extends ForgeroResource<R>, R extends ForgeroD
 
     @Override
     public ImmutableList<T> loadResources() {
-        var pojos = pathProvider.getPaths(type).stream()
-                .map(fileLoader::loadFile)
-                .flatMap(Optional::stream)
-                .toList();
+        if (resources.isEmpty()) {
+            var pojos = pathProvider.getPaths(type).stream()
+                    .map(fileLoader::loadFile)
+                    .flatMap(Optional::stream)
+                    .toList();
 
-        pojos.forEach(handler);
-
-        return factoryProvider.apply(pojos).createResources();
+            pojos.forEach(handler);
+            resources = factoryProvider.apply(pojos).createResources();
+        }
+        return resources;
     }
 }

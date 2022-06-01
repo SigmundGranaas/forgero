@@ -71,8 +71,8 @@ public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
     }
 
     @Override
-    public void updateResources() {
-
+    public void updateResources(ForgeroResourceLoader loader) {
+        forgeroRegistry.loadResources(loader);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.item.items;
 
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -61,8 +60,8 @@ public class GemItem extends Item implements ForgeroItem<GemItem, GemPojo>, Prop
     }
 
     @Override
-    public ForgeroDataResource toDataResource() {
-        return null;
+    public GemPojo toDataResource() {
+        return getGem().toDataResource();
     }
 
     @Override

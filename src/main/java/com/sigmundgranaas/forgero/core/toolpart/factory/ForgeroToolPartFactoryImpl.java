@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.core.toolpart.factory;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPartPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
@@ -33,8 +36,8 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     @Override
-    public @NotNull
-    ForgeroToolPart createToolPart(@NotNull ForgeroToolPartIdentifier identifier) {
+    @NotNull
+    public ForgeroToolPart createToolPart(@NotNull ForgeroToolPartIdentifier identifier) {
         PrimaryMaterial material = ForgeroRegistry.MATERIAL.getPrimaryMaterial(identifier.getMaterial().getName()).get();
         Schematic schematic = ForgeroRegistry.SCHEMATIC.getResource(identifier.getSchematic().identifier()).get();
 
@@ -121,5 +124,15 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
                     toolParts.add(new Binding(new BindingState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), schematic)));
         }
         return toolParts;
+    }
+
+    @Override
+    public Optional<ForgeroToolPart> createResource(ToolPartPojo data) {
+        return Optional.empty();
+    }
+
+    @Override
+    public ImmutableList<ForgeroToolPart> createResources() {
+        return ImmutableList.<ForgeroToolPart>builder().build();
     }
 }

@@ -11,4 +11,9 @@ public interface ForgeroItem<T extends Item, R extends ForgeroDataResource> exte
     default Identifier getIdentifier() {
         return new Identifier(getNameSpace(), getStringIdentifier());
     }
+
+    @Override
+    default R toDataResource() {
+        return getResource().toDataResource();
+    }
 }
