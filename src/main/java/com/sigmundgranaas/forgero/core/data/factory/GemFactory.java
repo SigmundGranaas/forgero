@@ -6,13 +6,13 @@ import com.sigmundgranaas.forgero.core.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
 public class GemFactory extends DataResourceFactory<GemPojo, Gem> {
-    public GemFactory(List<GemPojo> pojos, Set<String> availableNameSpaces) {
+    public GemFactory(Collection<GemPojo> pojos, Set<String> availableNameSpaces) {
         super(pojos, availableNameSpaces);
     }
 

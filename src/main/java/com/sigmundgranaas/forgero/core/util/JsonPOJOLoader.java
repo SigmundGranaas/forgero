@@ -33,6 +33,22 @@ public class JsonPOJOLoader {
         }
     }
 
+    public static <T> Optional<T> loadPOJO(InputStream stream, Class<T> type) {
+        if (stream != null) {
+            try {
+                JsonReader materialsJson = new JsonReader(new InputStreamReader(stream));
+                T gson = new Gson().fromJson(materialsJson, type);
+                return Optional.of(gson);
+            } catch (JsonSyntaxException e) {
+                //ForgeroInitializer.LOGGER.error("Unable to parse: {}", filePath);
+                return Optional.empty();
+            }
+        } else {
+            //ForgeroInitializer.LOGGER.error("Unable to load: {}", filePath);
+            return Optional.empty();
+        }
+    }
+
     @Nullable
     public static InputStream getInputStream(String path) {
         return JsonPOJOLoader.class.getResourceAsStream(path);

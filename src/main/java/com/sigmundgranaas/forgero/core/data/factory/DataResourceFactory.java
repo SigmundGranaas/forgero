@@ -29,12 +29,12 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R exten
     Set<String> availableNameSpaces;
 
 
-    public DataResourceFactory(List<T> pojos, Set<String> availableNameSpaces) {
+    public DataResourceFactory(Collection<T> pojos, Set<String> availableNameSpaces) {
         this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> current.order > next.order ? current : next));
         this.availableNameSpaces = availableNameSpaces;
     }
 
-    public DataResourceFactory(List<T> pojos) {
+    public DataResourceFactory(Collection<T> pojos) {
         this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> current.order > next.order ? current : next));
         this.availableNameSpaces = new HashSet<>(DEFAULT_DEPENDENCIES_LIST);
     }

@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 import static com.sigmundgranaas.forgero.core.data.factory.PropertyBuilder.createPropertyListFromPOJO;
 
 public class SchematicFactory extends DataResourceFactory<SchematicPojo, Schematic> {
-    public SchematicFactory(List<SchematicPojo> pojos, Set<String> availableNameSpaces) {
+    public SchematicFactory(Collection<SchematicPojo> pojos, Set<String> availableNameSpaces) {
         super(pojos, availableNameSpaces);
     }
 

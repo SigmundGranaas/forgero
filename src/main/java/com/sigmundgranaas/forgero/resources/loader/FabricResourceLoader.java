@@ -11,11 +11,12 @@ import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PaletteResourceIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.ResourceIdentifier;
+import com.sigmundgranaas.forgero.core.resource.FactoryProvider;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
-import com.sigmundgranaas.forgero.core.resource.ForgeroResourceFactory;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
-import com.sigmundgranaas.forgero.core.resource.loader.PathResourceLoader;
+import com.sigmundgranaas.forgero.core.resource.PojoLoader;
 import com.sigmundgranaas.forgero.core.resource.loader.PojoFileLoaderImpl;
+import com.sigmundgranaas.forgero.core.resource.loader.ResourceLoaderImpl;
 import com.sigmundgranaas.forgero.core.resource.loader.ToolPartPathResourceLoader;
 import com.sigmundgranaas.forgero.core.resource.loader.ToolPathResourceLoader;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
@@ -23,21 +24,19 @@ import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.resources.FabricPathProvider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class FabricResourceLoader implements ForgeroResourceLoader {
     private final Set<String> availableNameSpaces;
 
-    private List<PrimaryMaterial> materials;
-    private List<Schematic> schematics;
-    private List<ForgeroToolPart> toolParts;
+    protected List<PrimaryMaterial> materials;
+    protected List<Schematic> schematics;
+    protected List<ForgeroToolPart> toolParts;
 
     public FabricResourceLoader(Set<String> availableNameSpaces) {
         this.materials = new ArrayList<>();
@@ -47,25 +46,52 @@ public class FabricResourceLoader implements ForgeroResourceLoader {
     }
 
     @Override
-    public ResourceLoader<Schematic, SchematicPojo> getSchematicLoader() {
-        var loader = createResourceLoader(
-                SchematicPojo.class,
-                ForgeroResourceType.SCHEMATIC,
-                (namespaces, pojos) -> new SchematicFactory(pojos, namespaces));
+    public @NotNull ResourceLoader<Schematic, SchematicPojo> getSchematicLoader() {
+        FactoryProvider<Schematic, SchematicPojo> provider = (pojos) -> new SchematicFactory(pojos, availableNameSpaces);
+
+        var loader = new ResourceLoaderImpl<>(
+                createPojoLoader(SchematicPojo.class, ForgeroResourceType.SCHEMATIC),
+                provider,
+                ForgeroResourceType.SCHEMATIC);
+
         schematics = loader.loadResources();
+
         return loader;
     }
 
+    @Override
+    public @NotNull ResourceLoader<ForgeroMaterial, MaterialPojo> getMaterialLoader() {
+        FactoryProvider<ForgeroMaterial, MaterialPojo> provider = (pojos) -> new MaterialFactoryImpl(pojos, getAvailableNameSpaces());
+
+        var loader = new ResourceLoaderImpl<>(
+                createPojoLoader(MaterialPojo.class, ForgeroResourceType.MATERIAL),
+                (materialPojo) -> registerPalettes(materialPojo.palette),
+                provider,
+                ForgeroResourceType.MATERIAL);
+
+        this.materials = loader.loadResources().stream().filter(PrimaryMaterial.class::isInstance).map(PrimaryMaterial.class::cast).toList();
+
+        return loader;
+    }
 
     @Override
-    public ResourceLoader<ForgeroToolPart, ToolPartPojo> getToolPartLoader() {
-        var fileLoader = new PojoFileLoaderImpl<>(ToolPartPojo.class);
+    public @NotNull ResourceLoader<Gem, GemPojo> getGemLoader() {
+        FactoryProvider<Gem, GemPojo> provider = (pojos) -> new GemFactory(pojos, getAvailableNameSpaces());
+
+        return new ResourceLoaderImpl<>(
+                createPojoLoader(GemPojo.class, ForgeroResourceType.GEM),
+                (gemPojo) -> registerPalettes(gemPojo.palette),
+                provider,
+                ForgeroResourceType.GEM);
+    }
+
+    @Override
+    public @NotNull ResourceLoader<ForgeroToolPart, ToolPartPojo> getToolPartLoader() {
         var loader = new ToolPartPathResourceLoader(
-                FabricPathProvider.PROVIDER,
+                createPojoLoader(ToolPartPojo.class, ForgeroResourceType.TOOL_PART),
                 (pojo) -> {
                 },
                 (pojo) -> new ToolPartFactory(pojo, availableNameSpaces),
-                fileLoader,
                 ForgeroResourceType.TOOL_PART,
                 materials,
                 schematics);
@@ -74,69 +100,53 @@ public class FabricResourceLoader implements ForgeroResourceLoader {
     }
 
     @Override
-    public ResourceLoader<ForgeroTool, ToolPojo> getToolLoader() {
-        var fileLoader = new PojoFileLoaderImpl<>(ToolPojo.class);
+    public @NotNull ResourceLoader<ForgeroTool, ToolPojo> getToolLoader() {
         return new ToolPathResourceLoader(
-                FabricPathProvider.PROVIDER,
+                createPojoLoader(ToolPojo.class, ForgeroResourceType.TOOL),
                 (pojo) -> {
                 },
                 (pojo) -> new ToolFactory(pojo, availableNameSpaces),
-                fileLoader,
-                ForgeroResourceType.TOOL_PART,
+                ForgeroResourceType.TOOL,
                 toolParts);
     }
 
     @Override
-    public ResourceLoader<ForgeroMaterial, MaterialPojo> getMaterialLoader() {
-        var loader = createResourceLoader(
-                MaterialPojo.class,
-                (materialPojo) -> registerPalettes(materialPojo.palette),
-                ForgeroResourceType.MATERIAL,
-                (namespaces, pojos) -> new MaterialFactoryImpl(pojos, namespaces));
-        this.materials = loader.loadResources().stream().filter(PrimaryMaterial.class::isInstance).map(PrimaryMaterial.class::cast).toList();
-
-        return loader;
+    public Set<String> getAvailableNameSpaces() {
+        return availableNameSpaces;
     }
 
-    @Override
-    public ResourceLoader<Gem, GemPojo> getGemLoader() {
-        return createResourceLoader(
-                GemPojo.class,
-                (gemPojo) -> registerPalettes(gemPojo.palette),
-                ForgeroResourceType.GEM,
-                (namespaces, pojos) -> new GemFactory(pojos, namespaces));
-    }
-
-    private <T extends ForgeroResource<R>, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, ForgeroResourceType type, BiFunction<Set<String>, List<R>, ForgeroResourceFactory<T, R>> factoryCreator) {
-        var fileLoader = new PojoFileLoaderImpl<>(classType);
-        Function<List<R>, ForgeroResourceFactory<T, R>> factoryProvider = (List<R> list) -> factoryCreator.apply(availableNameSpaces, list);
-
-        return new PathResourceLoader<>(
-                FabricPathProvider.PROVIDER,
-                factoryProvider,
+    @SuppressWarnings("SameParameterValue")
+    protected <T extends ForgeroResource<R>, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, ForgeroResourceType type, FactoryProvider<T, R> factoryProvider) {
+        var fileLoader = createPojoLoader(classType, type);
+        return new ResourceLoaderImpl<>(
                 fileLoader,
+                factoryProvider,
                 type
         );
     }
 
-    @SuppressWarnings("unused")
-    private <T extends ForgeroResource<R>, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, Consumer<R> handler, ForgeroResourceType type, BiFunction<Set<String>, List<R>, ForgeroResourceFactory<T, R>> factoryCreator) {
-        var fileLoader = new PojoFileLoaderImpl<>(classType);
-        Function<List<R>, ForgeroResourceFactory<T, R>> factoryProvider = (List<R> list) -> factoryCreator.apply(availableNameSpaces, list);
-
-        return new PathResourceLoader<>(
-                FabricPathProvider.PROVIDER,
+    protected <T extends ForgeroResource<R>, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, Consumer<R> handler, ForgeroResourceType type, FactoryProvider<T, R> factoryProvider) {
+        return new ResourceLoaderImpl<T, R>(
+                createPojoLoader(classType, type),
                 handler,
                 factoryProvider,
-                fileLoader,
                 type
         );
     }
 
-    private void registerPalettes(PalettePojo pojo) {
-        List<ResourceIdentifier> inclusions = pojo.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.name), paletteIdentifiers)).collect(Collectors.toList());
-        List<ResourceIdentifier> exclusions = pojo.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.name), paletteIdentifiers)).collect(Collectors.toList());
-        PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.name, inclusions, exclusions));
+
+    protected void registerPalettes(PalettePojo pojo) {
+        if (pojo != null && pojo.include != null) {
+            List<ResourceIdentifier> inclusions = pojo.include.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.name), paletteIdentifiers)).toList();
+            List<ResourceIdentifier> exclusions = new ArrayList<>();
+            if (pojo.exclude != null) {
+                exclusions = pojo.exclude.stream().map(paletteIdentifiers -> new ResourceIdentifier(new PaletteIdentifier(pojo.name), paletteIdentifiers)).toList();
+            }
+            PaletteResourceRegistry.getInstance().addPalette(new PaletteResourceIdentifier(pojo.name, inclusions, exclusions));
+        }
     }
 
+    protected <R extends ForgeroDataResource> PojoLoader<R> createPojoLoader(Class<R> classType, ForgeroResourceType type) {
+        return new PojoFileLoaderImpl<>(FabricPathProvider.PROVIDER.getPaths(type), classType);
+    }
 }

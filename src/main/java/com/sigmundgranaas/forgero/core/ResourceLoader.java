@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import org.jetbrains.annotations.NotNull;
 
 public interface ResourceLoader<R extends ForgeroResource<T>, T extends ForgeroDataResource> {
-    @NotNull
-    ImmutableList<R> loadResources();
+    @NotNull ImmutableList<R> loadResources();
+
+    @NotNull ImmutableList<T> loadPojos();
 }

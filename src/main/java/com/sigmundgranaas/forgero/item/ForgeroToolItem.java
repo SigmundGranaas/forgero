@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
+import com.sigmundgranaas.forgero.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.toolhandler.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -38,7 +39,7 @@ import java.util.UUID;
 
 public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed, PropertyContainer, ForgeroItem<Item, ToolPojo> {
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
-    UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
+    UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
     FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
 
     @Override
@@ -91,7 +92,13 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
             Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", tool.getAttackDamage(target) - getTool().getAttackDamage(target), EntityAttributeModifier.Operation.ADDITION));
+            float baseToolDamage = getTool().getAttackDamage(target);
+            float currentToolDamage = tool.getAttackDamage(target);
+            //Base attack damage
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
+
+            //Attack damage addition
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", baseToolDamage - currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
             if (tool.getAttackSpeed(target) != getTool().getAttackSpeed(target)) {
                 builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
             }

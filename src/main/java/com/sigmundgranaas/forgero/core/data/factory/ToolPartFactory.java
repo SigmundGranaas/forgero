@@ -2,14 +2,15 @@ package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPartPojo;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
 public class ToolPartFactory extends DataResourceFactory<ToolPartPojo, ForgeroToolPart> {
 
-    public ToolPartFactory(List<ToolPartPojo> pojos, Set<String> availableNameSpaces) {
+    public ToolPartFactory(Collection<ToolPartPojo> pojos, Set<String> availableNameSpaces) {
         super(pojos, availableNameSpaces);
     }
 
@@ -25,7 +26,7 @@ public class ToolPartFactory extends DataResourceFactory<ToolPartPojo, ForgeroTo
     }
 
     @Override
-    public Optional<ForgeroToolPart> createResource(ToolPartPojo data) {
+    public @NotNull Optional<ForgeroToolPart> createResource(ToolPartPojo data) {
         return Optional.empty();
     }
 }

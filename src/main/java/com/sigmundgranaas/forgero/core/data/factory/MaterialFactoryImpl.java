@@ -7,13 +7,13 @@ import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDu
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleSecondaryMaterialImpl;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
 public class MaterialFactoryImpl extends DataResourceFactory<MaterialPojo, ForgeroMaterial> implements MaterialFactory {
 
-    public MaterialFactoryImpl(List<MaterialPojo> pojos, Set<String> availableNameSpaces) {
+    public MaterialFactoryImpl(Collection<MaterialPojo> pojos, Set<String> availableNameSpaces) {
         super(pojos, availableNameSpaces);
     }
 
