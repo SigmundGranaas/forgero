@@ -3,7 +3,7 @@
   "dependencies": [
   ],
   "ingredient": {
-    "tag": "c:constantan_ingot"
+    "tag": "c:constantan_ingots"
   },
   "properties": {
     "attributes": [
