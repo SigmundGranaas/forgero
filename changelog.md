@@ -2,6 +2,7 @@
 
 # Forgero Beta release
 
+* Fixed achievements triggers
 * Cleaned up some files
 * Reworked the Item registry
 * Added a common tag for all tools
