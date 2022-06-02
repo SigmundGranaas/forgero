@@ -1,7 +1,8 @@
-### Changelog 0.8.2
+### Changelog 0.8.3
 
 # Forgero Beta release
 
+* Fixed triggers for achievements
 * Cleaned up some files
 * Reworked the Item registry
 * Added a common tag for all tools
