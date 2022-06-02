@@ -21,7 +21,7 @@ public class ResourceManagerStreamProvider implements InputStreamProvider {
 
     @Override
     public Collection<InputStream> getStreams(ForgeroResourceType type) {
-        return manager.findResources(getStartingPath(type), path -> path.endsWith(".json"))
+        return manager.findResources(getStartingPath(type), path -> true)
                 .stream()
                 .map(this::getInputStream)
                 .filter(Objects::nonNull)

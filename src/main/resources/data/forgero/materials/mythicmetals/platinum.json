@@ -4,7 +4,7 @@
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:platinum_ingot"
+    "tag": "c:platinum_ingots"
   },
   "properties": {
     "attributes": [

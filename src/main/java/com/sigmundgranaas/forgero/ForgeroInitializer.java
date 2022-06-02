@@ -26,7 +26,7 @@ public class ForgeroInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        var loader = new FabricResourceLoader(new ModContainerService().getForgeroResourceNamespaces());
+        var loader = new FabricResourceLoader(new ModContainerService().getAllModsAsSet());
         var registry = ForgeroItemRegistry.INSTANCE.loadResourcesIfEmpty(loader);
         registry.register(new MineCraftRegistryHandler());
         resourceReloader();
@@ -47,7 +47,7 @@ public class ForgeroInitializer implements ModInitializer {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
-                ForgeroItemRegistry.INSTANCE.updateResources(new ReloadableResourceLoader(new ModContainerService().getForgeroResourceNamespaces(), new ResourceManagerStreamProvider(manager)));
+                ForgeroItemRegistry.INSTANCE.updateResources(new ReloadableResourceLoader(new ModContainerService().getAllModsAsSet(), new ResourceManagerStreamProvider(manager)));
             }
 
             @Override

@@ -31,7 +31,9 @@ public class FabricTextureLoader implements TextureLoader {
     public Texture getResource(TextureIdentifier id) {
         try {
             if (id instanceof PaletteTemplateIdentifier) {
-                return RawTexture.createRawTexture(id, getResource.apply((new Identifier(id.getFileNameWithExtension()))).getInputStream());
+                try (var res = getResource.apply((new Identifier(id.getFileNameWithExtension())))) {
+                    return RawTexture.createRawTexture(id, res.getInputStream());
+                }
             } else {
                 return RawTexture.createRawTexture(id, fileService.getStream(id));
             }

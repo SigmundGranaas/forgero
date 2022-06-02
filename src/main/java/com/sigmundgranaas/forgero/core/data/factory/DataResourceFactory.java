@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES_LIST;
+import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES_SET;
 
 /**
  * Abstract class for managing the creation of Forgero content from data files.
@@ -30,13 +31,26 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R exten
 
 
     public DataResourceFactory(Collection<T> pojos, Set<String> availableNameSpaces) {
-        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> current.order > next.order ? current : next));
+        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> resolveConflict(current, next, availableNameSpaces)));
         this.availableNameSpaces = availableNameSpaces;
     }
 
     public DataResourceFactory(Collection<T> pojos) {
-        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> current.order > next.order ? current : next));
+        this.pojos = pojos.stream().collect(Collectors.toMap(ForgeroDataResource::getName, pojo -> pojo, (current, next) -> resolveConflict(current, next, DEFAULT_DEPENDENCIES_SET)));
         this.availableNameSpaces = new HashSet<>(DEFAULT_DEPENDENCIES_LIST);
+    }
+
+    private T resolveConflict(T current, T next, Set<String> availableNameSpaces) {
+        if (current.dependencies != null && availableNameSpaces.containsAll(current.dependencies)) {
+            if (next.dependencies != null && availableNameSpaces.containsAll(next.dependencies)) {
+                return current.order > next.order ? current : next;
+            } else {
+                return current;
+            }
+        } else {
+            return next;
+        }
+
     }
 
     @Override

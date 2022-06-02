@@ -1,10 +1,10 @@
 {
-  "name": "palladium",
+  "name": "Atanium",
   "dependencies": [
-    "mythicmetals"
+    "alloygery"
   ],
   "ingredient": {
-    "tag": "c:palladium_ingots"
+    "tag": "c:antanium_ingots"
   },
   "properties": {
     "attributes": [
@@ -19,9 +19,9 @@
     "active": []
   },
   "palette": {
-    "name": "palladium",
+    "name": "antanium",
     "include": [
-      "mythicmetals:textures/items/palladium_ingot.png"
+      "alloygery:textures/item/antanium_ingot.png"
     ],
     "exclude": [
     ]

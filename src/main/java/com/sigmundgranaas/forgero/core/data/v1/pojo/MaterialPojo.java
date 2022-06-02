@@ -37,4 +37,9 @@ public class MaterialPojo extends ForgeroDataResource {
     public static class Secondary {
         public PropertyPojo properties;
     }
+
+    @Override
+    public String getName() {
+        return super.getName().toLowerCase();
+    }
 }

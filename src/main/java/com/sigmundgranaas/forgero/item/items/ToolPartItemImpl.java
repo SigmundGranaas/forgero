@@ -81,7 +81,7 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
 
     @Override
     public PrimaryMaterial getPrimaryMaterial() {
-        return material;
+        return part.getPrimaryMaterial();
     }
 
     @Override
