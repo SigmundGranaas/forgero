@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.gem;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.resource.ForgeroResourceInitializer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

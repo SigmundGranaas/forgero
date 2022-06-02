@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.resources;
 
+import com.sigmundgranaas.forgero.resources.loader.ModContainerFileLoader;
+
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collection;

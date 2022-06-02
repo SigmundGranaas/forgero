@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public interface ToolPartItem extends ForgeroItem<Item, ToolPartPojo>, PropertyContainer {
     String PRIMARY_MATERIAL_IDENTIFIER = "PrimaryMaterial";
@@ -42,5 +43,15 @@ public interface ToolPartItem extends ForgeroItem<Item, ToolPartPojo>, PropertyC
     @Override
     default ForgeroResourceType getResourceType() {
         return ForgeroResourceType.TOOL_PART;
+    }
+
+    @Override
+    default int compareTo(@NotNull Object o) {
+        int containerResult = PropertyContainer.super.compareTo(o);
+        if (containerResult != 0) {
+            return containerResult;
+        } else {
+            return ForgeroItem.super.compareTo(o);
+        }
     }
 }

@@ -32,7 +32,8 @@ public class ResourceManagerStreamProvider implements InputStreamProvider {
     @Nullable
     private InputStream getInputStream(Identifier id) {
         try {
-            return manager.getResource(id).getInputStream();
+            var resource = manager.getResource(id);
+            return resource.getInputStream();
         } catch (IOException e) {
             ForgeroInitializer.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
             return null;

@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.tool.factory;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.resource.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.toolpart.HandleTest;
 import com.sigmundgranaas.forgero.core.toolpart.toolpart.PickaxeHeadTest;

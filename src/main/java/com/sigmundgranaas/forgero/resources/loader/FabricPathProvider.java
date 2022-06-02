@@ -1,7 +1,8 @@
-package com.sigmundgranaas.forgero.resources;
+package com.sigmundgranaas.forgero.resources.loader;
 
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.resource.ResourcePathProvider;
+import com.sigmundgranaas.forgero.resources.ModContainerService;
 
 import java.nio.file.Path;
 import java.util.Collection;

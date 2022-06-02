@@ -146,4 +146,13 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     @NotNull
     Item getItem();
 
+    @Override
+    default int compareTo(@NotNull Object o) {
+        int containerResult = PropertyContainer.super.compareTo(o);
+        if (containerResult != 0) {
+            return containerResult;
+        } else {
+            return ForgeroItem.super.compareTo(o);
+        }
+    }
 }

@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartHeadIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
-import com.sigmundgranaas.forgero.core.resource.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactoryImpl;
 import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;

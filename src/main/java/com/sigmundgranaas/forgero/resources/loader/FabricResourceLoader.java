@@ -23,7 +23,6 @@ import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.resources.FabricPathProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

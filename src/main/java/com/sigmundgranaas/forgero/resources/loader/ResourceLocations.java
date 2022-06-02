@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.resources;
+package com.sigmundgranaas.forgero.resources.loader;
 
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 
@@ -11,7 +11,7 @@ public class ResourceLocations {
     public static String TOOL_PART_LOCATION = "data/forgero/toolparts/";
     public static String MATERIAL_TEMPLATES_LOCATION = "assets/forgero/templates/materials/";
 
-    static String getPathFromType(ForgeroResourceType type) {
+    public static String getPathFromType(ForgeroResourceType type) {
         return switch (type) {
             case MATERIAL -> MATERIAL_LOCATION;
             case GEM -> GEM_LOCATION;

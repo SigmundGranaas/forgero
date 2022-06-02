@@ -24,7 +24,7 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
 
-import static com.sigmundgranaas.forgero.resources.ResourceLocations.MATERIAL_TEMPLATES_LOCATION;
+import static com.sigmundgranaas.forgero.resources.loader.ResourceLocations.MATERIAL_TEMPLATES_LOCATION;
 
 
 public class ForgeroTextures implements RRPPreGenEntrypoint {

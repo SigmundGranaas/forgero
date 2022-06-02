@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.item.items;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
 import com.sigmundgranaas.forgero.core.gem.Gem;
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.item.ForgeroItem;
@@ -14,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -68,5 +70,20 @@ public class GemItem extends Item implements ForgeroItem<GemItem, GemPojo>, Prop
     @Override
     public GemItem getItem() {
         return this;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        int containerResult = PropertyContainer.super.compareTo(o);
+        if (containerResult != 0) {
+            return containerResult;
+        } else {
+            return ForgeroItem.super.compareTo(o);
+        }
+    }
+
+    @Override
+    public @NotNull List<Property> getProperties() {
+        return getGem().getProperties();
     }
 }

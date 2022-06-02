@@ -20,6 +20,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -94,7 +95,22 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem, Sc
     }
 
     @Override
+    public int compareTo(@NotNull Object o) {
+        int containerResult = PropertyContainer.super.compareTo(o);
+        if (containerResult != 0) {
+            return containerResult;
+        } else {
+            return ForgeroItem.super.compareTo(o);
+        }
+    }
+
+    @Override
     public SchematicItem getItem() {
         return this;
+    }
+
+    @Override
+    public @NotNull List<Property> getProperties() {
+        return getSchematic().getProperties();
     }
 }

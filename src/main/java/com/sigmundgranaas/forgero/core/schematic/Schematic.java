@@ -60,7 +60,7 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         return null;
     }
 
-    public List<Property> getProperties() {
+    public @NotNull List<Property> getProperties() {
         return properties;
     }
 
