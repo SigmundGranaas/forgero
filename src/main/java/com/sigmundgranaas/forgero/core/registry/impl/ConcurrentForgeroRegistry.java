@@ -77,7 +77,6 @@ public class ConcurrentForgeroRegistry implements ForgeroRegistry {
 
     @Override
     public ConcurrentForgeroRegistry loadResources(ForgeroResourceLoader loader) {
-        clear();
         schematicRegistry.replaceRegistry(loader.getSchematicLoader().loadResources());
         gemRegistry.replaceRegistry(loader.getGemLoader().loadResources());
         materialRegistry.replaceRegistry(loader.getMaterialLoader().loadResources());
