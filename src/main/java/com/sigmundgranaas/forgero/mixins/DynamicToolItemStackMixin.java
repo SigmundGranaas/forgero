@@ -89,15 +89,11 @@ public abstract class DynamicToolItemStackMixin {
     public Multimap<EntityAttribute, EntityAttributeModifier> modifyAttributeModifiersMap(Multimap<EntityAttribute, EntityAttributeModifier> multimap, EquipmentSlot slot) {
         ItemStack stack = (ItemStack) (Object) this;
 
-        // Only perform our custom operations if the tool being operated on is dynamic.
         if (stack.getItem() instanceof DynamicAttributeTool holder) {
-            // The Multimap passed in is not ordered, so we need to re-assemble the vanilla and modded attributes
-            // into a custom, ordered Multimap. If this step is not done, and both vanilla + modded attributes
-            // exist at once, the item tooltip attribute lines will randomly switch positions.
+            // creating a dummy map for our old attributes
             LinkedListMultimap<EntityAttribute, EntityAttributeModifier> oldAttributes = LinkedListMultimap.create();
-            // First, add all vanilla attributes to our ordered Multimap.
             oldAttributes.putAll(multimap);
-            // Second, calculate the dynamic attributes, and add them at the end of our Multimap.
+            // Check if the root attributes have changed and remove them
             var newMap = holder.getDynamicModifiers(slot, stack, contextEntity);
             for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_DAMAGE)) {
                 var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
@@ -113,7 +109,9 @@ public abstract class DynamicToolItemStackMixin {
             }
 
             LinkedListMultimap<EntityAttribute, EntityAttributeModifier> orderedAttributes = LinkedListMultimap.create();
+            //Place new Forgero root attributes at the start
             orderedAttributes.putAll(newMap);
+            //Place old attributes last
             orderedAttributes.putAll(oldAttributes);
             return orderedAttributes;
         }
