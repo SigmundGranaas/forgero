@@ -4,7 +4,7 @@
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:steel_ingot"
+    "tag": "c:steel_ingots"
   },
   "properties": {
     "attributes": [

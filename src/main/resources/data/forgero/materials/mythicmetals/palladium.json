@@ -4,7 +4,7 @@
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:palladium_ingot"
+    "tag": "c:palladium_ingots"
   },
   "properties": {
     "attributes": [

@@ -4,7 +4,7 @@
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:osmium_ingot"
+    "tag": "c:osmium_ingots"
   },
   "properties": {
     "attributes": [
