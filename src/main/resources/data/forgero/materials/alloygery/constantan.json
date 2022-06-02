@@ -1,10 +1,10 @@
 {
-  "name": "steel",
+  "name": "Constantan",
   "dependencies": [
     "alloygery"
   ],
   "ingredient": {
-    "tag": "c:steel_ingot"
+    "tag": "c:constantan_ingot"
   },
   "properties": {
     "attributes": [
@@ -19,9 +19,9 @@
     "active": []
   },
   "palette": {
-    "name": "steel",
+    "name": "constantan",
     "include": [
-      "alloygery:textures/items/steel_ingot.png"
+      "alloygery:textures/items/constantan_ingot.png"
     ],
     "exclude": [
     ]
