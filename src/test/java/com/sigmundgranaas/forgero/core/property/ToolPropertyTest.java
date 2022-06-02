@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.property;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.core.resourceloader.TestResourceLoader;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 public class ToolPropertyTest {
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
     }
 
     public static Supplier<PrimaryMaterial> DIAMOND_PRIMARY = () -> ForgeroRegistry.MATERIAL.getPrimaryMaterial("diamond").get();

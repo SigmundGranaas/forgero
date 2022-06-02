@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.gem;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.resourceloader.TestResourceLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ class GemCollectionImplTest {
 
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
     }
 
     @Test
@@ -21,7 +22,6 @@ class GemCollectionImplTest {
 
     @Test
     void gemsAreTheSameInstance() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
         var collection = ForgeroRegistry.GEM.list();
         var collection1 = ForgeroRegistry.GEM.list();
         for (int i = 0; i < collection.size(); i++) {

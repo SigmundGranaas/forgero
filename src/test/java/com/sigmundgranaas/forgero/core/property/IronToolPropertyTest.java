@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.resourceloader.TestResourceLoader;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
@@ -17,7 +18,7 @@ import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.*;
 public class IronToolPropertyTest {
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
     }
 
     @Test

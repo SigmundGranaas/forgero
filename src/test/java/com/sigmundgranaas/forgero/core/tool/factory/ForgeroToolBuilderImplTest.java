@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.tool.factory;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.resourceloader.TestResourceLoader;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.toolpart.toolpart.HandleTest;
 import com.sigmundgranaas.forgero.core.toolpart.toolpart.PickaxeHeadTest;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class ForgeroToolBuilderImplTest {
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
     }
 
     @Test

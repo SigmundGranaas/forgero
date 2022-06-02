@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class MaterialCollectionImplTest {
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        //ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
     }
 
     @Test
