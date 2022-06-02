@@ -1,5 +1,5 @@
 {
-  "name": "invar",
+  "name": "Invar",
   "dependencies": [
     "alloygery"
   ],
@@ -21,7 +21,7 @@
   "palette": {
     "name": "invar",
     "include": [
-      "alloygery:textures/items/invar_ingot.png"
+      "alloygery:textures/item/invar_ingot.png"
     ],
     "exclude": [
     ]

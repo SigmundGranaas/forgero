@@ -1,7 +1,6 @@
 {
   "name": "Constantan",
   "dependencies": [
-    "alloygery"
   ],
   "ingredient": {
     "tag": "c:constantan_ingot"
@@ -21,7 +20,7 @@
   "palette": {
     "name": "constantan",
     "include": [
-      "alloygery:textures/items/constantan_ingot.png"
+      "alloygery:textures/item/constantan_ingot.png"
     ],
     "exclude": [
     ]

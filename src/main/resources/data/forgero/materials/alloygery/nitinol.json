@@ -1,5 +1,5 @@
 {
-  "name": "nitinol",
+  "name": "Nitinol",
   "dependencies": [
     "alloygery"
   ],
@@ -21,7 +21,7 @@
   "palette": {
     "name": "nitinol",
     "include": [
-      "alloygery:textures/items/nitinol_ingot.png"
+      "alloygery:textures/item/nitinol_ingot.png"
     ],
     "exclude": [
     ]

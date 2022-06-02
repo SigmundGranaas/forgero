@@ -1,5 +1,5 @@
 {
-  "name": "nickel",
+  "name": "Nickel",
   "dependencies": [
     "alloygery"
   ],
@@ -21,7 +21,7 @@
   "palette": {
     "name": "nickel",
     "include": [
-      "alloygery:textures/items/nickel_ingot.png"
+      "alloygery:textures/item/nickel_ingot.png"
     ],
     "exclude": [
     ]

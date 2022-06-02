@@ -31,6 +31,6 @@ public class ForgeroDataResource {
     public int order = 0;
 
     public String getName() {
-        return name;
+        return name.toLowerCase();
     }
 }

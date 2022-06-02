@@ -1,5 +1,5 @@
 {
-  "name": "steel",
+  "name": "Steel",
   "dependencies": [
     "alloygery"
   ],
@@ -21,7 +21,7 @@
   "palette": {
     "name": "steel",
     "include": [
-      "alloygery:textures/items/steel_ingot.png"
+      "alloygery:textures/item/steel_ingot.png"
     ],
     "exclude": [
     ]

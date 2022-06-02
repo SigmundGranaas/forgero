@@ -1,5 +1,5 @@
 {
-  "name": "cupronickel",
+  "name": "Cupronickel",
   "dependencies": [
     "alloygery"
   ],
@@ -21,7 +21,7 @@
   "palette": {
     "name": "cupronickel",
     "include": [
-      "alloygery:textures/items/cupronickel_ingot.png"
+      "alloygery:textures/item/cupronickel_ingot.png"
     ],
     "exclude": [
     ]

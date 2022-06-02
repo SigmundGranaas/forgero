@@ -39,7 +39,7 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
             //var materialCollection = ForgeroRegistry.MATERIAL.list();
             ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
 
-            var loader = new FabricResourceLoader(new ModContainerService().getForgeroResourceNamespaces());
+            var loader = new FabricResourceLoader(new ModContainerService().getAllModsAsSet());
             ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(loader);
 
             //registry.getTextures().stream().filter(id -> PaletteResourceRegistry.getInstance().premadePalette(id.getPaletteIdentifier())).forEach(texture -> RESOURCE_PACK.addTexture(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier()), CachedToolPartTextureService.getInstance(new FabricTextureLoader((textureId) -> MinecraftClient.getInstance().getResourceManager().getResource(textureId))).getTexture(texture).getImage()));

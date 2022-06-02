@@ -69,7 +69,7 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource<?>> i
     @Override
     public void replaceRegistry(List<T> newResources) {
         synchronized (ConcurrentResourceRegistry.class) {
-            this.resources = newResources.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, element -> element));
+            this.resources = newResources.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, element -> element, (element1, element2) -> element1));
         }
     }
 

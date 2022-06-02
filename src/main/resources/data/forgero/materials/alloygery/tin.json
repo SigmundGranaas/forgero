@@ -1,5 +1,5 @@
 {
-  "name": "tin",
+  "name": "Tin",
   "dependencies": [
     "alloygery"
   ],
@@ -21,7 +21,7 @@
   "palette": {
     "name": "tin",
     "include": [
-      "alloygery:textures/items/tin_ingot.png"
+      "alloygery:textures/item/tin_ingot.png"
     ],
     "exclude": [
     ]

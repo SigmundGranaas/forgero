@@ -1,5 +1,5 @@
 {
-  "name": "titanium",
+  "name": "Titanium",
   "dependencies": [
     "alloygery"
   ],
@@ -21,7 +21,7 @@
   "palette": {
     "name": "titanium",
     "include": [
-      "alloygery:textures/items/titanium_ingot.png"
+      "alloygery:textures/item/titanium_ingot.png"
     ],
     "exclude": [
     ]

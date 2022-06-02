@@ -1,10 +1,10 @@
 {
-  "name": "atanium",
+  "name": "Antanium",
   "dependencies": [
     "alloygery"
   ],
   "ingredient": {
-    "tag": "c:atanium_ingot"
+    "tag": "c:antanium_ingot"
   },
   "properties": {
     "attributes": [
@@ -19,9 +19,9 @@
     "active": []
   },
   "palette": {
-    "name": "atanium",
+    "name": "antanium",
     "include": [
-      "alloygery:textures/items/atanium_ingot.png"
+      "alloygery:textures/item/antanium_ingot.png"
     ],
     "exclude": [
     ]

@@ -31,6 +31,9 @@ public class FabricTextureLoader implements TextureLoader {
     public Texture getResource(TextureIdentifier id) {
         try {
             if (id instanceof PaletteTemplateIdentifier) {
+                if (!id.getIdentifier().contains("minecraft")) {
+                    return RawTexture.createRawTexture(id, fileService.getStream(id));
+                }
                 return RawTexture.createRawTexture(id, getResource.apply((new Identifier(id.getFileNameWithExtension()))).getInputStream());
             } else {
                 return RawTexture.createRawTexture(id, fileService.getStream(id));

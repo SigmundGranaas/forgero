@@ -21,7 +21,7 @@
   "palette": {
     "name": "bronze",
     "include": [
-      "alloygery:textures/items/bronze_ingot.png"
+      "alloygery:textures/item/bronze_ingot.png"
     ],
     "exclude": [
     ]

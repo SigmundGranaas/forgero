@@ -1,10 +1,10 @@
 {
-  "name": "titaniumgold",
+  "name": "Titaniumgold",
   "dependencies": [
     "alloygery"
   ],
   "ingredient": {
-    "tag": "c:titaniumgold_ingot"
+    "tag": "c:titanium_gold_ingot"
   },
   "properties": {
     "attributes": [
@@ -21,7 +21,7 @@
   "palette": {
     "name": "titaniumgold",
     "include": [
-      "alloygery:textures/items/titaniumgold_ingot.png"
+      "alloygery:textures/item/titanium_gold_ingot.png"
     ],
     "exclude": [
     ]
