@@ -1,7 +1,8 @@
-### Changelog 0.8.3
+### Changelog 0.8.4
 
 # Forgero Beta release
 
+* Made all data resources reloadable and overridable
 * Fixed triggers for achievements
 * Cleaned up some files
 * Reworked the Item registry
