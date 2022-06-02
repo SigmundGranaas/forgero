@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ConcurrentMaterialRegistry extends ConcurrentResourceRegistry<ForgeroMaterial> implements MaterialRegistry {
-
     public ConcurrentMaterialRegistry(Map<String, ForgeroMaterial> materials) {
         super(materials);
     }

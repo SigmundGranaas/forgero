@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero.core.toolpart.binding;
 
-import com.sigmundgranaas.forgero.core.toolpart.AbstractToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ReloadableToolPart;
 
-public class Binding extends AbstractToolPart implements ToolPartBinding {
-
+public class Binding extends ReloadableToolPart implements ToolPartBinding {
 
     public Binding(BindingState state) {
         super(state);

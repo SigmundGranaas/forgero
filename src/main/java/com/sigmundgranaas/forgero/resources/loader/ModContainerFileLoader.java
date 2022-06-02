@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.resources;
+package com.sigmundgranaas.forgero.resources.loader;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import net.fabricmc.loader.api.ModContainer;

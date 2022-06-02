@@ -3,9 +3,10 @@ package com.sigmundgranaas.forgero.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPojo;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -13,6 +14,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
+import com.sigmundgranaas.forgero.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.toolhandler.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,9 +37,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 import java.util.UUID;
 
-public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed, PropertyContainer, ForgeroItem<Item> {
+public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed, PropertyContainer, ForgeroItem<Item, ToolPojo> {
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
-    UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-645C-4F38-A497-9C13A33DB5CF");
+    UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
+
     FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
 
     @Override
@@ -45,9 +48,12 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
         return state.isIn(getToolTags());
     }
 
-    Identifier getIdentifier();
-
     ForgeroToolTypes getToolType();
+
+
+    default Identifier getIdentifier() {
+        return new Identifier(getNameSpace(), getTool().getToolIdentifierString());
+    }
 
     ForgeroTool getTool();
 
@@ -58,7 +64,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
     @Override
     default String getStringIdentifier() {
-        return getIdentifier().getPath();
+        return getTool().getStringIdentifier();
     }
 
     @Override
@@ -87,7 +93,13 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
             Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", tool.getAttackDamage(target) - getTool().getAttackDamage(target), EntityAttributeModifier.Operation.ADDITION));
+            float baseToolDamage = getTool().getAttackDamage(target);
+            float currentToolDamage = tool.getAttackDamage(target);
+            //Base attack damage
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
+
+            //Attack damage addition
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", baseToolDamage - currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
             if (tool.getAttackSpeed(target) != getTool().getAttackSpeed(target)) {
                 builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
             }
@@ -112,7 +124,6 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
         return adapter.getTool(toolStack).orElse(getTool());
     }
 
-
     default Text getForgeroTranslatableToolName() {
         ForgeroTool tool = getTool();
         MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName().toLowerCase(Locale.ROOT))).append(" ");
@@ -135,4 +146,13 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     @NotNull
     Item getItem();
 
+    @Override
+    default int compareTo(@NotNull Object o) {
+        int containerResult = PropertyContainer.super.compareTo(o);
+        if (containerResult != 0) {
+            return containerResult;
+        } else {
+            return ForgeroItem.super.compareTo(o);
+        }
+    }
 }

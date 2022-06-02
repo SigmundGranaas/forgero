@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -18,7 +18,6 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,12 +40,6 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
         ForgeroTool forgeroTool = toolAdapter.getTool(itemStack).orElse(tool);
         forgeroTool.createToolDescription(new DescriptionWriter(tooltip));
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
-    }
-
-
-    @Override
-    public Identifier getIdentifier() {
-        return new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString());
     }
 
 

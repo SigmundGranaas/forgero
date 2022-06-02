@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.registry.impl;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroResourceLoader;
 import com.sigmundgranaas.forgero.core.registry.*;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
@@ -41,18 +41,19 @@ public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
     }
 
     @Override
-    public ForgeroItemRegistry loadResources(ForgeroResourceInitializer initializer) {
-        forgeroRegistry.loadResources(initializer);
-        schematicItemRegistry.updateRegistry(SCHEMATIC.list().stream()
+    public ForgeroItemRegistry loadResources(ForgeroResourceLoader loader) {
+        forgeroRegistry.loadResources(loader);
+
+        schematicItemRegistry.replaceRegistry(SCHEMATIC.stream()
                 .map(ItemFactory.INSTANCE::createSchematic)
                 .toList());
-        gemItemRegistry.updateRegistry(GEM.list().stream()
+        gemItemRegistry.replaceRegistry(GEM.list().stream()
                 .map(ItemFactory.INSTANCE::createGem)
                 .toList());
-        toolItemRegistry.updateRegistry(TOOL.list().stream()
+        toolItemRegistry.replaceRegistry(TOOL.list().stream()
                 .map(ItemFactory.INSTANCE::createTool)
                 .toList());
-        toolPartItemRegistry.updateRegistry(TOOL_PART.list().stream()
+        toolPartItemRegistry.replaceRegistry(TOOL_PART.list().stream()
                 .filter(toolPart -> toolPart.getSchematic().getResourceName().contains("default"))
                 .map(ItemFactory.INSTANCE::createToolPart)
                 .map(ToolPartItem.class::cast)
@@ -62,16 +63,16 @@ public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
 
     @Override
     @NotNull
-    public ForgeroItemRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer) {
+    public ForgeroItemRegistry loadResourcesIfEmpty(ForgeroResourceLoader loader) {
         if (isEmpty()) {
-            loadResources(initializer);
+            loadResources(loader);
         }
         return this;
     }
 
     @Override
-    public void updateResources() {
-
+    public void updateResources(ForgeroResourceLoader loader) {
+        forgeroRegistry.loadResources(loader);
     }
 
     @Override

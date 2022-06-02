@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core;
+package com.sigmundgranaas.forgero.core.resource;
 
 public enum ForgeroResourceType {
     MATERIAL,

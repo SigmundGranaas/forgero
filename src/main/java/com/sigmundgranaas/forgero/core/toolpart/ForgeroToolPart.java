@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.toolpart;
 
-import com.sigmundgranaas.forgero.core.ForgeroResource;
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPartPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
@@ -10,9 +9,11 @@ import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 
-public interface ForgeroToolPart extends ForgeroResource, PropertyContainer {
+public interface ForgeroToolPart extends ForgeroResource<ToolPartPojo>, PropertyContainer {
     PrimaryMaterial getPrimaryMaterial();
 
     SecondaryMaterial getSecondaryMaterial();

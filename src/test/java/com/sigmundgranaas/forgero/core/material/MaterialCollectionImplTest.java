@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.material;
 
 import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
 import net.minecraft.item.ToolMaterial;
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class MaterialCollectionImplTest {
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        //ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
     }
 
     @Test

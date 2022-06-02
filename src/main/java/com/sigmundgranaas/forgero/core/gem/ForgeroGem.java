@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.core.gem;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.GemPojo;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +67,12 @@ public class ForgeroGem implements Gem {
     }
 
     @Override
-    public List<Property> getProperties() {
+    public GemPojo toDataResource() {
+        return null;
+    }
+
+    @Override
+    public @NotNull List<Property> getProperties() {
         var leveledAttribute = propertyList.stream().filter(property -> property instanceof Attribute)
                 .map(Attribute.class::cast)
                 .map(attribute -> {

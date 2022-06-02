@@ -2,8 +2,9 @@ package com.sigmundgranaas.forgero.core.registry.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.sigmundgranaas.forgero.core.ForgeroResource;
+import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.ForgeroResourceRegistry;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @param <T>
  */
-public abstract class ConcurrentResourceRegistry<T extends ForgeroResource> implements ForgeroResourceRegistry<T> {
+public abstract class ConcurrentResourceRegistry<T extends ForgeroResource<?>> implements ForgeroResourceRegistry<T> {
     private Map<String, T> resources;
 
     protected ConcurrentResourceRegistry(Map<String, T> resources) {
@@ -44,6 +45,18 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource> impl
     }
 
     @Override
+    public @NotNull T getResource(T resource) {
+        T updatedResource = getResources().get(resource.getStringIdentifier());
+        if (updatedResource == null) {
+            if (!resources.isEmpty()) {
+                ForgeroInitializer.LOGGER.warn("state is corrupted, registry does not contain original resources");
+            }
+            return resource;
+        }
+        return updatedResource;
+    }
+
+    @Override
     public ImmutableList<T> getResourcesAsList() {
         return ForgeroResourceRegistry.convertMapToImmutableList(getResources());
     }
@@ -54,10 +67,42 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource> impl
     }
 
     @Override
+    public void replaceRegistry(List<T> newResources) {
+        synchronized (ConcurrentResourceRegistry.class) {
+            this.resources = newResources.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, element -> element));
+        }
+    }
+
+    @Override
+    public void replaceRegistry(Map<String, T> newResources) {
+        synchronized (ConcurrentResourceRegistry.class) {
+            this.resources = newResources;
+        }
+    }
+
+
+    @Override
+    public void replaceRegistry(ImmutableList<T> newResources) {
+        synchronized (ConcurrentResourceRegistry.class) {
+            this.resources = newResources.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, element -> element));
+        }
+    }
+
+    @Override
     public void updateRegistry(List<T> newResources) {
         synchronized (ConcurrentResourceRegistry.class) {
-            resources = newResources.stream().collect(Collectors.toMap(T::getStringIdentifier, resource -> resource));
+            newResources.forEach(resource -> {
+                String key = resource.getStringIdentifier();
+                if (resources.containsKey(key)) {
+                    resources.put(resource.getStringIdentifier(), resource);
+                }
+            });
         }
+    }
+
+    @Override
+    public void updateRegistry(ImmutableList<T> newResources) {
+        updateRegistry(newResources.stream().toList());
     }
 
     @Override

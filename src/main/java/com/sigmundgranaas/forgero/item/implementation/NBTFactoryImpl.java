@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -248,14 +248,14 @@ public class NBTFactoryImpl implements NBTFactory {
     }
 
     private Property createPassivePropertyFromNbt(NbtCompound compound) {
-        var pojo = new PropertyPOJO.Passive();
+        var pojo = new PropertyPojo.Passive();
         pojo.type = PassivePropertyType.valueOf(compound.getString("Type"));
         pojo.tag = compound.getString("Tag");
         return PassivePropertyBuilder.createPassivePropertyFromPojo(pojo);
     }
 
     private Property createActivePropertyFromNbt(NbtCompound compound) {
-        var pojo = new PropertyPOJO.Active();
+        var pojo = new PropertyPojo.Active();
         pojo.type = ActivePropertyType.valueOf(compound.getString("Type"));
         pojo.tag = compound.getString("Tag");
         pojo.depth = compound.getInt("Depth");
@@ -274,14 +274,14 @@ public class NBTFactoryImpl implements NBTFactory {
     }
 
     private Attribute createAttributeFromNbt(NbtCompound compound) {
-        var pojo = new PropertyPOJO.Attribute();
+        var pojo = new PropertyPojo.Attribute();
         pojo.value = compound.getFloat("Value");
         pojo.operation = NumericOperation.valueOf(compound.getString("Operation"));
         pojo.order = CalculationOrder.valueOf(compound.getString("Order"));
         pojo.type = AttributeType.valueOf(compound.getString("Type"));
         if (compound.contains("Condition")) {
             var conditionCompound = compound.getCompound("Condition");
-            pojo.condition = new PropertyPOJO.Condition();
+            pojo.condition = new PropertyPojo.Condition();
             pojo.condition.target = TargetTypes.valueOf(conditionCompound.getString("target"));
             NbtList list = conditionCompound.getList("Tag", NbtElement.STRING_TYPE);
             pojo.condition.tag = new ArrayList<>(list.stream().map(NbtElement::asString).toList());
@@ -291,7 +291,7 @@ public class NBTFactoryImpl implements NBTFactory {
 
 
     @Override
-    public @NotNull NbtCompound createNbtFromProperties(@NotNull PropertyPOJO properties) {
+    public @NotNull NbtCompound createNbtFromProperties(@NotNull PropertyPojo properties) {
         NbtCompound compound = new NbtCompound();
         if (properties.passiveProperties.size() > 0) {
             NbtList list = new NbtList();
@@ -312,7 +312,7 @@ public class NBTFactoryImpl implements NBTFactory {
         return compound;
     }
 
-    private NbtElement createAttributeNbtCompound(PropertyPOJO.Attribute attribute) {
+    private NbtElement createAttributeNbtCompound(PropertyPojo.Attribute attribute) {
         NbtCompound compound = new NbtCompound();
         compound.putString("Type", attribute.type.toString());
         compound.putFloat("Value", attribute.value);
@@ -329,7 +329,7 @@ public class NBTFactoryImpl implements NBTFactory {
         return compound;
     }
 
-    private NbtElement createActiveNbtCompound(PropertyPOJO.Active active) {
+    private NbtElement createActiveNbtCompound(PropertyPojo.Active active) {
         NbtCompound compound = new NbtCompound();
         compound.putString("Tag", active.tag);
         compound.putString("Type", active.type.toString());
@@ -348,7 +348,7 @@ public class NBTFactoryImpl implements NBTFactory {
         }
     }
 
-    private NbtElement createPassiveNbtCompound(PropertyPOJO.Passive passive) {
+    private NbtElement createPassiveNbtCompound(PropertyPojo.Passive passive) {
         NbtCompound compound = new NbtCompound();
         compound.putString("Tag", passive.tag);
         compound.putString("Type", passive.type.toString());

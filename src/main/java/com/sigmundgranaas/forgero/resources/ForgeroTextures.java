@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ModelLayer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
@@ -16,6 +15,7 @@ import com.sigmundgranaas.forgero.core.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RRPPreGenEntrypoint;
 import net.devtech.arrp.api.RuntimeResourcePack;
@@ -24,7 +24,7 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
 
-import static com.sigmundgranaas.forgero.resources.ResourceLocations.MATERIAL_TEMPLATES_LOCATION;
+import static com.sigmundgranaas.forgero.resources.loader.ResourceLocations.MATERIAL_TEMPLATES_LOCATION;
 
 
 public class ForgeroTextures implements RRPPreGenEntrypoint {
@@ -39,8 +39,8 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
             //var materialCollection = ForgeroRegistry.MATERIAL.list();
             ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
 
-            ForgeroResourceInitializer initializer = new ForgeroResourceInitializer();
-            ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(initializer);
+            var loader = new FabricResourceLoader(new ModContainerService().getForgeroResourceNamespaces());
+            ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(loader);
 
             //registry.getTextures().stream().filter(id -> PaletteResourceRegistry.getInstance().premadePalette(id.getPaletteIdentifier())).forEach(texture -> RESOURCE_PACK.addTexture(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier()), CachedToolPartTextureService.getInstance(new FabricTextureLoader((textureId) -> MinecraftClient.getInstance().getResourceManager().getResource(textureId))).getTexture(texture).getImage()));
 
