@@ -72,7 +72,7 @@ public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
 
     @Override
     public void updateResources(ForgeroResourceLoader loader) {
-        forgeroRegistry.loadResources(loader);
+        forgeroRegistry.updateResources(loader);
     }
 
     @Override
