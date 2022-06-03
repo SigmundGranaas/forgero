@@ -1,0 +1,54 @@
+{
+  "name": "root_binding",
+  "type": "BINDING",
+  "resource_type": "SCHEMATIC",
+  "abstract_resource": true,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "binding_primary",
+        "secondary": "binding_secondary",
+        "gem": "handle_gem"
+      }
+    },
+    {
+      "id": "PICKAXE_BINDING",
+      "model": {
+        "primary": "pickaxe_binding_primary",
+        "secondary": "pickaxe_binding_secondary",
+        "gem": "pickaxe_binding_gem"
+      }
+    },
+    {
+      "id": "SHOVEL_BINDING",
+      "model": {
+        "primary": "shovel_binding_primary",
+        "secondary": "shovel_binding_secondary",
+        "gem": "shovel_binding_gem"
+      }
+    },
+    {
+      "id": "SWORD_BINDING",
+      "model": {
+        "primary": "sword_binding_primary",
+        "secondary": "sword_binding_secondary",
+        "gem": "sword_binding_gem"
+      }
+    },
+    {
+      "id": "AXE_BINDING",
+      "model": {
+        "primary": "axe_binding_primary",
+        "secondary": "axe_binding_secondary",
+        "gem": "axe_binding_gem"
+      }
+    }
+  ],
+  "materialCount": 2,
+  "properties": {
+    "attributes": [],
+    "passive:": [],
+    "active": []
+  }
+}

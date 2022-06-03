@@ -1,6 +1,7 @@
 {
   "name": "Constantan",
   "dependencies": [
+    "alloygery"
   ],
   "ingredient": {
     "tag": "c:constantan_ingots"

@@ -54,7 +54,7 @@ public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
                 .map(ItemFactory.INSTANCE::createTool)
                 .toList());
         toolPartItemRegistry.replaceRegistry(TOOL_PART.list().stream()
-                .filter(toolPart -> toolPart.getSchematic().getResourceName().contains("default"))
+                .filter(toolPart -> toolPart.getSchematic().isUnique())
                 .map(ItemFactory.INSTANCE::createToolPart)
                 .map(ToolPartItem.class::cast)
                 .toList());

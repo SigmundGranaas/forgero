@@ -1,9 +1,6 @@
 {
-  "name": "reinforced",
-  "type": "HANDLE",
-  "model": "dense",
-  "output": "handle_dense",
-  "rarity": 70,
+  "name": "reinforced_handle",
+  "parent": "root_handle",
   "materialCount": 4,
   "properties": {
     "attributes": [

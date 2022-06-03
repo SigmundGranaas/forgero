@@ -117,12 +117,12 @@ public interface ForgeroDefaults {
 
             @Override
             public String getToolPartName() {
-                return "default_handle";
+                return "default-handle";
             }
 
             @Override
             public String getToolPartIdentifier() {
-                return "default_handle";
+                return "default-handle";
             }
 
             @Override

@@ -1,10 +1,6 @@
 {
-  "name": "vein",
-  "type": "HEAD",
-  "parent": "default_axehead",
-  "model": "vein",
-  "output": "axe_vein",
-  "rarity": 80,
+  "name": "vein_axehead",
+  "parent": "root_axehead",
   "properties": {
     "attributes": [
     ],

@@ -1,10 +1,18 @@
 {
-  "name": "pattern",
-  "parent": "default_axehead",
+  "name": "pattern_axehead",
+  "parent": "root_axehead",
   "type": "HEAD",
   "toolType": "AXE",
-  "model": "pattern",
-  "output": "axe_pattern",
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "pattern_pickaxehead_primary",
+        "secondary": "pattern_pickaxehead_secondary",
+        "gem": "pattern_pickaxehead_gem"
+      }
+    }
+  ],
   "materialCount": 3,
   "properties": {
     "active": [

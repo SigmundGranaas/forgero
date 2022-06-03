@@ -1,10 +1,6 @@
 {
   "name": "pattern_axehead",
-  "parent": "axehead_root",
-  "type": "HEAD",
-  "toolType": "SHOVEL",
-  "model": "pattern",
-  "output": "shovel_pattern",
+  "parent": "root_axehead",
   "materialCount": 3,
   "properties": {
     "active": [

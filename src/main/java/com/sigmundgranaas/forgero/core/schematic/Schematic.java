@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.schematic;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -8,10 +7,13 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.texture.TextureModelContainer;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContainer {
     private final ForgeroToolPartTypes type;
@@ -21,11 +23,11 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
     private final int rarity;
 
     private final boolean unique;
-    private final ModelPojo model;
+    private final TextureModelContainer model;
 
     private final int materialCount;
 
-    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, ModelPojo model, int materialCount, boolean unique) {
+    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, TextureModelContainer model, int materialCount, boolean unique) {
         this.type = type;
         this.name = name;
         this.properties = properties;
@@ -47,7 +49,7 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
 
     @Override
     public String getStringIdentifier() {
-        return String.format("%s_schematic_%s", type.getName(), name);
+        return String.format("%s%sschematic", name, ELEMENT_SEPARATOR);
     }
 
     public String getResourceName() {
@@ -68,7 +70,7 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         return properties;
     }
 
-    public ModelPojo getModel() {
+    public TextureModelContainer getModelContainer() {
         return model;
     }
 

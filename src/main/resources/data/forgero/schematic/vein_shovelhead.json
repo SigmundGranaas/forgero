@@ -1,10 +1,17 @@
 {
-  "name": "vein",
+  "name": "vein_shovelhead",
   "type": "HEAD",
   "toolType": "SHOVEL",
-  "model": "vein",
-  "output": "shovel_vein",
-  "rarity": 80,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "vanilla_shovel_head_primary",
+        "secondary": "vanilla_shovel_head_secondary",
+        "gem": "vanilla_shovel_head_gem"
+      }
+    }
+  ],
   "materialCount": 3,
   "properties": {
     "attributes": [

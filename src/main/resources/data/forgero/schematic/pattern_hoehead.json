@@ -1,10 +1,6 @@
 {
-  "name": "pattern",
-  "parent": "default_hoehead",
-  "type": "HEAD",
-  "toolType": "HOE",
-  "model": "vein",
-  "output": "hoe_vein",
+  "name": "pattern_hoehead",
+  "parent": "vanilla_hoehead",
   "materialCount": 3,
   "properties": {
     "active": [

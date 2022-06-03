@@ -5,12 +5,14 @@ import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierType;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier implements ForgeroToolIdentifier {
     private final String[] toolElements;
 
     public ForgeroToolIdentifierImpl(String toolDescriptor) {
         super(ForgeroIdentifierType.TOOL);
-        String[] elements = toolDescriptor.split("_");
+        String[] elements = toolDescriptor.split(ELEMENT_SEPARATOR);
         if (elements.length != 2) {
             ForgeroInitializer.LOGGER.warn("Unable to Create ForgeroToolIdentifier with: {}", toolDescriptor);
             throw new IllegalArgumentException("Unable to Create ForgeroTolIdentifier with: " + toolDescriptor);
@@ -25,12 +27,12 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
 
     @Override
     public ForgeroToolPartHeadIdentifier getHead() {
-        return (ForgeroToolPartHeadIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolElements[0] + "_" + toolElements[1] + "head" + "_default");
+        return (ForgeroToolPartHeadIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolElements[0] + ELEMENT_SEPARATOR + toolElements[1] + "head" + ELEMENT_SEPARATOR + "default");
     }
 
     @Override
     public ForgeroToolPartIdentifier getHandle() {
-        return (ForgeroToolPartIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier("oak_handle_default");
+        return (ForgeroToolPartIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier("oak" + ELEMENT_SEPARATOR + "handle" + ELEMENT_SEPARATOR + "default");
     }
 
     @Override
@@ -40,6 +42,6 @@ public class ForgeroToolIdentifierImpl extends AbstractForgeroIdentifier impleme
 
     @Override
     public String getIdentifier() {
-        return toolElements[0] + "_" + toolElements[1];
+        return toolElements[0] + ELEMENT_SEPARATOR + toolElements[1];
     }
 }

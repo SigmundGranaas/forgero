@@ -8,6 +8,8 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import org.jetbrains.annotations.Nullable;
 
+import static com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR;
+
 @SuppressWarnings("ClassCanBeRecord")
 public class ForgeroModelVariantProvider implements ModelVariantProvider {
     private final UnbakedModelCollection collection;
@@ -20,7 +22,7 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     public @Nullable
     UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
         if (modelId.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
-            String[] elements = modelId.getPath().split("_");
+            String[] elements = modelId.getPath().split(DEFAULT_SPLIT_OPERATOR);
 
             if (elements.length > 1 && ForgeroToolTypes.isTool(elements[1])) {
                 return new ToolModelVariant(collection);

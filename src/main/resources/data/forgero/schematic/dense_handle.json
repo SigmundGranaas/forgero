@@ -1,9 +1,6 @@
 {
-  "name": "dense",
-  "type": "HANDLE",
-  "model": "dense",
-  "output": "handle_dense",
-  "rarity": 50,
+  "name": "dense_handle",
+  "parent": "root_handle",
   "materialCount": 3,
   "properties": {
     "attributes": [

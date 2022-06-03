@@ -1,0 +1,42 @@
+{
+  "name": "root_handle",
+  "type": "HANDLE",
+  "resource_type": "SCHEMATIC",
+  "abstract_resource": true,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "handle_primary",
+        "secondary": "handle_secondary",
+        "gem": "handle_gem"
+      }
+    },
+    {
+      "id": "FULL_HANDLE",
+      "reference": "DEFAULT"
+    },
+    {
+      "id": "MEDIUM_HANDLE",
+      "model": {
+        "primary": "medium_handle_primary",
+        "secondary": "medium_handle_secondary",
+        "gem": "medium_handle_gem"
+      }
+    },
+    {
+      "id": "SHORT_HANDLE",
+      "model": {
+        "primary": "short_handle_primary",
+        "secondary": "short_handle_secondary",
+        "gem": "short_handle_gem"
+      }
+    }
+  ],
+  "materialCount": 2,
+  "properties": {
+    "attributes": [],
+    "passive:": [],
+    "active": []
+  }
+}

@@ -45,8 +45,8 @@ dependencies {
     modImplementation("net.devtech:arrp:0.5.7")
 
     //alloygery testing
-    modImplementation "curse.maven:alloygery-573592:3778894"
-    modImplementation "curse.maven:nbtcrafting-314633:3707208"
+    //modImplementation "curse.maven:alloygery-573592:3778894"
+    //modImplementation "curse.maven:nbtcrafting-314633:3707208"
 
 
     include "net.devtech:arrp:0.5.7"

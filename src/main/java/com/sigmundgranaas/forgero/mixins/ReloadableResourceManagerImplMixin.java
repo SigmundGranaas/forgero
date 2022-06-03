@@ -22,6 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 @Mixin(LifecycledResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin {
 
@@ -31,7 +33,7 @@ public abstract class ReloadableResourceManagerImplMixin {
     @Inject(method = "getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
 
-        if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent")) {
+        if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split(ELEMENT_SEPARATOR).length > 1 && !id.getPath().contains("transparent")) {
             FabricTextureIdentifierFactory factory = new FabricTextureIdentifierFactory();
 
             Optional<ToolPartModelTextureIdentifier> identifierResult = factory.createToolPartTextureIdentifier(id.getPath());

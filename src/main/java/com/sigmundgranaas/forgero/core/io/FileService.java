@@ -20,7 +20,7 @@ public class FileService {
             return "assets/" + id.getFileNameWithExtension().replace(":", "/");
         }
         if (id instanceof TemplateTextureIdentifier texture) {
-            return "assets/forgero/templates/textures/" + texture.skin() + "/" + id.getFileNameWithExtension();
+            return "assets/forgero/templates/textures/" + texture.getFileNameWithExtension();
         } else if (id instanceof PaletteIdentifier) {
             return "assets/forgero/templates/materials/" + id.getFileNameWithExtension();
         } else {

@@ -65,7 +65,8 @@ public class ModelAssembler implements ToolModelAssembler, ToolPartModelAssemble
     }
 
     private FabricBakedModel getBaseModel(ForgeroToolPart part) {
-        return Optional.ofNullable(getModel.apply(ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(part).getIdentifier())).orElse(new EmptyBakedModel());
+        var identifier = ForgeroIdentifierFactory.INSTANCE.createToolPartModelIdentifier(part).getIdentifier();
+        return Optional.ofNullable(getModel.apply(identifier)).orElse(new EmptyBakedModel());
     }
 
     private FabricBakedModel getSecondaryMaterialModel(ForgeroToolPart part) {
