@@ -9,8 +9,10 @@ public class SchematicPojo extends ForgeroDataResource {
     @NotNull
     public ForgeroToolPartTypes type;
     public ForgeroToolTypes toolType;
-    public String model;
+    //public String model;
     public int materialCount;
+    public ModelPojo model;
+    public boolean unique = false;
 
     @Override
     public String getName() {

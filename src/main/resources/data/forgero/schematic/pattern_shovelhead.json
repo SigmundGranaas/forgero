@@ -1,6 +1,6 @@
 {
-  "name": "pattern",
-  "parent": "default_shovelhead",
+  "name": "pattern_axehead",
+  "parent": "axehead_root",
   "type": "HEAD",
   "toolType": "SHOVEL",
   "model": "pattern",

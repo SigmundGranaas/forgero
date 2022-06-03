@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.schematic;
 
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -18,17 +19,20 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
     private final List<Property> properties;
 
     private final int rarity;
-    private final String model;
+
+    private final boolean unique;
+    private final ModelPojo model;
 
     private final int materialCount;
 
-    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, String model, int materialCount) {
+    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, ModelPojo model, int materialCount, boolean unique) {
         this.type = type;
         this.name = name;
         this.properties = properties;
         this.rarity = (int) Property.stream(properties).applyAttribute(Target.EMPTY, AttributeType.RARITY);
         this.model = model;
         this.materialCount = materialCount;
+        this.unique = unique;
     }
 
     @Override
@@ -64,7 +68,7 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         return properties;
     }
 
-    public String getModel() {
+    public ModelPojo getModel() {
         return model;
     }
 
@@ -76,8 +80,8 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         return type;
     }
 
-    public String getVariant() {
-        return name;
+    public boolean isUnique() {
+        return unique;
     }
 
     public int getMaterialCount() {

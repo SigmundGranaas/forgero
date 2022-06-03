@@ -2,6 +2,7 @@
 
 # Forgero Beta release
 
+* Created Alloygery integration (MATERIALS ARE NOT BALANCED)
 * Made all data resources reloadable and overridable
 * Fixed triggers for achievements
 * Cleaned up some files
@@ -18,5 +19,5 @@
 * Created palettes for all materials from mythic metals
 * Fixed mythic metal translations
 * Added support for adding resources in subdirectories
-* Recipe for guidebook will only be created if pathouli is loaded
+* Recipe for guidebook will only be created if patchouli is loaded
 * Removed guidebook being given more than one time

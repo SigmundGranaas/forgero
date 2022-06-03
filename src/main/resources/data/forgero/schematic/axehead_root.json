@@ -1,11 +1,13 @@
 {
-  "name": "default",
+  "name": "root",
   "type": "HEAD",
   "resource_type": "SCHEMATIC",
   "toolType": "AXE",
-  "model": "default",
-  "output": "axehead_default",
-  "rarity": 1,
+  "model": {
+    "primary": "axehead_primary",
+    "secondary": "axehead_secondary",
+    "gem": "axehead_gem"
+  },
   "materialCount": 3,
   "properties": {
     "passive:": [],

@@ -25,9 +25,9 @@ public class SchematicFactory extends DataResourceFactory<SchematicPojo, Schemat
     public Optional<Schematic> createResource(SchematicPojo pojo) {
         List<Property> propertyList = createPropertyListFromPOJO(pojo.properties);
         if (pojo.type == ForgeroToolPartTypes.HEAD) {
-            return Optional.of(new HeadSchematic(pojo.type, pojo.name, propertyList, pojo.toolType, pojo.model, pojo.materialCount));
+            return Optional.of(new HeadSchematic(pojo.type, pojo.name, propertyList, pojo.toolType, pojo.model, pojo.materialCount, pojo.unique));
         } else {
-            return Optional.of(new Schematic(pojo.type, pojo.name, propertyList, pojo.model, pojo.materialCount));
+            return Optional.of(new Schematic(pojo.type, pojo.name, propertyList, pojo.model, pojo.materialCount, pojo.unique));
         }
     }
 
@@ -35,6 +35,7 @@ public class SchematicFactory extends DataResourceFactory<SchematicPojo, Schemat
     protected SchematicPojo mergePojos(SchematicPojo parent, SchematicPojo child, SchematicPojo basePojo) {
         basePojo.materialCount = replaceAttributesDefault(child.materialCount, parent.materialCount, 1);
         basePojo.model = replaceAttributesDefault(child.model, parent.model, null);
+        basePojo.unique = replaceAttributesDefault(child.unique, parent.unique, false);
         basePojo.toolType = replaceAttributesDefault(child.toolType, parent.toolType, null);
         basePojo.type = replaceAttributesDefault(child.type, parent.type, null);
         basePojo.resourceType = ResourceType.SCHEMATIC;

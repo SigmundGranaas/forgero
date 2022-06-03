@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
@@ -211,15 +212,20 @@ public class NBTFactoryImpl implements NBTFactory {
                 NbtCompound schematicCompound = compound.getCompound(SCHEMATIC_NBT_IDENTIFIER);
                 ForgeroToolPartTypes type = ForgeroToolPartTypes.valueOf(schematicCompound.getString("Type"));
                 String name = schematicCompound.getString("Name");
-                String model = schematicCompound.getString("Model");
+                NbtCompound modelCompound = schematicCompound.getCompound("Model");
+                ModelPojo model = new ModelPojo();
+                model.primary = modelCompound.getString("Primary");
+                model.secondary = modelCompound.getString("Secondary");
+                model.gem = modelCompound.getString("Gem");
+                boolean unique = schematicCompound.getBoolean("Unique");
                 int materialCount = schematicCompound.getInt("MaterialCount");
                 List<Property> properties = createPropertiesFromNbt(schematicCompound.getCompound("Properties"));
 
                 if (type == ForgeroToolPartTypes.HEAD) {
                     ForgeroToolTypes toolType = ForgeroToolTypes.valueOf(schematicCompound.getString("ToolType"));
-                    return Optional.of(new HeadSchematic(type, name, properties, toolType, model, materialCount));
+                    return Optional.of(new HeadSchematic(type, name, properties, toolType, model, materialCount, unique));
                 }
-                return Optional.of(new Schematic(type, name, properties, model, materialCount));
+                return Optional.of(new Schematic(type, name, properties, model, materialCount, unique));
             }
         }
         return Optional.empty();
@@ -360,7 +366,11 @@ public class NBTFactoryImpl implements NBTFactory {
         NbtCompound schematicCompound = new NbtCompound();
         schematicCompound.putString("Name", schematic.getResourceName());
         schematicCompound.putInt("MaterialCount", schematic.getMaterialCount());
-        schematicCompound.putString("Model", schematic.getModel());
+        NbtCompound modelCompound = new NbtCompound();
+        modelCompound.putString("Primary", schematic.getModel().primary);
+        modelCompound.putString("Secondary", schematic.getModel().secondary);
+        modelCompound.putString("Gem", schematic.getModel().gem);
+        schematicCompound.put("Model", modelCompound);
         schematicCompound.put("Property", createNbtFromProperties(Property.pojo(schematic.getProperties())));
         if (schematic instanceof HeadSchematic headSchematic) {
             schematicCompound.putString("ToolType", headSchematic.getToolType().toString());

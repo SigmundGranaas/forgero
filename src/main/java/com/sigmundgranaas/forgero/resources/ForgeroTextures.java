@@ -69,16 +69,16 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
     }
 
     private void registerModel(ForgeroToolPartTextureRegistry registry, Schematic schematic, ForgeroMaterial material, ModelLayer layer) {
-        registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.getModelType(schematic), layer, schematic.getModel()));
+        registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.getModelType(schematic), layer, layer == ModelLayer.PRIMARY ? schematic.getModel().primary : schematic.getModel().secondary));
         if (schematic.getType() == ForgeroToolPartTypes.BINDING) {
             for (ForgeroToolTypes type : ForgeroToolTypes.values()) {
-                registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.getModelType(type, schematic.getType()), layer, schematic.getModel()));
+                registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.getModelType(type, schematic.getType()), layer, layer == ModelLayer.PRIMARY ? schematic.getModel().primary : schematic.getModel().secondary));
             }
         }
         if (schematic.getType() == ForgeroToolPartTypes.HANDLE) {
-            registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.MEDIUMHANDLE, layer, schematic.getModel()));
-            registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.FULLHANDLE, layer, schematic.getModel()));
-            registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.SHORTHANDLE, layer, schematic.getModel()));
+            registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.MEDIUMHANDLE, layer, layer == ModelLayer.PRIMARY ? schematic.getModel().primary : schematic.getModel().secondary));
+            registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.FULLHANDLE, layer, layer == ModelLayer.PRIMARY ? schematic.getModel().primary : schematic.getModel().secondary));
+            registry.registerTexture(new ToolPartModelTextureIdentifier(material.getResourceName(), ToolPartModelType.SHORTHANDLE, layer, layer == ModelLayer.PRIMARY ? schematic.getModel().primary : schematic.getModel().secondary));
         }
     }
 
@@ -86,25 +86,25 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
         for (Schematic schematic : ForgeroRegistry.SCHEMATIC.list()) {
             for (Gem gem : ForgeroRegistry.GEM.list()) {
                 if (schematic instanceof HeadSchematic head) {
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.getModelType(head.getToolType(), schematic.getType()), ModelLayer.GEM, schematic.getModel()));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.getModelType(head.getToolType(), schematic.getType()), ModelLayer.GEM, schematic.getModel().gem));
                 }
                 if (schematic.getType() == ForgeroToolPartTypes.BINDING) {
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.BINDING, ModelLayer.GEM, schematic.getModel()));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.BINDING, ModelLayer.GEM, schematic.getModel().gem));
                     for (ForgeroToolTypes type : ForgeroToolTypes.values()) {
-                        registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.getModelType(type, schematic.getType()), ModelLayer.GEM, schematic.getModel()));
+                        registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.getModelType(type, schematic.getType()), ModelLayer.GEM, schematic.getModel().gem));
                     }
 
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.PICKAXEBINDING, ModelLayer.GEM, schematic.getModel()));
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.SHOVELBINDING, ModelLayer.GEM, schematic.getModel()));
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.AXEHEADBINDING, ModelLayer.GEM, schematic.getModel()));
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.HOEBINDING, ModelLayer.GEM, schematic.getModel()));
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.SWORDBINDING, ModelLayer.GEM, schematic.getModel()));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.PICKAXEBINDING, ModelLayer.GEM, schematic.getModel().gem));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.SHOVELBINDING, ModelLayer.GEM, schematic.getModel().gem));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.AXEHEADBINDING, ModelLayer.GEM, schematic.getModel().gem));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.HOEBINDING, ModelLayer.GEM, schematic.getModel().gem));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.SWORDBINDING, ModelLayer.GEM, schematic.getModel().gem));
                 }
                 if (schematic.getType() == ForgeroToolPartTypes.HANDLE) {
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.HANDLE, ModelLayer.GEM, schematic.getModel()));
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.SHORTHANDLE, ModelLayer.GEM, schematic.getModel()));
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.MEDIUMHANDLE, ModelLayer.GEM, schematic.getModel()));
-                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.FULLHANDLE, ModelLayer.GEM, schematic.getModel()));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.HANDLE, ModelLayer.GEM, schematic.getModel().gem));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.SHORTHANDLE, ModelLayer.GEM, schematic.getModel().gem));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.MEDIUMHANDLE, ModelLayer.GEM, schematic.getModel().gem));
+                    registry.registerTexture(new ToolPartModelTextureIdentifier(gem.getResourceName(), ToolPartModelType.FULLHANDLE, ModelLayer.GEM, schematic.getModel().gem));
                 }
 
             }

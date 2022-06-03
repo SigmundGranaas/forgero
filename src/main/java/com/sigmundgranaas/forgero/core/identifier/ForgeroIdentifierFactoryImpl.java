@@ -45,29 +45,29 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getSchematic().getModel().primary);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getSchematic().getModel().primary);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getSchematic().getModel().secondary);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getSchematic().getModel().secondary);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ForgeroToolPart part, ToolPartModelType type) {
-        return new ForgeroModelIdentifier(gem.getResourceName(), type, ModelLayer.GEM, part.getSchematic().getModel());
+        return new ForgeroModelIdentifier(gem.getResourceName(), type, ModelLayer.GEM, part.getSchematic().getModel().gem);
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {
