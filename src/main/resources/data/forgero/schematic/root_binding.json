@@ -9,7 +9,7 @@
       "model": {
         "primary": "binding_primary",
         "secondary": "binding_secondary",
-        "gem": "handle_gem"
+        "gem": "binding_gem"
       }
     },
     {
@@ -42,6 +42,14 @@
         "primary": "axe_binding_primary",
         "secondary": "axe_binding_secondary",
         "gem": "axe_binding_gem"
+      }
+    },
+    {
+      "id": "HOE_BINDING",
+      "model": {
+        "primary": "hoe_binding_primary",
+        "secondary": "hoe_binding_secondary",
+        "gem": "hoe_binding_gem"
       }
     }
   ],

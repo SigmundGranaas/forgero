@@ -4,14 +4,13 @@
   "resource_type": "SCHEMATIC",
   "abstract_resource": true,
   "toolType": "HOE",
-  "output": "hoe_default",
   "models": [
     {
       "id": "DEFAULT",
       "model": {
-        "primary": "hoe_head_primary",
-        "secondary": "hoe_head_secondary",
-        "gem": "hoe_head_gem"
+        "primary": "hoehead_primary",
+        "secondary": "hoehead_secondary",
+        "gem": "hoehead_gem"
       }
     }
   ],

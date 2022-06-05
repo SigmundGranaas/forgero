@@ -6,9 +6,9 @@
     {
       "id": "DEFAULT",
       "model": {
-        "primary": "pickaxe_head_primary",
-        "secondary": "pickaxe_head_secondary",
-        "gem": "pickaxe_head_gem"
+        "primary": "pickaxehead_primary",
+        "secondary": "pickaxehead_secondary",
+        "gem": "pickaxehead_gem"
       }
     }
   ],

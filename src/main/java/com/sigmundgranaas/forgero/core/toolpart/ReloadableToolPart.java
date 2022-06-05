@@ -42,7 +42,7 @@ public abstract class ReloadableToolPart extends AbstractToolPart {
 
     @Override
     public String getToolPartIdentifier() {
-        return state.getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getToolPartName() + ELEMENT_SEPARATOR + getSchematic().getResourceName();
+        return state.getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getSchematic().getResourceName();
     }
 
     @Override

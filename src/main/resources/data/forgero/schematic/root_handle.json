@@ -14,7 +14,11 @@
     },
     {
       "id": "FULL_HANDLE",
-      "reference": "DEFAULT"
+      "model": {
+        "primary": "handle_primary",
+        "secondary": "handle_secondary",
+        "gem": "handle_gem"
+      }
     },
     {
       "id": "MEDIUM_HANDLE",

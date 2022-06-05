@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelContainerPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -15,13 +17,24 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 import java.util.Collections;
+import java.util.List;
 
 public class SimpleToolMaterialAdapter implements ToolMaterial {
     private final HeadState state;
 
     public SimpleToolMaterialAdapter(PrimaryMaterial material) {
-        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Schematic(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), TextureModelContainerImpl.createContainer(Collections.emptyList()).get(), 1, false));
+        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Schematic(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), TextureModelContainerImpl.createContainer(List.of(createModelPojo())).get(), 1, false));
 
+    }
+
+    private ModelContainerPojo createModelPojo() {
+        var pojo = new ModelContainerPojo();
+        pojo.model = new ModelPojo();
+        pojo.id = "DEFAULT";
+        pojo.model.primary = "DEFAULT";
+        pojo.model.secondary = "DEFAULT";
+        pojo.model.gem = "DEFAULT";
+        return pojo;
     }
 
     @Override

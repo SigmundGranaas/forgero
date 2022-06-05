@@ -6,9 +6,9 @@
     {
       "id": "DEFAULT",
       "model": {
-        "primary": "vanilla_hoe_head_primary",
-        "secondary": "vanilla_hoe_head_secondary",
-        "gem": "vanilla_hoe_head_gem"
+        "primary": "hoehead_primary",
+        "secondary": "hoehead_secondary",
+        "gem": "hoehead_gem"
       }
     }
   ],
