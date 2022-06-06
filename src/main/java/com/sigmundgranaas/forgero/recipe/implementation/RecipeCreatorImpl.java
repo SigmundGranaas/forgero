@@ -60,7 +60,7 @@ public record RecipeCreatorImpl(
     public List<RecipeWrapper> createRecipes() {
         List<RecipeWrapper> toolRecipes = tools.stream().map(this::createToolRecipe).flatMap(List::stream).toList();
         List<RecipeWrapper> toolPartSecondaryMaterialUpgradeRecipe = toolParts.stream().map(this::createSecondaryMaterialUpgradeRecipes).flatMap(List::stream).toList();
-        List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().filter(toolParts -> toolParts.getSchematic().getResourceName().equals("default")).map(this::createGemUpgradeRecipes).flatMap(List::stream).toList();
+        List<RecipeWrapper> toolPartGemUpgradeRecipe = toolParts.stream().filter(toolParts -> toolParts.getSchematic().isUnique()).map(this::createGemUpgradeRecipes).flatMap(List::stream).toList();
         List<RecipeWrapper> toolPartSchematicRecipes = createToolPartSchematicRecipes().stream().toList();
 
         List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
