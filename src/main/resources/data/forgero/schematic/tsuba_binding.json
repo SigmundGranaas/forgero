@@ -1,12 +1,12 @@
 {
-  "name": "kimiri_binding",
+  "name": "tsuba_binding",
   "parent": "root_binding",
   "models": [
     {
       "id": "SWORD_BINDING",
       "model": {
-        "primary": "kimiri_binding_primary",
-        "secondary": "kimiri_binding_secondary",
+        "primary": "tsuba_binding_primary",
+        "secondary": "tsuba_binding_secondary",
         "gem": "kimiri_binding_gem"
       }
     }
