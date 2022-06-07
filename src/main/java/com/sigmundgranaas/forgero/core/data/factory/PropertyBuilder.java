@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyBuilder {
-    public static List<Property> createPropertyListFromPOJO(PropertyPOJO pojo) {
+    public static List<Property> createPropertyListFromPOJO(PropertyPojo pojo) {
         List<Property> properties = new ArrayList<>();
         if (pojo == null) {
             return properties;

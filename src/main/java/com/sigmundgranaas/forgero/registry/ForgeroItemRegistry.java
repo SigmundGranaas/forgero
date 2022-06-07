@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.registry;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
+import com.sigmundgranaas.forgero.core.ForgeroResourceLoader;
 import com.sigmundgranaas.forgero.registry.impl.ConcurrentForgeroItemRegistry;
 
 /**
@@ -29,8 +29,8 @@ public interface ForgeroItemRegistry extends ForgeroRegistry {
 
     SchematicItemRegistry getSchematicItemRegistry();
 
-    ForgeroItemRegistry loadResources(ForgeroResourceInitializer initializer);
+    ForgeroItemRegistry loadResources(ForgeroResourceLoader loader);
 
-    ForgeroItemRegistry loadResourcesIfEmpty(ForgeroResourceInitializer initializer);
+    ForgeroItemRegistry loadResourcesIfEmpty(ForgeroResourceLoader loader);
 
 }

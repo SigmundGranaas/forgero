@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.property.active;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
 
 public class ActivePropertyBuilder {
-    public static ActiveProperty createAttributeFromPojo(PropertyPOJO.Active activePOJO) {
+    public static ActiveProperty createAttributeFromPojo(PropertyPojo.Active activePOJO) {
         if (activePOJO.type == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
             BreakingDirection direction = activePOJO.direction == null ? BreakingDirection.ANY : activePOJO.direction;
             if (activePOJO.tag != null) {

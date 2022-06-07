@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "forgero:axe_schematic_pattern"
+            "items": [
+              "forgero:axehead_schematic_pattern"
+            ]
           }
         ]
       }
@@ -31,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "item": "forgero:pickaxe_schematic_pattern"
+            "items": [
+              "forgero:pickaxehead_schematic_pattern"
+            ]
           }
         ]
       }
@@ -41,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "item": "forgero:shovel_schematic_pattern"
+            "items": [
+              "forgero:shovelhead_schematic_pattern"
+            ]
           }
         ]
       }
@@ -51,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "item": "forgero:hoe_schematic_pattern"
+            "items": [
+              "forgero:hoehead_schematic_pattern"
+            ]
           }
         ]
       }

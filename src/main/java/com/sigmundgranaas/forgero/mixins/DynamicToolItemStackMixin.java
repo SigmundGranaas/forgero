@@ -29,6 +29,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
+import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE;
+import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_SPEED;
+
 /**
  * Mixin originally used by The Fabric APIs dynamic attribute module, but has since been deprecated.
  * This class is almost an identical copy of the mixin developed by the Fabric project.
@@ -86,16 +89,30 @@ public abstract class DynamicToolItemStackMixin {
     public Multimap<EntityAttribute, EntityAttributeModifier> modifyAttributeModifiersMap(Multimap<EntityAttribute, EntityAttributeModifier> multimap, EquipmentSlot slot) {
         ItemStack stack = (ItemStack) (Object) this;
 
-        // Only perform our custom operations if the tool being operated on is dynamic.
         if (stack.getItem() instanceof DynamicAttributeTool holder) {
-            // The Multimap passed in is not ordered, so we need to re-assemble the vanilla and modded attributes
-            // into a custom, ordered Multimap. If this step is not done, and both vanilla + modded attributes
-            // exist at once, the item tooltip attribute lines will randomly switch positions.
+            // creating a dummy map for our old attributes
+            LinkedListMultimap<EntityAttribute, EntityAttributeModifier> oldAttributes = LinkedListMultimap.create();
+            oldAttributes.putAll(multimap);
+            // Check if the root attributes have changed and remove them
+            var newMap = holder.getDynamicModifiers(slot, stack, contextEntity);
+            for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_DAMAGE)) {
+                var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
+                if (newValue.isPresent()) {
+                    oldAttributes.remove(GENERIC_ATTACK_DAMAGE, attribute);
+                }
+            }
+            for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_SPEED)) {
+                var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
+                if (newValue.isPresent()) {
+                    oldAttributes.remove(GENERIC_ATTACK_SPEED, attribute);
+                }
+            }
+
             LinkedListMultimap<EntityAttribute, EntityAttributeModifier> orderedAttributes = LinkedListMultimap.create();
-            // First, add all vanilla attributes to our ordered Multimap.
-            orderedAttributes.putAll(multimap);
-            // Second, calculate the dynamic attributes, and add them at the end of our Multimap.
-            orderedAttributes.putAll(holder.getDynamicModifiers(slot, stack, contextEntity));
+            //Place new Forgero root attributes at the start
+            orderedAttributes.putAll(newMap);
+            //Place old attributes last
+            orderedAttributes.putAll(oldAttributes);
             return orderedAttributes;
         }
 

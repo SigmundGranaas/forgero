@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.data.v1;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
 import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SchematicDataTest {
-    public static SchematicPOJO createDefaultSchematicPojo() {
-        var pojo = new SchematicPOJO();
+    public static SchematicPojo createDefaultSchematicPojo() {
+        var pojo = new SchematicPojo();
         pojo.abstractResource = false;
         pojo.dependencies = DEFAULT_DEPENDENCIES_LIST;
         pojo.materialCount = 1;

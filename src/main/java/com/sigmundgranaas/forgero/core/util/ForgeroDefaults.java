@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.core.util;
 
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.IngredientPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPartPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
@@ -10,6 +11,7 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartState;
@@ -41,6 +43,11 @@ public interface ForgeroDefaults {
             @Override
             public @NotNull String getResourceName() {
                 return "DEFAULT";
+            }
+
+            @Override
+            public MaterialPojo toDataResource() {
+                return new MaterialPojo();
             }
 
             @Override
@@ -81,6 +88,11 @@ public interface ForgeroDefaults {
             @Override
             public ForgeroResourceType getResourceType() {
                 return ForgeroResourceType.TOOL_PART;
+            }
+
+            @Override
+            public ToolPartPojo toDataResource() {
+                return new ToolPartPojo();
             }
 
             @Override

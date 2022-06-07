@@ -17,7 +17,6 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,12 +62,6 @@ public class ForgeroShovelItem extends ShovelItem implements ForgeroToolItem {
     @Override
     public Text getName(ItemStack stack) {
         return getForgeroTranslatableToolName();
-    }
-
-
-    @Override
-    public Identifier getIdentifier() {
-        return new Identifier(ForgeroInitializer.MOD_NAMESPACE, tool.getToolIdentifierString());
     }
 
     @Override

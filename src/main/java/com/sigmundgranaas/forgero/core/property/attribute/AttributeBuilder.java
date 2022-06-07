@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.property.*;
 
 import java.util.HashSet;
@@ -22,7 +22,7 @@ public class AttributeBuilder {
         this.type = type;
     }
 
-    public static Attribute createAttributeFromPojo(PropertyPOJO.Attribute attributePOJO) {
+    public static Attribute createAttributeFromPojo(PropertyPojo.Attribute attributePOJO) {
         AttributeBuilder builder = new AttributeBuilder(attributePOJO.type)
                 .applyOrder(attributePOJO.order);
 

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -16,27 +17,27 @@ import java.util.stream.Stream;
  *
  * @param <T> The type of Resource this registry controls
  */
-public interface ForgeroResourceRegistry<T extends ForgeroResource> {
-    static <T extends ForgeroResource> Map<String, T> convertListToMap(Collection<T> resourceList) {
+public interface ForgeroResourceRegistry<T extends ForgeroResource<?>> {
+    static <T extends ForgeroResource<?>> Map<String, T> convertListToMap(Collection<T> resourceList) {
         return resourceList.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, resource -> resource));
     }
 
-    static <T extends ForgeroResource> ImmutableMap<String, T> convertMapToImmutableMap(Map<String, T> resourceMap) {
+    static <T extends ForgeroResource<?>> ImmutableMap<String, T> convertMapToImmutableMap(Map<String, T> resourceMap) {
         return new ImmutableMap.Builder<String, T>().putAll(resourceMap).build();
     }
 
-    static <T extends ForgeroResource> ImmutableList<T> convertMapToImmutableList(Map<String, T> resourceMap) {
+    static <T extends ForgeroResource<?>> ImmutableList<T> convertMapToImmutableList(Map<String, T> resourceMap) {
         return new ImmutableList.Builder<T>().addAll(resourceMap.values()).build();
     }
 
-    static <T extends ForgeroResource, R extends T> ImmutableList<R> getSubTypeAsList(Collection<T> resources, Class<R> type) {
+    static <T extends ForgeroResource<?>, R extends T> ImmutableList<R> getSubTypeAsList(Collection<T> resources, Class<R> type) {
         return resources.stream()
                 .filter(type::isInstance)
                 .map(type::cast)
                 .collect(ImmutableList.toImmutableList());
     }
 
-    static <T extends ForgeroResource, R extends T> ImmutableMap<String, R> getMapSubTypeAsMap(Collection<T> resources, Class<R> type) {
+    static <T extends ForgeroResource<?>, R extends T> ImmutableMap<String, R> getMapSubTypeAsMap(Collection<T> resources, Class<R> type) {
         return resources.stream()
                 .filter(type::isInstance)
                 .map(type::cast)
@@ -45,6 +46,9 @@ public interface ForgeroResourceRegistry<T extends ForgeroResource> {
 
     @NotNull
     Optional<T> getResource(String identifier);
+
+    @NotNull
+    T getResource(T resource);
 
     ImmutableList<T> getResourcesAsList();
 
@@ -63,6 +67,14 @@ public interface ForgeroResourceRegistry<T extends ForgeroResource> {
     }
 
     void updateRegistry(List<T> newResources);
+
+    void updateRegistry(ImmutableList<T> newResources);
+
+    void replaceRegistry(List<T> newResources);
+
+    void replaceRegistry(ImmutableList<T> newResources);
+
+    void replaceRegistry(Map<String, T> newResources);
 
     void updateEntry(T updatedEntry);
 

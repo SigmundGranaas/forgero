@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.core.toolpart.toolpart;
 
 import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
-import com.sigmundgranaas.forgero.core.ForgeroResourceInitializer;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
+import com.sigmundgranaas.forgero.core.resourceloader.TestResourceLoader;
 import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
 import com.sigmundgranaas.forgero.core.toolpart.head.PickaxeHead;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +16,7 @@ import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEH
 public class PickaxeHeadTest {
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
     }
 
     public static PickaxeHead createDefaultPickaxeHead() {

@@ -64,6 +64,11 @@ public abstract class ToolPartState implements PropertyContainer {
         return getProperties(Target.createEmptyTarget());
     }
 
+    @Override
+    public @NotNull List<Property> getProperties() {
+        return getRootProperties();
+    }
+
     private Target getToolPartConditionTarget() {
         return new ToolPartTarget(Set.of(getToolPartType().toString()));
     }

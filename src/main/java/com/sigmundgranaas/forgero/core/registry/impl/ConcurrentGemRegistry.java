@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.core.registry.GemRegistry;
 
 import java.util.Map;
 
-public class ConcurrenGemRegistry extends ConcurrentResourceRegistry<Gem> implements GemRegistry {
-    protected ConcurrenGemRegistry(Map<String, Gem> resources) {
+public class ConcurrentGemRegistry extends ConcurrentResourceRegistry<Gem> implements GemRegistry {
+    protected ConcurrentGemRegistry(Map<String, Gem> resources) {
         super(resources);
     }
 }

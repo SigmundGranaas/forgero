@@ -13,8 +13,10 @@ import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,10 +35,10 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
     public Text getName() {
         MutableText text;
         if (!getSchematic().getResourceName().equals("default")) {
-            text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" ");
+            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" ");
 
         } else {
-            text = Text.literal("");
+            text = new LiteralText("");
         }
         if (schematic.getType() == ForgeroToolPartTypes.HEAD) {
             String headType = switch (((HeadSchematic) schematic).getToolType()) {
@@ -46,11 +48,11 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
                 case SWORD -> "sword";
                 case HOE -> "hoe";
             };
-            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
         } else {
-            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getType().getName()))).append(" ");
+            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getType().getName()))).append(" ");
         }
-        text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, "schematic")));
+        text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, "schematic")));
         return text;
     }
 

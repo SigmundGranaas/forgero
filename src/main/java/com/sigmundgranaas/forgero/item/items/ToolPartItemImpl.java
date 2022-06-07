@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
@@ -15,6 +16,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -78,7 +80,7 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
 
     @Override
     public PrimaryMaterial getPrimaryMaterial() {
-        return material;
+        return part.getPrimaryMaterial();
     }
 
     @Override
@@ -100,5 +102,10 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         ForgeroToolPart toolPart = FabricToForgeroToolPartAdapter.createAdapter().getToolPart(stack).orElse(part);
         toolPart.createToolPartWithPropertiesDescription(new DescriptionWriter(tooltip));
+    }
+
+    @Override
+    public @NotNull List<Property> getProperties() {
+        return getPart().getProperties();
     }
 }

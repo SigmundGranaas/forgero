@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.mojang.authlib.GameProfile;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
@@ -41,16 +41,16 @@ public class GameTestHelper {
     }
 
     public static ToolPartHead createDummyToolPartHead() {
-        PrimaryMaterial material = new SimpleDuoMaterial(MaterialPOJO.createDefaultMaterialPOJO());
+        PrimaryMaterial material = new SimpleDuoMaterial(MaterialPojo.createDefaultMaterialPOJO());
         return ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(material, PICKAXEHEAD_SCHEMATIC.get()).createToolPart();
     }
 
     public static ToolPartHandle createDummyToolPartHandle() {
-        PrimaryMaterial material = new SimpleDuoMaterial(MaterialPOJO.createDefaultMaterialPOJO());
+        PrimaryMaterial material = new SimpleDuoMaterial(MaterialPojo.createDefaultMaterialPOJO());
         return ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(material, HANDLE_SCHEMATIC.get()).createToolPart();
     }
 
     public static SimpleDuoMaterial createDummyDuoMaterial() {
-        return new SimpleDuoMaterial(MaterialPOJO.createDefaultMaterialPOJO());
+        return new SimpleDuoMaterial(MaterialPojo.createDefaultMaterialPOJO());
     }
 }

@@ -4,7 +4,7 @@
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:orichalcum_ingot"
+    "tag": "c:orichalcum_ingots"
   },
   "properties": {
     "attributes": [

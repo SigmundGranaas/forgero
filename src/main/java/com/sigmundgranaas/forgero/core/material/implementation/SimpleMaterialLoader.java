@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.material.implementation;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.factory.MaterialFactory;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.core.material.MaterialLoader;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
@@ -26,8 +26,8 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
     @Override
     public Map<String, ForgeroMaterial> getMaterials() {
         if (materialMap.isEmpty()) {
-            List<MaterialPOJO> jsonMaterials = materials.stream()
-                    .map(material -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/materials/%s.json", material), MaterialPOJO.class))
+            List<MaterialPojo> jsonMaterials = materials.stream()
+                    .map(material -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/materials/%s.json", material), MaterialPojo.class))
                     .filter(Optional::isPresent)
                     .map(Optional::get).toList();
             jsonMaterials.forEach(pojo -> {

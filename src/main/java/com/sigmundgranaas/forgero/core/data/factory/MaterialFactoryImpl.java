@@ -1,23 +1,24 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
-import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPOJO;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleSecondaryMaterialImpl;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-public class MaterialFactoryImpl extends DataResourceFactory<MaterialPOJO, ForgeroMaterial> implements MaterialFactory {
+public class MaterialFactoryImpl extends DataResourceFactory<MaterialPojo, ForgeroMaterial> implements MaterialFactory {
 
-    public MaterialFactoryImpl(List<MaterialPOJO> pojos, Set<String> availableNameSpaces) {
+    public MaterialFactoryImpl(Collection<MaterialPojo> pojos, Set<String> availableNameSpaces) {
         super(pojos, availableNameSpaces);
     }
 
 
-    protected MaterialPOJO mergePojos(MaterialPOJO parent, MaterialPOJO material, MaterialPOJO basePojo) {
+    protected MaterialPojo mergePojos(MaterialPojo parent, MaterialPojo material, MaterialPojo basePojo) {
         //Some attributes should always be fetched from the child
         basePojo.resourceType = ResourceType.MATERIAL;
         basePojo.type = replaceAttributesDefault(material.type, parent.type, null);
@@ -25,23 +26,24 @@ public class MaterialFactoryImpl extends DataResourceFactory<MaterialPOJO, Forge
         basePojo.secondary = material.secondary;
         basePojo.palette = material.palette;
 
-        //TODO create a proper way of handling ingredients
         basePojo.ingredient = replaceAttributesDefault(material.ingredient, parent.ingredient, null);
 
         return basePojo;
     }
 
     @Override
-    protected MaterialPOJO createDefaultPojo() {
-        return new MaterialPOJO();
+    protected MaterialPojo createDefaultPojo() {
+        return new MaterialPojo();
     }
 
     @Override
-    protected Optional<ForgeroMaterial> createResource(MaterialPOJO pojo) {
+    public @NotNull Optional<ForgeroMaterial> createResource(MaterialPojo pojo) {
         if (pojo.primary != null) {
             return Optional.of(new SimpleDuoMaterial(pojo));
-        } else {
+        } else if (pojo.secondary != null) {
             return Optional.of(new SimpleSecondaryMaterialImpl(pojo));
+        } else {
+            return Optional.empty();
         }
     }
 }

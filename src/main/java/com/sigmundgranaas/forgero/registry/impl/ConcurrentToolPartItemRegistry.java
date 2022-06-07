@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.registry.impl;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPartPojo;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.binding.ToolPartBinding;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
@@ -10,22 +10,13 @@ import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.registry.ToolPartItemRegistry;
 import net.minecraft.item.Item;
 
-import java.util.Comparator;
 import java.util.Map;
 
 import static com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes.*;
 
-public class ConcurrentToolPartItemRegistry extends ConcurrentItemResourceRegistry<ToolPartItem> implements ToolPartItemRegistry {
+public class ConcurrentToolPartItemRegistry extends ConcurrentItemResourceRegistry<ToolPartItem, ToolPartPojo> implements ToolPartItemRegistry {
     ConcurrentToolPartItemRegistry(Map<String, ToolPartItem> resources) {
         super(resources);
-    }
-
-    @Override
-    public ImmutableList<ToolPartItem> getResourcesAsList() {
-        return super.getResourcesAsList().stream()
-                .sorted(Comparator.comparing(toolPartItem -> PropertyContainer.RARITY.apply((PropertyContainer) toolPartItem))
-                        .thenComparing(toolPartItem -> ((ToolPartItem) toolPartItem).getPart().getPrimaryMaterial().getResourceName()))
-                .collect(ImmutableList.toImmutableList());
     }
 
     @Override

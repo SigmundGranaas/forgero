@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.core.toolpart.head;
 
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgero.core.toolpart.AbstractToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ReloadableToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 
 import java.util.Locale;
 
-public abstract class AbstractToolPartHead extends AbstractToolPart implements ToolPartHead {
+public abstract class AbstractToolPartHead extends ReloadableToolPart implements ToolPartHead {
     public AbstractToolPartHead(HeadState state) {
         super(state);
 

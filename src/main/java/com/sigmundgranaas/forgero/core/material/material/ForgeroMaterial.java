@@ -1,17 +1,18 @@
 package com.sigmundgranaas.forgero.core.material.material;
 
-import com.sigmundgranaas.forgero.core.ForgeroResource;
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.IngredientPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
-public interface ForgeroMaterial extends ForgeroResource, PropertyContainer {
+public interface ForgeroMaterial extends ForgeroResource<MaterialPojo>, PropertyContainer {
     int getRarity();
 
     @NotNull

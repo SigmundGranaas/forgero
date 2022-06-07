@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.resources;
 
+import com.sigmundgranaas.forgero.resources.loader.ModContainerFileLoader;
+
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -10,7 +12,7 @@ public class FabricModFileLoader {
     private final List<ModContainerFileLoader> containers;
 
     public FabricModFileLoader() {
-        this.containers = new ForgeroResourceModContainerService().getForgeroResourceContainers();
+        this.containers = new ModContainerService().getForgeroResourceContainers();
     }
 
     public boolean resourceExists(String resource) {
