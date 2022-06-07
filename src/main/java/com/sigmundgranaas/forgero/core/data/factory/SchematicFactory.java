@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelContainerPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.core.data.factory.PropertyBuilder.createPropertyListFromPOJO;
 
@@ -39,12 +41,20 @@ public class SchematicFactory extends DataResourceFactory<SchematicPojo, Schemat
     @Override
     protected SchematicPojo mergePojos(SchematicPojo parent, SchematicPojo child, SchematicPojo basePojo) {
         basePojo.materialCount = replaceAttributesDefault(child.materialCount, parent.materialCount, 1);
-        basePojo.models = replaceAttributesDefault(child.models, parent.models, null);
+        basePojo.models = mergeModels(child.models, parent.models);
         basePojo.unique = replaceAttributesDefault(child.unique, parent.unique, false);
         basePojo.toolType = replaceAttributesDefault(child.toolType, parent.toolType, null);
         basePojo.type = replaceAttributesDefault(child.type, parent.type, null);
         basePojo.resourceType = ResourceType.SCHEMATIC;
         return basePojo;
+    }
+
+    private List<ModelContainerPojo> mergeModels(Collection<ModelContainerPojo> child, Collection<ModelContainerPojo> parent) {
+        var parentModel = parent.stream().filter(modelContainerPojo -> modelContainerPojo.model != null).collect(Collectors.toMap(container -> container.id, container -> container));
+        child.forEach(model -> {
+            if (model != null) parentModel.put(model.id, model);
+        });
+        return parentModel.values().stream().toList();
     }
 
     @Override

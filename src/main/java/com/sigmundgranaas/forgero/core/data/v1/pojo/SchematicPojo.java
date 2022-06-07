@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SchematicPojo extends ForgeroDataResource {
@@ -13,7 +14,8 @@ public class SchematicPojo extends ForgeroDataResource {
     public ForgeroToolTypes toolType;
     //public String model;
     public int materialCount;
-    public List<ModelContainerPojo> models;
+    @NotNull
+    public List<ModelContainerPojo> models = new ArrayList<>();
     public boolean unique = false;
 
     @Override

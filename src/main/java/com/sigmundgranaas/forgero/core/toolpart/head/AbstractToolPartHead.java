@@ -29,7 +29,7 @@ public abstract class AbstractToolPartHead extends ReloadableToolPart implements
     }
 
     public String getToolPartIdentifier() {
-        return getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getSchematic().getResourceName();
+        return getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getSchematic().getResourceName() + "head";
     }
 
     @Override

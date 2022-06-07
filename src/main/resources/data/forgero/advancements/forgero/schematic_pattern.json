@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/schematic",
   "display": {
     "icon": {
-      "item": "forgero:axehead_schematic_default"
+      "item": "forgero:axehead-schematic"
     },
     "title": {
       "translate": "advancements.forgero.schematic_pattern.title"

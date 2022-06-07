@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,13 +67,13 @@ public class ForgeroToolBase implements ForgeroTool {
     @Override
     public @NotNull
     String getShortToolIdentifierString() {
-        return head.getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + head.getToolType().getToolName();
+        return head.getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getToolHead().getSchematic().getResourceName();
     }
 
     @Override
     public @NotNull
     String getToolIdentifierString() {
-        return String.format("%s%s%s", head.getPrimaryMaterial().getResourceName(), ELEMENT_SEPARATOR, getToolType().toString().toLowerCase(Locale.ROOT));
+        return String.format("%s%s%s", head.getPrimaryMaterial().getResourceName(), ELEMENT_SEPARATOR, getToolHead().getSchematic().getResourceName());
     }
 
     @Override

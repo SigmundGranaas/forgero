@@ -1,5 +1,5 @@
 {
-  "name": "pattern_axehead",
+  "name": "pattern_axe",
   "parent": "root_axehead",
   "type": "HEAD",
   "toolType": "AXE",
@@ -9,7 +9,7 @@
       "model": {
         "primary": "pattern_pickaxehead_primary",
         "secondary": "pattern_pickaxehead_secondary",
-        "gem": "pattern_pickaxehead_gem"
+        "gem": "pickaxehead_gem"
       }
     }
   ],

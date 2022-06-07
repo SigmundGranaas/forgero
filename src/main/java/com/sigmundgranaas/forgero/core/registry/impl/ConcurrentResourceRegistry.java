@@ -62,6 +62,11 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource<?>> i
     }
 
     @Override
+    public boolean resourceExists(String identifier) {
+        return resources.containsKey(identifier);
+    }
+
+    @Override
     public ImmutableMap<String, T> getResourcesAsMap() {
         return ForgeroResourceRegistry.convertMapToImmutableMap(getResources());
     }

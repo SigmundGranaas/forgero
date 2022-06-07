@@ -50,7 +50,7 @@ public class ConcurrentForgeroItemRegistry implements ForgeroItemRegistry {
         gemItemRegistry.replaceRegistry(GEM.list().stream()
                 .map(ItemFactory.INSTANCE::createGem)
                 .toList());
-        toolItemRegistry.replaceRegistry(TOOL.list().stream()
+        toolItemRegistry.replaceRegistry(TOOL.stream()
                 .map(ItemFactory.INSTANCE::createTool)
                 .toList());
         toolPartItemRegistry.replaceRegistry(TOOL_PART.list().stream()

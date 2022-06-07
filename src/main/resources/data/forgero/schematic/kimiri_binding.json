@@ -1,0 +1,15 @@
+{
+  "name": "kimiri_binding",
+  "parent": "root_binding",
+  "unique": true,
+  "models": [
+    {
+      "id": "SWORD_BINDING",
+      "model": {
+        "primary": "kimiri_binding_primary",
+        "secondary": "kimiri_binding_secondary",
+        "gem": "kimiri_binding_gem"
+      }
+    }
+  ]
+}

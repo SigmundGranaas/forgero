@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/toolpart",
   "display": {
     "icon": {
-      "item": "forgero:oak_handle_default"
+      "item": "forgero:oak-handle"
     },
     "title": {
       "translate": "advancements.forgero.handle.title"

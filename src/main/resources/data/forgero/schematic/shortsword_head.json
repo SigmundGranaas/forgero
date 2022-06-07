@@ -1,20 +1,20 @@
 {
-  "name": "root_swordhead",
+  "name": "short_sword",
   "resource_type": "SCHEMATIC",
   "type": "HEAD",
   "toolType": "SWORD",
-  "abstract_resource": true,
+  "unique": true,
+  "materialCount": 2,
   "models": [
     {
       "id": "DEFAULT",
       "model": {
-        "primary": "swordhead_primary",
-        "secondary": "swordhead_secondary",
-        "gem": "swordhead_gem"
+        "primary": "shortswordhead_primary",
+        "secondary": "shortswordhead_secondary",
+        "gem": "shortswordhead_gem"
       }
     }
   ],
-  "materialCount": 3,
   "properties": {
     "passive:": [],
     "active": [],
@@ -23,13 +23,13 @@
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 2.0
+        "value": 1.0
       },
       {
         "type": "ATTACK_SPEED",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": -2.8
+        "value": -2.0
       }
     ]
   }
