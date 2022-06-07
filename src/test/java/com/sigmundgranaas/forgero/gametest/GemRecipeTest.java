@@ -22,7 +22,7 @@ import java.util.Optional;
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithSmithingScreenHandler;
 
 public class GemRecipeTest {
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void allGemsCanBeUpgradedToLevel10(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
         var gems = ForgeroRegistry.GEM.list();
@@ -65,7 +65,7 @@ public class GemRecipeTest {
         }
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void CannotCombineGemOfDifferentLevel(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
         ForgeroRegistry.GEM.list().forEach(gem -> {
@@ -95,7 +95,7 @@ public class GemRecipeTest {
         context.complete();
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void allGemsHaveBeenRegistered(TestContext context) {
         ForgeroRegistry.GEM.list().stream().map(gem -> Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem.getStringIdentifier()))).forEach(item -> {
             if (item == Items.AIR) {
@@ -105,7 +105,7 @@ public class GemRecipeTest {
         context.complete();
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void only1GemPerToolPart(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
 
@@ -137,7 +137,7 @@ public class GemRecipeTest {
         context.complete();
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void GemUpgradeDoesNotAlterExistingNbtValues(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
@@ -169,7 +169,7 @@ public class GemRecipeTest {
         }
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void NbtCorrespondToUpgradedLevel(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);

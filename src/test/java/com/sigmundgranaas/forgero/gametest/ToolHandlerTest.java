@@ -58,7 +58,7 @@ public class ToolHandlerTest {
 
     }
 
-    @GameTest(structureName = "forgero:stone3x3", batchId = "Tool handlers")
+    @GameTest(templateName = "forgero:stone3x3", batchId = "Tool handlers")
     public void testToolHandler3x3(TestContext context) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
         ItemStack baseTool = createToolItemWithSchematic();
@@ -97,7 +97,7 @@ public class ToolHandlerTest {
         }
     }
 
-    @GameTest(structureName = "forgero:coal3x3", batchId = "Tool handlers")
+    @GameTest(templateName = "forgero:coal3x3", batchId = "Tool handlers")
     public void testVeinMining3x3Coal(TestContext context) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
         ItemStack baseTool = createToolItemWithVeinMining();
