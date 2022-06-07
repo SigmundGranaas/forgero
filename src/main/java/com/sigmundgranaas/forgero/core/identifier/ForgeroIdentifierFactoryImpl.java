@@ -58,18 +58,18 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getResourceName());
+        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getSchematic().getResourceName());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getSchematic().getModelContainer().getModel(ToolPartModelType.getModelType(toolPart, toolType)).secondary());
+        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getSchematic().getResourceName());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ForgeroToolPart part, ToolPartModelType type) {
-        return new ForgeroModelIdentifier(gem.getResourceName(), type, ModelLayer.GEM, part.getSchematic().getModelContainer().getModel(type).gem());
+        return new ForgeroModelIdentifier(gem.getResourceName(), type, ModelLayer.GEM, part.getSchematic().getResourceName());
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {
