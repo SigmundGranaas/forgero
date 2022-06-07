@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.StructureBlockBlockEntity;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.structure.Structure;
+import net.minecraft.structure.StructureTemplate;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -30,11 +30,11 @@ public class CommandRegistry {
                             .executes(context -> {
                                 BlockPos pos = context.getSource().getPlayer().getBlockPos().add(1, -1, 0);
                                 BlockState initialState = context.getSource().getWorld().getBlockState(pos);
-                                Optional<Structure> station = context.getSource().getWorld().getStructureManager().getStructure(new Identifier("forgero:forgerostation"));
+                                Optional<StructureTemplate> station = context.getSource().getWorld().getStructureTemplateManager().getTemplate(new Identifier("forgero:forgerostation"));
                                 context.getSource().getWorld().setBlockState(pos, Blocks.STRUCTURE_BLOCK.getDefaultState());
                                 if (station.isPresent() && !context.getSource().getWorld().isClient) {
                                     var structureBlock = new StructureBlockBlockEntity(pos, context.getSource().getWorld().getBlockState(pos));
-                                    structureBlock.setStructureName(new Identifier("forgero:forgerostation"));
+                                    //structureBlock.setStructureName(new Identifier("forgero:forgerostation"));
                                     structureBlock.loadStructure(context.getSource().getWorld());
                                     structureBlock.place(context.getSource().getWorld(), true, station.get());
                                     context.getSource().sendFeedback(Text.literal("Placed Forgero testing station"), true);

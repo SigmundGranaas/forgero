@@ -32,9 +32,9 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     //modImplementation "vazkii.patchouli:Patchouli:1.18.2-67-FABRIC"
-    modImplementation("net.devtech:arrp:0.5.7")
+    modImplementation("net.devtech:arrp:0.6.2")
 
-    include "net.devtech:arrp:0.5.7"
+    include "net.devtech:arrp:0.6.2"
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 

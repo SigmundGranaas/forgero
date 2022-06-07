@@ -28,7 +28,7 @@ public abstract class ReloadableResourceManagerImplMixin {
     public abstract Optional<Resource> getResource(Identifier id);
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
-    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) throws IOException {
+    public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) throws IOException {
 
         if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png") && id.getPath().split("_").length > 1 && !id.getPath().contains("transparent")) {
             FabricTextureIdentifierFactory factory = new FabricTextureIdentifierFactory();
@@ -42,9 +42,9 @@ public abstract class ReloadableResourceManagerImplMixin {
 
                 Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 
-                Resource resource = new Resource(id.getNamespace(), toolPartTexture::getStream, null);
+                Resource resource = new Resource(id.getNamespace(), toolPartTexture::getStream);
 
-                cir.setReturnValue(resource);
+                cir.setReturnValue(Optional.of(resource));
                 // }
             }
         }

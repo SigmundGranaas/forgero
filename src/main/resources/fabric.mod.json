@@ -18,9 +18,6 @@
     "client": [
       "com.sigmundgranaas.forgero.client.ForgeroClient"
     ],
-    "rrp:pregen": [
-      "com.sigmundgranaas.forgero.resources.ForgeroTextures"
-    ],
     "main": [
       "com.sigmundgranaas.forgero.ForgeroInitializer"
     ]
