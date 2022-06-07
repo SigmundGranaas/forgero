@@ -1,10 +1,11 @@
 package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
@@ -13,16 +14,15 @@ import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, PropertyContainer {
+public class SchematicItem extends Item implements ForgeroItem<SchematicItem, SchematicPojo>, PropertyContainer {
     private final Schematic schematic;
 
     public SchematicItem(Settings settings, Schematic pattern) {
@@ -35,24 +35,24 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
     public Text getName() {
         MutableText text;
         if (!getSchematic().getResourceName().equals("default")) {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" ");
+            text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" ");
 
         } else {
-            text = new LiteralText("");
+            text = Text.literal("");
         }
         if (schematic.getType() == ForgeroToolPartTypes.HEAD) {
-            String headType = switch (((HeadSchematic) schematic).getToolType()) {
+            String headType = switch (((HeadSchematic) getSchematic()).getToolType()) {
                 case AXE -> "axehead";
                 case PICKAXE -> "pickaxehead";
                 case SHOVEL -> "shovelhead";
                 case SWORD -> "sword";
                 case HOE -> "hoe";
             };
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
+            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
         } else {
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getType().getName()))).append(" ");
+            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getType().getName()))).append(" ");
         }
-        text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, "schematic")));
+        text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, "schematic")));
         return text;
     }
 
@@ -82,13 +82,34 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, P
         return schematic.getResourceName();
     }
 
+
     @Override
     public ForgeroResourceType getResourceType() {
         return ForgeroResourceType.SCHEMATIC;
     }
 
     @Override
+    public SchematicPojo toDataResource() {
+        return getSchematic().toDataResource();
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        int containerResult = PropertyContainer.super.compareTo(o);
+        if (containerResult != 0) {
+            return containerResult;
+        } else {
+            return ForgeroItem.super.compareTo(o);
+        }
+    }
+
+    @Override
     public SchematicItem getItem() {
         return this;
+    }
+
+    @Override
+    public @NotNull List<Property> getProperties() {
+        return getSchematic().getProperties();
     }
 }

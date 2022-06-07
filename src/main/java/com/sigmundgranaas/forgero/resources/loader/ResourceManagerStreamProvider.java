@@ -3,14 +3,13 @@ package com.sigmundgranaas.forgero.resources.loader;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.resource.InputStreamProvider;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Optional;
 
 public class ResourceManagerStreamProvider implements InputStreamProvider {
     private final ResourceManager manager;
@@ -22,21 +21,20 @@ public class ResourceManagerStreamProvider implements InputStreamProvider {
     @Override
     public Collection<InputStream> getStreams(ForgeroResourceType type) {
         return manager.findResources(getStartingPath(type), path -> true)
+                .values()
                 .stream()
                 .map(this::getInputStream)
-                .filter(Objects::nonNull)
+                .flatMap(Optional::stream)
                 .toList();
 
     }
 
-    @Nullable
-    private InputStream getInputStream(Identifier id) {
+    private Optional<InputStream> getInputStream(Resource res) {
         try {
-            var resource = manager.getResource(id);
-            return resource.getInputStream();
+            return Optional.ofNullable(res.getInputStream());
         } catch (IOException e) {
-            ForgeroInitializer.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
-            return null;
+            ForgeroInitializer.LOGGER.error("Error occurred while loading resource json ", e);
+            return Optional.empty();
         }
     }
 
