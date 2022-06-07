@@ -1,23 +1,9 @@
-### Changelog 0.8.4
+### Changelog 0.9.0-pre-1
 
-# Forgero Beta release
+# Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 
-* Created Alloygery integration (MATERIALS ARE NOT BALANCED)
-* Made all data resources reloadable and overridable
-* Fixed triggers for achievements
-* Cleaned up some files
-* Reworked the Item registry
-* Added a common tag for all tools
-* Fixed the bug where you cannot apply secondary materials
-* Created a static V1 schema - THIS WILL LIKELY BREAK EARLIER SAVES
-* Added experimental support for Mythic Metals
-* Enabled tags as ingredients for materials
-* Added ordering for overriding properties
-* Reworked core registries
-* Significant speed increase when loading recipes
-* Added support for custom schematics and properties embedded in NBT's
-* Created palettes for all materials from mythic metals
-* Fixed mythic metal translations
-* Added support for adding resources in subdirectories
-* Recipe for guidebook will only be created if patchouli is loaded
-* Removed guidebook being given more than one time
+* Reworked identifier element from _ to -, to make it possible to use _ in resource names, like dark_oak
+* Added saber blade
+* Added short sword blade
+* Added kimiri binding
+* Reworked schematic Schema, to make textures and registered items more configurable
