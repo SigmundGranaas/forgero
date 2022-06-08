@@ -1,7 +1,17 @@
 {
   "name": "pattern_hoe",
-  "parent": "vanilla_hoehead",
+  "parent": "root_hoehead",
   "materialCount": 3,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "vein_hoehead_primary",
+        "secondary": "vein_hoehead_secondary",
+        "gem": "hoehead_gem"
+      }
+    }
+  ],
   "properties": {
     "active": [
       {

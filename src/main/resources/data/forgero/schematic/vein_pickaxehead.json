@@ -6,8 +6,8 @@
     {
       "id": "DEFAULT",
       "model": {
-        "primary": "pickaxehead_primary",
-        "secondary": "pickaxehead_secondary",
+        "primary": "vein_pickaxehead_primary",
+        "secondary": "vein_pickaxehead_secondary",
         "gem": "pickaxehead_gem"
       }
     }

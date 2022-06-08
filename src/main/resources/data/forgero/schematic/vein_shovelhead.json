@@ -6,9 +6,9 @@
     {
       "id": "DEFAULT",
       "model": {
-        "primary": "shovelhead_primary",
-        "secondary": "shovelhead_secondary",
-        "gem": "shovelhead_gem"
+        "primary": "vein_shovelhead_primary",
+        "secondary": "vein_shovelhead_secondary",
+        "gem": "vein_shovelhead_gem"
       }
     }
   ],

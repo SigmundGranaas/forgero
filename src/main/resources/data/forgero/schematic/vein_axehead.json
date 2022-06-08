@@ -1,6 +1,16 @@
 {
   "name": "vein_axe",
   "parent": "root_axehead",
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "vein_axehead_primary",
+        "secondary": "vein_axehead_secondary",
+        "gem": "vein_axehead_gem"
+      }
+    }
+  ],
   "properties": {
     "attributes": [
     ],
