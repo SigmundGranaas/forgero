@@ -37,7 +37,7 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
     @Override
     public void pregen() {
         for (Path path : new FabricModFileLoader().getResourcesFromFolder(MATERIAL_TEMPLATES_LOCATION)) {
-            PaletteResourceRegistry.getInstance().addPremadePalette(path.getFileName().toString().replace("_" + "palette.png", ""));
+            PaletteResourceRegistry.getInstance().addPremadePalette(path.getFileName().toString().replace(".png", ""));
         }
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             //var materialCollection = ForgeroRegistry.MATERIAL.list();
