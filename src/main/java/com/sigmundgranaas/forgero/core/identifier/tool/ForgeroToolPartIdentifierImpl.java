@@ -24,7 +24,7 @@ public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier imp
 
     @Override
     public ForgeroSchematicIdentifier getSchematic() {
-        return new ForgeroSchematicIdentifier(String.format("%s%sschematic%s%s", toolPartName.split(ELEMENT_SEPARATOR)[1].toLowerCase(Locale.ROOT), ELEMENT_SEPARATOR, ELEMENT_SEPARATOR, toolPartName.split(ELEMENT_SEPARATOR)[2].toLowerCase(Locale.ROOT)));
+        return new ForgeroSchematicIdentifier(String.format("%s%sschematic", toolPartName.split(ELEMENT_SEPARATOR)[1].toLowerCase(Locale.ROOT), ELEMENT_SEPARATOR).replace("head", ""));
     }
 
     @Override

@@ -28,7 +28,7 @@ class DefaultForgeroToolTest {
 
     public static ForgeroToolBase getDefaultForgeroTool() {
         ToolPartHead head = (ToolPartHead) createToolPart(Constants.IRON_PICKAXEHEAD_IDENTIFIER);
-        ToolPartHandle handle = (ToolPartHandle) createToolPart("oak_handle_default");
+        ToolPartHandle handle = (ToolPartHandle) createToolPart("oak-handle");
         return new ForgeroToolBase(head, handle);
     }
 
@@ -40,7 +40,7 @@ class DefaultForgeroToolTest {
 
     @Test
     void getShortToolName() {
-        assertEquals("iron_pickaxe", getDefaultForgeroTool().getShortToolIdentifierString());
+        assertEquals("iron-pickaxe", getDefaultForgeroTool().getShortToolIdentifierString());
     }
 
     @Test

@@ -78,7 +78,7 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
             return new ForgeroMaterialIdentifierImpl(forgeroName);
         } else if (ForgeroToolTypes.isTool(elements[1])) {
             return new ForgeroToolIdentifierImpl(forgeroName);
-        } else if (elements.length == 3) {
+        } else if (elements.length == 2) {
             return createForgeroToolPartIdentifier(forgeroName);
         }
         throw new IllegalStateException("Unexpected value: " + elements.length);
