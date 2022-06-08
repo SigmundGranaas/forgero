@@ -3,7 +3,6 @@
   "resource_type": "SCHEMATIC",
   "type": "HEAD",
   "toolType": "SWORD",
-  "unique": true,
   "materialCount": 2,
   "models": [
     {
