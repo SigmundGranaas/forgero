@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/schematic",
   "display": {
     "icon": {
-      "item": "forgero:shovelhead-schematic"
+      "item": "forgero:shovel-schematic"
     },
     "title": {
       "translate": "advancements.forgero.schematic_vein.title"
@@ -22,7 +22,7 @@
         "items": [
           {
             "items": [
-              "forgero:axehead_schematic_vein"
+              "forgero:vein_axe-schematic"
             ]
           }
         ]
@@ -34,7 +34,7 @@
         "items": [
           {
             "items": [
-              "forgero:pickaxehead_schematic_vein"
+              "forgero:vein_pickaxe-schematic"
             ]
           }
         ]
@@ -46,7 +46,7 @@
         "items": [
           {
             "items": [
-              "forgero:shovelhead_schematic_vein"
+              "forgero:vein_shovel-schematic"
             ]
           }
         ]
@@ -58,7 +58,7 @@
         "items": [
           {
             "items": [
-              "forgero:hoehead_schematic_vein"
+              "forgero:vein_hoe-schematic"
             ]
           }
         ]

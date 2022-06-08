@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/root",
   "display": {
     "icon": {
-      "item": "forgero:pickaxehead-schematic"
+      "item": "forgero:pickaxe-schematic"
     },
     "title": {
       "translate": "advancements.forgero.schematic.title"

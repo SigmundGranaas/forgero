@@ -1,6 +1,6 @@
 {
-  "name": "pattern_axe",
-  "parent": "root_axehead",
+  "name": "pattern_shovel",
+  "parent": "root_shovelhead",
   "materialCount": 3,
   "properties": {
     "active": [

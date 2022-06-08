@@ -1,13 +1,13 @@
 {
   "type": "forgero:gem_upgrade_recipe",
   "base": {
-    "item": "forgero:redstone_gem"
+    "item": "forgero:redstone-gem"
   },
   "addition": {
-    "item": "forgero:redstone_gem"
+    "item": "forgero:redstone-gem"
   },
   "result": {
-    "item": "forgero:redstone_gem"
+    "item": "forgero:redstone-gem"
   }
 }
 
