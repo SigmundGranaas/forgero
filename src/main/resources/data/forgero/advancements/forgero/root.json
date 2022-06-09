@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "forgero:diamond_pickaxe"
+      "item": "forgero:diamond-pickaxe"
     },
     "title": {
       "translate": "advancements.forgero.root.title"

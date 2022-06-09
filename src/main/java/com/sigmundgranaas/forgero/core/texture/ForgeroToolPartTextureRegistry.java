@@ -35,6 +35,10 @@ public class ForgeroToolPartTextureRegistry {
         toolPartTextures.add(textureIdentifier.getIdentifier());
     }
 
+    public void registerTexture(String texture) {
+        toolPartTextures.add(texture);
+    }
+
     public List<ToolPartModelTextureIdentifier> getTextures() {
         return toolPartTextures.stream().map(factory::createToolPartTextureIdentifier).filter(Optional::isPresent).map(Optional::get).toList();
     }

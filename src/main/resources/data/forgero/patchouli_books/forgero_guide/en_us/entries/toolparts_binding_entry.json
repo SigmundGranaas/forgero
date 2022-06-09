@@ -1,6 +1,6 @@
 {
   "name": "Binding",
-  "icon": "forgero:gold_binding_default",
+  "icon": "forgero:gold-binding",
   "category": "forgero:toolparts_category",
   "pages": [
     {

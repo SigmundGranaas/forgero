@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Locale;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
 
     private final FabricToForgeroToolAdapter toolAdapter = FabricToForgeroToolAdapter.createAdapter();
@@ -95,7 +97,7 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
 
     @Override
     protected String getOrCreateTranslationKey() {
-        return String.format("item.%s.%s_%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName(), getToolType().toString().toLowerCase(Locale.ROOT));
+        return String.format("item.%s.%s%s%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName(), ELEMENT_SEPARATOR, getToolType().toString().toLowerCase(Locale.ROOT));
     }
 
 

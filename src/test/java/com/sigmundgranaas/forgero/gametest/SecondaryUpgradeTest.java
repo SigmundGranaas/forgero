@@ -22,7 +22,7 @@ public class SecondaryUpgradeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron-pickaxehead")));
         ItemStack diamondSecondaryUpgrade = new ItemStack(Items.DIAMOND);
 
 
@@ -49,7 +49,7 @@ public class SecondaryUpgradeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron-pickaxehead")));
         ItemStack diamondSecondaryUpgrade = new ItemStack(Items.COBBLESTONE);
 
 

@@ -7,10 +7,13 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.texture.TextureModelContainer;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContainer {
     private final ForgeroToolPartTypes type;
@@ -18,17 +21,20 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
     private final List<Property> properties;
 
     private final int rarity;
-    private final String model;
+
+    private final boolean unique;
+    private final TextureModelContainer model;
 
     private final int materialCount;
 
-    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, String model, int materialCount) {
+    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, TextureModelContainer model, int materialCount, boolean unique) {
         this.type = type;
         this.name = name;
         this.properties = properties;
         this.rarity = (int) Property.stream(properties).applyAttribute(Target.EMPTY, AttributeType.RARITY);
         this.model = model;
         this.materialCount = materialCount;
+        this.unique = unique;
     }
 
     @Override
@@ -43,7 +49,7 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
 
     @Override
     public String getStringIdentifier() {
-        return String.format("%s_schematic_%s", type.getName(), name);
+        return String.format("%s%sschematic", name, ELEMENT_SEPARATOR);
     }
 
     public String getResourceName() {
@@ -64,7 +70,7 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         return properties;
     }
 
-    public String getModel() {
+    public TextureModelContainer getModelContainer() {
         return model;
     }
 
@@ -76,8 +82,8 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         return type;
     }
 
-    public String getVariant() {
-        return name;
+    public boolean isUnique() {
+        return unique;
     }
 
     public int getMaterialCount() {

@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.core.data.v1;
 
 import com.sigmundgranaas.forgero.core.data.ResourceType;
 import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelContainerPojo;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
@@ -23,8 +25,15 @@ public class SchematicDataTest {
         pojo.materialCount = 1;
         pojo.type = ForgeroToolPartTypes.HEAD;
         pojo.toolType = ForgeroToolTypes.PICKAXE;
+        var model = new ModelPojo();
+        model.gem = "";
+        model.primary = "";
+        model.secondary = "";
+        var modelContainer = new ModelContainerPojo();
+        modelContainer.model = model;
+        modelContainer.id = "DEFAULT";
+        pojo.models = List.of(modelContainer);
         pojo.name = "default";
-        pojo.model = "default";
         pojo.parent = null;
         pojo.resourceType = ResourceType.SCHEMATIC;
         pojo.properties = null;

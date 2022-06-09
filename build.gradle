@@ -1,6 +1,6 @@
 plugins {
     id "idea"
-    id "fabric-loom" version "0.12.38"
+    id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
@@ -10,6 +10,13 @@ group = project.maven_group
 
 repositories {
     mavenCentral()
+
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 
     maven { url 'https://maven.blamejared.com' }
     maven {
@@ -31,8 +38,12 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    //modImplementation "vazkii.patchouli:Patchouli:1.18.2-67-FABRIC"
+    modImplementation "vazkii.patchouli:Patchouli:1.18.2-67-FABRIC"
     modImplementation("net.devtech:arrp:0.6.2")
+
+    //alloygery testing
+    modImplementation "curse.maven:alloygery-573592:3778894"
+    modImplementation "curse.maven:nbtcrafting-314633:3707208"
 
     include "net.devtech:arrp:0.6.2"
     // Fabric API. This is technically optional, but you probably want it anyway.
@@ -72,9 +83,13 @@ jar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
             // add all the jars that should be included when publishing to maven
-
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
         }
     }
 

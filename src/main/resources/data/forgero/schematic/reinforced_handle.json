@@ -1,10 +1,41 @@
 {
-  "name": "reinforced",
-  "type": "HANDLE",
-  "model": "dense",
-  "output": "handle_dense",
-  "rarity": 70,
+  "name": "reinforced_handle",
+  "parent": "root_handle",
   "materialCount": 4,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "dense_handle_primary",
+        "secondary": "dense_handle_secondary",
+        "gem": "dense_handle_gem"
+      }
+    },
+    {
+      "id": "FULL_HANDLE",
+      "model": {
+        "primary": "dense_handle_primary",
+        "secondary": "dense_handle_secondary",
+        "gem": "dense_handle_gem"
+      }
+    },
+    {
+      "id": "MEDIUM_HANDLE",
+      "model": {
+        "primary": "dense_medium_handle_primary",
+        "secondary": "dense_medium_handle_secondary",
+        "gem": "dense_medium_handle_gem"
+      }
+    },
+    {
+      "id": "SHORT_HANDLE",
+      "model": {
+        "primary": "dense_short_handle_primary",
+        "secondary": "dense_short_handle_secondary",
+        "gem": "dense_short_handle_gem"
+      }
+    }
+  ],
   "properties": {
     "attributes": [
       {

@@ -1,5 +1,5 @@
 {
-  "name": "starplatinum",
+  "name": "star_platinum",
   "dependencies": [
     "mythicmetals"
   ],
@@ -19,7 +19,7 @@
     "active": []
   },
   "palette": {
-    "name": "starplatinum",
+    "name": "star_platinum",
     "include": [
       "mythicmetals:textures/items/star_platinum.png"
     ],

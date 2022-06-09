@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class ForgeroGem implements Gem {
     private final int gemLevel;
     private final String identifier;
@@ -63,7 +65,7 @@ public class ForgeroGem implements Gem {
 
     @Override
     public String getResourceName() {
-        return getStringIdentifier().split("_")[0];
+        return getStringIdentifier().split(ELEMENT_SEPARATOR)[0];
     }
 
     @Override

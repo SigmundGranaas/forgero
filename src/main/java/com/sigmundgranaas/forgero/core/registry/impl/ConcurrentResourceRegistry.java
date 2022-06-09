@@ -62,6 +62,11 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource<?>> i
     }
 
     @Override
+    public boolean resourceExists(String identifier) {
+        return resources.containsKey(identifier);
+    }
+
+    @Override
     public ImmutableMap<String, T> getResourcesAsMap() {
         return ForgeroResourceRegistry.convertMapToImmutableMap(getResources());
     }
@@ -84,7 +89,7 @@ public abstract class ConcurrentResourceRegistry<T extends ForgeroResource<?>> i
     @Override
     public void replaceRegistry(ImmutableList<T> newResources) {
         synchronized (ConcurrentResourceRegistry.class) {
-            this.resources = newResources.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, element -> element));
+            this.resources = newResources.stream().collect(Collectors.toMap(ForgeroResource::getStringIdentifier, element -> element, (element1, element2) -> element1));
         }
     }
 

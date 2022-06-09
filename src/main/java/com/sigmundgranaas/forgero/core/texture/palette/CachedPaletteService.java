@@ -17,6 +17,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 /**
  * Cached service for generating or fetching Palettes
  * <p>
@@ -95,7 +97,7 @@ public class CachedPaletteService implements PaletteService {
 
         try {
 
-            File outputFile = new File(String.format("./%s_palette.png", id.getIdentifier()));
+            File outputFile = new File(String.format("./%s%spalette.png", id.getIdentifier(), ELEMENT_SEPARATOR));
             if (!outputFile.exists()) {
                 //noinspection ResultOfMethodCallIgnored
                 outputFile.createNewFile();

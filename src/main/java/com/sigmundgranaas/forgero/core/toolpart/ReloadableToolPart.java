@@ -9,6 +9,8 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public abstract class ReloadableToolPart extends AbstractToolPart {
 
     public ReloadableToolPart(ToolPartState state) {
@@ -40,7 +42,7 @@ public abstract class ReloadableToolPart extends AbstractToolPart {
 
     @Override
     public String getToolPartIdentifier() {
-        return state.getPrimaryMaterial().getResourceName() + "_" + getToolPartName() + "_" + getSchematic().getVariant();
+        return state.getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getSchematic().getResourceName();
     }
 
     @Override

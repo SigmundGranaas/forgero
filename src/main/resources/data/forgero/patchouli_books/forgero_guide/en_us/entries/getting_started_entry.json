@@ -1,6 +1,6 @@
 {
   "name": "Crafting your first tool",
-  "icon": "forgero:diamond_pickaxe",
+  "icon": "forgero:diamond-pickaxe",
   "category": "forgero:getting_started_category",
   "priority": true,
   "pages": [

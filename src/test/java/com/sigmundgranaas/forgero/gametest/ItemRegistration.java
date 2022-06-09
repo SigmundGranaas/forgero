@@ -17,7 +17,7 @@ public class ItemRegistration {
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolsHaveBeenRegistered(TestContext context) {
         ForgeroRegistry.TOOL.list().forEach(forgeroTool -> {
-            Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getShortToolIdentifierString()));
+            Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getToolIdentifierString()));
             if (checkedTool == Items.AIR && !(checkedTool instanceof ForgeroToolItem)) {
                 String message = String.format("%s has not been registered correctly", forgeroTool.getToolIdentifierString());
                 ForgeroInitializer.LOGGER.error(message);

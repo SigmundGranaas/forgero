@@ -48,6 +48,9 @@ public interface ForgeroResourceRegistry<T extends ForgeroResource<?>> {
     Optional<T> getResource(String identifier);
 
     @NotNull
+    boolean resourceExists(String identifier);
+
+    @NotNull
     T getResource(T resource);
 
     ImmutableList<T> getResourcesAsList();

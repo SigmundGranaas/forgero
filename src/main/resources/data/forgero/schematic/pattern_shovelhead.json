@@ -1,10 +1,6 @@
 {
-  "name": "pattern",
-  "parent": "default_shovelhead",
-  "type": "HEAD",
-  "toolType": "SHOVEL",
-  "model": "pattern",
-  "output": "shovel_pattern",
+  "name": "pattern_shovel",
+  "parent": "root_shovelhead",
   "materialCount": 3,
   "properties": {
     "active": [

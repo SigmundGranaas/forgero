@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/toolpart",
   "display": {
     "icon": {
-      "item": "forgero:iron_pickaxe"
+      "item": "forgero:iron-pickaxe"
     },
     "title": {
       "translate": "advancements.forgero.tool.title"

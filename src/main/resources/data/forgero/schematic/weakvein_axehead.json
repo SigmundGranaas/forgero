@@ -1,10 +1,17 @@
 {
-  "name": "weakvein",
+  "name": "weakvein_axe",
   "type": "HEAD",
   "toolType": "AXE",
-  "model": "vein",
-  "output": "axe_vein",
-  "rarity": 20,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "vein_axehead_primary",
+        "secondary": "vein_axehead_secondary",
+        "gem": "axehead_gem"
+      }
+    }
+  ],
   "materialCount": 3,
   "properties": {
     "attributes": [
