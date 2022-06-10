@@ -1,4 +1,4 @@
-### Changelog 0.9.0-pre-2
+### Changelog 0.9.0-pre-3
 
 # Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 

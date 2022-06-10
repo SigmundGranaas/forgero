@@ -37,7 +37,7 @@ public class FabricTextureLoader implements TextureLoader {
             } else {
                 return RawTexture.createRawTexture(id, fileService.getStream(id));
             }
-        } catch (IOException | NoSuchElementException e) {
+        } catch (IOException | NoSuchElementException | IllegalArgumentException e) {
             ForgeroInitializer.LOGGER.error("Unable to load {} due to {}, Falling back to default image", id.getFileNameWithExtension(), e);
             return new RawTexture(id, new BufferedImage(32, 32, BufferedImage.TYPE_INT_BGR));
         }
