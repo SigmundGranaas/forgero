@@ -26,7 +26,7 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private void initializeItemModels() {
-        new ForgeroTextures().pregen();
+        new ForgeroTextures().createTextureIdentifiers();
 
         registerToolPartTextures();
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE));
@@ -35,7 +35,7 @@ public class ForgeroClient implements ClientModInitializer {
     private void registerToolPartTextures() {
 
         ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
-        
+
         registry.getTextures().forEach(texture -> {
             ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier())));
 

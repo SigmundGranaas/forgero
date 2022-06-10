@@ -1,7 +1,8 @@
-### Changelog 0.8.4
+### Changelog 0.8.5
 
 # Forgero Beta release
 
+* Removed necessary entrypoint extension used by Forgero via AARP
 * Made all data resources reloadable and overridable
 * Fixed triggers for achievements
 * Cleaned up some files

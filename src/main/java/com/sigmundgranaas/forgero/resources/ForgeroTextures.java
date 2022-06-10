@@ -16,7 +16,6 @@ import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
-import net.devtech.arrp.api.RRPPreGenEntrypoint;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -25,11 +24,10 @@ import java.nio.file.Path;
 import static com.sigmundgranaas.forgero.resources.loader.ResourceLocations.MATERIAL_TEMPLATES_LOCATION;
 
 
-public class ForgeroTextures implements RRPPreGenEntrypoint {
-    //public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:textures");
+public class ForgeroTextures {
 
-    @Override
-    public void pregen() {
+
+    public void createTextureIdentifiers() {
         for (Path path : new FabricModFileLoader().getResourcesFromFolder(MATERIAL_TEMPLATES_LOCATION)) {
             PaletteResourceRegistry.getInstance().addPremadePalette(path.getFileName().toString().replace("_palette.png", ""));
         }
@@ -40,13 +38,11 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
             var loader = new FabricResourceLoader(new ModContainerService().getAllModsAsSet());
             ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(loader);
 
-            //registry.getTextures().stream().filter(id -> PaletteResourceRegistry.getInstance().premadePalette(id.getPaletteIdentifier())).forEach(texture -> RESOURCE_PACK.addTexture(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier()), CachedToolPartTextureService.getInstance(new FabricTextureLoader((textureId) -> MinecraftClient.getInstance().getResourceManager().getResource(textureId))).getTexture(texture).getImage()));
 
             registerToolPartModelsPrimary(registry);
             registerToolPartModelsSecondary(registry);
             registerToolPartGemModels(registry);
 
-            //RRPCallback.AFTER_VANILLA.register(a -> a.add(RESOURCE_PACK));
         }
     }
 
