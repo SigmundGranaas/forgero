@@ -23,7 +23,7 @@ public class ItemRenderContextMixin {
     @Shadow
     private ModelTransformation.Mode transformMode;
 
-    @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"))
+    @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/api/renderer/v1/model/FabricBakedModel;emitItemQuads(Lnet/minecraft/item/ItemStack;Ljava/util/function/Supplier;Lnet/fabricmc/fabric/api/renderer/v1/render/RenderContext;)V"))
     public void renderModel(ItemStack itemStack, ModelTransformation.Mode transformMode, boolean invert, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int lightmap, int overlay, BakedModel model, ItemRenderContext.VanillaQuadHandler vanillaHandler, CallbackInfo ci) {
         if ((itemStack.getItem() instanceof ForgeroToolItem || itemStack.getItem() instanceof ToolPartItem) && this.transformMode == ModelTransformation.Mode.GROUND) {
             this.matrixStack.scale(0.5f, 0.5f, 0.5f);
