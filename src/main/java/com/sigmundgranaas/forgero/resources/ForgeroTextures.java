@@ -18,9 +18,6 @@ import com.sigmundgranaas.forgero.core.texture.palette.PaletteResourceRegistry;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
-import net.devtech.arrp.api.RRPCallback;
-import net.devtech.arrp.api.RRPPreGenEntrypoint;
-import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -31,11 +28,8 @@ import static com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelT
 import static com.sigmundgranaas.forgero.resources.loader.ResourceLocations.MATERIAL_TEMPLATES_LOCATION;
 
 
-public class ForgeroTextures implements RRPPreGenEntrypoint {
-    public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:textures");
-
-    @Override
-    public void pregen() {
+public class ForgeroTextures {
+    public void generateTextureIdentifiers() {
         for (Path path : new FabricModFileLoader().getResourcesFromFolder(MATERIAL_TEMPLATES_LOCATION)) {
             PaletteResourceRegistry.getInstance().addPremadePalette(path.getFileName().toString().replace(".png", ""));
         }
@@ -53,7 +47,6 @@ public class ForgeroTextures implements RRPPreGenEntrypoint {
             registerToolPartGemModels(registry);
             registerSchematicModels(registry);
 
-            RRPCallback.AFTER_VANILLA.register(a -> a.add(RESOURCE_PACK));
         }
     }
 
