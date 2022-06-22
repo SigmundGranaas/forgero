@@ -35,6 +35,10 @@ public class ForgeroToolPartTextureRegistry {
         toolPartTextures.add(textureIdentifier.getIdentifier());
     }
 
+    public boolean isRegistered(String texture) {
+        return toolPartTextures.contains(texture);
+    }
+
     public void registerTexture(String texture) {
         toolPartTextures.add(texture);
     }
