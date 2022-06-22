@@ -9,6 +9,10 @@ import com.sigmundgranaas.forgero.core.property.PropertyStream;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolBuilder;
+import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartHandleBuilder;
+import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartHeadBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +56,13 @@ public interface ForgeroTool extends ForgeroResource<ToolPojo>, PropertyContaine
     @Override
     default String getResourceName() {
         return getStringIdentifier();
+    }
+
+    default ForgeroTool getBaseTool() {
+        ToolPartHead head = new ToolPartHeadBuilder(getPrimaryMaterial(), (HeadSchematic) getToolHead().getSchematic()).createToolPart();
+        ToolPartHandle handle = new ToolPartHandleBuilder(getPrimaryMaterial(), getToolHandle().getSchematic()).createToolPart();
+
+        return ForgeroToolBuilder.createBuilder(head, handle).createTool();
     }
 
     @Override
