@@ -1,7 +1,8 @@
-### Changelog 0.8.6
+### Changelog 0.8.7
 
 # Forgero Beta release
 
+* Fixed a bug where rouge texture identifiers would create an IndexOutOfboundExeption
 * Fixed crash with fabric api v0.56
 * Removed necessary entrypoint extension used by Forgero via AARP
 * Made all data resources reloadable and overridable
