@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    testCompileOnly('org.junit.jupiter:junit-jupiter:5.8.2')
+    testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
     compileOnlyApi('org.jetbrains:annotations:23.0.0')
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
