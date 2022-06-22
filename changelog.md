@@ -1,8 +1,9 @@
-### Changelog 0.8.5
+### Changelog 0.8.6
 
 # Forgero Beta release
 
-* Removed necessary entrypoint extension used by Forgero via ARRP
+* Fixed crash with fabric api v0.56
+* Removed necessary entrypoint extension used by Forgero via AARP
 * Made all data resources reloadable and overridable
 * Fixed triggers for achievements
 * Cleaned up some files
