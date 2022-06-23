@@ -12,6 +12,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.stream.Stream;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
     private static ForgeroIdentifierFactoryImpl INSTANCE;
 
@@ -39,44 +41,44 @@ public class ForgeroIdentifierFactoryImpl implements ForgeroIdentifierFactory {
 
     @Override
     public ForgeroMaterialIdentifier createForgeroMaterialIdentifier(String identifier) {
-        String[] elements = identifier.split("_");
+        String[] elements = identifier.split(ELEMENT_SEPARATOR);
         return new ForgeroMaterialIdentifierImpl(elements[0]);
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.PRIMARY, toolPart.getSchematic().getResourceName());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart toolPart) {
-        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(toolPart.getPrimaryMaterial().getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.PRIMARY, toolPart.getSchematic().getResourceName());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolPart toolPart, SecondaryMaterial
             secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart), ModelLayer.SECONDARY, toolPart.getSchematic().getResourceName());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(ForgeroToolTypes toolType, ForgeroToolPart
             toolPart, SecondaryMaterial secondaryMaterial) {
-        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getSchematic().getModel());
+        return new ForgeroModelIdentifier(secondaryMaterial.getResourceName(), ToolPartModelType.getModelType(toolPart, toolType), ModelLayer.SECONDARY, toolPart.getSchematic().getResourceName());
     }
 
     @Override
     public ForgeroModelIdentifier createToolPartModelIdentifier(Gem gem, ForgeroToolPart part, ToolPartModelType type) {
-        return new ForgeroModelIdentifier(gem.getResourceName(), type, ModelLayer.GEM, part.getSchematic().getModel());
+        return new ForgeroModelIdentifier(gem.getResourceName(), type, ModelLayer.GEM, part.getSchematic().getResourceName());
     }
 
     private ForgeroIdentifier createForgeroIdentifierFromName(String forgeroName) {
-        String[] elements = forgeroName.split("_");
+        String[] elements = forgeroName.split(ELEMENT_SEPARATOR);
         if (elements.length == 1) {
             return new ForgeroMaterialIdentifierImpl(forgeroName);
         } else if (ForgeroToolTypes.isTool(elements[1])) {
             return new ForgeroToolIdentifierImpl(forgeroName);
-        } else if (elements.length == 3) {
+        } else if (elements.length == 2) {
             return createForgeroToolPartIdentifier(forgeroName);
         }
         throw new IllegalStateException("Unexpected value: " + elements.length);

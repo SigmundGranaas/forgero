@@ -1,13 +1,13 @@
 {
   "type": "forgero:gem_upgrade_recipe",
   "base": {
-    "item": "forgero:stoneheart_gem"
+    "item": "forgero:stoneheart-gem"
   },
   "addition": {
-    "item": "forgero:stoneheart_gem"
+    "item": "forgero:stoneheart-gem"
   },
   "result": {
-    "item": "forgero:stoneheart_gem"
+    "item": "forgero:stoneheart-gem"
   }
 }
 

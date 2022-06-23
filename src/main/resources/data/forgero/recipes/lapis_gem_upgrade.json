@@ -1,13 +1,13 @@
 {
   "type": "forgero:gem_upgrade_recipe",
   "base": {
-    "item": "forgero:lapis_gem"
+    "item": "forgero:lapis-gem"
   },
   "addition": {
-    "item": "forgero:lapis_gem"
+    "item": "forgero:lapis-gem"
   },
   "result": {
-    "item": "forgero:lapis_gem"
+    "item": "forgero:lapis-gem"
   }
 }
 

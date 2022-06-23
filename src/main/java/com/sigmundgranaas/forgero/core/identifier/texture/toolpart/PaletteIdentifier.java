@@ -12,7 +12,7 @@ public record PaletteIdentifier(
 
     @Override
     public String getFileNameWithoutExtension() {
-        return getIdentifier() + "_palette";
+        return getIdentifier();
     }
 
     @Override

@@ -1,13 +1,13 @@
 {
   "type": "forgero:gem_upgrade_recipe",
   "base": {
-    "item": "forgero:emerald_gem"
+    "item": "forgero:emerald-gem"
   },
   "addition": {
-    "item": "forgero:emerald_gem"
+    "item": "forgero:emerald-gem"
   },
   "result": {
-    "item": "forgero:emerald_gem"
+    "item": "forgero:emerald-gem"
   }
 }
 

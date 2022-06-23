@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/gem",
   "display": {
     "icon": {
-      "item": "forgero:redstone_gem"
+      "item": "forgero:redstone-gem"
     },
     "title": {
       "translate": "advancements.forgero.gem.title"

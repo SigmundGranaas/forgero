@@ -1,6 +1,6 @@
 {
   "name": "Crafting a tool part",
-  "icon": "forgero:acacia_handle_default",
+  "icon": "forgero:acacia-handle",
   "category": "forgero:getting_started_category",
   "pages": [
     {

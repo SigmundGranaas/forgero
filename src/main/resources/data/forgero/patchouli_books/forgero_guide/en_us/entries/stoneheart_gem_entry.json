@@ -1,6 +1,6 @@
 {
   "name": "Stoneheart Gem",
-  "icon": "forgero:stoneheart_gem",
+  "icon": "forgero:stoneheart-gem",
   "category": "forgero:gems_category",
   "pages": [
     {
@@ -10,13 +10,13 @@
     {
       "type": "patchouli:spotlight",
       "title": "Stoneheart gem, level 8",
-      "item": "forgero:stoneheart_gem{Gem:'8_stoneheart_gem', CustomModelData:8}",
+      "item": "forgero:stoneheart-gem{Gem:'8_stoneheart_gem', CustomModelData:8}",
       "text": "A stoneheart gem upgraded to level 8"
     },
     {
       "type": "patchouli:crafting",
       "title": "Crafting a stoneheart gem",
-      "recipe": "forgero:stoneheart_gem"
+      "recipe": "forgero:stoneheart-gem"
     }
   ]
 }

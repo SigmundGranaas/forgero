@@ -51,7 +51,7 @@ public class ForgeroToolFactoryImpl implements ForgeroToolFactory {
         for (ToolPartHead head : collection.stream()
                 .filter(toolPart -> toolPart instanceof ToolPartHead)
                 .map(ToolPartHead.class::cast)
-                .filter(toolPartHead -> toolPartHead.getSchematic().getResourceName().equals("default")).toList()) {
+                .toList()) {
             //noinspection OptionalGetWithoutIsPresent
             tools.add(new ForgeroToolBase(head, collection.stream()
                     .filter(toolPart -> toolPart instanceof ToolPartHandle)

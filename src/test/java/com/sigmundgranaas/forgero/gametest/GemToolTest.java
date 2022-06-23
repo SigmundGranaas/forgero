@@ -45,7 +45,7 @@ public class GemToolTest {
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));
 
-        ItemStack stack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxe")));
+        ItemStack stack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron-pickaxe")));
         stack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, nbt);
         return stack;
     }
@@ -57,7 +57,7 @@ public class GemToolTest {
 
         for (int i = 1; i < 10; i++) {
             Attribute attribute = new AttributeBuilder(AttributeType.DURABILITY).applyOperation(NumericOperation.ADDITION).applyValue(100).build();
-            ItemStack tool = createToolItemWithGem(new ForgeroGem(i, "emerald_gem", List.of(attribute), List.of(ForgeroToolPartTypes.HANDLE, ForgeroToolPartTypes.HEAD, ForgeroToolPartTypes.BINDING)));
+            ItemStack tool = createToolItemWithGem(new ForgeroGem(i, "emerald-gem", List.of(attribute), List.of(ForgeroToolPartTypes.HANDLE, ForgeroToolPartTypes.HEAD, ForgeroToolPartTypes.BINDING)));
             if (tool.getMaxDamage() != baseDamage + i * 100) {
                 //throw new GameTestException("Durability based on Gem is not taken into account");
             }
@@ -76,7 +76,7 @@ public class GemToolTest {
         float lastSpeed = baseSpeed;
         for (int i = 1; i < 10; i++) {
             Attribute attribute = new AttributeBuilder(AttributeType.MINING_SPEED).applyOperation(NumericOperation.ADDITION).applyValue(1).build();
-            ItemStack tool = createToolItemWithGem(new ForgeroGem(i, "lapis_gem", List.of(attribute), List.of(ForgeroToolPartTypes.HANDLE, ForgeroToolPartTypes.HEAD, ForgeroToolPartTypes.BINDING)));
+            ItemStack tool = createToolItemWithGem(new ForgeroGem(i, "lapis-gem", List.of(attribute), List.of(ForgeroToolPartTypes.HANDLE, ForgeroToolPartTypes.HEAD, ForgeroToolPartTypes.BINDING)));
             float currentSpeed = tool.getMiningSpeedMultiplier(context.getBlockState(pos));
             if (currentSpeed < lastSpeed) {
                 throw new GameTestException("Durability based on Gem is not taken into account");

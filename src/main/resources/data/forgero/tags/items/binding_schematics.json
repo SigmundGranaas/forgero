@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    {
-      "id": "forgero:binding_schematic_default",
-      "required": false
-    }
-  ]
-}

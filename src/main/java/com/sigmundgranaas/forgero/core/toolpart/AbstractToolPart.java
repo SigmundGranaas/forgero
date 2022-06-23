@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public abstract class AbstractToolPart implements ForgeroToolPart {
     protected final ToolPartState state;
 
@@ -34,7 +36,7 @@ public abstract class AbstractToolPart implements ForgeroToolPart {
 
     @Override
     public String getToolPartIdentifier() {
-        return getPrimaryMaterial().getResourceName() + "_" + getToolPartName() + "_" + getSchematic().getVariant();
+        return getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getSchematic().getResourceName();
     }
 
     @Override

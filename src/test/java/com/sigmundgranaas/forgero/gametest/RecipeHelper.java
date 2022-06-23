@@ -58,9 +58,9 @@ public class RecipeHelper {
                     if (wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).has("item")) {
                         itemIdentifier = wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("item").getAsString();
                     } else if (wrapper.getRecipe().getAsJsonObject("key").getAsJsonObject(String.valueOf(patternLine.charAt(j))).get("tag").getAsString().contains("handle")) {
-                        itemIdentifier = "forgero:oak_handle_default";
+                        itemIdentifier = "forgero:oak-handle";
                     } else {
-                        itemIdentifier = "forgero:oak_binding_default";
+                        itemIdentifier = "forgero:oak-binding";
                     }
                     Identifier itemId = new Identifier(itemIdentifier);
                     ItemStack stack = new ItemStack(Registry.ITEM.get(itemId));

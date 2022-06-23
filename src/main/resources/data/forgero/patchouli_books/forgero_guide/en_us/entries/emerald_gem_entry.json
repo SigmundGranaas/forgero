@@ -1,6 +1,6 @@
 {
   "name": "Emerald",
-  "icon": "forgero:emerald_gem",
+  "icon": "forgero:emerald-gem",
   "category": "forgero:gems_category",
   "pages": [
     {
@@ -10,7 +10,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Emerald gem, level 8",
-      "item": "forgero:emerald_gem{Gem:'8_emerald_gem', CustomModelData:8}",
+      "item": "forgero:emerald-gem{Gem:'8_emerald_gem', CustomModelData:8}",
       "text": "A emerald gem upgraded to level 8"
     },
     {

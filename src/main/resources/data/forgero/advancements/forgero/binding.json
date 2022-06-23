@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/toolpart",
   "display": {
     "icon": {
-      "item": "forgero:iron_binding_default"
+      "item": "forgero:iron-binding"
     },
     "title": {
       "translate": "advancements.forgero.binding.title"
