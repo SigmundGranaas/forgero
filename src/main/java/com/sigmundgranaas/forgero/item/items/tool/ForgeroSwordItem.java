@@ -56,7 +56,7 @@ public class ForgeroSwordItem extends SwordItem implements ForgeroToolItem {
 
     @Override
     public Text getName(ItemStack stack) {
-        return getForgeroTranslatableToolName();
+        return getForgeroTranslatableToolName(getToolAdapter().getTool(stack).orElse(getTool()));
     }
 
 

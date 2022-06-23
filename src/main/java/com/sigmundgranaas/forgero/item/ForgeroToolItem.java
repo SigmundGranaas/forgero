@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPojo;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
-import com.sigmundgranaas.forgero.core.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
@@ -125,20 +124,15 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
     default Text getForgeroTranslatableToolName() {
         ForgeroTool tool = getTool();
+        return getForgeroTranslatableToolName(tool);
+    }
+
+    default Text getForgeroTranslatableToolName(ForgeroTool tool) {
         MutableText text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName().toLowerCase(Locale.ROOT))).append(" ");
         Schematic schematic = tool.getToolHead().getSchematic();
         if (!schematic.getResourceName().equals("default")) {
             text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" "));
         }
-
-        String headType = switch (((HeadSchematic) schematic).getToolType()) {
-            case AXE -> "axe";
-            case PICKAXE -> "pickaxe";
-            case SHOVEL -> "shovel";
-            case SWORD -> "sword";
-            case HOE -> "hoe";
-        };
-        text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
         return text;
     }
 
