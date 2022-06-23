@@ -1,6 +1,6 @@
 {
   "name": "Diamond Gem",
-  "icon": "forgero:diamond_gem",
+  "icon": "forgero:diamond-gem",
   "category": "forgero:gems_category",
   "pages": [
     {
@@ -10,7 +10,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Dimaond gem, level 8",
-      "item": "forgero:diamond_gem{Gem:'8_diamond_gem', CustomModelData:8}",
+      "item": "forgero:diamond-gem{Gem:'8_diamond_gem', CustomModelData:8}",
       "text": "A diamond upgraded to level 8"
     },
     {

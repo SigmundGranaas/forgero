@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    {
-      "id": "forgero:shovelhead_pattern_default",
-      "required": false
-    }
-  ]
-}

@@ -1,6 +1,6 @@
 {
   "name": "Crafting your first tool",
-  "icon": "forgero:diamond_pickaxe",
+  "icon": "forgero:diamond-pickaxe",
   "category": "forgero:getting_started_category",
   "priority": true,
   "pages": [
@@ -10,8 +10,8 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron_pickaxe_iron_pickaxehead_default_oak_handle",
-      "recipe2": "forgero:netherite_axe_netherite_axehead_default_oak_handle_binding"
+      "recipe": "forgero:iron-pickaxe-iron-pickaxehead-oak-handle",
+      "recipe2": "forgero:netherite-axe-netherite-axehead-oak-handle-binding"
     }
   ]
 }

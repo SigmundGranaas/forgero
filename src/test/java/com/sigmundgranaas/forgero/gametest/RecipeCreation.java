@@ -30,7 +30,7 @@ public class RecipeCreation {
 
     public static Item testHandleRecipe(Item ingredient, Schematic pattern, ServerPlayerEntity player) {
         CraftingScreenHandler handler = ((CraftingScreenHandler) player.currentScreenHandler);
-        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getSchematicIdentifier()))));
+        handler.getSlot(1).setStack(new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getStringIdentifier()))));
         for (int i = 0; i < pattern.getMaterialCount(); i++) {
             handler.getSlot(i + 2).setStack(new ItemStack(ingredient));
         }

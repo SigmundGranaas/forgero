@@ -11,6 +11,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class GemFactory extends DataResourceFactory<GemPojo, Gem> {
     public GemFactory(Collection<GemPojo> pojos, Set<String> availableNameSpaces) {
         super(pojos, availableNameSpaces);
@@ -20,7 +22,7 @@ public class GemFactory extends DataResourceFactory<GemPojo, Gem> {
     public @NotNull Optional<Gem> createResource(GemPojo pojo) {
         String name = pojo.name.toLowerCase(Locale.ROOT);
         var properties = PropertyBuilder.createPropertyListFromPOJO(pojo.properties);
-        return Optional.of(new ForgeroGem(1, name + "_gem", properties, pojo.placement));
+        return Optional.of(new ForgeroGem(1, name + ELEMENT_SEPARATOR + "gem", properties, pojo.placement));
     }
 
     @Override

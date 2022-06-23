@@ -7,6 +7,8 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 import java.util.Locale;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier implements ForgeroToolPartIdentifier {
     protected final String toolPartName;
 
@@ -17,12 +19,12 @@ public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier imp
 
     @Override
     public ForgeroMaterialIdentifier getMaterial() {
-        return (ForgeroMaterialIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolPartName.split("_")[0]);
+        return (ForgeroMaterialIdentifier) ForgeroIdentifierFactory.INSTANCE.createForgeroIdentifier(toolPartName.split(ELEMENT_SEPARATOR)[0]);
     }
 
     @Override
     public ForgeroSchematicIdentifier getSchematic() {
-        return new ForgeroSchematicIdentifier(String.format("%s_schematic_%s", toolPartName.split("_")[1].toLowerCase(Locale.ROOT), toolPartName.split("_")[2].toLowerCase(Locale.ROOT)));
+        return new ForgeroSchematicIdentifier(String.format("%s%sschematic", toolPartName.split(ELEMENT_SEPARATOR)[1].toLowerCase(Locale.ROOT), ELEMENT_SEPARATOR).replace("head", ""));
     }
 
     @Override
@@ -30,7 +32,7 @@ public class ForgeroToolPartIdentifierImpl extends AbstractForgeroIdentifier imp
         if (toolPartName.contains("head")) {
             return ForgeroToolPartTypes.valueOf("HEAD");
         } else {
-            return ForgeroToolPartTypes.valueOf(toolPartName.split("_")[1].toUpperCase(Locale.ROOT));
+            return ForgeroToolPartTypes.valueOf(toolPartName.split(ELEMENT_SEPARATOR)[1].toUpperCase(Locale.ROOT));
         }
 
     }

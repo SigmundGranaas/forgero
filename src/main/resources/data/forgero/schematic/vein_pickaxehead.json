@@ -1,10 +1,17 @@
 {
-  "name": "vein",
+  "name": "vein_pickaxe",
   "type": "HEAD",
   "toolType": "PICKAXE",
-  "model": "vein",
-  "output": "pickaxe_vein",
-  "rarity": 80,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "vein_pickaxehead_primary",
+        "secondary": "vein_pickaxehead_secondary",
+        "gem": "pickaxehead_gem"
+      }
+    }
+  ],
   "materialCount": 3,
   "properties": {
     "attributes": [

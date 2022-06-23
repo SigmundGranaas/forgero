@@ -1,0 +1,35 @@
+{
+  "name": "broadsword",
+  "resource_type": "SCHEMATIC",
+  "type": "HEAD",
+  "toolType": "SWORD",
+  "materialCount": 3,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "broadsword_head_primary",
+        "secondary": "broadsword_head_secondary",
+        "gem": "broadsword_head_gem"
+      }
+    }
+  ],
+  "properties": {
+    "passive:": [],
+    "active": [],
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 4.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": -3.2
+      }
+    ]
+  }
+}

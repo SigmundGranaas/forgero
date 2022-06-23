@@ -1,6 +1,6 @@
 {
   "name": "Shovelhead Schematic",
-  "icon": "forgero:shovelhead_schematic_default",
+  "icon": "forgero:shovelhead-schematic",
   "category": "forgero:schematic_category",
   "pages": [
     {

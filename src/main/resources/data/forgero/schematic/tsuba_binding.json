@@ -1,0 +1,14 @@
+{
+  "name": "tsuba_binding",
+  "parent": "root_binding",
+  "models": [
+    {
+      "id": "SWORD_BINDING",
+      "model": {
+        "primary": "tsuba_binding_primary",
+        "secondary": "tsuba_binding_secondary",
+        "gem": "kimiri_binding_gem"
+      }
+    }
+  ]
+}

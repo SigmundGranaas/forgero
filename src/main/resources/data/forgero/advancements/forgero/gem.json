@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/toolpart",
   "display": {
     "icon": {
-      "item": "forgero:lapis_gem"
+      "item": "forgero:lapis-gem"
     },
     "title": {
       "translate": "advancements.forgero.gem.title"

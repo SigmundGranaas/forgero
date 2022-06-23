@@ -1,6 +1,6 @@
 {
   "name": "Schematics",
   "description": "Schematics are the most important factor when creating tool parts. They decide the primary functionality of the tool part. Schematics will decide which type of tool it is, as well as how it looks. Different schematics can create different looking tools.",
-  "icon": "forgero:pickaxehead_schematic_default",
+  "icon": "forgero:pickaxe-schematic",
   "sortnum": 1
 }

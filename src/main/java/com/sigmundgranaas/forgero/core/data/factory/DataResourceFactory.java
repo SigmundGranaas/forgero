@@ -69,9 +69,17 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R exten
     }
 
     public static int replaceAttributesDefault(int attribute1, int attribute2, int defaultAttribute) {
-        if (attribute1 == 0 && attribute2 == 0)
+        if (attribute1 == 0 && attribute2 == 0) {
             return defaultAttribute;
-        else return Objects.requireNonNullElse(attribute1, attribute2);
+        } else if (attribute1 == attribute2) {
+            return attribute1;
+        } else if (attribute1 != 0 && attribute2 != 0) {
+            return attribute1;
+        } else if (attribute1 == 0) {
+            return attribute2;
+        } else {
+            return attribute1;
+        }
     }
 
     public static <T> T attributeOrDefault(T attribute1, T defaultAttribute) {

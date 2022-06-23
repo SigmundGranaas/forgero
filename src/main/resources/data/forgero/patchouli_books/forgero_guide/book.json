@@ -3,5 +3,5 @@
   "landing_text": "Welcome to Forgero $(playername), crafting awaits you.$(br)Forgero is all about crafting, customization and exploring. Sounds fun? Let's get started!",
   "subtitle": "Forgero Complete Reference",
   "creative_tab": "toolparts",
-  "version": "0.6.0"
+  "version": "0.9.0"
 }

@@ -7,6 +7,8 @@ import com.sigmundgranaas.forgero.core.toolpart.ToolPartDescriptionWriter;
 
 import java.util.Locale;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public abstract class AbstractToolPartHead extends ReloadableToolPart implements ToolPartHead {
     public AbstractToolPartHead(HeadState state) {
         super(state);
@@ -27,7 +29,7 @@ public abstract class AbstractToolPartHead extends ReloadableToolPart implements
     }
 
     public String getToolPartIdentifier() {
-        return getPrimaryMaterial().getResourceName() + "_" + getToolPartName() + "_" + getSchematic().getVariant();
+        return getPrimaryMaterial().getResourceName() + ELEMENT_SEPARATOR + getSchematic().getResourceName() + "head";
     }
 
     @Override

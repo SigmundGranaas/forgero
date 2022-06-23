@@ -22,9 +22,9 @@
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
+    "LifecycleResourceManagerImplMixin",
     "ModelLoaderMixin",
-    "PlayerInteractionManagerMixin",
-    "ReloadableResourceManagerImplMixin"
+    "PlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

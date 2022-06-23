@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/root",
   "display": {
     "icon": {
-      "item": "forgero:oak_swordhead_default"
+      "item": "forgero:oak-swordhead"
     },
     "title": {
       "translate": "advancements.forgero.toolpart.title"

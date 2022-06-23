@@ -19,6 +19,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithSmithingScreenHandler;
 
 public class GemRecipeTest {
@@ -117,7 +118,7 @@ public class GemRecipeTest {
 
             ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getStringIdentifier())));
             ItemStack gemStack2 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, gem1.getStringIdentifier())));
-            ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
+            ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron-pickaxehead")));
 
             handler.setStackInSlot(0, 1, toolPartStack);
             handler.setStackInSlot(1, 1, gemStack1);
@@ -143,7 +144,7 @@ public class GemRecipeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron-pickaxehead")));
         ItemStack diamondSecondaryUpgrade = new ItemStack(Items.DIAMOND);
 
 
@@ -175,7 +176,7 @@ public class GemRecipeTest {
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
 
 
-        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron_pickaxehead_default")));
+        ItemStack toolPartStack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron-pickaxehead")));
         ItemStack gemStack1 = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, ForgeroRegistry.GEM.list().get(0).getStringIdentifier())));
 
 
@@ -187,7 +188,7 @@ public class GemRecipeTest {
 
         if (Integer.parseInt(itemStackWithNbtReference1.getNbt()
                 .getCompound(NBTFactory.HEAD_NBT_IDENTIFIER)
-                .getString(NBTFactory.GEM_NBT_IDENTIFIER).split("_")[0]) == 1
+                .getString(NBTFactory.GEM_NBT_IDENTIFIER).split(ELEMENT_SEPARATOR)[0]) == 1
         ) {
             context.complete();
         }

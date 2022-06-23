@@ -1,13 +1,21 @@
 package com.sigmundgranaas.forgero.core.identifier;
 
 import com.sigmundgranaas.forgero.Constants;
+import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
+import com.sigmundgranaas.forgero.core.resourceloader.TestResourceLoader;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ForgeroToolIdentifierImplTest {
+
+    @BeforeEach
+    void initialiseResources() {
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
+    }
 
     @Test
     void getMaterial() {
@@ -32,7 +40,7 @@ class ForgeroToolIdentifierImplTest {
 
     @Test
     void getHandle() {
-        ForgeroToolPartIdentifierImpl referenceIdentifier = new ForgeroToolPartIdentifierImpl("oak_handle");
+        ForgeroToolPartIdentifierImpl referenceIdentifier = new ForgeroToolPartIdentifierImpl("oak-handle");
 
         ForgeroToolIdentifierImpl toolIdentifier = new ForgeroToolIdentifierImpl(Constants.EXAMPLE_TOOL_IDENTIFIER);
 
