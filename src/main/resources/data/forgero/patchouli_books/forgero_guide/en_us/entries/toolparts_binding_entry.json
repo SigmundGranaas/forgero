@@ -1,6 +1,6 @@
 {
   "name": "Binding",
-  "icon": "forgero:gold_binding_default",
+  "icon": "forgero:gold-binding",
   "category": "forgero:toolparts_category",
   "pages": [
     {
@@ -10,8 +10,8 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting bindings",
-      "recipe": "forgero:gold_binding_default",
-      "recipe2": "forgero:diamond_binding_default"
+      "recipe": "forgero:gold-binding",
+      "recipe2": "forgero:diamond-binding"
     }
   ]
 }

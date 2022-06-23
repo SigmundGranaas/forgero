@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.gem.EmptyGem;
 import com.sigmundgranaas.forgero.core.gem.Gem;
@@ -38,6 +39,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class NBTFactoryImpl implements NBTFactory {
 
     public static NBTFactory INSTANCE;
@@ -55,7 +58,7 @@ public class NBTFactoryImpl implements NBTFactory {
     }
 
     public static String createGemNbtString(Gem gem) {
-        return String.format("%s_%s", gem.getLevel(), gem.getStringIdentifier());
+        return String.format("%s%s%s", gem.getLevel(), ELEMENT_SEPARATOR, gem.getStringIdentifier());
     }
 
     @Override
@@ -81,9 +84,9 @@ public class NBTFactoryImpl implements NBTFactory {
             patternIdentifier = compound.getString(NBTFactory.SCHEMATIC_NBT_IDENTIFIER);
         } else {
             if (toolPartTypes == ForgeroToolPartTypes.HEAD) {
-                patternIdentifier = String.format("%s%s_pattern_default", toolType.getToolName(), toolPartTypeIdentifier.toLowerCase(Locale.ROOT));
+                patternIdentifier = String.format("%s%s%spattern_default", toolType.getToolName(), toolPartTypeIdentifier.toLowerCase(Locale.ROOT), ELEMENT_SEPARATOR);
             } else {
-                patternIdentifier = String.format("%s_pattern_default", toolPartTypeIdentifier.toLowerCase(Locale.ROOT));
+                patternIdentifier = String.format("%s%spattern_default", toolPartTypeIdentifier.toLowerCase(Locale.ROOT), ELEMENT_SEPARATOR);
             }
 
         }
@@ -211,15 +214,20 @@ public class NBTFactoryImpl implements NBTFactory {
                 NbtCompound schematicCompound = compound.getCompound(SCHEMATIC_NBT_IDENTIFIER);
                 ForgeroToolPartTypes type = ForgeroToolPartTypes.valueOf(schematicCompound.getString("Type"));
                 String name = schematicCompound.getString("Name");
-                String model = schematicCompound.getString("Model");
+                NbtCompound modelCompound = schematicCompound.getCompound("Model");
+                ModelPojo model = new ModelPojo();
+                model.primary = modelCompound.getString("Primary");
+                model.secondary = modelCompound.getString("Secondary");
+                model.gem = modelCompound.getString("Gem");
+                boolean unique = schematicCompound.getBoolean("Unique");
                 int materialCount = schematicCompound.getInt("MaterialCount");
                 List<Property> properties = createPropertiesFromNbt(schematicCompound.getCompound("Properties"));
 
                 if (type == ForgeroToolPartTypes.HEAD) {
                     ForgeroToolTypes toolType = ForgeroToolTypes.valueOf(schematicCompound.getString("ToolType"));
-                    return Optional.of(new HeadSchematic(type, name, properties, toolType, model, materialCount));
+                    return Optional.of(new HeadSchematic(type, name, properties, toolType, null, materialCount, unique));
                 }
-                return Optional.of(new Schematic(type, name, properties, model, materialCount));
+                return Optional.of(new Schematic(type, name, properties, null, materialCount, unique));
             }
         }
         return Optional.empty();
@@ -360,7 +368,11 @@ public class NBTFactoryImpl implements NBTFactory {
         NbtCompound schematicCompound = new NbtCompound();
         schematicCompound.putString("Name", schematic.getResourceName());
         schematicCompound.putInt("MaterialCount", schematic.getMaterialCount());
-        schematicCompound.putString("Model", schematic.getModel());
+        NbtCompound modelCompound = new NbtCompound();
+        modelCompound.putString("Primary", schematic.getModelContainer().getModel().primary());
+        modelCompound.putString("Secondary", schematic.getModelContainer().getModel().secondary());
+        modelCompound.putString("Gem", schematic.getModelContainer().getModel().gem());
+        schematicCompound.put("Model", modelCompound);
         schematicCompound.put("Property", createNbtFromProperties(Property.pojo(schematic.getProperties())));
         if (schematic instanceof HeadSchematic headSchematic) {
             schematicCompound.putString("ToolType", headSchematic.getToolType().toString());
@@ -370,11 +382,11 @@ public class NBTFactoryImpl implements NBTFactory {
     }
 
     Gem getGemFromNbtString(String nbtGem) {
-        String[] elements = nbtGem.split("_");
+        String[] elements = nbtGem.split(ELEMENT_SEPARATOR);
         if (elements.length < 3) {
             return EmptyGem.createEmptyGem();
         }
-        Gem gem = ForgeroRegistry.GEM.getResource(String.format("%s_%s", elements[1], elements[2])).orElse(EmptyGem.createEmptyGem());
+        Gem gem = ForgeroRegistry.GEM.getResource(String.format("%s%s%s", elements[1], ELEMENT_SEPARATOR, elements[2])).orElse(EmptyGem.createEmptyGem());
         return gem.createGem(Integer.parseInt(elements[0]));
     }
 }

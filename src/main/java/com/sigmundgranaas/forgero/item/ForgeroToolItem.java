@@ -93,7 +93,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
             Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            float baseToolDamage = getTool().getAttackDamage(target);
+            float baseToolDamage = tool.getBaseTool().getAttackDamage(target);
             float currentToolDamage = tool.getAttackDamage(target);
             //Base attack damage
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
@@ -101,7 +101,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
             //Attack damage addition
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", baseToolDamage - currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
             if (tool.getAttackSpeed(target) != getTool().getAttackSpeed(target)) {
-                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - getTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
+                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - tool.getBaseTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
             }
             return builder.build();
         } else {

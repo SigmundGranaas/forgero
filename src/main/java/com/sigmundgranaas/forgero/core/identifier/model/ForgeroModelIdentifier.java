@@ -5,6 +5,8 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ToolPartModelType;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifier;
 import com.sigmundgranaas.forgero.core.identifier.ForgeroIdentifierType;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public record ForgeroModelIdentifier(
         String material,
         ToolPartModelType type,
@@ -18,6 +20,6 @@ public record ForgeroModelIdentifier(
 
     @Override
     public String getIdentifier() {
-        return String.format("%s_%s_%s_%s", material, type.toFileName(), layer.getFileName(), skin);
+        return String.format("%s%s%s%s%s%s%s", material, ELEMENT_SEPARATOR, type.toFileName(), ELEMENT_SEPARATOR, layer.getFileName(), ELEMENT_SEPARATOR, skin);
     }
 }

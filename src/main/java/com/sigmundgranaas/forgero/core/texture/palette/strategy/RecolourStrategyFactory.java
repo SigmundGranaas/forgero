@@ -16,8 +16,8 @@ public class RecolourStrategyFactory {
         if (template.getId().getToolPartModelLayer() == ModelLayer.SECONDARY) {
             return switch (template.getId().getToolPartModelType()) {
                 case BINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
-                case PICKAXEBINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
-                case SHOVELBINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
+                case PICKAXE_BINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
+                case SHOVEL_BINDING -> new SecondaryToolPartRecolourStrategy(template, palette);
                 case PICKAXEHEAD -> new PickaxeHeadRecolourStrategy(template, palette);
                 case SHOVELHEAD -> new PickaxeHeadRecolourStrategy(template, palette);
                 default -> new DefaultToolPartRecolourStrategy(template, palette);

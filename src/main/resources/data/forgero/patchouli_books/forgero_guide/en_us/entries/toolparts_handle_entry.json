@@ -1,6 +1,6 @@
 {
   "name": "Handles",
-  "icon": "forgero:acacia_handle_default",
+  "icon": "forgero:acacia-handle",
   "category": "forgero:toolparts_category",
   "pages": [
     {
@@ -10,8 +10,8 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting handles",
-      "recipe": "forgero:iron_handle_default",
-      "recipe2": "forgero:acacia_handle_default"
+      "recipe": "forgero:iron-handle",
+      "recipe2": "forgero:acacia-handle"
     }
   ]
 }

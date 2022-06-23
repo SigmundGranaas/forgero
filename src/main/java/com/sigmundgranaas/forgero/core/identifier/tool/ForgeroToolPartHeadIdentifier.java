@@ -5,6 +5,8 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 import java.util.Locale;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class ForgeroToolPartHeadIdentifier extends ForgeroToolPartIdentifierImpl {
 
     public ForgeroToolPartHeadIdentifier(String forgeroName) {
@@ -12,7 +14,7 @@ public class ForgeroToolPartHeadIdentifier extends ForgeroToolPartIdentifierImpl
     }
 
     public ForgeroToolTypes getHeadType() {
-        String headName = toolPartName.split("_")[1];
+        String headName = toolPartName.split(ELEMENT_SEPARATOR)[1];
         return ForgeroToolTypes.valueOf(headName.replace("head", "").toUpperCase(Locale.ROOT));
     }
 

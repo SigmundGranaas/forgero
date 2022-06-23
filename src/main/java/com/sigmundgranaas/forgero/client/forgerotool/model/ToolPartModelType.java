@@ -21,16 +21,16 @@ public enum ToolPartModelType {
 
 
     HANDLE,
-    FULLHANDLE,
-    MEDIUMHANDLE,
-    SHORTHANDLE,
+    FULL_HANDLE,
+    MEDIUM_HANDLE,
+    SHORT_HANDLE,
 
     BINDING,
-    PICKAXEBINDING,
-    SWORDBINDING,
-    HOEBINDING,
-    AXEHEADBINDING,
-    SHOVELBINDING;
+    PICKAXE_BINDING,
+    SWORD_BINDING,
+    HOE_BINDING,
+    AXE_BINDING,
+    SHOVEL_BINDING;
 
 
     public static ToolPartModelType getModelType(ForgeroToolPart toolPart) {
@@ -70,28 +70,28 @@ public enum ToolPartModelType {
         return switch (toolType) {
             case PICKAXE -> switch (part) {
                 case HEAD -> PICKAXEHEAD;
-                case HANDLE -> FULLHANDLE;
-                case BINDING -> PICKAXEBINDING;
+                case HANDLE -> FULL_HANDLE;
+                case BINDING -> PICKAXE_BINDING;
             };
             case AXE -> switch (part) {
                 case HEAD -> AXEHEAD;
-                case HANDLE -> MEDIUMHANDLE;
-                case BINDING -> AXEHEADBINDING;
+                case HANDLE -> MEDIUM_HANDLE;
+                case BINDING -> AXE_BINDING;
             };
             case SHOVEL -> switch (part) {
                 case HEAD -> SHOVELHEAD;
-                case HANDLE -> MEDIUMHANDLE;
-                case BINDING -> SHOVELBINDING;
+                case HANDLE -> MEDIUM_HANDLE;
+                case BINDING -> SHOVEL_BINDING;
             };
             case SWORD -> switch (part) {
                 case HEAD -> SWORDHEAD;
-                case HANDLE -> SHORTHANDLE;
-                case BINDING -> SWORDBINDING;
+                case HANDLE -> SHORT_HANDLE;
+                case BINDING -> SWORD_BINDING;
             };
             case HOE -> switch (part) {
                 case HEAD -> HOEHEAD;
-                case HANDLE -> FULLHANDLE;
-                case BINDING -> HOEBINDING;
+                case HANDLE -> FULL_HANDLE;
+                case BINDING -> HOE_BINDING;
             };
         };
     }
@@ -108,9 +108,9 @@ public enum ToolPartModelType {
     }
 
     public static boolean isItemModelIdentifier(String[] identifier) {
-        if (identifier.length == 3) {
+        if (identifier.length == 2) {
             for (ToolPartModelType value : ToolPartModelType.values()) {
-                if (value.name().toLowerCase().equals(identifier[1].toLowerCase(Locale.ROOT))) {
+                if (value.name().toLowerCase().contains(identifier[1].toLowerCase(Locale.ROOT))) {
                     return true;
                 }
             }

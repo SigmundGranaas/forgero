@@ -1,10 +1,17 @@
 {
-  "name": "vein",
+  "name": "vein_hoe",
   "type": "HEAD",
   "toolType": "HOE",
-  "model": "vein",
-  "output": "hoe_vein",
-  "rarity": 1,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "vein_hoehead_primary",
+        "secondary": "vein_hoehead_secondary",
+        "gem": "vein_hoehead_gem"
+      }
+    }
+  ],
   "materialCount": 3,
   "properties": {
     "passive:": [],

@@ -23,6 +23,8 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Arrays;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 
 public class DynamicResourceGenerator {
     public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:builtin");
@@ -84,9 +86,9 @@ public class DynamicResourceGenerator {
             ForgeroRegistry.MATERIAL.getPrimaryMaterials().forEach(material -> {
                 JTag toolTag = new JTag();
                 if (material.getType() == MaterialType.WOOD) {
-                    woodTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getResourceName() + "_" + type.getToolName()));
+                    woodTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getResourceName() + ELEMENT_SEPARATOR + type.getToolName()));
                 } else {
-                    toolTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getResourceName() + "_" + type.getToolName()));
+                    toolTag.add(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.getResourceName() + ELEMENT_SEPARATOR + type.getToolName()));
                     if (Registry.ITEM.containsId(new Identifier("minecraft", material.getResourceName() + "_" + type.getToolName()))) {
                         toolTag.add(new Identifier("minecraft", material.getResourceName() + "_" + type.getToolName()));
                     }

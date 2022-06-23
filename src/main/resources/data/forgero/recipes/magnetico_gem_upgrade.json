@@ -1,13 +1,13 @@
 {
   "type": "forgero:gem_upgrade_recipe",
   "base": {
-    "item": "forgero:magnetico_gem"
+    "item": "forgero:magnetico-gem"
   },
   "addition": {
-    "item": "forgero:magnetico_gem"
+    "item": "forgero:magnetico-gem"
   },
   "result": {
-    "item": "forgero:magnetico_gem"
+    "item": "forgero:magnetico-gem"
   }
 }
 

@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
@@ -23,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
 public class ToolPartItemImpl extends Item implements ToolPartItem {
     private final PrimaryMaterial material;
     private final ForgeroToolPartTypes type;
@@ -38,26 +39,8 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
 
     @Override
     public Text getName() {
-        MutableText text;
-        if (!part.getSchematic().getResourceName().equals("default")) {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getSchematic().getResourceName())).append(" ");
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))))
-                    .append(" ");
-        } else {
-            text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
-        }
-        if (getToolPartType() == ForgeroToolPartTypes.HEAD) {
-            String headType = switch (((ToolPartHead) part).getToolType()) {
-                case AXE -> "axehead";
-                case PICKAXE -> "pickaxehead";
-                case SHOVEL -> "shovelhead";
-                case SWORD -> "swordhead";
-                case HOE -> "hoehead";
-            };
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, headType))).append(" ");
-        } else {
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartType().getName())));
-        }
+        MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
+        text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartIdentifier().split(ELEMENT_SEPARATOR)[1])));
         return text;
     }
 

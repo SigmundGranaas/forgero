@@ -1,11 +1,17 @@
 {
-  "name": "pattern",
-  "parent": "default_pickaxehead",
-  "type": "HEAD",
-  "toolType": "PICKAXE",
-  "model": "pattern",
-  "output": "pickaxe_pattern",
+  "name": "pattern_pickaxe",
+  "parent": "root_pickaxehead",
   "materialCount": 3,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "pattern_pickaxehead_primary",
+        "secondary": "pattern_pickaxehead_secondary",
+        "gem": "pickaxehead_gem"
+      }
+    }
+  ],
   "properties": {
     "active": [
       {

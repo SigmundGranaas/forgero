@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.Constants;
 import com.sigmundgranaas.forgero.core.ForgeroRegistry;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroMaterialIdentifierImpl;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolPartIdentifierImpl;
+import com.sigmundgranaas.forgero.core.resourceloader.TestResourceLoader;
 import net.minecraft.item.ToolMaterial;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class MaterialCollectionImplTest {
     @BeforeEach
     void initialiseResources() {
-        //ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new ForgeroResourceInitializer());
+        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
     }
 
     @Test
