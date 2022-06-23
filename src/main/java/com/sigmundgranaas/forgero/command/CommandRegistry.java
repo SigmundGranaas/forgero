@@ -17,8 +17,6 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class CommandRegistry {
     public void registerCommand() {
-
-
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             dispatcher.register(CommandManager.literal("forgero").executes(context -> {
                 ForgeroInitializer.LOGGER.info("Called Forgero command with no arguments");

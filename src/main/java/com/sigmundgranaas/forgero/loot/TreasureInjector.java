@@ -5,8 +5,7 @@ import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
@@ -23,7 +22,7 @@ public class TreasureInjector {
     private static final List<ForgeroToolPartTypes> ALL_TOOL_PARTS = List.of(ForgeroToolPartTypes.values());
 
     public void registerLoot() {
-        LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, table, setter) -> {
+        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, table, setter) -> {
             if (id.equals(LootTables.ABANDONED_MINESHAFT_CHEST)) {
                 table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
                         ToolPartFilter.createToolPartFilter()
@@ -175,7 +174,7 @@ public class TreasureInjector {
     }
 
     private LootPool.Builder createStandardConstantPool() {
-        return FabricLootPoolBuilder.builder()
+        return LootPool.builder()
                 .rolls(ConstantLootNumberProvider.create(1));
     }
 }
