@@ -73,12 +73,13 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R exten
             return defaultAttribute;
         } else if (attribute1 == attribute2) {
             return attribute1;
+        } else if (attribute1 != 0 && attribute2 != 0) {
+            return attribute1;
         } else if (attribute1 == 0) {
             return attribute2;
-        } else if (attribute2 == 0) {
+        } else {
             return attribute1;
         }
-        return defaultAttribute;
     }
 
     public static <T> T attributeOrDefault(T attribute1, T defaultAttribute) {
