@@ -7,7 +7,7 @@
       "model": {
         "primary": "vein_axehead_primary",
         "secondary": "vein_axehead_secondary",
-        "gem": "vein_axehead_gem"
+        "gem": "pattern_axehead_gem"
       }
     }
   ],

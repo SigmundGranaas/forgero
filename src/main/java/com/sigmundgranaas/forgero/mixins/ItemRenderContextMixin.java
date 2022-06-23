@@ -29,5 +29,4 @@ public class ItemRenderContextMixin {
             this.matrixStack.scale(0.5f, 0.5f, 0.5f);
         }
     }
-
 }
