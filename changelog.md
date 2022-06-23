@@ -1,4 +1,4 @@
-### Changelog 0.9.0-pre-2
+### Changelog 0.9.0
 
 # Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 
@@ -15,3 +15,6 @@
 * Added short sword blade
 * Added kimiri binding
 * Reworked schematic Schema, to make textures and registered items more configurable
+* Fixed a bug where rouge texture identifiers would create an IndexOutOfboundExeption
+* Fixed crash with fabric api v0.56
+* Removed necessary entrypoint extension used by Forgero via AARP
