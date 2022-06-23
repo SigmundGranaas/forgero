@@ -25,13 +25,12 @@ public class FabricTextureIdentifierFactory implements TextureIdentifierFactory 
     @Override
     public Optional<ToolPartModelTextureIdentifier> createToolPartTextureIdentifier(String part) {
         String[] elements = part.split(ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR);
+        if (!ToolPartModelType.isModelIdentifier(elements) || elements.length <= 1) {
+            return Optional.empty();
+        }
         elements[0] = elements[0].split("/")[elements[0].split("/").length - 1];
         if (elements.length == 3) {
             elements = new String[]{elements[0], elements[1], "primary", elements[2]};
-        }
-        elements[ToolPartModelTextureIdentifier.SKIN_INDEX] = elements[ToolPartModelTextureIdentifier.SKIN_INDEX].replace(".png", "");
-        if (!ToolPartModelType.isModelIdentifier(elements)) {
-            return Optional.empty();
         }
 
         if (elements.length == ToolPartModelTextureIdentifier.DEFAULT_SPLIT_IDENTIFIER_LENGTH) {
