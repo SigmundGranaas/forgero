@@ -21,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
-
 @Mixin(LifecycledResourceManagerImpl.class)
 public abstract class LifecycleResourceManagerImplMixin {
 
@@ -45,10 +43,11 @@ public abstract class LifecycleResourceManagerImplMixin {
 
                     Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
 
-                Resource resource = new Resource(id.getNamespace(), toolPartTexture::getStream);
+                    Resource resource = new Resource(id.getNamespace(), toolPartTexture::getStream);
 
-                cir.setReturnValue(Optional.of(resource));
-                // }
+                    cir.setReturnValue(Optional.of(resource));
+                    // }
+                }
             }
         }
     }
