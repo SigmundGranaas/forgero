@@ -9,8 +9,8 @@
       "id": "DEFAULT",
       "model": {
         "primary": "tachihead_primary",
-        "secondary": "broadsword_head_secondary",
-        "gem": "broadsword_head_gem"
+        "secondary": "tachi_head_secondary",
+        "gem": "tachihead_gem"
       }
     }
   ],

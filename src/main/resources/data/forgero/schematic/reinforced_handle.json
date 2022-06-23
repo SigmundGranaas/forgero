@@ -1,7 +1,7 @@
 {
   "name": "reinforced_handle",
   "parent": "root_handle",
-  "materialCount": 4,
+  "materialCount": 3,
   "models": [
     {
       "id": "DEFAULT",

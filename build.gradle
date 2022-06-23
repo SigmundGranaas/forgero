@@ -41,6 +41,9 @@ dependencies {
     //modImplementation "vazkii.patchouli:Patchouli:1.19.0-69-FABRIC"
     modImplementation("net.devtech:arrp:0.6.2")
 
+    //continuity testing
+    //modImplementation "curse.maven:continuity-531351:3822250"
+
     //alloygery testing
     //modImplementation "curse.maven:alloygery-573592:3778894"
     //modImplementation "curse.maven:nbtcrafting-314633:3707208"

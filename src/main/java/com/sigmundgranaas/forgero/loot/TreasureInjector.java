@@ -175,7 +175,7 @@ public class TreasureInjector {
     }
 
     private LootPool.Builder createStandardConstantPool() {
-        return builder()
+        return LootPool.builder()
                 .rolls(ConstantLootNumberProvider.create(1));
     }
 }
