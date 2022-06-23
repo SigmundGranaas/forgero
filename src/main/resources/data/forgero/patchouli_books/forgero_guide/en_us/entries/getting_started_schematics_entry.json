@@ -1,6 +1,6 @@
 {
   "name": "Finding a schematic",
-  "icon": "forgero:pickaxehead-schematic",
+  "icon": "forgero:pickaxe-schematic",
   "category": "forgero:getting_started_category",
   "pages": [
     {
@@ -9,8 +9,8 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:pickaxehead_schematic_default",
-      "recipe2": "forgero:handle_schematic_default"
+      "recipe": "forgero:pickaxe-schematic",
+      "recipe2": "forgero:handle-schematic"
     },
     {
       "type": "patchouli:text",
@@ -20,7 +20,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Vein Mining Axe head",
-      "item": "forgero:axehead_schematic_vein",
+      "item": "forgero:vein_axe-schematic",
       "text": "Schematics will decide the base stats, look and functionality of your tools. Hmmm, I wonder what this schematic will let me do?"
     }
   ]
