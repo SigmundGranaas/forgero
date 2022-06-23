@@ -16,7 +16,7 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting a blazed stoneheart gem",
-      "recipe": "forgero:blazedstoneheart_gem"
+      "recipe": "forgero:blazed_stoneheart_gem"
     }
   ]
 }

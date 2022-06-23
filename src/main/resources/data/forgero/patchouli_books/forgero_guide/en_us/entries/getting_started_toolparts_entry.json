@@ -10,20 +10,20 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting heads",
-      "recipe": "forgero:iron_pickaxehead_default",
-      "recipe2": "forgero:netherite_axehead_default"
+      "recipe": "forgero:iron-pickaxehead",
+      "recipe2": "forgero:netherite-axehead"
     },
     {
       "type": "patchouli:crafting",
       "title": "Crafting handles",
-      "recipe": "forgero:iron_handle_default",
-      "recipe2": "forgero:acacia_handle_default"
+      "recipe": "forgero:iron-handle",
+      "recipe2": "forgero:acacia-handle"
     },
     {
       "type": "patchouli:crafting",
       "title": "Crafting bindings",
-      "recipe": "forgero:gold_binding_default",
-      "recipe2": "forgero:diamond_binding_default"
+      "recipe": "forgero:gold-binding",
+      "recipe2": "forgero:diamond-binding"
     }
   ]
 }
