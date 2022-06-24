@@ -12,7 +12,13 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 5
+        "value": 25
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2
       }
     ],
     "passive": [],
@@ -33,7 +39,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 5.5,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -45,7 +51,25 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 59.0,
+          "value": 270.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 90.0
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.5,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -57,19 +81,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HANDLE"
-            ]
-          }
-        },
-        {
-          "type": "ATTACK_SPEED",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 0.5,
+          "value": 5.5,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -89,19 +101,19 @@
           "type": "MINING_SPEED",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 0.5
         },
         {
           "type": "ATTACK_DAMAGE",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 0.5
         },
         {
-          "type": "ATTACK_SPEED",
-          "order": "MIDDLE",
+          "type": "DURABILITY",
+          "order": "BASE",
           "operation": "ADDITION",
-          "value": 0.1
+          "value": 100.0
         }
       ],
       "passive": [],

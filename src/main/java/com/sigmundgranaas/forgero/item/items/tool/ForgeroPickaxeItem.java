@@ -54,6 +54,7 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroToolItem {
         return getForgeroTranslatableToolName();
     }
 
+
     @Override
     public Text getName(ItemStack stack) {
         return getForgeroTranslatableToolName(getToolAdapter().getTool(stack).orElse(getTool()));
