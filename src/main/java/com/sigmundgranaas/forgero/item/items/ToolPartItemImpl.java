@@ -38,6 +38,10 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
 
     @Override
     public Text getName() {
+        return getNameFromToolPart(getPart());
+    }
+
+    public Text getNameFromToolPart(ForgeroToolPart part) {
         MutableText text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
         text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartIdentifier().split(ELEMENT_SEPARATOR)[1])));
         return text;
@@ -45,7 +49,7 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
 
     @Override
     public Text getName(ItemStack stack) {
-        return getName();
+        return getNameFromToolPart(FabricToForgeroToolPartAdapter.createAdapter().getToolPart(stack).orElse(part));
     }
 
     public ForgeroToolPartTypes getToolPartType() {
