@@ -97,7 +97,7 @@
   "secondary": {
     "properties": {
       "attributes": [
-        {
+      {
           "type": "MINING_SPEED",
           "order": "MIDDLE",
           "operation": "ADDITION",

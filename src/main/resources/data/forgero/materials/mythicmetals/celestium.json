@@ -47,7 +47,7 @@
             ]
           }
         },
-        {
+         {
           "type": "ATTACK_DAMAGE",
           "order": "BASE",
           "operation": "ADDITION",

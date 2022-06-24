@@ -12,7 +12,13 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 5
+        "value": 63
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3
       }
     ],
     "passive": [],
@@ -33,7 +39,19 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 7.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.5,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -45,7 +63,7 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 59.0,
+          "value": 650.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -54,10 +72,16 @@
           }
         },
         {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 200.0
+        },
+        {
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 3.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [

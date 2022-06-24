@@ -6,18 +6,6 @@
   "ingredient": {
     "item": "mythicmetals:prometheum_ingot"
   },
-  "properties": {
-    "attributes": [
-      {
-        "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 5
-      }
-    ],
-    "passive": [],
-    "active": []
-  },
   "palette": {
     "name": "prometheum",
     "include": [
@@ -26,6 +14,24 @@
     "exclude": [
     ]
   },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 53
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3
+      }
+    ],
+    "passive": [],
+    "active": []
+  },
   "primary": {
     "properties": {
       "attributes": [
@@ -33,7 +39,19 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 6.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 4.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -45,7 +63,7 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 59.0,
+          "value": 1120.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -54,28 +72,10 @@
           }
         },
         {
-          "type": "MINING_SPEED",
+          "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HANDLE"
-            ]
-          }
-        },
-        {
-          "type": "ATTACK_SPEED",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 0.5,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HANDLE"
-            ]
-          }
+          "value": 350.0
         }
       ],
       "passive": [],
