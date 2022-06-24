@@ -1,7 +1,8 @@
-### Changelog 0.9.0
+### Changelog 0.9.1
 
 # Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 
+* Balanced Alloygery and Mythicmetals materials
 * Reworked identifier element from _ to -, to make it possible to use _ in resource names, like dark_oak
 * Updated all recipes to new identifiers
 * Updated Icon for group tab
