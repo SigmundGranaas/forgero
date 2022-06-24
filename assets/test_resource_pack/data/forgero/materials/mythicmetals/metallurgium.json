@@ -1,10 +1,10 @@
 {
-  "name": "durasteel",
+  "name": "Metallurgium",
   "dependencies": [
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:durasteel_ingot"
+    "item": "mythicmetals:metallurgium_ingot"
   },
   "properties": {
     "attributes": [
@@ -12,22 +12,22 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 45
+        "value": 110
       },
       {
         "type": "MINING_LEVEL",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 3
+        "value": 5
       }
     ],
     "passive": [],
     "active": []
   },
   "palette": {
-    "name": "durasteel",
+    "name": "metallurgium",
     "include": [
-      "mythicmetals:textures/items/durasteel_ingot.png"
+      "mythicmetals:textures/items/metallurgium_ingot.png"
     ],
     "exclude": [
     ]
@@ -39,7 +39,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 7.1,
+          "value": 15.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -51,7 +51,7 @@
           "type": "ATTACK_DAMAGE",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 3.5,
+          "value": 8.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -63,7 +63,7 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 500.0,
+          "value": 2300.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -75,13 +75,13 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 300.0
+          "value": 700.0
         },
         {
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 3.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -93,7 +93,7 @@
           "type": "ATTACK_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 0.5,
+          "value": 1.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [

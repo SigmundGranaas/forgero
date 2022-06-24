@@ -1,10 +1,10 @@
 {
-  "name": "durasteel",
+  "name": "kyber",
   "dependencies": [
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:durasteel_ingot"
+    "item": "mythicmetals:kyber_ingot"
   },
   "properties": {
     "attributes": [
@@ -12,7 +12,7 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 45
+        "value": 63
       },
       {
         "type": "MINING_LEVEL",
@@ -25,9 +25,9 @@
     "active": []
   },
   "palette": {
-    "name": "durasteel",
+    "name": "kyber",
     "include": [
-      "mythicmetals:textures/items/durasteel_ingot.png"
+      "mythicmetals:textures/items/kyber_ingot.png"
     ],
     "exclude": [
     ]
@@ -39,7 +39,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 7.1,
+          "value": 7.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -51,7 +51,7 @@
           "type": "ATTACK_DAMAGE",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 3.5,
+          "value": 2.5,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -63,7 +63,7 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 500.0,
+          "value": 650.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -75,13 +75,13 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 300.0
+          "value": 200.0
         },
         {
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
+          "value": 3.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [

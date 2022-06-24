@@ -1,10 +1,18 @@
 {
-  "name": "durasteel",
+  "name": "osmium",
   "dependencies": [
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:durasteel_ingot"
+    "tag": "c:osmium_ingots"
+  },
+  "palette": {
+    "name": "osmium",
+    "include": [
+      "mythicmetals:textures/items/osmium_ingot.png"
+    ],
+    "exclude": [
+    ]
   },
   "properties": {
     "attributes": [
@@ -12,7 +20,7 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 45
+        "value": 56
       },
       {
         "type": "MINING_LEVEL",
@@ -24,14 +32,6 @@
     "passive": [],
     "active": []
   },
-  "palette": {
-    "name": "durasteel",
-    "include": [
-      "mythicmetals:textures/items/durasteel_ingot.png"
-    ],
-    "exclude": [
-    ]
-  },
   "primary": {
     "properties": {
       "attributes": [
@@ -39,7 +39,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 7.1,
+          "value": 7.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -51,55 +51,31 @@
           "type": "ATTACK_DAMAGE",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 3.5,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HEAD"
-            ]
-          }
-        },
-        {
-          "type": "DURABILITY",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 500.0,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HEAD"
-            ]
-          }
-        },
-        {
-          "type": "DURABILITY",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 300.0
-        },
-        {
-          "type": "MINING_SPEED",
-          "order": "BASE",
-          "operation": "ADDITION",
           "value": 2.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
-              "HANDLE"
+              "HEAD"
             ]
           }
         },
         {
-          "type": "ATTACK_SPEED",
+          "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 0.5,
+          "value": 440.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
-              "HANDLE"
+              "HEAD"
             ]
           }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 120.0
         }
       ],
       "passive": [],

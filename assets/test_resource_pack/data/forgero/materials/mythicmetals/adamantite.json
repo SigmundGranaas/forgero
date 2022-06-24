@@ -1,10 +1,10 @@
 {
-  "name": "durasteel",
+  "name": "adamantite",
   "dependencies": [
     "mythicmetals"
   ],
   "ingredient": {
-    "item": "mythicmetals:durasteel_ingot"
+    "tag": "c:adamantite_ingots"
   },
   "properties": {
     "attributes": [
@@ -12,22 +12,22 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 45
+        "value": 70
       },
       {
         "type": "MINING_LEVEL",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 3
+        "value": 4
       }
     ],
     "passive": [],
     "active": []
   },
   "palette": {
-    "name": "durasteel",
+    "name": "adamantite",
     "include": [
-      "mythicmetals:textures/items/durasteel_ingot.png"
+      "mythicmetals:textures/items/adamantite_ingot.png"
     ],
     "exclude": [
     ]
@@ -39,61 +39,49 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 7.1,
+          "value": 2.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
               "HEAD"
             ]
           }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 800.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 200.0
         },
         {
           "type": "ATTACK_DAMAGE",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 3.5,
+          "value": 5.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
               "HEAD"
             ]
           }
-        },
-        {
-          "type": "DURABILITY",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 500.0,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HEAD"
-            ]
-          }
-        },
-        {
-          "type": "DURABILITY",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 300.0
         },
         {
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HANDLE"
-            ]
-          }
-        },
-        {
-          "type": "ATTACK_SPEED",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 0.5,
+          "value": 7.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -113,19 +101,37 @@
           "type": "MINING_SPEED",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         },
         {
           "type": "ATTACK_DAMAGE",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         },
         {
-          "type": "ATTACK_SPEED",
+          "type": "DURABILITY",
           "order": "MIDDLE",
-          "operation": "ADDITION",
-          "value": 0.1
+          "operation": "MULTIPLICATION",
+          "value": 1.3,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         }
       ],
       "passive": [],
