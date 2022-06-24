@@ -55,9 +55,10 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
         return ForgeroResourceType.TOOL;
     }
 
+
     @Override
     public Text getName(ItemStack stack) {
-        return getForgeroTranslatableToolName();
+        return getForgeroTranslatableToolName(getToolAdapter().getTool(stack).orElse(getTool()));
     }
 
     @Override

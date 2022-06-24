@@ -1,18 +1,10 @@
 {
-  "name": "steel",
+  "name": "celestium",
   "dependencies": [
     "mythicmetals"
   ],
   "ingredient": {
-    "tag": "c:steel_ingots"
-  },
-  "palette": {
-    "name": "steel",
-    "include": [
-      "mythicmetals:textures/items/steel_ingot.png"
-    ],
-    "exclude": [
-    ]
+    "item": "mythicmetals:celestium_ingot"
   },
   "properties": {
     "attributes": [
@@ -20,17 +12,25 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 38
+        "value": 95
       },
       {
         "type": "MINING_LEVEL",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 2
+        "value": 5
       }
     ],
     "passive": [],
     "active": []
+  },
+  "palette": {
+    "name": "celestium",
+    "include": [
+      "mythicmetals:textures/items/celestium_ingot.png"
+    ],
+    "exclude": [
+    ]
   },
   "primary": {
     "properties": {
@@ -39,7 +39,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 6.5,
+          "value": 16.9,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -51,7 +51,7 @@
           "type": "ATTACK_DAMAGE",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.5,
+          "value": 6.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -63,7 +63,7 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 450.0,
+          "value": 1700.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -75,7 +75,31 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 250.0
+          "value": 500.0
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 0.5,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
         }
       ],
       "passive": [],
