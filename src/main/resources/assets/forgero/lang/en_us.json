@@ -239,9 +239,13 @@
   "item.forgero.diorite_axe": "Diorite axe",
   "item.forgero.diamond_axe": "Diamond axe",
   "item.forgero.netherite_axe": "Netherite axe",
-  "item.forgero.emerald_gem": "Emerald gem",
-  "item.forgero.diamond_gem": "Diamond gem",
-  "item.forgero.redstone_gem": "Redstone gem",
-  "item.forgero.lapis_gem": "Lapis Lazuli gem",
-  "item.forgero.ender_gem": "Ender gem"
+  "item.forgero.emerald-gem": "Emerald gem",
+  "item.forgero.diamond-gem": "Diamond gem",
+  "item.forgero.redstone-gem": "Redstone gem",
+  "item.forgero.lapis-gem": "Lapis Lazuli gem",
+  "item.forgero.ender-gem": "Ender gem",
+  "item.forgero.stoneheart-gem": "Stoneheart gem",
+  "item.forgero.blazed_stoneheart-gem": "Blazed Stoneheart gem",
+  "item.forgero.magnetico-gem": "Magnetico gem",
+  "item.forgero.quartz-gem": "Quartz gem"
 }
