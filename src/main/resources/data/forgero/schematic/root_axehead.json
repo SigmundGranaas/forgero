@@ -23,7 +23,7 @@
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 6.0
+        "value": 5.0
       },
       {
         "type": "ATTACK_SPEED",
