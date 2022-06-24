@@ -2,6 +2,9 @@
 
 # Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 
+* Added more translations
+* Removed duplicated tool type names
+* Added Therrassium support
 * Balanced Alloygery and Mythicmetals materials
 * Reworked identifier element from _ to -, to make it possible to use _ in resource names, like dark_oak
 * Updated all recipes to new identifiers
