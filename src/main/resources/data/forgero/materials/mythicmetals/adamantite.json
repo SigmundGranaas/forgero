@@ -12,7 +12,13 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 5
+        "value": 70
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 4
       }
     ],
     "passive": [],
@@ -45,7 +51,25 @@
           "type": "DURABILITY",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 59.0,
+          "value": 800.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 200.0
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 5.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -57,19 +81,7 @@
           "type": "MINING_SPEED",
           "order": "BASE",
           "operation": "ADDITION",
-          "value": 2.0,
-          "condition": {
-            "target": "TOOL_PART_TYPE",
-            "tag": [
-              "HANDLE"
-            ]
-          }
-        },
-        {
-          "type": "ATTACK_SPEED",
-          "order": "BASE",
-          "operation": "ADDITION",
-          "value": 0.5,
+          "value": 7.0,
           "condition": {
             "target": "TOOL_PART_TYPE",
             "tag": [
@@ -89,19 +101,37 @@
           "type": "MINING_SPEED",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         },
         {
           "type": "ATTACK_DAMAGE",
           "order": "MIDDLE",
           "operation": "ADDITION",
-          "value": 0.2
+          "value": 1.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         },
         {
-          "type": "ATTACK_SPEED",
+          "type": "DURABILITY",
           "order": "MIDDLE",
-          "operation": "ADDITION",
-          "value": 0.1
+          "operation": "MULTIPLICATION",
+          "value": 1.3,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
         }
       ],
       "passive": [],
