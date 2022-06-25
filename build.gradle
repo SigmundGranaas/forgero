@@ -18,6 +18,7 @@ repositories {
         }
     }
     mavenLocal()
+    maven { url = "https://modmaven.dev/" }
     maven { url = "https://minecraft.guntram.de/maven/" }
     maven { url = "https://www.cursemaven.com" }
     maven { url = "https://maven.shedaniel.me/" }
@@ -51,6 +52,9 @@ dependencies {
     //modImplementation "vazkii.patchouli:Patchouli:1.19.0-69-FABRIC"
     modImplementation("net.devtech:arrp:0.6.2")
 
+    //Twilight forest compat
+    //modImplementation "teamtwilight:twilightforest:4.1.1102:universal"
+
     //continuity testing
     //modImplementation "curse.maven:continuity-531351:3822250"
 
@@ -62,7 +66,6 @@ dependencies {
     //modImplementation "curse.maven:therassium-554562:3829121"
     //modImplementation "de.guntram.mcmod:crowdin-translate:1.4+1.18.2"
 
-
     //mythicmetals testing
     //modImplementation "curse.maven:alloy-forgery-438718:3758381"
     //modImplementation "curse.maven:cloth-config-348521:3782775"
@@ -71,6 +74,15 @@ dependencies {
     //modImplementation 'com.github.Draylar:magna:1.7.0-1.18.2'
 
     include "net.devtech:arrp:0.6.2"
+    //Polymorph testing
+
+    //modImplementation "curse.maven:cardinal-components-318449:3669769"
+    //modImplementation "curse.maven:cardinal-components-318449:3669770"
+    //modImplementation "curse.maven:cardinal-components-318449:3669771"
+    //modImplementation "curse.maven:cardinal-components-318449:3669774"
+    //modImplementation "curse.maven:cardinal-components-318449:3669773"
+    //modImplementation "curse.maven:polymorph-397434:3793108"
+
     modImplementation 'com.ptsmods:devlogin:2.1'
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"

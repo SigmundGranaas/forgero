@@ -1,7 +1,10 @@
-### Changelog 0.9.1
+### Changelog 0.9.2
 
 # Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 
+* Added gem translations
+* Added Forgero tools to the banned_uncrafting tag, to resolve bugs and exploits related to uncrafting Forgero tools
+* Removed duplicated tool recipes
 * Added more translations
 * Removed duplicated tool type names
 * Added Therrassium support
