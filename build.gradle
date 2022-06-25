@@ -83,7 +83,7 @@ dependencies {
     //modImplementation "curse.maven:cardinal-components-318449:3669771"
     //modImplementation "curse.maven:cardinal-components-318449:3669774"
     //modImplementation "curse.maven:cardinal-components-318449:3669773"
-    modImplementation "curse.maven:polymorph-397434:3793108"
+    //modImplementation "curse.maven:polymorph-397434:3793108"
 
     modImplementation 'com.ptsmods:devlogin:2.1'
     include "net.devtech:arrp:0.5.7"
