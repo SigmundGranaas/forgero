@@ -49,7 +49,6 @@ public class DynamicResourceGenerator {
                 return new Identifier("forgero", "resources");
             }
         });
-
     }
 
     public void generateTags() {
