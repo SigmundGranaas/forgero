@@ -1,7 +1,8 @@
-### Changelog 0.9.2
+### Changelog 0.9.3
 
 # Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 
+* Fix bug where all players could execute forgero commands ( Identithree )
 * Added gem translations
 * Added Forgero tools to the banned_uncrafting tag, to resolve bugs and exploits related to uncrafting Forgero tools
 * Removed duplicated tool recipes
