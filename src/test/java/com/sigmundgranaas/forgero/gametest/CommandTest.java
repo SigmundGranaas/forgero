@@ -41,23 +41,21 @@ public class CommandTest {
 
     @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
     public void failCreateStationWhenNotOp(TestContext context) {
-        ServerPlayerEntity testPlayer = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer"));
+        ServerPlayerEntity testPlayer = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer2"));
         testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
 
         BlockPos targetPos = new BlockPos(1, 5, 0);
         BlockPos absolute = context.getAbsolutePos(targetPos);
         testPlayer.teleport(context.getWorld(), absolute.getX(), absolute.getY() + 2, absolute.getZ(), 0, 0f);
 
-        //context.getWorld().getServer().getPlayerManager().addToOperators(testPlayer.getGameProfile());
+        context.getWorld().getServer().getPlayerManager().removeFromOperators(testPlayer.getGameProfile());
 
         //testPlayer.sendMessage(new LiteralText("/forgero createstation"), MessageType.SYSTEM, testPlayer.getUuid());
         try {
             testPlayer.server.getCommandManager().getDispatcher().execute("forgero createstation", testPlayer.getCommandSource());
         } catch (Exception ignored) {
-         
+
         }
-        context.addFinalTask(() -> {
-            context.checkBlock(new BlockPos(3, 8, 0), block -> block.getDefaultState().isAir(), "Forgero station is missing");
-        });
+        context.addFinalTask(() -> context.checkBlock(new BlockPos(3, 8, 0), block -> block.getDefaultState().isAir(), "Forgero station is missing"));
     }
 }
