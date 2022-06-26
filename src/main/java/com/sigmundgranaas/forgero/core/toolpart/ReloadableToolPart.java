@@ -8,12 +8,13 @@ import com.sigmundgranaas.forgero.core.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import com.sigmundgranaas.forgero.core.toolpart.state.AbstractToolPartState;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 public abstract class ReloadableToolPart extends AbstractToolPart {
 
-    public ReloadableToolPart(ToolPartState state) {
+    public ReloadableToolPart(AbstractToolPartState state) {
         super(state);
     }
 
@@ -31,8 +32,8 @@ public abstract class ReloadableToolPart extends AbstractToolPart {
     }
 
     @Override
-    public ToolPartState getState() {
-        return new ToolPartState(getPrimaryMaterial(), getSecondaryMaterial(), getGem(), getSchematic()) {
+    public AbstractToolPartState getState() {
+        return new AbstractToolPartState(getPrimaryMaterial(), getSecondaryMaterial(), getGem(), getSchematic()) {
             @Override
             public ForgeroToolPartTypes getToolPartType() {
                 return state.getToolPartType();

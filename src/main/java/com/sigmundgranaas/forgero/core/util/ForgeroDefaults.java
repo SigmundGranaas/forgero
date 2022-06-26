@@ -14,9 +14,9 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.toolpart.ToolPartState;
 import com.sigmundgranaas.forgero.core.toolpart.handle.HandleState;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.state.AbstractToolPartState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -111,7 +111,7 @@ public interface ForgeroDefaults {
             }
 
             @Override
-            public ToolPartState getState() {
+            public AbstractToolPartState getState() {
                 return new HandleState(getDefaultPrimaryMaterial(), getDefaultSecondaryMaterial(), null, null);
             }
 

@@ -14,11 +14,6 @@ public interface ForgeroItem<T extends Item, R extends ForgeroDataResource> exte
     }
 
     @Override
-    default R toDataResource() {
-        return getResource().toDataResource();
-    }
-
-    @Override
     default int compareTo(@NotNull Object o) {
         if (o == this) {
             return 0;

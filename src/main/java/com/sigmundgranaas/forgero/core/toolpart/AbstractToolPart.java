@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import com.sigmundgranaas.forgero.core.toolpart.state.AbstractToolPartState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.List;
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 public abstract class AbstractToolPart implements ForgeroToolPart {
-    protected final ToolPartState state;
+    protected final AbstractToolPartState state;
 
 
-    public AbstractToolPart(ToolPartState state) {
+    public AbstractToolPart(AbstractToolPartState state) {
         this.state = state;
     }
 
@@ -30,7 +31,7 @@ public abstract class AbstractToolPart implements ForgeroToolPart {
     }
 
     @Override
-    public ToolPartState getState() {
+    public AbstractToolPartState getState() {
         return state;
     }
 

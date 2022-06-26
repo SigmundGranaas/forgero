@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.material.material.SecondaryMaterial;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.toolpart.ToolPartState;
+import com.sigmundgranaas.forgero.core.toolpart.state.AbstractToolPartState;
 
-public class HeadState extends ToolPartState {
+public class HeadState extends AbstractToolPartState {
     public HeadState(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial, Gem gem, Schematic pattern) {
         super(primaryMaterial, secondaryMaterial, gem, pattern);
 

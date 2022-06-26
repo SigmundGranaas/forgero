@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.toolpart;
+package com.sigmundgranaas.forgero.core.toolpart.state;
 
 import com.sigmundgranaas.forgero.core.gem.Gem;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.ToolPartTarget;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -16,13 +17,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class ToolPartState implements PropertyContainer {
+public abstract class AbstractToolPartState implements PropertyContainer {
     final PrimaryMaterial primaryMaterial;
     final SecondaryMaterial secondaryMaterial;
     final Gem gem;
     final Schematic schematic;
 
-    public ToolPartState(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial, Gem gem, Schematic schematic) {
+    public AbstractToolPartState(PrimaryMaterial primaryMaterial, SecondaryMaterial secondaryMaterial, Gem gem, Schematic schematic) {
         this.primaryMaterial = primaryMaterial;
         this.secondaryMaterial = secondaryMaterial;
         this.gem = gem;
