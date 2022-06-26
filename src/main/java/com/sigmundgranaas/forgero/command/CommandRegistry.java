@@ -29,6 +29,7 @@ public class CommandRegistry {
 
             dispatcher.register(literal("forgero")
                     .then(literal("createstation")
+                            .requires(ctx -> ctx.hasPermissionLevel(2))
                             .executes(context -> {
                                 BlockPos pos = context.getSource().getPlayer().getBlockPos().add(1, -1, 0);
                                 BlockState initialState = context.getSource().getWorld().getBlockState(pos);

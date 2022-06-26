@@ -15,7 +15,8 @@
       "com.sigmundgranaas.forgero.gametest.GemRecipeTest",
       "com.sigmundgranaas.forgero.gametest.GemToolTest",
       "com.sigmundgranaas.forgero.gametest.ToolHandlerTest",
-      "com.sigmundgranaas.forgero.gametest.SecondaryUpgradeTest"
+      "com.sigmundgranaas.forgero.gametest.SecondaryUpgradeTest",
+      "com.sigmundgranaas.forgero.gametest.CommandTest"
     ]
   }
 }
