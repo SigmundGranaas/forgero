@@ -26,6 +26,16 @@ public interface ForgeroDefaults {
     static PrimaryMaterial getDefaultPrimaryMaterial() {
         return new PrimaryMaterial() {
             @Override
+            public PrimaryMaterial getResource() {
+                return this;
+            }
+
+            @Override
+            public String getConstructIdentifier() {
+                return getStringIdentifier();
+            }
+
+            @Override
             public @NotNull List<Property> getProperties(Target target) {
                 return Collections.emptyList();
             }
@@ -43,11 +53,6 @@ public interface ForgeroDefaults {
             @Override
             public @NotNull String getResourceName() {
                 return "DEFAULT";
-            }
-
-            @Override
-            public MaterialPojo toDataResource() {
-                return new MaterialPojo();
             }
 
             @Override
@@ -90,10 +95,6 @@ public interface ForgeroDefaults {
                 return ForgeroResourceType.TOOL_PART;
             }
 
-            @Override
-            public ToolPartPojo toDataResource() {
-                return new ToolPartPojo();
-            }
 
             @Override
             public PrimaryMaterial getPrimaryMaterial() {

@@ -59,8 +59,4 @@ public abstract class ReloadableToolPart extends AbstractToolPart {
         return ForgeroRegistry.MATERIAL.getSecondaryMaterial(super.getSecondaryMaterial().getStringIdentifier()).orElse(super.getSecondaryMaterial());
     }
 
-    @Override
-    public ToolPartPojo toDataResource() {
-        return new ToolPartPojo();
-    }
 }

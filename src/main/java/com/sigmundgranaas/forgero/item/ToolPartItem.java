@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-public interface ToolPartItem extends ForgeroItem<Item, ToolPartPojo>, PropertyContainer {
+public interface ToolPartItem extends ForgeroItem<Item>, PropertyContainer {
     String PRIMARY_MATERIAL_IDENTIFIER = "PrimaryMaterial";
     String SECONDARY_MATERIAL_IDENTIFIER = "SecondaryMaterial";
     String GEM_IDENTIFIER = "ForgeroModifier";

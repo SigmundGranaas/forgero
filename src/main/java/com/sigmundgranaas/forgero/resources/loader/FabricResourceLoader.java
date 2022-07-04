@@ -115,7 +115,7 @@ public class FabricResourceLoader implements ForgeroResourceLoader {
     }
 
     @SuppressWarnings("SameParameterValue")
-    protected <T extends ForgeroResource<R>, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, ForgeroResourceType type, FactoryProvider<T, R> factoryProvider) {
+    protected <T extends ForgeroResource, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, ForgeroResourceType type, FactoryProvider<T, R> factoryProvider) {
         var fileLoader = createPojoLoader(classType, type);
         return new ResourceLoaderImpl<>(
                 fileLoader,
@@ -124,7 +124,7 @@ public class FabricResourceLoader implements ForgeroResourceLoader {
         );
     }
 
-    protected <T extends ForgeroResource<R>, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, Consumer<R> handler, ForgeroResourceType type, FactoryProvider<T, R> factoryProvider) {
+    protected <T extends ForgeroResource, R extends ForgeroDataResource> ResourceLoader<T, R> createResourceLoader(Class<R> classType, Consumer<R> handler, ForgeroResourceType type, FactoryProvider<T, R> factoryProvider) {
         return new ResourceLoaderImpl<T, R>(
                 createPojoLoader(classType, type),
                 handler,

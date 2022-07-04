@@ -133,7 +133,7 @@ public class ForgeroToolPartFactoryImpl implements ForgeroToolPartFactory {
     }
 
     @Override
-    public Optional<ForgeroToolPart> buildResource(ToolPartPojo pojo) {
+    public @NotNull Optional<ForgeroToolPart> buildResource(ToolPartPojo pojo) {
         return Optional.empty();
     }
 

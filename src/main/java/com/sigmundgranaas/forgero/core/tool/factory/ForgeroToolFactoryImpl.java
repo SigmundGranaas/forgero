@@ -62,17 +62,17 @@ public class ForgeroToolFactoryImpl implements ForgeroToolFactory {
     }
 
     @Override
-    public Optional<ForgeroTool> createResource(ToolPojo data) {
+    public @NotNull Optional<ForgeroTool> createResource(ToolPojo data) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<ForgeroTool> buildResource(ToolPojo pojo) {
+    public @NotNull Optional<ForgeroTool> buildResource(ToolPojo pojo) {
         return Optional.empty();
     }
 
     @Override
-    public ImmutableList<ForgeroTool> createResources() {
+    public @NotNull ImmutableList<ForgeroTool> createResources() {
         return ImmutableList.<ForgeroTool>builder().build();
     }
 }

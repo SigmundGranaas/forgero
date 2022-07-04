@@ -4,13 +4,31 @@
   "resource_type": "SCHEMATIC",
   "toolType": "AXE",
   "abstract_resource": true,
+  "slots": [
+    {
+      "type":  "MATERIAL",
+      "slotType": "OFFENSIVE",
+      "index": 1
+    },
+    {
+      "type":  "MATERIAL",
+      "slotType": "UTILITY",
+      "index": 2
+    },
+    {
+      "type": "TRINKET",
+      "slotType": "UTILITY",
+      "index": 1
+    }
+  ],
   "models": [
     {
       "id": "DEFAULT",
       "model": {
         "primary": "axehead_primary",
-        "secondary": "axehead_secondary",
-        "gem": "axehead_gem"
+        "material-1": "axehead_secondary",
+        "material-2": "axehead_secondary",
+        "trinket1": "axehead_gem"
       }
     }
   ],

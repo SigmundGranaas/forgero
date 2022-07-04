@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.tool;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.ToolPojo;
 import com.sigmundgranaas.forgero.core.identifier.tool.ForgeroToolIdentifier;
 import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -17,7 +16,7 @@ import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import org.jetbrains.annotations.NotNull;
 
-public interface ForgeroTool extends ForgeroResource<ToolPojo>, PropertyContainer {
+public interface ForgeroTool extends ForgeroResource, PropertyContainer {
     @NotNull
     ToolPartHead getToolHead();
 

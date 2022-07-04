@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import com.sigmundgranaas.forgero.core.schematic.SlotContainer;
 import com.sigmundgranaas.forgero.core.texture.TextureModelContainerImpl;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.core.toolpart.head.HeadState;
@@ -23,7 +24,7 @@ public class SimpleToolMaterialAdapter implements ToolMaterial {
     private final HeadState state;
 
     public SimpleToolMaterialAdapter(PrimaryMaterial material) {
-        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Schematic(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), TextureModelContainerImpl.createContainer(List.of(createModelPojo())).get(), 1, false));
+        this.state = new HeadState(material, new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), new Schematic(ForgeroToolPartTypes.HANDLE, "default", Collections.emptyList(), TextureModelContainerImpl.createContainer(List.of(createModelPojo())).get(), 1, false, new SlotContainer(Collections.emptyList())));
 
     }
 

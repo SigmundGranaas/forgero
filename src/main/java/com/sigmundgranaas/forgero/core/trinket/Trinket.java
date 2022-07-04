@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.trinket;
 
-import com.sigmundgranaas.forgero.core.toolpart.state.ToolPartUpgrade;
+import com.sigmundgranaas.forgero.core.constructable.Upgrade;
 
-public interface Trinket extends ToolPartUpgrade {
+public interface Trinket extends Upgrade {
 }

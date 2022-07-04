@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @param <T>
  */
-public abstract class ConcurrentResourceRegistry<T extends ForgeroResource<?>> implements ForgeroResourceRegistry<T> {
+public abstract class ConcurrentResourceRegistry<T extends ForgeroResource> implements ForgeroResourceRegistry<T> {
     private Map<String, T> resources;
 
     protected ConcurrentResourceRegistry(Map<String, T> resources) {

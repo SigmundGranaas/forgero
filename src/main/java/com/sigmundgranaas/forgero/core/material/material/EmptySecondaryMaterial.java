@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class EmptySecondaryMaterial implements SecondaryMaterial, SimpleSecondaryMaterial {
     @Override
@@ -21,10 +22,6 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, SimpleSecondar
         return "empty";
     }
 
-    @Override
-    public MaterialPojo toDataResource() {
-        return new MaterialPojo();
-    }
 
 
     @Override
@@ -41,5 +38,10 @@ public class EmptySecondaryMaterial implements SecondaryMaterial, SimpleSecondar
     @Override
     public IngredientPojo getIngredient() {
         return new IngredientPojo();
+    }
+
+    @Override
+    public Set<String> getValidPlacements() {
+        return null;
     }
 }
