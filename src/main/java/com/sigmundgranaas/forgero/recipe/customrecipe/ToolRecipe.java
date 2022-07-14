@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.core.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
@@ -31,6 +32,8 @@ public class ToolRecipe extends ShapedRecipe {
         ItemStack headItem = null;
         ItemStack handleItem = null;
 
+        ItemStack forgeroToolInstanceStack = getOutput().copy();
+        ForgeroTool fallBackTool = ((ForgeroToolItem) forgeroToolInstanceStack.getItem()).getTool();
 
         List<Ingredient> ingredients = super.getIngredients();
 
@@ -57,14 +60,14 @@ public class ToolRecipe extends ShapedRecipe {
 
         if (headItem.hasNbt() && headItem.getOrCreateNbt().contains(NBTFactory.HEAD_NBT_IDENTIFIER)) {
             assert headItem.getNbt() != null;
-            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER));
+            head = (ToolPartHead) NBTFactory.INSTANCE.createToolPartFromNBT(headItem.getNbt().getCompound(NBTFactory.HEAD_NBT_IDENTIFIER)).orElse(fallBackTool.getToolHead());
         } else {
             head = (ToolPartHead) ((ToolPartItem) headItem.getItem()).getPart();
         }
 
         if (handleItem.hasNbt() && handleItem.getOrCreateNbt().contains(NBTFactory.HANDLE_NBT_IDENTIFIER)) {
             assert handleItem.getNbt() != null;
-            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getNbt().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER));
+            handle = (ToolPartHandle) NBTFactory.INSTANCE.createToolPartFromNBT(handleItem.getNbt().getCompound(NBTFactory.HANDLE_NBT_IDENTIFIER)).orElse(fallBackTool.getToolHandle());
         } else {
             handle = (ToolPartHandle) ((ToolPartItem) handleItem.getItem()).getPart();
         }
@@ -72,7 +75,6 @@ public class ToolRecipe extends ShapedRecipe {
 
         ForgeroTool tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle);
 
-        ItemStack forgeroToolInstanceStack = getOutput().copy();
         forgeroToolInstanceStack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromTool(tool));
         return forgeroToolInstanceStack;
     }

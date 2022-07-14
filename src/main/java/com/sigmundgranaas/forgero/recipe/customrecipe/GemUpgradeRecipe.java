@@ -23,20 +23,23 @@ public class GemUpgradeRecipe extends SmithingRecipe {
     }
 
     public static Optional<Gem> getGem(Inventory inventory) {
+
+
         Gem baseGem;
         Gem additionGem;
         ItemStack base = inventory.getStack(0);
+        Gem fallbackGem = ((GemItem)base.getItem()).getGem();
         ItemStack addition = inventory.getStack(1);
         if (base.hasNbt() && base.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
             //noinspection ConstantConditions
-            baseGem = NBTFactory.INSTANCE.createGemFromNbt(base.getNbt());
+            baseGem = NBTFactory.INSTANCE.createGemFromNbt(base.getNbt()).orElse(fallbackGem);
         } else {
             baseGem = ((GemItem) base.getItem()).getGem();
         }
 
         if (addition.hasNbt() && addition.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
             //noinspection ConstantConditions
-            additionGem = NBTFactory.INSTANCE.createGemFromNbt(addition.getNbt());
+            additionGem = NBTFactory.INSTANCE.createGemFromNbt(addition.getNbt()).orElse(fallbackGem);
         } else {
             additionGem = ((GemItem) addition.getItem()).getGem();
         }

@@ -54,12 +54,12 @@ public class GemToolPartUpgradeRecipe extends SmithingRecipe {
         Gem gem = FabricToForgeroGemAdapter.createAdapter().getGem(inventory.getStack(1)).orElse(EmptyGem.createEmptyGem());
         ItemStack toolPartStack = inventory.getStack(0);
 
-        ForgeroToolPart toolpart = FabricToForgeroToolPartAdapter.createAdapter().getToolPart(toolPartStack).orElse(((ToolPartItem) toolPartStack.getItem()).getPart());
+        ForgeroToolPart toolPart = FabricToForgeroToolPartAdapter.createAdapter().getToolPart(toolPartStack).orElse(((ToolPartItem) toolPartStack.getItem()).getPart());
 
-        ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(toolpart).setGem(gem);
+        ToolPartBuilder builder = ForgeroToolPartFactory.INSTANCE.createToolPartBuilderFromToolPart(toolPart).setGem(gem);
 
         ItemStack result = super.craft(inventory);
-        result.getOrCreateNbt().put(NBTFactory.getToolPartNBTIdentifier(toolpart), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
+        result.getOrCreateNbt().put(NBTFactory.getToolPartNBTIdentifier(toolPart), NBTFactory.INSTANCE.createNBTFromToolPart(builder.createToolPart()));
         return result;
     }
 

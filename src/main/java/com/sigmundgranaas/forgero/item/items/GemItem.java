@@ -40,7 +40,7 @@ public class GemItem extends Item implements ForgeroItem<GemItem, GemPojo>, Prop
 
     @Override
     public boolean hasGlint(ItemStack stack) {
-        if (stack.hasNbt() && NBTFactory.INSTANCE.createGemFromNbt(stack.getOrCreateNbt()).getLevel() > 7) {
+        if (stack.hasNbt() && NBTFactory.INSTANCE.createGemFromNbt(stack.getOrCreateNbt()).orElse(gem).getLevel() > 7) {
             return true;
         } else {
             return super.hasGlint(stack);
