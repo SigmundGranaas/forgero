@@ -10,7 +10,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Blazed stoneheart gem, level 8",
-      "item": "forgero:blazed_stoneheart-gem{Gem:'8_blazedstoneheart_gem', CustomModelData:8}",
+      "item": "forgero:blazed_stoneheart-gem{Gem:'8-blazed_stoneheart-gem', CustomModelData:8}",
       "text": "A blazed stoneheart gem gem upgraded to level 8"
     },
     {
