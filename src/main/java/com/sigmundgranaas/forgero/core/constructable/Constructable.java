@@ -4,6 +4,8 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 
 import java.util.List;
 
-public interface Constructable extends PropertyContainer {
+public interface Constructable {
     List<Construct<?>> getConstructs();
+
+    String getConstructIdentifier();
 }

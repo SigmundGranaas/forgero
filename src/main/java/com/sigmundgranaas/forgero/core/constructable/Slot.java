@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.core.constructable;
 
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-
 import java.util.Optional;
 
 /**
@@ -10,7 +8,7 @@ import java.util.Optional;
  *
  * Slots are immutable by default
  */
-public interface Slot<T> extends PropertyContainer {
+public interface Slot<T> {
     boolean isFilled();
 
    default boolean isEmpty(){

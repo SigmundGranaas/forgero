@@ -59,7 +59,6 @@ public abstract class AbstractToolPartState implements PropertyContainer {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public @NotNull List<Property> getRootProperties() {
         return getProperties(Target.createEmptyTarget());

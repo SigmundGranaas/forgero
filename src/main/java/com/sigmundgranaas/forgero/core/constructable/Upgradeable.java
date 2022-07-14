@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.trinket.Trinket;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
