@@ -2,6 +2,7 @@
 
 # Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
 
+* Implemented item model caching to improve performance when lots of Forgero models are rendered at the same time
 * Fix bug where all players could execute forgero commands ( Identithree )
 * Added gem translations
 * Added Forgero tools to the banned_uncrafting tag, to resolve bugs and exploits related to uncrafting Forgero tools
