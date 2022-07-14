@@ -9,20 +9,20 @@
     },
     {
       "type": "patchouli:spotlight",
-      "title": "Sacondary upgrades",
-      "item": "forgero:iron-pickaxehead{Head:{PrimaryMaterial:'Iron', SecondaryMaterial:'Netherite', ToolPartType:'Head', ToolPartHeadType:'PICKAXE', Gem:'1_empty_gem', ToolPartIdentifier:'iron_pickaxehead_default', Schematic:'pickaxehead_schematic_default'}}",
+      "title": "Secondary upgrades",
+      "item": "forgero:iron-pickaxehead{Head:{PrimaryMaterial:'iron', SecondaryMaterial:'netherite', ToolPartType:'Head', ToolPartHeadType:'PICKAXE', Gem:'1-empty-gem', ToolPartIdentifier:'iron-pickaxehead', Schematic:'pickaxe-schematic'}}",
       "text": "This iron pickaxe head has been upgraded with an netherite ingot in the Smithing table. Every single tool parts can be upgraded with a secondary material."
     },
     {
       "type": "patchouli:spotlight",
       "title": "Gem upgrades",
-      "item": "forgero:iron-pickaxehead{Head:{PrimaryMaterial:'Iron', SecondaryMaterial:'Netherite', ToolPartType:'Head', ToolPartHeadType:'PICKAXE', Gem:'7_lapis_gem', ToolPartIdentifier:'iron_pickaxehead_default', Schematic:'pickaxehead_schematic_default'}}",
+      "item": "forgero:iron-pickaxehead{Head:{PrimaryMaterial:'iron', SecondaryMaterial:'netherite', ToolPartType:'Head', ToolPartHeadType:'PICKAXE', Gem:'7-lapis-gem', ToolPartIdentifier:'iron-pickaxehead', Schematic:'pickaxe-schematic'}}",
       "text": "This iron pickaxe head has been upgraded with an level 7 Lapis Gem in the Smithing table. A single gem can be placed on every tool part. Higher level gems will multiply their effect with the gem's level."
     },
     {
       "type": "patchouli:spotlight",
       "title": "Gem upgrades",
-      "item": "forgero:acacia-handle{Handle:{PrimaryMaterial:'Acacia', SecondaryMaterial:'Leather', ToolPartType:'Handle', Gem:'3_emerald_gem', ToolPartIdentifier:'acacia_handle_default', Schematic:'handle_schematic_default'}}",
+      "item": "forgero:acacia-handle{Handle:{PrimaryMaterial:'acacia', SecondaryMaterial:'leather', ToolPartType:'Handle', Gem:'3-emerald-gem', ToolPartIdentifier:'acacia-handle', Schematic:'handle-schematic'}}",
       "text": "This acacia handle has been upgraded with an level 3 Emerald Gem in the Smithing table. A single gem can be placed on every tool part. Higher level gems will multiply their effect with the gem's level."
     }
   ]
