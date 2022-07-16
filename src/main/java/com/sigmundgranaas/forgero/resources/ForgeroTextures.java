@@ -29,7 +29,9 @@ import static com.sigmundgranaas.forgero.resources.loader.ResourceLocations.MATE
 
 
 public class ForgeroTextures {
-    public void generateTextureIdentifiers() {
+
+
+    public void createTextureIdentifiers() {
         for (Path path : new FabricModFileLoader().getResourcesFromFolder(MATERIAL_TEMPLATES_LOCATION)) {
             PaletteResourceRegistry.getInstance().addPremadePalette(path.getFileName().toString().replace(".png", ""));
         }
@@ -40,7 +42,6 @@ public class ForgeroTextures {
             var loader = new FabricResourceLoader(new ModContainerService().getAllModsAsSet());
             ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(loader);
 
-            //registry.getTextures().stream().filter(id -> PaletteResourceRegistry.getInstance().premadePalette(id.getPaletteIdentifier())).forEach(texture -> RESOURCE_PACK.addTexture(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier()), CachedToolPartTextureService.getInstance(new FabricTextureLoader((textureId) -> MinecraftClient.getInstance().getResourceManager().getResource(textureId))).getTexture(texture).getImage()));
 
             registerToolPartModelsPrimary(registry);
             registerToolPartModelsSecondary(registry);

@@ -14,13 +14,13 @@ import net.minecraft.util.math.BlockPos;
 import java.util.UUID;
 
 public class CommandTest {
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
     public void TestCreateStationWithOp(TestContext context) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer-op");
         context.getWorld().getServer().getPlayerManager().addToOperators(profile);
 
 
-        ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile);
+        ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile, null);
         testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
 
         BlockPos targetPos = new BlockPos(1, 5, 0);
@@ -46,9 +46,12 @@ public class CommandTest {
 
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
     public void failCreateStationWhenNotOp(TestContext context) {
-        ServerPlayerEntity testPlayer = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer2"));
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer2");
+        context.getWorld().getServer().getPlayerManager().addToOperators(profile);
+
+        ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile, null);
         testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
 
         BlockPos targetPos = new BlockPos(1, 5, 0);

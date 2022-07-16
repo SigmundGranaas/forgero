@@ -1,7 +1,12 @@
-### Changelog 0.9.3
+### Changelog 0.9.5
 
-# Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
+# Forgero Beta release
 
+* Fixed damage upgrades affecting tool negatively instad of boosting stats.
+* Fixed Gem levels not being applied in ToolPart state
+* Fixed Pathcouli entries
+* Reworked NBT factory to use Optionals
+* Implemented item model caching to improve performance when lots of Forgero models are rendered at the same time
 * Fix bug where all players could execute forgero commands ( Identithree )
 * Added gem translations
 * Added Forgero tools to the banned_uncrafting tag, to resolve bugs and exploits related to uncrafting Forgero tools

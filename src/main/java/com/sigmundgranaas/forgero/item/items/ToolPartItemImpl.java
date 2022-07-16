@@ -13,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -36,14 +35,15 @@ public class ToolPartItemImpl extends Item implements ToolPartItem {
         this.part = part;
     }
 
+
     @Override
     public Text getName() {
         return getNameFromToolPart(getPart());
     }
 
     public Text getNameFromToolPart(ForgeroToolPart part) {
-        MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
-        text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartIdentifier().split(ELEMENT_SEPARATOR)[1])));
+        MutableText text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).append(" ");
+        text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, part.getToolPartIdentifier().split(ELEMENT_SEPARATOR)[1])));
         return text;
     }
 

@@ -101,7 +101,7 @@ public class FabricToForgeroAdapter implements FabricToForgeroToolAdapter, Fabri
         if (itemStack.getItem() instanceof ToolPartItem) {
             if (itemStack.getOrCreateNbt().contains(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))) {
                 assert itemStack.getNbt() != null;
-                return Optional.of(NBTFactory.INSTANCE.createToolPartFromNBT(itemStack.getNbt().getCompound(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart()))));
+                return NBTFactory.INSTANCE.createToolPartFromNBT(itemStack.getNbt().getCompound(NBTFactory.getToolPartNBTIdentifier(((ToolPartItem) itemStack.getItem()).getPart())));
             } else {
                 return Optional.of(((ToolPartItem) itemStack.getItem()).getPart());
             }

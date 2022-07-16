@@ -58,7 +58,7 @@ public class ToolHandlerTest {
 
     }
 
-    @GameTest(structureName = "forgero:stone3x3", batchId = "Tool handlers")
+    @GameTest(templateName = "forgero:stone3x3", batchId = "Tool handlers")
     public void testToolHandler3x3(TestContext context) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
         ItemStack baseTool = createToolItemWithSchematic();
@@ -76,7 +76,7 @@ public class ToolHandlerTest {
         ForgeroInitializer.LOGGER.info("Testing pattern breaking 3x3");
 
         //mockPlayer.interactionManager.tryBreakBlock(absolute);
-        mockPlayer.interactionManager.processBlockBreakingAction(new BlockPos(absolute.getX(), absolute.getY() + 1, absolute.getZ()), PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, Direction.DOWN, context.getWorld().getHeight());
+        mockPlayer.interactionManager.processBlockBreakingAction(new BlockPos(absolute.getX(), absolute.getY() + 1, absolute.getZ()), PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, Direction.DOWN, context.getWorld().getHeight(), 1);
 
 
         for (int i = 0; i < 3; i++) {
@@ -97,7 +97,7 @@ public class ToolHandlerTest {
         }
     }
 
-    @GameTest(structureName = "forgero:coal3x3", batchId = "Tool handlers")
+    @GameTest(templateName = "forgero:coal3x3", batchId = "Tool handlers")
     public void testVeinMining3x3Coal(TestContext context) {
         ServerPlayerEntity mockPlayer = createDummyServerPlayer(context);
         ItemStack baseTool = createToolItemWithVeinMining();
@@ -115,7 +115,7 @@ public class ToolHandlerTest {
         ForgeroInitializer.LOGGER.info("Testing breaking vein 3x3");
 
         //mockPlayer.interactionManager.tryBreakBlock(absolute);
-        mockPlayer.interactionManager.processBlockBreakingAction(absolute, PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, Direction.DOWN, context.getWorld().getHeight());
+        mockPlayer.interactionManager.processBlockBreakingAction(absolute, PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, Direction.DOWN, context.getWorld().getHeight(), 1);
 
 
         for (int i = 0; i < 3; i++) {

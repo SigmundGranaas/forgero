@@ -15,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,9 +31,9 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem, Sc
 
     @Override
     public Text getName() {
-        MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, getSchematic().getResourceName())).append(" ");
+        MutableText text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, getSchematic().getResourceName())).append(" ");
 
-        text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, "schematic")));
+        text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, "schematic")));
         return text;
     }
 

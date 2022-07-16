@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class ItemRegistration {
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolsHaveBeenRegistered(TestContext context) {
         ForgeroRegistry.TOOL.list().forEach(forgeroTool -> {
             Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getToolIdentifierString()));
@@ -28,7 +28,7 @@ public class ItemRegistration {
         context.complete();
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Testing item registration")
     public void allToolPartsHaveBeenRegistered(TestContext context) {
         ForgeroRegistry.TOOL_PART.list().forEach(forgeroTool -> {
             Item checkedTool = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, forgeroTool.getToolPartIdentifier()));

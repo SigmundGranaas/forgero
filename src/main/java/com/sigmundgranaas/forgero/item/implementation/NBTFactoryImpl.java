@@ -25,7 +25,6 @@ import com.sigmundgranaas.forgero.core.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.core.toolpart.factory.ToolPartBuilder;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
-import com.sigmundgranaas.forgero.core.util.ForgeroDefaults;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
@@ -63,13 +62,20 @@ public class NBTFactoryImpl implements NBTFactory {
 
     @Override
     public @NotNull
-    ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound) {
+    Optional<ForgeroToolPart> createToolPartFromNBT(@NotNull NbtCompound compound) {
         String primaryMaterialString = compound.getString(ToolPartItem.PRIMARY_MATERIAL_IDENTIFIER);
-        PrimaryMaterial primary = ForgeroRegistry.MATERIAL.getPrimaryMaterial(primaryMaterialString).orElse(ForgeroDefaults.getDefaultPrimaryMaterial());
+        var primaryOpt= ForgeroRegistry.MATERIAL.getPrimaryMaterial(primaryMaterialString);
+        PrimaryMaterial primary;
+        if(primaryOpt.isPresent()){
+            primary = primaryOpt.get();
+        }else{
+            return Optional.empty();
+        }
+
+
         String secondaryMaterialString = compound.getString(ToolPartItem.SECONDARY_MATERIAL_IDENTIFIER);
 
         String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
-
 
         String toolPartTypeIdentifier = compound.getString(NBTFactory.TOOL_PART_TYPE_NBT_IDENTIFIER);
         ForgeroToolPartTypes toolPartTypes = ForgeroToolPartTypes.valueOf(toolPartTypeIdentifier.toUpperCase(Locale.ROOT));
@@ -91,24 +97,25 @@ public class NBTFactoryImpl implements NBTFactory {
 
         }
 
-        Schematic pattern = ForgeroRegistry.SCHEMATIC.getResource(patternIdentifier).get();
+        var patternOpt = ForgeroRegistry.SCHEMATIC.getResource(patternIdentifier);
+        if(patternOpt.isEmpty()){
+           return Optional.empty();
+        }
 
         ToolPartBuilder builder = switch (toolPartTypes) {
-            case HANDLE -> ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(primary, pattern);
-            case BINDING -> ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(primary, pattern);
-            case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, (HeadSchematic) pattern);
+            case HANDLE -> ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(primary, patternOpt.get());
+            case BINDING -> ForgeroToolPartFactory.INSTANCE.createToolPartBindingBuilder(primary, patternOpt.get());
+            case HEAD -> ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(primary, (HeadSchematic) patternOpt.get());
         };
         if (!secondaryMaterialString.equals("empty")) {
-            builder.setSecondary(ForgeroRegistry.MATERIAL.getSecondaryMaterial(secondaryMaterialString).get());
+            ForgeroRegistry.MATERIAL.getSecondaryMaterial(secondaryMaterialString).ifPresent(builder::setSecondary);
         }
-
 
         if (!gemString.equals("")) {
-            builder.setGem(getGemFromNbtString(gemString));
+            getGemFromNbtString(gemString).ifPresent(builder::setGem);
         }
 
-
-        return builder.createToolPart();
+        return Optional.of(builder.createToolPart());
     }
 
     @Override
@@ -130,24 +137,24 @@ public class NBTFactoryImpl implements NBTFactory {
         ToolPartHandle handle;
 
         if (toolCompound.contains(ToolPartItem.HEAD_IDENTIFIER)) {
-            head = (ToolPartHead) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.HEAD_IDENTIFIER));
+            head = (ToolPartHead) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.HEAD_IDENTIFIER)).orElse(baseTool.getHead());
         } else {
             head = baseTool.getHead();
         }
 
         if (toolCompound.contains(ToolPartItem.HANDLE_IDENTIFIER)) {
-            handle = (ToolPartHandle) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.HANDLE_IDENTIFIER));
+            handle = (ToolPartHandle) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.HANDLE_IDENTIFIER)).orElse(baseTool.getHandle());
         } else {
             handle = baseTool.getHandle();
         }
 
-        Optional<ToolPartBinding> binding = Optional.empty();
+        Optional<ForgeroToolPart> binding = Optional.empty();
         if (toolCompound.contains(ToolPartItem.BINDING_IDENTIFIER)) {
-            binding = Optional.of((ToolPartBinding) createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.BINDING_IDENTIFIER)));
+            binding = createToolPartFromNBT(toolCompound.getCompound(ToolPartItem.BINDING_IDENTIFIER));
         }
         ForgeroTool tool;
         if (binding.isPresent()) {
-            tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle, binding.get());
+            tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle, (ToolPartBinding) binding.get());
         } else {
             tool = ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle);
         }
@@ -178,7 +185,7 @@ public class NBTFactoryImpl implements NBTFactory {
         baseCompound.putString(GEM_NBT_IDENTIFIER, createGemNbtString(toolPart.getGem()));
         baseCompound.putString(TOOL_PART_TYPE_NBT_IDENTIFIER, toolPart.getToolPartType().toString());
         baseCompound.putString(TOOL_PART_IDENTIFIER, toolPart.getToolPartIdentifier());
-        baseCompound.putString(SCHEMATIC_NBT_IDENTIFIER, toolPart.getSchematic().getSchematicIdentifier());
+        baseCompound.putString(SCHEMATIC_NBT_IDENTIFIER, toolPart.getSchematic().getStringIdentifier());
         if (toolPart.getToolPartType() == ForgeroToolPartTypes.HEAD) {
             baseCompound.putString(TOOL_PART_HEAD_TYPE_NBT_IDENTIFIER, ((ToolPartHead) toolPart).getToolType().toString());
         }
@@ -187,12 +194,12 @@ public class NBTFactoryImpl implements NBTFactory {
 
     @Override
     public @NotNull
-    Gem createGemFromNbt(@NotNull NbtCompound compound) {
+    Optional<Gem> createGemFromNbt(@NotNull NbtCompound compound) {
         String gemString = compound.getString(NBTFactory.GEM_NBT_IDENTIFIER);
         if (!gemString.equals("")) {
             return getGemFromNbtString(gemString);
         } else {
-            return EmptyGem.createEmptyGem();
+           return Optional.empty();
         }
     }
 
@@ -381,13 +388,13 @@ public class NBTFactoryImpl implements NBTFactory {
         return schematicCompound;
     }
 
-    Gem getGemFromNbtString(String nbtGem) {
+    Optional<Gem> getGemFromNbtString(String nbtGem) {
         String[] elements = nbtGem.split(ELEMENT_SEPARATOR);
         if (elements.length < 3) {
-            return EmptyGem.createEmptyGem();
+            return Optional.empty();
         }
         Gem gem = ForgeroRegistry.GEM.getResource(String.format("%s%s%s", elements[1], ELEMENT_SEPARATOR, elements[2])).orElse(EmptyGem.createEmptyGem());
-        return gem.createGem(Integer.parseInt(elements[0]));
+        return Optional.of(gem.createGem(Integer.parseInt(elements[0])));
     }
 }
 

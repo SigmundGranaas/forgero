@@ -45,7 +45,7 @@ public interface NBTFactory {
     }
 
     @NotNull
-    ForgeroToolPart createToolPartFromNBT(@NotNull NbtCompound compound);
+    Optional<ForgeroToolPart> createToolPartFromNBT(@NotNull NbtCompound compound);
 
     @NotNull
     ForgeroTool createToolFromNBT(@NotNull ForgeroToolItem baseTool, @NotNull NbtCompound compound);
@@ -57,7 +57,7 @@ public interface NBTFactory {
     NbtCompound createNBTFromToolPart(@NotNull ForgeroToolPart toolPart);
 
     @NotNull
-    Gem createGemFromNbt(@NotNull NbtCompound compound);
+    Optional<Gem> createGemFromNbt(@NotNull NbtCompound compound);
 
     @NotNull
     NbtCompound createNBTFromGem(@NotNull Gem gem, NbtCompound compound);

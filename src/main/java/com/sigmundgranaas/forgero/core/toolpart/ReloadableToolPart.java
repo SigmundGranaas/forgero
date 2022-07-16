@@ -22,7 +22,7 @@ public abstract class ReloadableToolPart extends AbstractToolPart {
         if (super.getGem() instanceof EmptyGem) {
             return super.getGem();
         }
-        return ForgeroRegistry.GEM.getResource(super.getGem());
+        return ForgeroRegistry.GEM.getResource(super.getGem()).createGem((super.getGem()).getLevel());
     }
 
     @Override

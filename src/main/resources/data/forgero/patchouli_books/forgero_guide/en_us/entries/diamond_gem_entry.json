@@ -10,7 +10,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Dimaond gem, level 8",
-      "item": "forgero:diamond-gem{Gem:'8_diamond_gem', CustomModelData:8}",
+      "item": "forgero:diamond-gem{Gem:'8-diamond-gem', CustomModelData:8}",
       "text": "A diamond upgraded to level 8"
     },
     {

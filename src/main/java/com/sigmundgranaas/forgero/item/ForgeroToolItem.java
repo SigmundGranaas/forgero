@@ -28,7 +28,6 @@ import net.minecraft.item.MiningToolItem;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,7 +97,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
             //Attack damage addition
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", baseToolDamage - currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
             if (tool.getAttackSpeed(target) != getTool().getAttackSpeed(target)) {
                 builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", tool.getAttackSpeed(target) - tool.getBaseTool().getAttackSpeed(target), EntityAttributeModifier.Operation.ADDITION));
             }
@@ -129,10 +128,10 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     }
 
     default Text getForgeroTranslatableToolName(ForgeroTool tool) {
-        MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName().toLowerCase(Locale.ROOT))).append(" ");
+        MutableText text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName().toLowerCase(Locale.ROOT))).append(" ");
         Schematic schematic = tool.getToolHead().getSchematic();
         if (!schematic.getResourceName().equals("default")) {
-            text.append(new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" "));
+            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" "));
         }
         return text;
     }

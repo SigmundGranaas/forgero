@@ -40,7 +40,7 @@ public class RecipeCreation {
         return actualOutput;
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing")
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing")
     public void testCraftAllHandles(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithCraftingScreenHandler(context);
 
@@ -72,18 +72,18 @@ public class RecipeCreation {
         }
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing tools", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing tools", required = true)
     public void testingToolRecipe(TestContext context) {
         testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOL_RECIPE);
     }
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing tools with binding", required = true)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing tools with binding", required = true)
     public void testingToolWithBindingRecipe(TestContext context) {
         testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOL_WITH_BINDING_RECIPE);
     }
 
 
-    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing schematics", required = false)
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Recipe testing schematics", required = false)
     public void testingSchematicRecipes(TestContext context) {
         testingGeneratedRecipesStreamReduce(context, RecipeTypes.TOOLPART_SCHEMATIC_RECIPE);
     }

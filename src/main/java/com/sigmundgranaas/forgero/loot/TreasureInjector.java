@@ -17,6 +17,7 @@ import net.minecraft.util.registry.Registry;
 import java.util.List;
 
 import static com.sigmundgranaas.forgero.loot.ToolPartFilter.getToolPartValue;
+import static net.minecraft.loot.LootPool.builder;
 
 public class TreasureInjector {
     private static final List<ForgeroToolPartTypes> ALL_TOOL_PARTS = List.of(ForgeroToolPartTypes.values());

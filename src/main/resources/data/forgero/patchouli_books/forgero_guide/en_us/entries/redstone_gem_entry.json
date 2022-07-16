@@ -10,7 +10,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Redstone gem, level 8",
-      "item": "forgero:redstone-gem{Gem:'8_redstone_gem', CustomModelData:8}",
+      "item": "forgero:redstone-gem{Gem:'8-redstone-gem', CustomModelData:8}",
       "text": "A redstone gem upgraded to level 8"
     },
     {
