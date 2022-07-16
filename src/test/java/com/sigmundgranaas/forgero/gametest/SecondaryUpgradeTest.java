@@ -16,7 +16,7 @@ import net.minecraft.util.registry.Registry;
 import static com.sigmundgranaas.forgero.gametest.RecipeHelper.setUpDummyPlayerWithSmithingScreenHandler;
 
 public class SecondaryUpgradeTest {
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Secondary upgrade testing", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Secondary upgrade testing", required = true)
     public void secondaryDiamondUpgradeTest(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);
@@ -43,7 +43,7 @@ public class SecondaryUpgradeTest {
         }
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Secondary upgrade testing", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Secondary upgrade testing", required = true)
     public void secondaryStoneUpgradeTest(TestContext context) {
         ServerPlayerEntity mockPlayer = setUpDummyPlayerWithSmithingScreenHandler(context);
         SmithingScreenHandler handler = ((SmithingScreenHandler) mockPlayer.currentScreenHandler);

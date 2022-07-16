@@ -28,6 +28,7 @@ import net.minecraft.item.MiningToolItem;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -128,10 +129,10 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
     }
 
     default Text getForgeroTranslatableToolName(ForgeroTool tool) {
-        MutableText text = Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName().toLowerCase(Locale.ROOT))).append(" ");
+        MutableText text = new TranslatableText(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName().toLowerCase(Locale.ROOT))).append(" ");
         Schematic schematic = tool.getToolHead().getSchematic();
         if (!schematic.getResourceName().equals("default")) {
-            text.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName())).append(" "));
+            text.append(new TranslatableText((String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, schematic.getResourceName()))).append(" "));
         }
         return text;
     }

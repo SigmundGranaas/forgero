@@ -25,7 +25,7 @@ import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEH
 
 public class GameTestHelper {
     public static ServerPlayerEntity createDummyServerPlayer(TestContext context) {
-        ServerPlayerEntity serverPlayer = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer"), null);
+        ServerPlayerEntity serverPlayer = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-player"));
         serverPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), serverPlayer);
         return serverPlayer;
     }

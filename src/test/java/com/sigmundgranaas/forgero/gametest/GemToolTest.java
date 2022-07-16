@@ -50,7 +50,7 @@ public class GemToolTest {
         return stack;
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void DurabilityGemIncreasesByLevel(TestContext context) {
         ItemStack baseTool = createToolItemWithGem(EmptyGem.createEmptyGem());
         float baseDamage = baseTool.getMaxDamage();
@@ -66,7 +66,7 @@ public class GemToolTest {
         context.complete();
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Gem testing", required = true)
     public void miningSpeedGemIncreasesSpeed(TestContext context) {
         ItemStack baseTool = createToolItemWithGem(EmptyGem.createEmptyGem());
         BlockPos pos = new BlockPos(1, 1, 1);

@@ -19,7 +19,6 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,8 +43,8 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 
     public static Reader getReaderForResource(Identifier location) throws IOException {
         Identifier file = new Identifier(location.getNamespace(), location.getPath() + ".json");
-        Optional<Resource> resource = MinecraftClient.getInstance().getResourceManager().getResource(file);
-        return new BufferedReader(new InputStreamReader(resource.get().getInputStream(), Charsets.UTF_8));
+        Resource resource = MinecraftClient.getInstance().getResourceManager().getResource(file);
+        return new BufferedReader(new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
     }
 
 

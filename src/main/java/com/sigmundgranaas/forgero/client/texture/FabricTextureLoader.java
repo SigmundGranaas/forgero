@@ -21,10 +21,10 @@ import java.util.Optional;
  * This class is used to load template textures and palettes as well as a method for fetching Minecraft's assets.
  */
 public class FabricTextureLoader implements TextureLoader {
-    private final Function<Identifier, Optional<Resource>> getResource;
+    private final Function<Identifier, Resource> getResource;
     private final FileService fileService;
 
-    public FabricTextureLoader(Function<Identifier, Optional<Resource>> getResource) {
+    public FabricTextureLoader(Function<Identifier, Resource> getResource) {
         this.getResource = getResource;
         this.fileService = new FileService();
     }
@@ -33,7 +33,7 @@ public class FabricTextureLoader implements TextureLoader {
     public Texture getResource(TextureIdentifier id) {
         try {
             if (id instanceof PaletteTemplateIdentifier) {
-                return RawTexture.createRawTexture(id, getResource.apply((new Identifier(id.getFileNameWithExtension()))).get().getInputStream());
+                return RawTexture.createRawTexture(id, getResource.apply((new Identifier(id.getFileNameWithExtension()))).getInputStream());
             } else {
                 return RawTexture.createRawTexture(id, fileService.getStream(id));
             }

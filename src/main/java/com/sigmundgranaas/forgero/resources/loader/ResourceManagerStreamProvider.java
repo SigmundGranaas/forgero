@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.resources.loader;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.resource.InputStreamProvider;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.util.Identifier;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,6 @@ public class ResourceManagerStreamProvider implements InputStreamProvider {
     @Override
     public Collection<InputStream> getStreams(ForgeroResourceType type) {
         return manager.findResources(getStartingPath(type), path -> true)
-                .values()
                 .stream()
                 .map(this::getInputStream)
                 .flatMap(Optional::stream)
@@ -29,9 +28,9 @@ public class ResourceManagerStreamProvider implements InputStreamProvider {
 
     }
 
-    private Optional<InputStream> getInputStream(Resource res) {
+    private Optional<InputStream> getInputStream(Identifier res) {
         try {
-            return Optional.ofNullable(res.getInputStream());
+            return Optional.ofNullable(manager.getResource(res).getInputStream());
         } catch (IOException e) {
             ForgeroInitializer.LOGGER.error("Error occurred while loading resource json ", e);
             return Optional.empty();
