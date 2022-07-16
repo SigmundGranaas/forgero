@@ -1,7 +1,8 @@
-### Changelog 0.9.4
+### Changelog 0.9.5
 
-# Forgero Beta release - THIS RELEASE WILL CRASH IF USED ON SAVES WITH EARLIER FORGERO VERSIONS
+# Forgero Beta release
 
+* Fixed damage upgrades affecting tool negatively instad of boosting stats.
 * Fixed Gem levels not being applied in ToolPart state
 * Fixed Pathcouli entries
 * Reworked NBT factory to use Optionals
