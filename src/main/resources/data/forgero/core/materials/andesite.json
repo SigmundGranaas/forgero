@@ -31,7 +31,7 @@
           "operation": "ADDITION",
           "value": 3.5,
           "condition": {
-            "target": "TOOL_PART_TYPE",
+            "target": "PART",
             "tag": [
               "HEAD"
             ]

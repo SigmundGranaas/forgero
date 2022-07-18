@@ -1,0 +1,8 @@
+{
+  "id": "DEFAULT",
+  "model": {
+    "primary": "knifehead_primary",
+    "secondary": "knifehead_secondary",
+    "gem": "knifehead_gem"
+  }
+}

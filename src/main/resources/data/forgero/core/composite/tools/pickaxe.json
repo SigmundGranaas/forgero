@@ -1,0 +1,41 @@
+{
+  "name": "pickaxe",
+  "resource_type": "composite",
+  "container": true,
+  "construct": {
+    "recipe":{
+      "included": false,
+      "recipe_type": "TOOL",
+      "ingredients": [
+        {
+          "type": "PART",
+          "category": ["UTILITY", "OFFENSIVE"],
+          "unique": true,
+          "condition": {
+            "target":"PART",
+            "tag": "pickaxe_head"
+          }
+        },
+        {
+          "type": "PART",
+          "category": ["UTILITY"],
+          "condition": {
+            "target":"PART",
+            "tag": "handle"
+          }
+        }
+      ],
+      "tier": 1
+    } ,
+    "slots": [
+      {
+        "slot_type": "PART",
+        "tier": 1,
+        "category": [ "UTILITY" ]
+      }
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

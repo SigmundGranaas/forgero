@@ -1,8 +1,8 @@
 {
-  "name": "stoneheart",
-  "item_identifier": "forgero:item/stoneheart_gem",
+  "name": "diamond",
+  "item_identifier": "forgero:item/diamond_gem",
   "palette": {
-    "name": "stone",
+    "name": "diamond_gem",
     "include": [
       "minecraft:textures/block/diamond_block.png"
     ],
@@ -11,15 +11,22 @@
   },
   "placement": [
     "HEAD",
+    "HANDLE",
     "BINDING"
   ],
   "properties": {
     "attributes": [
       {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 100.0
+      },
+      {
         "type": "MINING_SPEED",
         "order": "END",
         "operation": "MULTIPLICATION",
-        "value": 1.2,
+        "value": 1.5,
         "condition": {
           "target": "BLOCK",
           "tag": [
@@ -30,5 +37,8 @@
     ],
     "passive": [],
     "active": []
-  }
+  },
+  "type": "DURABILITY",
+  "effect": "ADDITIVE",
+  "amount": 100.0
 }

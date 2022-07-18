@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.resources.loader;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 
 public class ResourceLocations {
-    public static String SCHEMATIC_LOCATION = "data/forgero/schematic/";
-    public static String GEM_LOCATION = "data/forgero/gems/";
-    public static String MATERIAL_LOCATION = "data/forgero/materials/";
+    public static String SCHEMATIC_LOCATION = "data/forgero/core/schematic/";
+    public static String GEM_LOCATION = "data/forgero/core/upgrade/gem/";
+    public static String MATERIAL_LOCATION = "data/forgero/core/materials/";
     public static String TOOL_LOCATION = "data/forgero/tools/";
 
     public static String TOOL_PART_LOCATION = "data/forgero/toolparts/";

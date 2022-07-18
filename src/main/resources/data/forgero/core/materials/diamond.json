@@ -1,7 +1,6 @@
 {
   "name": "Diamond",
-  "rarity": 90,
-  "type": "MINERAL",
+  "material_type": "MINERAL",
   "properties": {
     "attributes": [
       {
