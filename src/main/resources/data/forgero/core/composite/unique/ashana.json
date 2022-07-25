@@ -1,0 +1,14 @@
+{
+  "name": "ashana",
+  "resource_type": "UNIQUE",
+  "type": "SWORD",
+  "container": false,
+  "slots": [],
+  "properties": {
+
+  },
+  "model": {
+    "type": "BASIC",
+    "id": "ashana"
+  }
+}

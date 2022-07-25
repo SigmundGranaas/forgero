@@ -14,9 +14,9 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.core.toolpart.ToolPartState;
 import com.sigmundgranaas.forgero.core.toolpart.handle.HandleState;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.core.toolpart.state.AbstractToolPartState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -25,6 +25,16 @@ import java.util.List;
 public interface ForgeroDefaults {
     static PrimaryMaterial getDefaultPrimaryMaterial() {
         return new PrimaryMaterial() {
+            @Override
+            public PrimaryMaterial getResource() {
+                return this;
+            }
+
+            @Override
+            public String getConstructIdentifier() {
+                return getStringIdentifier();
+            }
+
             @Override
             public @NotNull List<Property> getProperties(Target target) {
                 return Collections.emptyList();
@@ -43,11 +53,6 @@ public interface ForgeroDefaults {
             @Override
             public @NotNull String getResourceName() {
                 return "DEFAULT";
-            }
-
-            @Override
-            public MaterialPojo toDataResource() {
-                return new MaterialPojo();
             }
 
             @Override
@@ -90,10 +95,6 @@ public interface ForgeroDefaults {
                 return ForgeroResourceType.TOOL_PART;
             }
 
-            @Override
-            public ToolPartPojo toDataResource() {
-                return new ToolPartPojo();
-            }
 
             @Override
             public PrimaryMaterial getPrimaryMaterial() {
@@ -111,7 +112,7 @@ public interface ForgeroDefaults {
             }
 
             @Override
-            public ToolPartState getState() {
+            public AbstractToolPartState getState() {
                 return new HandleState(getDefaultPrimaryMaterial(), getDefaultSecondaryMaterial(), null, null);
             }
 

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GemItem extends Item implements ForgeroItem<GemItem, GemPojo>, PropertyContainer {
+public class GemItem extends Item implements ForgeroItem<GemItem>, PropertyContainer {
     private final Gem gem;
 
     public GemItem(Settings settings, Gem gem) {
@@ -60,11 +60,6 @@ public class GemItem extends Item implements ForgeroItem<GemItem, GemPojo>, Prop
     @Override
     public ForgeroResourceType getResourceType() {
         return ForgeroResourceType.GEM;
-    }
-
-    @Override
-    public GemPojo toDataResource() {
-        return getGem().toDataResource();
     }
 
     @Override

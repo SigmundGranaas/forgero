@@ -1,0 +1,60 @@
+{
+  "name": "knife",
+  "resource_type": "SCHEMATIC",
+  "type": "HEAD",
+  "tool_type": "SWORD",
+  "construct": {
+    "result": {
+      "type": "PART",
+      "id": "BLADE"
+    },
+    "requirements":{
+      "included": true,
+      "ingredients": [
+        {
+          "type": "MATERIAL",
+          "category": "OFFENSIVE",
+          "unique": true,
+          "count": 2
+        }
+      ],
+      "tier": 1
+    } ,
+    "slots": [
+      {
+        "type": "MATERIAL",
+        "tier": 1,
+        "category": [ "OFFENSIVE" ]
+      },
+      {
+        "type": "TRINKET",
+        "tier": 1,
+        "category": [
+          "OFFENSIVE", "UTILITY"
+        ]
+      }
+    ],
+    "model": {
+      "type": "TEMPLATE",
+      "id": "knife_head"
+    }
+  },
+  "properties": {
+    "passive:": [],
+    "active": [],
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "SUBTRACTION",
+        "value": 2.0
+      }
+    ]
+  }
+}

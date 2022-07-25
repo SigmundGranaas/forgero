@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class ResourceLoaderImpl<T extends ForgeroResource<R>, R extends ForgeroDataResource> implements ResourceLoader<T, R> {
+public class ResourceLoaderImpl<T extends ForgeroResource, R extends ForgeroDataResource> implements ResourceLoader<T, R> {
     protected final PojoLoader<R> pojoLoader;
     protected final Consumer<R> handler;
     protected final FactoryProvider<T, R> factoryProvider;

@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,5 +28,10 @@ public class SimpleSecondaryMaterialImpl extends AbstractForgeroMaterial impleme
         return Stream.of(super.getProperties(), properties)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<String> getValidPlacements() {
+        return Set.of("MATERIAL");
     }
 }

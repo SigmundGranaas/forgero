@@ -57,8 +57,4 @@ public abstract class AbstractForgeroMaterial implements ForgeroMaterial {
         return ingredient;
     }
 
-    @Override
-    public MaterialPojo toDataResource() {
-        return new MaterialPojo();
-    }
 }

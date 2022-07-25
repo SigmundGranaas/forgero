@@ -12,8 +12,8 @@ import java.util.Set;
  * Both target type and tag needs match for the attribute to be applied when presented with a target.
  * Attributes with no condition will ignore targets.
  */
-public interface Target {
-    static Target EMPTY = createEmptyTarget();
+public interface Target extends PropertyFilter {
+    Target EMPTY = createEmptyTarget();
 
     static Target createEmptyTarget() {
         return new Target() {

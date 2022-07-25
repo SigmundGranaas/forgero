@@ -3,10 +3,12 @@ package com.sigmundgranaas.forgero.core.material.material.implementation;
 import com.sigmundgranaas.forgero.core.data.factory.PropertyBuilder;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.material.material.AbstractForgeroMaterial;
+import com.sigmundgranaas.forgero.core.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.core.property.Property;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,4 +38,18 @@ public class SimpleDuoMaterial extends AbstractForgeroMaterial implements Simple
     }
 
 
+    @Override
+    public PrimaryMaterial getResource() {
+        return this;
+    }
+
+    @Override
+    public String getConstructIdentifier() {
+        return getResourceName();
+    }
+
+    @Override
+    public Set<String> getValidPlacements() {
+        return Set.of("MATERIAL");
+    }
 }

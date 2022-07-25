@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.registry.impl.ConcurrentForgeroRegistry;
 /**
  * The root registry for Forgero. All available resource will be stored within the child registries.
  * Defaults to a ConcurrentRegistry, which makes it Thread safe.
- * use loadResourcesIfEmpty
+ * use loadResourcesIfEmpty to prevent the registry from clearing out resources if it's already loaded.
  */
 public interface ForgeroRegistry {
     ForgeroRegistry INSTANCE = ConcurrentForgeroRegistry.getInstance();

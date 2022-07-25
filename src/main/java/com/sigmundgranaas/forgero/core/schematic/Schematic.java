@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.schematic;
 
-import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
+import com.sigmundgranaas.forgero.core.constructable.*;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -15,19 +15,17 @@ import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
-public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContainer {
+public class Schematic implements ForgeroResource, PropertyContainer, Construct<Schematic> {
     private final ForgeroToolPartTypes type;
     private final String name;
     private final List<Property> properties;
-
     private final int rarity;
-
     private final boolean unique;
     private final TextureModelContainer model;
-
+    private final SlotContainer slotContainer;
     private final int materialCount;
 
-    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, TextureModelContainer model, int materialCount, boolean unique) {
+    public Schematic(ForgeroToolPartTypes type, String name, List<Property> properties, TextureModelContainer model, int materialCount, boolean unique, SlotContainer slotContainer) {
         this.type = type;
         this.name = name;
         this.properties = properties;
@@ -35,6 +33,7 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         this.model = model;
         this.materialCount = materialCount;
         this.unique = unique;
+        this.slotContainer = slotContainer;
     }
 
     @Override
@@ -61,11 +60,6 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
         return ForgeroResourceType.SCHEMATIC;
     }
 
-    @Override
-    public SchematicPojo toDataResource() {
-        return null;
-    }
-
     public @NotNull List<Property> getProperties() {
         return properties;
     }
@@ -88,5 +82,25 @@ public class Schematic implements ForgeroResource<SchematicPojo>, PropertyContai
 
     public int getMaterialCount() {
         return materialCount;
+    }
+
+    public int getTotalUpgradeSlots() {
+        return slotContainer.slots().size();
+    }
+
+   public List<EmptyUpgradeSlot<Upgrade>> createUpgradeSlots(){
+        return slotContainer.slots().stream()
+                .map(SlotContainer.DataSlot::toEmptyUpgradeSlot)
+                .toList();
+    }
+
+    @Override
+    public Schematic getResource() {
+        return this;
+    }
+
+    @Override
+    public String getConstructIdentifier() {
+        return getStringIdentifier();
     }
 }

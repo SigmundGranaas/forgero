@@ -9,15 +9,16 @@ import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.core.toolpart.handle.Handle;
 import com.sigmundgranaas.forgero.core.toolpart.handle.HandleState;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static com.sigmundgranaas.forgero.Util.INIT_TEST_REGISTRY;
 import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.HANDLE_SCHEMATIC;
 
 public class HandleTest {
-    @BeforeEach
-    void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
+    @BeforeAll
+    static void initialiseResources() {
+        INIT_TEST_REGISTRY.run();
     }
 
     public static Handle createDefaultToolPartHandle() {

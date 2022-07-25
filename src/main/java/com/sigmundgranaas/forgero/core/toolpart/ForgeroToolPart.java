@@ -12,15 +12,16 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.schematic.Schematic;
+import com.sigmundgranaas.forgero.core.toolpart.state.AbstractToolPartState;
 
-public interface ForgeroToolPart extends ForgeroResource<ToolPartPojo>, PropertyContainer {
+public interface ForgeroToolPart extends ForgeroResource, PropertyContainer {
     PrimaryMaterial getPrimaryMaterial();
 
     SecondaryMaterial getSecondaryMaterial();
 
     Gem getGem();
 
-    ToolPartState getState();
+    AbstractToolPartState getState();
 
     String getToolPartName();
 

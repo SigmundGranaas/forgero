@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.registry.RegistryHandler;
 
 import java.util.Map;
 
-public abstract class ConcurrentItemResourceRegistry<T extends ForgeroItem<?, R>, R extends ForgeroDataResource> extends ConcurrentResourceRegistry<T> {
+public abstract class ConcurrentItemResourceRegistry<T extends ForgeroItem<?>, R extends ForgeroDataResource> extends ConcurrentResourceRegistry<T> {
     protected ConcurrentItemResourceRegistry(Map<String, T> resources) {
         super(resources);
     }

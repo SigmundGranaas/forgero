@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.core.toolpart.head.PickaxeHead;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.sigmundgranaas.forgero.Util.INIT_TEST_REGISTRY;
 import static com.sigmundgranaas.forgero.core.property.ToolPropertyTest.PICKAXEHEAD_SCHEMATIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ForgeroToolPartFactoryImplTest {
     @BeforeEach
     void initialiseResources() {
-        ForgeroRegistry.INSTANCE.loadResourcesIfEmpty(new TestResourceLoader());
+        INIT_TEST_REGISTRY.run();
     }
 
     @Test

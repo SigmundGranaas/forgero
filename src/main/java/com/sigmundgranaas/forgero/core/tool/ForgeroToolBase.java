@@ -59,10 +59,6 @@ public class ForgeroToolBase implements ForgeroTool {
         return getToolIdentifierString();
     }
 
-    @Override
-    public ToolPojo toDataResource() {
-        return new ToolPojo();
-    }
 
     @Override
     public @NotNull

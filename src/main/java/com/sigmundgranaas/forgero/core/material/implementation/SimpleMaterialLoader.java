@@ -27,7 +27,7 @@ public record SimpleMaterialLoader(List<String> materials) implements MaterialLo
     public Map<String, ForgeroMaterial> getMaterials() {
         if (materialMap.isEmpty()) {
             List<MaterialPojo> jsonMaterials = materials.stream()
-                    .map(material -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/materials/%s.json", material), MaterialPojo.class))
+                    .map(material -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/core/materials/%s.json", material), MaterialPojo.class))
                     .filter(Optional::isPresent)
                     .map(Optional::get).toList();
             jsonMaterials.forEach(pojo -> {

@@ -68,10 +68,6 @@ public class ForgeroGem implements Gem {
         return getStringIdentifier().split(ELEMENT_SEPARATOR)[0];
     }
 
-    @Override
-    public GemPojo toDataResource() {
-        return null;
-    }
 
     @Override
     public @NotNull List<Property> getProperties() {
@@ -84,5 +80,10 @@ public class ForgeroGem implements Gem {
                 }).toList();
         var otherAttributes = propertyList.stream().filter(property -> !(property instanceof Attribute)).toList();
         return Stream.of(leveledAttribute, otherAttributes).flatMap(List::stream).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<String> getValidPlacements() {
+       return Set.of("TRINKET");
     }
 }

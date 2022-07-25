@@ -20,7 +20,7 @@ public record FileGemLoader(List<String> gems) implements GemLoader {
     @Override
     public List<Gem> loadGems() {
         List<GemPojo> gemPojos = gems.stream()
-                .map(gem -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/gems/%s.json", gem), GemPojo.class))
+                .map(gem -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/core/upgrade/gem/%s.json", gem), GemPojo.class))
                 .filter(Optional::isPresent)
                 .map(Optional::get).toList();
         gemPojos.forEach(pojo -> {

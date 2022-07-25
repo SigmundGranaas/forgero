@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public interface TextureModelContainer {
+
     @NotNull
     TextureModel getModel(String id);
 

@@ -5,6 +5,6 @@ import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
 import java.util.Collection;
 
 @FunctionalInterface
-public interface FactoryProvider<T extends ForgeroResource<R>, R extends ForgeroDataResource> {
+public interface FactoryProvider<T extends ForgeroResource, R extends ForgeroDataResource> {
     ForgeroResourceFactory<T, R> createFactory(Collection<R> pojos);
 }

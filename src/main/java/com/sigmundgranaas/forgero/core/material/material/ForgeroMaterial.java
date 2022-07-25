@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public interface ForgeroMaterial extends ForgeroResource<MaterialPojo>, PropertyContainer {
+public interface ForgeroMaterial extends ForgeroResource, PropertyContainer {
     int getRarity();
 
     @NotNull

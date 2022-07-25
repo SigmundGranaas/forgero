@@ -6,10 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public interface ForgeroResourceFactory<R extends ForgeroResource<T>, T extends ForgeroDataResource> {
+public interface ForgeroResourceFactory<R extends ForgeroResource, T extends ForgeroDataResource> {
     @NotNull
     Optional<R> createResource(T data);
 
+    @NotNull
     Optional<R> buildResource(T pojo);
 
     @NotNull

@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.core.trinket.Trinket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface Gem extends ForgeroResource<GemPojo>, PropertyContainer {
+public interface Gem extends ForgeroResource, Trinket {
     @Override
     default ForgeroResourceType getResourceType() {
         return ForgeroResourceType.GEM;

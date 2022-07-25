@@ -13,7 +13,7 @@ import java.util.*;
 
 public class SchematicLoader {
     public List<Schematic> loadSchematics() {
-        var location = "/data/forgero/schematic/";
+        var location = "/data/forgero/core/schematic/";
         URI uri = null;
         try {
             var etc = ForgeroInitializer.class.getResource(location);
@@ -39,7 +39,7 @@ public class SchematicLoader {
 
         try {
             assert dirPath != null;
-            var pojos = Files.list(dirPath).map(path -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/schematic/%s", path.getFileName()), SchematicPojo.class)).flatMap(Optional::stream).toList();
+            var pojos = Files.list(dirPath).map(path -> JsonPOJOLoader.loadPOJO(String.format("/data/forgero/core/schematic/%s", path.getFileName()), SchematicPojo.class)).flatMap(Optional::stream).toList();
             var factory = new SchematicFactory(pojos, Set.of("forgero", "minecraft"));
             return pojos.stream().map(factory::buildResource).flatMap(Optional::stream).toList();
 

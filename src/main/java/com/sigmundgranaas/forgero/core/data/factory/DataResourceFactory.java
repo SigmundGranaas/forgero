@@ -25,7 +25,7 @@ import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_D
  * @param <T> The type of the POJO object
  * @param <R> The resulting resource type
  */
-public abstract class DataResourceFactory<T extends ForgeroDataResource, R extends ForgeroResource<T>> implements ForgeroResourceFactory<R, T> {
+public abstract class DataResourceFactory<T extends ForgeroDataResource, R extends ForgeroResource> implements ForgeroResourceFactory<R, T> {
     Map<String, T> pojos;
     Set<String> availableNameSpaces;
 
@@ -104,7 +104,7 @@ public abstract class DataResourceFactory<T extends ForgeroDataResource, R exten
      * @param pojo input node
      * @return Optional Resource built from the pojo.
      */
-    public Optional<R> buildResource(T pojo) {
+    public @NotNull Optional<R> buildResource(T pojo) {
         if (pojo.abstractResource) {
             return Optional.empty();
         }

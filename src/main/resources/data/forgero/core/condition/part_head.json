@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "target": "TOOL_PART_TYPE",
+    "tag": [
+      "HEAD"
+    ]
+  }
+}

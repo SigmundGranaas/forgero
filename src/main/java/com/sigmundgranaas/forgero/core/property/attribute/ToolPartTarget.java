@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
+import com.sigmundgranaas.forgero.core.toolpart.ForgeroToolPartTypes;
 
 import java.util.Set;
 
@@ -18,5 +19,9 @@ public record ToolPartTarget(Set<String> targets) implements Target {
     @Override
     public Set<String> getTags() {
         return targets;
+    }
+
+    public static ToolPartTarget of(ForgeroToolPartTypes type) {
+        return new ToolPartTarget(Set.of(type.toString()));
     }
 }

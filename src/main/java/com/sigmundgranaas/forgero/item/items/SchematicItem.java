@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SchematicItem extends Item implements ForgeroItem<SchematicItem, SchematicPojo>, PropertyContainer {
+public class SchematicItem extends Item implements ForgeroItem<SchematicItem>, PropertyContainer {
     private final Schematic schematic;
 
     public SchematicItem(Settings settings, Schematic pattern) {
@@ -67,11 +67,6 @@ public class SchematicItem extends Item implements ForgeroItem<SchematicItem, Sc
     @Override
     public ForgeroResourceType getResourceType() {
         return ForgeroResourceType.SCHEMATIC;
-    }
-
-    @Override
-    public SchematicPojo toDataResource() {
-        return getSchematic().toDataResource();
     }
 
     @Override
