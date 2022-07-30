@@ -83,7 +83,7 @@ dependencies {
     //modImplementation "curse.maven:cardinal-components-318449:3669773"
     //modImplementation "curse.maven:polymorph-397434:3793108"
 
-    modImplementation 'com.ptsmods:devlogin:2.1'
+    //modImplementation 'com.ptsmods:devlogin:2.1'
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
