@@ -10,7 +10,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Lapis gem, level 8",
-      "item": "forgero:lapis-gem{Gem:'8_lapis_gem', CustomModelData:8}",
+      "item": "forgero:lapis-gem{Gem:'8-lapis-gem', CustomModelData:8}",
       "text": "A lapiz gem upgraded to level 8"
     },
     {

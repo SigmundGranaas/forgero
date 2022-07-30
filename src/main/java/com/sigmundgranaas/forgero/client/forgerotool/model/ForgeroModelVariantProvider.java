@@ -10,12 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.sigmundgranaas.forgero.core.identifier.texture.toolpart.ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR;
 
-@SuppressWarnings("ClassCanBeRecord")
 public class ForgeroModelVariantProvider implements ModelVariantProvider {
-    private final UnbakedModelCollection collection;
+    private final ToolModelVariant toolModelVariant;
+    private final ToolPartModelVariant toolPartModelVariant;
 
     public ForgeroModelVariantProvider(UnbakedModelCollection collection) {
-        this.collection = collection;
+        this.toolModelVariant = new ToolModelVariant(collection);
+        this.toolPartModelVariant = new ToolPartModelVariant(collection);
     }
 
     @Override
@@ -25,9 +26,9 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
             String[] elements = modelId.getPath().split(DEFAULT_SPLIT_OPERATOR);
 
             if (elements.length > 1 && ForgeroRegistry.TOOL.resourceExists(modelId.getPath())) {
-                return new ToolModelVariant(collection);
+                return toolModelVariant;
             } else if (elements.length == 2 && ForgeroRegistry.TOOL_PART.resourceExists(modelId.getPath())) {
-                return new ToolPartModelVariant(collection);
+                return toolPartModelVariant;
             }
 
         }

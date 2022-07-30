@@ -29,7 +29,7 @@ public class FabricToForgeroGemAdapterImpl implements FabricToForgeroGemAdapter 
     public Optional<Gem> getGem(ItemStack itemStack) {
         if (isGem(itemStack)) {
             if (itemStack.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
-                return Optional.of(NBTFactory.INSTANCE.createGemFromNbt(itemStack.getOrCreateNbt()));
+                return NBTFactory.INSTANCE.createGemFromNbt(itemStack.getOrCreateNbt());
             } else {
                 return Optional.of(((GemItem) itemStack.getItem()).getGem());
             }
@@ -40,7 +40,7 @@ public class FabricToForgeroGemAdapterImpl implements FabricToForgeroGemAdapter 
     @Override
     public Optional<Gem> getGem(NbtCompound compound) {
         if (isGem(compound)) {
-            return Optional.of(NBTFactory.INSTANCE.createGemFromNbt(compound));
+            return NBTFactory.INSTANCE.createGemFromNbt(compound);
         }
         return Optional.empty();
     }
