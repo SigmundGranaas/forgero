@@ -18,7 +18,7 @@ public class JsonPOJOLoader {
      */
     public static <T> Optional<T> loadPOJO(String filePath, Class<T> type) {
         InputStream materialsStream = getInputStream(filePath);
-        if (materialsStream != null && filePath.contains(".json")) {
+        if (materialsStream != null) {
             try {
                 JsonReader materialsJson = new JsonReader(new InputStreamReader(materialsStream));
                 T gson = new Gson().fromJson(materialsJson, type);
