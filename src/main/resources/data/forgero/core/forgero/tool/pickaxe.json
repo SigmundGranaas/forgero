@@ -1,0 +1,18 @@
+{
+  "type": "PICKAXE",
+  "construct": {
+    "recipe": {
+      "ingredients": []
+    },
+    "upgrade": {
+      "slots": [
+        {
+          "upgrade_type": "SMITHING"
+        }
+      ]
+    }
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

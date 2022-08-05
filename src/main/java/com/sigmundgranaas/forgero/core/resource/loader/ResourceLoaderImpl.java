@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.resource.loader;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ResourceLoader;
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.resource.FactoryProvider;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;

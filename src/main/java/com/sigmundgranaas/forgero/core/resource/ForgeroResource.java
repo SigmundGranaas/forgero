@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.resource;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 
 /**
  * The base Interface for all resource objects used by forgero

@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.data.factory;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.SchemaVersion;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
@@ -13,8 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES_LIST;
-import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES_SET;
+import static com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource.DEFAULT_DEPENDENCIES_LIST;
+import static com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource.DEFAULT_DEPENDENCIES_SET;
 
 /**
  * Abstract class for managing the creation of Forgero content from data files.

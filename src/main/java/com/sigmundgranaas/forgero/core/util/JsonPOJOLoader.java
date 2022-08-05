@@ -24,7 +24,8 @@ public class JsonPOJOLoader {
                 T gson = new Gson().fromJson(materialsJson, type);
                 return Optional.of(gson);
             } catch (JsonSyntaxException e) {
-                ForgeroInitializer.LOGGER.error("Unable to parse: {}", filePath);
+                ForgeroInitializer.LOGGER.error("Unable to parse: {}, check if the file is valid", filePath);
+                ForgeroInitializer.LOGGER.error(e);
                 return Optional.empty();
             }
         } else {

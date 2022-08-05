@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
-import com.sigmundgranaas.forgero.core.data.ResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.ResourceType;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.material.material.ForgeroMaterial;
 import com.sigmundgranaas.forgero.core.material.material.implementation.SimpleDuoMaterial;

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResource;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;

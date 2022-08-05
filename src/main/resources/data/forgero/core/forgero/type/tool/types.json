@@ -1,0 +1,18 @@
+{
+  "parent": "HOLDABLE",
+  "name": "TOOL",
+  "types": [
+    {
+      "name": "PICKAXE"
+    },
+    {
+      "name": "SHOVEL"
+    },
+    {
+      "name": "AXE"
+    },
+    {
+      "name": "HOE"
+    }
+  ]
+}

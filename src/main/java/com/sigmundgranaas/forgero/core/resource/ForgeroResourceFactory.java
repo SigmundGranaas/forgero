@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.resource;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

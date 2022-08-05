@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.resources.loader;
 
 import com.sigmundgranaas.forgero.core.ForgeroResourceLoader;
 import com.sigmundgranaas.forgero.core.ResourceLoader;
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.factory.*;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.*;
 import com.sigmundgranaas.forgero.core.gem.Gem;

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.resource;
 
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 
 import java.util.Collection;
 

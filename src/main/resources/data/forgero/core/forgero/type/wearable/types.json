@@ -1,0 +1,13 @@
+{
+  "name": "WEARABLE",
+  "children": [
+    {
+      "name": "ARMOR"
+    },
+    {
+      "name": "CLOTHING"
+    },
+    {
+    }
+  ]
+}

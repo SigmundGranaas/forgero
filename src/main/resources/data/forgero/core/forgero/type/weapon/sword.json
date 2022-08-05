@@ -1,0 +1,18 @@
+{
+  "parent_type": "HOLDABLE",
+  "type": "SWORD",
+  "sub_types": [
+    {
+      "name": "SABER"
+    },
+    {
+      "name": "KNIFE"
+    },
+    {
+      "name": "DAGGER"
+    },
+    {
+      "name": "SHORT_SWORD"
+    }
+  ]
+}
