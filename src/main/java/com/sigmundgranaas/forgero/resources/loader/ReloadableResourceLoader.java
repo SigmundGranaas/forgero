@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.resources.loader;
 
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.core.resource.InputStreamProvider;
 import com.sigmundgranaas.forgero.core.resource.PojoLoader;

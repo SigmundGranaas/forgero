@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.data.v1;
 
-import com.sigmundgranaas.forgero.core.data.ResourceType;
 import com.sigmundgranaas.forgero.core.data.factory.SchematicFactory;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelContainerPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelPojo;
@@ -12,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES_LIST;
-import static com.sigmundgranaas.forgero.core.data.ForgeroDataResource.DEFAULT_DEPENDENCIES_SET;
+import static com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource.DEFAULT_DEPENDENCIES_LIST;
+import static com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource.DEFAULT_DEPENDENCIES_SET;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

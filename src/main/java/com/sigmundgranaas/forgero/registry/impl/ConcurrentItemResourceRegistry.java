@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.registry.impl;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.registry.impl.ConcurrentResourceRegistry;
 import com.sigmundgranaas.forgero.item.ForgeroItem;
 import com.sigmundgranaas.forgero.registry.RegistryHandler;

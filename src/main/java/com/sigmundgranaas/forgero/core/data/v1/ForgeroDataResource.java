@@ -1,6 +1,7 @@
-package com.sigmundgranaas.forgero.core.data;
+package com.sigmundgranaas.forgero.core.data.v1;
 
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.core.data.SchemaVersion;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 
 import javax.annotation.Nullable;

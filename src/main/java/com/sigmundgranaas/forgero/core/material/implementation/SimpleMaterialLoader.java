@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.material.implementation;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.core.data.ForgeroDataResource;
+import com.sigmundgranaas.forgero.core.data.v1.ForgeroDataResource;
 import com.sigmundgranaas.forgero.core.data.factory.MaterialFactory;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.MaterialPojo;
 import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;

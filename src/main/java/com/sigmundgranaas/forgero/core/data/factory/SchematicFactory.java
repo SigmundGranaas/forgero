@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.data.factory;
 
-import com.sigmundgranaas.forgero.core.data.ResourceType;
+import com.sigmundgranaas.forgero.core.data.v1.ResourceType;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.ModelContainerPojo;
 import com.sigmundgranaas.forgero.core.data.v1.pojo.SchematicPojo;
 import com.sigmundgranaas.forgero.core.property.Property;
