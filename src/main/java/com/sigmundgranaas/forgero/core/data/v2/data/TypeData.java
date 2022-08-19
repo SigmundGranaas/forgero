@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.data.v2;
+package com.sigmundgranaas.forgero.core.data.v2.data;
 
 import java.util.Optional;
 
