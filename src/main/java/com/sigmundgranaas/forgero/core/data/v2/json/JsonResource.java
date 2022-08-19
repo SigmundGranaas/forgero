@@ -23,6 +23,12 @@ public class JsonResource {
     public List<String> dependencies = DEFAULT_DEPENDENCIES_LIST;
     @Nullable
     public JsonConstruct construct;
+    @Nullable
     public JsonModel model;
-
+    @Nullable
+    @SerializedName(value = "static", alternate = "json_static")
+    public JsonStatic jsonStatic;
+    @Nullable
+    @SerializedName(value = "host")
+    public JsonHost jsonHost;
 }
