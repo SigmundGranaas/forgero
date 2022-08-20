@@ -1,6 +1,14 @@
-### Changelog 0.9.5
+### Changelog 0.9.6
 
-# Forgero Beta release
+# Forgero Beta release 0.9.x
+
+-- 0.9.6 --
+
+* Fixed compatability with some resource packs
+* Updated ender gem and diamond gem to fix stats
+* Fixed crash when used with combatedit
+
+-- 0.9 --
 
 * Fixed damage upgrades affecting tool negatively instad of boosting stats.
 * Fixed Gem levels not being applied in ToolPart state

@@ -28,7 +28,8 @@ public class ForgeroClient implements ClientModInitializer {
     private void initializeItemModels() {
         new ForgeroTextures().createTextureIdentifiers();
         registerToolPartTextures();
-        ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE));
+        var modelProvider = new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE);
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
     }
 
     private void registerToolPartTextures() {
