@@ -1,8 +1,12 @@
 package com.sigmundgranaas.forgero.core.type;
 
+import com.sigmundgranaas.forgero.core.data.v2.JsonPoolLoader;
 import com.sigmundgranaas.forgero.core.data.v2.data.TypeData;
+import com.sigmundgranaas.forgero.core.data.v2.factory.TypeFactory;
+import com.sigmundgranaas.forgero.core.resourceloader.JsonPathLoader;
 import org.junit.jupiter.api.Test;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,5 +38,17 @@ class TypeTreeTest {
 
         assertTrue(testNodeOak.isPresent());
         assertTrue(testNodeOak.get().getParent().isPresent());
+    }
+
+    @Test
+    void loadTypeTreeFromJson() throws URISyntaxException {
+        JsonPoolLoader loader = new JsonPoolLoader(JsonPathLoader.getResourcesInFolder());
+        var tree = new TypeTree();
+        new TypeFactory().convertJsonToData(loader.loadPojos()).forEach(tree::addNode);
+        tree.resolve();
+
+        var testNodeSchematic = tree.find("LONG_BOW");
+        assertTrue(testNodeSchematic.isPresent());
+        assertTrue(testNodeSchematic.get().getParent().isPresent());
     }
 }
