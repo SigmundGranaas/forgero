@@ -24,7 +24,7 @@ public class BakedToolModel implements FabricBakedModel {
 
     @Override
     public boolean isVanillaAdapter() {
-        return false;
+        return true;
     }
 
     @Override

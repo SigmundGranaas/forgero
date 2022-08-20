@@ -24,7 +24,6 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
         if (modelId.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && !modelId.getPath().contains("transparent_base")) {
             String[] elements = modelId.getPath().split(DEFAULT_SPLIT_OPERATOR);
-
             if (elements.length > 1 && ForgeroRegistry.TOOL.resourceExists(modelId.getPath())) {
                 return toolModelVariant;
             } else if (elements.length == 2 && ForgeroRegistry.TOOL_PART.resourceExists(modelId.getPath())) {
@@ -34,4 +33,5 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
         }
         return null;
     }
+
 }

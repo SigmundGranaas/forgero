@@ -40,7 +40,9 @@ public class MiningToolItemMixin {
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
 
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_DAMAGE).stream().findFirst().get().getId(), "Tool modifier", this.attackDamage, EntityAttributeModifier.Operation.ADDITION));
-            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst().get().getId(), "Tool modifier", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+            if (attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findAny().isPresent()) {
+                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst().get().getId(), "Tool modifier", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+            }
             this.attributeModifiers = builder.build();
         }
     }

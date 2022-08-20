@@ -22,6 +22,7 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
     private final ToolModelAssembler toolAssembler;
     private final ToolPartModelAssembler toolPartModelAssembler;
     private Map<String, FabricBakedModel> bakedToolPartModels;
+    private ModelLoader loader;
 
 
     private ModelCollectionImpl(FabricToForgeroToolAdapter toolAdapter, FabricToForgeroToolPartAdapter toolPartAdapter) {
@@ -76,10 +77,12 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
         return toolPartModelAssembler.assembleToolPartModel(toolPart);
     }
 
+
     @Override
     public BakedModelCollection bakeModels(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter) {
-        if (bakedToolPartModels.isEmpty()) {
-            bakedToolPartModels = ToolPartModelFactory.createFactory(loader, textureGetter).createToolPartModels();
+        if (this.loader == null || this.loader != loader) {
+            this.loader = loader;
+            bakedToolPartModels = ToolPartModelFactory.createFactory(this.loader, textureGetter).createToolPartModels();
         }
         return this;
     }
