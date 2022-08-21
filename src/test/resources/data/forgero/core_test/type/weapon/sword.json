@@ -1,6 +1,6 @@
 {
   "parent": "HOLDABLE",
-  "type": "SWORD",
+  "name": "SWORD",
   "children": [
     {
       "name": "SABER"

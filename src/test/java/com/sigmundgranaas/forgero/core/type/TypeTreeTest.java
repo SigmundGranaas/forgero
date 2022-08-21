@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TypeTreeTest {
@@ -49,6 +50,6 @@ class TypeTreeTest {
 
         var testNodeSchematic = tree.find("LONG_BOW");
         assertTrue(testNodeSchematic.isPresent());
-        assertTrue(testNodeSchematic.get().getParent().isPresent());
+        assertEquals("BOW", testNodeSchematic.get().getParent().get());
     }
 }
