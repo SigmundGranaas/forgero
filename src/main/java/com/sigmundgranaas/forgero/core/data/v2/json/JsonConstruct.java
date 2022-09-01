@@ -7,7 +7,7 @@ import java.util.List;
 
 public class JsonConstruct {
     @NotNull
-    public String target = "THIS";
+    public String target = "this";
     @Nullable
     public List<JsonSlot> slots;
     @Nullable

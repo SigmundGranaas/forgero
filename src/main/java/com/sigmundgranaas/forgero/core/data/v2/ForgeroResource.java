@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.data.v2;
 
+import com.sigmundgranaas.forgero.core.data.v2.data.*;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 
 import java.util.Collection;

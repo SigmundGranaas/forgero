@@ -49,6 +49,7 @@ public class EmptyBakedModelCollection implements BakedModelCollection {
         return getEmptyModel(toolPart.getToolPartIdentifier());
     }
 
+
     private FabricBakedModel getEmptyModel(String identifier) {
         ForgeroInitializer.LOGGER.debug("Attempting to retrieve {} model from an Empty collection, return empty model", identifier);
         return new EmptyBakedModel();

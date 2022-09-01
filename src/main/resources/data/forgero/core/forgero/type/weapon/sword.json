@@ -1,7 +1,7 @@
 {
-  "parent_type": "HOLDABLE",
+  "parent": "HOLDABLE",
   "type": "SWORD",
-  "sub_types": [
+  "children": [
     {
       "name": "SABER"
     },
