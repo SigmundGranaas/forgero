@@ -24,6 +24,11 @@ public interface PropertyContainer extends Comparable<Object> {
     }
 
     @NotNull
+    default PropertyStream properties() {
+        return Property.stream(getProperties());
+    }
+
+    @NotNull
     default List<Property> getRootProperties() {
         return Collections.emptyList();
     }

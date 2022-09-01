@@ -3,9 +3,33 @@ package com.sigmundgranaas.forgero.core.util;
 import java.util.Optional;
 
 public interface Type extends Matchable {
+    static Type of(String name) {
+        var type = new SimpleType(name.toUpperCase(), Optional.empty(), new TypeMatcher());
+        if (type.test(SCHEMATIC)) {
+            return new SimpleType(name.toUpperCase(), Optional.empty(), new SchematicMatcher());
+        }
+        return type;
+    }
+
+    static Type of(String name, Type parent) {
+        var type = new SimpleType(name.toUpperCase(), Optional.of(parent), new TypeMatcher());
+        if (type.test(SCHEMATIC)) {
+            return new SimpleType(name.toUpperCase(), Optional.of(parent), new SchematicMatcher());
+        }
+        return type;
+    }
+
     String typeName();
 
-    boolean test(Matchable match);
+    default Optional<Type> parent() {
+        return Optional.empty();
+    }
 
-    Optional<Type> parent();
+    Type UNDEFINED = Type.of("UNDEFINED");
+    Type MATERIAL = Type.of("MATERIAL");
+    Type SCHEMATIC = Type.of("SCHEMATIC");
+    Type TOOL_PART_HEAD = Type.of("TOOL_PART_HEAD");
+    Type HANDLE = Type.of("HANDLE");
+    Type TOOL = Type.of("TOOL");
+
 }
