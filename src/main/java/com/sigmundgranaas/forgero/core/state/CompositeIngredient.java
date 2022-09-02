@@ -4,15 +4,9 @@ import com.sigmundgranaas.forgero.core.util.MatchContext;
 import com.sigmundgranaas.forgero.core.util.Matchable;
 import com.sigmundgranaas.forgero.core.util.Type;
 
-import java.util.List;
-
 public class CompositeIngredient extends Composite implements Ingredient {
-    protected CompositeIngredient(List<Ingredient> ingredientList, String name, Type type) {
-        super(ingredientList, name, type);
-    }
-
     public CompositeIngredient(Composite composite) {
-        super(composite.ingredients(), composite.name(), composite.type());
+        super(composite.ingredients(), composite.upgrades(), composite.name(), composite.type());
     }
 
     @Override

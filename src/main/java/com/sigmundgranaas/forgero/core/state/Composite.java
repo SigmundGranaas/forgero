@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.util.MatchContext;
@@ -11,14 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class Composite implements State {
+public class Composite implements Upgradeable {
     private final List<Ingredient> ingredientList;
+    private final ImmutableList<Upgrade> upgrades;
     private final String name;
     private final Type type;
 
-    protected Composite(List<Ingredient> ingredientList, String name, Type type) {
+    protected Composite(List<Ingredient> ingredientList, ImmutableList<Upgrade> upgrades, String name, Type type) {
         this.name = name;
         this.ingredientList = ingredientList;
+        this.upgrades = upgrades;
         this.type = type;
     }
 
@@ -73,18 +76,51 @@ public class Composite implements State {
         return ingredientList;
     }
 
+    @Override
+    public Upgradeable upgrade(Upgrade upgrade) {
+        var upgrades = ImmutableList.<Upgrade>builder().addAll(upgrades()).add(upgrade).build();
+        return builder()
+                .add(ingredients())
+                .add(upgrades)
+                .type(type())
+                .name(name())
+                .build();
+    }
+
+    @Override
+    public ImmutableList<Upgrade> upgrades() {
+        return upgrades;
+    }
+
     public static class CompositeBuilder {
         private final List<Ingredient> ingredientList;
+        private final List<Upgrade> upgrades;
         private final NameCompositor compositor = new NameCompositor();
         private Type type = Type.UNDEFINED;
         private String name;
 
         public CompositeBuilder() {
             this.ingredientList = new ArrayList<>();
+            this.upgrades = new ArrayList<>();
         }
 
         public CompositeBuilder add(Ingredient ingredient) {
             ingredientList.add(ingredient);
+            return this;
+        }
+
+        public CompositeBuilder add(List<Ingredient> ingredients) {
+            ingredientList.addAll(ingredients);
+            return this;
+        }
+
+        public CompositeBuilder add(Upgrade upgrade) {
+            upgrades.add(upgrade);
+            return this;
+        }
+
+        public CompositeBuilder add(ImmutableList<Upgrade> upgrades) {
+            this.upgrades.addAll(upgrades);
             return this;
         }
 
@@ -102,7 +138,7 @@ public class Composite implements State {
             if (name == null) {
                 this.name = compositor.compositeName(ingredientList);
             }
-            return new Composite(ingredientList, name, type);
+            return new Composite(ingredientList, ImmutableList.<Upgrade>builder().addAll(upgrades).build(), name, type);
         }
     }
 }

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 public class NbtToStateTest {
-    private static final CompositeParser parser = new CompositeParser((String id) -> Optional.of(Materials.IRON), (String id) -> Optional.of(ToolParts.PICKAXE_HEAD));
+    private static final CompositeParser parser = new CompositeParser((String id) -> Optional.of(Materials.IRON), (String id) -> Optional.of(ToolParts.PICKAXE_HEAD), (String id) -> Optional.empty());
 
     @Test
     void parseInvalidNbt() {

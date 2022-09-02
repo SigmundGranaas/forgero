@@ -42,6 +42,11 @@ public class SimpleIngredient implements Ingredient {
     }
 
     @Override
+    public String nameSpace() {
+        return "forgero";
+    }
+
+    @Override
     public boolean test(Matchable match) {
         return type.test(match, MatchContext.INGREDIENT);
     }

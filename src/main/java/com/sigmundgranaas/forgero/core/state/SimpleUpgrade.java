@@ -1,4 +1,4 @@
 package com.sigmundgranaas.forgero.core.state;
 
-public class Recipe {
+public class SimpleUpgrade {
 }

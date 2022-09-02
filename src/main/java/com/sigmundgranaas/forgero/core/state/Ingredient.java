@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface Ingredient extends PropertyContainer, Matchable {
+public interface Ingredient extends PropertyContainer, Matchable, Identifiable {
     static Ingredient of(Composite composite) {
         return new CompositeIngredient(composite);
     }
@@ -23,7 +23,4 @@ public interface Ingredient extends PropertyContainer, Matchable {
 
     @NotNull
     Type type();
-
-    @NotNull
-    String name();
 }
