@@ -33,6 +33,11 @@ public class Composite implements State {
     }
 
     @Override
+    public String nameSpace() {
+        return "forgero";
+    }
+
+    @Override
     @NotNull
     public Type type() {
         return type;

@@ -13,8 +13,9 @@ import com.sigmundgranaas.forgero.core.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.core.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.core.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
+import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.mixins.ItemUUIDMixin;
-import com.sigmundgranaas.forgero.toolhandler.*;
+import com.sigmundgranaas.forgero.toolhandler.BlockBreakingEfficiencyTarget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -35,11 +36,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 import java.util.UUID;
 
-public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed, PropertyContainer, ForgeroItem<Item, ToolPojo> {
+public interface ForgeroToolItem extends DynamicAttributeItem, ForgeroItem<Item, ToolPojo> {
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
 
     FabricToForgeroToolAdapter adapter = FabricToForgeroToolAdapter.createAdapter();
+
+    @Override
+    default PropertyContainer dynamicProperties(ItemStack stack) {
+        return adapter.getTool(stack).orElse(getTool());
+    }
+
+    @Override
+    default PropertyContainer defaultProperties() {
+        return getTool();
+    }
+
 
     @Override
     default boolean isEffectiveOn(BlockState state) {
@@ -141,7 +153,7 @@ public interface ForgeroToolItem extends DynamicAttributeTool, DynamicDurability
 
     @Override
     default int compareTo(@NotNull Object o) {
-        int containerResult = PropertyContainer.super.compareTo(o);
+        int containerResult = ForgeroItem.super.compareTo(o);
         if (containerResult != 0) {
             return containerResult;
         } else {

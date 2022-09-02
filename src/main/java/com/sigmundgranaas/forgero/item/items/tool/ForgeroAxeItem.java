@@ -100,6 +100,4 @@ public class ForgeroAxeItem extends AxeItem implements ForgeroToolItem {
     protected String getOrCreateTranslationKey() {
         return String.format("item.%s.%s%s%s", ForgeroInitializer.MOD_NAMESPACE, tool.getToolHead().getPrimaryMaterial().getResourceName(), ELEMENT_SEPARATOR, getToolType().toString().toLowerCase(Locale.ROOT));
     }
-
-
 }
