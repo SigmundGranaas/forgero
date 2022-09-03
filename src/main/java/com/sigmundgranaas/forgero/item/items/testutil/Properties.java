@@ -28,6 +28,6 @@ public class Properties {
     public static Attribute DURABILITY_1000 = new AttributeBuilder(DURABILITY)
             .applyOrder(BASE)
             .applyOperation(ADDITION)
-            .applyValue(10)
+            .applyValue(1000)
             .build();
 }

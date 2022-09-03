@@ -10,9 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class Composite implements Upgradeable {
+public class Composite implements Upgradeable<Composite> {
     private final List<Ingredient> ingredientList;
     private final ImmutableList<Upgrade> upgrades;
     private final String name;
@@ -48,7 +49,8 @@ public class Composite implements Upgradeable {
 
     @Override
     public @NotNull List<Property> getProperties() {
-        return ingredientList.stream()
+        return Stream.of(ingredientList, upgrades)
+                .flatMap(List::stream)
                 .map(PropertyContainer::getProperties)
                 .flatMap(List::stream)
                 .toList();
@@ -77,7 +79,7 @@ public class Composite implements Upgradeable {
     }
 
     @Override
-    public Upgradeable upgrade(Upgrade upgrade) {
+    public Composite upgrade(Upgrade upgrade) {
         var upgrades = ImmutableList.<Upgrade>builder().addAll(upgrades()).add(upgrade).build();
         return builder()
                 .add(ingredients())

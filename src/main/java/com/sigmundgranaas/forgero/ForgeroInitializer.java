@@ -29,7 +29,6 @@ import org.apache.logging.log4j.Logger;
 public class ForgeroInitializer implements ModInitializer {
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
-    public static DynamicSwordItem oakSword = new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), Tools.IRON_PICKAXE);
 
     @Override
     public void onInitialize() {
@@ -42,6 +41,7 @@ public class ForgeroInitializer implements ModInitializer {
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
         new DynamicResourceGenerator().generateResources();
+        DynamicSwordItem oakSword = new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), Tools.IRON_PICKAXE);
         Registry.register(Registry.ITEM, new Identifier("minecraft", oakSword.name()), oakSword);
     }
 
