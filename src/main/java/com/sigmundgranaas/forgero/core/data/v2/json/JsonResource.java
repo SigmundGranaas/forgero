@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.data.v2.json;
 
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.data.SchemaVersion;
+import com.sigmundgranaas.forgero.core.data.v1.pojo.PropertyPojo;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -49,6 +50,10 @@ public class JsonResource {
     @Nullable
     public JsonContext context;
 
+    @Nullable
+    @SerializedName(value = "properties", alternate = "property")
+    public PropertyPojo property;
+
     public JsonResource applyDefaults() {
         var res = this.copy();
         if (res.context == null || res.context.defaults == null) {
@@ -68,6 +73,7 @@ public class JsonResource {
             res.resourceType = defaultResource.resourceType;
         }
 
+
         return res;
     }
 
@@ -82,6 +88,8 @@ public class JsonResource {
         res.model = model;
         res.jsonStatic = jsonStatic;
         res.jsonHost = jsonHost;
+        res.construct = construct;
+        res.property = property;
         return res;
     }
 }

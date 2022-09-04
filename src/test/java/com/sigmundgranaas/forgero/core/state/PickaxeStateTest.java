@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgero.core.testutil.Tools.IRON_PICKAXE;
-import static com.sigmundgranaas.forgero.core.testutil.Upgrades.OAK_BINDING;
+import static com.sigmundgranaas.forgero.core.testutil.Upgrades.BINDING;
 
 public class PickaxeStateTest {
     @Test
@@ -48,12 +48,12 @@ public class PickaxeStateTest {
     @Test
     void testUpgradePickaxeIsNewInstance() {
         var pick = IRON_PICKAXE;
-        Assertions.assertNotEquals(pick, pick.upgrade(OAK_BINDING));
+        Assertions.assertNotEquals(pick, pick.upgrade(BINDING));
     }
 
     @Test
     void testUpgradesApply() {
-        var pick = IRON_PICKAXE.upgrade(OAK_BINDING);
+        var pick = IRON_PICKAXE.upgrade(BINDING);
         Assertions.assertEquals(1000, pick.stream().applyAttribute(AttributeType.DURABILITY));
     }
 }

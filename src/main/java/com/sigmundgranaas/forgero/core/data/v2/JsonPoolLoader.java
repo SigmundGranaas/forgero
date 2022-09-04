@@ -34,6 +34,7 @@ public class JsonPoolLoader {
                 .map(JsonPOJOLoader::loadPOJOWithContext)
                 .flatMap(Optional::stream)
                 .toList();
+
         var defaults = resources.stream()
                 .filter(resource -> Objects.nonNull(resource.context))
                 .filter(resource -> resource.context.fileName.equals("default.json"))

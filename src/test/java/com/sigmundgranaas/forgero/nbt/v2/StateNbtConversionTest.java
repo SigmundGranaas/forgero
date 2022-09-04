@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.core.testutil.Tools.IRON_PICKAXE;
-import static com.sigmundgranaas.forgero.core.testutil.Upgrades.OAK_BINDING;
+import static com.sigmundgranaas.forgero.core.testutil.Upgrades.BINDING;
 
 public class StateNbtConversionTest {
     private static final CompoundEncoder<Composite> encoder = new CompositeEncoder();
@@ -36,7 +36,7 @@ public class StateNbtConversionTest {
 
     @Test
     void encodeCompoundParseCompoundWithUpgrades() {
-        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(OAK_BINDING));
+        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(BINDING));
         var pickaxe = parser.parse(compound).orElseThrow();
         Assertions.assertEquals(1, pickaxe.upgrades().size());
         Assertions.assertEquals("oak-binding", pickaxe.upgrades().get(0).name());
@@ -44,9 +44,9 @@ public class StateNbtConversionTest {
 
     @Test
     void encodeCompoundParseCompoundWithProperties() {
-        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(OAK_BINDING));
+        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(BINDING));
         var pickaxe = parser.parse(compound).orElseThrow();
-        Assertions.assertEquals(12, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
-        Assertions.assertEquals(1000, pickaxe.stream().applyAttribute(AttributeType.DURABILITY));
+        Assertions.assertEquals(13, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
+        Assertions.assertEquals(2000, pickaxe.stream().applyAttribute(AttributeType.DURABILITY));
     }
 }

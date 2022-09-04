@@ -34,7 +34,7 @@ public class StateToNbtTest {
 
     @Test
     void encodeCompoundWithUpgrades() {
-        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(Upgrades.OAK_BINDING));
+        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(Upgrades.BINDING));
         NbtList list = compound.getList(UPGRADES_IDENTIFIER, NbtElement.COMPOUND_TYPE);
         Assertions.assertEquals(1, list.size());
         Assertions.assertEquals(((NbtCompound) list.get(0)).getString(NAME_IDENTIFIER), "oak-binding");

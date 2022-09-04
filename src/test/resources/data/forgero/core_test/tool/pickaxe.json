@@ -1,0 +1,30 @@
+{
+  "type": "PICKAXE",
+  "name": "pickaxe",
+  "construct": {
+    "recipe": {
+      "ingredients": [
+        {
+          "type": "PICKAXE_HEAD",
+          "unique": true
+        },
+        {
+          "type": "HANDLE"
+        }
+      ]
+    },
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "type": "BINDING",
+        "tier": 1
+      }
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

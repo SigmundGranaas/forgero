@@ -1,15 +1,17 @@
 package com.sigmundgranaas.forgero.core.type;
 
-import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.v2.data.TypeData;
+import com.sigmundgranaas.forgero.core.util.Type;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TypeTree {
-    private final List<TypeNode> rootNodes;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
+public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
+    private final List<MutableTypeNode> rootNodes;
     private List<TypeData> missingNodes;
 
     public TypeTree() {
@@ -17,12 +19,12 @@ public class TypeTree {
         this.missingNodes = new ArrayList<>();
     }
 
-    public Optional<TypeNode> addNode(TypeData nodeData) {
+    public Optional<MutableTypeNode> addNode(TypeData nodeData) {
         if (find(nodeData.name()).isEmpty()) {
             if (nodeData.parent().isPresent()) {
                 return addNodeWithParent(nodeData.name(), nodeData.parent().get());
             } else {
-                TypeNode node = new ParentLessTypeNode(ImmutableList.of(), nodeData.name());
+                MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), nodeData.name(), null);
                 rootNodes.add(node);
                 return Optional.of(node);
             }
@@ -38,10 +40,10 @@ public class TypeTree {
         this.resolve();
     }
 
-    private Optional<TypeNode> addNodeWithParent(String name, String parent) {
+    private Optional<MutableTypeNode> addNodeWithParent(String name, String parent) {
         var parentOpt = find(parent);
         if (parentOpt.isPresent()) {
-            TypeNode node = new ParentLessTypeNode(ImmutableList.<TypeNode>builder().build(), name);
+            MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), name, null);
             return Optional.of(parentOpt.get().addChild(node));
         } else {
             missingNodes.add(new TypeData(name, Optional.of(parent)));
@@ -49,9 +51,9 @@ public class TypeTree {
         return Optional.empty();
     }
 
-    public void resolve() {
+    public ResolvedTypeTree resolve() {
         if (this.missingNodes.isEmpty()) {
-            return;
+            return new ResolvedTree(resolveNodes());
         }
         int missing = missingNodes.size();
         var addedNodes = missingNodes.stream().map(this::addNode).flatMap(Optional::stream).toList();
@@ -59,20 +61,29 @@ public class TypeTree {
         if (missing > addedNodes.size()) {
             resolve();
         }
+        return new ResolvedTree(resolveNodes());
     }
 
-    private void removeMissingNodes(List<TypeNode> nodes) {
-        this.missingNodes = new ArrayList<>(missingNodes.stream().filter(missingNode -> nodes.stream().noneMatch(node -> node.getName().equals(missingNode.name()))).toList());
+    public List<TypeNode> resolveNodes() {
+        return rootNodes.stream().map(MutableTypeNode::resolve).toList();
     }
 
-    Optional<TypeNode> find(String name) {
-        return rootNodes.stream().map(typeNode -> find(name, typeNode)).flatMap(Optional::stream).findAny();
+    private void removeMissingNodes(List<MutableTypeNode> nodes) {
+        this.missingNodes = new ArrayList<>(missingNodes.stream().filter(missingNode -> nodes.stream().noneMatch(node -> node.name().equals(missingNode.name()))).toList());
     }
 
-    Optional<TypeNode> find(String name, TypeNode node) {
-        if (node.getName().equals(name)) {
+    public Optional<MutableTypeNode> find(String name) {
+        return rootNodes.stream().map(typeNode -> find(name, typeNode).map(MutableTypeNode.class::cast)).flatMap(Optional::stream).findAny();
+    }
+
+    public Optional<MutableTypeNode> find(String name, MutableTypeNode node) {
+        if (node.name().equals(name)) {
             return Optional.of(node);
         }
-        return node.getChildren().stream().map(newNode -> find(name, newNode)).flatMap(Optional::stream).findAny();
+        return node.children().stream().map(newNode -> find(name, newNode)).flatMap(Optional::stream).findAny();
+    }
+
+    public Type type(String type) {
+        return find(type).map(MutableTypeNode::type).orElse(Type.of(EMPTY_IDENTIFIER));
     }
 }

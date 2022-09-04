@@ -64,6 +64,6 @@ public class NbtToStateTest {
     @Test
     void assertPropertiesParsed() {
         var pickaxe = parser.parse(PICKAXE_NBT).orElseThrow();
-        Assertions.assertEquals(12, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
+        Assertions.assertEquals(22, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
     }
 }

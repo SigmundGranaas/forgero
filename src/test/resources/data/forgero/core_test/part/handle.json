@@ -1,0 +1,7 @@
+{
+  "type": "HANDLE",
+  "name": "handle",
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

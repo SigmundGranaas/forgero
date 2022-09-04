@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.core.type;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.data.v2.JsonPoolLoader;
+import com.sigmundgranaas.forgero.core.data.v2.ResourcePool;
 import com.sigmundgranaas.forgero.core.data.v2.data.TypeData;
 import com.sigmundgranaas.forgero.core.data.v2.factory.TypeFactory;
+import com.sigmundgranaas.forgero.core.data.v2.json.JsonResource;
 import com.sigmundgranaas.forgero.core.resourceloader.JsonPathLoader;
 import org.junit.jupiter.api.Test;
 
@@ -35,10 +38,10 @@ class TypeTreeTest {
         var testNodeSchematic = tree.find("SABER_SCHEMATIC");
         var testNodeOak = tree.find("OAK");
         assertTrue(testNodeSchematic.isPresent());
-        assertTrue(testNodeSchematic.get().getParent().isPresent());
+        assertTrue(testNodeSchematic.get().parent().isPresent());
 
         assertTrue(testNodeOak.isPresent());
-        assertTrue(testNodeOak.get().getParent().isPresent());
+        assertTrue(testNodeOak.get().parent().isPresent());
     }
 
     @Test
@@ -50,6 +53,19 @@ class TypeTreeTest {
 
         var testNodeSchematic = tree.find("LONG_BOW");
         assertTrue(testNodeSchematic.isPresent());
-        assertEquals("BOW", testNodeSchematic.get().getParent().get());
+        assertEquals("BOW", testNodeSchematic.get().parent().orElseThrow().name());
+    }
+
+    @Test
+    void loadedTypeTree() throws URISyntaxException {
+        JsonPoolLoader loader = new JsonPoolLoader(JsonPathLoader.getResourcesInFolder());
+        ResourcePool pool = new ResourcePool(ImmutableList.<JsonResource>builder().addAll(loader.loadPojos()).build());
+        var tree = pool.createLoadedTypeTree();
+        var pick = tree.find("PICKAXE").orElseThrow();
+        var tool = tree.find("TOOL").orElseThrow();
+        var holdAble = tree.find("HOLDABLE").orElseThrow();
+        //Assertions.assertTrue(pick.resources().stream().anyMatch(element -> element.equals("pickaxe")));
+        //Assertions.assertTrue(tool.resources().stream().anyMatch(element -> element.equals("pickaxe")));
+        //Assertions.assertTrue(holdAble.resources().stream().anyMatch(element -> element.equals("pickaxe")));
     }
 }
