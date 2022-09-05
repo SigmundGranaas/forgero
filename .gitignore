@@ -112,8 +112,8 @@ gradle-app.setting
 **/build/
 
 # Common working directory
-run/
+fabric/run/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-/logs/
+/fabric/logs/

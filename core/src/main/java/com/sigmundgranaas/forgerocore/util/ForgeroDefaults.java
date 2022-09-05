@@ -1,0 +1,144 @@
+package com.sigmundgranaas.forgerocore.util;
+
+import com.sigmundgranaas.forgerocore.data.v1.pojo.IngredientPojo;
+import com.sigmundgranaas.forgerocore.data.v1.pojo.MaterialPojo;
+import com.sigmundgranaas.forgerocore.data.v1.pojo.ToolPartPojo;
+import com.sigmundgranaas.forgerocore.gem.EmptyGem;
+import com.sigmundgranaas.forgerocore.gem.Gem;
+import com.sigmundgranaas.forgerocore.material.material.EmptySecondaryMaterial;
+import com.sigmundgranaas.forgerocore.material.material.MaterialType;
+import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgerocore.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgerocore.property.Property;
+import com.sigmundgranaas.forgerocore.property.Target;
+import com.sigmundgranaas.forgerocore.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgerocore.schematic.Schematic;
+import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgerocore.toolpart.ToolPartState;
+import com.sigmundgranaas.forgerocore.toolpart.handle.HandleState;
+import com.sigmundgranaas.forgerocore.toolpart.handle.ToolPartHandle;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
+
+public interface ForgeroDefaults {
+    static PrimaryMaterial getDefaultPrimaryMaterial() {
+        return new PrimaryMaterial() {
+            @Override
+            public @NotNull List<Property> getProperties(Target target) {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public int getRarity() {
+                return 0;
+            }
+
+            @Override
+            public String getStringIdentifier() {
+                return "DEFAULT";
+            }
+
+            @Override
+            public @NotNull String getResourceName() {
+                return "DEFAULT";
+            }
+
+            @Override
+            public MaterialPojo toDataResource() {
+                return new MaterialPojo();
+            }
+
+            @Override
+            public MaterialType getType() {
+                return MaterialType.WOOD;
+            }
+
+            @Override
+            public @NotNull List<Property> getProperties() {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public IngredientPojo getIngredient() {
+                var pojo = new IngredientPojo();
+                pojo.item = "minecraft:stick";
+                return pojo;
+            }
+        };
+    }
+
+    static SecondaryMaterial getDefaultSecondaryMaterial() {
+        return new EmptySecondaryMaterial();
+    }
+
+    static ToolPartHandle getDefaultHandle() {
+        return new ToolPartHandle() {
+            @Override
+            public String getStringIdentifier() {
+                return this.getResourceName();
+            }
+
+            @Override
+            public String getResourceName() {
+                return "default";
+            }
+
+            @Override
+            public ForgeroResourceType getResourceType() {
+                return ForgeroResourceType.TOOL_PART;
+            }
+
+            @Override
+            public ToolPartPojo toDataResource() {
+                return new ToolPartPojo();
+            }
+
+            @Override
+            public PrimaryMaterial getPrimaryMaterial() {
+                return getDefaultPrimaryMaterial();
+            }
+
+            @Override
+            public SecondaryMaterial getSecondaryMaterial() {
+                return getDefaultSecondaryMaterial();
+            }
+
+            @Override
+            public Gem getGem() {
+                return getDefaultGem();
+            }
+
+            @Override
+            public ToolPartState getState() {
+                return new HandleState(getDefaultPrimaryMaterial(), getDefaultSecondaryMaterial(), null, null);
+            }
+
+            @Override
+            public String getToolPartName() {
+                return "default-handle";
+            }
+
+            @Override
+            public String getToolPartIdentifier() {
+                return "default-handle";
+            }
+
+            @Override
+            public ForgeroToolPartTypes getToolPartType() {
+                return ForgeroToolPartTypes.HANDLE;
+            }
+
+            @Override
+            public Schematic getSchematic() {
+                return null;
+            }
+        };
+    }
+
+    static Gem getDefaultGem() {
+        return EmptyGem.createEmptyGem();
+    }
+
+}

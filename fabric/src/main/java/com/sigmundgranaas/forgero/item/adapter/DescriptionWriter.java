@@ -1,0 +1,215 @@
+package com.sigmundgranaas.forgero.item.adapter;
+
+import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgerocore.gem.Gem;
+import com.sigmundgranaas.forgerocore.gem.GemDescriptionWriter;
+import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgerocore.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgerocore.property.AttributeType;
+import com.sigmundgranaas.forgerocore.property.Property;
+import com.sigmundgranaas.forgerocore.property.PropertyStream;
+import com.sigmundgranaas.forgerocore.property.Target;
+import com.sigmundgranaas.forgerocore.property.active.ActiveProperty;
+import com.sigmundgranaas.forgero.PatternBreaking;
+import com.sigmundgranaas.forgerocore.property.active.VeinBreaking;
+import com.sigmundgranaas.forgerocore.schematic.Schematic;
+import com.sigmundgranaas.forgerocore.tool.ToolDescriptionWriter;
+import com.sigmundgranaas.forgerocore.toolpart.ToolPartDescriptionWriter;
+import com.sigmundgranaas.forgerocore.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgerocore.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgerocore.toolpart.head.ToolPartHead;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Rarity;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+public record DescriptionWriter(
+        List<Text> tooltip) implements ToolDescriptionWriter, ToolPartDescriptionWriter, GemDescriptionWriter {
+
+
+    public static Rarity getRarityFromInt(int rarity) {
+        if (rarity >= 100) {
+            return Rarity.EPIC;
+        } else if (rarity >= 80) {
+            return Rarity.RARE;
+        } else if (rarity >= 30) {
+            return Rarity.UNCOMMON;
+        }
+        return Rarity.COMMON;
+    }
+
+    @Override
+    public void addSecondaryMaterial(SecondaryMaterial material) {
+        Rarity rarity = getRarityFromInt((int) Property.stream(material.getSecondaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
+        MutableText mutableText = Text.translatable("  Secondary: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
+        tooltip.add(mutableText);
+    }
+
+    @Override
+    public void addGem(Gem gem) {
+        Rarity rarity = getRarityFromGemLevel(gem.getLevel());
+        MutableText mutableText = Text.literal("  Gem: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s, level %s", gem.getResourceName(), gem.getLevel())).formatted(rarity.formatting));
+        tooltip.add(mutableText);
+    }
+
+    private Rarity getRarityFromGemLevel(int level) {
+        int index = level / 2;
+        if (level > 4) {
+            index = 4;
+        } else if (index <= 0) {
+            index = 1;
+        }
+        return Rarity.values()[index - 1];
+    }
+
+    @Override
+    public void addPrimaryMaterial(PrimaryMaterial material) {
+        Rarity rarity = getRarityFromInt((int) Property.stream(material.getPrimaryProperties()).applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
+        MutableText mutableText = Text.literal("  Primary: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.translatable(String.format("item.%s.%s", ForgeroInitializer.MOD_NAMESPACE, material.getResourceName().toLowerCase(Locale.ROOT))).formatted(rarity.formatting));
+        tooltip.add(mutableText);
+    }
+
+    @Override
+    public void addToolPartProperties(PropertyStream stream) {
+        List<Property> properties = stream.collect(Collectors.toList());
+
+        addActiveProperty(Property.stream(properties).getActiveProperties().toList());
+
+        tooltip.add(Text.translatable("Attributes: "));
+        addAllAttribute(properties);
+    }
+
+    private void addToolAttributes(List<Property> attributes) {
+        addAttributeInt(attributes, AttributeType.DURABILITY, "Durability");
+        addAttribute(attributes, AttributeType.MINING_SPEED, "Mining Speed");
+        addAttribute(attributes, AttributeType.MINING_LEVEL, "Mining Level");
+    }
+
+    private void addAllAttribute(List<Property> attributes) {
+        addAttribute(attributes, AttributeType.ATTACK_DAMAGE, "Attack Damage");
+        addAttribute(attributes, AttributeType.ATTACK_SPEED, "Attack Speed");
+        addAttributeInt(attributes, AttributeType.DURABILITY, "Durability");
+        addAttribute(attributes, AttributeType.MINING_SPEED, "Mining Speed");
+        addAttributeInt(attributes, AttributeType.MINING_LEVEL, "Mining Level");
+    }
+
+    private void addAttributeInt(List<Property> attributes, AttributeType type, String title) {
+        int result = (int) Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
+        if (result > 0) {
+            MutableText miningLevel = Text.literal(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
+            tooltip.add(miningLevel);
+        }
+    }
+
+    private void addAttribute(List<Property> attributes, AttributeType type, String title) {
+        float result = Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
+        if (result != 0f) {
+            MutableText miningLevel = Text.literal(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
+            tooltip.add(miningLevel);
+        }
+    }
+
+    @Override
+    public void addHead(ToolPartHead head) {
+        tooltip.add(Text.literal("Head: "));
+        head.createToolPartDescription(this);
+    }
+
+    @Override
+    public void addHandle(ToolPartHandle handle) {
+        tooltip.add(Text.literal("Handle: "));
+        handle.createToolPartDescription(this);
+    }
+
+    @Override
+    public void addBinding(ToolPartBinding binding) {
+        tooltip.add(Text.literal("Binding: "));
+        binding.createToolPartDescription(this);
+    }
+
+    @Override
+    public void addToolProperties(PropertyStream stream) {
+        List<Property> properties = stream.collect(Collectors.toList());
+
+        addActiveProperty(Property.stream(properties).getActiveProperties().toList());
+        tooltip.add(Text.literal("Attributes: "));
+
+        addToolAttributes(properties);
+    }
+
+
+    public void addSwordProperties(PropertyStream stream) {
+        List<Property> properties = stream.collect(Collectors.toList());
+
+        addActiveProperty(Property.stream(properties).getActiveProperties().toList());
+        tooltip.add(Text.literal("Attributes: "));
+
+        addAttributeInt(properties.stream().toList(), AttributeType.DURABILITY, "Durability");
+    }
+
+    private void addActiveProperty(List<ActiveProperty> activeProperties) {
+        if (activeProperties.size() > 0) {
+            tooltip.add(Text.literal("Properties: "));
+        }
+        activeProperties.forEach(this::createPropertyDescription);
+
+    }
+
+    private void createPropertyDescription(ActiveProperty property) {
+        switch (property.getActiveType()) {
+            case VEIN_MINING_PATTERN -> createVeinMiningDescription((VeinBreaking) property);
+            case BLOCK_BREAKING_PATTERN -> createPatternMiningDescription((PatternBreaking) property);
+        }
+    }
+
+    private void createVeinMiningDescription(VeinBreaking property) {
+        MutableText mutableText = Text.literal(" Vein mining").formatted(Formatting.GRAY);
+        tooltip.add(mutableText);
+        MutableText blocks = Text.literal("  Blocks: ").formatted(Formatting.GRAY);
+        blocks.append(Text.literal(property.description()).formatted(Formatting.WHITE));
+        tooltip.add(blocks);
+        MutableText depth = Text.literal("  Depth: ").formatted(Formatting.GRAY);
+        depth.append(Text.literal(String.valueOf(property.depth())).formatted(Formatting.WHITE));
+        tooltip.add(depth);
+
+    }
+
+    private void createPatternMiningDescription(PatternBreaking property) {
+        MutableText mutableText = Text.literal(" Pattern Mining").formatted(Formatting.GRAY);
+        tooltip.add(mutableText);
+
+        for (String line : property.getPattern()) {
+            MutableText patternText = Text.literal(String.format("   %s", line)).formatted(Formatting.WHITE);
+            tooltip.add(patternText);
+        }
+    }
+
+
+    @Override
+    public void createGemDescription(Gem gem) {
+        Rarity rarity = getRarityFromGemLevel(gem.getLevel());
+        MutableText mutableText = Text.literal(String.format("item.%s.gem", ForgeroInitializer.MOD_NAMESPACE)).append(": ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s, level%s", gem.getResourceName(), gem.getLevel())).formatted(rarity.formatting));
+        tooltip.add(mutableText);
+
+        addActiveProperty(Property.stream(gem.getProperties()).getActiveProperties().toList());
+
+        addAllAttribute(gem.getProperties());
+    }
+
+    public void writeSchematicDescription(Schematic pattern) {
+        MutableText mutableText = Text.literal("Material count: ").formatted(Formatting.GRAY);
+        mutableText.append(Text.literal(String.format("%s", pattern.getMaterialCount())));
+
+        tooltip.add(mutableText);
+    }
+}
