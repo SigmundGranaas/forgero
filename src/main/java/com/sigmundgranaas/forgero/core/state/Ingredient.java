@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.core.state;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.Matchable;
-import com.sigmundgranaas.forgero.core.util.Type;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

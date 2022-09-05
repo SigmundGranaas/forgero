@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.testutil;
 
-import com.sigmundgranaas.forgero.core.util.Type;
+import com.sigmundgranaas.forgero.core.type.Type;
 
 public class Types {
     public static final Type TOOL = Type.of("TOOL");

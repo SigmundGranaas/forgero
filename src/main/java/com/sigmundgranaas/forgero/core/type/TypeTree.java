@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.type;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.core.data.v2.data.TypeData;
-import com.sigmundgranaas.forgero.core.util.Type;
 
 import java.util.ArrayList;
 import java.util.List;

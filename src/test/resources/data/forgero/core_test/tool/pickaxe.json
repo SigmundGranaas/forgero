@@ -3,6 +3,7 @@
   "name": "pickaxe",
   "construct": {
     "recipe": {
+      "type": "PICKAXE",
       "ingredients": [
         {
           "type": "PICKAXE_HEAD",

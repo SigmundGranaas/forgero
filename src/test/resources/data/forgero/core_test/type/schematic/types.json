@@ -12,6 +12,12 @@
     },
     {
       "name": "HOE_HEAD_SCHEMATIC"
+    },
+    {
+      "name": "HANDLE_SCHEMATIC"
+    },
+    {
+      "name": "BINDING_SCHEMATIC"
     }
   ]
 }

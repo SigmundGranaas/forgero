@@ -1,4 +1,8 @@
-package com.sigmundgranaas.forgero.core.util;
+package com.sigmundgranaas.forgero.core.type;
+
+import com.sigmundgranaas.forgero.core.util.MatchContext;
+import com.sigmundgranaas.forgero.core.util.Matchable;
+import com.sigmundgranaas.forgero.core.util.TypeMatcher;
 
 import java.util.Optional;
 

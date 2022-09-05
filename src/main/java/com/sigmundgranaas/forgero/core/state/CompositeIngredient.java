@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.MatchContext;
 import com.sigmundgranaas.forgero.core.util.Matchable;
-import com.sigmundgranaas.forgero.core.util.Type;
 
 public class CompositeIngredient extends Composite implements Ingredient {
     public CompositeIngredient(Composite composite) {

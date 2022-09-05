@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.MatchContext;
 import com.sigmundgranaas.forgero.core.util.Matchable;
-import com.sigmundgranaas.forgero.core.util.Type;
 import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;

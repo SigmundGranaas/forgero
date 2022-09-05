@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgero.core.util.Type.*;
+import static com.sigmundgranaas.forgero.core.type.Type.*;
 
 public class NameCompositor {
     public String compositeName(List<Ingredient> ingredients) {

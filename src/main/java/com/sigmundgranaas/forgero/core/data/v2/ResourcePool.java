@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.core.data.v2.json.JsonIngredient;
 import com.sigmundgranaas.forgero.core.data.v2.json.JsonResource;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Ingredient;
-import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.ResolvedTypeTree;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 
@@ -44,14 +43,16 @@ public class ResourcePool {
                 .collect(Collectors.groupingBy((entry -> entry.type), Collectors.mapping(resource -> resource, Collectors.toList())));
 
 
-        resourceMap.forEach((entry, values) -> tree.find(entry).ifPresent(node -> values.stream().map(this::resourceToIngredient).flatMap(Optional::stream).forEach(node::addResource)));
+        resourceMap.forEach((entry, values) -> tree.find(entry).ifPresent(node -> values.stream()
+                .map(this::resourceToIngredient)
+                .flatMap(Optional::stream)
+                .forEach(ingredient -> node.addResource(ingredient, Ingredient.class))));
 
         resources.stream().filter(resource -> resource.construct != null).forEach(unresolvedConstructs::add);
 
-        int lastResolved = 0;
-        int currentResolved = unresolvedConstructs.size();
-        while (unresolvedConstructs.size() > 0) {
-            lastResolved = unresolvedConstructs.size();
+        boolean remainingResources = true;
+        while (remainingResources) {
+            int resolvedResources = 0;
             var temporaryResolved = new ArrayList<JsonResource>();
             unresolvedConstructs.forEach(resource -> {
                 assert resource.construct != null;
@@ -65,7 +66,7 @@ public class ResourcePool {
                         resourceToIngredient(resource).ifPresent(resourceIngredients::add);
                     } else {
                         resourceIngredients.addAll(tree.find(ingredient.type)
-                                .map(MutableTypeNode::ingredients)
+                                .map(node -> node.getResources(Ingredient.class))
                                 .orElse(ImmutableList.<Ingredient>builder().build()));
 
                     }
@@ -78,17 +79,6 @@ public class ResourcePool {
                 }
             });
 
-            temporaryResolved.stream()
-                    .map(this::constructToComposite)
-                    .flatMap(List::stream)
-                    .forEach(composites::add);
-
-            temporaryResolved.stream()
-                    .map(this::constructToComposite)
-                    .flatMap(List::stream)
-                    .map(Ingredient::of)
-                    .forEach(ingredient -> tree.find(ingredient.type().typeName()).ifPresent(node -> node.addResource(ingredient)));
-
             for (JsonResource resource : temporaryResolved) {
                 unresolvedConstructs.remove(resource);
                 resolvedConstructs.add(resource);
@@ -98,9 +88,12 @@ public class ResourcePool {
                     .map(this::constructToComposite)
                     .flatMap(List::stream)
                     .map(Ingredient::of)
-                    .forEach(comp -> tree.find(comp.type().typeName()).ifPresent(node -> node.addResource(comp)));
+                    .forEach(comp -> tree.find(comp.type().typeName()).ifPresent(node -> node.addResource(comp, Ingredient.class)));
 
-            currentResolved = unresolvedConstructs.size();
+            resolvedResources = temporaryResolved.size();
+            if (resolvedResources == 0) {
+                remainingResources = false;
+            }
         }
 
         resolvedConstructs.stream()
@@ -129,7 +122,7 @@ public class ResourcePool {
             } else if (ingredient.type != null) {
                 if (ingredient.unique) {
                     var ingredients = tree.find(ingredient.type)
-                            .map(MutableTypeNode::ingredients)
+                            .map(node -> node.getResources(Ingredient.class))
                             .map(List::stream)
                             .map(Stream::toList)
                             .orElse(Collections.emptyList());
@@ -137,7 +130,7 @@ public class ResourcePool {
                 } else {
                     var ingredients =
                             tree.find(ingredient.type)
-                                    .map(MutableTypeNode::ingredients)
+                                    .map(node -> node.getResources(Ingredient.class))
                                     .map(element -> element.stream().findFirst().map(List::of).orElse(Collections.emptyList()))
                                     .orElse(Collections.emptyList());
 

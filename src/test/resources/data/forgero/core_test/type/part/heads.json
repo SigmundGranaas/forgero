@@ -1,6 +1,6 @@
 {
   "parent": "TOOL_PART",
-  "name": "PART_HEAD",
+  "name": "TOOL_PART_HEAD",
   "children": [
     {
       "name": "PICKAXE_HEAD"
