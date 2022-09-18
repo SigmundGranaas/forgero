@@ -2,13 +2,13 @@ package com.sigmundgranaas.forgero.resources;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.material.material.MaterialType;
-import com.sigmundgranaas.forgerocore.schematic.HeadSchematic;
-import com.sigmundgranaas.forgerocore.texture.CachedToolPartTextureService;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.material.material.MaterialType;
+import com.sigmundgranaas.forgero.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.texture.CachedToolPartTextureService;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.resources.external.Patchouli;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
@@ -23,7 +23,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Arrays;
 
-import static com.sigmundgranaas.forgerocore.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 
 
 public class DynamicResourceGenerator {

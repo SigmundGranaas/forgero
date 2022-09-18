@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.resources.loader;
 
-import com.sigmundgranaas.forgerocore.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.resource.ForgeroResourceType;
 
 public class ResourceLocations {
     public static String SCHEMATIC_LOCATION = "data/forgero/schematic/";

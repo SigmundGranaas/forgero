@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero;
 
-import com.sigmundgranaas.forgerocore.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.property.active.BreakingDirection;
 import net.minecraft.block.BlockState;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;

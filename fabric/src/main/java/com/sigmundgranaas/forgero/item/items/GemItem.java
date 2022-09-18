@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.item.items;
 
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.GemPojo;
-import com.sigmundgranaas.forgerocore.gem.Gem;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.property.PropertyContainer;
-import com.sigmundgranaas.forgerocore.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.GemPojo;
+import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.resource.ForgeroResourceType;
 import com.sigmundgranaas.forgero.item.ForgeroItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;

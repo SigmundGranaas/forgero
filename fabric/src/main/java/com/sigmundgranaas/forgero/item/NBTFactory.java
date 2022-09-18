@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgerocore.data.v1.pojo.PropertyPojo;
-import com.sigmundgranaas.forgerocore.gem.Gem;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.schematic.Schematic;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.schematic.Schematic;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.implementation.NBTFactoryImpl;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.NotNull;

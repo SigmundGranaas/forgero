@@ -1,9 +1,8 @@
 package com.sigmundgranaas.forgero.resources;
 
-import com.sigmundgranaas.forgerocore.identifier.texture.TextureIdentifier;
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.PaletteIdentifier;
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.TemplateTextureIdentifier;
-import com.sigmundgranaas.forgero.resources.FabricModFileLoader;
+import com.sigmundgranaas.forgero.identifier.texture.TextureIdentifier;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.PaletteIdentifier;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.TemplateTextureIdentifier;
 
 import java.io.InputStream;
 

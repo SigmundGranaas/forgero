@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
-import com.sigmundgranaas.forgerocore.texture.ForgeroToolPartTextureRegistry;
+import com.sigmundgranaas.forgero.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.resources.ForgeroTextures;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;

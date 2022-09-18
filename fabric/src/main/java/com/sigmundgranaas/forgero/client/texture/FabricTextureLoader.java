@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.client.texture;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.identifier.texture.TextureIdentifier;
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.PaletteIdentifier;
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.PaletteTemplateIdentifier;
+import com.sigmundgranaas.forgero.identifier.texture.TextureIdentifier;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.PaletteIdentifier;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.PaletteTemplateIdentifier;
 import com.sigmundgranaas.forgero.resources.FileService;
-import com.sigmundgranaas.forgerocore.texture.RawTexture;
-import com.sigmundgranaas.forgerocore.texture.Texture;
-import com.sigmundgranaas.forgerocore.texture.TextureLoader;
+import com.sigmundgranaas.forgero.texture.RawTexture;
+import com.sigmundgranaas.forgero.texture.Texture;
+import com.sigmundgranaas.forgero.texture.TextureLoader;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 

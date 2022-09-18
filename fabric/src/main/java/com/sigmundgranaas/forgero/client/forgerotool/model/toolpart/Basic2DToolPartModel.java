@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;

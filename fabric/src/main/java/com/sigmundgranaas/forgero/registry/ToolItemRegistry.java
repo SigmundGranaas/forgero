@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.registry;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.ToolPojo;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.ToolPojo;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.items.tool.*;
 import net.minecraft.item.Item;

@@ -1,22 +1,22 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolWithBinding;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgerocore.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgerocore.toolpart.factory.ToolPartBindingBuilder;
-import com.sigmundgranaas.forgerocore.toolpart.factory.ToolPartHandleBuilder;
-import com.sigmundgranaas.forgerocore.toolpart.factory.ToolPartHeadBuilder;
-import com.sigmundgranaas.forgerocore.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgerocore.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.tool.ForgeroToolWithBinding;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.toolpart.factory.ToolPartBindingBuilder;
+import com.sigmundgranaas.forgero.toolpart.factory.ToolPartHandleBuilder;
+import com.sigmundgranaas.forgero.toolpart.factory.ToolPartHeadBuilder;
+import com.sigmundgranaas.forgero.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import static com.sigmundgranaas.forgerocore.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 
 public class ItemGroups {
     public static final String FORGERO_GROUP = "forgero";

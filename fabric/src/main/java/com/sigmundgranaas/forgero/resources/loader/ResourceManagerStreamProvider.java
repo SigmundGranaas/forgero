@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.resources.loader;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.resource.ForgeroResourceType;
-import com.sigmundgranaas.forgerocore.resource.InputStreamProvider;
+import com.sigmundgranaas.forgero.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.resource.InputStreamProvider;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 

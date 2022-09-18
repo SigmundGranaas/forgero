@@ -1,30 +1,30 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.ModelPojo;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.PropertyPojo;
-import com.sigmundgranaas.forgerocore.gem.EmptyGem;
-import com.sigmundgranaas.forgerocore.gem.Gem;
-import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgerocore.property.*;
-import com.sigmundgranaas.forgerocore.property.active.ActivePropertyBuilder;
-import com.sigmundgranaas.forgerocore.property.active.BreakingDirection;
-import com.sigmundgranaas.forgerocore.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgerocore.property.passive.PassivePropertyBuilder;
-import com.sigmundgranaas.forgerocore.property.passive.PassivePropertyType;
-import com.sigmundgranaas.forgerocore.schematic.HeadSchematic;
-import com.sigmundgranaas.forgerocore.schematic.Schematic;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolWithBinding;
-import com.sigmundgranaas.forgerocore.tool.factory.ForgeroToolFactory;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgerocore.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgerocore.toolpart.factory.ForgeroToolPartFactory;
-import com.sigmundgranaas.forgerocore.toolpart.factory.ToolPartBuilder;
-import com.sigmundgranaas.forgerocore.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgerocore.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.ModelPojo;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.gem.EmptyGem;
+import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.property.*;
+import com.sigmundgranaas.forgero.property.active.ActivePropertyBuilder;
+import com.sigmundgranaas.forgero.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.property.passive.PassivePropertyBuilder;
+import com.sigmundgranaas.forgero.property.passive.PassivePropertyType;
+import com.sigmundgranaas.forgero.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.schematic.Schematic;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.tool.ForgeroToolWithBinding;
+import com.sigmundgranaas.forgero.tool.factory.ForgeroToolFactory;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.toolpart.factory.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.toolpart.factory.ToolPartBuilder;
+import com.sigmundgranaas.forgero.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.sigmundgranaas.forgerocore.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 
 public class NBTFactoryImpl implements NBTFactory {
 

@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.item.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgerocore.property.AttributeType;
-import com.sigmundgranaas.forgerocore.property.PropertyContainer;
-import com.sigmundgranaas.forgerocore.property.Target;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.toolhandler.*;
 import net.minecraft.block.BlockState;

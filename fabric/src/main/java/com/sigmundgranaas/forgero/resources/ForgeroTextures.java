@@ -1,22 +1,22 @@
 package com.sigmundgranaas.forgero.resources;
 
-import com.sigmundgranaas.forgerocore.deprecated.ModelLayer;
-import com.sigmundgranaas.forgerocore.deprecated.ToolPartModelType;
+import com.sigmundgranaas.forgero.deprecated.ModelLayer;
+import com.sigmundgranaas.forgero.deprecated.ToolPartModelType;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.gem.Gem;
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
-import com.sigmundgranaas.forgerocore.material.material.ForgeroMaterial;
-import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgerocore.material.material.SecondaryMaterial;
-import com.sigmundgranaas.forgerocore.schematic.HeadSchematic;
-import com.sigmundgranaas.forgerocore.schematic.Schematic;
-import com.sigmundgranaas.forgerocore.texture.ForgeroToolPartTextureRegistry;
-import com.sigmundgranaas.forgerocore.texture.TextureModel;
-import com.sigmundgranaas.forgerocore.texture.TextureModelContainer;
-import com.sigmundgranaas.forgerocore.texture.palette.PaletteResourceRegistry;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
+import com.sigmundgranaas.forgero.material.material.ForgeroMaterial;
+import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.material.material.SecondaryMaterial;
+import com.sigmundgranaas.forgero.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.schematic.Schematic;
+import com.sigmundgranaas.forgero.texture.ForgeroToolPartTextureRegistry;
+import com.sigmundgranaas.forgero.texture.TextureModel;
+import com.sigmundgranaas.forgero.texture.TextureModelContainer;
+import com.sigmundgranaas.forgero.texture.palette.PaletteResourceRegistry;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -24,7 +24,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.nio.file.Path;
 import java.util.Collection;
 
-import static com.sigmundgranaas.forgerocore.deprecated.ToolPartModelType.*;
+import static com.sigmundgranaas.forgero.deprecated.ToolPartModelType.*;
 import static com.sigmundgranaas.forgero.resources.loader.ResourceLocations.MATERIAL_TEMPLATES_LOCATION;
 
 

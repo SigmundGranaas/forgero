@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgerocore.property.ActivePropertyType;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.property.TargetTypes;
+import com.sigmundgranaas.forgero.property.ActivePropertyType;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.property.TargetTypes;
 import com.sigmundgranaas.forgero.PatternBreaking;
-import com.sigmundgranaas.forgerocore.property.active.VeinBreaking;
-import com.sigmundgranaas.forgerocore.property.attribute.SingleTarget;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.property.attribute.SingleTarget;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.BlockBreakingHandler;
 import com.sigmundgranaas.forgero.toolhandler.PatternBreakingStrategy;

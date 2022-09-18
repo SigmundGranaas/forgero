@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item.items.testutil;
 
-import com.sigmundgranaas.forgerocore.state.Ingredient;
-import com.sigmundgranaas.forgerocore.type.Type;
+import com.sigmundgranaas.forgero.state.Ingredient;
+import com.sigmundgranaas.forgero.type.Type;
 
 import java.util.List;
 

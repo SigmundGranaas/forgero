@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.BakedModelCollection;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroAdapter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;

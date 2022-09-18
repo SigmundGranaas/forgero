@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.nbt.v2;
 
-import com.sigmundgranaas.forgerocore.state.Composite;
+import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.core.testutil.Upgrades;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompoundEncoder;

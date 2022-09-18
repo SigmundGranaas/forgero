@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

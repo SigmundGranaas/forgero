@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.loot;
 
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgerocore.property.AttributeType;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.property.Target;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgerocore.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.property.Target;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
 
 import java.util.ArrayList;
 import java.util.HashSet;

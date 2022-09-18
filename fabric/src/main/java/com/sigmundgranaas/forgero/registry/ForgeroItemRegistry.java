@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.registry;
 
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.ForgeroResourceLoader;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.ForgeroResourceLoader;
 import com.sigmundgranaas.forgero.registry.impl.ConcurrentForgeroItemRegistry;
 
 /**

@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero;
 
-import com.sigmundgranaas.forgerocore.property.ActivePropertyType;
-import com.sigmundgranaas.forgerocore.property.Target;
-import com.sigmundgranaas.forgerocore.property.active.ActiveProperty;
-import com.sigmundgranaas.forgerocore.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.property.ActivePropertyType;
+import com.sigmundgranaas.forgero.property.Target;
+import com.sigmundgranaas.forgero.property.active.ActiveProperty;
+import com.sigmundgranaas.forgero.property.active.BreakingDirection;
 import net.minecraft.block.BlockState;
 
 public class PatternBreaking implements ActiveProperty {

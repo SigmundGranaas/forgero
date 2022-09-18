@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.loot;
 
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.schematic.HeadSchematic;
-import com.sigmundgranaas.forgerocore.schematic.Schematic;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.schematic.Schematic;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
 
 import java.util.ArrayList;
 import java.util.HashSet;

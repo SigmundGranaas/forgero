@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-import static com.sigmundgranaas.forgerocore.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 
 public class ToolPartItemImpl extends Item implements ToolPartItem {
     private final PrimaryMaterial material;

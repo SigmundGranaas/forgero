@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;

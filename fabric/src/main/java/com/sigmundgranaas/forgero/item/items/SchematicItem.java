@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.item.items;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.SchematicPojo;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.property.PropertyContainer;
-import com.sigmundgranaas.forgerocore.property.Target;
-import com.sigmundgranaas.forgerocore.resource.ForgeroResourceType;
-import com.sigmundgranaas.forgerocore.schematic.Schematic;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.SchematicPojo;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.property.Target;
+import com.sigmundgranaas.forgero.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.schematic.Schematic;
 import com.sigmundgranaas.forgero.item.ForgeroItem;
 import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
 import net.minecraft.client.item.TooltipContext;

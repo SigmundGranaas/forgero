@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgerocore.property.Target;
+import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.EntityTarget;
 import net.minecraft.entity.Entity;

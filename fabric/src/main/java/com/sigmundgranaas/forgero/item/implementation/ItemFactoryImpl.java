@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.item.implementation;
 
-import com.sigmundgranaas.forgerocore.gem.Gem;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.property.passive.StaticPassiveType;
-import com.sigmundgranaas.forgerocore.schematic.Schematic;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.property.passive.StaticPassiveType;
+import com.sigmundgranaas.forgero.schematic.Schematic;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ItemGroups;

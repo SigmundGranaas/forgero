@@ -2,10 +2,10 @@ package com.sigmundgranaas.forgero.nbt.v2;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.item.items.testutil.Schematics;
-import com.sigmundgranaas.forgerocore.property.AttributeType;
-import com.sigmundgranaas.forgerocore.state.Composite;
-import com.sigmundgranaas.forgerocore.state.Ingredient;
-import com.sigmundgranaas.forgerocore.state.Upgrade;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.Ingredient;
+import com.sigmundgranaas.forgero.state.Upgrade;
 
 import com.sigmundgranaas.forgero.item.items.testutil.Materials;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompositeParser;

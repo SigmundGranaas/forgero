@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.item.nbt.v2;
 
-import com.sigmundgranaas.forgerocore.registry.IngredientSupplier;
-import com.sigmundgranaas.forgerocore.registry.UpgradeSupplier;
-import com.sigmundgranaas.forgerocore.state.Composite;
-import com.sigmundgranaas.forgerocore.state.Ingredient;
-import com.sigmundgranaas.forgerocore.state.Upgrade;
+import com.sigmundgranaas.forgero.registry.IngredientSupplier;
+import com.sigmundgranaas.forgero.registry.UpgradeSupplier;
+import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.Ingredient;
+import com.sigmundgranaas.forgero.state.Upgrade;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 
@@ -40,9 +40,9 @@ public class CompositeParser implements CompoundParser<Composite> {
             //builder.namespace(compound.getString(NAMESPACE_IDENTIFIER));
         }
 
-        parseIngredients(compound).forEach(builder::add);
+        parseIngredients(compound).forEach(builder::addIngredient);
 
-        parseUpgrades(compound).forEach(builder::add);
+        parseUpgrades(compound).forEach(builder::addUpgrade);
 
         return Optional.of(builder.build());
     }

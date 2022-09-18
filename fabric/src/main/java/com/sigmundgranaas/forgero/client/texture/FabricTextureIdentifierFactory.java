@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.client.texture;
 
-import com.sigmundgranaas.forgerocore.deprecated.ModelLayer;
-import com.sigmundgranaas.forgerocore.deprecated.ToolPartModelType;
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.TextureIdentifierFactory;
-import com.sigmundgranaas.forgerocore.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.deprecated.ModelLayer;
+import com.sigmundgranaas.forgero.deprecated.ToolPartModelType;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.TextureIdentifierFactory;
+import com.sigmundgranaas.forgero.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 
 import java.util.Locale;
 import java.util.Optional;

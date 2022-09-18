@@ -2,14 +2,15 @@ package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.item.ItemGroups;
-import com.sigmundgranaas.forgero.item.items.testutil.Tools;
 import com.sigmundgranaas.forgero.item.items.tool.DynamicSwordItem;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.registry.CustomItemRegistry;
 import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.registry.impl.MineCraftRegistryHandler;
+import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
+import com.sigmundgranaas.forgero.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.resources.ModContainerService;
 import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ReloadableResourceLoader;
@@ -22,6 +23,7 @@ import net.minecraft.item.ToolMaterials;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +35,14 @@ public class ForgeroInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        PipelineBuilder
+                .builder()
+                .register(FabricPackFinder.supplier())
+                .state(com.sigmundgranaas.forgero.Registry.stateListener())
+                .inflated(com.sigmundgranaas.forgero.Registry.containerListener())
+                .build()
+                .execute();
+
         var loader = new FabricResourceLoader(new ModContainerService().getAllModsAsSet());
         var registry = ForgeroItemRegistry.INSTANCE.loadResourcesIfEmpty(loader);
         registry.register(new MineCraftRegistryHandler());
@@ -42,8 +52,24 @@ public class ForgeroInitializer implements ModInitializer {
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
         new DynamicResourceGenerator().generateResources();
-        DynamicSwordItem oakSword = new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), Tools.IRON_PICKAXE);
-        Registry.register(Registry.ITEM, new Identifier("minecraft", oakSword.name()), oakSword);
+
+        register();
+    }
+
+    private void register() {
+        com.sigmundgranaas.forgero.Registry.CONTAINERS.forEach(id -> {
+            try {
+                com.sigmundgranaas.forgero.Registry.STATES.get(id).ifPresent((state) -> {
+                    Identifier identifier = new Identifier(state.nameSpace(), state.name());
+                    DynamicSwordItem item = new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), state);
+                    Registry.register(Registry.ITEM, identifier, item);
+                });
+
+            } catch (InvalidIdentifierException e) {
+                LOGGER.error("invalid identifier: {}", id);
+                LOGGER.error(e);
+            }
+        });
     }
 
     private void registerRecipes() {

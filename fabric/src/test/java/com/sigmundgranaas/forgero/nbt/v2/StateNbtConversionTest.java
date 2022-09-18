@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.nbt.v2;
 
-import com.sigmundgranaas.forgerocore.property.AttributeType;
-import com.sigmundgranaas.forgerocore.state.Composite;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompositeParser;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompoundEncoder;

@@ -1,0 +1,12 @@
+{
+  "type": "HANDLE",
+  "name": "handle",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

@@ -1,18 +1,18 @@
 package com.sigmundgranaas.forgero.registry.impl;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.ToolPartPojo;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgerocore.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgerocore.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.ToolPartPojo;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.registry.ToolPartItemRegistry;
 import net.minecraft.item.Item;
 
 import java.util.Map;
 
-import static com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes.*;
+import static com.sigmundgranaas.forgero.tool.ForgeroToolTypes.*;
 
 public class ConcurrentToolPartItemRegistry extends ConcurrentItemResourceRegistry<ToolPartItem, ToolPartPojo> implements ToolPartItemRegistry {
     ConcurrentToolPartItemRegistry(Map<String, ToolPartItem> resources) {

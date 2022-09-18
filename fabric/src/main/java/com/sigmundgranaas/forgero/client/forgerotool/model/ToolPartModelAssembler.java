@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.ModelAssembler;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolTypes;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 
 import java.util.function.Function;

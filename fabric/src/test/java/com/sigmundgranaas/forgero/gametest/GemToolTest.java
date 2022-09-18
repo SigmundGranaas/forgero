@@ -1,23 +1,23 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.gem.EmptyGem;
-import com.sigmundgranaas.forgerocore.gem.ForgeroGem;
-import com.sigmundgranaas.forgerocore.gem.Gem;
-import com.sigmundgranaas.forgerocore.material.material.EmptySecondaryMaterial;
-import com.sigmundgranaas.forgerocore.property.Attribute;
-import com.sigmundgranaas.forgerocore.property.AttributeType;
-import com.sigmundgranaas.forgerocore.property.NumericOperation;
-import com.sigmundgranaas.forgerocore.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgerocore.tool.factory.ForgeroToolFactory;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgerocore.toolpart.handle.Handle;
-import com.sigmundgranaas.forgerocore.toolpart.handle.HandleState;
-import com.sigmundgranaas.forgerocore.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgerocore.toolpart.head.HeadState;
-import com.sigmundgranaas.forgerocore.toolpart.head.PickaxeHead;
-import com.sigmundgranaas.forgerocore.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.gem.EmptyGem;
+import com.sigmundgranaas.forgero.gem.ForgeroGem;
+import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.material.material.EmptySecondaryMaterial;
+import com.sigmundgranaas.forgero.property.Attribute;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.property.NumericOperation;
+import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.tool.factory.ForgeroToolFactory;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.toolpart.handle.Handle;
+import com.sigmundgranaas.forgero.toolpart.handle.HandleState;
+import com.sigmundgranaas.forgero.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.toolpart.head.HeadState;
+import com.sigmundgranaas.forgero.toolpart.head.PickaxeHead;
+import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
@@ -32,8 +32,8 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgerocore.property.ToolPropertyTest.HANDLE_SCHEMATIC;
-import static com.sigmundgranaas.forgerocore.property.ToolPropertyTest.PICKAXEHEAD_SCHEMATIC;
+import static com.sigmundgranaas.forgero.property.ToolPropertyTest.HANDLE_SCHEMATIC;
+import static com.sigmundgranaas.forgero.property.ToolPropertyTest.PICKAXEHEAD_SCHEMATIC;
 
 public class GemToolTest {
 

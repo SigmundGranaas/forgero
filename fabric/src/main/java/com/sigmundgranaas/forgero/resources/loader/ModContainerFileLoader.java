@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class ModContainerFileLoader {
     private final ModContainer container;
 
@@ -19,10 +20,14 @@ public class ModContainerFileLoader {
     }
 
     public List<Path> getResourcesInFolder(String resourceLocation) {
+        return getResourcesInFolder(resourceLocation, 4);
+    }
+
+    public List<Path> getResourcesInFolder(String resourceLocation, int depth) {
         var optionalPath = container.findPath(resourceLocation);
         if (optionalPath.isPresent()) {
-            try (var filesStream = Files.walk(optionalPath.get(), 4)) {
-                return filesStream.filter(Files::isRegularFile).toList();
+            try (var filesStream = Files.walk(optionalPath.get(), depth)) {
+                return filesStream.toList();
             } catch (IOException e) {
                 ForgeroInitializer.LOGGER.error("Unable to list files from {}", resourceLocation);
                 ForgeroInitializer.LOGGER.error(e);

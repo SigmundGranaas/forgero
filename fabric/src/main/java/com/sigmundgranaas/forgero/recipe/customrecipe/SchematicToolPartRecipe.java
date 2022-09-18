@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.schematic.HeadSchematic;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgerocore.toolpart.factory.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.toolpart.factory.ForgeroToolPartFactory;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.items.SchematicItem;
 import com.sigmundgranaas.forgero.item.items.ToolPartItemImpl;

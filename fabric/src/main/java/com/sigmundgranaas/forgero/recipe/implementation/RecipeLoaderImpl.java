@@ -4,10 +4,10 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.exception.NoMaterialsException;
+import com.sigmundgranaas.forgero.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgerocore.util.Utils;
+import com.sigmundgranaas.forgero.util.Utils;
 
 import java.io.InputStreamReader;
 import java.util.HashMap;

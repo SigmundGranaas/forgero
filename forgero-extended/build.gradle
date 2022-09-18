@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+version = rootProject.mod_version
+group = rootProject.maven_group
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
+processResources {
+    inputs.property "version", rootProject.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": rootProject.version
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

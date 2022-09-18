@@ -1,0 +1,3 @@
+version = project.mod_version
+group = project.maven_group
+archives_base_name = project.archives_base_name

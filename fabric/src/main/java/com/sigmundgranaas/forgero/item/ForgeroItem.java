@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgerocore.data.v1.ForgeroDataResource;
-import com.sigmundgranaas.forgerocore.resource.ForgeroResource;
+import com.sigmundgranaas.forgero.resource.data.v1.ForgeroDataResource;
+import com.sigmundgranaas.forgero.resource.ForgeroResource;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

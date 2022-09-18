@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgerocore.gem.EmptyGem;
-import com.sigmundgranaas.forgerocore.gem.Gem;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.tool.ForgeroToolWithBinding;
+import com.sigmundgranaas.forgero.gem.EmptyGem;
+import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.tool.ForgeroToolWithBinding;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;

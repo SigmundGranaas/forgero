@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.gem.Gem;
+import com.sigmundgranaas.forgero.gem.Gem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.items.GemItem;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;

@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.resources.loader;
 
-import com.sigmundgranaas.forgerocore.data.v1.ForgeroDataResource;
-import com.sigmundgranaas.forgerocore.resource.ForgeroResourceType;
-import com.sigmundgranaas.forgerocore.resource.InputStreamProvider;
-import com.sigmundgranaas.forgerocore.resource.PojoLoader;
-import com.sigmundgranaas.forgerocore.resource.loader.PojoInputStreamLoader;
+import com.sigmundgranaas.forgero.resource.data.v1.ForgeroDataResource;
+import com.sigmundgranaas.forgero.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.resource.InputStreamProvider;
+import com.sigmundgranaas.forgero.resource.PojoLoader;
+import com.sigmundgranaas.forgero.resource.loader.PojoInputStreamLoader;
 
 import java.util.Set;
 

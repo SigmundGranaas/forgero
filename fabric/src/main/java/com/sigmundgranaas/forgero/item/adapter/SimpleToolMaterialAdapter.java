@@ -1,18 +1,18 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.ModelContainerPojo;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.ModelPojo;
-import com.sigmundgranaas.forgerocore.gem.EmptyGem;
-import com.sigmundgranaas.forgerocore.material.material.EmptySecondaryMaterial;
-import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgerocore.property.AttributeType;
-import com.sigmundgranaas.forgerocore.property.Property;
-import com.sigmundgranaas.forgerocore.property.Target;
-import com.sigmundgranaas.forgerocore.schematic.Schematic;
-import com.sigmundgranaas.forgerocore.texture.TextureModelContainerImpl;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgerocore.toolpart.head.HeadState;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.ModelContainerPojo;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.ModelPojo;
+import com.sigmundgranaas.forgero.gem.EmptyGem;
+import com.sigmundgranaas.forgero.material.material.EmptySecondaryMaterial;
+import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.property.Target;
+import com.sigmundgranaas.forgero.schematic.Schematic;
+import com.sigmundgranaas.forgero.texture.TextureModelContainerImpl;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.toolpart.head.HeadState;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 

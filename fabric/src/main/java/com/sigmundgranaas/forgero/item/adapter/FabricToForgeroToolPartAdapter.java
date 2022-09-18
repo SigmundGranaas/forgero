@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

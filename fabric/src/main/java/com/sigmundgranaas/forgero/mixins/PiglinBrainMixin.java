@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgerocore.property.passive.Static;
-import com.sigmundgranaas.forgerocore.property.passive.StaticPassiveType;
+import com.sigmundgranaas.forgero.property.passive.Static;
+import com.sigmundgranaas.forgero.property.passive.StaticPassiveType;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PiglinBrain;

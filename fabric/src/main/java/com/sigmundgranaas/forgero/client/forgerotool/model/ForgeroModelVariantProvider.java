@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import org.jetbrains.annotations.Nullable;
 
-import static com.sigmundgranaas.forgerocore.identifier.texture.toolpart.ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR;
+import static com.sigmundgranaas.forgero.identifier.texture.toolpart.ToolPartModelTextureIdentifier.DEFAULT_SPLIT_OPERATOR;
 
 public class ForgeroModelVariantProvider implements ModelVariantProvider {
     private final ToolModelVariant toolModelVariant;

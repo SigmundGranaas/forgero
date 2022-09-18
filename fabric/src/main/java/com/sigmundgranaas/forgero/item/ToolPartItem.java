@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgerocore.data.v1.pojo.ToolPartPojo;
-import com.sigmundgranaas.forgerocore.material.material.PrimaryMaterial;
-import com.sigmundgranaas.forgerocore.property.PropertyContainer;
-import com.sigmundgranaas.forgerocore.resource.ForgeroResourceType;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgerocore.toolpart.ForgeroToolPartTypes;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.ToolPartPojo;
+import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
+import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.resource.ForgeroResourceType;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

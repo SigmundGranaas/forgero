@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.registry.impl;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgerocore.data.v1.pojo.GemPojo;
-import com.sigmundgranaas.forgerocore.property.PropertyStream;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.GemPojo;
+import com.sigmundgranaas.forgero.property.PropertyStream;
 import com.sigmundgranaas.forgero.item.items.GemItem;
 import com.sigmundgranaas.forgero.registry.GemItemRegistry;
 

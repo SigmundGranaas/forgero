@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.registry.impl;
 
-import com.sigmundgranaas.forgerocore.ForgeroRegistry;
-import com.sigmundgranaas.forgerocore.ForgeroResourceLoader;
-import com.sigmundgranaas.forgerocore.registry.*;
+import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.ForgeroResourceLoader;
+import com.sigmundgranaas.forgero.registry.*;
 import com.sigmundgranaas.forgero.item.ItemFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;
-import com.sigmundgranaas.forgero.registry.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.concurrent.ThreadSafe;

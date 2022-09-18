@@ -2,12 +2,12 @@ package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
-import com.sigmundgranaas.forgerocore.tool.factory.ForgeroToolFactory;
-import com.sigmundgranaas.forgerocore.toolpart.binding.ToolPartBinding;
-import com.sigmundgranaas.forgerocore.toolpart.factory.ForgeroToolPartFactory;
-import com.sigmundgranaas.forgerocore.toolpart.handle.ToolPartHandle;
-import com.sigmundgranaas.forgerocore.toolpart.head.ToolPartHead;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.tool.factory.ForgeroToolFactory;
+import com.sigmundgranaas.forgero.toolpart.binding.ToolPartBinding;
+import com.sigmundgranaas.forgero.toolpart.factory.ForgeroToolPartFactory;
+import com.sigmundgranaas.forgero.toolpart.handle.ToolPartHandle;
+import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.ToolPartItem;

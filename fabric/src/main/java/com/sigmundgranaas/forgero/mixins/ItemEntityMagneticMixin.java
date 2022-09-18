@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgerocore.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import com.sigmundgranaas.forgero.toolhandler.MagneticHandler;
 import net.minecraft.entity.ItemEntity;

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item.adapter;
 
-import com.sigmundgranaas.forgerocore.gem.Gem;
+import com.sigmundgranaas.forgero.gem.Gem;
 import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.item.items.GemItem;
 import net.minecraft.item.Item;
