@@ -39,6 +39,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .builder()
                 .register(FabricPackFinder.supplier())
                 .state(com.sigmundgranaas.forgero.Registry.stateListener())
+                .state(com.sigmundgranaas.forgero.Registry.compositeListener())
                 .inflated(com.sigmundgranaas.forgero.Registry.containerListener())
                 .build()
                 .execute();

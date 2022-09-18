@@ -1,14 +1,15 @@
 package com.sigmundgranaas.forgero.item.items.tool;
 
+import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.MatchContext;
 import com.sigmundgranaas.forgero.util.Matchable;
-import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.text.Text;
 
 public class DynamicSwordItem extends SwordItem implements DynamicAttributeItem, State {
     private final State DEFAULT;
@@ -16,6 +17,17 @@ public class DynamicSwordItem extends SwordItem implements DynamicAttributeItem,
     public DynamicSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
+    }
+
+    @Override
+    public Text getName() {
+        return Text.literal(DEFAULT.name());
+    }
+
+
+    @Override
+    public Text getName(ItemStack stack) {
+        return getName();
     }
 
     @Override

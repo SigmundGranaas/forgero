@@ -215,7 +215,7 @@ public class DataBuilder {
     }
 
     private String idToName(String id) {
-        return id.split("#")[1];
+        return id.split(":")[1];
     }
 
     @SuppressWarnings("unused")

@@ -1,15 +1,20 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
 import com.sigmundgranaas.forgero.client.forgerotool.model.*;
-import com.sigmundgranaas.forgero.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
+import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.Identifiable;
+import com.sigmundgranaas.forgero.tool.ForgeroTool;
+import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
+import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +59,11 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
     }
 
     @Override
+    public FabricBakedModel getModel(ItemStack stack) {
+        return getModel(stack.getItem());
+    }
+
+    @Override
     public FabricBakedModel getToolModel(ItemStack forgeroToolStack) {
         return toolAdapter.getTool(forgeroToolStack)
                 .map(this::getToolModel)
@@ -75,6 +85,26 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
     @Override
     public FabricBakedModel getToolPartModel(ForgeroToolPart toolPart) {
         return toolPartModelAssembler.assembleToolPartModel(toolPart);
+    }
+
+    @Override
+    public FabricBakedModel getModel(Composite composite) {
+        return bakedToolPartModels.values().stream().findAny().orElse(new EmptyBakedModel());
+    }
+
+    @Override
+    public FabricBakedModel getModel(Item item) {
+        String id = Registry.ITEM.getId(item).toString();
+        var compositeOpt = com.sigmundgranaas.forgero.Registry.STATES.get(id).map(Composite.class::cast);
+        if (compositeOpt.isPresent()) {
+            var composite = compositeOpt.get();
+            if (composite.test(Type.of("PART"))) {
+                return getModel(String.format("%s-primary-pickaxe", composite.name().replace("_", "")));
+            } else {
+                return CompositeModel.of(composite.ingredients().stream().map(Identifiable::name).map(name -> String.format("%s-primary-pickaxe", name.replace("_", ""))).map(this::getModel).toList());
+            }
+        }
+        return new EmptyBakedModel();
     }
 
 
