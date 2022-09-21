@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.*;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
 import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.Identifiable;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.type.Type;
@@ -98,13 +98,34 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
         var compositeOpt = com.sigmundgranaas.forgero.Registry.STATES.get(id).map(Composite.class::cast);
         if (compositeOpt.isPresent()) {
             var composite = compositeOpt.get();
-            if (composite.test(Type.of("PART"))) {
+            if (composite.test(Type.of("TOOL"))) {
+                return CompositeModel.of(composite.ingredients().stream().map(ingredient -> getIngredientId(ingredient, composite)).map(this::getModel).toList());
+            } else if (composite.test(Type.of("PART"))) {
                 return getModel(String.format("%s-primary-pickaxe", composite.name().replace("_", "")));
-            } else {
-                return CompositeModel.of(composite.ingredients().stream().map(Identifiable::name).map(name -> String.format("%s-primary-pickaxe", name.replace("_", ""))).map(this::getModel).toList());
             }
         }
         return new EmptyBakedModel();
+    }
+
+    public String getIngredientId(State ingredient, Composite composite) {
+        String skin;
+        if (composite.test(Type.of("PICKAXE"))) {
+            if (ingredient.test(Type.of("HANDLE"))) {
+                skin = "fullhandle";
+            } else {
+                skin = "pickaxe";
+            }
+        } else if (composite.test(Type.of("WEAPON"))) {
+            if (ingredient.test(Type.of("HANDLE"))) {
+                skin = "shorthandle";
+            } else {
+                skin = "axe";
+            }
+        } else {
+            skin = "binding";
+        }
+
+        return String.format("%s-primary-%s", ingredient.name().replace("_", ""), skin);
     }
 
 

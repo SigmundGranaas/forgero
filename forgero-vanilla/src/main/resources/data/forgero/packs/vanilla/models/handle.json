@@ -1,0 +1,99 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "modelType": "GENERATE_VARIANT",
+      "template": "handle",
+      "variants": [
+        {
+          "target": "AXE",
+          "template": "mediumhandle"
+        },
+        {
+          "target": "WEAPON",
+          "template": "short_handle"
+        }
+      ]
+    },
+    {
+      "name": "reinforced_handle",
+      "modelType": "GENERATE_VARIANT",
+      "template": "reinforced_handle",
+      "variants": [
+        {
+          "case": [
+            "AXE"
+          ],
+          "template": "medium_reinforced_handle"
+        },
+        {
+          "case": "SPEAR",
+          "template": "extended_reinforced_handle",
+          "offset": [
+            -6,
+            -6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gem-0",
+      "modelType": "GENERATE_VARIANT",
+      "template": "gem_small",
+      "variants": [
+        {
+          "case": "AXE_HEAD",
+          "template": "gem_small",
+          "offset": []
+        },
+        {
+          "case": "PICKAXE_HEAD",
+          "template": "gem_small",
+          "offset": [
+            -6,
+            -6
+          ]
+        }
+      ]
+    },
+    {
+      "target": [
+        "MATERIAL",
+        "HANDLE_SCHEMATIC"
+      ],
+      "modelType": "BASE",
+      "type": "GENERATED",
+      "palette": "MATERIAL",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "MATERIAL",
+        "id:reinforced_handle"
+      ],
+      "modelType": "COMPOSITE",
+      "type": "GENERATED",
+      "palette": "MATERIAL",
+      "template": "reinforced_handle"
+    },
+    {
+      "target": "HANDLE-MATERIAL-0",
+      "modelType": "UPGRADE",
+      "type": "GENERATED",
+      "palette": "MATERIAL",
+      "template": "handle_secondary"
+    },
+    {
+      "target": "HANDLE-GEM-1",
+      "modelType": "UPGRADE",
+      "type": "GENERATED",
+      "palette": "GEM",
+      "template": "gem-0",
+      "offset": [
+        -1,
+        5
+      ]
+    }
+  ]
+}
