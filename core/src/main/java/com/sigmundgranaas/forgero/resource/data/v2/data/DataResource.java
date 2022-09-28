@@ -52,7 +52,7 @@ public class DataResource implements Identifiable {
     private ConstructData construct;
 
     @Nullable
-    private JsonModel model;
+    private ModelData model;
 
     @Nullable
     @SerializedName(value = "static", alternate = "json_static")

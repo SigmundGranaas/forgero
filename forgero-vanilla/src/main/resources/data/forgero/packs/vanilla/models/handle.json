@@ -3,12 +3,15 @@
   "models": [
     {
       "name": "handle",
-      "modelType": "GENERATE_VARIANT",
       "template": "handle",
+      "type": "GENERATED",
+      "palette": "MATERIAL",
       "variants": [
         {
-          "target": "AXE",
-          "template": "mediumhandle"
+          "target": [
+            "AXE"
+          ],
+          "template": "medium_handle"
         },
         {
           "target": "WEAPON",
@@ -22,13 +25,15 @@
       "template": "reinforced_handle",
       "variants": [
         {
-          "case": [
+          "target": [
             "AXE"
           ],
           "template": "medium_reinforced_handle"
         },
         {
-          "case": "SPEAR",
+          "target": [
+            "SPEAR"
+          ],
           "template": "extended_reinforced_handle",
           "offset": [
             -6,
@@ -43,12 +48,16 @@
       "template": "gem_small",
       "variants": [
         {
-          "case": "AXE_HEAD",
+          "case": [
+            "model:extended_reinforced_handle"
+          ],
           "template": "gem_small",
           "offset": []
         },
         {
-          "case": "PICKAXE_HEAD",
+          "case": [
+            "model:medium_reinforced_handle"
+          ],
           "template": "gem_small",
           "offset": [
             -6,
@@ -62,9 +71,7 @@
         "MATERIAL",
         "HANDLE_SCHEMATIC"
       ],
-      "modelType": "BASE",
-      "type": "GENERATED",
-      "palette": "MATERIAL",
+      "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
@@ -73,27 +80,26 @@
         "id:reinforced_handle"
       ],
       "modelType": "COMPOSITE",
-      "type": "GENERATED",
-      "palette": "MATERIAL",
       "template": "reinforced_handle"
     },
     {
-      "target": "HANDLE-MATERIAL-0",
+      "target": [
+        "HANDLE",
+        "MATERIAL",
+        "slot:0"
+      ],
       "modelType": "UPGRADE",
       "type": "GENERATED",
-      "palette": "MATERIAL",
       "template": "handle_secondary"
     },
     {
-      "target": "HANDLE-GEM-1",
+      "target": [
+        "HANDLE",
+        "GEM",
+        "slot:1"
+      ],
       "modelType": "UPGRADE",
-      "type": "GENERATED",
-      "palette": "GEM",
-      "template": "gem-0",
-      "offset": [
-        -1,
-        5
-      ]
+      "template": "gem-0"
     }
   ]
 }
