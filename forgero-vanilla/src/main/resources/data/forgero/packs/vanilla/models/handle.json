@@ -3,8 +3,8 @@
   "models": [
     {
       "name": "handle",
-      "template": "handle",
-      "type": "GENERATED",
+      "template": "handle.png",
+      "type": "GENERATE",
       "palette": "MATERIAL",
       "variants": [
         {
@@ -21,18 +21,18 @@
     },
     {
       "name": "reinforced_handle",
-      "modelType": "GENERATE_VARIANT",
+      "modelType": "GENERATE",
       "template": "reinforced_handle",
       "variants": [
         {
           "target": [
-            "AXE"
+            "type:AXE"
           ],
           "template": "medium_reinforced_handle"
         },
         {
           "target": [
-            "SPEAR"
+            "type:SPEAR"
           ],
           "template": "extended_reinforced_handle",
           "offset": [
@@ -44,18 +44,18 @@
     },
     {
       "name": "gem-0",
-      "modelType": "GENERATE_VARIANT",
+      "modelType": "GENERATE",
       "template": "gem_small",
       "variants": [
         {
-          "case": [
+          "target": [
             "model:extended_reinforced_handle"
           ],
           "template": "gem_small",
           "offset": []
         },
         {
-          "case": [
+          "target": [
             "model:medium_reinforced_handle"
           ],
           "template": "gem_small",
@@ -68,24 +68,24 @@
     },
     {
       "target": [
-        "MATERIAL",
-        "HANDLE_SCHEMATIC"
+        "type:MATERIAL",
+        "type:HANDLE_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "MATERIAL",
-        "id:reinforced_handle"
+        "type:MATERIAL",
+        "id:reinforced_handle_schematic"
       ],
       "modelType": "COMPOSITE",
       "template": "reinforced_handle"
     },
     {
       "target": [
-        "HANDLE",
-        "MATERIAL",
+        "type:HANDLE",
+        "type:MATERIAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",
@@ -94,8 +94,8 @@
     },
     {
       "target": [
-        "HANDLE",
-        "GEM",
+        "type:HANDLE",
+        "type:GEM",
         "slot:1"
       ],
       "modelType": "UPGRADE",

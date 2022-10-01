@@ -8,4 +8,12 @@ import java.util.List;
 public class ModelEntryData {
     private List<String> target;
     private String template;
+
+    public List<String> getTarget() {
+        return target;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
 }

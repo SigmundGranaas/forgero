@@ -1,21 +1,13 @@
 package com.sigmundgranaas.forgero.model;
 
-public class TextureBasedModel<T> implements ModelAssembly<T> {
+public class TextureBasedModel implements ModelAble {
     private final String texture;
     private final int layerId;
 
-    private final Converter<T, TextureBasedModel<T>> converter;
-
-
-    public TextureBasedModel(String texture, int layerId, Converter<T, TextureBasedModel<T>> converter) {
+    public TextureBasedModel(String texture, int layerId) {
         this.texture = texture;
         this.layerId = layerId;
-        this.converter = converter;
-    }
 
-    @Override
-    public T convert() {
-        return converter.convert(this);
     }
 
     public String getTexture() {
@@ -24,5 +16,10 @@ public class TextureBasedModel<T> implements ModelAssembly<T> {
 
     public int getLayerId() {
         return layerId;
+    }
+
+    @Override
+    public <T> T convert(Converter<T, ModelAble> converter) {
+        return converter.convert(this);
     }
 }

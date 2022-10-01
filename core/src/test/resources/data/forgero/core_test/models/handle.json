@@ -70,15 +70,15 @@
     },
     {
       "target": [
-        "MATERIAL",
-        "HANDLE_SCHEMATIC"
+        "type:MATERIAL",
+        "type:HANDLE_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "MATERIAL",
+        "type:MATERIAL",
         "id:reinforced_handle"
       ],
       "modelType": "BASED_COMPOSITE",
@@ -86,8 +86,7 @@
     },
     {
       "target": [
-        "HANDLE",
-        "MATERIAL",
+        "type:MATERIAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",
@@ -96,8 +95,7 @@
     },
     {
       "target": [
-        "HANDLE",
-        "GEM",
+        "type:GEM",
         "slot:1"
       ],
       "modelType": "UPGRADE",
