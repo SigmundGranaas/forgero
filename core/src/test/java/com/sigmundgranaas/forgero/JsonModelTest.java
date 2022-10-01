@@ -24,9 +24,9 @@ public class JsonModelTest {
     @Test
     void testModelValues() {
         ModelData model = JSON_MODEL.apply("model.json");
-        assertNotNull(model.modelType);
-        assertNotNull(model.models);
-        assertTrue(model.models.size() > 0);
-        model.models.forEach(Assertions::assertNotNull);
+        assertNotNull(model.getModelType());
+        assertNotNull(model.getVariants());
+        assertTrue(model.getVariants().size() > 0);
+        model.getVariants().forEach(Assertions::assertNotNull);
     }
 }

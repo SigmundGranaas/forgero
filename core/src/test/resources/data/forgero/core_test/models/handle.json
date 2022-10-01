@@ -1,0 +1,107 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "template": "handle",
+      "type": "GENERATED",
+      "palette": "MATERIAL",
+      "variants": [
+        {
+          "target": [
+            "AXE"
+          ],
+          "template": "medium_handle"
+        },
+        {
+          "target": [
+            "WEAPON"
+          ],
+          "template": "short_handle"
+        }
+      ]
+    },
+    {
+      "name": "reinforced_handle",
+      "modelType": "GENERATE_VARIANT",
+      "template": "reinforced_handle",
+      "variants": [
+        {
+          "target": [
+            "AXE"
+          ],
+          "template": "medium_reinforced_handle"
+        },
+        {
+          "target": [
+            "SPEAR"
+          ],
+          "template": "extended_reinforced_handle",
+          "offset": [
+            -6,
+            -6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gem-0",
+      "modelType": "GENERATE_VARIANT",
+      "template": "gem_small",
+      "variants": [
+        {
+          "target": [
+            "model:extended_reinforced_handle"
+          ],
+          "template": "gem_small",
+          "offset": []
+        },
+        {
+          "target": [
+            "model:medium_reinforced_handle"
+          ],
+          "template": "gem_small",
+          "offset": [
+            -6,
+            -6
+          ]
+        }
+      ]
+    },
+    {
+      "target": [
+        "MATERIAL",
+        "HANDLE_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "MATERIAL",
+        "id:reinforced_handle"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "reinforced_handle"
+    },
+    {
+      "target": [
+        "HANDLE",
+        "MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "type": "GENERATED",
+      "template": "handle_secondary"
+    },
+    {
+      "target": [
+        "HANDLE",
+        "GEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "gem-0"
+    }
+  ]
+}

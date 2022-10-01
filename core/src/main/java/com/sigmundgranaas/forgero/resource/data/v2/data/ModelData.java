@@ -18,4 +18,32 @@ public class ModelData {
     private List<ModelEntryData> variants;
     private List<Integer> offset;
     private String palette;
+
+    public List<String> getTarget() {
+        return target;
+    }
+
+    public String getModelType() {
+        return modelType;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ModelEntryData> getVariants() {
+        return variants;
+    }
+
+    public List<Integer> getOffset() {
+        return offset;
+    }
+
+    public String getPalette() {
+        return palette;
+    }
 }

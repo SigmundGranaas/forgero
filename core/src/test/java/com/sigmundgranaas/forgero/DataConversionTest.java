@@ -28,8 +28,8 @@ public class DataConversionTest {
     void registryTest() {
         var dataPackage = new FilePackageLoader(CORE_PATH).get();
 
-        Registry.register(dataPackage);
-        Registry.init();
+        //Registry.register(dataPackage);
+        //Registry.init();
 
         Assertions.assertEquals("iron-pickaxe", Registry.STATES.get("forgero#iron-pickaxe").get().name());
     }

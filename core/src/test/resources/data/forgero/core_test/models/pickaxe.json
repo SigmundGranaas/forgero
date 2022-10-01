@@ -1,0 +1,11 @@
+{
+  "type": "PICKAXE",
+  "models": [
+    {
+      "target": [
+        "PICKAXE"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}
