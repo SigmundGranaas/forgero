@@ -90,7 +90,6 @@
         "slot:0"
       ],
       "modelType": "UPGRADE",
-      "type": "GENERATED",
       "template": "handle_secondary"
     },
     {

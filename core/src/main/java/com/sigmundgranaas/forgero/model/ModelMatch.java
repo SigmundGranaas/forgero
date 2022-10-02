@@ -3,8 +3,9 @@ package com.sigmundgranaas.forgero.model;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.MatchContext;
-import com.sigmundgranaas.forgero.util.Matchable;
+import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Matchable;
+import com.sigmundgranaas.forgero.util.match.NameMatch;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
                 return composite.ingredients().stream().allMatch(ingredient -> criteria.stream().anyMatch(criteria -> ingredientTest(ingredient, criteria)));
             } else if (matchType.equals("UPGRADE")) {
                 return false;
+            } else if (criteria.size() == 1) {
+                return ingredientTest(composite, criteria.get(0));
             }
         }
         return false;
@@ -25,14 +28,14 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
     public boolean test(Matchable match, MatchContext context) {
         return false;
     }
-    
+
     private boolean ingredientTest(State ingredient, String criteria) {
         if (criteria.contains("type")) {
             return ingredient.test(Type.of(criteria.replace("type:", "")));
         } else if (criteria.contains("id")) {
             return ingredient.identifier().contains(criteria.replace("id:", ""));
         }
-        return false;
+        return ingredient.test(new NameMatch(criteria));
     }
 
     private boolean upgradeTest(State upgrade, String criteria) {

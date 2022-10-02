@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.util;
+package com.sigmundgranaas.forgero.util.match;
 
 public interface Matchable {
     boolean test(Matchable match);

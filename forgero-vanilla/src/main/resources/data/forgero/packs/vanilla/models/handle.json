@@ -14,7 +14,9 @@
           "template": "medium_handle"
         },
         {
-          "target": "WEAPON",
+          "target": [
+            "WEAPON"
+          ],
           "template": "short_handle"
         }
       ]

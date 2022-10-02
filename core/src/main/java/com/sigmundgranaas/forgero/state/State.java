@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.state;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.Matchable;
+import com.sigmundgranaas.forgero.util.match.Matchable;
 
 import java.util.List;
 

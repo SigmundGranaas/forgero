@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.type;
 
-import com.sigmundgranaas.forgero.util.Matchable;
 import com.sigmundgranaas.forgero.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.util.TypeMatcher;
+import com.sigmundgranaas.forgero.util.match.Matchable;
 
 import java.util.Optional;
 

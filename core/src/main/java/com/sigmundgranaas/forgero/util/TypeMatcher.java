@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.util;
 
+import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Matchable;
+
 public class TypeMatcher implements Matchable {
 
     @Override

@@ -52,7 +52,7 @@ public class DataResource implements Identifiable {
     private ConstructData construct;
 
     @Nullable
-    private ModelData model;
+    private List<ModelData> models;
 
     @Nullable
     @SerializedName(value = "static", alternate = "json_static")
@@ -67,6 +67,9 @@ public class DataResource implements Identifiable {
 
     @Nullable
     private HostData container;
+
+    @Nullable
+    private PaletteData palette;
 
     @Nullable
     @SerializedName(value = "properties", alternate = "property")
@@ -111,6 +114,14 @@ public class DataResource implements Identifiable {
             return ImmutableList.<String>builder().build();
         }
         return ImmutableList.<String>builder().addAll(dependencies).build();
+    }
+
+    @NotNull
+    public ImmutableList<ModelData> models() {
+        if (models == null) {
+            return ImmutableList.<ModelData>builder().build();
+        }
+        return ImmutableList.<ModelData>builder().addAll(models).build();
     }
 
     @NotNull

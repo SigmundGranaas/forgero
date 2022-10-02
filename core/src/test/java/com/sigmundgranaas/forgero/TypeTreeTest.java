@@ -26,10 +26,13 @@ class TypeTreeTest {
         var shovelSchematic = new TypeData("SHOVEL_SCHEMATIC", Optional.of(schematic.name()), Collections.emptyList());
         var swordSchematic = new TypeData("SWORD_SCHEMATIC", Optional.of(schematic.name()), Collections.emptyList());
         var saberSchematic = new TypeData("SABER_SCHEMATIC", Optional.of(swordSchematic.name()), Collections.emptyList());
+        var part = new TypeData("PART", Optional.empty(), Collections.emptyList());
+        var toolpart = new TypeData("TOOL_PART", Optional.of(part.name()), Collections.emptyList());
+        var handle = new TypeData("HANDLE", Optional.of(toolpart.name()), Collections.emptyList());
         var material = new TypeData("MATERIAL", Optional.empty(), Collections.emptyList());
         var wood = new TypeData("WOOD", Optional.of(material.name()), Collections.emptyList());
         var oak = new TypeData("OAK", Optional.of("WOOD"), Collections.emptyList());
-        return List.of(wood, pickaxeSchematic, shovelSchematic, swordSchematic, saberSchematic, material, schematic, oak);
+        return List.of(wood, pickaxeSchematic, shovelSchematic, swordSchematic, saberSchematic, material, schematic, oak, part, toolpart, handle);
     }
 
     @Test

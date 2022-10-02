@@ -5,8 +5,9 @@ import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.MatchContext;
-import com.sigmundgranaas.forgero.util.Matchable;
+import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Matchable;
+import com.sigmundgranaas.forgero.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -81,6 +82,13 @@ public class Composite implements Upgradeable<Composite> {
                 return ingredientList.stream().anyMatch(ingredient -> ingredient.test(match, MatchContext.COMPOSITE));
             }
 
+        }
+        if (match instanceof NameMatch name) {
+            if (name.test(this)) {
+                return true;
+            } else {
+                return ingredientList.stream().anyMatch(name::test);
+            }
         }
         return match.test(this, context);
     }

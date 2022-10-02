@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.state.State;
 import java.util.Optional;
 
 public class ModelAssembler {
-    public Optional<ModelAble> find(State state) {
+    public Optional<ModelTemplate> find(State state) {
         return Optional.empty();
     }
 }

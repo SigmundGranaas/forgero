@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.util;
+package com.sigmundgranaas.forgero.util.match;
 
 public record MatchContext(String name) {
     public static MatchContext INGREDIENT = new MatchContext("INGREDIENT");

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.model;
 
-public class TextureBasedModel implements ModelAble {
+public class TextureBasedModel implements ModelTemplate {
     private final String texture;
     private final int layerId;
 
@@ -19,7 +19,7 @@ public class TextureBasedModel implements ModelAble {
     }
 
     @Override
-    public <T> T convert(Converter<T, ModelAble> converter) {
+    public <T> T convert(Converter<T, ModelTemplate> converter) {
         return converter.convert(this);
     }
 }

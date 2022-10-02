@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.state;
 
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.MatchContext;
-import com.sigmundgranaas.forgero.util.Matchable;
+import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Matchable;
 
 public class CompositeUpgrade extends Composite implements Upgrade {
     public CompositeUpgrade(Composite composite) {

@@ -13,11 +13,16 @@ public class ModelData {
     private List<String> target = Collections.emptyList();
     @Builder.Default
     private String modelType = EMPTY_IDENTIFIER;
-    private String template;
-    private String name;
-    private List<ModelEntryData> variants;
-    private List<Integer> offset;
-    private String palette;
+    @Builder.Default
+    private String template = EMPTY_IDENTIFIER;
+    @Builder.Default
+    private String name = EMPTY_IDENTIFIER;
+    @Builder.Default
+    private List<ModelEntryData> variants = Collections.emptyList();
+    @Builder.Default
+    private List<Integer> offset = Collections.emptyList();
+    @Builder.Default
+    private String palette = EMPTY_IDENTIFIER;
 
     public List<String> getTarget() {
         return target;
