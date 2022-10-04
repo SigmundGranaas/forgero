@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.state;
 
+import com.sigmundgranaas.forgero.state.slot.SlotContainer;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.MatchContext;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 
 public class CompositeIngredient extends Composite implements Ingredient {
     public CompositeIngredient(Composite composite) {
-        super(composite.ingredients(), composite.upgrades(), composite.name(), composite.nameSpace(), composite.type());
+        super(composite.ingredients(), SlotContainer.of(composite.slots()), composite.name(), composite.nameSpace(), composite.type());
     }
 
     @Override

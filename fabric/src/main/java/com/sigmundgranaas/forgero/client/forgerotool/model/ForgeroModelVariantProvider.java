@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.ForgeroRegistry;
 import com.sigmundgranaas.forgero.Registry;
+import com.sigmundgranaas.forgero.model.ModelRegistry;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -16,10 +17,10 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     private final ToolPartModelVariant toolPartModelVariant;
     private final CompositeModelVariant compositeModel;
 
-    public ForgeroModelVariantProvider(UnbakedModelCollection collection) {
+    public ForgeroModelVariantProvider(UnbakedModelCollection collection, ModelRegistry modelRegistry) {
         this.toolModelVariant = new ToolModelVariant(collection);
         this.toolPartModelVariant = new ToolPartModelVariant(collection);
-        this.compositeModel = new CompositeModelVariant(collection);
+        this.compositeModel = new CompositeModelVariant(collection, modelRegistry);
     }
 
     @Override

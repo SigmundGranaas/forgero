@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero;
 
+import com.sigmundgranaas.forgero.model.CompositeModelTemplate;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.ModelData;
@@ -12,7 +13,9 @@ import java.util.List;
 
 import static com.sigmundgranaas.forgero.TypeTreeTest.createDataList;
 import static com.sigmundgranaas.forgero.testutil.ToolParts.HANDLE;
+import static com.sigmundgranaas.forgero.testutil.ToolParts.REINFORCED_HANDLE;
 import static com.sigmundgranaas.forgero.testutil.Tools.IRON_PICKAXE;
+import static com.sigmundgranaas.forgero.testutil.Upgrades.*;
 
 public class ModelMatcherTest {
     public static TypeTree loadedTypeTree() {
@@ -24,13 +27,12 @@ public class ModelMatcherTest {
 
     @Test
     void getProperModel() {
-        var tree = loadedTypeTree();
+        var registry = new ModelRegistry();
+        PipeLineTest.defaultResourcePipeLineTest().data(registry.paletteListener()).data(registry.modelListener()).build().execute();
         var pickaxe = IRON_PICKAXE;
-        var pickaxeModel = ModelData.builder().target(List.of("PICKAXE")).modelType("COMPOSITE").build();
-        var registry = new ModelRegistry(tree);
-
-        var model = registry.find(pickaxe);
-        Assertions.assertTrue(model.isPresent());
+        var pickaxeModel = registry.find(pickaxe);
+        Assertions.assertTrue(pickaxeModel.isPresent());
+        Assertions.assertEquals(2, ((CompositeModelTemplate) pickaxeModel.get()).getModels().size());
     }
 
     @Test
@@ -47,5 +49,47 @@ public class ModelMatcherTest {
         registry.register(DataResource.builder().type("HANDLE").models(List.of(handleModelData, handleVariantData)).build());
         var model = registry.find(handle);
         Assertions.assertTrue(model.isPresent());
+    }
+
+    @Test
+    void getModelFromPipeLine() {
+        var registry = new ModelRegistry();
+        PipeLineTest.defaultResourcePipeLineTest().data(registry.paletteListener()).data(registry.modelListener()).build().execute();
+        var handle = HANDLE;
+        var pickaxe = IRON_PICKAXE;
+        var model = registry.find(handle);
+        Assertions.assertTrue(model.isPresent());
+        var pickaxeModel = registry.find(pickaxe);
+        Assertions.assertTrue(pickaxeModel.isPresent());
+    }
+
+    @Test
+    void getModelWithUpgrade() {
+        var registry = new ModelRegistry();
+        PipeLineTest.defaultResourcePipeLineTest().data(registry.paletteListener()).data(registry.modelListener()).build().execute();
+        var pickaxe = IRON_PICKAXE.upgrade(BINDING);
+        var pickaxeModel = registry.find(pickaxe);
+        Assertions.assertTrue(pickaxeModel.isPresent());
+        Assertions.assertEquals(3, ((CompositeModelTemplate) pickaxeModel.get()).getModels().size());
+    }
+
+    @Test
+    void getHandleModelWithUpgrade() {
+        var registry = new ModelRegistry();
+        PipeLineTest.defaultResourcePipeLineTest().data(registry.paletteListener()).data(registry.modelListener()).build().execute();
+        var handle = HANDLE.upgrade(REDSTONE_GEM).upgrade(IRON);
+        var handleModel = registry.find(handle);
+        Assertions.assertTrue(handleModel.isPresent());
+        Assertions.assertEquals(3, ((CompositeModelTemplate) handleModel.get()).getModels().size());
+    }
+
+    @Test
+    void reinforcedHandleTest() {
+        var registry = new ModelRegistry();
+        PipeLineTest.defaultResourcePipeLineTest().data(registry.paletteListener()).data(registry.modelListener()).build().execute();
+        var handle = REINFORCED_HANDLE.upgrade(REDSTONE_GEM).upgrade(IRON).upgrade(IRON);
+        var handleModel = registry.find(handle);
+        Assertions.assertTrue(handleModel.isPresent());
+        Assertions.assertEquals(3, ((CompositeModelTemplate) handleModel.get()).getModels().size());
     }
 }

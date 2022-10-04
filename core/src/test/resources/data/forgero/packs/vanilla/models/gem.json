@@ -1,0 +1,30 @@
+{
+  "type": "GEM",
+  "models": [
+    {
+      "name": "gem-0",
+      "type": "GENERATE",
+      "palette": "GEM",
+      "template": "gem_small.png",
+      "variants": [
+        {
+          "target": [
+            "model:extended_reinforced_handle"
+          ],
+          "template": "gem_small",
+          "offset": []
+        },
+        {
+          "target": [
+            "model:medium_reinforced_handle"
+          ],
+          "template": "gem_small",
+          "offset": [
+            -6,
+            -6
+          ]
+        }
+      ]
+    }
+  ]
+}

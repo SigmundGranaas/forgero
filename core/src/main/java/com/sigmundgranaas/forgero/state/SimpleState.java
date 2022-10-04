@@ -53,12 +53,7 @@ public class SimpleState implements Ingredient {
     }
 
     @Override
-    public boolean test(Matchable match) {
-        return type.test(match, MatchContext.INGREDIENT);
-    }
-
-    @Override
     public boolean test(Matchable match, MatchContext context) {
-        return type.test(match, context);
+        return test(match);
     }
 }

@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "handle",
-      "template": "handle",
+      "template": "handle.png",
       "type": "GENERATED",
       "palette": "MATERIAL",
       "variants": [
@@ -23,8 +23,9 @@
     },
     {
       "name": "reinforced_handle",
-      "modelType": "GENERATE_VARIANT",
-      "template": "reinforced_handle",
+      "modelType": "GENERATE",
+      "template": "reinforced_handle.png",
+      "palette": "MATERIAL",
       "variants": [
         {
           "target": [
@@ -79,7 +80,7 @@
     {
       "target": [
         "type:MATERIAL",
-        "id:reinforced_handle"
+        "id:reinforced_handle_schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "reinforced_handle"

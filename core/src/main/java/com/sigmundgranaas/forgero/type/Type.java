@@ -7,6 +7,13 @@ import com.sigmundgranaas.forgero.util.match.Matchable;
 import java.util.Optional;
 
 public interface Type extends Matchable {
+    Type HANDLE = new SimpleType("HANDLE", Optional.empty(), new TypeMatcher());
+    Type TOOL = new SimpleType("TOOL", Optional.empty(), new TypeMatcher());
+    Type TOOL_PART_HEAD = new SimpleType("TOOL_PART_HEAD", Optional.empty(), new TypeMatcher());
+    Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
+    Type UNDEFINED = new SimpleType("UNDEFINED", Optional.empty(), new TypeMatcher());
+    Type MATERIAL = new SimpleType("MATERIAL", Optional.empty(), new TypeMatcher());
+
     static Type of(String name) {
         var type = new SimpleType(name.toUpperCase(), Optional.empty(), new TypeMatcher());
         if (type.test(SCHEMATIC)) {
@@ -29,11 +36,5 @@ public interface Type extends Matchable {
         return Optional.empty();
     }
 
-    Type UNDEFINED = Type.of("UNDEFINED");
-    Type MATERIAL = Type.of("MATERIAL");
-    Type SCHEMATIC = Type.of("SCHEMATIC");
-    Type TOOL_PART_HEAD = Type.of("TOOL_PART_HEAD");
-    Type HANDLE = Type.of("HANDLE");
-    Type TOOL = Type.of("TOOL");
 
 }

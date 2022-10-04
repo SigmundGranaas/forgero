@@ -34,18 +34,14 @@ public class SimpleUpgrade implements Upgrade {
         return "forgero";
     }
 
-    @Override
-    public boolean test(Matchable match) {
-        return test(match, MatchContext.COMPOSITE);
-    }
 
     @Override
     public boolean test(Matchable match, MatchContext context) {
-        return type.test(match, context);
+        return type.test(match);
     }
 
     @Override
     public Type type() {
-        return null;
+        return type;
     }
 }

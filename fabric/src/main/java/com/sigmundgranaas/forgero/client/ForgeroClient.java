@@ -4,6 +4,9 @@ import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
+import com.sigmundgranaas.forgero.model.ModelRegistry;
+import com.sigmundgranaas.forgero.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.resources.ForgeroTextures;
 import com.sigmundgranaas.forgero.texture.ForgeroToolPartTextureRegistry;
 import net.fabricmc.api.ClientModInitializer;
@@ -26,9 +29,18 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private void initializeItemModels() {
+        var modelRegistry = new ModelRegistry();
+        PipelineBuilder
+                .builder()
+                .register(FabricPackFinder.supplier())
+                .data(modelRegistry.paletteListener())
+                .data(modelRegistry.modelListener())
+                .build()
+                .execute();
+
         new ForgeroTextures().createTextureIdentifiers();
         registerToolPartTextures();
-        var modelProvider = new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE);
+        var modelProvider = new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE, modelRegistry);
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
     }
 

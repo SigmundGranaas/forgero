@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.state.slot.SlotContainer;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.MatchContext;
 import com.sigmundgranaas.forgero.util.match.Matchable;
@@ -11,18 +12,19 @@ import com.sigmundgranaas.forgero.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class Composite implements Upgradeable<Composite> {
     private final List<State> ingredientList;
-    private final ImmutableList<State> upgrades;
+    private final SlotContainer upgrades;
     private final String name;
     private final String nameSpace;
     private final Type type;
 
-    protected Composite(List<State> ingredientList, ImmutableList<State> upgrades, String name, Type type) {
+    protected Composite(List<State> ingredientList, SlotContainer upgrades, String name, Type type) {
         this.name = name;
         this.ingredientList = ingredientList;
         this.upgrades = upgrades;
@@ -30,7 +32,7 @@ public class Composite implements Upgradeable<Composite> {
         this.nameSpace = Forgero.NAMESPACE;
     }
 
-    protected Composite(List<State> ingredientList, ImmutableList<State> upgrades, String name, String nameSpace, Type type) {
+    protected Composite(List<State> ingredientList, SlotContainer upgrades, String name, String nameSpace, Type type) {
         this.name = name;
         this.ingredientList = ingredientList;
         this.upgrades = upgrades;
@@ -61,7 +63,7 @@ public class Composite implements Upgradeable<Composite> {
 
     @Override
     public @NotNull List<Property> getProperties() {
-        return Stream.of(ingredientList, upgrades)
+        return Stream.of(ingredients(), upgrades())
                 .flatMap(List::stream)
                 .map(PropertyContainer::getProperties)
                 .flatMap(List::stream)
@@ -90,7 +92,7 @@ public class Composite implements Upgradeable<Composite> {
                 return ingredientList.stream().anyMatch(name::test);
             }
         }
-        return match.test(this, context);
+        return false;
     }
 
     public List<State> ingredients() {
@@ -99,10 +101,10 @@ public class Composite implements Upgradeable<Composite> {
 
     @Override
     public Composite upgrade(State upgrade) {
-        var upgrades = ImmutableList.<State>builder().addAll(upgrades()).add(upgrade).build();
+        upgrades.set(upgrade);
         return builder()
                 .addIngredients(ingredients())
-                .addUpgrades(upgrades)
+                .addUpgrades(upgrades.slots())
                 .type(type())
                 .name(name())
                 .build();
@@ -110,12 +112,16 @@ public class Composite implements Upgradeable<Composite> {
 
     @Override
     public ImmutableList<State> upgrades() {
-        return upgrades;
+        return ImmutableList.<State>builder().addAll(upgrades.entries()).build();
+    }
+
+    public List<Slot> slots() {
+        return upgrades.slots();
     }
 
     public static class CompositeBuilder {
         private final List<State> ingredientList;
-        private final List<State> upgrades;
+        private final SlotContainer upgradeContainer;
         private final NameCompositor compositor = new NameCompositor();
         private Type type = Type.UNDEFINED;
         private String name;
@@ -123,7 +129,12 @@ public class Composite implements Upgradeable<Composite> {
 
         public CompositeBuilder() {
             this.ingredientList = new ArrayList<>();
-            this.upgrades = new ArrayList<>();
+            this.upgradeContainer = SlotContainer.of(Collections.emptyList());
+        }
+
+        public CompositeBuilder(List<Slot> upgradeSlots) {
+            this.ingredientList = new ArrayList<>();
+            this.upgradeContainer = SlotContainer.of(upgradeSlots);
         }
 
         public CompositeBuilder addIngredient(State ingredient) {
@@ -137,12 +148,22 @@ public class Composite implements Upgradeable<Composite> {
         }
 
         public CompositeBuilder addUpgrade(State upgrade) {
-            upgrades.add(upgrade);
+            upgradeContainer.set(upgrade);
+            return this;
+        }
+
+        public CompositeBuilder addUpgrade(Slot upgrade) {
+            upgradeContainer.set(upgrade);
+            return this;
+        }
+
+        public CompositeBuilder addUpgrades(List<? extends Slot> upgrades) {
+            upgrades.forEach(upgradeContainer::set);
             return this;
         }
 
         public CompositeBuilder addUpgrades(ImmutableList<State> upgrades) {
-            this.upgrades.addAll(upgrades);
+            upgrades.forEach(upgradeContainer::set);
             return this;
         }
 
@@ -165,7 +186,7 @@ public class Composite implements Upgradeable<Composite> {
             if (name == null) {
                 this.name = compositor.compositeName(ingredientList);
             }
-            return new Composite(ingredientList, ImmutableList.<State>builder().addAll(upgrades).build(), name, nameSpace, type);
+            return new Composite(ingredientList, upgradeContainer, name, nameSpace, type);
         }
     }
 }

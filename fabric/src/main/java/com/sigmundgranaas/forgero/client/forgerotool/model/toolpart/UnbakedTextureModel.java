@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
@@ -19,7 +18,7 @@ public class UnbakedTextureModel extends Unbaked2DToolPartModel {
         this.texture = texture;
     }
 
-    public static UnbakedTextureModel of(String id, String texture, int layerIndex, ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter,) {
+    public static UnbakedTextureModel of(String id, String texture, int layerIndex, ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter) {
         return new UnbakedTextureModel(loader, textureGetter, id, texture, layerIndex);
     }
 

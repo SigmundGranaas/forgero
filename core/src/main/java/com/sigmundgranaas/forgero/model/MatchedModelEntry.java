@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.model;
 
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.util.match.Matchable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,11 +15,11 @@ public class MatchedModelEntry implements ModelMatcher {
     }
 
     @Override
-    public Optional<ModelTemplate> find(State state, ModelProvider provider) {
+    public Optional<ModelTemplate> match(Matchable state, ModelProvider provider) {
         return models.stream()
                 .filter(pairing -> pairing.match().test(state))
                 .map(ModelMatchPairing::model)
-                .map(pairing -> pairing.find(state, provider))
+                .map(pairing -> pairing.match(state, provider))
                 .filter(Optional::isPresent)
                 .flatMap(Optional::stream)
                 .findFirst();

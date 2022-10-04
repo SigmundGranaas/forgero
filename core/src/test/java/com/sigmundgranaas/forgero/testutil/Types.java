@@ -9,7 +9,7 @@ public class Types {
     public static Type MATERIAL = Type.of("MATERIAL");
     public static Type WOOD = Type.of("WOOD", MATERIAL);
     public static Type SCHEMATIC = Type.of("SCHEMATIC");
-    public static Type PICKAXE_SCHEMATIC = Type.of("PICKAXE_SCHEMATIC", SCHEMATIC);
+    public static Type PICKAXE_SCHEMATIC = Type.of("PICKAXE_HEAD_SCHEMATIC", SCHEMATIC);
     public static Type HANDLE_SCHEMATIC = Type.of("HANDLE_SCHEMATIC", SCHEMATIC);
     public static Type BINDING_SCHEMATIC = Type.of("BINDING_SCHEMATIC", SCHEMATIC);
     public static Type PART = Type.of("PART");

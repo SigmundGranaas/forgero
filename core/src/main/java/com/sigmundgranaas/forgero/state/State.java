@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import com.sigmundgranaas.forgero.util.match.NameMatch;
 
 import java.util.List;
 
@@ -23,6 +24,19 @@ public interface State extends PropertyContainer, Matchable, Identifiable {
     Type type();
 
     default boolean equals(State s) {
+        return false;
+    }
+
+    @Override
+    default boolean test(Matchable match) {
+        if (match instanceof Type typeMatch) {
+            if (this.type().test(typeMatch)) {
+                return true;
+            }
+        }
+        if (match instanceof NameMatch name) {
+            return name.test(this);
+        }
         return false;
     }
 }

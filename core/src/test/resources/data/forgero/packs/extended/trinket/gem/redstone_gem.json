@@ -1,0 +1,14 @@
+{
+  "type": "GEM",
+  "name": "redstone-gem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": []
+  },
+  "palette": {
+    "name": "redstone-gem"
+  }
+}

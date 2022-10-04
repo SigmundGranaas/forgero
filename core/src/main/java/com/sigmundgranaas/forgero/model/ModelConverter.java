@@ -8,16 +8,20 @@ import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 public class ModelConverter {
     private final TypeTree tree;
     private final HashMap<String, ModelMatcher> models;
+    private final Set<String> textures;
 
-    public ModelConverter(TypeTree tree, HashMap<String, ModelMatcher> models) {
+    public ModelConverter(TypeTree tree, HashMap<String, ModelMatcher> models, Set<String> textures) {
         this.tree = tree;
         this.models = models;
+        this.textures = textures;
     }
 
     public static boolean notEmpty(String test) {
@@ -29,10 +33,21 @@ public class ModelConverter {
     }
 
     public void register(ModelData data, String type) {
+        if (data.getTemplate().contains(".png")) {
+            textures.add(data.getTemplate());
+        }
         if (data.getName().equals(EMPTY_IDENTIFIER)) {
             ModelMatcher model;
             var match = new ModelMatch(data.getTarget(), "");
-            model = new ModelMatchPairing(match, new TemplatedModelEntry(data.getTemplate()));
+            if (data.getModelType().equals("BASED_COMPOSITE")) {
+                model = new ModelMatchPairing(match, new TemplatedModelEntry(data.getTemplate()));
+            } else if (data.getModelType().equals("COMPOSITE")) {
+                model = new ModelMatchPairing(match, new CompositeModelEntry());
+            } else if (data.getModelType().equals("UPGRADE")) {
+                model = new ModelMatchPairing(new ModelMatch(data.getTarget(), "UPGRADE"), new TemplatedModelEntry(data.getTemplate()));
+            } else {
+                model = (de, da) -> Optional.empty();
+            }
             tree.find(type).ifPresent(node -> node.addResource(model, ModelMatcher.class));
         } else if (notEmpty(data.getName()) && data.getModelType().equals("GENERATE")) {
             List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());

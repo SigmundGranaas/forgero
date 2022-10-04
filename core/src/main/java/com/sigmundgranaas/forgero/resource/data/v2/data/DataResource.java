@@ -154,5 +154,10 @@ public class DataResource implements Identifiable {
         return Optional.ofNullable(context);
     }
 
+    @NotNull
+    public Optional<PaletteData> palette() {
+        return Optional.ofNullable(palette);
+    }
+
 
 }

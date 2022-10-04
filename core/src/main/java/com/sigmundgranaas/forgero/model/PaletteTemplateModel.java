@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.model;
 
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.util.match.Matchable;
 
 import java.util.Optional;
 
@@ -12,7 +12,7 @@ public record PaletteTemplateModel(String palette, String template) implements M
     }
 
     @Override
-    public Optional<ModelTemplate> find(State state, ModelProvider provider) {
+    public Optional<ModelTemplate> match(Matchable state, ModelProvider provider) {
         return Optional.of(this);
     }
 }
