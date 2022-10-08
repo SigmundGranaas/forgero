@@ -58,14 +58,8 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        var model = converter(stack.getItem());
-        if (model.isPresent()) {
-            var unbakedModel = model.get().convert(this::modelConverter);
-            if (unbakedModel.isPresent()) {
-                var bakedModel = unbakedModel.get().bake();
-                bakedModel.emitItemQuads(null, null, context);
-            }
-        }
+        converter(stack.getItem()).flatMap(this::convertModel).ifPresent(model -> model.emitItemQuads(null, null, context));
+
         /**
          * if (stack.hasNbt()) {
          *             cache.getUnchecked(stack).emitItemQuads(null, null, context);
@@ -90,6 +84,14 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         return this;
     }
 
+    private Optional<FabricBakedModel> convertModel(ModelTemplate template) {
+        var unbakedModel = template.convert(this::modelConverter);
+        if (unbakedModel.isPresent()) {
+            return unbakedModel.map(UnbakedTextureModel::bake);
+        }
+        return Optional.empty();
+    }
+
     private Optional<ModelTemplate> converter(Item item) {
         String id = Registry.ITEM.getId(item).toString();
         var compositeOpt = com.sigmundgranaas.forgero.Registry.STATES.get(id).map(Composite.class::cast);
@@ -112,7 +114,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     }
 
     private UnbakedTextureModel templateToModel(PaletteTemplateModel model) {
-        String texture = String.format("%s-%s", model.palette(), model.template());
+        String texture = String.format("%s-%s", model.palette(), model.template().replace(".png", ""));
         return new UnbakedTextureModel(loader, textureGetter, texture, texture, 1);
     }
 }

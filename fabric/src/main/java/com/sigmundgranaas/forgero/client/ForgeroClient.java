@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.client.forgerotool.model.ForgeroModelVariantPr
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
+import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.resources.ForgeroTextures;
@@ -19,9 +20,14 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
+
+    public static Map<String, PaletteTemplateModel> TEXTURES = new HashMap<>();
 
     @Override
     public void onInitializeClient() {
@@ -39,15 +45,18 @@ public class ForgeroClient implements ClientModInitializer {
                 .execute();
 
         new ForgeroTextures().createTextureIdentifiers();
-        registerToolPartTextures();
+        registerToolPartTextures(modelRegistry);
         var modelProvider = new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE, modelRegistry);
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
     }
 
-    private void registerToolPartTextures() {
+    private void registerToolPartTextures(ModelRegistry modelRegistry) {
 
         ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
-
+        TEXTURES = modelRegistry.getTextures();
+        TEXTURES.values().forEach(texture -> {
+            ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.name().replace(".png", ""))));
+        });
         registry.getTextures().forEach(texture -> {
             ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier())));
         });

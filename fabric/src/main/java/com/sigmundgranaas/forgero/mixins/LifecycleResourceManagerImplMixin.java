@@ -4,10 +4,13 @@ import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureLoader;
 import com.sigmundgranaas.forgero.identifier.texture.toolpart.ToolPartModelTextureIdentifier;
+import com.sigmundgranaas.forgero.resources.FileService;
 import com.sigmundgranaas.forgero.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.texture.ForgeroToolPartTextureRegistry;
 import com.sigmundgranaas.forgero.texture.Texture;
 import com.sigmundgranaas.forgero.texture.TextureLoader;
+import com.sigmundgranaas.forgero.texture.V2.FileLoader;
+import com.sigmundgranaas.forgero.texture.V2.TextureGenerator;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
@@ -21,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.client.ForgeroClient.TEXTURES;
+
 @Mixin(LifecycledResourceManagerImpl.class)
 public abstract class LifecycleResourceManagerImplMixin {
 
@@ -31,22 +36,34 @@ public abstract class LifecycleResourceManagerImplMixin {
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) throws IOException {
 
         if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png")) {
-            String[] elements = id.getPath().split("/");
-            var factory = new FabricTextureIdentifierFactory();
-            String toolPartName = elements.length > 1 ? elements[elements.length - 1].replace(".png", "") : "INVALID_TEXTURE";
-            if (elements.length > 1 && ForgeroToolPartTextureRegistry.getInstance(factory).isRegistered(toolPartName)) {
+            var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
+            if (TEXTURES.containsKey(textureId)) {
+                FileLoader loader = new FileService();
 
-                Optional<ToolPartModelTextureIdentifier> identifierResult = factory.createToolPartTextureIdentifier(id.getPath());
-
-                if (identifierResult.isPresent() && ForgeroToolPartTextureRegistry.getInstance(factory).isGeneratedTexture(identifierResult.get())) {
-                    TextureLoader loader = new FabricTextureLoader(MinecraftClient.getInstance().getResourceManager()::getResource);
-
-                    Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
-
-                    Resource resource = new Resource(id.getNamespace(), toolPartTexture::getStream);
+                var texture = TextureGenerator.getInstance(loader).getTexture(TEXTURES.get(textureId));
+                if (texture.isPresent()) {
+                    Resource resource = new Resource(id.getNamespace(), texture.get()::getStream);
 
                     cir.setReturnValue(Optional.of(resource));
-                    // }
+                }
+            } else {
+                String[] elements = id.getPath().split("/");
+                var factory = new FabricTextureIdentifierFactory();
+                String toolPartName = elements.length > 1 ? elements[elements.length - 1].replace(".png", "") : "INVALID_TEXTURE";
+                if (elements.length > 1 && ForgeroToolPartTextureRegistry.getInstance(factory).isRegistered(toolPartName)) {
+
+                    Optional<ToolPartModelTextureIdentifier> identifierResult = factory.createToolPartTextureIdentifier(id.getPath());
+
+                    if (identifierResult.isPresent() && ForgeroToolPartTextureRegistry.getInstance(factory).isGeneratedTexture(identifierResult.get())) {
+                        TextureLoader loader = new FabricTextureLoader(MinecraftClient.getInstance().getResourceManager()::getResource);
+
+                        Texture toolPartTexture = CachedToolPartTextureService.getInstance(loader).getTexture(identifierResult.get());
+
+                        Resource resource = new Resource(id.getNamespace(), toolPartTexture::getStream);
+
+                        cir.setReturnValue(Optional.of(resource));
+                        // }
+                    }
                 }
             }
         }

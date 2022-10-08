@@ -8,17 +8,17 @@ import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 public class ModelConverter {
     private final TypeTree tree;
     private final HashMap<String, ModelMatcher> models;
-    private final Set<String> textures;
+    private final Map<String, PaletteTemplateModel> textures;
 
-    public ModelConverter(TypeTree tree, HashMap<String, ModelMatcher> models, Set<String> textures) {
+    public ModelConverter(TypeTree tree, HashMap<String, ModelMatcher> models, Map<String, PaletteTemplateModel> textures) {
         this.tree = tree;
         this.models = models;
         this.textures = textures;
@@ -34,7 +34,7 @@ public class ModelConverter {
 
     public void register(ModelData data, String type) {
         if (data.getTemplate().contains(".png")) {
-            textures.add(data.getTemplate());
+            //textures.add(data.getTemplate());
         }
         if (data.getName().equals(EMPTY_IDENTIFIER)) {
             ModelMatcher model;
@@ -59,6 +59,7 @@ public class ModelConverter {
 
     private ModelMatchPairing generate(PaletteData palette, String template) {
         var model = new PaletteTemplateModel(palette.getName(), template);
+        textures.put(model.identifier(), model);
         return new ModelMatchPairing(new ModelMatch(List.of(palette.getName()), ""), model);
     }
 

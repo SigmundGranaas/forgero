@@ -8,25 +8,28 @@ import com.sigmundgranaas.forgero.state.Identifiable;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.resource.data.v2.data.ResourceType.MODEL;
 
 public class ModelRegistry {
     private final HashMap<String, ModelMatcher> modelMap;
-    private final Set<String> textures;
+    private final Map<String, PaletteTemplateModel> textures;
     private TypeTree tree;
 
     public ModelRegistry(TypeTree tree) {
         this.tree = tree;
         this.modelMap = new HashMap<>();
-        this.textures = new HashSet<>();
+        this.textures = new HashMap<>();
     }
 
     public ModelRegistry() {
         this.tree = new TypeTree();
         this.modelMap = new HashMap<>();
-        this.textures = new HashSet<>();
+        this.textures = new HashMap<>();
     }
 
     public ResourceListener<List<DataResource>> modelListener() {
@@ -72,7 +75,7 @@ public class ModelRegistry {
         return Optional.empty();
     }
 
-    public Set<String> getTextures() {
+    public Map<String, PaletteTemplateModel> getTextures() {
         return textures;
     }
 }

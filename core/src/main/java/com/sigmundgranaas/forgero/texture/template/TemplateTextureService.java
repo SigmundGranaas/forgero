@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.texture.template;
 
+import com.sigmundgranaas.forgero.identifier.texture.TemplateIdentifier;
 import com.sigmundgranaas.forgero.identifier.texture.toolpart.TemplateTextureIdentifier;
 
 /**
@@ -9,6 +10,8 @@ import com.sigmundgranaas.forgero.identifier.texture.toolpart.TemplateTextureIde
  */
 public interface TemplateTextureService {
     TemplateTexture getTemplate(TemplateTextureIdentifier id);
+
+    TemplateTexture2 getTemplate(TemplateIdentifier id);
 
     void clearCache();
 }

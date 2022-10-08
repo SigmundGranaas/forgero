@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  */
 public class PaletteFactoryImpl implements PaletteFactory {
     //TODO Split into smaller methods
+    
     public static MaterialPalette createColourPalette(UnbakedPalette palette) {
         HashSet<RgbColour> colourValueSet = new HashSet<>();
         for (Texture image : palette.getInclusions()) {
