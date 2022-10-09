@@ -4,11 +4,10 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModelCollection;
-import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.UnbakedTextureModel;
-import com.sigmundgranaas.forgero.model.CompositeModelTemplate;
-import com.sigmundgranaas.forgero.model.ModelRegistry;
-import com.sigmundgranaas.forgero.model.ModelTemplate;
-import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.SingleTexturedModel;
+import com.sigmundgranaas.forgero.client.model.Unbaked2DTexturedModel;
+import com.sigmundgranaas.forgero.client.model.UnbakedFabricModel;
+import com.sigmundgranaas.forgero.model.*;
 import com.sigmundgranaas.forgero.state.Composite;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
@@ -25,6 +24,8 @@ import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -59,7 +60,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
         converter(stack.getItem()).flatMap(this::convertModel).ifPresent(model -> model.emitItemQuads(null, null, context));
-
         /**
          * if (stack.hasNbt()) {
          *             cache.getUnchecked(stack).emitItemQuads(null, null, context);
@@ -87,7 +87,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private Optional<FabricBakedModel> convertModel(ModelTemplate template) {
         var unbakedModel = template.convert(this::modelConverter);
         if (unbakedModel.isPresent()) {
-            return unbakedModel.map(UnbakedTextureModel::bake);
+            return unbakedModel.map(UnbakedFabricModel::bake);
         }
         return Optional.empty();
     }
@@ -102,19 +102,42 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         return Optional.empty();
     }
 
-    private Optional<UnbakedTextureModel> modelConverter(ModelTemplate input) {
+    private Optional<UnbakedFabricModel> modelConverter(ModelTemplate input) {
+        var textureList = new ArrayList<String>();
         if (input instanceof CompositeModelTemplate model) {
-            if (model.getModels().size() > 0) {
-                if (model.getModels().get(0) instanceof PaletteTemplateModel paletteModel) {
-                    return Optional.of(templateToModel(paletteModel));
-                }
-            }
+            model.getModels().forEach(template -> textureCollector(template, textureList));
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
+            return Optional.of(unbakedModel);
+        } else if (input instanceof TextureBasedModel model) {
+            textureCollector(model, textureList);
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
+            return Optional.of(unbakedModel);
         }
         return Optional.empty();
     }
 
-    private UnbakedTextureModel templateToModel(PaletteTemplateModel model) {
-        String texture = String.format("%s-%s", model.palette(), model.template().replace(".png", ""));
-        return new UnbakedTextureModel(loader, textureGetter, texture, texture, 1);
+    private void textureCollector(ModelTemplate template, List<String> accumulator) {
+        if (template instanceof PaletteTemplateModel palette) {
+            textureCollector(palette, accumulator);
+        } else if (template instanceof CompositeModelTemplate composite) {
+            textureCollector(composite, accumulator);
+        }
+    }
+
+    private void textureCollector(PaletteTemplateModel template, List<String> accumulator) {
+        accumulator.add(textureName(template));
+    }
+
+    private void textureCollector(CompositeModelTemplate template, List<String> accumulator) {
+        template.getModels().forEach(model -> textureCollector(model, accumulator));
+    }
+
+
+    private UnbakedFabricModel templateToModel(PaletteTemplateModel model) {
+        return new SingleTexturedModel(loader, textureGetter, textureName(model), textureName(model), 1);
+    }
+
+    private String textureName(PaletteTemplateModel model) {
+        return String.format("%s-%s", model.palette(), model.template().replace(".png", ""));
     }
 }

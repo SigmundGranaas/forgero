@@ -1,0 +1,36 @@
+{
+  "type": "AXE",
+  "name": "axe",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "AXE",
+    "target": "CREATE",
+    "recipe": {
+    },
+    "components": [
+      {
+        "type": "AXE_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "type": "BINDING",
+        "tier": 1
+      }
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

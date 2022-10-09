@@ -1,8 +1,7 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model.toolpart;
+package com.sigmundgranaas.forgero.client.model;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.client.model.UnbakedFabricModel;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.ModelRotation;
@@ -14,27 +13,25 @@ import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.math.Direction;
 
+import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
-public abstract class Unbaked2DToolPartModel implements UnbakedFabricModel {
-    public static final String TRANSPARENT_BASE_IDENTIFIER = "transparent_base";
+public class Unbaked2DTexturedModel implements UnbakedFabricModel {
     private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
+
+    public static final String TRANSPARENT_BASE_IDENTIFIER = "transparent_base";
+    private final List<String> textures;
+    private final String id;
     private final ModelLoader loader;
     private final Function<SpriteIdentifier, Sprite> textureGetter;
 
-    public Unbaked2DToolPartModel(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter) {
+    public Unbaked2DTexturedModel(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, List<String> textures, String id) {
         this.loader = loader;
         this.textureGetter = textureGetter;
+        this.textures = textures;
+        this.id = id;
     }
-
-    public abstract String getIdentifier();
-
-    public String getTextureIdentifier() {
-        return getIdentifier();
-    }
-
-    public abstract int getModelLayerIndex();
 
     public String BuildJsonModel() {
         JsonObject model = new JsonObject();
@@ -49,20 +46,24 @@ public abstract class Unbaked2DToolPartModel implements UnbakedFabricModel {
     }
 
     protected JsonObject getTextures() {
-        JsonObject textures = new JsonObject();
-
-        for (int i = 0; i <= getModelLayerIndex(); i++) {
-            if (i == getModelLayerIndex()) {
-                textures.addProperty("layer" + i, getTextureBasePath() + getIdentifier());
-            } else {
-                textures.addProperty("layer" + i, getTextureBasePath() + TRANSPARENT_BASE_IDENTIFIER);
+        JsonObject jsonTextures = new JsonObject();
+        if (this.textures.size() > 0) {
+            for (int i = 0; i < this.textures.size(); i++) {
+                jsonTextures.addProperty("layer" + i, getTextureBasePath() + this.textures.get(i));
             }
+        } else {
+            jsonTextures.addProperty("layer" + 1, getTextureBasePath() + TRANSPARENT_BASE_IDENTIFIER);
         }
-        return textures;
+
+        return jsonTextures;
     }
 
     public JsonUnbakedModel buildUnbakedJsonModel() {
         return JsonUnbakedModel.deserialize(BuildJsonModel());
+    }
+
+    public String getIdentifier() {
+        return id;
     }
 
     @Override
