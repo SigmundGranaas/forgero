@@ -69,12 +69,22 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
         return rootNodes.stream().map(MutableTypeNode::resolve).toList();
     }
 
+    public List<MutableTypeNode> nodes() {
+        var list = new ArrayList<MutableTypeNode>();
+        rootNodes.forEach(node -> node.allChildren(list));
+        return list;
+    }
+
     private void removeMissingNodes(List<MutableTypeNode> nodes) {
         this.missingNodes = new ArrayList<>(missingNodes.stream().filter(missingNode -> nodes.stream().noneMatch(node -> node.name().equals(missingNode.name()))).toList());
     }
 
     public Optional<MutableTypeNode> find(String name) {
         return rootNodes.stream().map(typeNode -> find(name, typeNode).map(MutableTypeNode.class::cast)).flatMap(Optional::stream).findAny();
+    }
+
+    public Optional<MutableTypeNode> find(Type type) {
+        return rootNodes.stream().map(typeNode -> find(type.typeName(), typeNode).map(MutableTypeNode.class::cast)).flatMap(Optional::stream).findAny();
     }
 
     public Optional<MutableTypeNode> find(String name, MutableTypeNode node) {

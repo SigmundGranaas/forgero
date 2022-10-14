@@ -6,6 +6,8 @@ public class NbtConstants {
     //Misc
     public static String NAME_IDENTIFIER = "NAME";
     public static String NAMESPACE_IDENTIFIER = "NAMESPACE";
+
+    public static String TYPE_IDENTIFIER = "TYPE";
     public static String ID_IDENTIFIER = "ID";
 
     //State

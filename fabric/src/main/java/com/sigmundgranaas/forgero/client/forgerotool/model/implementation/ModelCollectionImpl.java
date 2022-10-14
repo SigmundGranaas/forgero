@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.client.forgerotool.model.implementation;
 
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.client.forgerotool.model.*;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolPartAdapter;
@@ -95,7 +96,7 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
     @Override
     public FabricBakedModel getModel(Item item) {
         String id = Registry.ITEM.getId(item).toString();
-        var compositeOpt = com.sigmundgranaas.forgero.Registry.STATES.get(id).map(Composite.class::cast);
+        var compositeOpt = ForgeroStateRegistry.STATES.get(id).map(Composite.class::cast);
         if (compositeOpt.isPresent()) {
             var composite = compositeOpt.get();
             if (composite.test(Type.of("TOOL"))) {

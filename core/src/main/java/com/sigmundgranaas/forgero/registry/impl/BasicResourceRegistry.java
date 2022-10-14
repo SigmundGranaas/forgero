@@ -16,6 +16,7 @@ public class BasicResourceRegistry implements ResourceRegistry<State> {
     public BasicResourceRegistry(Map<String, State> states, TypeTree tree) {
         this.states = states;
         this.tree = tree;
+        states.values().forEach(state -> tree.find(state.type()).ifPresent(node -> node.addResource(state, State.class)));
     }
 
     @Override

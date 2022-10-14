@@ -1,5 +1,5 @@
 {
-  "type": "BINDING",
+  "type": "TOOL_BINDING",
   "models": [
     {
       "name": "binding",

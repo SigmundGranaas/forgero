@@ -106,7 +106,7 @@ public class DataBuilder {
         var templateIngredients = new ArrayList<List<IngredientData>>();
         for (IngredientData ingredient : components) {
             if (ingredient.id().equals(THIS_IDENTIFIER)) {
-                templateIngredients.add(List.of(IngredientData.builder().id(data.identifier()).build()));
+                templateIngredients.add(List.of(IngredientData.builder().id(data.identifier()).unique(true).build()));
             } else if (!ingredient.type().equals(EMPTY_IDENTIFIER)) {
                 if (ingredient.unique()) {
                     var resources = tree.find(ingredient.type())

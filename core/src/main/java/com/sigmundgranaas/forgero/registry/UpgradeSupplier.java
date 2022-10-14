@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.registry;
 
-import com.sigmundgranaas.forgero.state.Upgrade;
+import com.sigmundgranaas.forgero.state.State;
 
 import java.util.Optional;
 
 @FunctionalInterface
 public interface UpgradeSupplier {
-    Optional<Upgrade> get(String id);
+    Optional<State> get(String id);
 }

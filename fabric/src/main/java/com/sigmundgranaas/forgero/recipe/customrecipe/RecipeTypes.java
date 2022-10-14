@@ -12,6 +12,10 @@ public enum RecipeTypes {
 
     MISC_SHAPELESS,
 
+    STATE_CRAFTING_RECIPE,
+
+    
+    STATE_UPGRADE_RECIPE,
     TOOLPART_SCHEMATIC_RECIPE;
 
     String getName() {

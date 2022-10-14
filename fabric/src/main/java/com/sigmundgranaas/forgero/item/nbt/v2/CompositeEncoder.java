@@ -21,6 +21,7 @@ public class CompositeEncoder implements CompoundEncoder<Composite> {
     public NbtCompound encode(Composite element) {
         var compound = identifiableEncoder.encode(element);
         compound.putString(STATE_TYPE_IDENTIFIER, COMPOSITE_IDENTIFIER);
+        compound.putString(TYPE_IDENTIFIER, element.type().typeName());
         var ingredients = new NbtList();
         element.ingredients().stream().map(ingredientEncoder::encode).forEach(ingredients::add);
         compound.put(INGREDIENTS_IDENTIFIER, ingredients);

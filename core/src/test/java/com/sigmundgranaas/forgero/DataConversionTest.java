@@ -31,6 +31,6 @@ public class DataConversionTest {
         //Registry.register(dataPackage);
         //Registry.init();
 
-        Assertions.assertEquals("iron-pickaxe", Registry.STATES.get("forgero#iron-pickaxe").get().name());
+        Assertions.assertEquals("iron-pickaxe", ForgeroStateRegistry.STATES.get("forgero#iron-pickaxe").get().name());
     }
 }

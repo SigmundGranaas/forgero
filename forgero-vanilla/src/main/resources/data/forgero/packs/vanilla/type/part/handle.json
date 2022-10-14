@@ -1,4 +1,12 @@
 {
   "parent": "TOOL_PART",
-  "name": "HANDLE"
+  "name": "HANDLE",
+  "children": [
+    {
+      "name": "TOOL_HANDLE"
+    },
+    {
+      "name": "SWORD_GUARD"
+    }
+  ]
 }

@@ -3,10 +3,12 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModelCollection;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.SingleTexturedModel;
 import com.sigmundgranaas.forgero.client.model.Unbaked2DTexturedModel;
 import com.sigmundgranaas.forgero.client.model.UnbakedFabricModel;
+import com.sigmundgranaas.forgero.item.nbt.v2.CompositeParser;
 import com.sigmundgranaas.forgero.model.*;
 import com.sigmundgranaas.forgero.state.Composite;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
@@ -29,6 +31,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private final UnbakedModelCollection unbakedModelCollection;
@@ -59,7 +63,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        converter(stack.getItem()).flatMap(this::convertModel).ifPresent(model -> model.emitItemQuads(null, null, context));
+        converter(stack).flatMap(this::convertModel).ifPresent(model -> model.emitItemQuads(null, null, context));
         /**
          * if (stack.hasNbt()) {
          *             cache.getUnchecked(stack).emitItemQuads(null, null, context);
@@ -92,9 +96,14 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         return Optional.empty();
     }
 
-    private Optional<ModelTemplate> converter(Item item) {
-        String id = Registry.ITEM.getId(item).toString();
-        var compositeOpt = com.sigmundgranaas.forgero.Registry.STATES.get(id).map(Composite.class::cast);
+    private Optional<ModelTemplate> converter(ItemStack stack) {
+        Optional<Composite> compositeOpt;
+        if (stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
+            compositeOpt = new CompositeParser(ForgeroStateRegistry.STATES::get, ForgeroStateRegistry.STATES::get).parse(stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER));
+        } else {
+            String id = Registry.ITEM.getId(stack.getItem()).toString();
+            compositeOpt = ForgeroStateRegistry.STATES.get(id).map(Composite.class::cast);
+        }
         if (compositeOpt.isPresent()) {
             var composite = compositeOpt.get();
             return registry.find(composite);

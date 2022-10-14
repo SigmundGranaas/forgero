@@ -29,6 +29,12 @@ public class MutableTypeNode {
         return children;
     }
 
+    public List<MutableTypeNode> allChildren(List<MutableTypeNode> children) {
+        children.addAll(children());
+        children().forEach(child -> child.allChildren(children));
+        return children;
+    }
+
     public MutableTypeNode addChild(MutableTypeNode child) {
         MutableTypeNode parentedChild = child.addParent(this);
         this.children.add(child);

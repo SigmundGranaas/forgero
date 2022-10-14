@@ -40,6 +40,8 @@ public class RecipeCollectionImpl implements RecipeCollection {
                 SecondaryMaterialToolPartUpgradeRecipe.Serializer.INSTANCE,
                 GemUpgradeRecipe.Serializer.INSTANCE,
                 GemToolPartUpgradeRecipe.Serializer.INSTANCE,
-                SchematicToolPartRecipe.SchematicToolPartRecipeSerializer.INSTANCE);
+                StateCraftingRecipe.StateCraftingRecipeSerializer.INSTANCE,
+                SchematicToolPartRecipe.SchematicToolPartRecipeSerializer.INSTANCE,
+                StateUpgradeRecipe.Serializer.INSTANCE);
     }
 }

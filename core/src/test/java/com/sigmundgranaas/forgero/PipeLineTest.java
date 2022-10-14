@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.Registry.*;
+import static com.sigmundgranaas.forgero.ForgeroStateRegistry.*;
 import static com.sigmundgranaas.forgero.resource.data.Constant.*;
 
 public class PipeLineTest {
@@ -23,6 +23,6 @@ public class PipeLineTest {
     @Test
     void loadResources() {
         defaultResourcePipeLineTest().build().execute();
-        Assertions.assertTrue(Registry.STATES.get("forgero-test:oak-pickaxe").isPresent());
+        Assertions.assertTrue(ForgeroStateRegistry.STATES.get("forgero-test:oak-pickaxe").isPresent());
     }
 }

@@ -3,13 +3,16 @@ package com.sigmundgranaas.forgero.resources;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.ForgeroRegistry;
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.material.material.MaterialType;
+import com.sigmundgranaas.forgero.resources.external.Patchouli;
 import com.sigmundgranaas.forgero.schematic.HeadSchematic;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.texture.CachedToolPartTextureService;
 import com.sigmundgranaas.forgero.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.toolpart.ForgeroToolPartTypes;
-import com.sigmundgranaas.forgero.resources.external.Patchouli;
+import com.sigmundgranaas.forgero.type.MutableTypeNode;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.tags.JTag;
@@ -27,10 +30,11 @@ import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 
 
 public class DynamicResourceGenerator {
-    public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:builtin");
+    public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:dynamic");
 
     public void generateResources() {
         generateTags();
+        generateTagsFromStateTree();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
 
         if (FabricLoader.getInstance().isModLoaded("patchouli")) {
@@ -78,6 +82,22 @@ public class DynamicResourceGenerator {
         addToolPartTags(ForgeroToolPartTypes.BINDING, new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/binding_schematics"), new Identifier(ForgeroInitializer.MOD_NAMESPACE, "items/bindings"));
         addGemTags();
     }
+
+    public void generateTagsFromStateTree() {
+        ForgeroStateRegistry.TREE.nodes().forEach(this::createTagFromType);
+    }
+
+    private void createTagFromType(MutableTypeNode node) {
+        JTag typeTag = new JTag();
+        var states = node.getResources(State.class);
+        if (states.size() > 0) {
+            states.stream()
+                    .filter(state -> ForgeroStateRegistry.CONTAINERS.containsKey(state.identifier()))
+                    .forEach(state -> typeTag.add(new Identifier(ForgeroStateRegistry.CONTAINERS.get(state.identifier()))));
+            RESOURCE_PACK.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase()), typeTag);
+        }
+    }
+
 
     private void createCommonToolVariantTags(ImmutableList<ForgeroTool> list) {
         Arrays.stream(ForgeroToolTypes.values()).forEach(type -> {

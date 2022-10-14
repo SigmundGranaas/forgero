@@ -182,6 +182,15 @@ public class Composite implements Upgradeable<Composite> {
             return this;
         }
 
+        public CompositeBuilder id(String id) {
+            var elements = id.split(":");
+            if (elements.length == 2) {
+                this.nameSpace = elements[0];
+                this.name = elements[1];
+            }
+            return this;
+        }
+
         public Composite build() {
             if (name == null) {
                 this.name = compositor.compositeName(ingredientList);

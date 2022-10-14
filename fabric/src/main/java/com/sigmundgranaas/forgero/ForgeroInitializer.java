@@ -38,9 +38,10 @@ public class ForgeroInitializer implements ModInitializer {
         PipelineBuilder
                 .builder()
                 .register(FabricPackFinder.supplier())
-                .state(com.sigmundgranaas.forgero.Registry.stateListener())
-                .state(com.sigmundgranaas.forgero.Registry.compositeListener())
-                .inflated(com.sigmundgranaas.forgero.Registry.containerListener())
+                .state(ForgeroStateRegistry.stateListener())
+                .state(ForgeroStateRegistry.compositeListener())
+                .inflated(ForgeroStateRegistry.constructListener())
+                .inflated(ForgeroStateRegistry.containerListener())
                 .build()
                 .execute();
 
@@ -58,13 +59,16 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void register() {
-        com.sigmundgranaas.forgero.Registry.CONTAINERS.forEach(id -> {
+        ForgeroStateRegistry.CONTAINERS.forEach((id, containerId) -> {
             try {
-                com.sigmundgranaas.forgero.Registry.STATES.get(id).ifPresent((state) -> {
-                    Identifier identifier = new Identifier(state.nameSpace(), state.name());
-                    DynamicSwordItem item = new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), state);
-                    Registry.register(Registry.ITEM, identifier, item);
-                });
+                if (!Registry.ITEM.containsId(new Identifier(containerId))) {
+                    ForgeroStateRegistry.STATES.get(id).ifPresent((state) -> {
+                        Identifier identifier = new Identifier(state.nameSpace(), state.name());
+                        DynamicSwordItem item = new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), state);
+                        Registry.register(Registry.ITEM, identifier, item);
+                    });
+                }
+
 
             } catch (InvalidIdentifierException e) {
                 LOGGER.error("invalid identifier: {}", id);

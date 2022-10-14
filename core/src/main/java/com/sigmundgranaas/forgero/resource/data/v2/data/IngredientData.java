@@ -13,6 +13,9 @@ import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 public class IngredientData {
     @Builder.Default
     private final boolean unique = false;
+
+    @Builder.Default
+    private final int amount = 1;
     @Builder.Default
     @Nullable
     private final String type = EMPTY_IDENTIFIER;

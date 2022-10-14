@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.ForgeroRegistry;
-import com.sigmundgranaas.forgero.Registry;
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
@@ -26,7 +26,7 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
     @Override
     public @Nullable
     UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
-        if (Registry.COMPOSITES.contains(String.format("%s:%s", modelId.getNamespace(), modelId.getPath()))) {
+        if (ForgeroStateRegistry.COMPOSITES.contains(String.format("%s:%s", modelId.getNamespace(), modelId.getPath()))) {
             return compositeModel;
         }
 

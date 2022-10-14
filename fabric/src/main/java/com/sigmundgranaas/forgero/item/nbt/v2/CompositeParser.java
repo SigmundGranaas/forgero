@@ -4,7 +4,9 @@ import com.sigmundgranaas.forgero.registry.IngredientSupplier;
 import com.sigmundgranaas.forgero.registry.UpgradeSupplier;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Ingredient;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.state.Upgrade;
+import com.sigmundgranaas.forgero.type.Type;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 
@@ -31,13 +33,21 @@ public class CompositeParser implements CompoundParser<Composite> {
             return Optional.empty();
         }
         Composite.CompositeBuilder builder = Composite.builder();
+
         if (compound.contains(NAME_IDENTIFIER)) {
             builder.name(compound.getString(NAME_IDENTIFIER));
         }
 
-        //noinspection StatementWithEmptyBody
         if (compound.contains(NAMESPACE_IDENTIFIER)) {
-            //builder.namespace(compound.getString(NAMESPACE_IDENTIFIER));
+            builder.nameSpace(compound.getString(NAMESPACE_IDENTIFIER));
+        }
+
+        if (compound.contains(ID_IDENTIFIER)) {
+            builder.id(compound.getString(ID_IDENTIFIER));
+        }
+
+        if (compound.contains(TYPE_IDENTIFIER)) {
+            builder.type(Type.of(compound.getString(TYPE_IDENTIFIER)));
         }
 
         parseIngredients(compound).forEach(builder::addIngredient);
@@ -47,7 +57,7 @@ public class CompositeParser implements CompoundParser<Composite> {
         return Optional.of(builder.build());
     }
 
-    private List<Ingredient> parseIngredients(NbtCompound compound) {
+    private List<State> parseIngredients(NbtCompound compound) {
         if (compound.contains(INGREDIENTS_IDENTIFIER)) {
             return compound.getList(INGREDIENTS_IDENTIFIER, NbtElement.COMPOUND_TYPE)
                     .stream()
@@ -58,7 +68,7 @@ public class CompositeParser implements CompoundParser<Composite> {
         return Collections.emptyList();
     }
 
-    private List<Upgrade> parseUpgrades(NbtCompound compound) {
+    private List<State> parseUpgrades(NbtCompound compound) {
         if (compound.contains(UPGRADES_IDENTIFIER)) {
             return compound.getList(UPGRADES_IDENTIFIER, NbtElement.COMPOUND_TYPE)
                     .stream()
@@ -69,7 +79,7 @@ public class CompositeParser implements CompoundParser<Composite> {
         return Collections.emptyList();
     }
 
-    private Optional<Ingredient> parseIngredient(NbtElement element) {
+    private Optional<State> parseIngredient(NbtElement element) {
         if (element.getType() == NbtElement.STRING_TYPE) {
             return ingredientSupplier.get(element.asString());
         } else if (element.getType() == NbtElement.COMPOUND_TYPE) {
@@ -82,7 +92,7 @@ public class CompositeParser implements CompoundParser<Composite> {
         return Optional.empty();
     }
 
-    private Optional<Upgrade> parseUpgrade(NbtElement element) {
+    private Optional<State> parseUpgrade(NbtElement element) {
         if (element.getType() == NbtElement.STRING_TYPE) {
             return upgradeSupplier.get(element.asString());
         } else if (element.getType() == NbtElement.COMPOUND_TYPE) {
