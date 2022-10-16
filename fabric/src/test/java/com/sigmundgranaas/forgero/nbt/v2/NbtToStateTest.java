@@ -1,14 +1,13 @@
 package com.sigmundgranaas.forgero.nbt.v2;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.item.items.testutil.Materials;
 import com.sigmundgranaas.forgero.item.items.testutil.Schematics;
+import com.sigmundgranaas.forgero.item.nbt.v2.CompositeParser;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Ingredient;
-import com.sigmundgranaas.forgero.state.Upgrade;
-
-import com.sigmundgranaas.forgero.item.items.testutil.Materials;
-import com.sigmundgranaas.forgero.item.nbt.v2.CompositeParser;
+import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ import static com.sigmundgranaas.forgero.nbt.NBTs.PICKAXE_NBT;
 public class NbtToStateTest {
     private static final CompositeParser parser = new CompositeParser(NbtToStateTest::ingredientSupplier, (String id) -> Optional.empty());
 
-    public static Optional<Ingredient> ingredientSupplier(String id) {
+    public static Optional<State> ingredientSupplier(String id) {
         return switch (id) {
             case "forgero#oak-handle" -> Optional.of(Ingredient.of(HANDLE));
             case "forgero#iron-pickaxe_head" -> Optional.of(Ingredient.of(PICKAXE_HEAD));
@@ -45,12 +44,12 @@ public class NbtToStateTest {
 
     @Test
     void parseSimplePickaxe() {
-        Assertions.assertEquals("iron-pickaxe", parser.parse(PICKAXE_NBT).map(Composite::name).orElse("invalid"));
+        Assertions.assertEquals("iron-pickaxe", parser.parse(PICKAXE_NBT).map(State::name).orElse("invalid"));
     }
 
     @Test
     void parseSimplePickaxeWithIngredients() {
-        List<Ingredient> ingredients = parser.parse(PICKAXE_NBT).map(Composite::ingredients).orElse(Collections.emptyList());
+        List<State> ingredients = parser.parse(PICKAXE_NBT).map(Composite.class::cast).map(Composite::ingredients).orElse(Collections.emptyList());
         Assertions.assertEquals(2, ingredients.size());
         Assertions.assertEquals("oak-handle", ingredients.get(0).name());
         Assertions.assertEquals("iron-pickaxe_head", ingredients.get(1).name());
@@ -58,7 +57,7 @@ public class NbtToStateTest {
 
     @Test
     void parseSimplePickaxeWithUpgrades() {
-        List<Upgrade> upgrades = parser.parse(PICKAXE_NBT).map(Composite::upgrades).orElse(ImmutableList.<Upgrade>builder().build());
+        List<State> upgrades = parser.parse(PICKAXE_NBT).map(Composite.class::cast).map(Composite::upgrades).orElse(ImmutableList.<State>builder().build());
         Assertions.assertEquals(1, upgrades.size());
         Assertions.assertEquals("iron-binding", upgrades.get(0).name());
     }

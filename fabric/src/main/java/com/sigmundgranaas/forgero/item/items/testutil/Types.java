@@ -15,4 +15,5 @@ public class Types {
     public static Type TOOL_PART = Type.of("TOOL_PART", PART);
     public static Type TOOL_PART_HEAD = Type.of("TOOL_PART_HEAD", TOOL_PART);
     public static Type HANDLE = Type.of("HANDLE", TOOL_PART);
+    public static Type BINDING = Type.of("BINDING", TOOL_PART);
 }

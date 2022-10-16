@@ -9,7 +9,7 @@
     },
     {
       "target": [
-        "type:BINDING",
+        "type:TOOL_BINDING",
         "slot:0"
       ],
       "modelType": "UPGRADE",

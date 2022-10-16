@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.item.nbt.v2;
 
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.registry.IngredientSupplier;
 import com.sigmundgranaas.forgero.registry.UpgradeSupplier;
 import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.Ingredient;
 import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.state.Upgrade;
 import com.sigmundgranaas.forgero.type.Type;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -18,7 +17,7 @@ import java.util.function.Function;
 import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.*;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class CompositeParser implements CompoundParser<Composite> {
+public class CompositeParser implements CompoundParser<State> {
     private final IngredientSupplier ingredientSupplier;
     private final UpgradeSupplier upgradeSupplier;
 
@@ -28,7 +27,7 @@ public class CompositeParser implements CompoundParser<Composite> {
     }
 
     @Override
-    public Optional<Composite> parse(NbtCompound compound) {
+    public Optional<State> parse(NbtCompound compound) {
         if (!compound.contains(STATE_TYPE_IDENTIFIER)) {
             return Optional.empty();
         }
@@ -40,6 +39,8 @@ public class CompositeParser implements CompoundParser<Composite> {
 
             if (stateOpt.isPresent() && stateOpt.get() instanceof Composite composite) {
                 builder = Composite.builder(composite.slots());
+            } else if (ForgeroStateRegistry.CONTAINER_TO_STATE.containsKey(id)) {
+                return ingredientSupplier.get(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));
             }
             builder.id(id);
         } else {
@@ -90,7 +91,7 @@ public class CompositeParser implements CompoundParser<Composite> {
             return ingredientSupplier.get(element.asString());
         } else if (element.getType() == NbtElement.COMPOUND_TYPE) {
             if (element instanceof NbtCompound compound) {
-                return parseCompound(compound, ingredientSupplier::get, Ingredient::of);
+                return parseCompound(compound, ingredientSupplier::get);
             } else {
                 return Optional.empty();
             }
@@ -103,7 +104,7 @@ public class CompositeParser implements CompoundParser<Composite> {
             return upgradeSupplier.get(element.asString());
         } else if (element.getType() == NbtElement.COMPOUND_TYPE) {
             if (element instanceof NbtCompound compound) {
-                return parseCompound(compound, upgradeSupplier::get, Upgrade::of);
+                return parseCompound(compound, upgradeSupplier::get);
             } else {
                 return Optional.empty();
             }
@@ -112,14 +113,16 @@ public class CompositeParser implements CompoundParser<Composite> {
     }
 
 
-    private <T> Optional<T> parseCompound(NbtCompound compound, Function<String, Optional<T>> supplier, Function<Composite, T> compositeMapper) {
+    private Optional<State> parseCompound(NbtCompound compound, Function<String, Optional<State>> supplier) {
         if (compound.contains(STATE_TYPE_IDENTIFIER)) {
             if (compound.getString(STATE_TYPE_IDENTIFIER).equals(INGREDIENT_IDENTIFIER)) {
                 return supplier.apply(compound.getString(ID_IDENTIFIER));
             } else if (compound.getString(STATE_TYPE_IDENTIFIER).equals(COMPOSITE_IDENTIFIER)) {
-                return parse(compound).map(compositeMapper);
+                return parse(compound);
+            } else if (compound.getString(STATE_TYPE_IDENTIFIER).equals(UPGRADES_IDENTIFIER)) {
+                return supplier.apply(compound.getString(ID_IDENTIFIER));
             }
         }
-        return Optional.empty();
+        return parse(compound);
     }
 }

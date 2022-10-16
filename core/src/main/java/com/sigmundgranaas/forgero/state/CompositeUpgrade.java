@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.util.match.Matchable;
 
 public class CompositeUpgrade extends Composite implements Upgrade {
     public CompositeUpgrade(Composite composite) {
-        super(composite.ingredients(), SlotContainer.of(composite.slots()), composite.name(), composite.type());
+        super(composite.ingredients(), SlotContainer.of(composite.slots()), composite.name(), composite.nameSpace(), composite.type());
     }
 
     @Override

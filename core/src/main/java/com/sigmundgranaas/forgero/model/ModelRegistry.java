@@ -60,7 +60,7 @@ public class ModelRegistry {
             return modelMap.get(state.identifier()).match(state, this::provider);
         } else {
             var modelEntries = tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build());
-            return modelEntries.stream().map(entry -> entry.match(state, this::provider)).filter(Optional::isPresent).flatMap(Optional::stream).findAny();
+            return modelEntries.stream().map(entry -> entry.match(state, this::provider)).flatMap(Optional::stream).findFirst();
         }
     }
 

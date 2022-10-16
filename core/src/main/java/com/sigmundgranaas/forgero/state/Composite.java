@@ -110,7 +110,7 @@ public class Composite implements Upgradeable<Composite> {
                 .addUpgrades(upgrades.slots())
                 .addUpgrade(upgrade)
                 .type(type())
-                .name(name())
+                .id(identifier())
                 .build();
     }
 

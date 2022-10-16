@@ -5,7 +5,15 @@
       "name": "pickaxe_head",
       "template": "pickaxe_head.png",
       "type": "GENERATE",
-      "palette": "MATERIAL"
+      "palette": "MATERIAL",
+      "order": 40
+    },
+    {
+      "name": "pickaxe_head_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "pickaxe_head_material.png",
+      "order": 51
     },
     {
       "name": "pickaxe_head_pointy",
@@ -35,7 +43,7 @@
         "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "handle_secondary"
+      "template": "pickaxe_head_material"
     },
     {
       "target": [
