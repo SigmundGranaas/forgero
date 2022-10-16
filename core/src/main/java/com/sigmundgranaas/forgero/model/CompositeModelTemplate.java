@@ -19,6 +19,11 @@ public class CompositeModelTemplate implements ModelTemplate {
     }
 
     @Override
+    public int order() {
+        return 0;
+    }
+
+    @Override
     public <T> T convert(Converter<T, ModelTemplate> converter) {
         return converter.convert(this);
     }

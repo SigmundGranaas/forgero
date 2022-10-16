@@ -44,6 +44,10 @@ public class Composite implements Upgradeable<Composite> {
         return new CompositeBuilder();
     }
 
+    public static CompositeBuilder builder(List<? extends Slot> slots) {
+        return new CompositeBuilder(slots);
+    }
+
     @Override
     @NotNull
     public String name() {
@@ -101,10 +105,10 @@ public class Composite implements Upgradeable<Composite> {
 
     @Override
     public Composite upgrade(State upgrade) {
-        upgrades.set(upgrade);
         return builder()
                 .addIngredients(ingredients())
                 .addUpgrades(upgrades.slots())
+                .addUpgrade(upgrade)
                 .type(type())
                 .name(name())
                 .build();
@@ -132,7 +136,7 @@ public class Composite implements Upgradeable<Composite> {
             this.upgradeContainer = SlotContainer.of(Collections.emptyList());
         }
 
-        public CompositeBuilder(List<Slot> upgradeSlots) {
+        public CompositeBuilder(List<? extends Slot> upgradeSlots) {
             this.ingredientList = new ArrayList<>();
             this.upgradeContainer = SlotContainer.of(upgradeSlots);
         }

@@ -51,14 +51,14 @@ public class ModelConverter {
             tree.find(type).ifPresent(node -> node.addResource(model, ModelMatcher.class));
         } else if (notEmpty(data.getName()) && data.getModelType().equals("GENERATE")) {
             List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());
-            var models = palettes.stream().map(palette -> generate(palette, data.getTemplate())).toList();
+            var models = palettes.stream().map(palette -> generate(palette, data.getTemplate(), data.order())).toList();
             var model = new MatchedModelEntry(models, data.getName());
             this.models.put(data.getName(), model);
         }
     }
 
-    private ModelMatchPairing generate(PaletteData palette, String template) {
-        var model = new PaletteTemplateModel(palette.getName(), template);
+    private ModelMatchPairing generate(PaletteData palette, String template, int order) {
+        var model = new PaletteTemplateModel(palette.getName(), template, order);
         textures.put(model.identifier(), model);
         return new ModelMatchPairing(new ModelMatch(List.of(palette.getName()), ""), model);
     }

@@ -184,12 +184,9 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createGemUpgradeRecipes(ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
-            case HEAD ->
-                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case HANDLE ->
-                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case BINDING ->
-                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HEAD -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HANDLE -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case BINDING -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
         };
     }
 
@@ -271,10 +268,10 @@ public record RecipeCreatorImpl(
         var object = new JsonObject();
         if (data.unique() && !data.id().equals(EMPTY_IDENTIFIER)) {
             String id;
-            if (ForgeroStateRegistry.CONTAINERS.containsKey(ForgeroStateRegistry.ID_MAPPER.get(data.id()))) {
-                id = ForgeroStateRegistry.CONTAINERS.get(ForgeroStateRegistry.ID_MAPPER.get(data.id()));
-            } else if (ForgeroStateRegistry.CONTAINERS.containsValue(data.id())) {
-                id = ForgeroStateRegistry.CONTAINERS.entrySet().stream().filter(entry -> entry.getValue().equals(data.id())).map(Map.Entry::getKey).findFirst().orElse(data.id());
+            if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(ForgeroStateRegistry.ID_MAPPER.get(data.id()))) {
+                id = ForgeroStateRegistry.STATE_TO_CONTAINER.get(ForgeroStateRegistry.ID_MAPPER.get(data.id()));
+            } else if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsValue(data.id())) {
+                id = ForgeroStateRegistry.STATE_TO_CONTAINER.entrySet().stream().filter(entry -> entry.getValue().equals(data.id())).map(Map.Entry::getKey).findFirst().orElse(data.id());
             } else {
                 id = data.id();
             }

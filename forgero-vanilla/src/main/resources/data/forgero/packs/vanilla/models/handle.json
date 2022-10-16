@@ -6,6 +6,7 @@
       "template": "handle.png",
       "type": "GENERATE",
       "palette": "MATERIAL",
+      "order": 10,
       "variants": [
         {
           "target": [
@@ -25,6 +26,7 @@
       "name": "reinforced_handle",
       "modelType": "GENERATE",
       "template": "reinforced_handle.png",
+      "order": 20,
       "variants": [
         {
           "target": [
@@ -49,6 +51,7 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "handle_material.png",
+      "order": 11,
       "variants": [
         {
           "target": [

@@ -2,18 +2,16 @@ package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
         List<ItemStack> ingredients = new ArrayList<>();
-        var target = ForgeroStateRegistry.STATES.get(Registry.ITEM.getId(this.getOutput().getItem()).toString());
+        var target = StateConverter.of(this.getOutput());
         if (target.isPresent()) {
             var targetState = target.get();
             var builder = Composite.builder().type(targetState.type()).name(targetState.name()).nameSpace(targetState.nameSpace());
@@ -41,7 +39,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
                 }
             }
 
-            ingredients.stream().map(this::itemStackToState).flatMap(Optional::stream).forEach(builder::addIngredient);
+            ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).forEach(builder::addIngredient);
 
             var finalState = builder.build();
             var nbt = new CompositeEncoder().encode(finalState);
@@ -50,11 +48,6 @@ public class StateCraftingRecipe extends ShapedRecipe {
             return output;
         }
         return getOutput().copy();
-    }
-
-    private Optional<State> itemStackToState(ItemStack stack) {
-        Identifier id = Registry.ITEM.getId(stack.getItem());
-        return ForgeroStateRegistry.STATES.get(id.toString());
     }
 
     @Override

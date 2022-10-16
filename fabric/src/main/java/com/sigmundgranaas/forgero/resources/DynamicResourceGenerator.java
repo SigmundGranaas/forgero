@@ -92,8 +92,9 @@ public class DynamicResourceGenerator {
         var states = node.getResources(State.class);
         if (states.size() > 0) {
             states.stream()
-                    .filter(state -> ForgeroStateRegistry.CONTAINERS.containsKey(state.identifier()))
-                    .forEach(state -> typeTag.add(new Identifier(ForgeroStateRegistry.CONTAINERS.get(state.identifier()))));
+                    .filter(state -> ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(state.identifier()))
+                    .map(state -> new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier())))
+                    .forEach(typeTag::add);
             RESOURCE_PACK.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase()), typeTag);
         }
     }

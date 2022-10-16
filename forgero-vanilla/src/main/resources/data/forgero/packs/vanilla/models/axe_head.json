@@ -5,7 +5,8 @@
       "name": "axe_head",
       "template": "axe_head.png",
       "type": "GENERATE",
-      "palette": "MATERIAL"
+      "palette": "MATERIAL",
+      "order": 20
     },
     {
       "target": [
@@ -13,7 +14,8 @@
         "type:AXE_HEAD_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "axe_head"
+      "template": "axe_head",
+      "order": 20
     },
     {
       "target": [

@@ -34,24 +34,30 @@ public class CompositeParser implements CompoundParser<Composite> {
         }
         Composite.CompositeBuilder builder = Composite.builder();
 
-        if (compound.contains(NAME_IDENTIFIER)) {
-            builder.name(compound.getString(NAME_IDENTIFIER));
-        }
-
-        if (compound.contains(NAMESPACE_IDENTIFIER)) {
-            builder.nameSpace(compound.getString(NAMESPACE_IDENTIFIER));
-        }
-
         if (compound.contains(ID_IDENTIFIER)) {
-            builder.id(compound.getString(ID_IDENTIFIER));
+            var id = compound.getString(ID_IDENTIFIER);
+            var stateOpt = ingredientSupplier.get(id);
+
+            if (stateOpt.isPresent() && stateOpt.get() instanceof Composite composite) {
+                builder = Composite.builder(composite.slots());
+            }
+            builder.id(id);
+        } else {
+            if (compound.contains(NAME_IDENTIFIER)) {
+                builder.name(compound.getString(NAME_IDENTIFIER));
+            }
+
+            if (compound.contains(NAMESPACE_IDENTIFIER)) {
+                builder.nameSpace(compound.getString(NAMESPACE_IDENTIFIER));
+            }
         }
+
 
         if (compound.contains(TYPE_IDENTIFIER)) {
             builder.type(Type.of(compound.getString(TYPE_IDENTIFIER)));
         }
 
         parseIngredients(compound).forEach(builder::addIngredient);
-
         parseUpgrades(compound).forEach(builder::addUpgrade);
 
         return Optional.of(builder.build());

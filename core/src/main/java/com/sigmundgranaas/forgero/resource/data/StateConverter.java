@@ -5,13 +5,15 @@ import com.sigmundgranaas.forgero.resource.data.v2.data.ConstructData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.slot.EmptySlot;
+import com.sigmundgranaas.forgero.type.MutableTypeNode;
+import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class StateConverter implements DataConverter<State> {
     private final HashMap<String, State> states = new HashMap<>();
@@ -41,7 +43,7 @@ public class StateConverter implements DataConverter<State> {
 
     private Optional<State> createComposite(DataResource resource) {
         if (resource.construct().isPresent()) {
-            var builder = Composite.builder();
+            var builder = Composite.builder(createSlots(resource.construct().get()));
             builder.type(tree.type(resource.type()));
             builder.nameSpace(resource.nameSpace());
             resource.construct().map(ConstructData::components).orElse(Collections.emptyList())
@@ -57,6 +59,11 @@ public class StateConverter implements DataConverter<State> {
             return Optional.of(state);
         }
         return Optional.empty();
+    }
+
+    private List<? extends Slot> createSlots(ConstructData data) {
+        return IntStream.range(0, data.slots().size())
+                .mapToObj(index -> new EmptySlot(index, tree.find(data.slots().get(index).type()).map(MutableTypeNode::type).orElse(Type.of(data.slots().get(index).type())))).toList();
     }
 
     private Optional<State> createState(DataResource resource) {

@@ -59,7 +59,7 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void register() {
-        ForgeroStateRegistry.CONTAINERS.forEach((id, containerId) -> {
+        ForgeroStateRegistry.STATE_TO_CONTAINER.forEach((id, containerId) -> {
             try {
                 if (!Registry.ITEM.containsId(new Identifier(containerId))) {
                     ForgeroStateRegistry.STATES.get(id).ifPresent((state) -> {

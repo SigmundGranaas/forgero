@@ -70,7 +70,7 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
     }
 
     public List<MutableTypeNode> nodes() {
-        var list = new ArrayList<MutableTypeNode>();
+        var list = new ArrayList<>(rootNodes);
         rootNodes.forEach(node -> node.allChildren(list));
         return list;
     }

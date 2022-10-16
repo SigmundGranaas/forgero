@@ -14,7 +14,7 @@ public class SlotContainer {
         this.slots = slots;
     }
 
-    public static SlotContainer of(List<Slot> slots) {
+    public static SlotContainer of(List<? extends Slot> slots) {
         return new SlotContainer(new ArrayList<>(slots));
     }
 

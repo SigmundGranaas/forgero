@@ -3,14 +3,12 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModelCollection;
 import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.SingleTexturedModel;
 import com.sigmundgranaas.forgero.client.model.Unbaked2DTexturedModel;
 import com.sigmundgranaas.forgero.client.model.UnbakedFabricModel;
-import com.sigmundgranaas.forgero.item.nbt.v2.CompositeParser;
+import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.model.*;
-import com.sigmundgranaas.forgero.state.Composite;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.render.model.BakedModel;
@@ -22,7 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +28,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private final UnbakedModelCollection unbakedModelCollection;
@@ -97,13 +92,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     }
 
     private Optional<ModelTemplate> converter(ItemStack stack) {
-        Optional<Composite> compositeOpt;
-        if (stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
-            compositeOpt = new CompositeParser(ForgeroStateRegistry.STATES::get, ForgeroStateRegistry.STATES::get).parse(stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER));
-        } else {
-            String id = Registry.ITEM.getId(stack.getItem()).toString();
-            compositeOpt = ForgeroStateRegistry.STATES.get(id).map(Composite.class::cast);
-        }
+        var compositeOpt = StateConverter.of(stack);
         if (compositeOpt.isPresent()) {
             var composite = compositeOpt.get();
             return registry.find(composite);
@@ -112,20 +101,20 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     }
 
     private Optional<UnbakedFabricModel> modelConverter(ModelTemplate input) {
-        var textureList = new ArrayList<String>();
+        var textureList = new ArrayList<PaletteTemplateModel>();
         if (input instanceof CompositeModelTemplate model) {
             model.getModels().forEach(template -> textureCollector(template, textureList));
-            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList.stream().sorted().map(this::textureName).toList(), "test");
             return Optional.of(unbakedModel);
         } else if (input instanceof TextureBasedModel model) {
             textureCollector(model, textureList);
-            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList.stream().sorted().map(this::textureName).toList(), "test");
             return Optional.of(unbakedModel);
         }
         return Optional.empty();
     }
 
-    private void textureCollector(ModelTemplate template, List<String> accumulator) {
+    private void textureCollector(ModelTemplate template, List<PaletteTemplateModel> accumulator) {
         if (template instanceof PaletteTemplateModel palette) {
             textureCollector(palette, accumulator);
         } else if (template instanceof CompositeModelTemplate composite) {
@@ -133,11 +122,11 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         }
     }
 
-    private void textureCollector(PaletteTemplateModel template, List<String> accumulator) {
-        accumulator.add(textureName(template));
+    private void textureCollector(PaletteTemplateModel template, List<PaletteTemplateModel> accumulator) {
+        accumulator.add(template);
     }
 
-    private void textureCollector(CompositeModelTemplate template, List<String> accumulator) {
+    private void textureCollector(CompositeModelTemplate template, List<PaletteTemplateModel> accumulator) {
         template.getModels().forEach(model -> textureCollector(model, accumulator));
     }
 

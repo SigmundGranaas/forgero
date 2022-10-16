@@ -2,8 +2,10 @@ package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.recipe.implementation.SmithingRecipeGetters;
+import com.sigmundgranaas.forgero.state.Composite;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -11,6 +13,9 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+
+import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundEncoder.COMPOSITE_ENCODER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class StateUpgradeRecipe extends SmithingRecipe {
     public StateUpgradeRecipe(SmithingRecipeGetters recipe) {
@@ -27,7 +32,16 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 
     @Override
     public ItemStack craft(Inventory inventory) {
-        return getOutput().copy();
+        var originStateOpt = StateConverter.of(inventory.getStack(0));
+        var upgradeOpt = StateConverter.of(inventory.getStack(1));
+        if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite state) {
+            var upgraded = state.upgrade(upgradeOpt.get());
+            var output = getOutput().copy();
+            output.setNbt(inventory.getStack(0).getOrCreateNbt().copy());
+            output.getOrCreateNbt().put(FORGERO_IDENTIFIER, COMPOSITE_ENCODER.encode(upgraded));
+            return output;
+        }
+        return inventory.getStack(0);
     }
 
     @Override

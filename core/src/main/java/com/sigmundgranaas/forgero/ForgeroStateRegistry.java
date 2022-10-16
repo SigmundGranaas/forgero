@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 
 public class ForgeroStateRegistry {
     public static ResourceRegistry<State> STATES;
-    public static Map<String, String> CONTAINERS;
+    public static Map<String, String> STATE_TO_CONTAINER;
+    public static Map<String, String> CONTAINER_TO_STATE;
     public static Set<String> COMPOSITES;
 
     public static List<DataResource> CONSTRUCTS;
@@ -35,8 +36,9 @@ public class ForgeroStateRegistry {
 
     public static ResourceListener<List<DataResource>> containerListener() {
         return (resources, tree, idMapper) -> {
-            if (CONTAINERS == null) {
-                var map = new HashMap<String, String>();
+            if (CONTAINER_TO_STATE == null) {
+                var containerToState = new HashMap<String, String>();
+                var stateToContainer = new HashMap<String, String>();
                 resources.stream()
                         .filter(data -> data.container().isPresent())
                         .forEach(data -> {
@@ -44,16 +46,20 @@ public class ForgeroStateRegistry {
                             String stateId = data.identifier();
                             if (idMapper.containsKey(stateId)) {
                                 if (idMapper.containsKey(containerId)) {
-                                    map.put(idMapper.get(containerId), idMapper.get(stateId));
+                                    stateToContainer.put(idMapper.get(stateId), idMapper.get(containerId));
+                                    containerToState.put(idMapper.get(containerId), idMapper.get(stateId));
                                 } else {
-                                    map.put(containerId, idMapper.get(stateId));
+                                    stateToContainer.put(idMapper.get(stateId), containerId);
+                                    containerToState.put(containerId, idMapper.get(stateId));
                                 }
 
                             } else {
-                                map.put(containerId, stateId);
+                                stateToContainer.put(stateId, containerId);
+                                containerToState.put(containerId, stateId);
                             }
                         });
-                CONTAINERS = map;
+                CONTAINER_TO_STATE = containerToState;
+                STATE_TO_CONTAINER = stateToContainer;
             }
         };
     }

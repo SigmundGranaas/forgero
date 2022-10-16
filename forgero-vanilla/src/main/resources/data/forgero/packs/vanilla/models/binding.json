@@ -6,18 +6,13 @@
       "template": "binding.png",
       "type": "GENERATE",
       "palette": "MATERIAL",
+      "order": "30",
       "variants": [
         {
           "target": [
             "AXE"
           ],
           "template": "axe_binding.png"
-        },
-        {
-          "target": [
-            "WEAPON"
-          ],
-          "template": "weapon_binding.png"
         }
       ]
     },

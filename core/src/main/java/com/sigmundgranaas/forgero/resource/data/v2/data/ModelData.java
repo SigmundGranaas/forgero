@@ -15,6 +15,10 @@ public class ModelData {
     @Builder.Default
     @Nullable
     private List<String> target = Collections.emptyList();
+
+    @Builder.Default
+    private int order = 0;
+
     @Builder.Default
     @SerializedName(value = "modelType", alternate = "type")
     @Nullable
@@ -54,9 +58,14 @@ public class ModelData {
 
     }
 
+    public int order() {
+        return order;
+
+    }
+
     public List<ModelEntryData> getVariants() {
         return Objects.requireNonNullElse(variants, Collections.emptyList());
-        
+
     }
 
     public List<Integer> getOffset() {

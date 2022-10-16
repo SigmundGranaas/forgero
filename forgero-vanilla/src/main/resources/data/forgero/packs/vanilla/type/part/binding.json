@@ -1,4 +1,12 @@
 {
   "parent": "TOOL_PART",
-  "name": "BINDING"
+  "name": "BINDING",
+  "children": [
+    {
+      "name": "SWORD_GUARD"
+    },
+    {
+      "name": "TOOL_BINDING"
+    }
+  ]
 }

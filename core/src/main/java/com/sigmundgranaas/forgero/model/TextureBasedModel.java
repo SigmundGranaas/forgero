@@ -14,7 +14,9 @@ public class TextureBasedModel implements ModelTemplate {
         return texture;
     }
 
-    public int getLayerId() {
+
+    @Override
+    public int order() {
         return layerId;
     }
 
