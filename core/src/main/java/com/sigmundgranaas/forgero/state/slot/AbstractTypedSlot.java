@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.state.slot;
 
 import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 
 public abstract class AbstractTypedSlot implements Slot {
@@ -23,8 +24,8 @@ public abstract class AbstractTypedSlot implements Slot {
     }
 
     @Override
-    public boolean test(Matchable match) {
-        return match.test(type);
+    public boolean test(Matchable match, Context context) {
+        return match.test(type, context);
     }
 
 }

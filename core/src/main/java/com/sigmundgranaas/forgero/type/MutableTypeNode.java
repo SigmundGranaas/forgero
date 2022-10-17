@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.type;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.util.TypeMatcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,8 +89,8 @@ public class MutableTypeNode {
 
     public Type type() {
         if (parent().isPresent()) {
-            return Type.of(name(), parent().get().type());
+            return new SimpleType(name, Optional.of(parent().get().type()), new TypeMatcher());
         }
-        return Type.of(name());
+        return new SimpleType(name, Optional.empty(), new TypeMatcher());
     }
 }

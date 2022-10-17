@@ -6,9 +6,11 @@ import com.sigmundgranaas.forgero.resource.data.v2.data.ModelData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.PaletteData;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
@@ -50,16 +52,19 @@ public class ModelConverter {
             tree.find(type).ifPresent(node -> node.addResource(model, ModelMatcher.class));
         } else if (notEmpty(data.getName()) && data.getModelType().equals("GENERATE")) {
             List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());
-            var models = palettes.stream().map(palette -> generate(palette, data.getTemplate(), data.order())).toList();
+            var variants = data.getVariants().stream().map(variant -> data.toBuilder().template(variant.getTemplate()).target(variant.getTarget()).order(data.order()).build()).collect(Collectors.toList());
+            variants.add(data);
+            var models = palettes.stream().map(palette -> variants.stream().map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()))).toList()).flatMap(List::stream).toList();
             var model = new MatchedModelEntry(models, data.getName());
             this.models.put(data.getName(), model);
         }
     }
 
-    private ModelMatchPairing generate(PaletteData palette, String template, int order) {
+    private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria) {
         var model = new PaletteTemplateModel(palette.getName(), template, order);
         textures.put(model.identifier(), model);
-        return new ModelMatchPairing(new ModelMatch(List.of(palette.getName()), ""), model);
+        criteria.add(model.palette());
+        return new ModelMatchPairing(new ModelMatch(criteria, ""), model);
     }
 
 }

@@ -1,0 +1,20 @@
+{
+  "type": "SWORD_GUARD",
+  "models": [
+    {
+      "name": "sword_guard",
+      "template": "sword_guard.png",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "order": "60"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "type:SWORD_GUARD_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "sword_guard"
+    }
+  ]
+}

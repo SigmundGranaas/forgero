@@ -3,8 +3,9 @@ package com.sigmundgranaas.forgero.state;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import com.sigmundgranaas.forgero.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,7 +54,10 @@ public class SimpleState implements Ingredient {
     }
 
     @Override
-    public boolean test(Matchable match, MatchContext context) {
-        return test(match);
+    public boolean test(Matchable match, Context context) {
+        if (match instanceof NameMatch matcher) {
+            return matcher.name().equals(name);
+        }
+        return type.test(match, context);
     }
 }

@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.state;
 
 import com.sigmundgranaas.forgero.state.slot.SlotContainer;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 
 public class CompositeIngredient extends Composite implements Ingredient {
@@ -11,14 +11,14 @@ public class CompositeIngredient extends Composite implements Ingredient {
     }
 
     @Override
-    public boolean test(Matchable match) {
+    public boolean test(Matchable match, Context context) {
         if (match instanceof Type typeMatch) {
-            if (this.type().test(typeMatch)) {
+            if (this.type().test(typeMatch, context)) {
                 return true;
             } else {
-                return ingredients().stream().anyMatch(ingredient -> ingredient.test(match, MatchContext.COMPOSITE));
+                return ingredients().stream().anyMatch(ingredient -> ingredient.test(match, context));
             }
         }
-        return match.test(this);
+        return match.test(this, context);
     }
 }

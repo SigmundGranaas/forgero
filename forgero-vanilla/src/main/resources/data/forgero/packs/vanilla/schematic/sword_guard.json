@@ -1,0 +1,50 @@
+{
+  "type": "SWORD_GUARD_SCHEMATIC",
+  "name": "sword_guard-schematic",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORD_GUARD",
+    "target": "CREATE",
+    "recipe": {
+      "craftingType": "SHAPELESS"
+    },
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": []
+  },
+  "model": {
+    "type": "LAYERED",
+    "id": "this"
+  }
+}

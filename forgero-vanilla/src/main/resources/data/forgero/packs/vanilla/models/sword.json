@@ -1,19 +1,19 @@
 {
-  "type": "AXE",
+  "type": "SWORD",
   "models": [
     {
       "target": [
-        "type:AXE"
+        "type:SWORD"
       ],
       "modelType": "COMPOSITE"
     },
     {
       "target": [
-        "type:TOOL_BINDING",
+        "type:SWORD_GUARD",
         "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "binding"
+      "template": "sword_guard"
     }
   ]
 }

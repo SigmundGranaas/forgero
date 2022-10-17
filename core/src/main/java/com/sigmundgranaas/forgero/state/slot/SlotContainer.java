@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.state.slot;
 
 import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.util.match.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class SlotContainer {
 
     public Optional<Slot> set(State entry) {
         return slots.stream()
-                .filter(slot -> slot.test(entry))
+                .filter(slot -> slot.test(entry, Context.of()))
                 .map(slot -> slot.fill(entry))
                 .flatMap(Optional::stream)
                 .findFirst()

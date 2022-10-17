@@ -6,13 +6,19 @@
       "template": "binding.png",
       "type": "GENERATE",
       "palette": "MATERIAL",
-      "order": "30",
+      "order": "60",
       "variants": [
         {
           "target": [
-            "AXE"
+            "type:AXE"
           ],
           "template": "axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding.png"
         }
       ]
     },

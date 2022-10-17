@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.model;
 
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,18 +17,25 @@ public class MatchedModelEntry implements ModelMatcher {
     }
 
     @Override
-    public Optional<ModelTemplate> get(Matchable state, ModelProvider provider) {
+    public boolean match(Matchable state, Context context) {
+        return models.stream().anyMatch(pair -> pair.match().test(state, context));
+
+    }
+
+    @Override
+    public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
         return models.stream()
-                .filter(pairing -> pairing.match().test(state))
+                .filter(pairing -> pairing.match().test(state, context))
+                .sorted()
                 .map(ModelMatchPairing::model)
-                .map(pairing -> pairing.get(state, provider))
+                .map(pairing -> pairing.get(state, provider, context))
                 .filter(Optional::isPresent)
                 .flatMap(Optional::stream)
                 .findFirst();
     }
 
     @Override
-    public boolean match(Matchable state) {
-        return models.stream().anyMatch(pair -> pair.match().test(state));
+    public int compareTo(@NotNull ModelMatcher o) {
+        return 0;
     }
 }

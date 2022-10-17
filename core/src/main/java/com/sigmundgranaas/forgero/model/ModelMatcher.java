@@ -1,18 +1,25 @@
 package com.sigmundgranaas.forgero.model;
 
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public interface ModelMatcher {
+public interface ModelMatcher extends Comparable<ModelMatcher> {
     ModelMatcher EMPTY = new ModelMatcher() {
         @Override
-        public boolean match(Matchable state) {
+        public int compareTo(@NotNull ModelMatcher o) {
+            return 0;
+        }
+
+        @Override
+        public boolean match(Matchable state, Context context) {
             return false;
         }
 
         @Override
-        public Optional<ModelTemplate> get(Matchable state, ModelProvider provider) {
+        public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
             return Optional.empty();
         }
     };
@@ -38,7 +45,12 @@ public interface ModelMatcher {
         return 0;
     }
 
-    boolean match(Matchable state);
+    boolean match(Matchable state, Context context);
 
-    Optional<ModelTemplate> get(Matchable state, ModelProvider provider);
+    Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context);
+
+    @Override
+    default int compareTo(@NotNull ModelMatcher o) {
+        return 0;
+    }
 }

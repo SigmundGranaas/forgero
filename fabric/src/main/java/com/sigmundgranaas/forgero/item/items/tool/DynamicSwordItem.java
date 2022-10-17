@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -46,12 +46,7 @@ public class DynamicSwordItem extends SwordItem implements DynamicAttributeItem,
     }
 
     @Override
-    public boolean test(Matchable match) {
-        return DEFAULT.test(match);
-    }
-
-    @Override
-    public boolean test(Matchable match, MatchContext context) {
+    public boolean test(Matchable match, Context context) {
         return DEFAULT.test(match, context);
     }
 

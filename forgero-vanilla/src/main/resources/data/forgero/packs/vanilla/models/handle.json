@@ -10,15 +10,15 @@
       "variants": [
         {
           "target": [
-            "AXE"
+            "type:AXE"
           ],
-          "template": "medium_handle"
+          "template": "medium_handle.png"
         },
         {
           "target": [
-            "WEAPON"
+            "type:SWORD"
           ],
-          "template": "short_handle"
+          "template": "short_handle.png"
         }
       ]
     },

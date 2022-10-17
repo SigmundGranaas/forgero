@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
-@Builder
+@Builder(toBuilder = true)
 public class ModelData {
     @Builder.Default
     @Nullable

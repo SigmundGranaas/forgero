@@ -18,6 +18,12 @@
     },
     {
       "name": "BINDING_SCHEMATIC"
+    },
+    {
+      "name": "SWORD_BLADE_SCHEMATIC"
+    },
+    {
+      "name": "SWORD_GUARD_SCHEMATIC"
     }
   ]
 }

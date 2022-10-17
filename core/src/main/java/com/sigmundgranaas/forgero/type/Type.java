@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.type;
 
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.util.TypeMatcher;
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 
 import java.util.Optional;
@@ -15,8 +17,15 @@ public interface Type extends Matchable {
     Type MATERIAL = new SimpleType("MATERIAL", Optional.empty(), new TypeMatcher());
 
     static Type of(String name) {
+        if (ForgeroStateRegistry.TREE != null) {
+            var type = ForgeroStateRegistry.TREE.find(name);
+            if (type.isPresent()) {
+                return type.get().type();
+            }
+        }
+
         var type = new SimpleType(name.toUpperCase(), Optional.empty(), new TypeMatcher());
-        if (type.test(SCHEMATIC)) {
+        if (type.test(SCHEMATIC, Context.of())) {
             return new SimpleType(name.toUpperCase(), Optional.empty(), new SchematicMatcher());
         }
         return type;
@@ -24,7 +33,7 @@ public interface Type extends Matchable {
 
     static Type of(String name, Type parent) {
         var type = new SimpleType(name.toUpperCase(), Optional.of(parent), new TypeMatcher());
-        if (type.test(SCHEMATIC)) {
+        if (type.test(SCHEMATIC, Context.of())) {
             return new SimpleType(name.toUpperCase(), Optional.of(parent), new SchematicMatcher());
         }
         return type;

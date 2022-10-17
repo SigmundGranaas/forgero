@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.state.slot;
 import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 
 import java.util.List;
@@ -31,14 +31,14 @@ public class EmptySlot extends AbstractTypedSlot {
 
     @Override
     public Optional<Slot> fill(State slottable) {
-        if (test(slottable)) {
+        if (test(slottable, Context.of())) {
             return Optional.of(new FilledSlot(index(), type(), slottable));
         }
         return Optional.empty();
     }
 
     @Override
-    public boolean test(Matchable match, MatchContext context) {
-        return test(match);
+    public boolean test(Matchable match, Context context) {
+        return super.test(match, context);
     }
 }

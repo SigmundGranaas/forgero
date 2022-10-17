@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.state;
 
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.match.MatchContext;
+import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,8 +36,8 @@ public class SimpleUpgrade implements Upgrade {
 
 
     @Override
-    public boolean test(Matchable match, MatchContext context) {
-        return type.test(match);
+    public boolean test(Matchable match, Context context) {
+        return type.test(match, context);
     }
 
     @Override

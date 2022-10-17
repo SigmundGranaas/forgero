@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
 import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgero.util.match.Context;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
@@ -99,9 +100,9 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
         var compositeOpt = ForgeroStateRegistry.STATES.get(id).map(Composite.class::cast);
         if (compositeOpt.isPresent()) {
             var composite = compositeOpt.get();
-            if (composite.test(Type.of("TOOL"))) {
+            if (composite.test(Type.of("TOOL"), Context.of())) {
                 return CompositeModel.of(composite.ingredients().stream().map(ingredient -> getIngredientId(ingredient, composite)).map(this::getModel).toList());
-            } else if (composite.test(Type.of("PART"))) {
+            } else if (composite.test(Type.of("PART"), Context.of().add(composite))) {
                 return getModel(String.format("%s-primary-pickaxe", composite.name().replace("_", "")));
             }
         }
@@ -110,14 +111,14 @@ public class ModelCollectionImpl implements BakedModelCollection, UnbakedModelCo
 
     public String getIngredientId(State ingredient, Composite composite) {
         String skin;
-        if (composite.test(Type.of("PICKAXE"))) {
-            if (ingredient.test(Type.of("HANDLE"))) {
+        if (composite.test(Type.of("PICKAXE"), Context.of())) {
+            if (ingredient.test(Type.of("HANDLE"), Context.of())) {
                 skin = "fullhandle";
             } else {
                 skin = "pickaxe";
             }
-        } else if (composite.test(Type.of("WEAPON"))) {
-            if (ingredient.test(Type.of("HANDLE"))) {
+        } else if (composite.test(Type.of("WEAPON"), Context.of())) {
+            if (ingredient.test(Type.of("HANDLE"), Context.of())) {
                 skin = "shorthandle";
             } else {
                 skin = "axe";

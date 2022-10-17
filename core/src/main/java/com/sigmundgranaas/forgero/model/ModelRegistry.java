@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.resource.data.v2.data.PaletteData;
 import com.sigmundgranaas.forgero.state.Identifiable;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.util.match.Context;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,11 +57,12 @@ public class ModelRegistry {
     }
 
     public Optional<ModelTemplate> find(State state) {
+        var context = Context.of();
         if (modelMap.containsKey(state.identifier())) {
-            return modelMap.get(state.identifier()).get(state, this::provider);
+            return modelMap.get(state.identifier()).get(state, this::provider, Context.of());
         } else {
             var modelEntries = tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build());
-            return modelEntries.stream().filter(entry -> entry.match(state)).sorted(ModelMatcher::comparator).map(modelMatcher -> modelMatcher.get(state, this::provider)).flatMap(Optional::stream).findFirst();
+            return modelEntries.stream().filter(entry -> entry.match(state, context)).map(modelMatcher -> modelMatcher.get(state, this::provider, context)).flatMap(Optional::stream).findFirst();
         }
     }
 
