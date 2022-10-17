@@ -7,17 +7,25 @@ import java.util.Optional;
 
 public class CompositeModelEntry implements ModelMatcher {
     @Override
-    public Optional<ModelTemplate> match(Matchable state, ModelProvider provider) {
+    public boolean match(Matchable state) {
+        if (state instanceof Composite) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Optional<ModelTemplate> get(Matchable state, ModelProvider provider) {
         if (state instanceof Composite composite) {
             var compositeModelTemplate = new CompositeModelTemplate();
             composite.slots().stream()
-                    .map(slot -> slot.get().flatMap(upgrade -> provider.find(upgrade).flatMap(matcher -> matcher.match(slot, provider)))
+                    .map(slot -> slot.get().flatMap(upgrade -> provider.find(upgrade).flatMap(matcher -> matcher.get(slot, provider)))
                     ).flatMap(Optional::stream)
                     .forEach(compositeModelTemplate::add);
 
             composite.ingredients().stream()
                     .map(stateEntry ->
-                            provider.find(stateEntry).flatMap(matcher -> matcher.match(stateEntry, provider))
+                            provider.find(stateEntry).flatMap(matcher -> matcher.get(stateEntry, provider))
                     ).flatMap(Optional::stream)
                     .forEach(compositeModelTemplate::add);
             return Optional.of(compositeModelTemplate);

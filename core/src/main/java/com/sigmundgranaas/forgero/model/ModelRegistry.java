@@ -57,12 +57,13 @@ public class ModelRegistry {
 
     public Optional<ModelTemplate> find(State state) {
         if (modelMap.containsKey(state.identifier())) {
-            return modelMap.get(state.identifier()).match(state, this::provider);
+            return modelMap.get(state.identifier()).get(state, this::provider);
         } else {
             var modelEntries = tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build());
-            return modelEntries.stream().map(entry -> entry.match(state, this::provider)).flatMap(Optional::stream).findFirst();
+            return modelEntries.stream().filter(entry -> entry.match(state)).sorted(ModelMatcher::comparator).map(modelMatcher -> modelMatcher.get(state, this::provider)).flatMap(Optional::stream).findFirst();
         }
     }
+
 
     public Optional<ModelMatcher> provider(Identifiable id) {
         if (modelMap.containsKey(id.identifier())) {

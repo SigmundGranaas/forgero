@@ -17,7 +17,12 @@ public class MultipleModelMatcher implements ModelMatcher {
     }
 
     @Override
-    public Optional<ModelTemplate> match(Matchable state, ModelProvider provider) {
-        return matchers.stream().map(matcher -> matcher.match(state, provider)).flatMap(Optional::stream).findAny();
+    public boolean match(Matchable state) {
+        return matchers.stream().anyMatch(matchers -> matchers.match(state));
+    }
+
+    @Override
+    public Optional<ModelTemplate> get(Matchable state, ModelProvider provider) {
+        return matchers.stream().sorted(ModelMatcher::comparator).map(matcher -> matcher.get(state, provider)).flatMap(Optional::stream).findFirst();
     }
 }

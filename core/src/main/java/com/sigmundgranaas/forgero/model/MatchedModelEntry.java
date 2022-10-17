@@ -15,13 +15,18 @@ public class MatchedModelEntry implements ModelMatcher {
     }
 
     @Override
-    public Optional<ModelTemplate> match(Matchable state, ModelProvider provider) {
+    public Optional<ModelTemplate> get(Matchable state, ModelProvider provider) {
         return models.stream()
                 .filter(pairing -> pairing.match().test(state))
                 .map(ModelMatchPairing::model)
-                .map(pairing -> pairing.match(state, provider))
+                .map(pairing -> pairing.get(state, provider))
                 .filter(Optional::isPresent)
                 .flatMap(Optional::stream)
                 .findFirst();
+    }
+
+    @Override
+    public boolean match(Matchable state) {
+        return models.stream().anyMatch(pair -> pair.match().test(state));
     }
 }

@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.type.TypeTree;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
@@ -46,7 +45,7 @@ public class ModelConverter {
             } else if (data.getModelType().equals("UPGRADE")) {
                 model = new ModelMatchPairing(new ModelMatch(data.getTarget(), "UPGRADE"), new TemplatedModelEntry(data.getTemplate()));
             } else {
-                model = (de, da) -> Optional.empty();
+                model = ModelMatcher.EMPTY;
             }
             tree.find(type).ifPresent(node -> node.addResource(model, ModelMatcher.class));
         } else if (notEmpty(data.getName()) && data.getModelType().equals("GENERATE")) {

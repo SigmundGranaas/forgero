@@ -6,9 +6,14 @@ import java.util.Optional;
 
 public record ModelMatchPairing(ModelMatch match, ModelMatcher model) implements ModelMatcher {
     @Override
-    public Optional<ModelTemplate> match(Matchable matchable, ModelProvider provider) {
+    public boolean match(Matchable state) {
+        return match.test(state);
+    }
+
+    @Override
+    public Optional<ModelTemplate> get(Matchable matchable, ModelProvider provider) {
         if (match.test(matchable)) {
-            return model.match(matchable, provider);
+            return model.get(matchable, provider);
         }
         return Optional.empty();
     }

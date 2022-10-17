@@ -17,7 +17,12 @@ public record PaletteTemplateModel(String palette,
     }
 
     @Override
-    public Optional<ModelTemplate> match(Matchable state, ModelProvider provider) {
+    public boolean match(Matchable state) {
+        return true;
+    }
+
+    @Override
+    public Optional<ModelTemplate> get(Matchable state, ModelProvider provider) {
         return Optional.of(this);
     }
 
@@ -30,7 +35,7 @@ public record PaletteTemplateModel(String palette,
     public String nameSpace() {
         return String.format("%s", Forgero.NAMESPACE);
     }
-    
+
     @Override
     public int compareTo(@NotNull ModelTemplate o) {
         return order() - o.order();
