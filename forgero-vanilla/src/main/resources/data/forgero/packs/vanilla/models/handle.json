@@ -23,26 +23,29 @@
       ]
     },
     {
-      "name": "reinforced_handle",
+      "name": "dense_handle",
+      "template": "dense_handle.png",
       "modelType": "GENERATE",
-      "template": "reinforced_handle.png",
-      "order": 20,
+      "palette": "MATERIAL",
+      "order": 10,
       "variants": [
         {
           "target": [
             "AXE"
           ],
-          "template": "medium_reinforced_handle"
+          "template": "medium_dense_handle.png"
         },
         {
           "target": [
             "SPEAR"
           ],
-          "template": "extended_reinforced_handle",
-          "offset": [
-            -6,
-            -6
-          ]
+          "template": "extended_dense_handle.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "short_dense_handle.png"
         }
       ]
     },
@@ -55,22 +58,36 @@
       "variants": [
         {
           "target": [
-            "model:extended_reinforced_handle"
+            "model:short_handle.png"
           ],
-          "template": "gem_small",
-          "offset": []
+          "template": "short_handle_material.png"
         },
         {
           "target": [
-            "model:medium_reinforced_handle"
+            "model:medium_handle.png"
           ],
-          "template": "gem_small",
-          "offset": [
-            -6,
-            -6
-          ]
+          "template": "medium_handle_material.png"
+        },
+        {
+          "target": [
+            "model:short_dense_handle.png"
+          ],
+          "template": "short_dense_handle_material.png"
+        },
+        {
+          "target": [
+            "model:medium_dense_handle.png"
+          ],
+          "template": "medium_dense_handle_material.png"
         }
       ]
+    },
+    {
+      "name": "handle_pummel",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "dense_handle_pummel.png",
+      "order": 12
     },
     {
       "target": [
@@ -83,10 +100,10 @@
     {
       "target": [
         "type:MATERIAL",
-        "id:reinforced_handle"
+        "id:reinforced_handle-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "reinforced_handle"
+      "template": "dense_handle"
     },
     {
       "target": [
@@ -98,11 +115,11 @@
     },
     {
       "target": [
-        "type:GEM",
+        "type:MATERIAL",
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "gem-0"
+      "template": "handle_pummel"
     }
   ]
 }

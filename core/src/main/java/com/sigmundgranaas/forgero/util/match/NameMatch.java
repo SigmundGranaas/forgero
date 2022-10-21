@@ -7,8 +7,9 @@ public record NameMatch(String name) implements Matchable {
     public boolean test(Matchable match, Context context) {
         if (match instanceof Identifiable id) {
             return id.name().equals(name);
-        } else {
-            return context.test(this, context);
+        } else if (match instanceof NameMatch nameMatch) {
+            return nameMatch.name.equals(name);
         }
+        return false;
     }
 }

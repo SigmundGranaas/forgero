@@ -9,13 +9,6 @@
       "order": 40
     },
     {
-      "name": "pickaxe_head_material",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "pickaxe_head_material.png",
-      "order": 51
-    },
-    {
       "target": [
         "type:MATERIAL",
         "type:SWORD_BLADE_SCHEMATIC"

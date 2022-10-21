@@ -13,7 +13,15 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "pickaxe_head_material.png",
-      "order": 51
+      "order": 51,
+      "variants": [
+        {
+          "target": [
+            "model:pickaxe_head_pointy.png"
+          ],
+          "template": "pickaxe_head_pointy_material.png"
+        }
+      ]
     },
     {
       "name": "pickaxe_head_pointy",

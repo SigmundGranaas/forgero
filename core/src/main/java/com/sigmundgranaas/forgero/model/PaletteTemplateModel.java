@@ -43,6 +43,6 @@ public record PaletteTemplateModel(String palette,
         if (o instanceof ModelTemplate templateO) {
             return order() - templateO.order();
         }
-        return ModelMatcher.super.compareTo(o);
+        return 0;
     }
 }

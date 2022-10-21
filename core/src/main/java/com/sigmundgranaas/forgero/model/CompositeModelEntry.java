@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.model;
 
 import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import com.sigmundgranaas.forgero.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -20,14 +22,18 @@ public class CompositeModelEntry implements ModelMatcher {
     public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
         if (state instanceof Composite composite) {
             var compositeModelTemplate = new CompositeModelTemplate();
-            var compositeContext = context.add(composite.type());
+            var compositeContext = context.add(composite.type()).add(new NameMatch(composite.name()));
             composite.ingredients().stream()
                     .map(stateEntry ->
                             provider.find(stateEntry).filter(matcher -> matcher.match(stateEntry, compositeContext)).flatMap(matcher -> matcher.get(stateEntry, provider, compositeContext))
                     ).flatMap(Optional::stream)
                     .forEach(compositeModelTemplate::add);
+
+
             composite.slots().stream()
-                    .map(slot -> slot.get().flatMap(upgrade -> provider.find(upgrade).filter(matcher -> matcher.match(upgrade, compositeContext)).flatMap(matcher -> matcher.get(upgrade, provider, compositeContext)))
+                    .filter(Slot::filled)
+                    .map(slot ->
+                            provider.find(composite).filter(matcher -> matcher.match(slot, context)).flatMap(matcher -> matcher.get(slot, provider, context))
                     ).flatMap(Optional::stream)
                     .forEach(compositeModelTemplate::add);
 

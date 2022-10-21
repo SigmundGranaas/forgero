@@ -31,7 +31,9 @@ public class NameCompositor {
     private Optional<String> mapper(State ingredient) {
         if (ingredient.test(TOOL_PART_HEAD, Context.of())) {
             return Optional.of(ingredient.name().replace("_head", ""));
-
+        }
+        if (ingredient.test(SWORD_BLADE, Context.of())) {
+            return Optional.of(ingredient.name().replace("_blade", ""));
         } else if (ingredient.test(HANDLE, Context.of())) {
             return Optional.empty();
 

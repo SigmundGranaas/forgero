@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.model;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.slot.FilledSlot;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
@@ -14,7 +15,7 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
     @Override
     public boolean test(Matchable match, Context context) {
         if (match instanceof Composite composite) {
-            var compositeMatch = context.add(composite);
+            var compositeMatch = context.add(composite.type());
             if (matchType.equals("UPGRADE")) {
                 return composite.slots().stream().allMatch(slot -> criteria.stream().anyMatch(criteria -> upgradeTest(slot, criteria, compositeMatch)));
             } else if (criteria.size() == composite.ingredients().size()) {
@@ -28,11 +29,13 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
             }
         } else if (match instanceof State state) {
             return criteria.stream().allMatch(criteria -> ingredientTest(state, criteria, context));
-        } else if (match instanceof Slot slot) {
+        } else if (match instanceof FilledSlot slot) {
             if (matchType.equals("UPGRADE")) {
                 return criteria.stream().allMatch(criteria -> upgradeTest(slot, criteria, context));
             } else if (slot.get().isPresent() && criteria.size() == 1) {
                 return ingredientTest(slot.get().get(), criteria.get(0), context);
+            } else if (slot.get().isPresent()) {
+                return criteria.stream().allMatch(criteria -> ingredientTest(slot.get().get(), criteria, context));
             }
         }
         return false;
@@ -47,6 +50,8 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
             return ingredient.test(type, context);
         } else if (criteria.contains("id")) {
             return ingredient.identifier().contains(criteria.replace("id:", ""));
+        } else if (criteria.contains("model")) {
+            return context.test(new ModelMatchEntry(criteria.replace("model:", "")), context);
         }
         return ingredient.test(new NameMatch(criteria), context);
     }
@@ -63,6 +68,7 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
                 return upgrade.test(Type.of(criteria.replace("type:", "")), context);
             }
             return upgrade.test(new NameMatch(criteria), context);
+
         }
         return false;
     }
