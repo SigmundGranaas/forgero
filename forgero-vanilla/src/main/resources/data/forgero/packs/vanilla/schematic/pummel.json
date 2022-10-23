@@ -1,0 +1,35 @@
+{
+  "type": "PUMMEL_SCHEMATIC",
+  "name": "pummel-schematic",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "PUMMEL",
+    "target": "CREATE",
+    "recipe": {
+    },
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "METAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+    ],
+    "models": [
+      {}
+    ]
+  },
+  "properties": {
+    "attributes": []
+  },
+  "model": {
+    "type": "LAYERED",
+    "id": "this"
+  }
+}

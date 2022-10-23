@@ -32,6 +32,11 @@ public class FilledSlot extends AbstractTypedSlot {
     }
 
     @Override
+    public String identifier() {
+        return type().typeName();
+    }
+
+    @Override
     public boolean test(Matchable match, Context context) {
         if (type().test(match, context)) {
             return true;

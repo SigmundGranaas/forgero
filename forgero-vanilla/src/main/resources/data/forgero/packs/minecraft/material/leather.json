@@ -1,0 +1,15 @@
+{
+  "type": "LEATHER",
+  "name": "leather",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:leather"
+  },
+  "properties": {
+    "attributes": []
+  },
+  "palette": {
+    "name": "leather"
+  }
+}

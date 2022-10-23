@@ -14,4 +14,6 @@ public interface Slot extends PropertyContainer, Matchable {
 
     Optional<Slot> fill(State slottable);
 
+    String identifier();
+
 }

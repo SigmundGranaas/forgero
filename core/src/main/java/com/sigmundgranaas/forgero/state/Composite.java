@@ -119,6 +119,10 @@ public class Composite implements Upgradeable<Composite> {
         return upgrades.slots();
     }
 
+    public boolean canUpgrade(State state) {
+        return upgrades.canUpgrade(state);
+    }
+
     public static class CompositeBuilder {
         private final List<State> ingredientList;
         private final SlotContainer upgradeContainer;

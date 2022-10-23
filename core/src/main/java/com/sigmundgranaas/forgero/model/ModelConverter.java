@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.ModelData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.PaletteData;
+import com.sigmundgranaas.forgero.texture.utils.Offset;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.ArrayList;
@@ -52,16 +53,16 @@ public class ModelConverter {
             tree.find(type).ifPresent(node -> node.addResource(model, ModelMatcher.class));
         } else if (notEmpty(data.getName()) && data.getModelType().equals("GENERATE")) {
             List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());
-            var variants = data.getVariants().stream().map(variant -> data.toBuilder().template(variant.getTemplate()).target(variant.getTarget()).order(data.order()).build()).collect(Collectors.toList());
+            var variants = data.getVariants().stream().map(variant -> data.toBuilder().template(variant.getTemplate()).target(variant.getTarget()).offset(variant.getOffset()).order(data.order()).build()).collect(Collectors.toList());
             variants.add(data);
-            var models = palettes.stream().map(palette -> variants.stream().map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()))).toList()).flatMap(List::stream).toList();
+            var models = palettes.stream().map(palette -> variants.stream().map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()), Offset.of(entry.getOffset()))).toList()).flatMap(List::stream).toList();
             var model = new MatchedModelEntry(models, data.getName());
             this.models.put(data.getName(), model);
         }
     }
 
-    private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria) {
-        var model = new PaletteTemplateModel(palette.getName(), template, order);
+    private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria, Offset offset) {
+        var model = new PaletteTemplateModel(palette.getName(), template, order, offset);
         textures.put(model.identifier(), model);
         criteria.add(model.palette());
         return new ModelMatchPairing(new ModelMatch(criteria, ""), model);

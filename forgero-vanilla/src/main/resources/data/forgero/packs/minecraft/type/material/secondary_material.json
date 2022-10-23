@@ -1,0 +1,9 @@
+{
+  "parent": "MATERIAL",
+  "name": "SECONDARY_MATERIAL",
+  "children": [
+    {
+      "name": "LEATHER"
+    }
+  ]
+}

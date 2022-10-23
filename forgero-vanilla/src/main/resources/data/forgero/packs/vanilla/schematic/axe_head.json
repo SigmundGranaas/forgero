@@ -14,7 +14,7 @@
         "id": "this"
       },
       {
-        "type": "MATERIAL",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],

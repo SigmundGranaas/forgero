@@ -18,7 +18,9 @@ public record TemplatedModelEntry(String template) implements ModelMatcher {
 
     @Override
     public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
-        var templateModel = provider.find(Identifiable.of(template)).flatMap(matcher -> matcher.get(state, provider, context));
+        var templateModel = provider.find(Identifiable.of(template))
+                .filter(matcher -> matcher.match(state, context))
+                .flatMap(matcher -> matcher.get(state, provider, context));
         if (state instanceof Composite composite) {
             context.add(composite.type()).add(new NameMatch(composite.name()));
             var compositeModelTemplate = new CompositeModelTemplate();

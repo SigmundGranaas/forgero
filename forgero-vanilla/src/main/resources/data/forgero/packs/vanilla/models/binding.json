@@ -5,7 +5,7 @@
       "name": "binding",
       "template": "binding.png",
       "type": "GENERATE",
-      "palette": "MATERIAL",
+      "palette": "TOOL_MATERIAL",
       "order": "60",
       "variants": [
         {
@@ -24,7 +24,7 @@
     },
     {
       "target": [
-        "type:MATERIAL",
+        "type:TOOL_MATERIAL",
         "type:BINDING_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",

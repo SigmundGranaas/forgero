@@ -4,7 +4,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModelCollection;
-import com.sigmundgranaas.forgero.client.forgerotool.model.toolpart.SingleTexturedModel;
 import com.sigmundgranaas.forgero.client.model.Unbaked2DTexturedModel;
 import com.sigmundgranaas.forgero.client.model.UnbakedFabricModel;
 import com.sigmundgranaas.forgero.conversion.StateConverter;
@@ -104,11 +103,11 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         var textureList = new ArrayList<PaletteTemplateModel>();
         if (input instanceof CompositeModelTemplate model) {
             model.getModels().forEach(template -> textureCollector(template, textureList));
-            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList.stream().sorted().map(this::textureName).toList(), "test");
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
             return Optional.of(unbakedModel);
         } else if (input instanceof TextureBasedModel model) {
             textureCollector(model, textureList);
-            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList.stream().sorted().map(this::textureName).toList(), "test");
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
             return Optional.of(unbakedModel);
         }
         return Optional.empty();
@@ -128,14 +127,5 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 
     private void textureCollector(CompositeModelTemplate template, List<PaletteTemplateModel> accumulator) {
         template.getModels().forEach(model -> textureCollector(model, accumulator));
-    }
-
-
-    private UnbakedFabricModel templateToModel(PaletteTemplateModel model) {
-        return new SingleTexturedModel(loader, textureGetter, textureName(model), textureName(model), 1);
-    }
-
-    private String textureName(PaletteTemplateModel model) {
-        return String.format("%s-%s", model.palette(), model.template().replace(".png", ""));
     }
 }

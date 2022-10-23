@@ -1,0 +1,14 @@
+{
+  "type": "METAL",
+  "name": "netherite",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:netherite_ingot"
+  },
+  "properties": {
+    "attributes": []
+  },
+  "palette": {
+    "name": "netherite"
+  }
+}

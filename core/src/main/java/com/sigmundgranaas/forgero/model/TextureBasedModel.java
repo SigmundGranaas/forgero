@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.model;
 
+import com.sigmundgranaas.forgero.texture.utils.Offset;
+
+import java.util.Optional;
+
 public class TextureBasedModel implements ModelTemplate {
     private final String texture;
     private final int layerId;
@@ -18,6 +22,11 @@ public class TextureBasedModel implements ModelTemplate {
     @Override
     public int order() {
         return layerId;
+    }
+
+    @Override
+    public Optional<Offset> getOffset() {
+        return Optional.empty();
     }
 
     @Override

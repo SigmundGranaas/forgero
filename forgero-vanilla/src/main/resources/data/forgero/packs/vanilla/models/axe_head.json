@@ -5,12 +5,12 @@
       "name": "axe_head",
       "template": "axe_head.png",
       "type": "GENERATE",
-      "palette": "MATERIAL",
+      "palette": "TOOL_MATERIAL",
       "order": 20
     },
     {
       "target": [
-        "type:MATERIAL",
+        "type:TOOL_MATERIAL",
         "type:AXE_HEAD_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",

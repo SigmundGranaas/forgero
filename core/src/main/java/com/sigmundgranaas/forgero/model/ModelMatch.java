@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import com.sigmundgranaas.forgero.util.match.NameMatch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record ModelMatch(List<String> criteria, String matchType) implements Matchable {
@@ -19,7 +20,17 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
             if (matchType.equals("UPGRADE")) {
                 return composite.slots().stream().allMatch(slot -> criteria.stream().anyMatch(criteria -> upgradeTest(slot, criteria, compositeMatch)));
             } else if (criteria.size() == composite.ingredients().size()) {
-                return composite.ingredients().stream().allMatch(ingredient -> criteria.stream().anyMatch(criteria -> ingredientTest(ingredient, criteria, compositeMatch)));
+                List<String> matches = new ArrayList<>();
+                for (State ingredient : composite.ingredients()) {
+                    for (String criteria : criteria) {
+                        if (ingredientTest(ingredient, criteria, context)) {
+                            if (!matches.contains(criteria)) {
+                                matches.add(criteria);
+                            }
+                        }
+                    }
+                }
+                return matches.size() == criteria.size();
             } else if (criteria.size() == 1) {
                 if (ingredientTest(composite, criteria.get(0), context)) {
                     return true;

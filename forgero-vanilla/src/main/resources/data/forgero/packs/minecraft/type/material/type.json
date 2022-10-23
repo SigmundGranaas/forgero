@@ -1,20 +1,3 @@
 {
-  "name": "MATERIAL",
-  "children": [
-    {
-      "name": "LEATHER"
-    },
-    {
-      "name": "WOOD"
-    },
-    {
-      "name": "METAL"
-    },
-    {
-      "name": "STONE"
-    },
-    {
-      "name": "MINERAL"
-    }
-  ]
+  "name": "MATERIAL"
 }

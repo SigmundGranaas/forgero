@@ -17,7 +17,7 @@
         "id": "this"
       },
       {
-        "type": "MATERIAL",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],
@@ -35,7 +35,7 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "TRINKET",
+        "type": "MATERIAL",
         "tier": 1
       }
     ],

@@ -38,6 +38,11 @@ public class EmptySlot extends AbstractTypedSlot {
     }
 
     @Override
+    public String identifier() {
+        return type().typeName();
+    }
+
+    @Override
     public boolean test(Matchable match, Context context) {
         return super.test(match, context);
     }

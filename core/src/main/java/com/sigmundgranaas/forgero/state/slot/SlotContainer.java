@@ -50,4 +50,10 @@ public class SlotContainer {
     public List<Slot> slots() {
         return slots;
     }
+
+    public boolean canUpgrade(State state) {
+        return slots.stream()
+                .filter(slot -> !slot.filled())
+                .anyMatch(slot -> slot.test(state, Context.of()));
+    }
 }

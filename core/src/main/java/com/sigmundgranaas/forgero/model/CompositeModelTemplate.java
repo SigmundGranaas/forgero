@@ -1,7 +1,10 @@
 package com.sigmundgranaas.forgero.model;
 
+import com.sigmundgranaas.forgero.texture.utils.Offset;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CompositeModelTemplate implements ModelTemplate {
     private final List<ModelTemplate> models;
@@ -21,6 +24,11 @@ public class CompositeModelTemplate implements ModelTemplate {
     @Override
     public int order() {
         return 0;
+    }
+
+    @Override
+    public Optional<Offset> getOffset() {
+        return Optional.empty();
     }
 
     @Override

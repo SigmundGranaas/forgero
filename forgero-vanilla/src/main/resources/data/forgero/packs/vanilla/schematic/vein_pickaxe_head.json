@@ -15,7 +15,7 @@
         "id": "this"
       },
       {
-        "type": "MINERAL",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],

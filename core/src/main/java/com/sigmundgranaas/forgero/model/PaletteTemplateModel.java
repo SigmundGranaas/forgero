@@ -2,15 +2,23 @@ package com.sigmundgranaas.forgero.model;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.state.Identifiable;
+import com.sigmundgranaas.forgero.texture.utils.Offset;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public record PaletteTemplateModel(String palette,
                                    String template,
-                                   int order) implements ModelTemplate, ModelMatcher, Identifiable {
+                                   int order,
+                                   @Nullable Offset offset) implements ModelTemplate, ModelMatcher, Identifiable {
+
+    @Override
+    public Optional<Offset> getOffset() {
+        return Optional.ofNullable(offset);
+    }
 
     @Override
     public <T> T convert(Converter<T, ModelTemplate> converter) {

@@ -25,6 +25,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
         super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
     }
 
+
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
         List<ItemStack> ingredients = new ArrayList<>();

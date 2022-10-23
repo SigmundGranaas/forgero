@@ -1,0 +1,18 @@
+{
+  "parent": "MATERIAL",
+  "name": "TOOL_MATERIAL",
+  "children": [
+    {
+      "name": "WOOD"
+    },
+    {
+      "name": "METAL"
+    },
+    {
+      "name": "STONE"
+    },
+    {
+      "name": "MINERAL"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import com.sigmundgranaas.forgero.resources.ModContainerService;
 import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ReloadableResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ResourceManagerStreamProvider;
+import com.sigmundgranaas.forgero.state.Identifiable;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -27,6 +28,8 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Comparator;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -59,22 +62,19 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void register() {
-        ForgeroStateRegistry.STATE_TO_CONTAINER.forEach((id, containerId) -> {
-            try {
-                if (!Registry.ITEM.containsId(new Identifier(containerId))) {
-                    ForgeroStateRegistry.STATES.get(id).ifPresent((state) -> {
+        ForgeroStateRegistry.STATES.all().stream()
+                .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
+                .sorted(Comparator.comparing(Identifiable::name))
+                .forEach(state -> {
+                    try {
                         Identifier identifier = new Identifier(state.nameSpace(), state.name());
                         DynamicSwordItem item = new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), state);
                         Registry.register(Registry.ITEM, identifier, item);
-                    });
-                }
-
-
-            } catch (InvalidIdentifierException e) {
-                LOGGER.error("invalid identifier: {}", id);
-                LOGGER.error(e);
-            }
-        });
+                    } catch (InvalidIdentifierException e) {
+                        LOGGER.error("invalid identifier: {}", state.identifier());
+                        LOGGER.error(e);
+                    }
+                });
     }
 
     private void registerRecipes() {

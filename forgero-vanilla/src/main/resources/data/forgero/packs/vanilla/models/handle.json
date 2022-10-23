@@ -5,7 +5,7 @@
       "name": "handle",
       "template": "handle.png",
       "type": "GENERATE",
-      "palette": "MATERIAL",
+      "palette": "TOOL_MATERIAL",
       "order": 10,
       "variants": [
         {
@@ -26,20 +26,14 @@
       "name": "dense_handle",
       "template": "dense_handle.png",
       "modelType": "GENERATE",
-      "palette": "MATERIAL",
+      "palette": "TOOL_MATERIAL",
       "order": 10,
       "variants": [
         {
           "target": [
-            "AXE"
+            "type:AXE"
           ],
           "template": "medium_dense_handle.png"
-        },
-        {
-          "target": [
-            "SPEAR"
-          ],
-          "template": "extended_dense_handle.png"
         },
         {
           "target": [
@@ -87,11 +81,23 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "dense_handle_pummel.png",
-      "order": 12
+      "order": 12,
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "dense_handle_pummel.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
     },
     {
       "target": [
-        "type:MATERIAL",
+        "type:TOOL_MATERIAL",
         "type:HANDLE_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
@@ -99,7 +105,7 @@
     },
     {
       "target": [
-        "type:MATERIAL",
+        "type:TOOL_MATERIAL",
         "id:reinforced_handle-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
@@ -115,11 +121,11 @@
     },
     {
       "target": [
-        "type:MATERIAL",
+        "type:PUMMEL",
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "handle_pummel"
+      "template": "pummel"
     }
   ]
 }

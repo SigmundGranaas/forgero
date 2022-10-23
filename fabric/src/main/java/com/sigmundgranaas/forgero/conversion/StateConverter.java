@@ -14,7 +14,7 @@ import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundParser.COMPOSITE_PA
 import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public interface StateConverter {
-    static Optional<? extends State> of(ItemStack stack) {
+    static Optional<State> of(ItemStack stack) {
         if (stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
             return COMPOSITE_PARSER.parse(stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER));
         } else {
@@ -22,7 +22,7 @@ public interface StateConverter {
         }
     }
 
-    static Optional<? extends State> of(Item item) {
+    static Optional<State> of(Item item) {
         String id = Registry.ITEM.getId(item).toString();
         var stateFromId = ForgeroStateRegistry.STATES.get(id);
         if (stateFromId.isPresent()) {
@@ -37,7 +37,7 @@ public interface StateConverter {
         return Optional.empty();
     }
 
-    static Optional<? extends State> of(Identifier id) {
+    static Optional<State> of(Identifier id) {
         return Optional.empty();
     }
 }
