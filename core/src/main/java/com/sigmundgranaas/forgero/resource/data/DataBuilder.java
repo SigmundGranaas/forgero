@@ -132,7 +132,7 @@ public class DataBuilder {
                             .stream()
                             .map(res -> IngredientData.builder().id(res.identifier()).build())
                             .toList();
-
+                    
                     templateIngredients.add(ingredients);
                 }
             }

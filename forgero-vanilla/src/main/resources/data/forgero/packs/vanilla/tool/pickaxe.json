@@ -11,6 +11,7 @@
     "target": "CREATE",
     "recipe": {
     },
+    "container": false,
     "components": [
       {
         "type": "PICKAXE_HEAD"

@@ -19,6 +19,10 @@ public class ConstructData {
 
     @Nullable
     @Builder.Default
+    private final boolean container = false;
+
+    @Nullable
+    @Builder.Default
     private final List<IngredientData> components = Collections.emptyList();
 
     @Nullable
@@ -32,6 +36,10 @@ public class ConstructData {
     @Nullable
     @Builder.Default
     private final List<SlotData> slots = Collections.emptyList();
+
+    public boolean container() {
+        return container;
+    }
 
     @NotNull
     public String target() {

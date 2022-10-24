@@ -1,32 +1,29 @@
-package com.sigmundgranaas.forgero.item.items;
+package com.sigmundgranaas.forgero.item.items.tool;
 
 import com.sigmundgranaas.forgero.conversion.StateConverter;
-import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.adapter.CompositeWriter;
+import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
+import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class DefaultStateItem extends Item implements StateItem, State {
+public class DynamicAxeItem extends SwordItem implements DynamicAttributeItem, State {
     private final State DEFAULT;
 
-    public DefaultStateItem(Settings settings, State defaultState) {
-        super(settings);
+    public DynamicAxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+        super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
-    }
-
-    @Override
-    public State defaultState() {
-        return DEFAULT;
     }
 
     @Override
@@ -67,4 +64,15 @@ public class DefaultStateItem extends Item implements StateItem, State {
     public boolean test(Matchable match, Context context) {
         return DEFAULT.test(match, context);
     }
+
+    @Override
+    public PropertyContainer dynamicProperties(ItemStack stack) {
+        return DEFAULT;
+    }
+
+    @Override
+    public PropertyContainer defaultProperties() {
+        return DEFAULT;
+    }
 }
+
