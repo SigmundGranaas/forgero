@@ -1,22 +1,43 @@
-package com.sigmundgranaas.forgero.item.items.tool;
+package com.sigmundgranaas.forgero.item.tool;
 
+import com.sigmundgranaas.forgero.conversion.StateConverter;
+import com.sigmundgranaas.forgero.item.adapter.CompositeWriter;
 import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShovelItem;
+import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 
-public class DynamicShovelItem extends ShovelItem implements DynamicAttributeItem, State {
+import java.util.List;
+
+public class DynamicSwordItem extends SwordItem implements DynamicAttributeItem, State {
     private final State DEFAULT;
 
-    public DynamicShovelItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+    public DynamicSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
+    }
+
+    @Override
+    public Text getName() {
+        return Text.literal(DEFAULT.name());
+    }
+
+    @Override
+    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+        State state = StateConverter.of(itemStack).orElse(DEFAULT);
+        if (state instanceof Composite composite) {
+            CompositeWriter.write(composite, tooltip, tooltipContext, 0);
+        }
+        super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 
     @Override
@@ -54,3 +75,4 @@ public class DynamicShovelItem extends ShovelItem implements DynamicAttributeIte
         return DEFAULT;
     }
 }
+

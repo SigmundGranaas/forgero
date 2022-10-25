@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.items.tool;
+package com.sigmundgranaas.forgero.item.tool;
 
 import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.item.adapter.CompositeWriter;
@@ -10,18 +10,18 @@ import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State {
+public class DynamicHoeItem extends HoeItem implements DynamicAttributeItem, State {
     private final State DEFAULT;
 
-    public DynamicPickaxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+    public DynamicHoeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
     }
@@ -30,6 +30,7 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
     public Text getName() {
         return Text.literal(DEFAULT.name());
     }
+
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {

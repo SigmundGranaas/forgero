@@ -1,7 +1,7 @@
-package com.sigmundgranaas.forgero.item.items;
+package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.conversion.StateConverter;
-import com.sigmundgranaas.forgero.item.StateItem;
+import com.sigmundgranaas.forgero.item.adapter.AttributeWriter;
 import com.sigmundgranaas.forgero.item.adapter.CompositeWriter;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
@@ -40,6 +40,7 @@ public class DefaultStateItem extends Item implements StateItem, State {
         if (state instanceof Composite composite) {
             CompositeWriter.write(composite, tooltip, tooltipContext, 0);
         }
+        AttributeWriter.write(state, tooltip, tooltipContext);
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 

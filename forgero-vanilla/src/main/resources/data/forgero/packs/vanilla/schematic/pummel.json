@@ -26,7 +26,14 @@
     ]
   },
   "properties": {
-    "attributes": []
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 30
+      }
+    ]
   },
   "model": {
     "type": "LAYERED",

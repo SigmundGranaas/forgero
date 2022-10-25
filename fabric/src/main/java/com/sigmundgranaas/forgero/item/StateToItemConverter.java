@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgero.item.items.DefaultStateItem;
-import com.sigmundgranaas.forgero.item.items.tool.*;
+import com.sigmundgranaas.forgero.item.tool.*;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;

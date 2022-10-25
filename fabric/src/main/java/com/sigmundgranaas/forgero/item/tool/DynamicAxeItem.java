@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.items.tool;
+package com.sigmundgranaas.forgero.item.tool;
 
 import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.item.adapter.CompositeWriter;
@@ -30,6 +30,7 @@ public class DynamicAxeItem extends SwordItem implements DynamicAttributeItem, S
     public Text getName() {
         return Text.literal(DEFAULT.name());
     }
+
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {

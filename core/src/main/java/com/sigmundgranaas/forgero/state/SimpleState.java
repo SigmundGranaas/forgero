@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.state;
 
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
@@ -29,6 +30,12 @@ public class SimpleState implements Ingredient {
         this.nameSpace = nameSpace;
         this.type = type;
         this.properties = properties;
+    }
+
+    @Override
+    @NotNull
+    public List<Property> getProperties(Target target) {
+        return properties;
     }
 
     @Override

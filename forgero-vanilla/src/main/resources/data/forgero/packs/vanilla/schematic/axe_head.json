@@ -38,6 +38,13 @@
     ]
   },
   "properties": {
-    "attributes": []
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 10
+      }
+    ]
   }
 }

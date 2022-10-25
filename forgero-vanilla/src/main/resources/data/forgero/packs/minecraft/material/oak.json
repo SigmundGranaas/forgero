@@ -7,7 +7,14 @@
     "id": "minecraft:oak_planks"
   },
   "properties": {
-    "attributes": []
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 5
+      }
+    ]
   },
   "palette": {
     "name": "oak"

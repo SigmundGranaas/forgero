@@ -6,7 +6,26 @@
     "id": "minecraft:iron_ingot"
   },
   "properties": {
-    "attributes": []
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 40
+      }
+    ]
   },
   "palette": {
     "name": "iron"

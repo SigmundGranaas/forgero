@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.items.tool;
+package com.sigmundgranaas.forgero.item.tool;
 
 import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.item.adapter.CompositeWriter;
@@ -11,17 +11,17 @@ import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class DynamicSwordItem extends SwordItem implements DynamicAttributeItem, State {
+public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State {
     private final State DEFAULT;
 
-    public DynamicSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+    public DynamicPickaxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
     }

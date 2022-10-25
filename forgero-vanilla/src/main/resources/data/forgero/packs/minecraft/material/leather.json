@@ -7,7 +7,14 @@
     "id": "minecraft:leather"
   },
   "properties": {
-    "attributes": []
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 30
+      }
+    ]
   },
   "palette": {
     "name": "leather"
