@@ -38,7 +38,7 @@ public class DefaultStateItem extends Item implements StateItem, State {
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         State state = StateConverter.of(itemStack).orElse(DEFAULT);
         if (state instanceof Composite composite) {
-            CompositeWriter.write(composite, tooltip);
+            CompositeWriter.write(composite, tooltip, tooltipContext, 0);
         }
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }

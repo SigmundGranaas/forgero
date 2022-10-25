@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.items.DefaultStateItem;
-import com.sigmundgranaas.forgero.item.items.tool.DynamicAxeItem;
-import com.sigmundgranaas.forgero.item.items.tool.DynamicPickaxeItem;
-import com.sigmundgranaas.forgero.item.items.tool.DynamicSwordItem;
+import com.sigmundgranaas.forgero.item.items.tool.*;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
@@ -33,9 +31,9 @@ public class StateToItemConverter {
         } else if (state.type().test(Type.of("AXE"), context)) {
             return new DynamicAxeItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("HOE"), context)) {
-            return new DynamicAxeItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicHoeItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
-            return new DynamicAxeItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicShovelItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
         }
         return defaultStateItem();
     }

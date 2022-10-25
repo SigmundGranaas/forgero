@@ -6,7 +6,39 @@
     "id": "minecraft:diamond"
   },
   "properties": {
-    "attributes": []
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 80
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 500,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HANDLE",
+            "BINDING"
+          ]
+        }
+      }
+    ]
   },
   "palette": {
     "name": "diamond"

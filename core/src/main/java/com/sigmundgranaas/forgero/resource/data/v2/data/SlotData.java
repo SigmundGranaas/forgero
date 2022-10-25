@@ -21,6 +21,10 @@ public class SlotData {
     @Nullable
     private final String type = EMPTY_IDENTIFIER;
 
+    @Builder.Default
+    @Nullable
+    private final String description = EMPTY_IDENTIFIER;
+
     @SerializedName(value = "upgrade_type", alternate = "upgradeType")
     @Builder.Default
     @Nullable
@@ -43,6 +47,11 @@ public class SlotData {
     @NotNull
     public String type() {
         return Objects.requireNonNullElse(type, EMPTY_IDENTIFIER);
+    }
+
+    @NotNull
+    public String description() {
+        return Objects.requireNonNullElse(description, EMPTY_IDENTIFIER);
     }
 
 

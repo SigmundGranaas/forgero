@@ -22,6 +22,7 @@
     "slots": [
       {
         "upgrade_type": "SMITHING",
+        "description": "grip",
         "category": [
           "OFFENSIVE"
         ],
@@ -30,6 +31,7 @@
       },
       {
         "upgrade_type": "SMITHING",
+        "description": "pummel",
         "category": [
           "OFFENSIVE"
         ],

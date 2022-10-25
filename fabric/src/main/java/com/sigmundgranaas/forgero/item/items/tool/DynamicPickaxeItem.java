@@ -11,14 +11,14 @@ import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class DynamicPickaxeItem extends SwordItem implements DynamicAttributeItem, State {
+public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State {
     private final State DEFAULT;
 
     public DynamicPickaxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
@@ -35,7 +35,7 @@ public class DynamicPickaxeItem extends SwordItem implements DynamicAttributeIte
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         State state = StateConverter.of(itemStack).orElse(DEFAULT);
         if (state instanceof Composite composite) {
-            CompositeWriter.write(composite, tooltip);
+            CompositeWriter.write(composite, tooltip, tooltipContext, 0);
         }
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }

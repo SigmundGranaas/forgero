@@ -27,6 +27,7 @@
         "category": [
           "OFFENSIVE"
         ],
+        "description": "tip_reinforcement",
         "type": "MATERIAL",
         "tier": 1
       },

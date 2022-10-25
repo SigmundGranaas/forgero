@@ -16,4 +16,5 @@ public interface Slot extends PropertyContainer, Matchable {
 
     String identifier();
 
+    String description();
 }

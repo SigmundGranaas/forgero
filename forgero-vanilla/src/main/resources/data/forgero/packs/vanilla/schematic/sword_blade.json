@@ -27,6 +27,7 @@
         "category": [
           "OFFENSIVE"
         ],
+        "description": "sword_tip",
         "type": "MATERIAL",
         "tier": 1
       },
@@ -35,6 +36,7 @@
         "category": [
           "OFFENSIVE"
         ],
+        "description": "scabbard",
         "type": "MATERIAL",
         "tier": 1
       }

@@ -11,8 +11,8 @@ import java.util.Optional;
 public class FilledSlot extends AbstractTypedSlot {
     private final State upgrade;
 
-    public FilledSlot(int index, Type type, State upgrade) {
-        super(index, type);
+    public FilledSlot(int index, Type type, State upgrade, String description) {
+        super(index, type, description);
         this.upgrade = upgrade;
     }
 
@@ -29,11 +29,6 @@ public class FilledSlot extends AbstractTypedSlot {
     @Override
     public Optional<Slot> fill(State slottable) {
         return Optional.empty();
-    }
-
-    @Override
-    public String identifier() {
-        return type().typeName();
     }
 
     @Override
