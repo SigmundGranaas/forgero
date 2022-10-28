@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero.item.tool;
 
-import com.sigmundgranaas.forgero.conversion.StateConverter;
-import com.sigmundgranaas.forgero.item.adapter.CompositeWriter;
+import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
+import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
-import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
@@ -18,7 +17,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State {
+public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State, StateItem {
     private final State DEFAULT;
 
     public DynamicPickaxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
@@ -33,10 +32,8 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        State state = StateConverter.of(itemStack).orElse(DEFAULT);
-        if (state instanceof Composite composite) {
-            CompositeWriter.write(composite, tooltip, tooltipContext, 0);
-        }
+        StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
+
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 
@@ -72,6 +69,11 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
 
     @Override
     public PropertyContainer defaultProperties() {
+        return DEFAULT;
+    }
+
+    @Override
+    public State defaultState() {
         return DEFAULT;
     }
 }
