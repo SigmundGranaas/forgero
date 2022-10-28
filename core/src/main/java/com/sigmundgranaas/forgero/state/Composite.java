@@ -66,6 +66,14 @@ public class Composite implements Upgradeable<Composite> {
     }
 
     @Override
+    public int getEntityCount() {
+        return Stream.of(ingredients(), upgrades())
+                .flatMap(List::stream)
+                .map(State::getEntityCount)
+                .reduce(0, Integer::sum);
+    }
+
+    @Override
     public @NotNull List<Property> getProperties() {
         return Stream.of(ingredients(), upgrades())
                 .flatMap(List::stream)

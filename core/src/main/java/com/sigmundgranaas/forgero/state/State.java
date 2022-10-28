@@ -22,6 +22,10 @@ public interface State extends PropertyContainer, Matchable, Identifiable {
         return new SimpleState(name, nameSpace, type, properties);
     }
 
+    default int getEntityCount() {
+        return 1;
+    }
+
     Type type();
 
     default boolean equals(State s) {
