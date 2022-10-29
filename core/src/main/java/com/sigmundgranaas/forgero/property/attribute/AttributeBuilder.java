@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.property.attribute;
 
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.property.*;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
 
 import java.util.HashSet;
 import java.util.function.Predicate;
@@ -12,6 +12,7 @@ import java.util.function.Predicate;
  */
 public class AttributeBuilder {
     private final AttributeType type;
+    private Category category;
     private CalculationOrder order = CalculationOrder.BASE;
     private Predicate<Target> condition = Attribute.DEFAULT_CONDITION;
     private NumericOperation operation = NumericOperation.ADDITION;
@@ -20,6 +21,7 @@ public class AttributeBuilder {
 
     public AttributeBuilder(AttributeType type) {
         this.type = type;
+        this.category = Category.UNDEFINED;
     }
 
     public static Attribute createAttributeFromPojo(PropertyPojo.Attribute attributePOJO) {
@@ -61,6 +63,7 @@ public class AttributeBuilder {
         builder.applyValue(attribute.getValue());
         builder.applyOperation(attribute.getOperation());
         builder.applyLevel(attribute.getLevel());
+        builder.applyCategory(attribute.getCategory());
         return builder;
     }
 
@@ -71,6 +74,11 @@ public class AttributeBuilder {
 
     public AttributeBuilder applyOrder(CalculationOrder order) {
         this.order = order;
+        return this;
+    }
+
+    public AttributeBuilder applyCategory(Category category) {
+        this.category = category;
         return this;
     }
 
@@ -91,6 +99,6 @@ public class AttributeBuilder {
     }
 
     public Attribute build() {
-        return new BaseAttribute(type, operation, value, condition, order, level);
+        return new BaseAttribute(type, operation, value, condition, order, level, category);
     }
 }

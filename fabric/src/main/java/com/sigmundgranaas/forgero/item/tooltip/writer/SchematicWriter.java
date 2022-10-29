@@ -10,19 +10,19 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class ToolPartHeadWriter extends StateWriter {
-    public ToolPartHeadWriter(State state) {
+public class SchematicWriter extends StateWriter {
+    public SchematicWriter(State state) {
         super(state);
     }
 
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
         super.write(tooltip, context);
-        AttributeWriter.of(AttributeHelper.of(state))
-                .addAttribute(AttributeType.MINING_SPEED)
-                .addAttribute(AttributeType.MINING_LEVEL)
-                .addAttribute(AttributeType.DURABILITY)
-                .addAttribute(AttributeType.RARITY)
-                .write(tooltip, context);
+        var writer = AttributeWriter.of(AttributeHelper.of(state));
+        for (AttributeType type : AttributeType.values()) {
+            writer.addAttribute(type);
+        }
+
+        writer.write(tooltip, context);
     }
 }

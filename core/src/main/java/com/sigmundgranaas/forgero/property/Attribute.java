@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.property;
 
+import com.sigmundgranaas.forgero.property.attribute.Category;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -41,6 +42,8 @@ public interface Attribute extends Property, Comparable<Attribute> {
     NumericOperation getOperation();
 
     float getValue();
+
+    Category getCategory();
 
     int getLevel();
 

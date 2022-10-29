@@ -12,6 +12,55 @@
         "order": "BASE",
         "operation": "ADDITION",
         "value": 100
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 9.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 4.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 1500.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HEAD"
+          ]
+        }
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 750.0,
+        "condition": {
+          "target": "TOOL_PART_TYPE",
+          "tag": [
+            "HANDLE",
+            "BINDING"
+          ]
+        }
       }
     ]
   },

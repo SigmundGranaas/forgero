@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.item.tooltip;
 
-import com.sigmundgranaas.forgero.item.tooltip.writer.SwordBladeWriter;
-import com.sigmundgranaas.forgero.item.tooltip.writer.ToolPartHeadWriter;
-import com.sigmundgranaas.forgero.item.tooltip.writer.ToolWriter;
+import com.sigmundgranaas.forgero.item.tooltip.writer.*;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.client.item.TooltipContext;
@@ -22,10 +20,14 @@ public class StateWriter implements Writer {
     public static Writer of(State state) {
         if (state.test(TOOL)) {
             return new ToolWriter(state);
+        } else if (state.test(PART)) {
+            return new PartWriter((state));
         } else if (state.test(SWORD_BLADE)) {
             return new SwordBladeWriter(state);
         } else if (state.test(TOOL_PART_HEAD)) {
             return new ToolPartHeadWriter(state);
+        } else if (state.test(SCHEMATIC)) {
+            return new SchematicWriter(state);
         }
         return new StateWriter(state);
     }

@@ -10,8 +10,8 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class ToolPartHeadWriter extends StateWriter {
-    public ToolPartHeadWriter(State state) {
+public class PartWriter extends StateWriter {
+    public PartWriter(State state) {
         super(state);
     }
 
@@ -19,8 +19,6 @@ public class ToolPartHeadWriter extends StateWriter {
     public void write(List<Text> tooltip, TooltipContext context) {
         super.write(tooltip, context);
         AttributeWriter.of(AttributeHelper.of(state))
-                .addAttribute(AttributeType.MINING_SPEED)
-                .addAttribute(AttributeType.MINING_LEVEL)
                 .addAttribute(AttributeType.DURABILITY)
                 .addAttribute(AttributeType.RARITY)
                 .write(tooltip, context);

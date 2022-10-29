@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.item.tooltip;
 
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.Target;
+import com.sigmundgranaas.forgero.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.state.Composite;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
@@ -30,7 +31,7 @@ public class CompositeWriter implements Writer {
             composite.slots().forEach(slot -> {
                 MutableText mutableText = Text.literal(String.format("%s%s ", stringIndent + " ", slot.identifier().toLowerCase())).formatted(Formatting.GRAY);
                 if (slot.filled()) {
-                    Rarity rarity = getRarityFromInt((int) slot.get().get().stream().applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY) / slot.get().get().getEntityCount());
+                    Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
                     mutableText.append(Text.literal(String.format(": %s", slot.get().get().name())).formatted(rarity.formatting));
                 } else {
                     mutableText.append(": -").formatted(Formatting.GRAY);
@@ -46,7 +47,7 @@ public class CompositeWriter implements Writer {
             MutableText ingredients = Text.literal(stringIndent + "Ingredients:").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
             composite.ingredients().forEach(ingredient -> {
-                Rarity rarity = getRarityFromInt((int) ingredient.stream().applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY) / ingredient.getEntityCount());
+                Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
                 MutableText mutableText = Text.literal(String.format("%s%s ", stringIndent + " ", ingredient.name().toLowerCase())).formatted(rarity.formatting);
                 tooltip.add(mutableText);
                 if (context.isAdvanced() && ingredient instanceof Composite compositeSlot) {

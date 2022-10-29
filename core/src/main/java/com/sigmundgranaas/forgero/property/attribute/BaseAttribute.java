@@ -13,7 +13,7 @@ public record BaseAttribute(AttributeType attribute,
                             NumericOperation operation,
                             float value,
                             Predicate<Target> condition,
-                            CalculationOrder order, int level) implements Attribute {
+                            CalculationOrder order, int level, Category category) implements Attribute {
 
     @Override
     public CalculationOrder getOrder() {
@@ -58,6 +58,11 @@ public record BaseAttribute(AttributeType attribute,
     @Override
     public float getValue() {
         return value;
+    }
+
+    @Override
+    public Category getCategory() {
+        return category;
     }
 
     @Override

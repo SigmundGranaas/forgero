@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.resource.data.v1.pojo;
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.property.*;
 import com.sigmundgranaas.forgero.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.property.attribute.Category;
 import com.sigmundgranaas.forgero.property.passive.PassivePropertyType;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class PropertyPojo {
         public NumericOperation operation;
         public float value;
         public PropertyPojo.Condition condition;
-
+        public Category category;
     }
 
     public static class Passive {

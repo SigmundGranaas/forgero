@@ -65,12 +65,13 @@ public class Composite implements Upgradeable<Composite> {
         return type;
     }
 
-    @Override
-    public int getEntityCount() {
-        return Stream.of(ingredients(), upgrades())
+    public int getCompositeCount() {
+        int count = (int) Stream.of(ingredients(), upgrades())
                 .flatMap(List::stream)
-                .map(State::getEntityCount)
-                .reduce(0, Integer::sum);
+                .filter(Composite.class::isInstance)
+                .count();
+
+        return count == 0 ? 1 : count;
     }
 
     @Override

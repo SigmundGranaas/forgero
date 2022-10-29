@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.item.tooltip;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.Target;
+import com.sigmundgranaas.forgero.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
@@ -15,18 +16,18 @@ import java.util.List;
 import static com.sigmundgranaas.forgero.property.AttributeType.*;
 
 public class AttributeWriter implements Writer {
-    private final List<Property> properties;
     private final List<Text> tooltip;
     private final List<AttributeType> attributes;
+    private final AttributeHelper helper;
 
-    public AttributeWriter(List<Property> attributes) {
-        this.properties = attributes;
+    public AttributeWriter(AttributeHelper helper) {
+        this.helper = helper;
         this.tooltip = new ArrayList<>();
         this.attributes = new ArrayList<>();
     }
 
-    public static AttributeWriter of(List<Property> attributes) {
-        return new AttributeWriter(attributes);
+    public static AttributeWriter of(AttributeHelper helper) {
+        return new AttributeWriter(helper);
     }
 
     public static void write(State state, List<Text> tooltip, TooltipContext context) {
@@ -78,7 +79,7 @@ public class AttributeWriter implements Writer {
     }
 
     private void intAttribute(AttributeType type, List<Text> tooltip) {
-        int result = (int) Property.stream(properties).applyAttribute(Target.createEmptyTarget(), type);
+        int result = (int) helper.attribute(type);
         if (result != 0) {
             MutableText miningLevel = Text.literal(String.format("  %s : ", type.toString())).formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
@@ -87,7 +88,7 @@ public class AttributeWriter implements Writer {
     }
 
     private void floatAttribute(AttributeType type, List<Text> tooltip) {
-        float result = Property.stream(properties).applyAttribute(Target.createEmptyTarget(), type);
+        float result = Property.stream(helper.attributes()).applyAttribute(Target.createEmptyTarget(), type);
         if (result != 0f) {
             MutableText miningLevel = Text.literal(String.format("  %s : ", type.toString())).formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
