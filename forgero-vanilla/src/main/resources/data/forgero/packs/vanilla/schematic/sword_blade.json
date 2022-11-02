@@ -55,9 +55,15 @@
       },
       {
         "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 2.0
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.8
+      },
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
       },
       {
         "type": "ATTACK_SPEED",

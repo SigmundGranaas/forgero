@@ -1,0 +1,111 @@
+{
+  "name": "palladium",
+  "dependencies": [
+    "mythicmetals"
+  ],
+  "ingredient": {
+    "tag": "c:palladium_ingots"
+  },
+  "palette": {
+    "name": "palladium",
+    "include": [
+      "mythicmetals:textures/items/palladium_ingot.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 71
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 4
+      }
+    ],
+    "passive": [],
+    "active": []
+  },
+  "primary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 8.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 3.5,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 960.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 350.0
+        }
+      ],
+      "passive": [],
+      "active": []
+    }
+  },
+  "secondary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.2
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.1
+        }
+      ],
+      "passive": [],
+      "active": []
+    }
+  }
+}

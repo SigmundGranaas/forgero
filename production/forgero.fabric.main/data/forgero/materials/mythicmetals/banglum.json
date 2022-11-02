@@ -1,0 +1,123 @@
+{
+  "name": "banglum",
+  "dependencies": [
+    "mythicmetals"
+  ],
+  "ingredient": {
+    "item": "mythicmetals:banglum_ingot"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2
+      }
+    ],
+    "passive": [],
+    "active": []
+  },
+  "palette": {
+    "name": "banglum",
+    "include": [
+      "mythicmetals:textures/items/banglum_ingot.png"
+    ],
+    "exclude": [
+    ]
+  },
+  "primary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 11.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 200.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 60.0
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 2.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HEAD"
+            ]
+          }
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "BASE",
+          "operation": "ADDITION",
+          "value": 7.0,
+          "condition": {
+            "target": "TOOL_PART_TYPE",
+            "tag": [
+              "HANDLE"
+            ]
+          }
+        }
+      ],
+      "passive": [],
+      "active": []
+    }
+  },
+  "secondary": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "MINING_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 2.0
+        },
+        {
+          "type": "DURABILITY",
+          "order": "BASE",
+          "operation": "MULTIPLICATION",
+          "value": 0.8
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "MIDDLE",
+          "operation": "ADDITION",
+          "value": 0.4
+        }
+      ],
+      "passive": [],
+      "active": []
+    }
+  }
+}

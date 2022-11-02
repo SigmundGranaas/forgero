@@ -2,10 +2,10 @@ package com.sigmundgranaas.forgero.item.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.property.Target;
-import com.sigmundgranaas.forgero.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.toolhandler.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -30,8 +30,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         if (slot.equals(EquipmentSlot.MAINHAND) && stack.getItem() instanceof DynamicAttributeItem) {
             Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            float baseToolDamage = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
-            float currentToolDamage = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
+            float currentToolDamage = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+            float baseToolDamage = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
             //Base attack damage
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) stack.getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
@@ -39,7 +39,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
             //Attack speed
-            float baseAttackSpeed = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+            float baseAttackSpeed = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_SPEED);
             float currentAttackSpeed = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_SPEED);
             if (currentAttackSpeed != baseAttackSpeed) {
                 builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", currentAttackSpeed - baseAttackSpeed, EntityAttributeModifier.Operation.ADDITION));

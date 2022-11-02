@@ -65,7 +65,7 @@ public class StateConverter implements DataConverter<State> {
 
     private List<? extends Slot> createSlots(ConstructData data) {
         return IntStream.range(0, data.slots().size())
-                .mapToObj(index -> new EmptySlot(index, tree.find(data.slots().get(index).type()).map(MutableTypeNode::type).orElse(Type.of(data.slots().get(index).type())), data.slots().get(index).description())).toList();
+                .mapToObj(index -> new EmptySlot(index, tree.find(data.slots().get(index).type()).map(MutableTypeNode::type).orElse(Type.of(data.slots().get(index).type())), data.slots().get(index).description(), Set.copyOf(data.slots().get(index).category()))).toList();
     }
 
     private Optional<State> createState(DataResource resource) {

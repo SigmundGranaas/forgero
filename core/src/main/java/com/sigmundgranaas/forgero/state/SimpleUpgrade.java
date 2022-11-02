@@ -20,7 +20,7 @@ public class SimpleUpgrade implements Upgrade {
     }
 
     @Override
-    public @NotNull List<Property> getProperties() {
+    public @NotNull List<Property> getRootProperties() {
         return properties;
     }
 

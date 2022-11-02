@@ -1,0 +1,15 @@
+{
+  "name": "Handle Schematic",
+  "icon": "forgero:handle-schematic",
+  "category": "forgero:schematic_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The default handle schematic creates a basic handle"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:handle_schematic_default"
+    }
+  ]
+}

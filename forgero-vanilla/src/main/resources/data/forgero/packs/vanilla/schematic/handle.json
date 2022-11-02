@@ -45,9 +45,23 @@
     "attributes": [
       {
         "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 10
+        "order": "COMPOSITE",
+        "category": "ALL",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "category": "ALL",
+        "operation": "MULTIPLICATION",
+        "value": 0.4
+      },
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
       }
     ]
   },

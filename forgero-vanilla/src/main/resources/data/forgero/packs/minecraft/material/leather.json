@@ -10,7 +10,7 @@
     "attributes": [
       {
         "type": "RARITY",
-        "order": "BASE",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 30
       }

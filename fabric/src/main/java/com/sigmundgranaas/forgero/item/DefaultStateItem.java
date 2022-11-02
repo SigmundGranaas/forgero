@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
@@ -60,5 +61,15 @@ public class DefaultStateItem extends Item implements StateItem, State {
     @Override
     public boolean test(Matchable match, Context context) {
         return DEFAULT.test(match, context);
+    }
+
+    @Override
+    public PropertyContainer dynamicProperties(ItemStack stack) {
+        return dynamicState(stack);
+    }
+
+    @Override
+    public PropertyContainer defaultProperties() {
+        return DEFAULT;
     }
 }

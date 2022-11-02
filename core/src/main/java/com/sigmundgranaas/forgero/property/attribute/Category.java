@@ -4,5 +4,6 @@ public enum Category {
     UNDEFINED,
     OFFENSIVE,
     UTILITY,
-    DEFENSIVE
+    DEFENSIVE,
+    ALL,
 }

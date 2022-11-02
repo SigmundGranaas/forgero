@@ -65,7 +65,7 @@ public class DynamicHoeItem extends HoeItem implements DynamicAttributeItem, Sta
 
     @Override
     public PropertyContainer dynamicProperties(ItemStack stack) {
-        return DEFAULT;
+        return dynamicState(stack);
     }
 
     @Override

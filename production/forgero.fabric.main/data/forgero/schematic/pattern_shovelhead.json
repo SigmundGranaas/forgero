@@ -1,0 +1,27 @@
+{
+  "name": "pattern_shovel",
+  "parent": "root_shovelhead",
+  "materialCount": 3,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "pattern_shovelhead_primary",
+        "secondary": "pattern_shovelhead_secondary",
+        "gem": "pattern_shovelhead_gem"
+      }
+    }
+  ],
+  "properties": {
+    "active": [
+      {
+        "type": "BLOCK_BREAKING_PATTERN",
+        "pattern": [
+          "xxx",
+          "xxx",
+          "xxx"
+        ]
+      }
+    ]
+  }
+}

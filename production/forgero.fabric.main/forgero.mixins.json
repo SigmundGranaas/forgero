@@ -1,0 +1,32 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractBlockMixin",
+    "DynamicToolItemStackMixin",
+    "ItemEntityMagneticMixin",
+    "ItemSchematicRemainderMixin",
+    "ItemStackDropGemOnBreakMixin",
+    "ItemUUIDMixin",
+    "LivingEntityMagneticMixin",
+    "MiningToolItemMixin",
+    "PiglinBrainMixin",
+    "PlayerEntityAttackMixin",
+    "PlayerServerInteractionManagerMixin",
+    "RecipeManagerMixin",
+    "SmithingRecipeMixin"
+  ],
+  "client": [
+    "ItemModelGeneratorMixin",
+    "ItemRenderContextMixin",
+    "ItemRenderMixin",
+    "LifecycleResourceManagerImplMixin",
+    "ModelLoaderMixin",
+    "PlayerInteractionManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

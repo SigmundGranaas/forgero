@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.property.attribute;
 
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.Property;
-import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.state.State;
 
 import java.util.List;
@@ -29,9 +29,6 @@ public class AttributeHelper {
 
     public int rarity() {
         int rarity = (int) state.stream().applyAttribute(AttributeType.RARITY);
-        if (state instanceof Composite composite) {
-            return rarity / composite.getCompositeCount();
-        }
         return rarity;
     }
 
@@ -44,6 +41,6 @@ public class AttributeHelper {
     }
 
     public List<Property> attributes() {
-        return state.getProperties();
+        return state.applyProperty(Target.EMPTY);
     }
 }

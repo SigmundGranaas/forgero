@@ -21,8 +21,9 @@
       },
       {
         "type": "RARITY",
-        "order": "BASE",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
+        "category": "ALL",
         "value": 80
       },
       {

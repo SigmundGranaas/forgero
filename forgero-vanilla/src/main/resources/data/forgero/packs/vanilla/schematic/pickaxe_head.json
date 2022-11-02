@@ -54,8 +54,14 @@
       },
       {
         "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "operation": "ADDITION",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
         "value": 1.0
       },
       {

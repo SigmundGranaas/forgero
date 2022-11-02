@@ -15,17 +15,17 @@ public interface PropertyContainer extends Comparable<Object> {
     @Deprecated
     @NotNull
     default List<Property> getProperties(Target target) {
-        return Collections.emptyList();
+        return applyProperty(target);
     }
 
     @NotNull
     default List<Property> getProperties() {
-        return Collections.emptyList();
+        return applyProperty(Target.EMPTY);
     }
 
     @NotNull
     default PropertyStream stream() {
-        return Property.stream(getProperties());
+        return Property.stream(applyProperty(Target.EMPTY));
     }
 
     @NotNull
@@ -35,7 +35,9 @@ public interface PropertyContainer extends Comparable<Object> {
 
     @NotNull
     default List<Property> applyProperty(Target target) {
-        return Collections.emptyList();
+        return getRootProperties().stream()
+                .filter(property -> property.applyCondition(target))
+                .toList();
     }
 
     default void addProperties(List<Property> properties) {

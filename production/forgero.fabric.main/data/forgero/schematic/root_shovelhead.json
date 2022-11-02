@@ -1,0 +1,36 @@
+{
+  "name": "root_shovelhead",
+  "resource_type": "SCHEMATIC",
+  "abstract_resource": true,
+  "type": "HEAD",
+  "toolType": "SHOVEL",
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "shovelhead_primary",
+        "secondary": "shovelhead_secondary",
+        "gem": "shovelhead_gem"
+      }
+    }
+  ],
+  "materialCount": 1,
+  "properties": {
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 1.5
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": -3.0
+      }
+    ],
+    "passive:": [],
+    "active": []
+  }
+}

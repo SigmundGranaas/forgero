@@ -1,0 +1,35 @@
+{
+  "name": "tachi",
+  "resource_type": "SCHEMATIC",
+  "type": "HEAD",
+  "toolType": "SWORD",
+  "materialCount": 3,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "tachihead_primary",
+        "secondary": "tachi_head_secondary",
+        "gem": "tachihead_gem"
+      }
+    }
+  ],
+  "properties": {
+    "passive:": [],
+    "active": [],
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": -2.5
+      }
+    ]
+  }
+}

@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.item.tool;
 
 import com.sigmundgranaas.forgero.item.StateItem;
-import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
@@ -17,7 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class DynamicAxeItem extends SwordItem implements DynamicAttributeItem, State, StateItem {
+public class DynamicAxeItem extends SwordItem implements State, StateItem {
     private final State DEFAULT;
 
     public DynamicAxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
@@ -59,16 +57,6 @@ public class DynamicAxeItem extends SwordItem implements DynamicAttributeItem, S
     @Override
     public boolean test(Matchable match, Context context) {
         return DEFAULT.test(match, context);
-    }
-
-    @Override
-    public PropertyContainer dynamicProperties(ItemStack stack) {
-        return DEFAULT;
-    }
-
-    @Override
-    public PropertyContainer defaultProperties() {
-        return DEFAULT;
     }
 
     @Override

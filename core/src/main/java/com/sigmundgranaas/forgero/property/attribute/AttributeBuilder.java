@@ -44,6 +44,14 @@ public class AttributeBuilder {
                     }
                     return target.isApplicable(new HashSet<>(attributePOJO.condition.tag), TargetTypes.TOOL_TYPE);
                 };
+            } else if (attributePOJO.condition.target == TargetTypes.TYPE) {
+                condition = (target) -> {
+                    if (!target.getTypes().contains(TargetTypes.TYPE)) {
+                        return true;
+                    }
+                    return target.isApplicable(new HashSet<>(attributePOJO.condition.tag), TargetTypes.TYPE);
+                };
+
             } else {
                 condition = (target) ->
                         target.isApplicable(new HashSet<>(attributePOJO.condition.tag), attributePOJO.condition.target);

@@ -64,7 +64,7 @@ public class DynamicSwordItem extends SwordItem implements DynamicAttributeItem,
 
     @Override
     public PropertyContainer dynamicProperties(ItemStack stack) {
-        return DEFAULT;
+        return dynamicState(stack);
     }
 
     @Override

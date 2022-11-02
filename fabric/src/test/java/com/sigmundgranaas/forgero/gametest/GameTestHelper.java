@@ -40,12 +40,12 @@ public class GameTestHelper {
 
     public static ToolPartHead createDummyToolPartHead() {
         PrimaryMaterial material = new SimpleDuoMaterial(MaterialPojo.createDefaultMaterialPOJO());
-        return ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(material, PICKAXEHEAD_SCHEMATIC.get()).createToolPart();
+        return ForgeroToolPartFactory.INSTANCE.createToolPartHeadBuilder(material, null).createToolPart();
     }
 
     public static ToolPartHandle createDummyToolPartHandle() {
         PrimaryMaterial material = new SimpleDuoMaterial(MaterialPojo.createDefaultMaterialPOJO());
-        return ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(material, HANDLE_SCHEMATIC.get()).createToolPart();
+        return ForgeroToolPartFactory.INSTANCE.createToolPartHandleBuilder(material, null).createToolPart();
     }
 
     public static SimpleDuoMaterial createDummyDuoMaterial() {

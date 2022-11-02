@@ -13,7 +13,8 @@
     },
     "components": [
       {
-        "type": "SWORD_BLADE"
+        "type": "SWORD_BLADE",
+        "unique": true
       },
       {
         "type": "HANDLE"

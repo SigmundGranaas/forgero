@@ -29,9 +29,17 @@
     "attributes": [
       {
         "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 30
+        "order": "COMPOSITE",
+        "category": "ALL",
+        "operation": "MULTIPLICATION",
+        "value": 0.4
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "category": "UTILITY",
+        "operation": "MULTIPLICATION",
+        "value": 0.1
       }
     ]
   },

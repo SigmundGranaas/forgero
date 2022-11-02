@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.gametest;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.ForgeroRegistry;
 import com.sigmundgranaas.forgero.gem.EmptyGem;
+import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.toolpart.handle.Handle;
@@ -11,7 +12,6 @@ import com.sigmundgranaas.forgero.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.toolpart.head.HeadState;
 import com.sigmundgranaas.forgero.toolpart.head.PickaxeHead;
 import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
-import com.sigmundgranaas.forgero.item.NBTFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -26,15 +26,14 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameMode;
 
-import static com.sigmundgranaas.forgero.property.ToolPropertyTest.*;
 import static com.sigmundgranaas.forgero.gametest.GameTestHelper.createDummyServerPlayer;
 
 public class ToolHandlerTest {
 
     public static ItemStack createToolItemWithSchematic() {
-        HeadState state = new HeadState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC_PATTERN.get());
+        HeadState state = new HeadState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), null);
         ToolPartHead head = new PickaxeHead(state);
-        HandleState handleState = new HandleState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
+        HandleState handleState = new HandleState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), null);
         ToolPartHandle handle = new Handle(handleState);
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));
@@ -45,9 +44,9 @@ public class ToolHandlerTest {
     }
 
     public static ItemStack createToolItemWithVeinMining() {
-        HeadState state = new HeadState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), PICKAXEHEAD_SCHEMATIC_VEIN.get());
+        HeadState state = new HeadState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), null);
         ToolPartHead head = new PickaxeHead(state);
-        HandleState handleState = new HandleState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), HANDLE_SCHEMATIC.get());
+        HandleState handleState = new HandleState(ForgeroRegistry.MATERIAL.getPrimaryMaterials().get(0), new EmptySecondaryMaterial(), EmptyGem.createEmptyGem(), null);
         ToolPartHandle handle = new Handle(handleState);
 
         NbtCompound nbt = NBTFactory.INSTANCE.createNBTFromTool(ForgeroToolFactory.INSTANCE.createForgeroTool(head, handle));

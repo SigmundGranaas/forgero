@@ -61,7 +61,7 @@ public class DynamicShovelItem extends ShovelItem implements DynamicAttributeIte
 
     @Override
     public PropertyContainer dynamicProperties(ItemStack stack) {
-        return DEFAULT;
+        return dynamicState(stack);
     }
 
     @Override

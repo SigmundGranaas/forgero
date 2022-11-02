@@ -33,14 +33,14 @@ public class SlotContainer {
     public Optional<Slot> set(State entry) {
         return slots.stream()
                 .filter(slot -> slot.test(entry, Context.of()))
-                .map(slot -> slot.fill(entry))
+                .map(slot -> slot.fill(entry, slot.category()))
                 .flatMap(Optional::stream)
                 .findFirst()
                 .map(this::set);
     }
 
     public Optional<Slot> set(State entry, int index) {
-        return slots.get(index).fill(entry);
+        return slots.get(index).fill(entry, slots.get(index).category());
     }
 
     public List<State> entries() {

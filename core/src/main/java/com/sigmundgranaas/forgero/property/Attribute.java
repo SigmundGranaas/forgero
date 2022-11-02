@@ -26,7 +26,15 @@ public interface Attribute extends Property, Comparable<Attribute> {
 
     @Override
     default int compareTo(@NotNull Attribute o) {
-        return getOrder().getValue() - o.getOrder().getValue();
+        int order = getOrder().getValue() - o.getOrder().getValue();
+        if (order == 0) {
+            if (getOperation() == NumericOperation.ADDITION) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+        return order;
     }
 
     AttributeType getAttributeType();
@@ -52,5 +60,10 @@ public interface Attribute extends Property, Comparable<Attribute> {
             return this.getCalculation().apply(currentAttribute);
         }
         return currentAttribute;
+    }
+
+    @Override
+    default boolean applyCondition(Target target) {
+        return this.getCondition().test(target);
     }
 }

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.resource.data.v2.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.property.attribute.Category;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +16,7 @@ import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 public class SlotData {
     @Builder.Default
     @Nullable
-    private final List<String> category = Collections.emptyList();
+    private final List<Category> category = Collections.emptyList();
 
     @Builder.Default
     @Nullable
@@ -40,7 +41,7 @@ public class SlotData {
     }
 
     @NotNull
-    public List<String> category() {
+    public List<Category> category() {
         return Objects.requireNonNullElse(category, Collections.emptyList());
     }
 

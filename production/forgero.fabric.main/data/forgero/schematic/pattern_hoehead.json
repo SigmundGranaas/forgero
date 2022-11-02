@@ -1,0 +1,33 @@
+{
+  "name": "pattern_hoe",
+  "parent": "root_hoehead",
+  "materialCount": 3,
+  "models": [
+    {
+      "id": "DEFAULT",
+      "model": {
+        "primary": "vein_hoehead_primary",
+        "secondary": "vein_hoehead_secondary",
+        "gem": "hoehead_gem"
+      }
+    }
+  ],
+  "properties": {
+    "active": [
+      {
+        "type": "BLOCK_BREAKING_PATTERN",
+        "direction": "Y",
+        "tag": "forgero:plants",
+        "pattern": [
+          "   x   ",
+          "  xxx  ",
+          " xxxxx ",
+          "xxxxxxx",
+          " xxxxx ",
+          "  xxx  ",
+          "   x   "
+        ]
+      }
+    ]
+  }
+}

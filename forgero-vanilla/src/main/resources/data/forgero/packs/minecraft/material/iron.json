@@ -21,9 +21,21 @@
       },
       {
         "type": "RARITY",
-        "order": "BASE",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 40
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "SWORD_BLADE"
+          ]
+        }
       }
     ]
   },

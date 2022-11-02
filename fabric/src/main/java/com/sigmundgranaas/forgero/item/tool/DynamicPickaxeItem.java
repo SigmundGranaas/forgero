@@ -64,7 +64,7 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
 
     @Override
     public PropertyContainer dynamicProperties(ItemStack stack) {
-        return DEFAULT;
+        return dynamicState(stack);
     }
 
     @Override

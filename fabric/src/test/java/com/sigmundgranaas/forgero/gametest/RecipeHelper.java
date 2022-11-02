@@ -41,6 +41,8 @@ public class RecipeHelper {
             case GEM_UPGRADE_RECIPE -> false;
             case TOOL_PART_RECIPE -> true;
             case TOOL_WITH_BINDING_RECIPE -> true;
+            case STATE_CRAFTING_RECIPE -> true;
+            case STATE_UPGRADE_RECIPE -> false;
             case TOOLPART_SCHEMATIC_RECIPE -> true;
             case MISC_SHAPELESS -> false;
         };

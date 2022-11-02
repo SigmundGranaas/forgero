@@ -2,8 +2,10 @@ package com.sigmundgranaas.forgero.state;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.property.Property;
-import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.property.*;
+import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.property.attribute.Category;
+import com.sigmundgranaas.forgero.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.state.slot.SlotContainer;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
@@ -14,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
@@ -75,14 +79,40 @@ public class Composite implements Upgradeable<Composite> {
     }
 
     @Override
-    public @NotNull List<Property> getProperties() {
-        return Stream.of(ingredients(), upgrades())
-                .flatMap(List::stream)
-                .map(PropertyContainer::getProperties)
-                .flatMap(List::stream)
-                .toList();
+    public @NotNull List<Property> getRootProperties() {
+        return getCompositeProperties(Target.EMPTY);
     }
 
+    @Override
+    public @NotNull List<Property> applyProperty(Target target) {
+        var newTarget = target.combineTarget(new TypeTarget(Set.of(type.typeName())));
+        return getCompositeProperties(newTarget);
+    }
+
+
+    public List<Property> getCompositeProperties(Target target) {
+        var props = Stream.of(ingredients(), slots())
+                .flatMap(List::stream)
+                .map(prop -> prop.applyProperty(target))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        var compositeAttributes = Property.stream(props).getAttributes().filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE).map(Property.class::cast).toList();
+        var newValues = new ArrayList<Property>();
+        for (AttributeType type : AttributeType.values()) {
+            var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
+            newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.ALL);
+            var attribute = newBaseAttribute.build();
+            if (attribute.getValue() != 0) {
+                newValues.add(newBaseAttribute.build());
+            }
+        }
+
+        var other = new ArrayList<>(props);
+        compositeAttributes.forEach(other::remove);
+        other.addAll(newValues);
+        return other;
+    }
 
     @Override
     public boolean test(Matchable match, Context context) {
@@ -121,6 +151,7 @@ public class Composite implements Upgradeable<Composite> {
 
     @Override
     public ImmutableList<State> upgrades() {
+
         return ImmutableList.<State>builder().addAll(upgrades.entries()).build();
     }
 
