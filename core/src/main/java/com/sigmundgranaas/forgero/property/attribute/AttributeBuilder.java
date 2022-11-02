@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.property.*;
 import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -58,6 +59,8 @@ public class AttributeBuilder {
             }
             builder.applyCondition(condition);
         }
+        builder.applyCategory(Objects.requireNonNullElse(attributePOJO.category, Category.UNDEFINED));
+
         builder.applyValue(attributePOJO.value);
         builder.applyOperation(attributePOJO.operation);
 

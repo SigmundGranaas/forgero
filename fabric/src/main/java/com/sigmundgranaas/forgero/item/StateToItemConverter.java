@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.tool.*;
+import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
@@ -24,15 +25,15 @@ public class StateToItemConverter {
     public Item convert() {
         var context = Context.of();
         if (state.type().test(Type.of("SWORD"), context)) {
-            return new DynamicSwordItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicSwordItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("PICKAXE"), context)) {
-            return new DynamicPickaxeItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicPickaxeItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("AXE"), context)) {
-            return new DynamicAxeItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicAxeItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("HOE"), context)) {
-            return new DynamicHoeItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicHoeItem(ToolMaterials.WOOD, (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
-            return new DynamicShovelItem(ToolMaterials.WOOD, 1, 1, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicShovelItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         }
         return defaultStateItem();
     }

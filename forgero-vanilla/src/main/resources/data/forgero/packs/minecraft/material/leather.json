@@ -13,6 +13,20 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 30
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value":10
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 150
       }
     ]
   },

@@ -60,6 +60,12 @@
         "value": 1.8
       },
       {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",

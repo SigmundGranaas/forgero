@@ -21,46 +21,23 @@
         }
       },
       {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 32.0
+      },
+      {
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 5
       },
       {
-        "type": "DURABILITY",
-        "order": "BASE",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 24.0,
-        "condition": {
-          "target": "TOOL_PART_TYPE",
-          "tag": [
-            "HEAD"
-          ]
-        }
-      },
-      {
-        "type": "DURABILITY",
-        "order": "MIDDLE",
-        "operation": "MULTIPLICATION",
-        "value": 1.2,
-        "condition": {
-          "target": "TOOL_PART_TYPE",
-          "tag": [
-            "HANDLE"
-          ]
-        }
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "MIDDLE",
-        "operation": "MULTIPLICATION",
-        "value": 1.1,
-        "condition": {
-          "target": "TOOL_PART_TYPE",
-          "tag": [
-            "HANDLE"
-          ]
-        }
+        "value": 1
       },
       {
         "type": "MINING_SPEED",
@@ -75,13 +52,6 @@
         "category": "OFFENSIVE",
         "operation": "ADDITION",
         "value": 0.2
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "ADDITION",
-        "value": 0.1
       }
     ],
     "passive": [],

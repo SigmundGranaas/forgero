@@ -69,15 +69,6 @@ public class Composite implements Upgradeable<Composite> {
         return type;
     }
 
-    public int getCompositeCount() {
-        int count = (int) Stream.of(ingredients(), upgrades())
-                .flatMap(List::stream)
-                .filter(Composite.class::isInstance)
-                .count();
-
-        return count == 0 ? 1 : count;
-    }
-
     @Override
     public @NotNull List<Property> getRootProperties() {
         return getCompositeProperties(Target.EMPTY);
@@ -100,10 +91,11 @@ public class Composite implements Upgradeable<Composite> {
         var compositeAttributes = Property.stream(props).getAttributes().filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE).map(Property.class::cast).toList();
         var newValues = new ArrayList<Property>();
         for (AttributeType type : AttributeType.values()) {
+
             var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
             newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.ALL);
             var attribute = newBaseAttribute.build();
-            if (attribute.getValue() != 0) {
+            if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof  Attribute attribute1 && attribute1.getAttributeType() == type).toList().size() > 1) {
                 newValues.add(newBaseAttribute.build());
             }
         }

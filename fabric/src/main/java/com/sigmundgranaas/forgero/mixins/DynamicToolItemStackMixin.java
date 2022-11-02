@@ -30,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE;
+import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_SPEED;
 
 /**
  * Mixin originally used by The Fabric APIs dynamic attribute module, but has since been deprecated.
@@ -101,16 +102,16 @@ public abstract class DynamicToolItemStackMixin {
                 }
             }
 
-            /**
+
 
 
              for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_SPEED)) {
              var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
              if (newValue.isPresent()) {
              oldAttributes.remove(GENERIC_ATTACK_SPEED, attribute);
+                }
              }
-             }  *
-             */
+
 
             LinkedListMultimap<EntityAttribute, EntityAttributeModifier> orderedAttributes = LinkedListMultimap.create();
             //Place new Forgero root attributes at the start

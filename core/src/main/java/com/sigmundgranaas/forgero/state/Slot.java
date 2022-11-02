@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.property.attribute.Category;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,7 +19,9 @@ public interface Slot extends PropertyContainer, Matchable {
 
     String identifier();
 
-    Set<Category> category();
+   default Set<Category> category(){
+       return Collections.emptySet();
+   }
 
     String description();
 }

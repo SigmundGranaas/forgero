@@ -42,7 +42,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
             float baseAttackSpeed = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_SPEED);
             float currentAttackSpeed = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_SPEED);
             if (currentAttackSpeed != baseAttackSpeed) {
-                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", currentAttackSpeed - baseAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
+                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition",   baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
             }
             return builder.build();
         } else {

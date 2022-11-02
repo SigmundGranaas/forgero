@@ -29,7 +29,7 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 5.0,
+        "value": 4.0,
         "condition": {
           "target": "TYPE",
           "tag": [
@@ -43,6 +43,12 @@
         "operation": "ADDITION",
         "category": "ALL",
         "value": 1500.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0.5
       }
     ]
   },

@@ -28,6 +28,18 @@
       },
       {
         "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1100
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "OFFENSIVE",
+        "value": 300
+      },
+      {
+        "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "value": 500,

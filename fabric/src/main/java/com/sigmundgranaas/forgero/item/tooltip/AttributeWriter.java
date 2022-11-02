@@ -10,6 +10,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,13 @@ public class AttributeWriter implements Writer {
     }
 
     private void floatAttribute(AttributeType type, List<Text> tooltip) {
+
         float result = Property.stream(helper.attributes()).applyAttribute(Target.createEmptyTarget(), type);
+        if(type == ATTACK_SPEED){
+            result += 4f;
+        }
+        DecimalFormat df = new DecimalFormat("#.00");
+        result = Float.parseFloat(df.format(result));
         if (result != 0f) {
             MutableText miningLevel = Text.literal(String.format("  %s : ", type.toString())).formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));

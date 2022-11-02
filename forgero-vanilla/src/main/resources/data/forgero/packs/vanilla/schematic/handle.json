@@ -23,9 +23,9 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "MATERIAL",
+        "type": "LEATHER",
         "tier": 1
       },
       {
@@ -59,6 +59,12 @@
       },
       {
         "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      },
+      {
+        "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.2

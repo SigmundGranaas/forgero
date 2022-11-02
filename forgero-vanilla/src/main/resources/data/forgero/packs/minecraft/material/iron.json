@@ -20,10 +20,23 @@
         }
       },
       {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0.2
+      },
+      {
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 40
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 350
       },
       {
         "type": "ATTACK_DAMAGE",

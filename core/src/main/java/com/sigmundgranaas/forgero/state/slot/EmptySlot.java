@@ -6,6 +6,8 @@ import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import org.apache.logging.log4j.core.util.Assert;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,7 @@ public class EmptySlot extends AbstractTypedSlot {
 
     @Override
     public Optional<Slot> fill(State slottable, Set<Category> categories) {
+        assert categories != null;
         if (test(slottable, Context.of())) {
             return Optional.of(new FilledSlot(index(), type(), slottable, description(), categories));
         }
