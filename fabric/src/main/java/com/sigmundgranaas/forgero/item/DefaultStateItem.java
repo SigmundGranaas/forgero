@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
@@ -9,6 +10,7 @@ import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -29,7 +31,13 @@ public class DefaultStateItem extends Item implements StateItem, State {
 
     @Override
     public Text getName() {
-        return Text.literal(DEFAULT.name());
+        MutableText text = Text.literal("");
+        for (String element:
+                DEFAULT.name().split("-")) {
+            text.append(Text.translatable(Writer.toTranslationKey(element)));
+            text.append(Text.literal(" "));
+        }
+        return text;
     }
 
     @Override

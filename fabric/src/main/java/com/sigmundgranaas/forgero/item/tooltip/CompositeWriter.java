@@ -26,10 +26,10 @@ public class CompositeWriter implements Writer {
         stringIndent.append(" ".repeat(Math.max(0, indent)));
 
         if (composite.slots().size() > 0) {
-            MutableText slots = Text.literal(stringIndent + "Slots:").formatted(Formatting.GRAY);
+            MutableText slots = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("slots")).formatted(Formatting.GRAY));
             tooltip.add(slots);
             composite.slots().forEach(slot -> {
-                MutableText mutableText = Text.literal(String.format("%s%s ", stringIndent + " ", slot.identifier().toLowerCase())).formatted(Formatting.GRAY);
+                MutableText mutableText = Text.literal(stringIndent.toString()).append(Text.translatable(stringIndent + Writer.toTranslationKey( slot.identifier().toLowerCase())).append(" ").formatted(Formatting.GRAY));
                 if (slot.filled()) {
                     Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
                     mutableText.append(Text.literal(String.format(": %s", slot.get().get().name())).formatted(rarity.formatting));
@@ -44,11 +44,11 @@ public class CompositeWriter implements Writer {
         }
 
         if (composite.ingredients().size() > 0) {
-            MutableText ingredients = Text.literal(stringIndent + "Ingredients:").formatted(Formatting.GRAY);
+            MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append( ":").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
             composite.ingredients().forEach(ingredient -> {
                 Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
-                MutableText mutableText = Text.literal(String.format("%s%s ", stringIndent + " ", ingredient.name().toLowerCase())).formatted(rarity.formatting);
+                MutableText mutableText =  Text.literal(stringIndent.toString()).append(Writer.nameToTranslatableText(ingredient)).append(" ").formatted(rarity.formatting);
                 tooltip.add(mutableText);
                 if (context.isAdvanced() && ingredient instanceof Composite compositeSlot) {
                     write(compositeSlot, tooltip, context, indent + 2);
