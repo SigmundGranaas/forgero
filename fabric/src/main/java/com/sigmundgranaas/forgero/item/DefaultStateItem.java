@@ -10,7 +10,6 @@ import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -31,13 +30,7 @@ public class DefaultStateItem extends Item implements StateItem, State {
 
     @Override
     public Text getName() {
-        MutableText text = Text.literal("");
-        for (String element:
-                DEFAULT.name().split("-")) {
-            text.append(Text.translatable(Writer.toTranslationKey(element)));
-            text.append(Text.literal(" "));
-        }
-        return text;
+        return Writer.nameToTranslatableText(DEFAULT);
     }
 
     @Override

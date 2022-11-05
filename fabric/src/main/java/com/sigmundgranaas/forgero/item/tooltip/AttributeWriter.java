@@ -48,7 +48,7 @@ public class AttributeWriter implements Writer {
     private static void addAttribute(List<Property> attributes, AttributeType type, String title, List<Text> tooltip) {
         float result = Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
         if (result != 0f) {
-            MutableText miningLevel = Text.translatable(String.format("  %s : ", title)).formatted(Formatting.GRAY);
+            MutableText miningLevel = Text.translatable(String.format("  %s: ", title)).formatted(Formatting.GRAY);
             miningLevel.append(Text.translatable(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
@@ -82,7 +82,7 @@ public class AttributeWriter implements Writer {
     private void intAttribute(AttributeType type, List<Text> tooltip) {
         int result = (int) helper.attribute(type);
         if (result != 0) {
-            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(" : ").formatted(Formatting.GRAY);
+            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
@@ -91,13 +91,13 @@ public class AttributeWriter implements Writer {
     private void floatAttribute(AttributeType type, List<Text> tooltip) {
 
         float result = Property.stream(helper.attributes()).applyAttribute(Target.createEmptyTarget(), type);
-        if(type == ATTACK_SPEED){
+        if (type == ATTACK_SPEED) {
             result += 4f;
         }
         DecimalFormat df = new DecimalFormat("#.00");
         result = Float.parseFloat(df.format(result));
         if (result != 0f) {
-            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(" : ").formatted(Formatting.GRAY);
+            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }

@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.item.tooltip;
 
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.state.Composite;
 import net.minecraft.client.item.TooltipContext;
@@ -29,10 +27,10 @@ public class CompositeWriter implements Writer {
             MutableText slots = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("slots")).formatted(Formatting.GRAY));
             tooltip.add(slots);
             composite.slots().forEach(slot -> {
-                MutableText mutableText = Text.literal(stringIndent.toString()).append(Text.translatable(stringIndent + Writer.toTranslationKey( slot.identifier().toLowerCase())).append(" ").formatted(Formatting.GRAY));
+                MutableText mutableText = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).formatted(Formatting.GRAY));
                 if (slot.filled()) {
                     Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
-                    mutableText.append(Text.literal(String.format(": %s", slot.get().get().name())).formatted(rarity.formatting));
+                    mutableText.append(Text.literal(": ")).append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
                 } else {
                     mutableText.append(": -").formatted(Formatting.GRAY);
                 }
@@ -44,11 +42,11 @@ public class CompositeWriter implements Writer {
         }
 
         if (composite.ingredients().size() > 0) {
-            MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append( ":").formatted(Formatting.GRAY);
+            MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append(":").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
             composite.ingredients().forEach(ingredient -> {
                 Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
-                MutableText mutableText =  Text.literal(stringIndent.toString()).append(Writer.nameToTranslatableText(ingredient)).append(" ").formatted(rarity.formatting);
+                MutableText mutableText = Text.literal(stringIndent.toString()).append(Writer.nameToTranslatableText(ingredient)).formatted(rarity.formatting);
                 tooltip.add(mutableText);
                 if (context.isAdvanced() && ingredient instanceof Composite compositeSlot) {
                     write(compositeSlot, tooltip, context, indent + 2);
@@ -62,15 +60,15 @@ public class CompositeWriter implements Writer {
         stringIndent.append(" ".repeat(Math.max(0, indent)));
 
         if (composite.slots().size() > 0) {
-            MutableText slots = Text.literal(stringIndent + "Slots:").formatted(Formatting.GRAY);
+            MutableText slots = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("slots")).append(Text.literal(":")).formatted(Formatting.GRAY));
             tooltip.add(slots);
             composite.slots().forEach(slot -> {
-                MutableText mutableText = Text.literal(String.format("%s%s ", stringIndent + " ", slot.identifier().toLowerCase())).formatted(Formatting.GRAY);
+                MutableText mutableText = Text.literal(stringIndent + " ").append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(Formatting.GRAY));
                 if (slot.filled()) {
-                    Rarity rarity = getRarityFromInt((int) slot.get().get().stream().applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
-                    mutableText.append(Text.literal(String.format(": %s", slot.get().get().name())).formatted(rarity.formatting));
+                    Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
+                    mutableText.append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
                 } else {
-                    mutableText.append(": -").formatted(Formatting.GRAY);
+                    mutableText.append("-").formatted(Formatting.GRAY);
                 }
                 tooltip.add(mutableText);
                 if (context.isAdvanced() && slot.filled() && slot.get().get() instanceof Composite compositeSlot) {
@@ -80,11 +78,11 @@ public class CompositeWriter implements Writer {
         }
 
         if (composite.ingredients().size() > 0) {
-            MutableText ingredients = Text.literal(stringIndent + "Ingredients:").formatted(Formatting.GRAY);
+            MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append(":").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
             composite.ingredients().forEach(ingredient -> {
-                Rarity rarity = getRarityFromInt((int) ingredient.stream().applyAttribute(Target.createEmptyTarget(), AttributeType.RARITY));
-                MutableText mutableText = Text.literal(String.format("%s%s ", stringIndent + " ", ingredient.name().toLowerCase())).formatted(rarity.formatting);
+                Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
+                MutableText mutableText = Text.literal(stringIndent + " ").append(Writer.nameToTranslatableText(ingredient)).formatted(rarity.formatting);
                 tooltip.add(mutableText);
                 if (context.isAdvanced() && ingredient instanceof Composite compositeSlot) {
                     write(compositeSlot, tooltip, context, indent + 2);

@@ -2,10 +2,8 @@ package com.sigmundgranaas.forgero.item.tool;
 
 import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.match.Context;
-import com.sigmundgranaas.forgero.util.match.Matchable;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -15,17 +13,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class DynamicAxeItem extends SwordItem implements State, StateItem {
+public class DynamicAxeItem extends SwordItem implements StateItem {
     private final State DEFAULT;
 
     public DynamicAxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
-    }
-
-    @Override
-    public Text getName() {
-        return Text.literal(DEFAULT.name());
     }
 
     @Override
@@ -35,28 +28,13 @@ public class DynamicAxeItem extends SwordItem implements State, StateItem {
     }
 
     @Override
+    public Text getName() {
+        return Writer.nameToTranslatableText(this);
+    }
+
+    @Override
     public Text getName(ItemStack stack) {
         return getName();
-    }
-
-    @Override
-    public String name() {
-        return DEFAULT.name();
-    }
-
-    @Override
-    public String nameSpace() {
-        return DEFAULT.nameSpace();
-    }
-
-    @Override
-    public Type type() {
-        return DEFAULT.type();
-    }
-
-    @Override
-    public boolean test(Matchable match, Context context) {
-        return DEFAULT.test(match, context);
     }
 
     @Override
