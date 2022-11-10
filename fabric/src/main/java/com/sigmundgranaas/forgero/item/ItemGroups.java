@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -27,6 +28,7 @@ public class ItemGroups {
             .build();
 
     private static ItemStack createForgeroToolIcon() {
+        /**
         ForgeroToolPart head = new ToolPartHeadBuilder(ForgeroRegistry.TOOL_PART.getHead("iron-pickaxehead").get())
                 .setSecondary(ForgeroRegistry.MATERIAL.getSecondaryMaterial("netherite").get())
                 .setGem(ForgeroRegistry.GEM.getResource("lapis-gem").get())
@@ -44,6 +46,8 @@ public class ItemGroups {
         var tool = new ForgeroToolWithBinding((ToolPartHead) head, (ToolPartHandle) handle, (ToolPartBinding) binding);
         var stack = new ItemStack(Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "iron" + ELEMENT_SEPARATOR + "pickaxe")));
         stack.getOrCreateNbt().put(NBTFactory.FORGERO_TOOL_NBT_IDENTIFIER, NBTFactory.INSTANCE.createNBTFromTool(tool));
-        return stack;
+
+         */
+        return new ItemStack(Items.DIAMOND_AXE);
     }
 }

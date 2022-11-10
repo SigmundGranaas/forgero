@@ -53,7 +53,7 @@ public class ModelConverter {
             tree.find(type).ifPresent(node -> node.addResource(model, ModelMatcher.class));
         } else if (notEmpty(data.getName()) && data.getModelType().equals("GENERATE")) {
             List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());
-            var variants = data.getVariants().stream().map(variant -> data.toBuilder().template(variant.getTemplate()).target(variant.getTarget()).offset(variant.getOffset()).order(data.order()).build()).collect(Collectors.toList());
+            var variants = data.getVariants().stream().map(variant -> data.toBuilder().template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() :variant.getTemplate() ).target(variant.getTarget()).offset(variant.getOffset()).order(data.order()).build()).collect(Collectors.toList());
             variants.add(data);
             var models = palettes.stream().map(palette -> variants.stream().map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()), Offset.of(entry.getOffset()))).toList()).flatMap(List::stream).toList();
             var model = new MatchedModelEntry(models, data.getName());

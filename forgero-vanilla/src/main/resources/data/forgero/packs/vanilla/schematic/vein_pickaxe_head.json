@@ -36,23 +36,16 @@
         "type": "TRINKET",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
     "attributes": [
       {
         "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 40
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.2
       }
     ]
-  },
-  "model": {
-    "type": "LAYERED",
-    "id": "this"
   }
 }

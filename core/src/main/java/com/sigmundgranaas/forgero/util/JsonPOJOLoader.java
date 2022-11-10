@@ -25,7 +25,7 @@ public class JsonPOJOLoader {
             try {
                 JsonReader materialsJson = new JsonReader(new InputStreamReader(materialsStream));
                 T gson = new Gson().fromJson(materialsJson, type);
-                return Optional.of(gson);
+                return Optional.ofNullable(gson);
             } catch (JsonSyntaxException e) {
                 Forgero.LOGGER.error("Unable to parse: {}, check if the file is valid", filePath);
                 Forgero.LOGGER.error(e);
@@ -45,7 +45,11 @@ public class JsonPOJOLoader {
                 var context = createContextFromPath(filePath);
                 DataResource gson = new Gson().fromJson(materialsJson, DataResource.class);
                 if (gson != null) {
-                    return Optional.of(gson.toBuilder().context(context).build());
+                    var resource = gson.toBuilder().context(context).build();
+                    if(resource == null){
+                        Forgero.LOGGER.error("Unable to load: {}, check if the file is valid", filePath);
+                    }
+                    return Optional.ofNullable(resource);
                 }
                 return Optional.empty();
             } catch (JsonSyntaxException e) {

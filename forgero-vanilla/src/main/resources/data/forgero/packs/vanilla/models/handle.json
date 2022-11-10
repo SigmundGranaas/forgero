@@ -105,14 +105,6 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
-        "id:reinforced_handle-schematic"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "dense_handle"
-    },
-    {
-      "target": [
         "type:MATERIAL",
         "slot:0"
       ],
@@ -124,8 +116,7 @@
         "type:PUMMEL",
         "slot:1"
       ],
-      "modelType": "UPGRADE",
-      "template": "pummel"
+      "modelType": "COMPOSITE"
     }
   ]
 }

@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.resource.ForgeroResourceType;
 public class ResourceLocations {
     public static String SCHEMATIC_LOCATION = "data/forgero/schematic/";
     public static String GEM_LOCATION = "data/forgero/gems/";
-    public static String MATERIAL_LOCATION = "data/forgero/materials/";
+    public static String MATERIAL_LOCATION = "data/forgero/materials_old/";
     public static String TOOL_LOCATION = "data/forgero/tools/";
 
     public static String TOOL_PART_LOCATION = "data/forgero/toolparts/";

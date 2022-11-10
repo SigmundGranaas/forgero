@@ -1,14 +1,16 @@
 {
-  "type": "HANDLE_SCHEMATIC",
-  "name": "handle-schematic",
+  "type": "SWORD_GUARD_SCHEMATIC",
+  "name": "kimiri_sword_guard-schematic",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "HANDLE",
+    "type": "SWORD_GUARD",
     "target": "CREATE",
     "recipe": {
+      "craftingType": "SHAPELESS"
     },
     "components": [
       {
@@ -23,9 +25,17 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "UTILITY"
+          "OFFENSIVE"
         ],
-        "type": "LEATHER",
+        "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
         "tier": 1
       }
     ]
@@ -33,25 +43,26 @@
   "properties": {
     "attributes": [
       {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "category": "ALL",
-        "operation": "MULTIPLICATION",
-        "value": 0.4
-      },
-      {
         "type": "RARITY",
         "order": "COMPOSITE",
+        "category": "UTILITY",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.3
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "category": "UTILITY",
+        "operation": "MULTIPLICATION",
+        "value": 0.3
       },
       {
         "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "category": "UTILITY",
+        "operation": "ADDITION",
         "value": 0.2
       }
     ]
   }
-
 }

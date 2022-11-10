@@ -39,18 +39,15 @@
         "type": "TRINKET",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
     "attributes": [
       {
         "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 10
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
       },
       {
         "type": "ATTACK_DAMAGE",
@@ -71,9 +68,6 @@
         "value": -2.8
       }
     ]
-  },
-  "model": {
-    "type": "LAYERED",
-    "id": "this"
   }
+
 }
