@@ -18,12 +18,16 @@ public class StateWriter implements Writer {
     }
 
     public static Writer of(State state) {
-        if (state.test(TOOL)) {
+        if (state.test(AXE)) {
+            return new AxeWriter(state);
+        } else if (state.test(TOOL)) {
             return new ToolWriter(state);
         } else if (state.test(SWORD_BLADE)) {
             return new SwordBladeWriter(state);
+        }else if (state.test(AXE_HEAD)) {
+            return new SwordBladeWriter(state);
         } else if (state.test(TOOL_PART_HEAD)) {
-            return new ToolPartHeadWriter(state);
+            return new AxeHeadWriter(state);
         } else if (state.test(PART)) {
             return new PartWriter((state));
         } else if (state.test(SCHEMATIC)) {

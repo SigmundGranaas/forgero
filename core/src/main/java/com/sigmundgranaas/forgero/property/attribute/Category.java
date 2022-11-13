@@ -5,5 +5,7 @@ public enum Category {
     OFFENSIVE,
     UTILITY,
     DEFENSIVE,
+    COMPOSITE,
     ALL,
+    LOCAL,
 }

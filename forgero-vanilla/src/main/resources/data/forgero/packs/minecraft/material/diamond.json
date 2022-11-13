@@ -9,15 +9,9 @@
     "attributes": [
       {
         "type": "MINING_LEVEL",
-        "order": "BASE",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3.0,
-        "condition": {
-          "target": "TOOL_PART_TYPE",
-          "tag": [
-            "HEAD"
-          ]
-        }
+        "value": 3.0
       },
       {
         "type": "RARITY",
@@ -30,7 +24,19 @@
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 1100
+        "value": 1500
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.5
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 8
       },
       {
         "type": "DURABILITY",
@@ -39,17 +45,10 @@
         "value": 300
       },
       {
-        "type": "DURABILITY",
-        "order": "BASE",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 500,
-        "condition": {
-          "target": "TOOL_PART_TYPE",
-          "tag": [
-            "HANDLE",
-            "BINDING"
-          ]
-        }
+        "value": 0
       }
     ]
   },

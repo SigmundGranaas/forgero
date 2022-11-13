@@ -45,7 +45,7 @@ repositories {
 dependencies {
     implementation project(':core')
     implementation project(':forgero-vanilla')
-    //implementation project(':forgero-extended')
+    implementation project(':forgero-extended')
     //implementation project(':common')
 
 
@@ -82,7 +82,7 @@ dependencies {
     include "net.devtech:arrp:0.6.2"
     include project(':core')
     include project(':forgero-vanilla')
-
+    include project(':forgero-extended')
     //Polymorph testing
 
     //modImplementation "curse.maven:cardinal-components-318449:3669769"

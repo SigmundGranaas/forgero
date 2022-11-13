@@ -2,14 +2,14 @@ package com.sigmundgranaas.forgero.item.items.tool;
 
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
+import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.tool.ForgeroToolTypes;
 import com.sigmundgranaas.forgero.toolpart.handle.ToolPartHandle;
 import com.sigmundgranaas.forgero.toolpart.head.ToolPartHead;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
-import com.sigmundgranaas.forgero.item.adapter.DescriptionWriter;
-import com.sigmundgranaas.forgero.item.adapter.FabricToForgeroToolAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;

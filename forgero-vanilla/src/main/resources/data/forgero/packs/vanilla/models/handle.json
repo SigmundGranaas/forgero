@@ -80,17 +80,47 @@
       "name": "handle_pummel",
       "type": "GENERATE",
       "palette": "MATERIAL",
-      "template": "dense_handle_pummel.png",
+      "template": "pummel.png",
       "order": 12,
       "variants": [
         {
           "target": [
             "type:SWORD"
           ],
-          "template": "dense_handle_pummel.png",
           "offset": [
             -1,
             -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "handle_reinforcement",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "handle_reinforcement.png",
+      "order": 15,
+      "offset": [
+        7,
+        7
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            5,
+            5
+          ]
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "offset": [
+            3,
+            3
           ]
         }
       ]
@@ -110,6 +140,14 @@
       ],
       "modelType": "UPGRADE",
       "template": "handle_secondary"
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "handle_reinforcement"
     },
     {
       "target": [

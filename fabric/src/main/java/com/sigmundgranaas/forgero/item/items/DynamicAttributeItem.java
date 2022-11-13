@@ -42,7 +42,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
             float baseAttackSpeed = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_SPEED);
             float currentAttackSpeed = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_SPEED);
             if (currentAttackSpeed != baseAttackSpeed) {
-                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition",   baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
+                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
             }
             return builder.build();
         } else {
@@ -55,14 +55,13 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         return (int) dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
     }
 
-    @Override
-    default boolean isEffectiveOn(BlockState state) {
-        return DynamicEffectiveNess.super.isEffectiveOn(state);
+    default int getItemBarStep(ItemStack stack) {
+        return Math.round(13.0F - (float) stack.getDamage() * 13.0F / (float) getDurability(stack));
     }
 
     @Override
     default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
-        if (stack.getItem() instanceof DynamicAttributeItem dynamic) {
+        if (stack.getItem() instanceof DynamicAttributeItem dynamic && isEffectiveOn(state)) {
             Target target = new BlockBreakingEfficiencyTarget(state);
             return dynamic.dynamicProperties(stack).stream().applyAttribute(target, AttributeType.MINING_SPEED);
         }

@@ -12,7 +12,7 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 30
+        "value": 20
       },
       {
         "type": "RARITY",
@@ -25,8 +25,22 @@
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "ALL",
+        "category": "UTILITY",
         "value": 150
+      },
+      {
+        "type": "ATTACKS_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 0.2
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.9
       }
     ]
   },

@@ -1,4 +1,4 @@
 {
-  "parent": "HOLDABLE",
+  "parent": "WEAPON",
   "name": "PROJECTILE"
 }

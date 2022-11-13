@@ -33,11 +33,18 @@
   "properties": {
     "attributes": [
       {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "LOCAL",
+        "value": 10
+      },
+      {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "category": "ALL",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0.5
       },
       {
         "type": "RARITY",
@@ -53,5 +60,4 @@
       }
     ]
   }
-
 }

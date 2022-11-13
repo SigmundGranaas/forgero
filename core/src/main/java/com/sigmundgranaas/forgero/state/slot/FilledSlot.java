@@ -3,7 +3,9 @@ package com.sigmundgranaas.forgero.state.slot;
 import com.sigmundgranaas.forgero.property.Attribute;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.Target;
+import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.property.attribute.Category;
+import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
@@ -39,9 +41,23 @@ public class FilledSlot extends AbstractTypedSlot {
         var otherProperties = properties.stream().filter(property -> !(property instanceof Attribute)).toList();
         var attributes = Property.stream(properties)
                 .getAttributes()
-                .filter(attribute -> (categories.contains(attribute.getCategory()) && attribute.getCategory() != Category.UNDEFINED) || attribute.getCategory() == Category.ALL)
+                .filter(this::filterAttribute)
+                .map(attribute -> AttributeBuilder.createAttributeBuilderFromAttribute(attribute).applyCategory(Category.ALL).build())
                 .toList();
         return Stream.of(otherProperties, attributes).flatMap(List::stream).map(Property.class::cast).toList();
+    }
+
+    private boolean filterAttribute(Attribute attribute) {
+        if (attribute.getCategory() == Category.COMPOSITE && upgrade instanceof Composite) {
+            return true;
+        } else if (categories.contains(attribute.getCategory())) {
+            return true;
+        } else if (attribute.getCategory() == Category.ALL) {
+            return true;
+        } else if (attribute.getCategory() == Category.LOCAL) {
+            return false;
+        }
+        return false;
     }
 
     @Override

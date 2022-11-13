@@ -24,16 +24,18 @@ public class StateToItemConverter {
 
     public Item convert() {
         var context = Context.of();
+        int attack_damage = (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
+        float attack_speed = state.stream().applyAttribute(AttributeType.ATTACK_SPEED);
         if (state.type().test(Type.of("SWORD"), context)) {
-            return new DynamicSwordItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("PICKAXE"), context)) {
-            return new DynamicPickaxeItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("AXE"), context)) {
-            return new DynamicAxeItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicAxeItem(ToolMaterials.WOOD, attack_damage, attack_speed, new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("HOE"), context)) {
-            return new DynamicHoeItem(ToolMaterials.WOOD, (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
-            return new DynamicShovelItem(ToolMaterials.WOOD,  (int)state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         }
         return defaultStateItem();
     }
@@ -43,10 +45,19 @@ public class StateToItemConverter {
     }
 
     private Item defaultStateItem() {
-        return new DefaultStateItem(new FabricItemSettings().group(ItemGroups.FORGERO_TOOL_PARTS), state);
+        return new DefaultStateItem(new FabricItemSettings().group(getItemGroup()), state);
     }
 
     private ItemGroup getItemGroup() {
+        if (state.test(Type.TOOL)) {
+            return ItemGroups.FORGERO_TOOLS;
+        } else if (state.test(Type.WEAPON)) {
+            return ItemGroups.FORGERO_WEAPONS;
+        } else if (state.test(Type.PART)) {
+            return ItemGroups.FORGERO_TOOL_PARTS;
+        } else if (state.test(Type.SCHEMATIC)) {
+            return ItemGroups.FORGERO_SCHEMATICS;
+        }
         return ItemGroups.FORGERO_TOOL_PARTS;
     }
 }

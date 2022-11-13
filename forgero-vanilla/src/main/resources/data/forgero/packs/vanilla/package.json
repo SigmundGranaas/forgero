@@ -2,7 +2,7 @@
   "name": "forgero-vanilla",
   "resource_type": "PACKAGE",
   "priority": 5,
-  "namespace": "forgero-test",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero"

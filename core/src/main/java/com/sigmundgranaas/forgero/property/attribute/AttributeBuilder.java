@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
+
 /**
  * Builder for building attributes. You can create fresh ones, from POJO or from an existing attribute.
  * Use this to modify or create custom attributes.
@@ -19,6 +21,9 @@ public class AttributeBuilder {
     private NumericOperation operation = NumericOperation.ADDITION;
     private float value = 1;
     private int level = 1;
+
+    private String id = EMPTY_IDENTIFIER;
+    private int priority = 0;
 
     public AttributeBuilder(AttributeType type) {
         this.type = type;
@@ -64,6 +69,15 @@ public class AttributeBuilder {
         builder.applyValue(attributePOJO.value);
         builder.applyOperation(attributePOJO.operation);
 
+        if (!attributePOJO.id.equals(EMPTY_IDENTIFIER)) {
+            builder.applyId(attributePOJO.id);
+        }
+        if (attributePOJO.priority > 0) {
+            builder.applyPriority(attributePOJO.priority);
+        } else if (attributePOJO.condition != null) {
+            builder.applyPriority(1);
+        }
+
         return builder.build();
     }
 
@@ -75,6 +89,8 @@ public class AttributeBuilder {
         builder.applyOperation(attribute.getOperation());
         builder.applyLevel(attribute.getLevel());
         builder.applyCategory(attribute.getCategory());
+        builder.applyId(attribute.getId());
+        builder.applyPriority(attribute.getPriority());
         return builder;
     }
 
@@ -109,7 +125,19 @@ public class AttributeBuilder {
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
+    public AttributeBuilder applyId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public AttributeBuilder applyPriority(int priority) {
+        this.priority = priority;
+        return this;
+    }
+
     public Attribute build() {
-        return new BaseAttribute(type, operation, value, condition, order, level, category);
+        return new BaseAttribute(type, operation, value, condition, order, level, category, id, priority);
     }
 }

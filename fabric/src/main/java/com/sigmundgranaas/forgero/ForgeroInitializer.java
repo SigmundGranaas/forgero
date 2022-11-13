@@ -14,7 +14,6 @@ import com.sigmundgranaas.forgero.resources.ModContainerService;
 import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ReloadableResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ResourceManagerStreamProvider;
-import com.sigmundgranaas.forgero.state.Identifiable;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -25,8 +24,6 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Comparator;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -61,7 +58,7 @@ public class ForgeroInitializer implements ModInitializer {
     private void register() {
         ForgeroStateRegistry.STATES.all().stream()
                 .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
-                .sorted(Comparator.comparing(Identifiable::name))
+                .sorted()
                 .forEach(state -> {
                     try {
                         var converter = StateToItemConverter.of(state);

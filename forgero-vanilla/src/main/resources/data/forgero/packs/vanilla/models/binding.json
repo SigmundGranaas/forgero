@@ -12,6 +12,10 @@
           "target": [
             "type:AXE"
           ],
+          "offset": [
+            1,
+            1
+          ],
           "template": "axe_binding.png"
         },
         {
@@ -19,6 +23,27 @@
             "type:PICKAXE"
           ],
           "template": "pickaxe_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "spiked_binding",
+      "template": "spiked_pickaxe_binding.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": "60",
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "spiked_pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "spiked_pickaxe_binding.png"
         }
       ]
     },
@@ -32,19 +57,11 @@
     },
     {
       "target": [
-        "type:MATERIAL",
-        "slot:0"
+        "type:TOOL_MATERIAL",
+        "id:spiked_binding-schematic"
       ],
-      "modelType": "UPGRADE",
-      "template": "handle_secondary"
-    },
-    {
-      "target": [
-        "type:GEM",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "gem-0"
+      "modelType": "BASED_COMPOSITE",
+      "template": "spiked_binding"
     }
   ]
 }

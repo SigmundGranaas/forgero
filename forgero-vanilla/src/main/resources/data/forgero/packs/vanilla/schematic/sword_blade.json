@@ -51,19 +51,8 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
+        "category": "LOCAL",
         "value": 10
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.8
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
       },
       {
         "type": "RARITY",
@@ -72,8 +61,26 @@
         "value": 1
       },
       {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
         "type": "ATTACK_SPEED",
-        "order": "BASE",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": -2.8
       }

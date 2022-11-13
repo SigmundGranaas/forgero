@@ -1,5 +1,5 @@
 {
-  "parent": "HOLDABLE",
+  "parent": "WEAPON",
   "name": "SWORD",
   "children": [
     {

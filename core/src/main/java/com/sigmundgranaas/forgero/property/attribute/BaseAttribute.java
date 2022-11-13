@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.property.attribute;
 
 import com.sigmundgranaas.forgero.property.*;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -13,7 +14,8 @@ public record BaseAttribute(AttributeType attribute,
                             NumericOperation operation,
                             float value,
                             Predicate<Target> condition,
-                            CalculationOrder order, int level, Category category) implements Attribute {
+                            CalculationOrder order, int level, Category category, String id,
+                            int priority) implements Attribute {
 
     @Override
     public CalculationOrder getOrder() {
@@ -71,8 +73,23 @@ public record BaseAttribute(AttributeType attribute,
     }
 
     @Override
+    public int getPriority() {
+        return priority;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
     public boolean applyCondition(Target target) {
         return condition.test(target);
     }
+    
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority);
+    }
 }

@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.recipe.customrecipe;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.conversion.StateConverter;
-import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.state.Composite;
@@ -32,25 +31,41 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
     @Override
     public boolean matches(CraftingInventory craftingInventory, World world) {
-        if(super.matches(craftingInventory, world)){
-            if(result().isPresent() && result().get() instanceof Composite result){
-              return  IntStream.range(0, craftingInventory.size())
+        if (super.matches(craftingInventory, world)) {
+            if (result().isPresent() && result().get() instanceof Composite result) {
+                boolean isSameMaterial = IntStream.range(0, craftingInventory.size())
                         .mapToObj(craftingInventory::getStack)
-                      .map(this::convertHead)
-                      .flatMap(Optional::stream)
-                      .map(State::name)
-                      .anyMatch(name -> name.split("-")[0].equals(result.name().split("-")[0]));
+                        .map(this::convertHead)
+                        .flatMap(Optional::stream)
+                        .map(State::name)
+                        .anyMatch(name -> name.split("-")[0].equals(result.name().split("-")[0]));
+
+                boolean isSchematic = IntStream.range(0, craftingInventory.size())
+                        .mapToObj(craftingInventory::getStack)
+                        .map(this::convertState)
+                        .flatMap(Optional::stream)
+                        .anyMatch(state -> state.test(Type.SCHEMATIC));
+                if (isSameMaterial) {
+                    return true;
+                } else if (isSchematic) {
+                    return true;
+                }
+
             }
         }
         return false;
     }
 
-    private Optional<State> convertHead(ItemStack stack){
+    private Optional<State> convertHead(ItemStack stack) {
         var converted = StateConverter.of(stack);
-        if(converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))){
+        if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))) {
             return converted;
         }
         return Optional.empty();
+    }
+
+    private Optional<State> convertState(ItemStack stack) {
+        return StateConverter.of(stack);
     }
 
     @Override
@@ -78,7 +93,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
         return getOutput().copy();
     }
 
-    private Optional<State> result(){
+    private Optional<State> result() {
         return StateConverter.of(getOutput());
     }
 

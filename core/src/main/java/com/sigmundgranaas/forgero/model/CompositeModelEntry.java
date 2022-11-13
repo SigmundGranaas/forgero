@@ -41,7 +41,7 @@ public class CompositeModelEntry implements ModelMatcher {
         return Optional.empty();
     }
 
-    private Optional<ModelTemplate> findUpgradeModel(Slot upgradeSlot, Composite composite, Context context, ModelProvider provider){
+    public static Optional<ModelTemplate> findUpgradeModel(Slot upgradeSlot, Composite composite, Context context, ModelProvider provider){
         if(upgradeSlot.filled()){
             if(upgradeSlot.get().get() instanceof Composite upgradeComposite){
               return  provider.find(upgradeComposite).filter(matcher -> matcher.match(upgradeComposite, context)).flatMap(matcher -> matcher.get(upgradeComposite, provider, context));

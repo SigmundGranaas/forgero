@@ -11,7 +11,7 @@
     },
     {
       "name": "pummel",
-      "template": "dense_handle_pummel.png",
+      "template": "pummel.png",
       "type": "GENERATE",
       "palette": "METAL",
       "order": 12,

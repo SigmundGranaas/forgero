@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -27,6 +28,17 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
     }
 
     @Override
+    public int getItemBarStep(ItemStack stack) {
+        return StateItem.super.getItemBarStep(stack);
+    }
+
+    public int getItemBarColor(ItemStack stack) {
+        float f = Math.max(0.0F, ((float) this.getDurability(stack) - (float) stack.getDamage()) / (float) this.getDurability(stack));
+        return MathHelper.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
+    }
+
+
+    @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
 
@@ -42,5 +54,7 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
     public Text getName(ItemStack stack) {
         return getName();
     }
+
+
 }
 

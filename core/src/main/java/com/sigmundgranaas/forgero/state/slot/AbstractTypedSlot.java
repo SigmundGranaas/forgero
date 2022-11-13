@@ -58,4 +58,9 @@ public abstract class AbstractTypedSlot implements Slot {
         return false;
     }
 
+    @Override
+    public String typeName() {
+        return type.typeName();
+    }
+
 }

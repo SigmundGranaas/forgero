@@ -6,10 +6,11 @@ import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import com.sigmundgranaas.forgero.util.match.NameMatch;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface State extends PropertyContainer, Matchable, Identifiable {
+public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object> {
     static State of(Composite composite) {
         return new CompositeIngredient(composite);
     }
@@ -39,5 +40,19 @@ public interface State extends PropertyContainer, Matchable, Identifiable {
             return name.test(this, context);
         }
         return false;
+    }
+
+    @Override
+    default int compareTo(@NotNull Object o) {
+        if (o instanceof State state) {
+            int compare = PropertyContainer.super.compareTo(state);
+            if (compare == 0) {
+                return this.name().compareTo(state.name());
+            } else {
+                return compare;
+            }
+        } else {
+            return 0;
+        }
     }
 }

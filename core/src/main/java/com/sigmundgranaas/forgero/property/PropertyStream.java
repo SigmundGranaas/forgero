@@ -7,8 +7,13 @@ import com.sigmundgranaas.forgero.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.property.passive.Static;
 import com.sigmundgranaas.forgero.util.ForwardingStream;
 
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 /**
  * The property stream is a special stream for handling property specific operations.
@@ -17,11 +22,16 @@ import java.util.stream.Stream;
 public record PropertyStream(
         Stream<Property> stream) implements ForwardingStream<Property> {
 
+    public static <T extends PropertyContainer> ImmutableList<T> sortedByRarity(ImmutableList<T> list) {
+        return list.stream()
+                .sorted(Comparator.comparing(container -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY)))
+                .collect(ImmutableList.toImmutableList());
+    }
+
     @Override
     public Stream<Property> getStream() {
         return stream;
     }
-
 
     public float applyAttribute(Target target, AttributeType attributeType) {
         return getAttributeOfType(attributeType)
@@ -33,9 +43,23 @@ public record PropertyStream(
     }
 
     public Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
-        return getAttributes()
-                .filter(attribute -> attributeType == attribute.getAttributeType())
-                .sorted(Attribute::compareTo);
+        var rootAttributes = getAttributes()
+                .filter(attribute -> attributeType == attribute.getAttributeType()).toList();
+
+        Map<String, Attribute> idMap = rootAttributes
+                .stream()
+                .filter(attribute -> !attribute.getId().equals(EMPTY_IDENTIFIER))
+                .collect(Collectors.toMap(Attribute::getId, attribute -> attribute, (existing, replacement) -> existing.getPriority() > replacement.getPriority() ? existing : replacement));
+
+        var nonIdAttributes = rootAttributes
+                .stream()
+                .filter(attribute -> attribute.getId().equals(EMPTY_IDENTIFIER))
+                .toList();
+
+        return Stream.of(idMap.values(), nonIdAttributes)
+                .flatMap(Collection::stream)
+                .sorted(Attribute::compareTo)
+                .distinct();
     }
 
     public Stream<Attribute> getAttributes() {
@@ -61,11 +85,5 @@ public record PropertyStream(
     public Stream<LeveledProperty> getLeveledPassiveProperties() {
         return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
                 .map(LeveledProperty.class::cast);
-    }
-
-    public static <T extends PropertyContainer> ImmutableList<T> sortedByRarity(ImmutableList<T> list) {
-        return list.stream()
-                .sorted(Comparator.comparing(container -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY)))
-                .collect(ImmutableList.toImmutableList());
     }
 }

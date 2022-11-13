@@ -88,22 +88,43 @@ public class Composite implements Upgradeable<Composite> {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
-        var compositeAttributes = Property.stream(props).getAttributes().filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE).map(Property.class::cast).toList();
+        var upgradeProps = ingredients()
+                .stream()
+                .map(state -> state.applyProperty(target))
+                .flatMap(List::stream)
+                .filter(this::filterAttribute)
+                .toList();
+
+        var compositeAttributes = Property.stream(props)
+                .getAttributes()
+                .filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
+                .map(Property.class::cast)
+                .toList();
+
         var newValues = new ArrayList<Property>();
         for (AttributeType type : AttributeType.values()) {
-
             var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
-            newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.ALL);
+            newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.COMPOSITE);
             var attribute = newBaseAttribute.build();
-            if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof  Attribute attribute1 && attribute1.getAttributeType() == type).toList().size() > 1) {
+            if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType() == type).toList().size() > 1) {
                 newValues.add(newBaseAttribute.build());
             }
         }
 
         var other = new ArrayList<>(props);
         compositeAttributes.forEach(other::remove);
+        upgradeProps.forEach(other::remove);
         other.addAll(newValues);
         return other;
+    }
+
+    private boolean filterAttribute(Property property) {
+        if (property instanceof Attribute attribute) {
+            if (attribute.getCategory() != Category.COMPOSITE) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -139,6 +160,15 @@ public class Composite implements Upgradeable<Composite> {
                 .type(type())
                 .id(identifier())
                 .build();
+    }
+
+
+    public CompositeBuilder toBuilder() {
+        return builder()
+                .addIngredients(ingredients())
+                .addUpgrades(upgrades.slots())
+                .type(type())
+                .id(identifier());
     }
 
     @Override

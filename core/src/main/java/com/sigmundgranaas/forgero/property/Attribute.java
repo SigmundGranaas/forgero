@@ -55,6 +55,12 @@ public interface Attribute extends Property, Comparable<Attribute> {
 
     int getLevel();
 
+
+    int getPriority();
+
+    String getId();
+
+
     default float applyAttribute(Target target, float currentAttribute) {
         if (this.getCondition().test(target)) {
             return this.getCalculation().apply(currentAttribute);
@@ -66,4 +72,6 @@ public interface Attribute extends Property, Comparable<Attribute> {
     default boolean applyCondition(Target target) {
         return this.getCondition().test(target);
     }
+
+
 }

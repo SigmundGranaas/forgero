@@ -29,6 +29,13 @@
     "attributes": [
       {
         "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "LOCAL",
+        "value": 20
+      },
+      {
+        "type": "RARITY",
         "order": "COMPOSITE",
         "category": "ALL",
         "operation": "MULTIPLICATION",
