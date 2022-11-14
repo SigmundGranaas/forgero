@@ -44,7 +44,10 @@ public class FilledSlot extends AbstractTypedSlot {
                 .filter(this::filterAttribute)
                 .map(attribute -> AttributeBuilder.createAttributeBuilderFromAttribute(attribute).applyCategory(Category.ALL).build())
                 .toList();
-        return Stream.of(otherProperties, attributes).flatMap(List::stream).map(Property.class::cast).toList();
+        return Stream.of(otherProperties, attributes)
+                .flatMap(List::stream)
+                .map(Property.class::cast)
+                .toList();
     }
 
     private boolean filterAttribute(Attribute attribute) {

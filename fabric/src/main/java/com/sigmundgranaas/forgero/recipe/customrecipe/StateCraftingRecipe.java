@@ -44,7 +44,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
                         .mapToObj(craftingInventory::getStack)
                         .map(this::convertState)
                         .flatMap(Optional::stream)
-                        .anyMatch(state -> state.test(Type.SCHEMATIC));
+                        .anyMatch(state -> state.name().contains("schematic"));
                 if (isSameMaterial) {
                     return true;
                 } else if (isSchematic) {

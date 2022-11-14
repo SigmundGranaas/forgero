@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.resource.data.v2.data.ConstructData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.LeveledState;
 import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.state.slot.EmptySlot;
@@ -26,7 +27,9 @@ public class StateConverter implements DataConverter<State> {
 
     @Override
     public Optional<State> convert(DataResource resource) {
-        if (resource.construct().isEmpty()) {
+        if (resource.type().equals("GEM")) {
+            return createGem(resource);
+        } else if (resource.construct().isEmpty()) {
             return createState(resource);
         } else {
             return createComposite(resource);
@@ -72,9 +75,27 @@ public class StateConverter implements DataConverter<State> {
         var state = State.of(resource.name(),
                 resource.nameSpace(),
                 tree.type(resource.type()),
-                resource.properties().map(PropertyBuilder::createPropertyListFromPOJO).orElse(Collections.emptyList()));
+                resource.properties()
+                        .map(PropertyBuilder::createPropertyListFromPOJO)
+                        .orElse(Collections.emptyList()));
         states.put(state.identifier(), state);
         nameMapping.put(resource.identifier(), state.identifier());
         return Optional.of(state);
+    }
+
+    private Optional<State> createGem(DataResource resource) {
+        var gem = LeveledState
+                .builder()
+                .name(resource.name())
+                .nameSpace(resource.nameSpace())
+                .level(1)
+                .type(tree.type(resource.type()))
+                .properties(resource.properties()
+                        .map(PropertyBuilder::createPropertyListFromPOJO)
+                        .orElse(Collections.emptyList()))
+                .build();
+        states.put(gem.identifier(), gem);
+        nameMapping.put(resource.identifier(), gem.identifier());
+        return Optional.of(gem);
     }
 }

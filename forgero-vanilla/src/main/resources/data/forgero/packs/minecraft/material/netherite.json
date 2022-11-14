@@ -57,6 +57,18 @@
         "operation": "ADDITION",
         "category": "OFFENSIVE",
         "value": 1000
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -2,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
       }
     ]
   },

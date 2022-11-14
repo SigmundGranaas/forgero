@@ -55,6 +55,18 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -3,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
       }
     ]
   },

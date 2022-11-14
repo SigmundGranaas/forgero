@@ -44,7 +44,7 @@
       ]
     },
     {
-      "name": "handle_secondary",
+      "name": "grip",
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "handle_material.png",
@@ -139,7 +139,7 @@
         "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "handle_secondary"
+      "template": "grip"
     },
     {
       "target": [

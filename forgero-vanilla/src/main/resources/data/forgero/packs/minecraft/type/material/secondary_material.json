@@ -4,6 +4,12 @@
   "children": [
     {
       "name": "LEATHER"
+    },
+    {
+      "name": "PLANT"
+    },
+    {
+      "name": "STRING"
     }
   ]
 }

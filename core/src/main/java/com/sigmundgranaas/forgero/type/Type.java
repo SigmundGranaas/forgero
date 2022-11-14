@@ -26,6 +26,9 @@ public interface Type extends Matchable {
 
 
     Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
+
+    Type TRINKET = new SimpleType("TRINKET", Optional.empty(), new SchematicMatcher());
+    Type GEM = new SimpleType("GEM", Optional.of(TRINKET), new SchematicMatcher());
     Type UNDEFINED = new SimpleType("UNDEFINED", Optional.empty(), new TypeMatcher());
 
 

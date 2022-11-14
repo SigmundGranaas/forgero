@@ -14,18 +14,6 @@
         "value": 2.0
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0.2,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "HANDLE"
-          ]
-        }
-      },
-      {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -68,7 +56,13 @@
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -0.4
+        "value": -2,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
       }
     ]
   },

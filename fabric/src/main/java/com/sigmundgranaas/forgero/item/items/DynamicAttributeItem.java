@@ -25,9 +25,13 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     PropertyContainer defaultProperties();
 
+    default boolean isEquippable() {
+        return true;
+    }
+
     @Override
     default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
-        if (slot.equals(EquipmentSlot.MAINHAND) && stack.getItem() instanceof DynamicAttributeItem) {
+        if (slot.equals(EquipmentSlot.MAINHAND) && stack.getItem() instanceof DynamicAttributeItem && isEquippable()) {
             Target target = Target.createEmptyTarget();
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
             float currentToolDamage = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);

@@ -73,4 +73,9 @@ public class DefaultStateItem extends Item implements StateItem, State {
     public PropertyContainer defaultProperties() {
         return DEFAULT;
     }
+
+    @Override
+    public boolean isEquippable() {
+        return false;
+    }
 }

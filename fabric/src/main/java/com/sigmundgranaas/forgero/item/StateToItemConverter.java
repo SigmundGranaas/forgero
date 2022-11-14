@@ -57,6 +57,8 @@ public class StateToItemConverter {
             return ItemGroups.FORGERO_TOOL_PARTS;
         } else if (state.test(Type.SCHEMATIC)) {
             return ItemGroups.FORGERO_SCHEMATICS;
+        } else if (state.test(Type.TRINKET)) {
+            return ItemGroups.FORGERO_GEMS;
         }
         return ItemGroups.FORGERO_TOOL_PARTS;
     }

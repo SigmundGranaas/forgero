@@ -24,6 +24,7 @@ public class TextureService {
             return Optional.of(paletteCache.get(name));
         }
         var template = loader.load(PALETTE_PATH + name);
+        template.ifPresent(palette -> paletteCache.put(name, new Palette(palette)));
         return template.map(Palette::new);
     }
 
@@ -31,7 +32,8 @@ public class TextureService {
         if (templateCache.containsKey(name)) {
             return Optional.of(templateCache.get(name));
         }
-        var template = loader.load(TEMPLATE_PATH + name);
-        return template.map(templateTexture -> new TemplateTexture(templateTexture, new DefaultRecolorStrategy()));
+        var templateOpt = loader.load(TEMPLATE_PATH + name);
+        templateOpt.ifPresent(template -> templateCache.put(name, new TemplateTexture(template, new DefaultRecolorStrategy())));
+        return templateOpt.map(templateTexture -> new TemplateTexture(templateTexture, new DefaultRecolorStrategy()));
     }
 }

@@ -68,7 +68,12 @@ public class CompositeWriter implements Writer {
                     Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
                     mutableText.append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
                 } else {
-                    mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).formatted(Formatting.GRAY);
+                    if (slot.identifier().equals(slot.typeName())) {
+                        mutableText.append(Text.literal("-")).formatted(Formatting.GRAY);
+                    } else {
+                        mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).formatted(Formatting.GRAY);
+                    }
+
                 }
                 tooltip.add(mutableText);
                 if (context.isAdvanced() && slot.filled() && slot.get().get() instanceof Composite compositeSlot) {
