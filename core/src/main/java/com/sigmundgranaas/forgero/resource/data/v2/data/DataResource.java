@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.resource.data.factory.DataResourceFactory.mergeAttributes;
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder(toBuilder = true)
@@ -159,5 +160,19 @@ public class DataResource implements Identifiable {
         return Optional.ofNullable(palette);
     }
 
+
+    public DataResource mergeResource(DataResource resource) {
+        var builder = this.toBuilder();
+
+        var properties = properties().orElse(new PropertyPojo());
+        var mergeProperties = resource.properties().orElse(new PropertyPojo());
+        var newProps = new PropertyPojo();
+
+        newProps.active = mergeAttributes(mergeProperties.active, properties.active).stream().distinct().toList();
+        newProps.passiveProperties = mergeAttributes(mergeProperties.passiveProperties, properties.passiveProperties).stream().distinct().toList();
+        newProps.attributes = mergeAttributes(mergeProperties.attributes, properties.attributes).stream().distinct().toList();
+
+        return builder.property(newProps).build();
+    }
 
 }

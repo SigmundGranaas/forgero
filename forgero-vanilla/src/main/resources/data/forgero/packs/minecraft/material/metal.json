@@ -1,30 +1,22 @@
 {
   "type": "METAL",
-  "parent": "metal",
-  "name": "iron",
-  "container": {
-    "type": "HOST",
-    "id": "minecraft:iron_ingot"
-  },
+  "name": "metal",
+  "resource_type": "ABSTRACT",
   "properties": {
     "attributes": [
       {
+        "id": "metal-base-mining_level",
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.0
       },
       {
+        "id": "metal-base-mining_speed",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 6
-      },
-      {
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 40
       },
       {
         "type": "DURABILITY",
@@ -32,13 +24,6 @@
         "operation": "ADDITION",
         "category": "ALL",
         "value": 250
-      },
-      {
-        "id": "iron-base-attack",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.0
       },
       {
         "id": "iron-base-attack",
@@ -66,8 +51,5 @@
         }
       }
     ]
-  },
-  "palette": {
-    "name": "iron"
   }
 }

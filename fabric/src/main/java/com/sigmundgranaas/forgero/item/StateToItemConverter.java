@@ -36,6 +36,8 @@ public class StateToItemConverter {
             return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
             return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+        } else if (state.type().test(Type.GEM)) {
+            return new GemItem(new FabricItemSettings().group(getItemGroup()), state);
         }
         return defaultStateItem();
     }

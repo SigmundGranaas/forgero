@@ -4,7 +4,7 @@ import net.minecraft.nbt.NbtCompound;
 
 @FunctionalInterface
 public interface CompoundEncoder<T> {
-    CompositeEncoder COMPOSITE_ENCODER = new CompositeEncoder();
-    
+    StateEncoder ENCODER = new StateEncoder();
+
     NbtCompound encode(T element);
 }

@@ -37,7 +37,8 @@ public class ResourcePipeline {
         List<DataResource> validatedResources = validateResources(validatedPackages);
 
         tree = assembleTypeTree(validatedResources);
-        
+
+
         List<DataResource> resources = DataBuilder.of(validatedResources, tree).buildResources();
 
         Map<String, State> states = mapStates(resources);

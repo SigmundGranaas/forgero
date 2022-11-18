@@ -8,13 +8,11 @@ import net.minecraft.nbt.NbtList;
 import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.*;
 
 public class CompositeEncoder implements CompoundEncoder<State> {
-    private final IngredientEncoder ingredientEncoder;
-    private final UpgradeEncoder upgradeEncoder;
     private final IdentifiableEncoder identifiableEncoder;
+    private final StateEncoder stateEncoder;
 
     public CompositeEncoder() {
-        this.ingredientEncoder = new IngredientEncoder();
-        this.upgradeEncoder = new UpgradeEncoder();
+        this.stateEncoder = new StateEncoder();
         this.identifiableEncoder = new IdentifiableEncoder();
     }
 
@@ -25,11 +23,11 @@ public class CompositeEncoder implements CompoundEncoder<State> {
         compound.putString(TYPE_IDENTIFIER, element.type().typeName());
         if (element instanceof Composite composite) {
             var ingredients = new NbtList();
-            composite.ingredients().stream().map(ingredientEncoder::encode).forEach(ingredients::add);
+            composite.ingredients().stream().map(stateEncoder::encode).forEach(ingredients::add);
             compound.put(INGREDIENTS_IDENTIFIER, ingredients);
 
             var upgrades = new NbtList();
-            composite.upgrades().stream().map(upgradeEncoder::encode).forEach(upgrades::add);
+            composite.upgrades().stream().map(stateEncoder::encode).forEach(upgrades::add);
             compound.put(UPGRADES_IDENTIFIER, upgrades);
         }
         return compound;

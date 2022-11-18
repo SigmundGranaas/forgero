@@ -15,10 +15,12 @@ public class NbtConstants {
     public static String STATE_TYPE_IDENTIFIER = "STATE_TYPE";
     public static String DEFAULT_IDENTIFIER = "DEFAULT";
     public static String COMPOSITE_IDENTIFIER = "COMPOSITE";
-    public static String INGREDIENT_IDENTIFIER = "INGREDIENT";
+
+    public static String LEVELED_IDENTIFIER = "LEVELED";
     public static String STATIC_IDENTIFIER = "STATIC";
     public static String INGREDIENTS_IDENTIFIER = "INGREDIENTS";
     public static String UPGRADES_IDENTIFIER = "UPGRADES";
 
-    //
+    public static String LEVEL_IDENTIFIER = "LEVEL";
+
 }

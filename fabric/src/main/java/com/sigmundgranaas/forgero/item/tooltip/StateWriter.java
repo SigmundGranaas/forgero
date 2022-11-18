@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.item.tooltip;
 
 import com.sigmundgranaas.forgero.item.tooltip.writer.*;
 import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.LeveledState;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
@@ -24,7 +25,7 @@ public class StateWriter implements Writer {
             return new ToolWriter(state);
         } else if (state.test(SWORD_BLADE)) {
             return new SwordBladeWriter(state);
-        }else if (state.test(AXE_HEAD)) {
+        } else if (state.test(AXE_HEAD)) {
             return new SwordBladeWriter(state);
         } else if (state.test(TOOL_PART_HEAD)) {
             return new AxeHeadWriter(state);
@@ -32,6 +33,8 @@ public class StateWriter implements Writer {
             return new PartWriter((state));
         } else if (state.test(SCHEMATIC)) {
             return new SchematicWriter(state);
+        } else if (state.test(GEM) && state instanceof LeveledState leveledState) {
+            return new GemWriter(leveledState);
         }
         return new StateWriter(state);
     }

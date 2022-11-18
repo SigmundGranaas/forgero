@@ -69,4 +69,13 @@ public class LeveledState implements State {
                 .type(type)
                 .build();
     }
+
+    public LeveledState setLevel(int level) {
+        return toBuilder()
+                .level(level)
+                .name(name)
+                .nameSpace(nameSpace)
+                .type(type)
+                .build();
+    }
 }

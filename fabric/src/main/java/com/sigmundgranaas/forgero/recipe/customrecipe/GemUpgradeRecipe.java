@@ -2,11 +2,10 @@ package com.sigmundgranaas.forgero.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.gem.Gem;
-import com.sigmundgranaas.forgero.item.NBTFactory;
-import com.sigmundgranaas.forgero.item.items.GemItem;
+import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.recipe.implementation.SmithingRecipeGetters;
+import com.sigmundgranaas.forgero.state.LeveledState;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -17,50 +16,46 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundEncoder.ENCODER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
 public class GemUpgradeRecipe extends SmithingRecipe {
     public GemUpgradeRecipe(SmithingRecipeGetters recipe) {
         super(recipe.getId(), recipe.getBase(), recipe.getAddition(), recipe.getResult().copy());
     }
 
-    public static Optional<Gem> getGem(Inventory inventory) {
-
-
-        Gem baseGem;
-        Gem additionGem;
-        ItemStack base = inventory.getStack(0);
-        Gem fallbackGem = ((GemItem)base.getItem()).getGem();
-        ItemStack addition = inventory.getStack(1);
-        if (base.hasNbt() && base.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
-            //noinspection ConstantConditions
-            baseGem = NBTFactory.INSTANCE.createGemFromNbt(base.getNbt()).orElse(fallbackGem);
-        } else {
-            baseGem = ((GemItem) base.getItem()).getGem();
-        }
-
-        if (addition.hasNbt() && addition.getOrCreateNbt().contains(NBTFactory.GEM_NBT_IDENTIFIER)) {
-            //noinspection ConstantConditions
-            additionGem = NBTFactory.INSTANCE.createGemFromNbt(addition.getNbt()).orElse(fallbackGem);
-        } else {
-            additionGem = ((GemItem) addition.getItem()).getGem();
-        }
-
-        return baseGem.upgradeGem(additionGem);
-    }
-
     @Override
     public boolean matches(Inventory inventory, World world) {
         if (super.matches(inventory, world)) {
-            return getGem(inventory).isPresent();
+            var base = base(inventory);
+            var addition = addition(inventory);
+            if (base.isPresent() && addition.isPresent()) {
+                return base.get().level() == addition.get().level();
+
+            }
         }
         return false;
     }
 
+    private Optional<LeveledState> base(Inventory inventory) {
+        var target = StateConverter.of(inventory.getStack(0));
+        return target.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
+    }
+
+    private Optional<LeveledState> addition(Inventory inventory) {
+        var addition = StateConverter.of(inventory.getStack(1));
+        return addition.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
+    }
+
     @Override
     public ItemStack craft(Inventory inventory) {
-        Gem resultingGem = getGem(inventory).orElse(((GemItem) getOutput().getItem()).getGem());
-
-        ItemStack output = getOutput().copy();
-        NBTFactory.INSTANCE.createNBTFromGem(resultingGem, output.getOrCreateNbt());
+        var base = base(inventory);
+        var output = getOutput().copy();
+        if (base.isPresent()) {
+            var newBase = base.get().levelUp();
+            var nbt = ENCODER.encode(newBase);
+            output.getOrCreateNbt().put(FORGERO_IDENTIFIER, nbt);
+        }
         return output;
     }
 

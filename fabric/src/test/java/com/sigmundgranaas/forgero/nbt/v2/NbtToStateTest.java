@@ -22,7 +22,7 @@ import static com.sigmundgranaas.forgero.nbt.NBTs.PICKAXE_NBT;
 
 
 public class NbtToStateTest {
-    private static final CompositeParser parser = new CompositeParser(NbtToStateTest::ingredientSupplier, (String id) -> Optional.empty());
+    private static final CompositeParser parser = new CompositeParser(NbtToStateTest::ingredientSupplier);
 
     public static Optional<State> ingredientSupplier(String id) {
         return switch (id) {

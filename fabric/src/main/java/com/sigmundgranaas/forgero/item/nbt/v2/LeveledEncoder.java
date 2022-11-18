@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.item.nbt.v2;
 
 import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.LeveledState;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.nbt.NbtCompound;
 
-import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.INGREDIENT_IDENTIFIER;
-import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.STATE_TYPE_IDENTIFIER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.*;
 
-public class IngredientEncoder implements CompoundEncoder<State> {
+public class LeveledEncoder implements CompoundEncoder<State> {
     private final IdentifiableEncoder identifiableEncoder;
 
-    public IngredientEncoder() {
+    public LeveledEncoder() {
         this.identifiableEncoder = new IdentifiableEncoder();
     }
 
@@ -21,7 +21,10 @@ public class IngredientEncoder implements CompoundEncoder<State> {
         }
         var compound = identifiableEncoder.encode(element);
 
-        compound.putString(STATE_TYPE_IDENTIFIER, INGREDIENT_IDENTIFIER);
+        if (element instanceof LeveledState state) {
+            compound.putInt(LEVEL_IDENTIFIER, state.level());
+        }
+        compound.putString(STATE_TYPE_IDENTIFIER, LEVELED_IDENTIFIER);
         return compound;
     }
 }

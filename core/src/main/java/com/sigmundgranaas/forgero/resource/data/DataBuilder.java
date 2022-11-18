@@ -20,7 +20,7 @@ public class DataBuilder {
     private final List<DataResource> finalResources;
     private final Map<String, DataResource> templates;
     private final TypeTree tree;
-    private final List<DataResource> resources;
+    private List<DataResource> resources;
     private List<DataResource> unresolvedConstructs;
 
     public DataBuilder(List<DataResource> resources, TypeTree tree) {
@@ -37,10 +37,32 @@ public class DataBuilder {
     }
 
     public List<DataResource> buildResources() {
+        mapParentResources();
         assembleStandaloneResources();
         assembleConstructs();
-
         return finalResources;
+    }
+
+    private void mapParentResources() {
+        var namedResources = resources.stream().collect(Collectors.toMap((DataResource::name), (dataResource -> dataResource), (present, newRes) -> newRes));
+        namedResources.remove(EMPTY_IDENTIFIER);
+        this.resources = namedResources.values().stream()
+                .map(res -> applyParent(namedResources, res))
+                .filter(this::notAbstract)
+                .toList();
+    }
+
+    private DataResource applyParent(Map<String, DataResource> resources, DataResource resource) {
+        if (hasParent(resource)) {
+            var parent = Optional.ofNullable(resources.get(resource.parent()));
+            if (parent.isPresent()) {
+                return resource.mergeResource(applyParent(resources, parent.get()));
+            } else {
+                return resource;
+            }
+        } else {
+            return resource;
+        }
     }
 
     private void assembleConstructs() {
@@ -132,7 +154,7 @@ public class DataBuilder {
                             .stream()
                             .map(res -> IngredientData.builder().id(res.identifier()).build())
                             .toList();
-                    
+
                     templateIngredients.add(ingredients);
                 }
             }
@@ -183,6 +205,11 @@ public class DataBuilder {
         return true;
     }
 
+    private boolean notAbstract(DataResource resource) {
+        return resource.resourceType() != ABSTRACT;
+
+    }
+
     private boolean hasDefaults(ConstructData data) {
         return data.components().stream().anyMatch(ingredient -> {
             if (ingredient.id().equals(EMPTY_IDENTIFIER)) {
@@ -192,6 +219,10 @@ public class DataBuilder {
                 return res.filter(resource -> resource.resourceType() == DEFAULT).isPresent();
             }
         });
+    }
+
+    private boolean hasParent(DataResource data) {
+        return !data.parent().equals(EMPTY_IDENTIFIER) && !data.name().equals(EMPTY_IDENTIFIER) && isStatefulResource(data);
     }
 
     private boolean treeContainsTag(String tag) {

@@ -10,14 +10,12 @@ import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static com.sigmundgranaas.forgero.item.items.testutil.Tools.IRON_PICKAXE;
 import static com.sigmundgranaas.forgero.testutil.Upgrades.BINDING;
 
 public class StateNbtConversionTest {
     private static final CompoundEncoder<State> encoder = new CompositeEncoder();
-    private static final CompositeParser parser = new CompositeParser(NbtToStateTest::ingredientSupplier, (String id) -> Optional.empty());
+    private static final CompositeParser parser = new CompositeParser(NbtToStateTest::ingredientSupplier);
 
     @Test
     void encodeCompoundParseCompound() {

@@ -14,7 +14,7 @@ import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundEncoder.COMPOSITE_ENCODER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundEncoder.ENCODER;
 import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class StateUpgradeRecipe extends SmithingRecipe {
@@ -45,7 +45,7 @@ public class StateUpgradeRecipe extends SmithingRecipe {
             var upgraded = state.upgrade(upgradeOpt.get());
             var output = getOutput().copy();
             output.setNbt(inventory.getStack(0).getOrCreateNbt().copy());
-            output.getOrCreateNbt().put(FORGERO_IDENTIFIER, COMPOSITE_ENCODER.encode(upgraded));
+            output.getOrCreateNbt().put(FORGERO_IDENTIFIER, ENCODER.encode(upgraded));
             return output;
         }
         return inventory.getStack(0);

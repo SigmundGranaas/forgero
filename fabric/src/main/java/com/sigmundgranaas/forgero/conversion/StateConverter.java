@@ -10,13 +10,13 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundParser.COMPOSITE_PARSER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundParser.STATE_PARSER;
 import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public interface StateConverter {
     static Optional<State> of(ItemStack stack) {
         if (stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
-            return COMPOSITE_PARSER.parse(stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER));
+            return STATE_PARSER.parse(stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER));
         } else {
             return of(stack.getItem());
         }
