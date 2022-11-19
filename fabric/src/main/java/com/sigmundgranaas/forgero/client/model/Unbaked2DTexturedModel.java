@@ -15,6 +15,7 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.SpriteIdentifier;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class Unbaked2DTexturedModel implements UnbakedFabricModel {
         this.textures = textures;
         this.id = id;
         this.offsetMap = new HashMap<>();
+        this.textures.sort(Comparator.comparing(PaletteTemplateModel::order));
     }
 
     private String textureName(PaletteTemplateModel model) {

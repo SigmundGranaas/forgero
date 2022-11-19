@@ -62,6 +62,15 @@
             2,
             2
           ]
+        },
+        {
+          "target": [
+            "model:spiked_pickaxe_binding.png"
+          ],
+          "offset": [
+            2,
+            2
+          ]
         }
       ]
     },

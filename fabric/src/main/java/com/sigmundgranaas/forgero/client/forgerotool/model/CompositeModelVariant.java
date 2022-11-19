@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.client.forgerotool.model;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModelCollection;
 import com.sigmundgranaas.forgero.client.model.Unbaked2DTexturedModel;
 import com.sigmundgranaas.forgero.client.model.UnbakedFabricModel;
@@ -15,7 +16,6 @@ import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
@@ -31,7 +31,6 @@ import java.util.function.Supplier;
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private final UnbakedModelCollection unbakedModelCollection;
     private final LoadingCache<ItemStack, FabricBakedModel> cache;
-    private final LoadingCache<Item, FabricBakedModel> itemCache;
     private final ModelRegistry registry;
     private BakedModelCollection bakedModelCollection;
     private ModelLoader loader;
@@ -44,29 +43,14 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         this.cache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
             @Override
             public @NotNull FabricBakedModel load(@NotNull ItemStack stack) {
-                return bakedModelCollection.getModel(stack);
-            }
-        });
-        this.itemCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
-            @Override
-            public @NotNull FabricBakedModel load(@NotNull Item item) {
-                return bakedModelCollection.getModel(item);
+                return converter(stack).flatMap((model) -> convertModel(model)).orElse(new EmptyBakedModel());
             }
         });
     }
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        converter(stack).flatMap(this::convertModel).ifPresent(model -> model.emitItemQuads(null, null, context));
-        /**
-         * if (stack.hasNbt()) {
-         *             cache.getUnchecked(stack).emitItemQuads(null, null, context);
-         *         } else {
-         *             itemCache.getUnchecked(stack.getItem()).emitItemQuads(null, null, context);
-         *         }
-         */
-
-
+        cache.getUnchecked(stack).emitItemQuads(null, null, context);
     }
 
     @Nullable
@@ -77,7 +61,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
             this.loader = loader;
             this.textureGetter = textureGetter;
             cache.invalidateAll();
-            itemCache.invalidateAll();
         }
         return this;
     }

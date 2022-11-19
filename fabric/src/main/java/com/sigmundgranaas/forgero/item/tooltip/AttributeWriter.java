@@ -90,7 +90,7 @@ public class AttributeWriter implements Writer {
 
     private void floatAttribute(AttributeType type, List<Text> tooltip) {
         float result = Property.stream(helper.attributes()).applyAttribute(Target.createEmptyTarget(), type);
-        if (type == ATTACK_SPEED) {
+        if (result != 0f && type == ATTACK_SPEED) {
             result += 4f;
         }
         DecimalFormat df = new DecimalFormat("#.00");

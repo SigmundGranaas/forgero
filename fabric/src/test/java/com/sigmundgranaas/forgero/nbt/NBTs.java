@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
-import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.*;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.STATE_IDENTIFIER;
 
 public class NBTs {
     public static NbtCompound HANDLE_NBT = handle();
@@ -16,7 +16,7 @@ public class NBTs {
         var compound = new NbtCompound();
         compound.putString(NbtConstants.NAME_IDENTIFIER, "oak-handle");
         compound.putString(NbtConstants.ID_IDENTIFIER, "forgero#oak-handle");
-        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.INGREDIENT_IDENTIFIER);
+        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, STATE_IDENTIFIER);
         return compound;
     }
 
@@ -66,7 +66,7 @@ public class NBTs {
         var compound = new NbtCompound();
         compound.putString(NbtConstants.NAME_IDENTIFIER, "oak");
         compound.putString(NbtConstants.ID_IDENTIFIER, "forgero#oak");
-        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.INGREDIENT_IDENTIFIER);
+        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.STATE_IDENTIFIER);
         return compound;
     }
 
@@ -74,7 +74,7 @@ public class NBTs {
         var compound = new NbtCompound();
         compound.putString(NbtConstants.NAME_IDENTIFIER, "iron");
         compound.putString(NbtConstants.ID_IDENTIFIER, "forgero#iron");
-        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.INGREDIENT_IDENTIFIER);
+        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.STATE_IDENTIFIER);
         return compound;
     }
 
@@ -82,7 +82,7 @@ public class NBTs {
         var compound = new NbtCompound();
         compound.putString(NbtConstants.NAME_IDENTIFIER, "pickaxe_head-schematic");
         compound.putString(NbtConstants.ID_IDENTIFIER, "forgero#pickaxe_head-schematic");
-        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.INGREDIENT_IDENTIFIER);
+        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.STATE_IDENTIFIER);
         return compound;
     }
 
@@ -90,7 +90,7 @@ public class NBTs {
         var compound = new NbtCompound();
         compound.putString(NbtConstants.NAME_IDENTIFIER, "binding-schematic");
         compound.putString(NbtConstants.ID_IDENTIFIER, "forgero#binding-schematic");
-        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.INGREDIENT_IDENTIFIER);
+        compound.putString(NbtConstants.STATE_TYPE_IDENTIFIER, NbtConstants.STATE_IDENTIFIER);
         return compound;
     }
 

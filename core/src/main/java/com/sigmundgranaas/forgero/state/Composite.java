@@ -120,11 +120,11 @@ public class Composite implements Upgradeable<Composite> {
 
     private boolean filterAttribute(Property property) {
         if (property instanceof Attribute attribute) {
-            if (attribute.getCategory() != Category.COMPOSITE) {
-                return true;
+            if (attribute.getCategory() == Category.COMPOSITE || attribute.getCategory() == Category.ALL) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     @Override

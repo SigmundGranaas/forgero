@@ -28,7 +28,14 @@
       "modelType": "GENERATE",
       "template": "pickaxe_head_pointy.png",
       "palette": "TOOL_MATERIAL",
-      "order": 40
+      "order": 53
+    },
+    {
+      "name": "pickaxe_head_gem",
+      "modelType": "GENERATE",
+      "template": "pickaxe_head_gem.png",
+      "palette": "TRINKET",
+      "order": 65
     },
     {
       "target": [
@@ -60,7 +67,7 @@
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "gem-0"
+      "template": "pickaxe_head_gem"
     }
   ]
 }

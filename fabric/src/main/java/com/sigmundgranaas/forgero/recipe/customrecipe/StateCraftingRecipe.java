@@ -55,10 +55,6 @@ public class StateCraftingRecipe extends ShapedRecipe {
         return Optional.empty();
     }
 
-    private Optional<State> convertState(ItemStack stack) {
-        return StateConverter.of(stack);
-    }
-
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
         List<ItemStack> ingredients = new ArrayList<>();

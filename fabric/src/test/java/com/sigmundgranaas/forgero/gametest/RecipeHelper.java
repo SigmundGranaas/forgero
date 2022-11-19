@@ -33,21 +33,6 @@ public class RecipeHelper {
         return actualOutput;
     }
 
-    public static boolean isCraftingTableRecipe(RecipeWrapper wrapper) {
-        return switch (wrapper.getRecipeType()) {
-            case TOOL_PART_SECONDARY_MATERIAL_UPGRADE -> false;
-            case TOOL_PART_GEM_UPGRADE -> false;
-            case TOOL_RECIPE -> true;
-            case GEM_UPGRADE_RECIPE -> false;
-            case TOOL_PART_RECIPE -> true;
-            case TOOL_WITH_BINDING_RECIPE -> true;
-            case STATE_CRAFTING_RECIPE -> true;
-            case STATE_UPGRADE_RECIPE -> false;
-            case TOOLPART_SCHEMATIC_RECIPE -> true;
-            case MISC_SHAPELESS -> false;
-        };
-    }
-
     public static List<Pair<Integer, ItemStack>> parseCraftingTableRecipe(RecipeWrapper wrapper) {
         List<Pair<Integer, ItemStack>> ingredients = new ArrayList<>();
         JsonArray pattern = wrapper.getRecipe().getAsJsonArray("pattern");

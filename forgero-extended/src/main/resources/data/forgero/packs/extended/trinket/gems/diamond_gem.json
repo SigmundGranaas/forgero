@@ -9,25 +9,33 @@
     "attributes": [
       {
         "type": "RARITY",
-        "order": "COMPOSITE",
-        "category": "UTILITY",
-        "operation": "MULTIPLICATION",
-        "value": 0.3
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
       },
       {
         "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "category": "UTILITY",
-        "operation": "MULTIPLICATION",
-        "value": 0.3
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 200.0
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "ADDITION",
-        "value": 0.2
+        "type": "MINING_SPEED",
+        "order": "END",
+        "category": "ALL",
+        "operation": "MULTIPLICATION",
+        "value": 1.2,
+        "condition": {
+          "target": "BLOCK",
+          "tag": [
+            "minecraft:base_stone_overworld"
+          ]
+        }
       }
     ]
+  },
+  "palette": {
+    "name": "diamond-gem"
   }
 }

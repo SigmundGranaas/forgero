@@ -62,6 +62,6 @@ public class StateToItemConverter {
         } else if (state.test(Type.TRINKET)) {
             return ItemGroups.FORGERO_GEMS;
         }
-        return ItemGroups.FORGERO_TOOL_PARTS;
+        return ItemGroup.MISC;
     }
 }

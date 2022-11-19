@@ -18,6 +18,13 @@
       "order": 20
     },
     {
+      "name": "axe_head_gem",
+      "modelType": "GENERATE",
+      "template": "axe_head_gem.png",
+      "palette": "TRINKET",
+      "order": 90
+    },
+    {
       "target": [
         "type:MATERIAL",
         "slot:0"
@@ -27,11 +34,11 @@
     },
     {
       "target": [
-        "type:GEM",
+        "type:TRINKET",
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "gem-0"
+      "template": "axe_head_gem"
     }
   ]
 }
