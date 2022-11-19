@@ -14,8 +14,9 @@ public enum RecipeTypes {
 
     STATE_CRAFTING_RECIPE,
 
-    
+
     STATE_UPGRADE_RECIPE,
+    SCHEMATIC_PART_CRAFTING,
     TOOLPART_SCHEMATIC_RECIPE;
 
     String getName() {

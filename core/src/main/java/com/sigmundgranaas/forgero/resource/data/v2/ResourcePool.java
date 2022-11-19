@@ -55,8 +55,8 @@ public class ResourcePool {
             var temporaryResolved = new ArrayList<DataResource>();
             unresolvedConstructs.forEach(resource -> {
                 assert resource.construct().isPresent();
-                assert resource.construct().get().recipe().isPresent();
-                var ingredients = resource.construct().get().recipe().get().ingredients();
+                assert resource.construct().get().recipes().isPresent();
+                var ingredients = resource.construct().get().recipes().get().get(0).ingredients();
                 boolean resolved = true;
                 var resourceIngredients = new ArrayList<Ingredient>();
                 for (IngredientData ingredient : ingredients) {
@@ -112,7 +112,7 @@ public class ResourcePool {
     }
 
     private List<Composite> constructToComposite(DataResource resource) {
-        var jsonIngredients = resource.construct().get().recipe().get().ingredients();
+        var jsonIngredients = resource.construct().get().recipes().get().get(0).ingredients();
         var templateIngredients = new ArrayList<List<Ingredient>>();
         for (IngredientData ingredient : jsonIngredients) {
             if (ingredient.id() != null && ingredient.id().equals("this")) {

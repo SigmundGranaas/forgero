@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.resource.ResourceListener;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
@@ -17,12 +18,10 @@ public class ForgeroStateRegistry {
     public static Map<String, String> STATE_TO_CONTAINER;
     public static Map<String, String> CONTAINER_TO_STATE;
     public static Set<String> COMPOSITES;
-
     public static List<DataResource> CONSTRUCTS;
-
     public static TypeTree TREE;
-
     public static Map<String, String> ID_MAPPER;
+    public static List<RecipeData> RECIPES;
 
     public static ResourceListener<Map<String, State>> stateListener() {
         return (resources, tree, idMapper) -> {
@@ -80,6 +79,14 @@ public class ForgeroStateRegistry {
                         .filter(Composite.class::isInstance)
                         .map(State::identifier)
                         .collect(Collectors.toSet());
+            }
+        };
+    }
+
+    public static ResourceListener<List<RecipeData>> recipeListener() {
+        return (resources, tree, idMapper) -> {
+            if (RECIPES == null) {
+                RECIPES = resources;
             }
         };
     }

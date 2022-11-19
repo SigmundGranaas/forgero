@@ -4,31 +4,34 @@ import com.sigmundgranaas.forgero.resource.data.DataBuilder;
 import com.sigmundgranaas.forgero.resource.data.StateConverter;
 import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.resource.data.v2.factory.TypeFactory;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ResourcePipeline {
     private final List<DataPackage> packages;
     private final List<ResourceListener<List<DataResource>>> dataListeners;
     private final List<ResourceListener<List<DataResource>>> inflatedDataListener;
     private final List<ResourceListener<Map<String, State>>> stateListener;
+    private final List<ResourceListener<List<RecipeData>>> recipeListener;
     private Map<String, String> idMapper;
     private TypeTree tree;
 
+    private List<RecipeData> recipes;
 
-    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener) {
+
+    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener) {
         this.packages = packages;
         this.dataListeners = dataListeners;
         this.inflatedDataListener = inflatedDataListener;
         this.stateListener = stateListener;
+        this.recipeListener = recipeListener;
         this.tree = new TypeTree();
         this.idMapper = new HashMap<>();
+        this.recipes = new ArrayList<>();
     }
 
     public void execute() {
@@ -38,12 +41,13 @@ public class ResourcePipeline {
 
         tree = assembleTypeTree(validatedResources);
 
-
-        List<DataResource> resources = DataBuilder.of(validatedResources, tree).buildResources();
+        var dataBuilder = DataBuilder.of(validatedResources, tree);
+        List<DataResource> resources = dataBuilder.buildResources();
+        this.recipes = dataBuilder.recipes();
 
         Map<String, State> states = mapStates(resources);
 
-
+        recipeListener.forEach(listener -> listener.listen(recipes, tree, idMapper));
         dataListeners.forEach(listener -> listener.listen(validatedResources, tree, idMapper));
         inflatedDataListener.forEach(listener -> listener.listen(resources, tree, idMapper));
         stateListener.forEach(listener -> listener.listen(states, tree, idMapper));

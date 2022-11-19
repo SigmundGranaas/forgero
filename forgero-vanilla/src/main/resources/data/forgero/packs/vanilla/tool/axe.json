@@ -9,8 +9,19 @@
   "construct": {
     "type": "AXE",
     "target": "CREATE",
-    "recipe": {
-    },
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "type": "AXE_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
     "components": [
       {
         "type": "AXE_HEAD"

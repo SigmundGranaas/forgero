@@ -9,9 +9,19 @@
   "construct": {
     "type": "PICKAXE",
     "target": "CREATE",
-    "recipe": {
-    },
-    "container": false,
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "type": "PICKAXE_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
     "components": [
       {
         "type": "PICKAXE_HEAD"

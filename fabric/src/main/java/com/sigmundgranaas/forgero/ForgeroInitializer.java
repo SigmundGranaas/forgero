@@ -39,6 +39,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .state(ForgeroStateRegistry.compositeListener())
                 .inflated(ForgeroStateRegistry.constructListener())
                 .inflated(ForgeroStateRegistry.containerListener())
+                .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
 

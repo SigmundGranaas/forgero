@@ -61,7 +61,7 @@ public class ConstructData {
         return Objects.requireNonNullElse(components, Collections.emptyList());
     }
 
-    public Optional<RecipeData> recipe() {
-        return Optional.ofNullable(recipe);
+    public Optional<List<RecipeData>> recipes() {
+        return Optional.ofNullable(recipes);
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.resource.data.v2.data.ConstructData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
+import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.*;
@@ -21,6 +22,8 @@ public class DataBuilder {
     private final Map<String, DataResource> templates;
     private final TypeTree tree;
     private List<DataResource> resources;
+
+    private List<RecipeData> recipes;
     private List<DataResource> unresolvedConstructs;
 
     public DataBuilder(List<DataResource> resources, TypeTree tree) {
@@ -29,6 +32,7 @@ public class DataBuilder {
         this.templates = new HashMap<>();
         this.unresolvedConstructs = new ArrayList<>();
         this.finalResources = new ArrayList<>();
+        this.recipes = new ArrayList<>();
         this.tree = tree;
     }
 
@@ -41,6 +45,10 @@ public class DataBuilder {
         assembleStandaloneResources();
         assembleConstructs();
         return finalResources;
+    }
+
+    public List<RecipeData> recipes() {
+        return recipes;
     }
 
     private void mapParentResources() {
@@ -120,6 +128,12 @@ public class DataBuilder {
     }
 
     private List<DataResource> mapConstructData(DataResource data) {
+        if (data.construct().isPresent() && data.construct().get().recipes().isPresent()) {
+            data.construct().get().recipes().get().stream()
+                    .map(recipe -> inflateRecipes(recipe, data))
+                    .flatMap(List::stream)
+                    .forEach(recipes::add);
+        }
         List<DataResource> constructs = new ArrayList<>();
         if (data.construct().isEmpty()) {
             return Collections.emptyList();
@@ -185,6 +199,69 @@ public class DataBuilder {
         }
         return constructs;
     }
+
+
+    private List<RecipeData> inflateRecipes(RecipeData data, DataResource rootResource) {
+        var recipes = new ArrayList<RecipeData>();
+
+        var rootIngredients = data.ingredients();
+        var templateIngredients = new ArrayList<List<IngredientData>>();
+        for (IngredientData ingredient : rootIngredients) {
+            if (ingredient.id().equals(THIS_IDENTIFIER)) {
+                templateIngredients.add(List.of(IngredientData.builder().id(rootResource.identifier()).unique(true).build()));
+            } else if (!ingredient.type().equals(EMPTY_IDENTIFIER)) {
+                if (ingredient.unique()) {
+                    var resources = tree.find(ingredient.type())
+                            .map(node -> node.getResources(DataResource.class))
+                            .map(List::stream)
+                            .map(Stream::toList)
+                            .orElse(Collections.emptyList());
+
+                    var ingredients = resources
+                            .stream()
+                            .map(res -> IngredientData.builder()
+                                    .id(res.identifier())
+                                    .unique(true)
+                                    .amount(ingredient.amount())
+                                    .build())
+                            .toList();
+
+                    templateIngredients.add(ingredients);
+                } else {
+                    var resource =
+                            tree.find(ingredient.type())
+                                    .map(node -> node.getResources(DataResource.class))
+                                    .map(element -> element.stream().filter(res -> res.resourceType() == DEFAULT)
+                                            .toList())
+                                    .orElse(Collections.emptyList());
+                    var ingredients = resource
+                            .stream()
+                            .map(res -> IngredientData.builder()
+                                    .id(res.identifier())
+                                    .amount(ingredient.amount())
+                                    .build())
+                            .toList();
+
+                    templateIngredients.add(ingredients);
+                }
+            }
+        }
+        for (int i = 0; i < templateIngredients.get(0).size(); i++) {
+            for (int j = 0; j < templateIngredients.get(1).size(); j++) {
+                var newComponents = new ArrayList<IngredientData>();
+                newComponents.add(templateIngredients.get(0).get(i));
+                newComponents.add(templateIngredients.get(1).get(j));
+                String name = String.join(ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
+                recipes.add(RecipeData.builder()
+                        .ingredients(newComponents)
+                        .craftingType(data.type())
+                        .target(rootResource.nameSpace() + ":" + name)
+                        .build());
+            }
+        }
+        return recipes;
+    }
+
 
     private boolean hasValidComponents(DataResource resource) {
         if (resource.construct().isEmpty()) {

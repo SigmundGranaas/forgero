@@ -9,8 +9,19 @@
   "construct": {
     "type": "SWORD",
     "target": "CREATE",
-    "recipe": {
-    },
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "type": "SWORD_BLADE"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
     "components": [
       {
         "type": "SWORD_BLADE"

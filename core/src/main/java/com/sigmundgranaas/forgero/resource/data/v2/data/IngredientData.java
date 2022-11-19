@@ -35,4 +35,8 @@ public class IngredientData {
         return Objects.requireNonNullElse(id, EMPTY_IDENTIFIER);
     }
 
+    public int amount() {
+        return Objects.requireNonNullElse(amount, 1);
+    }
+
 }

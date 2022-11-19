@@ -15,9 +15,9 @@ import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
-import com.sigmundgranaas.forgero.resource.data.v2.data.ConstructData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
+import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.SlotData;
 import com.sigmundgranaas.forgero.schematic.HeadSchematic;
 import com.sigmundgranaas.forgero.schematic.Schematic;
@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
@@ -184,9 +185,12 @@ public record RecipeCreatorImpl(
 
     private List<RecipeWrapper> createGemUpgradeRecipes(ForgeroToolPart toolPart) {
         return switch (toolPart.getToolPartType()) {
-            case HEAD -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case HANDLE -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
-            case BINDING -> gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HEAD ->
+                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HEAD)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case HANDLE ->
+                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.HANDLE)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
+            case BINDING ->
+                    gems.stream().filter(gem -> gem.getPlacement().contains(ForgeroToolPartTypes.BINDING)).map(gem -> createGemUpgradeRecipe(toolPart, gem)).collect(Collectors.toList());
         };
     }
 
@@ -237,23 +241,43 @@ public record RecipeCreatorImpl(
     }
 
     private List<RecipeWrapper> compositeRecipes() {
-        return ForgeroStateRegistry.CONSTRUCTS.stream().map(this::constructRecipes).flatMap(List::stream).toList();
+        List<RecipeWrapper> recipes = new ArrayList<>();
+        recipes.addAll(ForgeroStateRegistry.CONSTRUCTS.stream().map(this::upgradeRecipes).flatMap(List::stream).toList());
+        recipes.addAll(ForgeroStateRegistry.RECIPES.stream().map(this::createRecipes).flatMap(Optional::stream).toList());
+        return recipes;
     }
 
-    private List<RecipeWrapper> constructRecipes(DataResource res) {
+    private Optional<RecipeWrapper> createRecipes(RecipeData res) {
+        RecipeTypes type = RecipeTypes.valueOf(res.type());
+        if (type == RecipeTypes.SCHEMATIC_PART_CRAFTING) {
+            return Optional.of(schematicPartCrafting(res));
+        } else if (type == RecipeTypes.STATE_CRAFTING_RECIPE) {
+            return compositeRecipe(res);
+        }
+        return Optional.empty();
+    }
+
+    private List<RecipeWrapper> upgradeRecipes(DataResource res) {
         var recipes = new ArrayList<RecipeWrapper>();
-        var recipe = compositeRecipe(res.construct().get(), ForgeroStateRegistry.ID_MAPPER.get(res.identifier())).get();
-        recipes.add(recipe);
         recipes.addAll(res.construct().get().slots().stream().map(slot -> compositeUpgrade(slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier()))).flatMap(Optional::stream).toList());
         return recipes;
     }
 
-    private Optional<RecipeWrapper> compositeRecipe(ConstructData data, String target) {
+    private Optional<RecipeWrapper> compositeRecipe(RecipeData data) {
         JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.STATE_CRAFTING_RECIPE).toString()).getAsJsonObject();
-        template.getAsJsonObject("key").add("H", ingredientToEntry(data.components().get(0)));
-        template.getAsJsonObject("key").add("I", ingredientToEntry(data.components().get(1)));
-        template.getAsJsonObject("result").addProperty("item", target);
-        return Optional.of(new RecipeWrapperImpl(new Identifier(target), template, RecipeTypes.STATE_CRAFTING_RECIPE));
+        template.getAsJsonObject("key").add("H", ingredientToEntry(data.ingredients().get(0)));
+        template.getAsJsonObject("key").add("I", ingredientToEntry(data.ingredients().get(1)));
+        template.getAsJsonObject("result").addProperty("item", ForgeroStateRegistry.ID_MAPPER.get(data.target()));
+        return Optional.of(new RecipeWrapperImpl(new Identifier(ForgeroStateRegistry.ID_MAPPER.get(data.target())), template, RecipeTypes.STATE_CRAFTING_RECIPE));
+    }
+
+    private RecipeWrapper schematicPartCrafting(RecipeData data) {
+        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.SCHEMATIC_PART_CRAFTING).toString()).getAsJsonObject();
+        IntStream.range(0, data.ingredients().get(0).amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientToEntry(data.ingredients().get(0))));
+        IntStream.range(0, data.ingredients().get(1).amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientToEntry(data.ingredients().get(1))));
+
+        template.getAsJsonObject("result").addProperty("item", ForgeroStateRegistry.ID_MAPPER.get(data.target()));
+        return new RecipeWrapperImpl(new Identifier(ForgeroStateRegistry.ID_MAPPER.get(data.target())), template, RecipeTypes.SCHEMATIC_PART_CRAFTING);
     }
 
     private Optional<RecipeWrapper> compositeUpgrade(SlotData data, String target) {
