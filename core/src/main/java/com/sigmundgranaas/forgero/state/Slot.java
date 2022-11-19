@@ -15,13 +15,15 @@ public interface Slot extends PropertyContainer, Matchable {
 
     Optional<State> get();
 
+    Slot empty();
+
     Optional<Slot> fill(State slottable, Set<Category> categories);
 
     String identifier();
 
-   default Set<Category> category(){
-       return Collections.emptySet();
-   }
+    default Set<Category> category() {
+        return Collections.emptySet();
+    }
 
     String description();
 

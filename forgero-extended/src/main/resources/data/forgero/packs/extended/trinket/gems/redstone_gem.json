@@ -22,5 +22,8 @@
         "value": 1
       }
     ]
+  },
+  "palette": {
+    "name": "redstone-gem"
   }
 }

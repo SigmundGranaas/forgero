@@ -16,6 +16,13 @@
       "order": "60"
     },
     {
+      "name": "guard_gem",
+      "type": "GENERATE",
+      "palette": "TRINKET",
+      "template": "sword_guard_gem.png",
+      "order": 65
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "type:SWORD_GUARD_SCHEMATIC"
@@ -30,6 +37,22 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "kimiri_guard"
+    },
+    {
+      "target": [
+        "type:GEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "guard_gem"
+    },
+    {
+      "target": [
+        "type:TOTEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "guard_gem"
     }
   ]
 }

@@ -74,6 +74,11 @@ public class FilledSlot extends AbstractTypedSlot {
     }
 
     @Override
+    public Slot empty() {
+        return new EmptySlot(index(), type(), description(), categories);
+    }
+
+    @Override
     public Optional<Slot> fill(State slottable, Set<Category> categories) {
         return Optional.empty();
     }

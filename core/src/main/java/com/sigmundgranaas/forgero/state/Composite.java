@@ -151,6 +151,54 @@ public class Composite implements Upgradeable<Composite> {
         return ingredientList;
     }
 
+    public Composite removeUpgrade(String id) {
+        if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
+            var originalSlots = slots().stream().filter(slot -> !slot.filled() || (slot.get().isPresent() && !slot.get().get().identifier().contains(id))).toList();
+            var emptySlots = slots().stream().filter(slot -> (slot.get().isPresent() && slot.get().get().identifier().contains(id))).map(Slot::empty).toList();
+            return builder()
+                    .addIngredients(ingredients())
+                    .addUpgrades(originalSlots)
+                    .addUpgrades(emptySlots)
+                    .type(type())
+                    .id(identifier())
+                    .build();
+        } else {
+            for (int i = 0; i < ingredientList.size(); i++) {
+                if (ingredientList.get(i) instanceof Composite composite) {
+                    var compositeRemoved = composite.removeUpgrade(id);
+                    if (composite != compositeRemoved) {
+                        var ingredients = new ArrayList<>(ingredientList);
+                        ingredients.set(i, compositeRemoved);
+                        return builder()
+                                .addIngredients(ingredients)
+                                .addUpgrades(slots())
+                                .type(type())
+                                .id(identifier())
+                                .build();
+                    }
+                }
+            }
+            for (int i = 0; i < slots().size(); i++) {
+                var slot = slots().get(i);
+                if (slot.get().isPresent() && slot.get().get() instanceof Composite composite) {
+                    var compositeRemoved = composite.removeUpgrade(id);
+                    if (composite != compositeRemoved) {
+                        var slots = new ArrayList<>(slots());
+                        slots.set(i, slot.empty().fill(compositeRemoved, slot.category()).orElse(slot.empty()));
+                        return builder()
+                                .addIngredients(ingredients())
+                                .addUpgrades(slots)
+                                .type(type())
+                                .id(identifier())
+                                .build();
+                    }
+                }
+            }
+
+        }
+        return this;
+    }
+
     @Override
     public Composite upgrade(State upgrade) {
         return builder()

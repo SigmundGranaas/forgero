@@ -44,5 +44,12 @@ public class StateWriter implements Writer {
         if (this.state instanceof Composite composite) {
             new CompositeWriter(composite).write(tooltip, context);
         }
+        writePassives(tooltip, context);
+    }
+
+    private void writePassives(List<Text> tooltip, TooltipContext context) {
+        var writer = new PassiveWriter();
+        state.stream().getPassiveProperties().forEach(writer::addPassive);
+        writer.write(tooltip, context);
     }
 }
