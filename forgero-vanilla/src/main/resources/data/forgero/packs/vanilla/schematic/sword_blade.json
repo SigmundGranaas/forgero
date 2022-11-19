@@ -9,9 +9,21 @@
   "construct": {
     "type": "SWORD_BLADE",
     "target": "CREATE",
-    "recipe": {
-      "craftingType": "SHAPELESS"
-    },
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 3
+          }
+        ]
+      }
+    ],
     "components": [
       {
         "id": "this"
@@ -84,10 +96,8 @@
         "operation": "ADDITION",
         "value": -2.8
       }
+    ],
+    "passive": [
     ]
-  },
-  "model": {
-    "type": "LAYERED",
-    "id": "this"
   }
 }

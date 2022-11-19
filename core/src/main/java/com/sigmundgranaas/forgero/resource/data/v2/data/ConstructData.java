@@ -15,7 +15,7 @@ import static com.sigmundgranaas.forgero.util.Identifiers.THIS_IDENTIFIER;
 @Builder(toBuilder = true)
 public class ConstructData {
     @Nullable
-    private final RecipeData recipe;
+    private final List<RecipeData> recipes;
 
     @Nullable
     @Builder.Default

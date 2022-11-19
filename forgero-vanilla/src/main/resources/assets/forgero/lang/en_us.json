@@ -1,3 +1,9 @@
 {
-  "item.forgero.passives": "Passives"
+  "item.forgero.passives": "Passives",
+  "item.forgero.soul_reaping": "Soul Reaping",
+  "item.forgero.string": "String",
+  "item.forgero.vine": "Vines",
+  "item.forgero.twisting_vines": "Twisting Vines",
+  "item.forgero.weeping_vines": "Weeping Vines",
+  "item.forgero.secondary_material": "Soft Material"
 }

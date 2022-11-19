@@ -11,6 +11,7 @@
     "ItemStackDropGemOnBreakMixin",
     "ItemUUIDMixin",
     "LivingEntityMagneticMixin",
+    "LivingEntityReapingMixin",
     "LivingEntityUndyingMixin",
     "MiningToolItemMixin",
     "PiglinBrainMixin",

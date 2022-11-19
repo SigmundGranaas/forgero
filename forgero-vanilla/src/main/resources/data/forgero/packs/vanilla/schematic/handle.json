@@ -8,8 +8,21 @@
   "construct": {
     "type": "HANDLE",
     "target": "CREATE",
-    "recipe": {
-    },
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
     "components": [
       {
         "id": "this"
@@ -25,7 +38,8 @@
         "category": [
           "UTILITY"
         ],
-        "type": "LEATHER",
+        "type": "SECONDARY_MATERIAL",
+        "description": "grip",
         "tier": 1
       }
     ]

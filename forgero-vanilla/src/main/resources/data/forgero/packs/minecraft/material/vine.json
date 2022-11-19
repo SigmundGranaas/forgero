@@ -1,9 +1,9 @@
 {
-  "type": "LEATHER",
-  "name": "leather",
+  "type": "PLANT",
+  "name": "vines",
   "container": {
     "type": "HOST",
-    "id": "minecraft:leather"
+    "id": "minecraft:vine"
   },
   "properties": {
     "attributes": [
@@ -11,21 +11,21 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 20
+        "value": 5
       },
       {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 10
+        "value": 5
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
-        "value": 150
+        "value": 50
       },
       {
         "type": "ATTACK_SPEED",
@@ -39,11 +39,11 @@
         "order": "BASE",
         "operation": "MULTIPLICATION",
         "category": "OFFENSIVE",
-        "value": 0.9
+        "value": 0.4
       }
     ]
   },
   "palette": {
-    "name": "leather"
+    "name": "string"
   }
 }

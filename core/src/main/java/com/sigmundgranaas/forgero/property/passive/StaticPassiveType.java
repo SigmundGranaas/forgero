@@ -3,5 +3,5 @@ package com.sigmundgranaas.forgero.property.passive;
 public enum StaticPassiveType {
     GOLDEN,
     FIREPROOF,
-    UNDYING,
+    UNDYING, SOUL_REAPING,
 }
