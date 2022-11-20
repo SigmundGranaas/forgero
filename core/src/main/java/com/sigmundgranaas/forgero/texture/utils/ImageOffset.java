@@ -17,7 +17,7 @@ public class ImageOffset {
                 var currentPixel = new Offset(i, j);
                 var newPixel = currentPixel.apply(offset);
                 if (newPixel.x() >= 0 && newPixel.x() < input.getWidth() && newPixel.y() >= 0 && newPixel.y() < input.getHeight()) {
-                    newImage.setRGB(i, j, input.getRGB(newPixel.x(), newPixel.y()));
+                    newImage.setRGB(i, j, input.getRGB((int) newPixel.x(), (int) newPixel.y()));
                 } else {
                     newImage.setRGB(i, j, transparent);
                 }

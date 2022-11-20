@@ -33,7 +33,11 @@ public class TextureService {
             return Optional.of(templateCache.get(name));
         }
         var templateOpt = loader.load(TEMPLATE_PATH + name);
-        templateOpt.ifPresent(template -> templateCache.put(name, new TemplateTexture(template, new DefaultRecolorStrategy())));
-        return templateOpt.map(templateTexture -> new TemplateTexture(templateTexture, new DefaultRecolorStrategy()));
+        if (templateOpt.isPresent()) {
+            var texture = new TemplateTexture(templateOpt.get(), new DefaultRecolorStrategy());
+            templateCache.put(name, texture);
+            return Optional.of(texture);
+        }
+        return Optional.empty();
     }
 }

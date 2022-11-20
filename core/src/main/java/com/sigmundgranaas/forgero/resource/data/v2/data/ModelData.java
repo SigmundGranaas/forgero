@@ -34,7 +34,7 @@ public class ModelData {
     private List<ModelEntryData> variants = Collections.emptyList();
     @Builder.Default
     @Nullable
-    private List<Integer> offset = Collections.emptyList();
+    private List<Float> offset = Collections.emptyList();
     @Builder.Default
     @Nullable
     private String palette = EMPTY_IDENTIFIER;
@@ -68,7 +68,7 @@ public class ModelData {
 
     }
 
-    public List<Integer> getOffset() {
+    public List<Float> getOffset() {
         return Objects.requireNonNullElse(offset, Collections.emptyList());
 
     }

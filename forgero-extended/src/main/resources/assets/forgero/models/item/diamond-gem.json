@@ -1,0 +1,15 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forgero:item/gem_base",
+    "layer1": "forgero:item/diamond_gem_animated"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "forgero:item/diamond-gem_upgraded"
+    }
+  ]
+}

@@ -82,7 +82,7 @@ public class Unbaked2DTexturedModel implements UnbakedFabricModel {
     private void applyOffset(ModelElement element) {
         for (ModelElementFace face : element.faces.values()) {
             var offset = offsetMap.getOrDefault(face.textureId, new Offset(0, 0));
-            if (offset.x() != 0 && offset.y() != 0) {
+            if (offset.x() != 0 || offset.y() != 0) {
                 element.from.add((float) offset.x(), (float) offset.y(), 0.001f);
                 element.to.add((float) offset.x(), (float) offset.y(), 0.001f);
             }

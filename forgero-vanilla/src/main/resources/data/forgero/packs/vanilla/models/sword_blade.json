@@ -26,7 +26,7 @@
           "target": [
             "model:saber_blade.png"
           ],
-          "template": "saber_blade_grip.png"
+          "template": "saber_blade_tip_reinforcement.png"
         }
       ]
     },
@@ -45,7 +45,7 @@
           "target": [
             "model:saber_blade.png"
           ],
-          "template": "saber_blade_tip_reinforcement.png"
+          "template": "saber_blade_grip.png"
         }
       ]
     },

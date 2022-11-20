@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.state;
 
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
+import com.sigmundgranaas.forgero.state.customvalue.CustomValue;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
@@ -9,6 +10,7 @@ import com.sigmundgranaas.forgero.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object> {
     static State of(Composite composite) {
@@ -54,5 +56,13 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
         } else {
             return 0;
         }
+    }
+
+    default boolean hasCustomValue(String identifier) {
+        return false;
+    }
+
+    default Optional<CustomValue> getCustomValue(String identifier) {
+        return Optional.empty();
     }
 }

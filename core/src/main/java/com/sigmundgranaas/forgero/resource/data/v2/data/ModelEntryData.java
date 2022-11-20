@@ -16,12 +16,13 @@ public class ModelEntryData {
     private String template;
     @Builder.Default
     @Nullable
-    private List<Integer> offset = Collections.emptyList();
+    private List<Float> offset = Collections.emptyList();
 
-    public List<Integer> getOffset() {
+    public List<Float> getOffset() {
         return Objects.requireNonNullElse(offset, Collections.emptyList());
 
     }
+
     @NotNull
     public List<String> getTarget() {
         return target;

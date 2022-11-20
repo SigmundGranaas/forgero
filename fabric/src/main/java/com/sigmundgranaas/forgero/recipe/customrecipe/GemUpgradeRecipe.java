@@ -54,7 +54,9 @@ public class GemUpgradeRecipe extends SmithingRecipe {
         if (base.isPresent()) {
             var newBase = base.get().levelUp();
             var nbt = ENCODER.encode(newBase);
+
             output.getOrCreateNbt().put(FORGERO_IDENTIFIER, nbt);
+            output.getOrCreateNbt().putInt("CustomModelData", newBase.level());
         }
         return output;
     }

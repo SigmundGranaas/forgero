@@ -6,21 +6,28 @@
       "template": "sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": "60"
+      "order": 60
     },
     {
       "name": "kimiri_guard",
       "template": "kimiri_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": "60"
+      "order": 60
     },
     {
       "name": "guard_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
       "template": "sword_guard_gem.png",
-      "order": 65
+      "order": 66
+    },
+    {
+      "name": "sword_guard_reinforcement",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "sword_guard_reinforcement.png",
+      "order": 62
     },
     {
       "target": [
@@ -37,6 +44,14 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "kimiri_guard"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "sword_guard_reinforcement"
     },
     {
       "target": [

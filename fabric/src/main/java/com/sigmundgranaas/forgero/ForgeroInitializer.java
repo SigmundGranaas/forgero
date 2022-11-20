@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero;
 import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
+import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.registry.CustomItemRegistry;
 import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
@@ -14,6 +15,7 @@ import com.sigmundgranaas.forgero.resources.ModContainerService;
 import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ReloadableResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ResourceManagerStreamProvider;
+import com.sigmundgranaas.forgero.state.State;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -24,6 +26,11 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -57,9 +64,13 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void register() {
+        var sortingMap = new HashMap<String, Integer>();
+
+        ForgeroStateRegistry.STATES.all().forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
+
         ForgeroStateRegistry.STATES.all().stream()
                 .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
-                .sorted()
+                .sorted((element1, element2) -> compareStates(element1, element2, sortingMap))
                 .forEach(state -> {
                     try {
                         var converter = StateToItemConverter.of(state);
@@ -71,6 +82,38 @@ public class ForgeroInitializer implements ModInitializer {
                         LOGGER.error(e);
                     }
                 });
+    }
+
+    private int getOrderingFromState(Map<String, Integer> map, State state) {
+        var name = materialName(state);
+        int rarity = (int) state.stream().applyAttribute(AttributeType.RARITY);
+        return map.getOrDefault(name, rarity);
+    }
+
+    private String materialName(State state) {
+        var elements = state.name().split(ELEMENT_SEPARATOR);
+        if (elements.length > 1) {
+            return elements[0];
+        } else {
+            return state.name();
+        }
+    }
+
+    private int compareStates(State element1, State element2, Map<String, Integer> map) {
+        int elementOrdering = getOrderingFromState(map, element1) - getOrderingFromState(map, element2);
+        int nameOrdering = materialName(element1).compareTo(materialName(element2));
+
+        if (elementOrdering != 0) {
+            return elementOrdering;
+        } else if (nameOrdering != 0) {
+            return nameOrdering;
+        } else {
+            return rarity(element1) - rarity(element2);
+        }
+    }
+
+    private int rarity(State state) {
+        return (int) state.stream().applyAttribute(AttributeType.RARITY);
     }
 
     private void registerRecipes() {

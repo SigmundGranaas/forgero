@@ -48,7 +48,7 @@
           "OFFENSIVE"
         ],
         "description": "scabbard",
-        "type": "MATERIAL",
+        "type": "SECONDARY_MATERIAL",
         "tier": 1
       }
     ]
