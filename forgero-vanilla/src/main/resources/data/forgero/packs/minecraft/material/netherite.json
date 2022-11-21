@@ -45,12 +45,6 @@
         "value": 2100.0
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      },
-      {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
@@ -65,6 +59,7 @@
         "value": 1000
       },
       {
+        "id": "netherite-attack-speed-base",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",

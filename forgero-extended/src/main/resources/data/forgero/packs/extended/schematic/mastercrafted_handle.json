@@ -67,8 +67,8 @@
       {
         "type": "RARITY",
         "order": "BASE",
-        "operation": "ADDITION",
         "category": "LOCAL",
+        "operation": "ADDITION",
         "value": 30
       },
       {

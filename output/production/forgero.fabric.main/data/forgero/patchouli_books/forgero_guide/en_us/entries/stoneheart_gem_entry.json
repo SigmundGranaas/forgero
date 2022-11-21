@@ -1,0 +1,22 @@
+{
+  "name": "Stoneheart Gem",
+  "icon": "forgero:stoneheart-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The stoneheart gem increases mining speed against stones"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Stoneheart gem, level 8",
+      "item": "forgero:stoneheart-gem{Gem:'8-stoneheart-gem', CustomModelData:8}",
+      "text": "A stoneheart gem upgraded to level 8"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a stoneheart gem",
+      "recipe": "forgero:stoneheart_gem"
+    }
+  ]
+}

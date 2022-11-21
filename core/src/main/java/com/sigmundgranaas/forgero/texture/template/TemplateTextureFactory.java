@@ -38,7 +38,7 @@ public class TemplateTextureFactory {
 
         List<RgbColour> greyScaleValues = greyScaleValueSet.stream().toList();
         greyScaleValues = greyScaleValues.stream().sorted().collect(Collectors.toList());
-        return new TemplateTexture(pixelValues, greyScaleValues, id);
+        return new TemplateTexture(pixelValues, greyScaleValues, id, templateImage.getWidth(), templateImage.getHeight());
     }
 
     /**

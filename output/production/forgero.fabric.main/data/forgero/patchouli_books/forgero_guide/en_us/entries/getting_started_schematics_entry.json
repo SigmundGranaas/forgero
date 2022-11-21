@@ -1,0 +1,22 @@
+{
+  "name": "Finding a schematic",
+  "icon": "forgero:pickaxe-schematic",
+  "category": "forgero:getting_started_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Schematics are the most important factor when creating tool parts. They decide the primary functionality of the tool part. Schematics will decide which type of tool it is, as well as how it looks. Different schematics can create different looking tools. Schematics can vary both in attributes, functionality and looks! The schematics with better attributes will be more rare, and harder to come by."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Looting",
+      "text": "Only the basic schematics can be crafted from existing tools. If you want to better schematics, you have to head out into the world and explore. Schematics have different rarity, and will appear in different loot chest depending on their rarity"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Vein Mining Axe head",
+      "item": "forgero:vein_axe-schematic",
+      "text": "Schematics will decide the base stats, look and functionality of your tools. Hmmm, I wonder what this schematic will let me do?"
+    }
+  ]
+}

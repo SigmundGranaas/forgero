@@ -1,0 +1,76 @@
+{
+  "parent": "forgero:forgero/schematic",
+  "display": {
+    "icon": {
+      "item": "forgero:shovel-schematic"
+    },
+    "title": {
+      "translate": "advancements.forgero.schematic_vein.title"
+    },
+    "description": {
+      "translate": "advancements.forgero.schematic_vein.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "default_axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:vein_axe-schematic"
+            ]
+          }
+        ]
+      }
+    },
+    "default_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:vein_pickaxe-schematic"
+            ]
+          }
+        ]
+      }
+    },
+    "default_shovel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:vein_shovel-schematic"
+            ]
+          }
+        ]
+      }
+    },
+    "default_hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:vein_hoe-schematic"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "default_hoe",
+      "default_shovel",
+      "default_pickaxe",
+      "default_axe"
+    ]
+  ]
+}

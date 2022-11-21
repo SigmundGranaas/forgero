@@ -48,12 +48,6 @@
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
         "value": -2.5,
         "condition": {
           "target": "TYPE",

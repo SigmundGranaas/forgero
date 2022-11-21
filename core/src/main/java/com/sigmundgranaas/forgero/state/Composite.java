@@ -86,6 +86,7 @@ public class Composite implements Upgradeable<Composite> {
                 .flatMap(List::stream)
                 .map(prop -> prop.applyProperty(target))
                 .flatMap(List::stream)
+                .filter(prop -> !(prop instanceof Attribute attribute && attribute.getCategory() == Category.LOCAL))
                 .collect(Collectors.toList());
 
         var upgradeProps = ingredients()
@@ -120,11 +121,11 @@ public class Composite implements Upgradeable<Composite> {
 
     private boolean filterAttribute(Property property) {
         if (property instanceof Attribute attribute) {
-            if (attribute.getCategory() == Category.COMPOSITE || attribute.getCategory() == Category.ALL) {
-                return false;
+            if (attribute.getCategory() != Category.COMPOSITE && attribute.getCategory() != Category.ALL) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override

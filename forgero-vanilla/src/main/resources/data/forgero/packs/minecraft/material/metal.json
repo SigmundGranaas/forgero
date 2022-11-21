@@ -39,6 +39,7 @@
         }
       },
       {
+        "id": "metal-attack-speed-base",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",

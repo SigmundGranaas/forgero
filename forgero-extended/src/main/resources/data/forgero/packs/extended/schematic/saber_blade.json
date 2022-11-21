@@ -58,6 +58,7 @@
       {
         "type": "RARITY",
         "order": "BASE",
+        "category": "LOCAL",
         "operation": "ADDITION",
         "value": 32
       },
@@ -86,9 +87,5 @@
         "value": -2.6
       }
     ]
-  },
-  "model": {
-    "type": "LAYERED",
-    "id": "this"
   }
 }

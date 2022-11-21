@@ -17,7 +17,7 @@ public class JsonToolLoader {
         DataResource pickaxe = JSON_PICKAXE.get();
         Assertions.assertEquals(pickaxe.type(), "PICKAXE");
         Assertions.assertNotNull(pickaxe.construct());
-        Assertions.assertNotNull(pickaxe.construct().get().recipe().get());
+        Assertions.assertNotNull(pickaxe.construct().get().recipes().get());
         Assertions.assertNotNull(pickaxe.construct().get().slots());
     }
 
@@ -32,6 +32,6 @@ public class JsonToolLoader {
     @Test
     void recipeEntries() {
         DataResource pickaxe = JSON_PICKAXE.get();
-        Assertions.assertEquals(pickaxe.construct().get().recipe().get().ingredients().size(), 2);
+        Assertions.assertEquals(pickaxe.construct().get().recipes().get().get(0).ingredients().size(), 2);
     }
 }

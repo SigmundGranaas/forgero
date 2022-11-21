@@ -23,56 +23,23 @@
       ]
     },
     {
-      "name": "dense_handle",
-      "template": "dense_handle.png",
-      "modelType": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": 10,
-      "variants": [
-        {
-          "target": [
-            "type:AXE"
-          ],
-          "template": "medium_dense_handle.png"
-        },
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "template": "short_dense_handle.png"
-        }
-      ]
-    },
-    {
       "name": "grip",
       "type": "GENERATE",
       "palette": "MATERIAL",
-      "template": "handle_material.png",
+      "template": "handle_grip.png",
       "order": 11,
       "variants": [
         {
           "target": [
             "model:short_handle.png"
           ],
-          "template": "short_handle_material.png"
+          "template": "short_handle_grip.png"
         },
         {
           "target": [
             "model:medium_handle.png"
           ],
-          "template": "medium_handle_material.png"
-        },
-        {
-          "target": [
-            "model:short_dense_handle.png"
-          ],
-          "template": "short_dense_handle_material.png"
-        },
-        {
-          "target": [
-            "model:medium_dense_handle.png"
-          ],
-          "template": "medium_dense_handle_material.png"
+          "template": "medium_handle_grip.png"
         }
       ]
     },

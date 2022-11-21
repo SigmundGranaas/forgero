@@ -16,6 +16,7 @@ import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ReloadableResourceLoader;
 import com.sigmundgranaas.forgero.resources.loader.ResourceManagerStreamProvider;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -66,7 +67,7 @@ public class ForgeroInitializer implements ModInitializer {
     private void register() {
         var sortingMap = new HashMap<String, Integer>();
 
-        ForgeroStateRegistry.STATES.all().forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
+        ForgeroStateRegistry.STATES.all().stream().filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
 
         ForgeroStateRegistry.STATES.all().stream()
                 .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
@@ -100,6 +101,8 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private int compareStates(State element1, State element2, Map<String, Integer> map) {
+
+
         int elementOrdering = getOrderingFromState(map, element1) - getOrderingFromState(map, element2);
         int nameOrdering = materialName(element1).compareTo(materialName(element2));
 

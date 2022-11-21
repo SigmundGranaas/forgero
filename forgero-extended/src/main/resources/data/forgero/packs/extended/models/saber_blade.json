@@ -10,20 +10,24 @@
     },
     {
       "name": "sword_blade_material",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "sword_blade_material.png",
-      "order": 56
+      "variants": [
+        {
+          "target": [
+            "model:saber_blade.png"
+          ],
+          "template": "saber_blade_tip_reinforcement.png"
+        }
+      ]
     },
     {
       "name": "sword_blade_guard",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "sword_blade_guard.png",
-      "order": 55,
-      "offset": [
-        -2,
-        -2
+      "variants": [
+        {
+          "target": [
+            "model:saber_blade.png"
+          ],
+          "template": "saber_blade_grip.png"
+        }
       ]
     },
     {
@@ -33,22 +37,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "saber_blade"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "sword_blade_material"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "sword_blade_guard"
     }
   ]
 }

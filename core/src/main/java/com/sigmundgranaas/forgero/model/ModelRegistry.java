@@ -3,34 +3,40 @@ package com.sigmundgranaas.forgero.model;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.resource.ResourceListener;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.resource.data.v2.data.ModelData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.PaletteData;
 import com.sigmundgranaas.forgero.state.Identifiable;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
 import com.sigmundgranaas.forgero.util.match.Context;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.sigmundgranaas.forgero.resource.data.v2.data.ResourceType.MODEL;
 
 public class ModelRegistry {
     private final HashMap<String, ModelMatcher> modelMap;
     private final Map<String, PaletteTemplateModel> textures;
+
+    private final HashMap<String, ArrayList<ModelData>> delayedModels;
+
+    private final HashMap<String, ModelData> generationModels;
     private TypeTree tree;
 
     public ModelRegistry(TypeTree tree) {
         this.tree = tree;
         this.modelMap = new HashMap<>();
         this.textures = new HashMap<>();
+        this.delayedModels = new HashMap<>();
+        this.generationModels = new HashMap<>();
     }
 
     public ModelRegistry() {
         this.tree = new TypeTree();
         this.modelMap = new HashMap<>();
         this.textures = new HashMap<>();
+        this.delayedModels = new HashMap<>();
+        this.generationModels = new HashMap<>();
     }
 
     public ResourceListener<List<DataResource>> modelListener() {
@@ -51,7 +57,7 @@ public class ModelRegistry {
     }
 
     public ModelRegistry register(DataResource data) {
-        var converter = new ModelConverter(tree, modelMap, textures);
+        var converter = new ModelConverter(tree, modelMap, textures, delayedModels, generationModels);
         converter.register(data);
         return this;
     }

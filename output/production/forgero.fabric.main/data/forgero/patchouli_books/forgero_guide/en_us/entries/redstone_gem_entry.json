@@ -1,0 +1,22 @@
+{
+  "name": "Redstone Gem",
+  "icon": "forgero:redstone-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A redstone gem increases attack damage by one. Can be applied to tool part heads."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Redstone gem, level 8",
+      "item": "forgero:redstone-gem{Gem:'8-redstone-gem', CustomModelData:8}",
+      "text": "A redstone gem upgraded to level 8"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a redstone gem",
+      "recipe": "forgero:redstone_gem"
+    }
+  ]
+}

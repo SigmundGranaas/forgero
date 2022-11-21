@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.client;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.client.forgerotool.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
 import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
@@ -15,6 +16,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +24,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
@@ -32,6 +36,9 @@ public class ForgeroClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         initializeItemModels();
+
+        HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
+
     }
 
     private void initializeItemModels() {

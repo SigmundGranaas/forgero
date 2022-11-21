@@ -1,0 +1,73 @@
+{
+  "type": "METAL",
+  "parent": "metal",
+  "name": "copper",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:copper_ingot"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 200
+      },
+      {
+        "id": "iron-base-attack",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.7
+      },
+      {
+        "id": "iron-base-attack",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.4,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -2,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "copper"
+  }
+}

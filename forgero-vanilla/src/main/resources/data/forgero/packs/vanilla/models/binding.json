@@ -28,7 +28,7 @@
     },
     {
       "name": "spiked_binding",
-      "template": "spiked_pickaxe_binding.png",
+      "template": "spiked_binding.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": "60",
@@ -37,13 +37,13 @@
           "target": [
             "type:AXE"
           ],
-          "template": "spiked_pickaxe_binding.png"
+          "template": "spiked_binding.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "spiked_pickaxe_binding.png"
+          "template": "spiked_binding.png"
         }
       ]
     },
@@ -51,8 +51,8 @@
       "name": "binding_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "binding_gem.png",
-      "order": 45,
+      "template": "square_gem_center.png",
+      "order": 66,
       "variants": [
         {
           "target": [
@@ -65,7 +65,7 @@
         },
         {
           "target": [
-            "model:spiked_pickaxe_binding.png"
+            "model:spiked_binding.png"
           ],
           "offset": [
             2,

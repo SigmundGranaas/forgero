@@ -22,11 +22,15 @@ public class TemplateTexture implements Texture {
     private final List<PixelInformation> pixelValues;
     private final List<RgbColour> greyScaleValues;
     private final TemplateTextureIdentifier id;
+    private final int height;
+    private final int width;
 
-    public TemplateTexture(ArrayList<PixelInformation> pixelValues, List<RgbColour> greyScaleValues, TemplateTextureIdentifier id) {
+    public TemplateTexture(ArrayList<PixelInformation> pixelValues, List<RgbColour> greyScaleValues, TemplateTextureIdentifier id, int height, int width) {
         this.pixelValues = pixelValues;
         this.greyScaleValues = greyScaleValues;
         this.id = id;
+        this.height = height;
+        this.width = width;
     }
 
 
@@ -54,7 +58,7 @@ public class TemplateTexture implements Texture {
 
     @Override
     public BufferedImage getImage() {
-        BufferedImage paletteImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage paletteImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         for (PixelInformation pixel : pixelValues) {
             paletteImage.setRGB(pixel.getLengthIndex(), pixel.getHeightIndex(), pixel.getRgbColor().getRgb());
         }

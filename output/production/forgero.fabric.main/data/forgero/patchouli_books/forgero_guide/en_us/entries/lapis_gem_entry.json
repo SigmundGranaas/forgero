@@ -1,0 +1,22 @@
+{
+  "name": "Lapis Gem",
+  "icon": "forgero:lapis-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The lapis gem increases your mining speed by 1 per level. This gem can be applied to Heads and handles."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Lapis gem, level 8",
+      "item": "forgero:lapis-gem{Gem:'8-lapis-gem', CustomModelData:8}",
+      "text": "A lapiz gem upgraded to level 8"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a lapis gem",
+      "recipe": "forgero:lapis_gem"
+    }
+  ]
+}

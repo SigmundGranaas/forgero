@@ -9,6 +9,13 @@
       "order": 20
     },
     {
+      "name": "axe_head_gem",
+      "modelType": "GENERATE",
+      "template": "axe_head_gem.png",
+      "palette": "TRINKET",
+      "order": 90
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "type:AXE_HEAD_SCHEMATIC"
@@ -16,13 +23,6 @@
       "modelType": "BASED_COMPOSITE",
       "template": "axe_head",
       "order": 20
-    },
-    {
-      "name": "axe_head_gem",
-      "modelType": "GENERATE",
-      "template": "axe_head_gem.png",
-      "palette": "TRINKET",
-      "order": 90
     },
     {
       "target": [

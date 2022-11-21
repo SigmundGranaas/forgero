@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "forgero:block/assembly_station"
+    }
+  }
+}

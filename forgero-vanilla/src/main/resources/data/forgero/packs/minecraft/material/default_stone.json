@@ -1,6 +1,5 @@
 {
   "type": "STONE",
-  "parent": "metal",
   "resource_type": "ABSTRACT",
   "name": "default_stone",
   "properties": {

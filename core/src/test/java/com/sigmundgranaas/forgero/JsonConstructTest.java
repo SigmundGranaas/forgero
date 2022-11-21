@@ -17,7 +17,7 @@ public class JsonConstructTest {
     @Test
     void testLoadJsonConstruct() {
         ConstructData construct = JSON_CONSTRUCT.get();
-        assertNotNull(construct.recipe().get());
+        assertNotNull(construct.recipes().get());
         assertNotNull(construct.slots());
         assertNotNull(construct.target());
     }

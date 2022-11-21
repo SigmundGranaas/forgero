@@ -62,9 +62,5 @@
         "value": 0.1
       }
     ]
-  },
-  "model": {
-    "type": "LAYERED",
-    "id": "this"
   }
 }

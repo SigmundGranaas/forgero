@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.model;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
@@ -8,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class MatchedModelEntry implements ModelMatcher {
-    List<ModelMatchPairing> models;
-    String id;
+    private List<ModelMatchPairing> models;
+    private String id;
 
     public MatchedModelEntry(List<ModelMatchPairing> models, String id) {
         this.models = models;
@@ -32,6 +33,10 @@ public class MatchedModelEntry implements ModelMatcher {
                 .filter(Optional::isPresent)
                 .flatMap(Optional::stream)
                 .findFirst();
+    }
+
+    public void add(List<ModelMatchPairing> models) {
+        this.models = ImmutableList.<ModelMatchPairing>builder().addAll(this.models).addAll(models).build();
     }
 
     @Override

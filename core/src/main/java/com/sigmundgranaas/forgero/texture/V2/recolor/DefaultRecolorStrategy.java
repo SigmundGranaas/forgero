@@ -17,7 +17,7 @@ public class DefaultRecolorStrategy implements RecolorStrategy {
         List<RgbColour> paletteValues = createUsableColourPalette(template, palette);
         assert greyScaleSize >= 2 && paletteSize >= 2;
 
-        BufferedImage recolouredImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage recolouredImage = new BufferedImage(template.getImage().getWidth(), template.getImage().getHeight(), BufferedImage.TYPE_INT_ARGB);
         for (PixelInformation pixel : template.getPixelValues()) {
             recolouredImage.setRGB(pixel.getLengthIndex(), pixel.getHeightIndex(), paletteValues.get(findIntPosition(pixel.getRgbColor(), template.getGreyScaleValues())).getRgb());
         }
