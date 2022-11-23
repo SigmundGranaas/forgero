@@ -1,6 +1,7 @@
 {
   "type": "AXE_HEAD_SCHEMATIC",
   "name": "axe_head-schematic",
+  "parent": "tool_part_head_schematic",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -69,12 +70,6 @@
       },
       {
         "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1

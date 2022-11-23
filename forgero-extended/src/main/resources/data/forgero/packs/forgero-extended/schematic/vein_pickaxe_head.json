@@ -1,6 +1,7 @@
 {
   "type": "PICKAXE_HEAD_SCHEMATIC",
   "name": "vein_pickaxe_head-schematic",
+  "parent": "tool_part_head_schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -61,6 +62,7 @@
         "value": 10
       },
       {
+        "id": "schematic_base_rarity_multiplication",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",

@@ -13,10 +13,7 @@ import com.sigmundgranaas.forgero.util.match.Matchable;
 import com.sigmundgranaas.forgero.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -203,6 +200,28 @@ public class Composite implements Upgradeable<Composite> {
 
         }
         return this;
+    }
+
+    public Optional<State> has(String id) {
+        if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
+            return upgrades().stream().filter(state -> state.identifier().contains(id)).findAny();
+        } else {
+            for (State ingredient : ingredientList) {
+                if (ingredient.identifier().contains(id)) {
+                    return Optional.of(ingredient);
+                } else if (ingredient instanceof Composite composite) {
+                    if (composite.has(id).isPresent()) {
+                        return composite.has(id);
+                    }
+
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public List<State> disassemble() {
+        return Stream.of(ingredients(), upgrades()).flatMap(List::stream).filter(state -> !state.name().contains("schematic")).toList();
     }
 
     @Override

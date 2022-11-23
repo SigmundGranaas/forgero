@@ -1,43 +1,53 @@
 package com.sigmundgranaas.forgero.block.assemblystation;
 
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import com.sigmundgranaas.forgero.conversion.StateConverter;
+import com.sigmundgranaas.forgero.state.Composite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.registry.Registry;
 
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.ASSEMBLY_STATION;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
-    public static final ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER;
+
+    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER;
 
     static {
 
         //We use registerSimple here because our Entity is not an ExtendedScreenHandlerFactory
         //but a NamedScreenHandlerFactory.
         //In a later Tutorial you will see what ExtendedScreenHandlerFactory can do!
-        ASSEMBLY_STATION_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(ASSEMBLY_STATION, AssemblyStationScreenHandler::new);
+        ASSEMBLY_STATION_SCREEN_HANDLER = Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, new ScreenHandlerType<>(AssemblyStationScreenHandler::new));
     }
 
-    private final Inventory inventory;
+    private final SimpleInventory inventory;
+    private final ScreenHandlerContext context;
+    private final PlayerEntity player;
 
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
     public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(9));
+        this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
     }
 
     //This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
     //and can therefore directly provide it as an argument. This inventory will then be synced to the client.
-    public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
+    public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 9);
-        this.inventory = inventory;
+        this.player = playerInventory.player;
+        this.context = context;
+        this.inventory = new SimpleInventory(7);
+        inventory.addListener(this::onContentChanged);
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player);
 
@@ -45,12 +55,20 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         //This will not render the background of the slots however, this is the Screens job
         int m;
         int l;
+
+        this.addSlot(new Slot(inventory, 0, 62 + 18, 17 + 18));
+
         //Our inventory
         for (m = 0; m < 3; ++m) {
-            for (l = 0; l < 3; ++l) {
-                this.addSlot(new Slot(inventory, l + m * 3, 62 + l * 18, 17 + m * 18));
-            }
+            this.addSlot(new Slot(inventory, m + 1, 62 + m * 18, 17));
         }
+
+
+        for (m = 0; m < 3; ++m) {
+            this.addSlot(new Slot(inventory, m + 4, 62 + m * 18, 17 + 2 * 18));
+        }
+
+
         //The player inventory
         for (m = 0; m < 3; ++m) {
             for (l = 0; l < 9; ++l) {
@@ -94,4 +112,41 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
         return newStack;
     }
+
+    @Override
+    public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
+        return true;
+    }
+
+    @Override
+    public void onContentChanged(Inventory inventory) {
+        if (!inventory.getStack(0).isEmpty() && inventory.getStack(0).getDamage() == 0) {
+            ItemStack empty = ItemStack.EMPTY;
+            var state = StateConverter.of(inventory.getStack(0));
+            this.context.run((world, pos) -> {
+                if (!world.isClient) {
+                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+                    if (state.isPresent() && state.get() instanceof Composite composite) {
+                        var elements = composite.disassemble();
+                        inventory.setStack(0, empty);
+                        setPreviousTrackedSlot(0, empty);
+                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
+
+                        for (int i = 1; i < elements.size() + 1; i++) {
+                            var element = elements.get(i - 1);
+                            var newStack = StateConverter.of(element);
+                            inventory.setStack(i, newStack);
+                            setPreviousTrackedSlot(i, newStack);
+                            serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, newStack));
+                        }
+                    }
+
+
+                }
+            });
+        }
+        super.onContentChanged(inventory);
+    }
+
+
 }
