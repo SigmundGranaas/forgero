@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.sigmundgranaas.forgero.property.attribute.Category.UPGRADE_CATEGORIES;
+
 @SuppressWarnings("ClassCanBeRecord")
 public class Composite implements Upgradeable<Composite> {
     private final List<State> ingredientList;
@@ -98,6 +100,9 @@ public class Composite implements Upgradeable<Composite> {
 
         var compositeAttributes = Property.stream(props)
                 .getAttributes()
+                .collect(Collectors.toMap(Attribute::toString, attribute -> attribute, (attribute1, attribute2) -> attribute1.getPriority() > attribute2.getPriority() ? attribute1 : attribute2))
+                .values()
+                .stream()
                 .filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
                 .map(Property.class::cast)
                 .toList();
@@ -105,7 +110,7 @@ public class Composite implements Upgradeable<Composite> {
         var newValues = new ArrayList<Property>();
         for (AttributeType type : AttributeType.values()) {
             var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
-            newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.COMPOSITE);
+            newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
             var attribute = newBaseAttribute.build();
             if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType() == type).toList().size() > 1) {
                 newValues.add(newBaseAttribute.build());
@@ -121,7 +126,7 @@ public class Composite implements Upgradeable<Composite> {
 
     private boolean filterAttribute(Property property) {
         if (property instanceof Attribute attribute) {
-            if (attribute.getCategory() != Category.COMPOSITE && attribute.getCategory() != Category.ALL) {
+            if (UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
                 return true;
             }
         }

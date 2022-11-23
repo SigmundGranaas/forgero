@@ -34,14 +34,14 @@
         "value": 200
       },
       {
-        "id": "iron-base-attack",
+        "id": "metal-base-attack",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.7
       },
       {
-        "id": "iron-base-attack",
+        "id": "metal-base-attack",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -50,18 +50,6 @@
           "target": "TYPE",
           "tag": [
             "AXE_HEAD"
-          ]
-        }
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "HANDLE"
           ]
         }
       }

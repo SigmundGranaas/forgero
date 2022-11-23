@@ -8,8 +8,6 @@ import static com.sigmundgranaas.forgero.property.AttributeType.DURABILITY;
 import static com.sigmundgranaas.forgero.test.util.StateHelper.state;
 
 public class handle extends ForgeroPackageTest {
-
-
     @Test
     void testOakHandle() {
         var state = state("forgero:oak-handle");

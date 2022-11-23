@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.property.attribute.Category;
-import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Slot;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
@@ -42,7 +41,7 @@ public class FilledSlot extends AbstractTypedSlot {
         var attributes = Property.stream(properties)
                 .getAttributes()
                 .filter(this::filterAttribute)
-                .map(attribute -> AttributeBuilder.createAttributeBuilderFromAttribute(attribute).applyCategory(Category.ALL).build())
+                .map(attribute -> AttributeBuilder.createAttributeBuilderFromAttribute(attribute).applyCategory(Category.PASS).build())
                 .toList();
         return Stream.of(otherProperties, attributes)
                 .flatMap(List::stream)
@@ -51,14 +50,10 @@ public class FilledSlot extends AbstractTypedSlot {
     }
 
     private boolean filterAttribute(Attribute attribute) {
-        if (attribute.getCategory() == Category.COMPOSITE && upgrade instanceof Composite) {
+        if (attribute.getCategory() == Category.PASS || attribute.getCategory() == Category.ALL) {
             return true;
         } else if (categories.contains(attribute.getCategory())) {
             return true;
-        } else if (attribute.getCategory() == Category.ALL) {
-            return true;
-        } else if (attribute.getCategory() == Category.LOCAL) {
-            return false;
         }
         return false;
     }

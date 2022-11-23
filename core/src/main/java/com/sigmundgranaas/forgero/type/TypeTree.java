@@ -57,7 +57,11 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
             return new ResolvedTree(resolveNodes());
         }
         int missing = missingNodes.size();
-        var addedNodes = missingNodes.stream().map(this::addNode).flatMap(Optional::stream).toList();
+        var addedNodes = missingNodes.stream()
+                .map(this::addNode)
+                .flatMap(Optional::stream)
+                .toList();
+        
         removeMissingNodes(addedNodes);
         if (missing > addedNodes.size()) {
             resolve();

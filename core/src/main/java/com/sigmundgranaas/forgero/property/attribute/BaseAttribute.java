@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
+
 /**
  * Base attribute class. This class is opinionated when it comes to how some attributes should be calculated, like MINING level.
  * Special attribute classes will likely deal with special scenarios like MINING level.
@@ -86,10 +88,28 @@ public record BaseAttribute(AttributeType attribute,
     public boolean applyCondition(Target target) {
         return condition.test(target);
     }
-    
+
 
     @Override
     public int hashCode() {
         return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority);
+    }
+
+    @Override
+    public String toString() {
+        if (!id.equals(EMPTY_IDENTIFIER)) {
+            return id;
+        }
+        return "BaseAttribute{" +
+                "attribute=" + attribute +
+                ", operation=" + operation +
+                ", value=" + value +
+                ", condition=" + condition +
+                ", order=" + order +
+                ", level=" + level +
+                ", category=" + category +
+                ", id='" + id + '\'' +
+                ", priority=" + priority +
+                '}';
     }
 }

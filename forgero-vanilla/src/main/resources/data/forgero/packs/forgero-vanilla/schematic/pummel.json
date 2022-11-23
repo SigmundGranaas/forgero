@@ -50,7 +50,6 @@
       {
         "type": "RARITY",
         "order": "COMPOSITE",
-        "category": "ALL",
         "operation": "MULTIPLICATION",
         "value": 0.4
       },
