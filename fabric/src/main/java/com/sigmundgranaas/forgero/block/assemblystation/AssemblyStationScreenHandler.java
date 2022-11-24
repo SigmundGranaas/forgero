@@ -1,20 +1,26 @@
 package com.sigmundgranaas.forgero.block.assemblystation;
 
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.ASSEMBLY_STATION;
@@ -125,9 +131,10 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         boolean isEmpty = IntStream.range(1, 7).allMatch(index -> inventory.getStack(index).isEmpty());
         if (!inventory.getStack(0).isEmpty() && inventory.getStack(0).getDamage() == 0 && isEmpty) {
             ItemStack empty = ItemStack.EMPTY;
+            var dissasemblyStack = inventory.getStack(0);
             var state = StateConverter.of(inventory.getStack(0));
             this.context.run((world, pos) -> {
-                if (!world.isClient) {
+                if (!world.isClient && false) {
                     ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                     if (state.isPresent() && state.get() instanceof Composite composite) {
                         var elements = composite.disassemble();
@@ -142,10 +149,41 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                             setPreviousTrackedSlot(i, newStack);
                             serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, newStack));
                         }
+                    } else if (dissasemblyStack.getItem() == Items.DIAMOND_PICKAXE) {
+                        inventory.setStack(0, empty);
+                        setPreviousTrackedSlot(0, empty);
+                        inventory.setStack(2, new ItemStack(Registry.ITEM.get(new Identifier("forgero:oak-handle"))));
+                        inventory.setStack(1, new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe_head"))));
+                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
+                    }
+                }
+            });
+
+        } else if (inventory.getStack(0).isEmpty()) {
+            this.context.run((world, pos) -> {
+                if (!world.isClient) {
+                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+                    List<State> states = IntStream.range(1, 7).mapToObj(index -> StateConverter.of(inventory.getStack(index))).flatMap(Optional::stream).toList();
+                    var output = ForgeroStateRegistry.STATES.all().stream()
+                            .filter(Composite.class::isInstance)
+                            .map(Composite.class::cast)
+                            .filter(composite -> composite.ingredients().stream().allMatch(ingredient -> states.stream().anyMatch(state -> state.identifier().equals(ingredient.identifier()))))
+                            .map(StateConverter::of)
+                            .findAny();
+                    if (output.isPresent()) {
+                        inventory.setStack(0, output.get());
+                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
+
+                    } else {
+                        if (!inventory.getStack(0).isEmpty()) {
+                            inventory.setStack(0, ItemStack.EMPTY);
+                            serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
+                        }
                     }
                 }
             });
         }
+
         super.onContentChanged(inventory);
     }
 

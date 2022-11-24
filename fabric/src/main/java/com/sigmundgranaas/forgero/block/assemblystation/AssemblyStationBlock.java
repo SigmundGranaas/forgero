@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -19,6 +20,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class AssemblyStationBlock extends Block {
@@ -56,4 +60,30 @@ public class AssemblyStationBlock extends Block {
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new AssemblyStationScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.literal("assembly_station"));
     }
+
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return makeShape();
+    }
+
+    public VoxelShape makeShape() {
+        VoxelShape shape = VoxelShapes.empty();
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.0625, 0, 0.0625, 1.1875, 0.375, 0.1875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.3125, 0.6875, 0, 1.375, 0.75, 1));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.1875, 0.375, 0.0625, 1.1875, 0.625, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.25, 0.625, 0, 1.25, 0.75, 1));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.25, 0.6875, 0, 1.3125, 0.75, 0.0625));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.25, 0.6875, 0.9375, 1.3125, 0.75, 1));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.3125, 0.5625, 0.375, -0.0625, 0.8125, 0.625));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.3125, 0.8125, 0.375, -0.1875, 0.9375, 0.625));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.1875, 0.875, 0.375, -0.0625, 0.9375, 0.625));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.0625, 0, 0.8125, 1.1875, 0.375, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.1875, 0, 0.8125, -0.0625, 0.375, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.1875, 0, 0.0625, -0.0625, 0.375, 0.1875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.0625, 0.09375, 0.9381249999999999, 0.9375, 0.59375, 0.9381249999999999));
+
+        return shape;
+    }
+
 }
