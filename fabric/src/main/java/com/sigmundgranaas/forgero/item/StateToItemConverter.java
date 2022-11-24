@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class StateToItemConverter {
     private final State state;
@@ -27,17 +28,17 @@ public class StateToItemConverter {
         int attack_damage = (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
         float attack_speed = state.stream().applyAttribute(AttributeType.ATTACK_SPEED);
         if (state.type().test(Type.of("SWORD"), context)) {
-            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
         } else if (state.type().test(Type.of("PICKAXE"), context)) {
-            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
         } else if (state.type().test(Type.of("AXE"), context)) {
-            return new DynamicAxeItem(ToolMaterials.WOOD, attack_damage, attack_speed, new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicAxeItem(ToolMaterials.WOOD, attack_damage, attack_speed, getItemSettings(state), state);
         } else if (state.type().test(Type.of("HOE"), context)) {
-            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
-            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), new FabricItemSettings().group(getItemGroup()), state);
+            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
         } else if (state.type().test(Type.GEM)) {
-            return new GemItem(new FabricItemSettings().group(getItemGroup()), state);
+            return new GemItem(getItemSettings(state), state);
         }
         return defaultStateItem();
     }
@@ -47,10 +48,10 @@ public class StateToItemConverter {
     }
 
     private Item defaultStateItem() {
-        return new DefaultStateItem(new FabricItemSettings().group(getItemGroup()), state);
+        return new DefaultStateItem(new FabricItemSettings().group(getItemGroup(state)), state);
     }
 
-    private ItemGroup getItemGroup() {
+    private ItemGroup getItemGroup(State state) {
         if (state.test(Type.TOOL)) {
             return ItemGroups.FORGERO_TOOLS;
         } else if (state.test(Type.WEAPON)) {
@@ -63,5 +64,20 @@ public class StateToItemConverter {
             return ItemGroups.FORGERO_GEMS;
         }
         return ItemGroup.MISC;
+    }
+
+    private FabricItemSettings getItemSettings(State state) {
+        var settings = new FabricItemSettings();
+
+        settings.group(getItemGroup(state));
+
+        if (state.name().contains("schematic")) {
+            settings.recipeRemainder(Registry.ITEM.get(new Identifier(state.identifier())));
+        }
+
+        if (state.name().contains("netherite")) {
+            settings.fireproof();
+        }
+        return settings;
     }
 }

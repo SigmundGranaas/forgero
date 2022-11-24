@@ -15,6 +15,8 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.registry.Registry;
 
+import java.util.stream.IntStream;
+
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.ASSEMBLY_STATION;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
@@ -56,16 +58,16 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         int m;
         int l;
 
-        this.addSlot(new Slot(inventory, 0, 62 + 18, 17 + 18));
+        this.addSlot(new Slot(inventory, 0, 34, 34));
 
         //Our inventory
         for (m = 0; m < 3; ++m) {
-            this.addSlot(new Slot(inventory, m + 1, 62 + m * 18, 17));
+            this.addSlot(new Slot(inventory, m + 1, 92 + m * 18, 17));
         }
 
 
         for (m = 0; m < 3; ++m) {
-            this.addSlot(new Slot(inventory, m + 4, 62 + m * 18, 17 + 2 * 18));
+            this.addSlot(new Slot(inventory, m + 4, 92 + m * 18, 53));
         }
 
 
@@ -120,7 +122,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
     @Override
     public void onContentChanged(Inventory inventory) {
-        if (!inventory.getStack(0).isEmpty() && inventory.getStack(0).getDamage() == 0) {
+        boolean isEmpty = IntStream.range(1, 7).allMatch(index -> inventory.getStack(index).isEmpty());
+        if (!inventory.getStack(0).isEmpty() && inventory.getStack(0).getDamage() == 0 && isEmpty) {
             ItemStack empty = ItemStack.EMPTY;
             var state = StateConverter.of(inventory.getStack(0));
             this.context.run((world, pos) -> {
@@ -140,8 +143,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                             serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, newStack));
                         }
                     }
-
-
                 }
             });
         }
