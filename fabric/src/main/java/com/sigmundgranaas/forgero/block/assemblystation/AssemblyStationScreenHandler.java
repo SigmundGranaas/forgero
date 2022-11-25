@@ -159,7 +159,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                 }
             });
 
-        } else if (inventory.getStack(0).isEmpty()) {
+        } else {
             this.context.run((world, pos) -> {
                 if (!world.isClient) {
                     ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
@@ -170,15 +170,12 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                             .filter(composite -> composite.ingredients().stream().allMatch(ingredient -> states.stream().anyMatch(state -> state.identifier().equals(ingredient.identifier()))))
                             .map(StateConverter::of)
                             .findAny();
-                    if (output.isPresent()) {
+                    if (output.isPresent() && inventory.getStack(0).isEmpty()) {
                         inventory.setStack(0, output.get());
                         serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
-
-                    } else {
-                        if (!inventory.getStack(0).isEmpty()) {
-                            inventory.setStack(0, ItemStack.EMPTY);
-                            serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
-                        }
+                    } else if (!inventory.getStack(0).isEmpty() && output.isEmpty()) {
+                        inventory.setStack(0, ItemStack.EMPTY);
+                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
                     }
                 }
             });

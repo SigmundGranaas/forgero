@@ -67,6 +67,11 @@ public class AssemblyStationBlock extends Block {
         return makeShape();
     }
 
+    @Override
+    public boolean hasSidedTransparency(BlockState state) {
+        return true;
+    }
+
     public VoxelShape makeShape() {
         VoxelShape shape = VoxelShapes.empty();
         shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.0625, 0, 0.0625, 1.1875, 0.375, 0.1875));
@@ -83,7 +88,9 @@ public class AssemblyStationBlock extends Block {
         shape = VoxelShapes.union(shape, VoxelShapes.cuboid(-0.1875, 0, 0.0625, -0.0625, 0.375, 0.1875));
         shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.0625, 0.09375, 0.9381249999999999, 0.9375, 0.59375, 0.9381249999999999));
 
+
         return shape;
     }
+
 
 }

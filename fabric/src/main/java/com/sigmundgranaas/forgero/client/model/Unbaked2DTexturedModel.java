@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.texture.utils.Offset;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.client.render.model.ModelLoader;
-import net.minecraft.client.render.model.ModelRotation;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelElement;
@@ -20,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
 
 public class Unbaked2DTexturedModel implements UnbakedFabricModel {
     public static final String TRANSPARENT_BASE_IDENTIFIER = "transparent_base";
@@ -98,7 +99,7 @@ public class Unbaked2DTexturedModel implements UnbakedFabricModel {
         for (ModelElement element : generated_model.getElements()) {
             applyOffset(element);
         }
-        var bakedModel = generated_model.bake(loader, model, textureGetter, ModelRotation.X0_Y0, id, true);
+        var bakedModel = generated_model.bake(loader, model, textureGetter, X0_Y0, id, true);
         //((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
         return (FabricBakedModel) bakedModel;
     }
