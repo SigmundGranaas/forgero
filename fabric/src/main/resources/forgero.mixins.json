@@ -24,6 +24,7 @@
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
+    "JsonUnbakedModelOverrideMixin",
     "LifecycleResourceManagerImplMixin",
     "ModelLoaderMixin",
     "PlayerInteractionManagerMixin"

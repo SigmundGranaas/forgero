@@ -15,6 +15,10 @@
       "type": "GENERATE",
       "palette": "METAL",
       "order": 12,
+      "offset": [
+        5,
+        5
+      ],
       "variants": [
         {
           "target": [
@@ -23,6 +27,11 @@
           "offset": [
             -1,
             -1
+          ]
+        },
+        {
+          "target": [
+            "type:HANDLE"
           ]
         }
       ]

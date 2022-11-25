@@ -6,14 +6,36 @@
       "template": "sword_blade.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 40
+      "order": 40,
+      "offset": [
+        -2,
+        -2
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ]
+        }
+      ]
     },
     {
       "name": "sword_blade_material",
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "sword_blade_tip_reinforcement.png",
-      "order": 56
+      "order": 56,
+      "offset": [
+        -2,
+        -2
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ]
+        }
+      ]
     },
     {
       "name": "sword_blade_guard",
@@ -22,8 +44,19 @@
       "template": "sword_blade_guard.png",
       "order": 55,
       "offset": [
-        -2,
-        -2
+        -4,
+        -4
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "offset": [
+            -2,
+            -2
+          ]
+        }
       ]
     },
     {

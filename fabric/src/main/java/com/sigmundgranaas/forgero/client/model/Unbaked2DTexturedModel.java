@@ -13,11 +13,10 @@ import net.minecraft.client.render.model.json.ModelElementFace;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
@@ -93,15 +92,47 @@ public class Unbaked2DTexturedModel implements UnbakedFabricModel {
 
     @Override
     public FabricBakedModel bake() {
+        var parentModel = loader.getOrLoadModel(new Identifier("minecraft:item/handheld"));
         JsonUnbakedModel model = this.buildUnbakedJsonModel();
         ModelIdentifier id = this.getId();
         JsonUnbakedModel generated_model = ITEM_MODEL_GENERATOR.create(textureGetter, model);
+
         for (ModelElement element : generated_model.getElements()) {
             applyOffset(element);
         }
-        var bakedModel = generated_model.bake(loader, model, textureGetter, X0_Y0, id, true);
+        var elements = generated_model.getElements();
+        for (ModelElement element : elements) {
+            if (element.faces.containsKey(Direction.WEST)) {
+                float rand = new Random().nextFloat();
+                element.from.add(rand * -0.01f, 0, 0);
+                element.to.add(rand * -0.01f, 0, 0);
+            }
+            if (element.faces.containsKey(Direction.EAST)) {
+                float rand = new Random().nextFloat();
+                element.from.add(rand * 0.01f, 0, 0);
+                element.to.add(rand * 0.01f, 0, 0);
+            }
+            if (element.faces.containsKey(Direction.UP)) {
+                float rand = new Random().nextFloat();
+                element.from.add(0, rand * -0.01f, 0);
+                element.to.add(0, rand * -0.01f, 0);
+            }
+            if (element.faces.containsKey(Direction.DOWN)) {
+                float rand = new Random().nextFloat();
+                element.from.add(0, rand * 0.01f, 0);
+                element.to.add(0, rand * 0.01f, 0);
+            }
+        }
+
+        if (parentModel instanceof JsonUnbakedModel parent) {
+            ((com.sigmundgranaas.forgero.mixins.JsonUnbakedModelOverrideMixin) generated_model).setParent(parent);
+            var bakedModel = generated_model.bake(loader, parent, textureGetter, X0_Y0, id, true);
+
+            return (FabricBakedModel) bakedModel;
+        }
         //((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
-        return (FabricBakedModel) bakedModel;
+        return (FabricBakedModel) generated_model.bake(loader, model, textureGetter, X0_Y0, id, true);
+
     }
 
     @Override

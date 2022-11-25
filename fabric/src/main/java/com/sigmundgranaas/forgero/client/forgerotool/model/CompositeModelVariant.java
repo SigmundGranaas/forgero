@@ -53,6 +53,10 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         cache.getUnchecked(stack).emitItemQuads(null, null, context);
     }
 
+    public BakedModel getModel(ItemStack stack) {
+        return ((BakedModel) cache.getUnchecked(stack));
+    }
+
     @Nullable
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
@@ -86,11 +90,11 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         var textureList = new ArrayList<PaletteTemplateModel>();
         if (input instanceof CompositeModelTemplate model) {
             model.getModels().forEach(template -> textureCollector(template, textureList));
-            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "dummy");
             return Optional.of(unbakedModel);
         } else if (input instanceof TextureBasedModel model) {
             textureCollector(model, textureList);
-            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "test");
+            var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, model.getTexture());
             return Optional.of(unbakedModel);
         }
         return Optional.empty();
@@ -111,4 +115,5 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private void textureCollector(CompositeModelTemplate template, List<PaletteTemplateModel> accumulator) {
         template.getModels().forEach(model -> textureCollector(model, accumulator));
     }
+
 }

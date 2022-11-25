@@ -71,7 +71,7 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 
     @Override
     public boolean isBuiltin() {
-        return false;
+        return true;
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 
     @Override
     public boolean isVanillaAdapter() {
-        return false;
+        return true;
     }
 
     @Override
