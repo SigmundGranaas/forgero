@@ -22,6 +22,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
 }
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", rootProject.version
 
     filesMatching("fabric.mod.json") {
@@ -29,6 +30,16 @@ processResources {
     }
 }
 
+
 test {
     useJUnitPlatform()
+    sourceSets {
+        main {
+            resources {
+                srcDirs += [
+                        //project(':forgero-vanilla').sourceSets.main.resources
+                ]
+            }
+        }
+    }
 }

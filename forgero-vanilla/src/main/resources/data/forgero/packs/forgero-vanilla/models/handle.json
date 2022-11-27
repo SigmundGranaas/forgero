@@ -16,6 +16,12 @@
         },
         {
           "target": [
+            "type:SHOVEL"
+          ],
+          "template": "medium_handle.png"
+        },
+        {
+          "target": [
             "type:SWORD"
           ],
           "template": "short_handle.png"

@@ -1,0 +1,33 @@
+{
+  "type": "AXE_HEAD",
+  "models": [
+    {
+      "name": "pickaxe_head_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "variants": [
+        {
+          "target": [
+            "model:clumpy_pickaxe_head.png"
+          ],
+          "template": "clumpy_pickaxe_head_tip_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "double_headed_axe_head",
+      "modelType": "GENERATE",
+      "template": "double_headed_axe_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 53
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:double_headed_axe_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "double_headed_axe_head"
+    }
+  ]
+}

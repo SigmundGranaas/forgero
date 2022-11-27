@@ -40,6 +40,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
     private final SimpleInventory inventory;
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
+    private final CompositeSlot compositeSlot;
 
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
@@ -54,23 +55,29 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         super(AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER, syncId);
         this.player = playerInventory.player;
         this.context = context;
-        this.inventory = new SimpleInventory(7);
+        this.inventory = new SimpleInventory(9);
         inventory.addListener(this::onContentChanged);
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player);
+        SimpleInventory compositeInventory = new SimpleInventory(1);
+        compositeInventory.addListener(this::onCompositeSlotChanged);
+        this.compositeSlot = new CompositeSlot(compositeInventory, 0, 34, 34);
 
         //This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
         //This will not render the background of the slots however, this is the Screens job
         int m;
         int l;
 
-        this.addSlot(new Slot(inventory, 0, 34, 34));
+        this.addSlot(compositeSlot);
 
         //Our inventory
         for (m = 0; m < 3; ++m) {
             this.addSlot(new Slot(inventory, m + 1, 92 + m * 18, 17));
         }
 
+        for (m = 0; m < 3; ++m) {
+            this.addSlot(new Slot(inventory, m + 4, 92 + m * 18, 35));
+        }
 
         for (m = 0; m < 3; ++m) {
             this.addSlot(new Slot(inventory, m + 4, 92 + m * 18, 53));
@@ -126,63 +133,149 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         return true;
     }
 
+
+    public void onCompositeSlotChanged(Inventory compositeInventory) {
+        boolean isEmpty = compositeInventory.isEmpty();
+        if (isEmpty) {
+            if (compositeSlot.isDeconstructed() && compositeSlot.getComposite().isPresent()) {
+                compositeSlot.doneConstructing = false;
+                onItemRemovedFromToolSlot();
+            }
+        } else {
+            var stack = StateConverter.of(compositeInventory.getStack(0))
+                    .filter(Composite.class::isInstance)
+                    .map(Composite.class::cast);
+            if (!compositeSlot.isConstructed() && stack.isPresent()) {
+                compositeSlot.addToolToCompositeSlot(stack.get());
+                onItemAddedToToolSlot();
+            }
+        }
+    }
+
     @Override
     public void onContentChanged(Inventory inventory) {
-        boolean isEmpty = IntStream.range(1, 7).allMatch(index -> inventory.getStack(index).isEmpty());
-        if (!inventory.getStack(0).isEmpty() && inventory.getStack(0).getDamage() == 0 && isEmpty) {
-            ItemStack empty = ItemStack.EMPTY;
-            var dissasemblyStack = inventory.getStack(0);
-            var state = StateConverter.of(inventory.getStack(0));
-            this.context.run((world, pos) -> {
-                if (!world.isClient && false) {
-                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
-                    if (state.isPresent() && state.get() instanceof Composite composite) {
-                        var elements = composite.disassemble();
-                        inventory.setStack(0, empty);
-                        setPreviousTrackedSlot(0, empty);
-                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
-
-                        for (int i = 1; i < elements.size() + 1; i++) {
-                            var element = elements.get(i - 1);
-                            var newStack = StateConverter.of(element);
-                            inventory.setStack(i, newStack);
-                            setPreviousTrackedSlot(i, newStack);
-                            serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, newStack));
-                        }
-                    } else if (dissasemblyStack.getItem() == Items.DIAMOND_PICKAXE) {
-                        inventory.setStack(0, empty);
-                        setPreviousTrackedSlot(0, empty);
-                        inventory.setStack(2, new ItemStack(Registry.ITEM.get(new Identifier("forgero:oak-handle"))));
-                        inventory.setStack(1, new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe_head"))));
-                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
-                    }
+        this.context.run((world, pos) -> {
+            if (!world.isClient && compositeSlot.isRemovable()) {
+                ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+                List<State> states = IntStream.range(1, 7).mapToObj(index -> StateConverter.of(inventory.getStack(index))).flatMap(Optional::stream).toList();
+                var output = ForgeroStateRegistry.STATES.all().stream()
+                        .filter(Composite.class::isInstance)
+                        .map(Composite.class::cast)
+                        .filter(composite -> composite.ingredients().stream().allMatch(ingredient -> states.stream().anyMatch(state -> state.identifier().equals(ingredient.identifier()))))
+                        .map(StateConverter::of)
+                        .findAny();
+                if (output.isPresent() && compositeSlot.isEmpty()) {
+                    compositeSlot.setStack(output.get());
+                    serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
+                } else if (!compositeSlot.isEmpty() && output.isEmpty()) {
+                    compositeSlot.removeCompositeIngredient();
+                    serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
                 }
-            });
-
-        } else {
-            this.context.run((world, pos) -> {
-                if (!world.isClient) {
-                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
-                    List<State> states = IntStream.range(1, 7).mapToObj(index -> StateConverter.of(inventory.getStack(index))).flatMap(Optional::stream).toList();
-                    var output = ForgeroStateRegistry.STATES.all().stream()
-                            .filter(Composite.class::isInstance)
-                            .map(Composite.class::cast)
-                            .filter(composite -> composite.ingredients().stream().allMatch(ingredient -> states.stream().anyMatch(state -> state.identifier().equals(ingredient.identifier()))))
-                            .map(StateConverter::of)
-                            .findAny();
-                    if (output.isPresent() && inventory.getStack(0).isEmpty()) {
-                        inventory.setStack(0, output.get());
-                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
-                    } else if (!inventory.getStack(0).isEmpty() && output.isEmpty()) {
-                        inventory.setStack(0, ItemStack.EMPTY);
-                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
-                    }
-                }
-            });
-        }
-
+            }
+        });
         super.onContentChanged(inventory);
     }
 
+    private void onItemAddedToToolSlot() {
+        var empty = ItemStack.EMPTY;
+        this.context.run((world, pos) -> {
+            if (!world.isClient) {
+                compositeSlot.doneConstructing = false;
+                var disassemblyStack = compositeSlot.getStack();
+                ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+                var compositeOpt = compositeSlot.getComposite();
+                if (compositeOpt.isPresent()) {
+                    var composite = compositeOpt.get();
+                    var elements = composite.disassemble();
 
+                    for (int i = 1; i < elements.size() + 1; i++) {
+                        var element = elements.get(i - 1);
+                        var newStack = StateConverter.of(element);
+                        inventory.setStack(i, newStack);
+                        setPreviousTrackedSlot(i, newStack);
+                        serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, newStack));
+                    }
+                    compositeSlot.doneConstructing();
+                } else if (disassemblyStack.getItem() == Items.DIAMOND_PICKAXE) {
+                    inventory.setStack(0, empty);
+                    setPreviousTrackedSlot(0, empty);
+                    inventory.setStack(2, new ItemStack(Registry.ITEM.get(new Identifier("forgero:oak-handle"))));
+                    inventory.setStack(1, new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe_head"))));
+                    serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
+                }
+
+            }
+        });
+    }
+
+    private void onItemRemovedFromToolSlot() {
+        this.context.run((world, pos) -> {
+            if (!world.isClient) {
+                compositeSlot.removeCompositeIngredient();
+                inventory.clear();
+            }
+        });
+    }
+
+    private void onItemAddedToCraftingSlots() {
+
+    }
+
+    private static class CompositeSlot extends Slot {
+        private Composite composite;
+        private boolean isConstructed;
+        private boolean doneConstructing = false;
+
+
+        public CompositeSlot(Inventory inventory, int index, int x, int y) {
+            super(inventory, index, x, y);
+        }
+
+        Optional<Composite> getComposite() {
+            return Optional.ofNullable(composite);
+        }
+
+        public boolean isConstructed() {
+            return isConstructed;
+        }
+
+        public boolean isDeconstructed() {
+            return true;
+        }
+
+        public boolean isEmpty() {
+            return composite == null;
+        }
+
+
+        public void addToolToCompositeSlot(Composite composite) {
+            this.composite = composite;
+            this.isConstructed = false;
+        }
+
+        public void removeCompositeIngredient() {
+            this.composite = null;
+            this.isConstructed = false;
+            this.doneConstructing = true;
+            this.inventory.getStack(0).decrement(1);
+        }
+
+        public void addSuggestedComposite(Composite composite) {
+            this.composite = composite;
+            this.isConstructed = true;
+        }
+
+        @Override
+        public boolean canInsert(ItemStack stack) {
+            return StateConverter.of(stack).filter(Composite.class::isInstance).isPresent();
+        }
+
+        public void doneConstructing() {
+            this.doneConstructing = true;
+        }
+
+        public boolean isRemovable() {
+            return doneConstructing;
+        }
+    }
 }

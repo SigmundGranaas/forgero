@@ -1,3 +1,9 @@
 version = project.mod_version
 group = project.maven_group
 archives_base_name = project.archives_base_name
+
+
+configure(subprojects) {
+
+    apply plugin: 'java-library'
+}

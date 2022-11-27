@@ -15,15 +15,23 @@
         "id": "metal-base-mining_speed",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
+        "operation": "MULTIPLICATION",
         "value": 6
       },
       {
+        "id": "metal-base-durability",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "category": "ALL",
         "value": 250
+      },
+      {
+        "id": "metal-base-attack",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.0
       },
       {
         "id": "metal-base-attack",
@@ -37,6 +45,13 @@
             "AXE_HEAD"
           ]
         }
+      },
+      {
+        "id": "metal-attack-speed-base",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
       },
       {
         "id": "metal-attack-speed-base",

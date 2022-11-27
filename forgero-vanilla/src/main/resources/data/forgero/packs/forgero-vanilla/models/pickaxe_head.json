@@ -12,7 +12,7 @@
       "name": "pickaxe_head_material",
       "type": "GENERATE",
       "palette": "MATERIAL",
-      "template": "pickaxe_head_material.png",
+      "template": "pickaxe_head_tip_reinforcement.png",
       "order": 51
     },
     {

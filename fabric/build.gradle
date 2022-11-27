@@ -197,6 +197,7 @@ sourceSets {
 }
 
 loom {
+
     runs {
         testmodServer {
             server()

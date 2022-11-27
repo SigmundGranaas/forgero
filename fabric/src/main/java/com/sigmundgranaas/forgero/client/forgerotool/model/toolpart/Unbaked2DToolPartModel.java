@@ -101,4 +101,6 @@ public abstract class Unbaked2DToolPartModel implements UnbakedFabricModel {
     public ModelIdentifier getId() {
         return new ModelIdentifier(ForgeroInitializer.MOD_NAMESPACE, getIdentifier(), "inventory");
     }
+
+
 }

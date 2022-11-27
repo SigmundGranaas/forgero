@@ -85,6 +85,12 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": -2.6
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1
       }
     ]
   }
