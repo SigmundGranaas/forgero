@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.mixins;
 
+import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.TargetTypes;
-import com.sigmundgranaas.forgero.PatternBreaking;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.property.attribute.SingleTarget;
-import com.sigmundgranaas.forgero.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.property.handler.PatternBreaking;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.toolhandler.BlockBreakingHandler;
 import com.sigmundgranaas.forgero.toolhandler.PatternBreakingStrategy;
 import com.sigmundgranaas.forgero.toolhandler.VeinMiningStrategy;
@@ -28,9 +28,9 @@ public class AbstractBlockMixin {
 
     @Inject(at = @At("HEAD"), method = "calcBlockBreakingDelta", cancellable = true)
     public void calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        if (player.getMainHandStack().getItem() instanceof ForgeroToolItem toolItem) {
-            ForgeroTool tool = toolItem.convertItemStack(player.getMainHandStack(), toolItem.getTool());
-            var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
+        if (player.getMainHandStack().getItem() instanceof StateItem stateItem) {
+            State toolState = stateItem.dynamicState(player.getMainHandStack());
+            var activeProperties = Property.stream(toolState.applyProperty(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
             if (!activeProperties.isEmpty()) {
                 float f;
                 if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {

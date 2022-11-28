@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.mixins;
 
+import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.property.passive.Static;
 import com.sigmundgranaas.forgero.property.passive.StaticPassiveType;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.item.ItemStack;
@@ -33,9 +33,9 @@ public abstract class PiglinBrainMixin {
     }
 
     private static boolean isGoldenForgeroTool(ItemStack stack) {
-        if (stack.getItem() instanceof ForgeroToolItem holder) {
-            Optional<Static> goldenProperty = holder.convertItemStack(stack, holder.getTool())
-                    .getPropertyStream()
+        if (stack.getItem() instanceof StateItem holder) {
+            Optional<Static> goldenProperty = holder.dynamicState(stack)
+                    .stream()
                     .getStaticPassiveProperties()
                     .filter(element -> element.getStaticType() == StaticPassiveType.GOLDEN)
                     .findAny();

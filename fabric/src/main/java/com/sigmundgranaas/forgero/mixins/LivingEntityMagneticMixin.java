@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.StateItem;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.toolhandler.MagneticHandler;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -20,11 +20,10 @@ public abstract class LivingEntityMagneticMixin {
 
     @Inject(method = "baseTick", at = @At("RETURN"))
     public void magneticTickInject(CallbackInfo callbackInfo) {
-        if (this.getMainHandStack().getItem() instanceof ForgeroToolItem toolItem) {
-            ForgeroTool tool = toolItem.convertItemStack(this.getMainHandStack(), toolItem.getTool());
-            var properties = tool.getPropertyStream().getLeveledPassiveProperties().toList();
+        if (this.getMainHandStack().getItem() instanceof StateItem stateItem) {
+            State state = stateItem.dynamicState(getMainHandStack());
+            var properties = state.stream().getLeveledPassiveProperties().toList();
             if (!properties.isEmpty()) {
-
                 MagneticHandler handler = new MagneticHandler(((LivingEntity) (Object) this));
                 var entities = handler.getNearbyEntities(properties.size() + 2, entity -> entity instanceof ItemEntity);
                 handler.pullEntities(5, entities);

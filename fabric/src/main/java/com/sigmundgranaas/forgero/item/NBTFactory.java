@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.item;
 
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.gem.Gem;
+import com.sigmundgranaas.forgero.item.implementation.NBTFactoryImpl;
 import com.sigmundgranaas.forgero.property.Property;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.schematic.Schematic;
 import com.sigmundgranaas.forgero.tool.ForgeroTool;
 import com.sigmundgranaas.forgero.toolpart.ForgeroToolPart;
-import com.sigmundgranaas.forgero.item.implementation.NBTFactoryImpl;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +66,7 @@ public interface NBTFactory {
     Optional<Schematic> createSchematicFromNbt(@NotNull NbtCompound compound);
 
     @NotNull
-    List<Property> createPropertiesFromNbt(@NotNull NbtCompound compound);
+    List<? extends Property> createPropertiesFromNbt(@NotNull NbtCompound compound);
 
     @NotNull
     NbtCompound createNbtFromProperties(@NotNull PropertyPojo properties);

@@ -1,13 +1,14 @@
 package com.sigmundgranaas.forgero.mixins;
 
+import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.TargetTypes;
-import com.sigmundgranaas.forgero.PatternBreaking;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.property.attribute.SingleTarget;
-import com.sigmundgranaas.forgero.tool.ForgeroTool;
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
+import com.sigmundgranaas.forgero.property.handler.PatternBreaking;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.toolhandler.BlockBreakingHandler;
 import com.sigmundgranaas.forgero.toolhandler.PatternBreakingStrategy;
 import com.sigmundgranaas.forgero.toolhandler.VeinMiningStrategy;
@@ -32,18 +33,17 @@ public abstract class PlayerInteractionManagerMixin {
     @Shadow
     @Final
     private MinecraftClient client;
+    @Shadow
+    private float currentBreakingProgress;
 
     @Shadow
     public abstract boolean breakBlock(BlockPos pos);
 
-    @Shadow
-    private float currentBreakingProgress;
-
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", shift = At.Shift.AFTER), method = "updateBlockBreakingProgress")
     public void calcBlockBreakingDelta(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
         if (this.currentBreakingProgress >= 1.0F) {
-            if (this.client.player.getMainHandStack().getItem() instanceof ForgeroToolItem toolItem) {
-                ForgeroTool tool = toolItem.convertItemStack(client.player.getMainHandStack(), toolItem.getTool());
+            if (this.client.player.getMainHandStack().getItem() instanceof StateItem stateItem && client.player != null) {
+                State tool = stateItem.dynamicState(client.player.getMainHandStack());
                 var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
                 if (!activeProperties.isEmpty()) {
                     List<Pair<BlockState, BlockPos>> availableBlocks;

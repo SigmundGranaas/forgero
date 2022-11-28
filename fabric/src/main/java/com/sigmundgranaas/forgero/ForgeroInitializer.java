@@ -4,6 +4,10 @@ import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.property.active.ActivePropertyRegistry;
+import com.sigmundgranaas.forgero.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.property.handler.PatternBreaking;
+import com.sigmundgranaas.forgero.property.handler.TaggedPatternBreaking;
 import com.sigmundgranaas.forgero.registry.CustomItemRegistry;
 import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
@@ -40,6 +44,11 @@ public class ForgeroInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(PatternBreaking.predicate, PatternBreaking.factory));
+        ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
+        ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
+
+        
         PipelineBuilder
                 .builder()
                 .register(FabricPackFinder.supplier())

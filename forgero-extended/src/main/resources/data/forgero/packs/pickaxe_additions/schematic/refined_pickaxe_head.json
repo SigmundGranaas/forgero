@@ -1,6 +1,6 @@
 {
   "type": "PICKAXE_HEAD_SCHEMATIC",
-  "name": "vein_pickaxe_head-schematic",
+  "name": "refined_pickaxe_head-schematic",
   "parent": "tool_part_head_schematic",
   "container": {
     "type": "CREATE",
@@ -59,38 +59,38 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 10
+        "value": 66
       },
       {
         "id": "schematic_base_rarity_multiplication",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 1.3
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 0.8
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.3
+        "value": 1.2
       },
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 0.9
       },
       {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.6
+        "value": -2.9
       }
     ]
   }

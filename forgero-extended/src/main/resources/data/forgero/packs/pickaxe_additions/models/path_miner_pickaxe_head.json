@@ -24,7 +24,7 @@
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:vein_pickaxe_head-schematic"
+        "id:path_miner-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "clumpy_pickaxe_head"

@@ -1,12 +1,19 @@
-package com.sigmundgranaas.forgero;
+package com.sigmundgranaas.forgero.property.handler;
 
 import com.sigmundgranaas.forgero.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.property.Target;
 import com.sigmundgranaas.forgero.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
 import net.minecraft.block.BlockState;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public class PatternBreaking implements ActiveProperty {
+    public static Predicate<PropertyPojo.Active> predicate = (active) -> active.type == ActivePropertyType.BLOCK_BREAKING_PATTERN && active.tag == null;
+    public static Function<PropertyPojo.Active, ActiveProperty> factory = (active) -> new PatternBreaking(active.pattern, active.direction == null ? BreakingDirection.ANY : active.direction);
+
     private final String[] pattern;
     private final BreakingDirection direction;
 

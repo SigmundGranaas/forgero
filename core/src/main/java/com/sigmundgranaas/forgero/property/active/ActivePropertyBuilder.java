@@ -1,19 +1,18 @@
 package com.sigmundgranaas.forgero.property.active;
 
+import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
-import com.sigmundgranaas.forgero.property.ActivePropertyType;
+
+import java.util.Optional;
+
 //TODO Fix properties
 public class ActivePropertyBuilder {
-    public static ActiveProperty createAttributeFromPojo(PropertyPojo.Active activePOJO) {
-        if (activePOJO.type == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
-            BreakingDirection direction = activePOJO.direction == null ? BreakingDirection.ANY : activePOJO.direction;
-            if (activePOJO.tag != null) {
-                //return new TaggedPatternBreaking(activePOJO.pattern, direction, activePOJO.tag);
-            }
-            //return new PatternBreaking(activePOJO.pattern, direction);
-        } else {
-           // return new VeinBreaking(activePOJO.depth, activePOJO.tag, activePOJO.description);
-        }
-        return new VeinBreaking(activePOJO.depth, activePOJO.tag, activePOJO.description);
+    public static Optional<Property> createAttributeFromPojo(PropertyPojo.Active activePOJO) {
+        return ActivePropertyRegistry.getEntries()
+                .stream()
+                .filter(entry -> entry.predicate().test(activePOJO))
+                .map(entry -> entry.factory().apply(activePOJO))
+                .map(Property.class::cast)
+                .findFirst();
     }
 }

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.toolhandler;
 
 import com.sigmundgranaas.forgero.property.active.BreakingDirection;
-import com.sigmundgranaas.forgero.PatternBreaking;
+import com.sigmundgranaas.forgero.property.handler.PatternBreaking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Pair;
@@ -26,7 +26,7 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
     public List<Pair<BlockState, BlockPos>> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
         Direction dir = Direction.getEntityFacingOrder(player)[0];
         var list = new ArrayList<Pair<BlockState, BlockPos>>();
-        if (breakingPattern.getPattern().length == 0 || breakingPattern.getPattern().length % 2 == 0 || breakingPattern.getPattern()[0].length() % 2 == 0) {
+        if (breakingPattern.getPattern().length == 0 || breakingPattern.getPattern()[0].length() % 2 == 0) {
             return Collections.emptyList();
         }
         int centerY = (breakingPattern.getPattern().length - 1) / 2;
