@@ -1,6 +1,6 @@
 {
   "type": "AXE_HEAD_SCHEMATIC",
-  "name": "double_headed_axe_head-schematic",
+  "name": "battle_axe_head-schematic",
   "parent": "tool_part_head_schematic",
   "container": {
     "type": "CREATE",

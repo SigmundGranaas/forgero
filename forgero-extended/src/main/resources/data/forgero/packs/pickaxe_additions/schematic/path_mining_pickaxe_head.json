@@ -1,6 +1,6 @@
 {
   "type": "PICKAXE_HEAD_SCHEMATIC",
-  "name": "path_miner_head-schematic",
+  "name": "path_mining_pickaxe_head-schematic",
   "parent": "tool_part_head_schematic",
   "container": {
     "type": "CREATE",

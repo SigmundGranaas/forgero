@@ -5,7 +5,9 @@ import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.LeveledState;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.List;
 
@@ -39,12 +41,23 @@ public class StateWriter implements Writer {
         return new StateWriter(state);
     }
 
+
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
         if (this.state instanceof Composite composite) {
             new CompositeWriter(composite).write(tooltip, context);
         }
-        writePassives(tooltip, context);
+        var active = state.stream().getActiveProperties().toList();
+        var passive = state.stream().getPassiveProperties().toList();
+
+        if (active.size() > 0 || passive.size() > 0) {
+
+            MutableText attributes = Text.literal(" ").append(Text.translatable(Writer.toTranslationKey("properties"))).append(": ").formatted(Formatting.GRAY);
+            tooltip.add(attributes);
+
+            writePassives(tooltip, context);
+            writeActive(tooltip, context);
+        }
     }
 
     private void writePassives(List<Text> tooltip, TooltipContext context) {
@@ -52,4 +65,11 @@ public class StateWriter implements Writer {
         state.stream().getPassiveProperties().forEach(writer::addPassive);
         writer.write(tooltip, context);
     }
+
+    private void writeActive(List<Text> tooltip, TooltipContext context) {
+        var writer = new ActiveWriter();
+        state.stream().getActiveProperties().forEach(writer::addPassive);
+        writer.write(tooltip, context);
+    }
+
 }

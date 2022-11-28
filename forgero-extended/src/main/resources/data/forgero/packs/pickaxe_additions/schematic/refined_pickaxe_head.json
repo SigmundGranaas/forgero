@@ -59,7 +59,7 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 66
+        "value": 40
       },
       {
         "id": "schematic_base_rarity_multiplication",

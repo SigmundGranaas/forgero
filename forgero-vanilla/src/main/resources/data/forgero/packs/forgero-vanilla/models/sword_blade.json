@@ -60,6 +60,17 @@
       ]
     },
     {
+      "name": "sword_blade_trinket",
+      "type": "GENERATE",
+      "palette": "TRINKET",
+      "template": "diagonal_gem_high.png",
+      "order": 55,
+      "offset": [
+        -4,
+        -4
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "type:SWORD_BLADE_SCHEMATIC"
@@ -82,6 +93,22 @@
       ],
       "modelType": "UPGRADE",
       "template": "sword_blade_guard"
+    },
+    {
+      "target": [
+        "type:TRINKET",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "sword_blade_trinket"
+    },
+    {
+      "target": [
+        "type:TRINKET",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "sword_blade_trinket"
     }
   ]
 }

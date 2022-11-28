@@ -1,13 +1,12 @@
 {
-  "type": "PICKAXE_HEAD_SCHEMATIC",
-  "name": "mastercrafted_pickaxe_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "type": "SWORD_BLADE_SCHEMATIC",
+  "name": "scimitar_blade-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "PICKAXE_HEAD",
+    "type": "SWORD_BLADE",
     "target": "CREATE",
     "recipes": [
       {
@@ -39,6 +38,7 @@
         "category": [
           "OFFENSIVE"
         ],
+        "description": "sword_tip",
         "type": "MATERIAL",
         "tier": 1
       },
@@ -47,7 +47,8 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "TRINKET",
+        "description": "scabbard",
+        "type": "SECONDARY_MATERIAL",
         "tier": 1
       }
     ]
@@ -59,38 +60,37 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 74
-      },
-      {
-        "id": "schematic_base_rarity_multiplication",
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.3
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 27
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.2
+        "value": 1.5
       },
       {
-        "type": "MINING_SPEED",
+        "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 1.0
+      },
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.1
       },
       {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.9
+        "value": -2.5
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1
       }
     ]
   }

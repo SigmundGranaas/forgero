@@ -47,10 +47,6 @@ public class PassiveWriter implements Writer {
 
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
-        if (passives.size() > 0) {
-            MutableText attributes = Text.literal(" ").append(Text.translatable(Writer.toTranslationKey("passives"))).append(": ").formatted(Formatting.GRAY);
-            tooltip.add(attributes);
-        }
         passives.forEach(this::writePassive);
         tooltip.addAll(this.tooltip);
     }

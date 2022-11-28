@@ -24,7 +24,7 @@
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:double_headed_axe_head-schematic"
+        "id:battle_axe_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "double_headed_axe_head"
