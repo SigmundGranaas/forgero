@@ -1,12 +1,13 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
-  "name": "refined_sword_blade-schematic",
+  "type": "SHOVEL_HEAD_SCHEMATIC",
+  "name": "grave_digger_head-schematic",
+  "parent": "tool_part_head_schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "SHOVEL_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -18,7 +19,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 3
+            "amount": 2
           }
         ]
       }
@@ -38,7 +39,6 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
         "type": "MATERIAL",
         "tier": 1
       },
@@ -47,13 +47,9 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "trinket",
         "type": "TRINKET",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -63,40 +59,41 @@
         "order": "BASE",
         "operation": "ADDITION",
         "category": "LOCAL",
-        "value": 30
-      },
-      {
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.2
+        "value": 10
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.2
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1
+        "value": 1.5
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 1
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.0
       },
       {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.8
+        "value": -2.7
       }
     ],
-    "passive": [
+    "active": [
+      {
+        "type": "VEIN_MINING_PATTERN",
+        "depth": 10,
+        "tag": "forgero:block/vein_mining_sand"
+      }
     ]
+  },
+  "custom_data": {
   }
 }

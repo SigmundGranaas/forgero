@@ -1,7 +1,6 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "serrated_sword_blade-schematic",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"

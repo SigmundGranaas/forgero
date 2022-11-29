@@ -1,6 +1,6 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
-  "name": "refined_sword_blade-schematic",
+  "name": "slanted_sword_blade-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"

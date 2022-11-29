@@ -1,12 +1,13 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
-  "name": "refined_sword_blade-schematic",
+  "type": "SWORD_GUARD_SCHEMATIC",
+  "name": "duelling_sword_guard-schematic",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "SWORD_GUARD",
     "target": "CREATE",
     "recipes": [
       {
@@ -18,7 +19,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 3
+            "amount": 2
           }
         ]
       }
@@ -38,7 +39,6 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
         "type": "MATERIAL",
         "tier": 1
       },
@@ -47,13 +47,9 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "trinket",
         "type": "TRINKET",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -61,42 +57,31 @@
       {
         "type": "RARITY",
         "order": "BASE",
-        "operation": "ADDITION",
         "category": "LOCAL",
-        "value": 30
+        "operation": "ADDITION",
+        "value": 24
       },
       {
         "type": "RARITY",
         "order": "COMPOSITE",
+        "category": "UTILITY",
         "operation": "MULTIPLICATION",
-        "value": 1.2
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 2.2
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1
+        "value": 0.4
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
+        "category": "UTILITY",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 0.4
       },
       {
         "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
+        "order": "BASE",
+        "category": "UTILITY",
         "operation": "ADDITION",
-        "value": -2.8
+        "value": 0.3
       }
-    ],
-    "passive": [
     ]
   }
 }

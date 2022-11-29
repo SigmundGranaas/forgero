@@ -1,0 +1,33 @@
+{
+  "type": "SHOVEL_HEAD",
+  "models": [
+    {
+      "name": "shovel_head_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "variants": [
+        {
+          "target": [
+            "model:square_shovel_head.png"
+          ],
+          "template": "square_shovel_head_tip_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "square_shovel_head",
+      "modelType": "GENERATE",
+      "template": "square_shovel_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 53
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:path_digger_shovel_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "square_shovel_head"
+    }
+  ]
+}
