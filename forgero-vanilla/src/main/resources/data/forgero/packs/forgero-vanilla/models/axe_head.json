@@ -16,6 +16,13 @@
       "order": 90
     },
     {
+      "name": "axe_head_material",
+      "type": "GENERATE",
+      "template": "axe_head_tip_reinforcement.png",
+      "palette": "MATERIAL",
+      "order": 55
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "type:AXE_HEAD_SCHEMATIC"
@@ -26,11 +33,11 @@
     },
     {
       "target": [
-        "type:MATERIAL",
+        "type:TOOL_MATERIAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "handle_secondary"
+      "template": "axe_head_material"
     },
     {
       "target": [

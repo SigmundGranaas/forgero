@@ -33,15 +33,6 @@
       }
     ],
     "slots": [
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "sword_tip",
-        "type": "MATERIAL",
-        "tier": 1
-      }
     ]
   },
   "properties": {
@@ -84,5 +75,8 @@
         "value": 1
       }
     ]
+  },
+  "custom_data": {
+    "ingredient_count": "2"
   }
 }

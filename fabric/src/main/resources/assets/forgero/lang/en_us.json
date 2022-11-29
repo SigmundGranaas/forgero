@@ -32,6 +32,7 @@
   "item.forgero.rarity": "Rarity",
   "item.forgero.mining_speed": "Mining speed",
   "item.forgero.slots": "Slots",
+  "item.forgero.material_count": " Materials: %s",
   "item.forgero.attributes": "Attributes",
   "item.forgero.properties": "Properties",
   "item.forgero.vein_mining": "Vein Mining",

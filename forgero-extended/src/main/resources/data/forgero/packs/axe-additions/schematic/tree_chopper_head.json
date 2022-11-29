@@ -1,6 +1,6 @@
 {
   "type": "AXE_HEAD_SCHEMATIC",
-  "name": "battle_axe_head-schematic",
+  "name": "tree_copper_head-schematic",
   "parent": "tool_part_head_schematic",
   "container": {
     "type": "CREATE",
@@ -92,6 +92,16 @@
         "operation": "ADDITION",
         "value": -3.4
       }
+    ],
+    "active": [
+      {
+        "type": "VEIN_MINING_PATTERN",
+        "depth": 12,
+        "tag": "minecraft:block/logs"
+      }
     ]
+  },
+  "custom_data": {
+    "ingredient_count": "3"
   }
 }

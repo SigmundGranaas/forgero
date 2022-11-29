@@ -61,5 +61,8 @@
         "value": 0.1
       }
     ]
+  },
+  "custom_data": {
+    "ingredient_count": "1"
   }
 }

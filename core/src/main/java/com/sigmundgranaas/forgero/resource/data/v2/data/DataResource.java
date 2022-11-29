@@ -9,10 +9,7 @@ import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.sigmundgranaas.forgero.resource.data.factory.DataResourceFactory.mergeAttributes;
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
@@ -78,6 +75,10 @@ public class DataResource implements Identifiable {
 
     @Builder.Default
     private int priority = 5;
+
+    @Builder.Default
+    @SerializedName("custom_data")
+    private Map<String, String> customData = new HashMap<>();
 
     @NotNull
     public String name() {
@@ -173,6 +174,10 @@ public class DataResource implements Identifiable {
         newProps.attributes = mergeAttributes(mergeProperties.attributes, properties.attributes).stream().distinct().toList();
 
         return builder.property(newProps).build();
+    }
+
+    public Map<String, String> getCustomData() {
+        return Objects.requireNonNullElse(customData, new HashMap<>());
     }
 
 }

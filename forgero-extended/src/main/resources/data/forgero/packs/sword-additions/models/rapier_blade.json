@@ -9,17 +9,6 @@
       "order": 40
     },
     {
-      "name": "sword_blade_material",
-      "variants": [
-        {
-          "target": [
-            "model:rapier_blade.png"
-          ],
-          "template": "rapier_blade_tip_reinforcement.png"
-        }
-      ]
-    },
-    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:rapier_blade-schematic"

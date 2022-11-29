@@ -52,11 +52,20 @@
       "type": "GENERATE",
       "palette": "TRINKET",
       "template": "square_gem_center.png",
-      "order": 66,
+      "order": 79,
       "variants": [
         {
           "target": [
             "type:PICKAXE"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        },
+        {
+          "target": [
+            "type:AXE"
           ],
           "offset": [
             2,

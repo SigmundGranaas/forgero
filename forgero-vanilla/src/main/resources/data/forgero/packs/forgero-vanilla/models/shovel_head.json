@@ -13,7 +13,7 @@
       "template": "shovel_head_tip_reinforcement.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 20
+      "order": 40
     },
     {
       "name": "shovel_head_trinket",

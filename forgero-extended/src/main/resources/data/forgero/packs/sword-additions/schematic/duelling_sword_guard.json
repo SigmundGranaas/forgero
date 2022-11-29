@@ -39,14 +39,6 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
         "type": "TRINKET",
         "tier": 1
       }
@@ -83,5 +75,8 @@
         "value": 0.3
       }
     ]
+  },
+  "custom_data": {
+    "ingredient_count": "1"
   }
 }

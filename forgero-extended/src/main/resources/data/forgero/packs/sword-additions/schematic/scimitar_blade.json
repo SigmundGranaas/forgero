@@ -41,15 +41,6 @@
         "description": "sword_tip",
         "type": "MATERIAL",
         "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "scabbard",
-        "type": "SECONDARY_MATERIAL",
-        "tier": 1
       }
     ]
   },
@@ -93,5 +84,8 @@
         "value": 1
       }
     ]
+  },
+  "custom_data": {
+    "ingredient_count": "2"
   }
 }

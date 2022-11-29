@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object> {
@@ -23,6 +24,10 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
 
     static Ingredient of(String name, String nameSpace, Type type, List<Property> properties) {
         return new SimpleState(name, nameSpace, type, properties);
+    }
+
+    static Ingredient of(String name, String nameSpace, Type type, List<Property> properties, Map<String, String> custom) {
+        return new SimpleState(name, nameSpace, type, properties, custom);
     }
 
     Type type();
@@ -59,7 +64,7 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
     }
 
     default boolean hasCustomValue(String identifier) {
-        return false;
+        return getCustomValue(identifier).isPresent();
     }
 
     default Optional<CustomValue> getCustomValue(String identifier) {

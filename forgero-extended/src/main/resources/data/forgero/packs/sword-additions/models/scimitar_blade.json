@@ -13,20 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:saber_blade.png"
-          ],
-          "template": "saber_blade_tip_reinforcement.png"
-        }
-      ]
-    },
-    {
-      "name": "sword_blade_guard",
-      "variants": [
-        {
-          "target": [
             "model:scimitar_blade.png"
           ],
-          "template": "saber_blade_grip.png"
+          "template": "scimitar_blade_tip_reinforcement.png"
         }
       ]
     },

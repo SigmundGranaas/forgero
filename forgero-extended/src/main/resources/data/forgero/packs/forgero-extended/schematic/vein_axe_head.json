@@ -93,5 +93,8 @@
         "value": -3.1
       }
     ]
+  },
+  "custom_data": {
+    "ingredient_count": "3"
   }
 }

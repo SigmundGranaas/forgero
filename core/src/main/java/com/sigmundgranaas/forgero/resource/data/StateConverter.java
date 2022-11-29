@@ -77,7 +77,8 @@ public class StateConverter implements DataConverter<State> {
                 tree.type(resource.type()),
                 resource.properties()
                         .map(PropertyBuilder::createPropertyListFromPOJO)
-                        .orElse(Collections.emptyList()));
+                        .orElse(Collections.emptyList()),
+                resource.getCustomData());
         states.put(state.identifier(), state);
         nameMapping.put(resource.identifier(), state.identifier());
         return Optional.of(state);

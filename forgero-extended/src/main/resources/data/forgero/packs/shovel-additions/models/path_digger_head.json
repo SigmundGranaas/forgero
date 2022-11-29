@@ -3,8 +3,6 @@
   "models": [
     {
       "name": "shovel_head_material",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
       "variants": [
         {
           "target": [
@@ -19,7 +17,7 @@
       "modelType": "GENERATE",
       "template": "square_shovel_head.png",
       "palette": "TOOL_MATERIAL",
-      "order": 53
+      "order": 30
     },
     {
       "target": [
