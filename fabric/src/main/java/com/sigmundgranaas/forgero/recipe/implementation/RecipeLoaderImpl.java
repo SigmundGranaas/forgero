@@ -29,18 +29,11 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
 
         Map<RecipeTypes, JsonObject> recipes = new HashMap<>();
         try {
-            JsonObject toolRecipe = getRecipeAsJson(recipeFolderPath + "/tool.json");
-            JsonObject toolWithBindingRecipe = getRecipeAsJson(recipeFolderPath + "/tool_with_binding.json");
-            JsonObject toolPartSecondaryMaterialUpgrade = getRecipeAsJson(recipeFolderPath + "/toolpart_secondary_upgrade.json");
-            JsonObject toolPartGemUpgrade = getRecipeAsJson(recipeFolderPath + "/toolpart_gem_upgrade.json");
+
             JsonObject toolPartPatternRecipe = getRecipeAsJson(recipeFolderPath + "/toolpart_schematic_recipe.json");
             JsonObject stateCraftingRecipe = getRecipeAsJson(recipeFolderPath + "/state_crafting_recipe.json");
             JsonObject stateUpgradeRecipe = getRecipeAsJson(recipeFolderPath + "/state_upgrade_recipe.json");
             JsonObject schematicPartRecipe = getRecipeAsJson(recipeFolderPath + "/schematic_part_crafting.json");
-            recipes.put(RecipeTypes.TOOL_RECIPE, toolRecipe);
-            recipes.put(RecipeTypes.TOOL_WITH_BINDING_RECIPE, toolWithBindingRecipe);
-            recipes.put(RecipeTypes.TOOL_PART_SECONDARY_MATERIAL_UPGRADE, toolPartSecondaryMaterialUpgrade);
-            recipes.put(RecipeTypes.TOOL_PART_GEM_UPGRADE, toolPartGemUpgrade);
             recipes.put(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE, toolPartPatternRecipe);
             recipes.put(RecipeTypes.STATE_CRAFTING_RECIPE, stateCraftingRecipe);
             recipes.put(RecipeTypes.STATE_UPGRADE_RECIPE, stateUpgradeRecipe);

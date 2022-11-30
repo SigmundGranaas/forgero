@@ -102,15 +102,12 @@ public abstract class DynamicToolItemStackMixin {
                 }
             }
 
-
-
-
-             for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_SPEED)) {
-             var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
-             if (newValue.isPresent()) {
-             oldAttributes.remove(GENERIC_ATTACK_SPEED, attribute);
+            for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_SPEED)) {
+                var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
+                if (newValue.isPresent()) {
+                    oldAttributes.remove(GENERIC_ATTACK_SPEED, attribute);
                 }
-             }
+            }
 
 
             LinkedListMultimap<EntityAttribute, EntityAttributeModifier> orderedAttributes = LinkedListMultimap.create();

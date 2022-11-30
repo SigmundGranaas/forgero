@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.mixins;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.item.adapter.SimpleToolMaterialAdapter;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.block.Block;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -36,16 +35,16 @@ public class MiningToolItemMixin {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Inject(method = "<init>", at = @At("TAIL"))
     public void init(float attackDamage, float attackSpeed, ToolMaterial material, TagKey<Block> effectiveBlocks, Item.Settings settings, CallbackInfo ci) {
-        if (((Object)this) instanceof SimpleToolMaterialAdapter || this instanceof State) {
+        if (this instanceof State) {
             this.attackDamage = attackDamage;
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
 
             builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_DAMAGE).stream().findFirst().get().getId(), "Tool modifier", this.attackDamage, EntityAttributeModifier.Operation.ADDITION));
 
 
-             if (attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findAny().isPresent()) {
-             builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst().get().getId(), "Tool modifier", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
-             }
+            if (attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findAny().isPresent()) {
+                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(attributeModifiers.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst().get().getId(), "Tool modifier", attackSpeed, EntityAttributeModifier.Operation.ADDITION));
+            }
             this.attributeModifiers = builder.build();
         }
     }

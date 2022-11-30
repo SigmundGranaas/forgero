@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.item.NBTFactory;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

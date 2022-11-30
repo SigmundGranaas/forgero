@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.gametest;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.ForgeroRegistry;
 import com.sigmundgranaas.forgero.gem.EmptyGem;
-import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.tool.factory.ForgeroToolFactory;
 import com.sigmundgranaas.forgero.toolpart.handle.Handle;

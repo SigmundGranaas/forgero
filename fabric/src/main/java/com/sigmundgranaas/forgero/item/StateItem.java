@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.conversion.StateConverter;
-import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;

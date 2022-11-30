@@ -8,24 +8,13 @@ import com.sigmundgranaas.forgero.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.property.handler.TaggedPatternBreaking;
-import com.sigmundgranaas.forgero.registry.CustomItemRegistry;
-import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
-import com.sigmundgranaas.forgero.registry.impl.MineCraftRegistryHandler;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.resources.ModContainerService;
-import com.sigmundgranaas.forgero.resources.loader.FabricResourceLoader;
-import com.sigmundgranaas.forgero.resources.loader.ReloadableResourceLoader;
-import com.sigmundgranaas.forgero.resources.loader.ResourceManagerStreamProvider;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
@@ -48,7 +37,6 @@ public class ForgeroInitializer implements ModInitializer {
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
 
-        
         PipelineBuilder
                 .builder()
                 .register(FabricPackFinder.supplier())
@@ -59,12 +47,6 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
-
-        var loader = new FabricResourceLoader(new ModContainerService().getAllModsAsSet());
-        var registry = ForgeroItemRegistry.INSTANCE.loadResourcesIfEmpty(loader);
-        registry.register(new MineCraftRegistryHandler());
-        resourceReloader();
-        new CustomItemRegistry().register();
         registerRecipes();
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
@@ -133,17 +115,4 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
 
-    private void resourceReloader() {
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-            @Override
-            public void reload(ResourceManager manager) {
-                ForgeroItemRegistry.INSTANCE.updateResources(new ReloadableResourceLoader(new ModContainerService().getAllModsAsSet(), new ResourceManagerStreamProvider(manager)));
-            }
-
-            @Override
-            public Identifier getFabricId() {
-                return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "data");
-            }
-        });
-    }
 }

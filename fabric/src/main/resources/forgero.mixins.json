@@ -26,7 +26,6 @@
     "ItemRenderMixin",
     "JsonUnbakedModelOverrideMixin",
     "LifecycleResourceManagerImplMixin",
-    "ModelLoaderMixin",
     "PlayerInteractionManagerMixin"
   ],
   "injectors": {

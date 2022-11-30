@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item.tool;
 
+import com.sigmundgranaas.forgero.item.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.item.StateItem;
-import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.state.State;
