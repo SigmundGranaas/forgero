@@ -1,12 +1,10 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model;
+package com.sigmundgranaas.forgero.client.model;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModel;
-import com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModelCollection;
-import com.sigmundgranaas.forgero.client.model.Unbaked2DTexturedModel;
-import com.sigmundgranaas.forgero.client.model.UnbakedFabricModel;
 import com.sigmundgranaas.forgero.conversion.StateConverter;
 import com.sigmundgranaas.forgero.model.*;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
@@ -29,17 +27,13 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
-    private final UnbakedModelCollection unbakedModelCollection;
     private final LoadingCache<ItemStack, FabricBakedModel> cache;
     private final ModelRegistry registry;
-    private BakedModelCollection bakedModelCollection;
     private ModelLoader loader;
     private Function<SpriteIdentifier, Sprite> textureGetter;
 
-    public CompositeModelVariant(UnbakedModelCollection collection, ModelRegistry modelRegistry) {
-        this.unbakedModelCollection = collection;
+    public CompositeModelVariant(ModelRegistry modelRegistry) {
         this.registry = modelRegistry;
-        bakedModelCollection = new EmptyBakedModelCollection();
         this.cache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
             @Override
             public @NotNull FabricBakedModel load(@NotNull ItemStack stack) {
@@ -60,7 +54,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     @Nullable
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-        this.bakedModelCollection = unbakedModelCollection.bakeModels(loader, textureGetter);
+
         if (this.loader == null || this.loader != loader) {
             this.loader = loader;
             this.textureGetter = textureGetter;

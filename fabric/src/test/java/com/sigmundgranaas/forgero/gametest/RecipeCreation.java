@@ -1,12 +1,10 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.schematic.Schematic;
-import com.sigmundgranaas.forgero.item.ToolPartItem;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.registry.ForgeroItemRegistry;
+import com.sigmundgranaas.forgero.schematic.Schematic;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CraftingTableBlock;

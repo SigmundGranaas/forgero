@@ -10,13 +10,22 @@ import net.minecraft.util.Rarity;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.item.adapter.DescriptionWriter.getRarityFromInt;
-
 public class CompositeWriter implements Writer {
     private final Composite composite;
 
     public CompositeWriter(Composite composite) {
         this.composite = composite;
+    }
+
+    public static Rarity getRarityFromInt(int rarity) {
+        if (rarity >= 100) {
+            return Rarity.EPIC;
+        } else if (rarity >= 80) {
+            return Rarity.RARE;
+        } else if (rarity >= 30) {
+            return Rarity.UNCOMMON;
+        }
+        return Rarity.COMMON;
     }
 
     public static void write(Composite composite, List<Text> tooltip, TooltipContext context, int indent) {

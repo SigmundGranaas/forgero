@@ -4,7 +4,10 @@ import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
-import com.sigmundgranaas.forgero.recipe.customrecipe.*;
+import com.sigmundgranaas.forgero.recipe.customrecipe.GemUpgradeRecipe;
+import com.sigmundgranaas.forgero.recipe.customrecipe.SchematicPartRecipe;
+import com.sigmundgranaas.forgero.recipe.customrecipe.StateCraftingRecipe;
+import com.sigmundgranaas.forgero.recipe.customrecipe.StateUpgradeRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +38,9 @@ public class RecipeCollectionImpl implements RecipeCollection {
 
     @Override
     public List<ForgeroRecipeSerializer> getRecipeTypes() {
-        return List.of(ToolRecipe.ToolRecipeSerializer.INSTANCE,
-                ToolWithBindingRecipe.ToolWithBindingRecipeSerializer.INSTANCE,
-                SecondaryMaterialToolPartUpgradeRecipe.Serializer.INSTANCE,
+        return List.of(
                 GemUpgradeRecipe.Serializer.INSTANCE,
-                GemToolPartUpgradeRecipe.Serializer.INSTANCE,
                 StateCraftingRecipe.StateCraftingRecipeSerializer.INSTANCE,
-                SchematicToolPartRecipe.SchematicToolPartRecipeSerializer.INSTANCE,
                 StateUpgradeRecipe.Serializer.INSTANCE,
                 SchematicPartRecipe.SchematicPartRecipeSerializer.INSTANCE);
     }

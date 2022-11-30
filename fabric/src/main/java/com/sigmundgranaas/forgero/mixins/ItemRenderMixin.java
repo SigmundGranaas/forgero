@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.client.forgerotool.model.CompositeModelVariant;
+import com.sigmundgranaas.forgero.client.model.CompositeModelVariant;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;

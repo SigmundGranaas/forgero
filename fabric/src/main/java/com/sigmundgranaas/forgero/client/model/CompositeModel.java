@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model;
+package com.sigmundgranaas.forgero.client.model;
 
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;

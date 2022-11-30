@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.item.items;
+package com.sigmundgranaas.forgero.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -16,10 +16,12 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import static com.sigmundgranaas.forgero.item.ForgeroToolItem.ADDITION_ATTACK_DAMAGE_MODIFIER_ID;
-import static com.sigmundgranaas.forgero.item.ForgeroToolItem.TEST_UUID;
+import java.util.UUID;
 
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
+
+    UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
+    UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
 
     PropertyContainer dynamicProperties(ItemStack stack);
 

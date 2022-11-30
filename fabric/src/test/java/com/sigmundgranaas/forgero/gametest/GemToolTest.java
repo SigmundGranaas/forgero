@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.ForgeroRegistry;
 import com.sigmundgranaas.forgero.gem.EmptyGem;
 import com.sigmundgranaas.forgero.gem.ForgeroGem;
 import com.sigmundgranaas.forgero.gem.Gem;
-import com.sigmundgranaas.forgero.item.NBTFactory;
 import com.sigmundgranaas.forgero.material.material.EmptySecondaryMaterial;
 import com.sigmundgranaas.forgero.property.Attribute;
 import com.sigmundgranaas.forgero.property.AttributeType;

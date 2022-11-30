@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.client.forgerotool.model;
+package com.sigmundgranaas.forgero.client;
 
 import com.google.common.base.Charsets;
 import com.mojang.datafixers.util.Pair;

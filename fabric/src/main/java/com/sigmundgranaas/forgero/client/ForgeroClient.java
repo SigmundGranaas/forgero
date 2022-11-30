@@ -2,15 +2,11 @@ package com.sigmundgranaas.forgero.client;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreen;
-import com.sigmundgranaas.forgero.client.forgerotool.model.ForgeroModelVariantProvider;
-import com.sigmundgranaas.forgero.client.forgerotool.model.UnbakedModelCollection;
-import com.sigmundgranaas.forgero.client.texture.FabricTextureIdentifierFactory;
+import com.sigmundgranaas.forgero.client.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
 import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.resources.ForgeroTextures;
-import com.sigmundgranaas.forgero.texture.ForgeroToolPartTextureRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -36,9 +32,7 @@ public class ForgeroClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         initializeItemModels();
-
         HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
-
     }
 
     private void initializeItemModels() {
@@ -51,22 +45,15 @@ public class ForgeroClient implements ClientModInitializer {
                 .build()
                 .execute();
 
-        new ForgeroTextures().createTextureIdentifiers();
         registerToolPartTextures(modelRegistry);
-        var modelProvider = new ForgeroModelVariantProvider(UnbakedModelCollection.INSTANCE, modelRegistry);
+        var modelProvider = new ForgeroModelVariantProvider(modelRegistry);
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
     }
 
     private void registerToolPartTextures(ModelRegistry modelRegistry) {
-
-        ForgeroToolPartTextureRegistry registry = ForgeroToolPartTextureRegistry.getInstance(new FabricTextureIdentifierFactory());
         TEXTURES = modelRegistry.getTextures();
         TEXTURES.values().forEach(texture -> {
             ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.name().replace(".png", ""))));
         });
-        registry.getTextures().forEach(texture -> {
-            ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.getIdentifier())));
-        });
-        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + "transparent_base")));
     }
 }

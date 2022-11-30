@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.gametest;
 
 import com.mojang.authlib.GameProfile;
-import com.sigmundgranaas.forgero.item.adapter.SimpleToolMaterialAdapter;
 import com.sigmundgranaas.forgero.item.items.tool.ForgeroPickaxeItem;
 import com.sigmundgranaas.forgero.material.material.PrimaryMaterial;
 import com.sigmundgranaas.forgero.material.material.implementation.SimpleDuoMaterial;

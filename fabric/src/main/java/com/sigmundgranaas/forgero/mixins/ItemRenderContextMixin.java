@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.item.ForgeroToolItem;
-import com.sigmundgranaas.forgero.item.ToolPartItem;
-import com.sigmundgranaas.forgero.item.items.DynamicAttributeItem;
+import com.sigmundgranaas.forgero.item.DynamicAttributeItem;
 import net.fabricmc.fabric.impl.client.indigo.renderer.render.ItemRenderContext;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
@@ -27,7 +25,7 @@ public class ItemRenderContextMixin {
 
     @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack$Entry;getPositionMatrix()Lnet/minecraft/util/math/Matrix4f;"))
     public void renderModel(ItemStack itemStack, ModelTransformation.Mode transformMode, boolean invert, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int lightmap, int overlay, BakedModel model, ItemRenderContext.VanillaQuadHandler vanillaHandler, CallbackInfo ci) {
-        if ((itemStack.getItem() instanceof ForgeroToolItem || itemStack.getItem() instanceof ToolPartItem || itemStack.getItem() instanceof DynamicAttributeItem) && this.transformMode == ModelTransformation.Mode.GROUND) {
+        if ((itemStack.getItem() instanceof DynamicAttributeItem) && this.transformMode == ModelTransformation.Mode.GROUND) {
             this.matrixStack.scale(0.5f, 0.5f, 0.5f);
             this.matrixStack.multiplyPositionMatrix(Matrix4f.translate(0.5f, 0.5f, 0.5f));
         }
