@@ -1,6 +1,6 @@
 {
   "name": "Finding a schematic",
-  "icon": "forgero:pickaxe-schematic",
+  "icon": "forgero:pickaxe_head-schematic",
   "category": "forgero:getting_started_category",
   "pages": [
     {
@@ -11,12 +11,6 @@
       "type": "patchouli:text",
       "title": "Looting",
       "text": "Only the basic schematics can be crafted from existing tools. If you want to better schematics, you have to head out into the world and explore. Schematics have different rarity, and will appear in different loot chest depending on their rarity"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "title": "Vein Mining Axe head",
-      "item": "forgero:vein_axe-schematic",
-      "text": "Schematics will decide the base stats, look and functionality of your tools. Hmmm, I wonder what this schematic will let me do?"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/toolpart",
   "display": {
     "icon": {
-      "item": "forgero:iron-pickaxehead"
+      "item": "forgero:iron-pickaxe_head"
     },
     "title": {
       "translate": "advancements.forgero.head.title"
@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:heads"
+            "tag": "forgero:tool_part_head"
           }
         ]
       }

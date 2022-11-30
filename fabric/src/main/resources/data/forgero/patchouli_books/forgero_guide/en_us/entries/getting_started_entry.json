@@ -10,8 +10,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-pickaxe-iron-pickaxehead",
-      "recipe2": "forgero:netherite-axe-netherite-axehead-binding"
+      "recipe": "forgero:iron-pickaxe"
     }
   ]
 }

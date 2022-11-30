@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "fabric:axes"
+            "tag": "fabric:axe"
           }
         ]
       }
@@ -31,7 +31,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "fabric:pickaxes"
+            "tag": "fabric:pickaxe"
           }
         ]
       }

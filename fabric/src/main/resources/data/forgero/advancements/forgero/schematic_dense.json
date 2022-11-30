@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/schematic",
   "display": {
     "icon": {
-      "item": "forgero:dense_handle-schematic"
+      "item": "forgero:handle-schematic"
     },
     "title": {
       "translate": "advancements.forgero.schematic_dense.title"

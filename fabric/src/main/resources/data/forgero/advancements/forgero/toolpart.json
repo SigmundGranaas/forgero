@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/root",
   "display": {
     "icon": {
-      "item": "forgero:oak-swordhead"
+      "item": "forgero:oak-sword_blade"
     },
     "title": {
       "translate": "advancements.forgero.toolpart.title"
@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:heads"
+            "tag": "forgero:tool_part_head"
           }
         ]
       }
@@ -31,7 +31,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:heads"
+            "tag": "forgero:binding"
           }
         ]
       }
@@ -41,7 +41,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:handles"
+            "tag": "forgero:handle"
           }
         ]
       }

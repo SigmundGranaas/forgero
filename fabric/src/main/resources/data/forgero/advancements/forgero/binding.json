@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:bindings"
+            "tag": "forgero:binding"
           }
         ]
       }

@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:handle_schematics"
+            "tag": "forgero:handle_schematic"
           }
         ]
       }
@@ -31,7 +31,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:head_schematics"
+            "tag": "forgero:pickaxe_head_schematic"
           }
         ]
       }
@@ -41,7 +41,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:binding_schematics"
+            "tag": "forgero:binding_schematic"
           }
         ]
       }
@@ -51,7 +51,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:heads"
+            "tag": "forgero:tool_part_head"
           }
         ]
       }
@@ -61,7 +61,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:heads"
+            "tag": "forgero:binding"
           }
         ]
       }
@@ -71,7 +71,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:handles"
+            "tag": "forgero:handle"
           }
         ]
       }
@@ -81,7 +81,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:gems"
+            "tag": "forgero:gem"
           }
         ]
       }

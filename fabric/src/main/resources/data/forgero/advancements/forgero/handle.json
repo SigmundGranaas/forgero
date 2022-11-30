@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forgero:handles"
+            "tag": "forgero:handle"
           }
         ]
       }

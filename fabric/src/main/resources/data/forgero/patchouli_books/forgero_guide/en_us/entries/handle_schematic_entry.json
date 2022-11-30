@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:handle_schematic_default"
+      "recipe": "forgero:oak_handle-schematic_recipe"
     }
   ]
 }

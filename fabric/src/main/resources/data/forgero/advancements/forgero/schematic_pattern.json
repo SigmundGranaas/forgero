@@ -2,7 +2,7 @@
   "parent": "forgero:forgero/schematic",
   "display": {
     "icon": {
-      "item": "forgero:axe-schematic"
+      "item": "forgero:axe_head-schematic"
     },
     "title": {
       "translate": "advancements.forgero.schematic_pattern.title"
@@ -22,7 +22,7 @@
         "items": [
           {
             "items": [
-              "forgero:pattern_axe-schematic"
+              "forgero:axe_head-schematic"
             ]
           }
         ]
@@ -34,7 +34,7 @@
         "items": [
           {
             "items": [
-              "forgero:pattern_pickaxe-schematic"
+              "forgero:pickaxe_head-schematic"
             ]
           }
         ]
@@ -46,7 +46,7 @@
         "items": [
           {
             "items": [
-              "forgero:pattern_shovel-schematic"
+              "forgero:shovel_head-schematic"
             ]
           }
         ]
@@ -58,7 +58,7 @@
         "items": [
           {
             "items": [
-              "forgero:pattern_hoe-schematic"
+              "forgero:hoe_head-schematic"
             ]
           }
         ]

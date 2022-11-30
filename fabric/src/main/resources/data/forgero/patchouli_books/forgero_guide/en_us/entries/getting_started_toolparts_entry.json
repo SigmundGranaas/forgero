@@ -10,8 +10,8 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting heads",
-      "recipe": "forgero:iron-pickaxehead",
-      "recipe2": "forgero:netherite-axehead"
+      "recipe": "forgero:iron-pickaxe_head",
+      "recipe2": "forgero:netherite-axe_head"
     },
     {
       "type": "patchouli:crafting",

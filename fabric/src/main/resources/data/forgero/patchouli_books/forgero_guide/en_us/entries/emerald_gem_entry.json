@@ -8,12 +8,6 @@
       "text": "The emerald gem increases your durability by 100"
     },
     {
-      "type": "patchouli:spotlight",
-      "title": "Emerald gem, level 8",
-      "item": "forgero:emerald-gem{Gem:'8-emerald-gem', CustomModelData:8}",
-      "text": "A emerald gem upgraded to level 8"
-    },
-    {
       "type": "patchouli:crafting",
       "title": "Crafting a emerald gem",
       "recipe": "forgero:emerald_gem"

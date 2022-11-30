@@ -5,13 +5,13 @@
       "item": "minecraft:diamond"
     },
     {
-      "tag": "minecraft:stone_tool_materials"
+      "item": "minecraft:netherrack"
     },
     {
       "item": "minecraft:amethyst_shard"
     }
   ],
   "result": {
-    "item": "forgero:stoneheart-gem"
+    "item": "forgero:blazed_stone_heart-gem"
   }
 }
