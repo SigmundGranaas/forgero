@@ -4,7 +4,6 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import com.sigmundgranaas.forgero.exception.NoMaterialsException;
 import com.sigmundgranaas.forgero.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.util.Utils;
@@ -42,8 +41,8 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
         } catch (NullPointerException | JsonIOException e) {
             ForgeroInitializer.LOGGER.error("Unable to read recipes from: {}", recipeFolderPath);
             ForgeroInitializer.LOGGER.error(e);
-            throw new NoMaterialsException();
         }
+        return recipes;
     }
 
     private JsonObject getRecipeAsJson(String path) {

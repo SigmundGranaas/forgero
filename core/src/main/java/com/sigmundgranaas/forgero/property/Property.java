@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.property;
 
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public interface Property {
-    public static PropertyStream stream(List<Property> properties) {
+    static PropertyStream stream(List<Property> properties) {
         return new PropertyStream(properties.stream());
     }
 

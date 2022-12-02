@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.property.handler;
 import com.sigmundgranaas.forgero.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.property.active.BreakingDirection;
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 import net.minecraft.block.BlockState;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;

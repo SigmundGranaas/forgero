@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.property.active;
 
 import com.sigmundgranaas.forgero.property.ActivePropertyType;
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

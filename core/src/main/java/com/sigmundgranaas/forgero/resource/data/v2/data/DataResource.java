@@ -2,16 +2,16 @@ package com.sigmundgranaas.forgero.resource.data.v2.data;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.resource.data.SchemaVersion;
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
 import com.sigmundgranaas.forgero.state.Identifiable;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.resource.data.factory.DataResourceFactory.mergeAttributes;
 import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder(toBuilder = true)
@@ -79,6 +79,14 @@ public class DataResource implements Identifiable {
     @Builder.Default
     @SerializedName("custom_data")
     private Map<String, String> customData = new HashMap<>();
+
+    public static <T> List<T> mergeAttributes(List<T> attribute1, List<T> attribute2) {
+        if (attribute1 == null && attribute2 == null)
+            return Collections.emptyList();
+        else if (attribute1 != null && attribute2 != null) {
+            return Stream.of(attribute1, attribute2).flatMap(List::stream).toList();
+        } else return Objects.requireNonNullElse(attribute1, attribute2);
+    }
 
     @NotNull
     public String name() {
@@ -161,7 +169,6 @@ public class DataResource implements Identifiable {
         return Optional.ofNullable(palette);
     }
 
-
     public DataResource mergeResource(DataResource resource) {
         var builder = this.toBuilder();
 
@@ -179,5 +186,4 @@ public class DataResource implements Identifiable {
     public Map<String, String> getCustomData() {
         return Objects.requireNonNullElse(customData, new HashMap<>());
     }
-
 }

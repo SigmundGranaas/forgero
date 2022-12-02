@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.property.passive;
 
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 
 public class PassivePropertyBuilder {
     public static PassiveProperty createPassivePropertyFromPojo(PropertyPojo.Passive propertyPOJO) {

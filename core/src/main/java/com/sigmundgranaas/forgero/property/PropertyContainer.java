@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.property;
 
-import com.sigmundgranaas.forgero.resource.data.v1.pojo.PropertyPojo;
+import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;

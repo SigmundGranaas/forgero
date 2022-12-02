@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.resources;
 
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.identifier.texture.TemplateIdentifier;
 import com.sigmundgranaas.forgero.identifier.texture.TextureIdentifier;
 import com.sigmundgranaas.forgero.identifier.texture.toolpart.PaletteIdentifier;
-import com.sigmundgranaas.forgero.identifier.texture.toolpart.TemplateTextureIdentifier;
 import com.sigmundgranaas.forgero.texture.V2.FileLoader;
 
 import java.io.InputStream;
@@ -21,7 +21,7 @@ public class FileService implements FileLoader {
         if (id.getFileNameWithoutExtension().contains(":")) {
             return "assets/" + id.getFileNameWithExtension().replace(":", "/");
         }
-        if (id instanceof TemplateTextureIdentifier texture) {
+        if (id instanceof TemplateIdentifier texture) {
             return "assets/forgero/templates/textures/" + texture.getFileNameWithExtension();
         } else if (id instanceof PaletteIdentifier) {
             return "assets/forgero/templates/materials/" + id.getFileNameWithExtension();
