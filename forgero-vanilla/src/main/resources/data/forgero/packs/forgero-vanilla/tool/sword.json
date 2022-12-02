@@ -1,0 +1,47 @@
+{
+  "type": "SWORD",
+  "name": "sword",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "type": "SWORD_BLADE"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "type": "SWORD_BLADE"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "type": "SWORD_GUARD",
+        "tier": 1
+      }
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

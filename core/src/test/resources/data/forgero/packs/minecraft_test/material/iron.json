@@ -1,0 +1,14 @@
+{
+  "type": "METAL",
+  "name": "iron",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:iron_ingot"
+  },
+  "properties": {
+    "attributes": []
+  },
+  "palette": {
+    "name": "iron"
+  }
+}

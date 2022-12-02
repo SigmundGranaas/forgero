@@ -1,0 +1,9 @@
+{
+  "model_type": "COMPOSITE",
+  "models": [
+    {
+      "id": "oak-handle",
+      "template": "handle_primary"
+    }
+  ]
+}

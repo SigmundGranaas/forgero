@@ -1,0 +1,70 @@
+{
+  "type": "STONE",
+  "resource_type": "ABSTRACT",
+  "name": "default_stone",
+  "properties": {
+    "attributes": [
+      {
+        "id": "default_stone_mining_level",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "id": "default_stone_rarity",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 10
+      },
+      {
+        "id": "default_stone_speed_level",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "default_stone_durability",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 100.0
+      },
+      {
+        "id": "default_stone_attack_damage",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.5
+      },
+      {
+        "id": "default_stone_attack_damage",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.0,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      },
+      {
+        "id": "default_stone_attack_speed_handle",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -1.8,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
+      }
+    ]
+  }
+}

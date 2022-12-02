@@ -1,0 +1,12 @@
+{
+  "type": "TRINKET",
+  "name": "magnetico",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  }
+}

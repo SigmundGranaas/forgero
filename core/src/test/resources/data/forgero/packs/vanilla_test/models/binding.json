@@ -1,0 +1,49 @@
+{
+  "type": "BINDING",
+  "models": [
+    {
+      "name": "binding",
+      "template": "binding.png",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "variants": [
+        {
+          "target": [
+            "AXE"
+          ],
+          "template": "axe_binding.png"
+        },
+        {
+          "target": [
+            "WEAPON"
+          ],
+          "template": "weapon_binding.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "type:BINDING_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "binding"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "handle_secondary"
+    },
+    {
+      "target": [
+        "type:GEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "gem-0"
+    }
+  ]
+}

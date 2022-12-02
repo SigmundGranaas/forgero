@@ -1,0 +1,22 @@
+{
+  "type": "GEM",
+  "name": "quartz-gem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
+      }
+    ]
+  },
+  "palette": {
+    "name": "quartz-gem"
+  }
+}

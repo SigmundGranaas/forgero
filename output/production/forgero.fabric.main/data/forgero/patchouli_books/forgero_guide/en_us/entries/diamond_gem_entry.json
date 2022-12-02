@@ -1,0 +1,22 @@
+{
+  "name": "Diamond Gem",
+  "icon": "forgero:diamond-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The diamond gem can be applied to all tool parts, and increase the durability of tools"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Dimaond gem, level 8",
+      "item": "forgero:diamond-gem{Gem:'8-diamond-gem', CustomModelData:8}",
+      "text": "A diamond upgraded to level 8"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a diamond gem",
+      "recipe": "forgero:diamond_gem"
+    }
+  ]
+}

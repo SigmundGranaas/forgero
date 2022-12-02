@@ -1,0 +1,14 @@
+{
+  "type": "MINERAL",
+  "name": "diamond",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:diamond"
+  },
+  "properties": {
+    "attributes": []
+  },
+  "palette": {
+    "name": "diamond"
+  }
+}

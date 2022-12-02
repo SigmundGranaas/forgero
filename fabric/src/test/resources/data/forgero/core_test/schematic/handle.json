@@ -1,0 +1,50 @@
+{
+  "type": "HANDLE_SCHEMATIC",
+  "name": "handle-schematic",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "HANDLE",
+    "recipe": {
+      "ingredients": [
+        {
+          "id": "this"
+        },
+        {
+          "type": "MATERIAL",
+          "unique": true
+        }
+      ]
+    },
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
+        "tier": 1
+      }
+    ],
+    "models": [
+      {}
+    ]
+  },
+  "properties": {
+    "attributes": []
+  },
+  "model": {
+    "type": "LAYERED",
+    "id": "this"
+  }
+}

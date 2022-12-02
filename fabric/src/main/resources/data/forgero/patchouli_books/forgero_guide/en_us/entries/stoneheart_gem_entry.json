@@ -1,0 +1,16 @@
+{
+  "name": "Stoneheart Gem",
+  "icon": "forgero:stone_heart-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The stoneheart gem increases mining speed against stones"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a stoneheart gem",
+      "recipe": "forgero:stoneheart_gem"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "PICKAXE",
+  "models": [
+    {
+      "target": [
+        "type:PICKAXE"
+      ],
+      "modelType": "COMPOSITE"
+    },
+    {
+      "target": [
+        "type:BINDING",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding"
+    }
+  ]
+}

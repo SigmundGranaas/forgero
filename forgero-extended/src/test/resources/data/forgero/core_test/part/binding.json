@@ -1,0 +1,8 @@
+{
+  "type": "BINDING",
+  "name": "binding",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

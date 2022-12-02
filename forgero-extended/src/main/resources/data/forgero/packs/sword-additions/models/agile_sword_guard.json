@@ -1,0 +1,39 @@
+{
+  "type": "SWORD_GUARD",
+  "models": [
+    {
+      "name": "agile_guard",
+      "template": "agile_sword_guard.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 60
+    },
+    {
+      "name": "sword_guard_trinket",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "square_gem_small.png",
+      "order": 62,
+      "offset": [
+        -4,
+        -4
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:agile_sword_guard-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "agile_guard"
+    },
+    {
+      "target": [
+        "type:TRINKET",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "sword_guard_trinket"
+    }
+  ]
+}

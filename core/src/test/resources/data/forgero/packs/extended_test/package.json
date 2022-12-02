@@ -1,0 +1,10 @@
+{
+  "name": "forgero-extended",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "forgero-test",
+  "dependencies": [
+    "minecraft",
+    "forgero"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "type": "GEM",
+  "name": "stone_heart-gem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 40
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "END",
+        "category": "ALL",
+        "operation": "MULTIPLICATION",
+        "value": 1.2,
+        "condition": {
+          "target": "BLOCK",
+          "tag": [
+            "minecraft:base_stone_overworld"
+          ]
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "stone_heart-gem"
+  }
+}

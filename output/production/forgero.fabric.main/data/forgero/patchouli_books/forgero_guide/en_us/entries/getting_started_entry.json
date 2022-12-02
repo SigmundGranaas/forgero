@@ -1,0 +1,17 @@
+{
+  "name": "Crafting your first tool",
+  "icon": "forgero:diamond-pickaxe",
+  "category": "forgero:getting_started_category",
+  "priority": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Tools can be crafted by combining tool part in a crafting table. A tool requires a handle and a head. The binding is optional, but can yield supply the tool with additional attributes just like the other tools parts. The tools type, i.e. pickaxe, is decided by which head component you have used."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:iron-pickaxe-iron-pickaxehead",
+      "recipe2": "forgero:netherite-axe-netherite-axehead-binding"
+    }
+  ]
+}

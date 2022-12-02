@@ -1,0 +1,15 @@
+{
+  "name": "Shovel head Schematic",
+  "icon": "forgero:shovel_head-schematic",
+  "category": "forgero:schematic_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The default shovelhead schematic creates a basic shovelhead"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:iron-shovel_head-schematic_recipe"
+    }
+  ]
+}

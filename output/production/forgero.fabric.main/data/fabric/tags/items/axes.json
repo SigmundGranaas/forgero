@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forgero:axes",
+      "required": false
+    },
+    {
+      "id": "#c:wooden_axe",
+      "required": false
+    },
+    {
+      "id": "#c:stone_axe",
+      "required": false
+    },
+    {
+      "id": "#c:iron_axe",
+      "required": false
+    },
+    {
+      "id": "#c:golden_axe",
+      "required": false
+    },
+    {
+      "id": "#c:diamond_axe",
+      "required": false
+    },
+    {
+      "id": "#c:netherite_axe",
+      "required": false
+    }
+  ]
+}
