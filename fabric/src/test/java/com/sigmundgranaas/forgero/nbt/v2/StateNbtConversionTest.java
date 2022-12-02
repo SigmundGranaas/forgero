@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.sigmundgranaas.forgero.item.items.testutil.Tools.IRON_PICKAXE;
+import static com.sigmundgranaas.forgero.testutil.Tools.IRON_PICKAXE;
 import static com.sigmundgranaas.forgero.testutil.Upgrades.BINDING;
 
 public class StateNbtConversionTest {

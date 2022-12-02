@@ -9,9 +9,9 @@ import net.minecraft.nbt.NbtList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.sigmundgranaas.forgero.item.items.testutil.ToolParts.BINDING;
-import static com.sigmundgranaas.forgero.item.items.testutil.Tools.IRON_PICKAXE;
 import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.*;
+import static com.sigmundgranaas.forgero.testutil.Tools.IRON_PICKAXE;
+import static com.sigmundgranaas.forgero.testutil.Upgrades.BINDING;
 
 
 public class StateToNbtTest {

@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.nbt.v2;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.item.items.testutil.Materials;
-import com.sigmundgranaas.forgero.item.items.testutil.Schematics;
 import com.sigmundgranaas.forgero.item.nbt.v2.CompositeParser;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Ingredient;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.testutil.Materials;
+import com.sigmundgranaas.forgero.testutil.Schematics;
 import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.item.items.testutil.ToolParts.HANDLE;
-import static com.sigmundgranaas.forgero.item.items.testutil.ToolParts.PICKAXE_HEAD;
 import static com.sigmundgranaas.forgero.nbt.NBTs.PICKAXE_NBT;
+import static com.sigmundgranaas.forgero.testutil.ToolParts.HANDLE;
+import static com.sigmundgranaas.forgero.testutil.ToolParts.PICKAXE_HEAD;
 
 
 public class NbtToStateTest {
