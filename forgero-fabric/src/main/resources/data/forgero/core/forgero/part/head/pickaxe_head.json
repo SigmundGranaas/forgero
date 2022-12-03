@@ -1,0 +1,19 @@
+{
+  "type": "PICKAXE_HEAD",
+  "construct": {
+    "recipe": {
+      "type": "CRAFTING",
+      "ingredients": [
+        {
+          "type": "PICKAXE_HEAD-SCHEMATIC"
+        },
+        {
+          "type": "MATERIAL",
+          "count": 3
+        }
+      ],
+      "tier": 1
+    }
+  },
+  "properties": {}
+}

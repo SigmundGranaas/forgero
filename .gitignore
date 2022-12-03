@@ -116,6 +116,22 @@ fabric/run/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-/fabric/logs/
+/forgero-fabric/logs/
+/forgero-fabric/run/
+/forgero-fabric/build/
+/forgero-fabric/.gradle/
+
+/forgero-vanilla/logs/
+/forgero-vanilla/run/
+/forgero-vanilla/build/
+
+/forgero-extended/logs/
+/forgero-extended/run/
+/forgero-extended/build/
+
+/core/logs/
+/core/run/
+/core/build/
+
 /logs/
 /run/

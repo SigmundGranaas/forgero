@@ -1,0 +1,15 @@
+{
+  "name": "Pickaxehead Schematic",
+  "icon": "forgero:pickaxe_head-schematic",
+  "category": "forgero:schematic_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The default pickaxehead schematic creates a basic pickaxe head"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:iron-pickaxe_head-schematic_recipe"
+    }
+  ]
+}

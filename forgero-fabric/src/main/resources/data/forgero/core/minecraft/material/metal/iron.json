@@ -1,0 +1,14 @@
+{
+  "type": "PICKAXE_HEAD-SCHEMATIC",
+  "properties": {
+    "attributes": [],
+    "active": [
+      {
+        "name": "PROFICIENCY",
+        "value": [
+          "minecraft:pickaxe_mineable"
+        ]
+      }
+    ]
+  }
+}
