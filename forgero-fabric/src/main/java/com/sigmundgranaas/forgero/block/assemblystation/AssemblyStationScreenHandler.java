@@ -227,7 +227,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         this.context.run((world, pos) -> {
             if (!world.isClient) {
                 compositeSlot.removeCompositeIngredient();
-                inventory.clear();
+                IntStream.range(0, 9).forEach(index -> inventory.getStack(index).decrement(1));
             }
         });
     }
