@@ -118,7 +118,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
     public ItemStack transferSlot(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
+        if (slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
             if (invSlot < this.inventory.size()) {
@@ -168,7 +168,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             if (!world.isClient && compositeSlot.isRemovable()) {
                 ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                 var output = craftInventory(world);
-                if (output.isPresent() && compositeSlot.isEmpty()) {
+                if (output.isPresent() && compositeSlot.isRemovable()) {
                     compositeSlot.setStack(output.get());
                     serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
                 } else if (!compositeSlot.isEmpty() && output.isEmpty()) {
@@ -232,13 +232,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         });
     }
 
-    private void onItemAddedToCraftingSlots() {
-
-    }
-
     private static class CompositeSlot extends Slot {
         private Composite composite;
-        private boolean isConstructed;
+        private boolean isConstructed = false;
         private boolean doneConstructing = false;
 
 
@@ -275,11 +271,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             this.inventory.getStack(0).decrement(1);
         }
 
-        public void addSuggestedComposite(Composite composite) {
-            this.composite = composite;
-            this.isConstructed = true;
-        }
-
         @Override
         public boolean canInsert(ItemStack stack) {
             return StateConverter.of(stack).filter(Composite.class::isInstance).isPresent();
@@ -290,7 +281,10 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         }
 
         public boolean isRemovable() {
-            return doneConstructing;
+            if (inventory.isEmpty()) {
+                return true;
+            }
+            return doneConstructing || !isConstructed;
         }
     }
 }
