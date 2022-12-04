@@ -9,11 +9,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHandler> {
-    //A path to the gui texture. In this example we use the texture from the dispenser
-    private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/container/assembly_table_test.png");
+    private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/container/assembly_table_ui.png");
 
     public AssemblyStationScreen(AssemblyStationScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
+        super(handler, inventory, Text.literal("Assembly Station"));
     }
 
     @Override
