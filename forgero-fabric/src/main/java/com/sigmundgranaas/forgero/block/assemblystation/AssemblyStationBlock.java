@@ -44,6 +44,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
         this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(PART, AssemblyStationPart.LEFT);
     }
 
+
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
         VoxelShape[] buffer = new VoxelShape[]{shape, VoxelShapes.empty()};
 
@@ -60,6 +61,10 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
     @Override
     public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
         return true;
+    }
+
+    public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
+        return stateFrom.isOf(this) || super.isSideInvisible(state, stateFrom, direction);
     }
 
     @Override
