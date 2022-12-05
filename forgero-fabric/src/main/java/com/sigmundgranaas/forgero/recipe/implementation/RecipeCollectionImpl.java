@@ -4,10 +4,7 @@ import com.sigmundgranaas.forgero.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
-import com.sigmundgranaas.forgero.recipe.customrecipe.GemUpgradeRecipe;
-import com.sigmundgranaas.forgero.recipe.customrecipe.SchematicPartRecipe;
-import com.sigmundgranaas.forgero.recipe.customrecipe.StateCraftingRecipe;
-import com.sigmundgranaas.forgero.recipe.customrecipe.StateUpgradeRecipe;
+import com.sigmundgranaas.forgero.recipe.customrecipe.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,7 @@ public class RecipeCollectionImpl implements RecipeCollection {
                 GemUpgradeRecipe.Serializer.INSTANCE,
                 StateCraftingRecipe.StateCraftingRecipeSerializer.INSTANCE,
                 StateUpgradeRecipe.Serializer.INSTANCE,
-                SchematicPartRecipe.SchematicPartRecipeSerializer.INSTANCE);
+                SchematicPartRecipe.SchematicPartRecipeSerializer.INSTANCE,
+                RepairKitRecipe.RepairKitRecipeSerializer.INSTANCE);
     }
 }

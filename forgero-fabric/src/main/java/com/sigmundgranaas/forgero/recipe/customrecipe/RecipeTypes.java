@@ -5,6 +5,8 @@ import java.util.Locale;
 public enum RecipeTypes {
 
     MISC_SHAPELESS,
+
+    REPAIR_KIT_RECIPE,
     GEM_UPGRADE_RECIPE,
     STATE_CRAFTING_RECIPE,
     STATE_UPGRADE_RECIPE,
