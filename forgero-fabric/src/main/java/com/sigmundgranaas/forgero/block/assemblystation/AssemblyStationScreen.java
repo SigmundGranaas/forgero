@@ -12,7 +12,7 @@ public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHa
     private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/container/assembly_table_ui.png");
 
     public AssemblyStationScreen(AssemblyStationScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, Text.literal("Assembly Station"));
+        super(handler, inventory, Text.translatable("block.forgero.assembly_station"));
     }
 
     @Override
