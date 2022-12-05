@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.item.DynamicItems.registerDynamicItems;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -49,7 +50,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
-        
+
 
         registerRecipes();
         new CommandRegistry().registerCommand();
