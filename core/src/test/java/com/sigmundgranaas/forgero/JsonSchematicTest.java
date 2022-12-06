@@ -25,7 +25,7 @@ public class JsonSchematicTest {
     void testJsonConstructFromSchematicData() {
         var schematicData = SCHEMATIC_JSON.apply("schematic_example.json");
         assertNotNull(schematicData.construct());
-        assertEquals(schematicData.construct().get().target(), Constants.THIS);
+        assertEquals(Constants.THIS, schematicData.construct().get().target());
     }
 
     @Test

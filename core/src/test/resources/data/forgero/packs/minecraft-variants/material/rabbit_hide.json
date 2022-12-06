@@ -1,0 +1,42 @@
+{
+  "type": "LEATHER",
+  "name": "rabbit_hide",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:rabbit_hide"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 10
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 5
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 50
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.7
+      }
+    ]
+  },
+  "palette": {
+    "name": "rabbit_hide"
+  }
+}

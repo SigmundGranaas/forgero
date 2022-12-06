@@ -30,6 +30,5 @@ class JsonSlotTest {
         assertEquals(slot.category(), newSlot.category());
         assertEquals(slot.type(), newSlot.type());
         assertEquals(slot.upgradeType(), newSlot.upgradeType());
-        assertEquals(slot.tier(), newSlot.tier());
     }
 }

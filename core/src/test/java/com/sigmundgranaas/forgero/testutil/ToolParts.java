@@ -33,6 +33,6 @@ public class ToolParts {
     public static Composite OAK_BINDING = Composite.builder()
             .addIngredient(OAK)
             .addIngredient(Schematics.BINDING_SCHEMATIC)
-            .type(Types.BINDING)
+            .type(Types.TOOL_BINDING)
             .build();
 }

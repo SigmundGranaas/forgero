@@ -37,7 +37,7 @@ test {
         main {
             resources {
                 srcDirs += [
-                        //project(':forgero-vanilla').sourceSets.main.resources
+                        project(':forgero-vanilla').sourceSets.main.resources
                 ]
             }
         }

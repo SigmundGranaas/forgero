@@ -1,0 +1,23 @@
+{
+  "type": "STONE",
+  "name": "calcite",
+  "parent": "default_stone",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:calcite"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "default_stone_rarity",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 18
+      }
+    ]
+  },
+  "palette": {
+    "name": "calcite"
+  }
+}

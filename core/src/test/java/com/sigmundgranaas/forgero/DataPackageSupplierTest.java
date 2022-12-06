@@ -11,7 +11,7 @@ public class DataPackageSupplierTest {
     @Test
     void testLoadDataPackage() {
         var dataPackage = new FilePackageLoader(CORE_PATH).get();
-        Assertions.assertEquals("core_test", dataPackage.name());
-        Assertions.assertEquals("forgero", dataPackage.nameSpace());
+        Assertions.assertEquals("minecraft-vanilla", dataPackage.name());
+        Assertions.assertEquals("minecraft", dataPackage.nameSpace());
     }
 }
