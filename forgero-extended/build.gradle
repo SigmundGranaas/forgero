@@ -31,10 +31,9 @@ processResources {
 }
 
 
-test {
-    useJUnitPlatform()
+tasks.withType(Test) {
     sourceSets {
-        main {
+        test {
             resources {
                 srcDirs += [
                         project(':forgero-vanilla').sourceSets.main.resources
@@ -42,4 +41,9 @@ test {
             }
         }
     }
+}
+
+test {
+    useJUnitPlatform()
+
 }
