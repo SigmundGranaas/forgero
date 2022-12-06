@@ -21,16 +21,6 @@ public class DataConversionTest {
         var states = data.resources().stream().map(converter::convert).flatMap(Optional::stream).toList();
 
         Assertions.assertTrue(states.size() > 1);
-        Assertions.assertTrue(states.stream().anyMatch(state -> state.type().typeName().equals("PICKAXE")));
-    }
-
-    @Test
-    void registryTest() {
-        var dataPackage = new FilePackageLoader(CORE_PATH).get();
-
-        //Registry.register(dataPackage);
-        //Registry.init();
-
-        Assertions.assertEquals("iron-pickaxe", ForgeroStateRegistry.STATES.get("forgero#iron-pickaxe").get().name());
+        Assertions.assertTrue(states.stream().anyMatch(state -> state.name().equals("oak")));
     }
 }

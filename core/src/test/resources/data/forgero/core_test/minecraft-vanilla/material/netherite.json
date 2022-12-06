@@ -1,0 +1,86 @@
+{
+  "type": "METAL",
+  "name": "netherite",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:netherite_ingot"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 100
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.0
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 30
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 9.0
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.0
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2100.0
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 4
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 1000
+      },
+      {
+        "id": "netherite-attack-speed-base",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
+      },
+      {
+        "id": "netherite-attack-speed-base",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -2,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "netherite"
+  }
+}

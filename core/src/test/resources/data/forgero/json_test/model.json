@@ -1,9 +1,13 @@
 {
-  "model_type": "COMPOSITE",
-  "models": [
+  "modelType": "COMPOSITE",
+  "name": "oak-handle",
+  "template": "handle_primary",
+  "variants": [
     {
-      "id": "oak-handle",
-      "template": "handle_primary"
+      "target": [
+        "type:SWORD"
+      ],
+      "template": "handle_short"
     }
   ]
 }

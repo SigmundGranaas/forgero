@@ -1,8 +1,0 @@
-{
-  "type": "PICKAXE_HEAD",
-  "name": "pickaxe_head",
-  "resource_type": "CONSTRUCT_TEMPLATE",
-  "model": {
-    "type": "COMPOSITE"
-  }
-}

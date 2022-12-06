@@ -1,0 +1,18 @@
+{
+  "parent": "WEAPON",
+  "name": "SWORD",
+  "children": [
+    {
+      "name": "SABER"
+    },
+    {
+      "name": "KNIFE"
+    },
+    {
+      "name": "DAGGER"
+    },
+    {
+      "name": "SHORT_SWORD"
+    }
+  ]
+}

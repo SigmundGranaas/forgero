@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.property.AttributeType;
-
 import com.sigmundgranaas.forgero.testutil.Types;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,12 +35,6 @@ public class HandleStateTest {
     }
 
     @Test
-    void testHandleTypeSchematicFail() {
-        var handle = HANDLE;
-        Assertions.assertFalse(handle.test(Types.SCHEMATIC));
-    }
-
-    @Test
     void testHandleUpgradeIsNotMutated() {
         var handle = HANDLE;
         Assertions.assertNotEquals(handle, handle.upgrade(REDSTONE_GEM));
@@ -50,6 +43,6 @@ public class HandleStateTest {
     @Test
     void testHandleUpgradeAppliesProperty() {
         var handle = HANDLE.upgrade(REDSTONE_GEM);
-        Assertions.assertEquals(12, handle.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
+        Assertions.assertEquals(11, handle.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
     }
 }

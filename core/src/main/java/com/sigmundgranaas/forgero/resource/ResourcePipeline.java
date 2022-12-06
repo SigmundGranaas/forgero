@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.resource.data.v2.factory.TypeFactory;
+import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
@@ -22,8 +23,10 @@ public class ResourcePipeline {
 
     private List<RecipeData> recipes;
 
+    private ForgeroSettings settings;
 
-    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener) {
+
+    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, ForgeroSettings settings) {
         this.packages = packages;
         this.dataListeners = dataListeners;
         this.inflatedDataListener = inflatedDataListener;
@@ -32,6 +35,7 @@ public class ResourcePipeline {
         this.tree = new TypeTree();
         this.idMapper = new HashMap<>();
         this.recipes = new ArrayList<>();
+        this.settings = settings;
     }
 
     public void execute() {
@@ -75,10 +79,10 @@ public class ResourcePipeline {
         packs.add("minecraft");
 
         packages.forEach(pack -> packs.add(pack.name()));
-        return packages.stream().filter(pack -> packs.containsAll(pack.dependencies())).toList();
+        return packages.stream().filter(settings::filterPacks).filter(pack -> packs.containsAll(pack.dependencies())).toList();
     }
 
     private List<DataResource> validateResources(List<DataPackage> resources) {
-        return resources.stream().map(DataPackage::data).flatMap(List::stream).toList();
+        return resources.stream().map(DataPackage::data).flatMap(List::stream).filter(settings::filterResources).toList();
     }
 }
