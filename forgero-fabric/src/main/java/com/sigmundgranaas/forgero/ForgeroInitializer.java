@@ -55,7 +55,10 @@ public class ForgeroInitializer implements ModInitializer {
         registerRecipes();
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
+
         new ARRPGenerator().generate();
+
+        registerDynamicItems();
 
         register();
     }
