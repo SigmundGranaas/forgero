@@ -10,9 +10,9 @@ import com.sigmundgranaas.forgero.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.property.handler.TaggedPatternBreaking;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.resources.DynamicResourceGenerator;
+import com.sigmundgranaas.forgero.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.settings.SettingsLoader;
+import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
@@ -34,15 +34,13 @@ public class ForgeroInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        var setting = SettingsLoader.load();
-
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(PatternBreaking.predicate, PatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
 
         PipelineBuilder
                 .builder()
-                .register(setting)
+                .register(ForgeroSettings.SETTINGS)
                 .register(FabricPackFinder.supplier())
                 .state(ForgeroStateRegistry.stateListener())
                 .state(ForgeroStateRegistry.compositeListener())
@@ -51,10 +49,12 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
+        
+
         registerRecipes();
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
-        new DynamicResourceGenerator().generateResources();
+        new ARRPGenerator().generate();
 
         register();
     }

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.settings;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.Forgero;
 
@@ -19,14 +20,21 @@ public class SettingsLoader {
     public static ForgeroSettings load() {
         Path path = Path.of(settingsLocation);
         try (InputStream stream = Files.newInputStream(path)) {
-            if (stream != null) {
+
+
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(ForgeroSettings.class, ForgeroSettings.deserializer);
+            Gson settingsGson = gsonBuilder.create();
+            ForgeroSettings settings = settingsGson.fromJson(new JsonReader(new BufferedReader(new InputStreamReader(stream))), ForgeroSettings.class);
+
+            if (settings.getResourceLogging()) {
                 Forgero.LOGGER.info("Reading Forgero setting from:  {}", path);
-                Gson settingsGson = new Gson();
-                ForgeroSettings settings = settingsGson.fromJson(new JsonReader(new BufferedReader(new InputStreamReader(stream))), ForgeroSettings.class);
-                return settings;
             }
 
+            return settings;
+
         } catch (Exception e) {
+            Forgero.LOGGER.error(e);
             Forgero.LOGGER.info("No Forgero settings file detected in {}", path);
         }
         return ForgeroSettings.builder().build();

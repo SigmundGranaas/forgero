@@ -27,7 +27,9 @@ public class PipelineBuilder {
     }
 
     public PipelineBuilder register(DataPackage dataPackage) {
-        Forgero.LOGGER.info("Registered {}", dataPackage.name());
+        if (settings.getResourceLogging()) {
+            Forgero.LOGGER.info("Registered {}", dataPackage.name());
+        }
         packages.add(dataPackage);
         return this;
     }
@@ -54,7 +56,9 @@ public class PipelineBuilder {
 
     public PipelineBuilder register(PackageSupplier supplier) {
         var packs = supplier.supply();
-        packs.forEach(pack -> Forgero.LOGGER.info("Registered {}", pack.name()));
+        if (settings.getResourceLogging()) {
+            packs.forEach(pack -> Forgero.LOGGER.info("Registered {}", pack.name()));
+        }
         packages.addAll(packs);
         return this;
     }
