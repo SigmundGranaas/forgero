@@ -1,17 +1,19 @@
 {
   "type": "PICKAXE",
   "construct": {
-    "recipe": {
-      "ingredients": [
-        {
-          "type": "PICKAXE_HEAD",
-          "unique": true
-        },
-        {
-          "type": "HANDLE"
-        }
-      ]
-    },
+    "recipes": [
+      {
+        "ingredients": [
+          {
+            "type": "PICKAXE_HEAD",
+            "unique": true
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
     "slots": [
       {
         "upgrade_type": "SMITHING",

@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.testutil;
 
-import com.sigmundgranaas.forgero.property.attribute.Category;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.slot.EmptySlot;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static com.sigmundgranaas.forgero.testutil.Materials.IRON;
 import static com.sigmundgranaas.forgero.testutil.Materials.OAK;
@@ -14,14 +13,14 @@ public class ToolParts {
     public static Composite HANDLE = Composite.builder()
             .addIngredient(OAK)
             .addIngredient(Schematics.HANDLE_SCHEMATIC)
-            .addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM), Set.of(Category.UNDEFINED)))
+            .addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM), Collections.emptySet()))
             .type(Types.HANDLE)
             .build();
 
     public static Composite REINFORCED_HANDLE = Composite.builder()
             .addIngredient(OAK)
             .addIngredient(Schematics.REINFORCED_HANDLE_SCHEMATIC)
-            .addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM, Types.MATERIAL), Set.of(Category.UNDEFINED)))
+            .addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM, Types.MATERIAL), Collections.emptySet()))
             .type(Types.HANDLE)
             .build();
 

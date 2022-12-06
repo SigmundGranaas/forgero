@@ -1,0 +1,72 @@
+{
+  "type": "MINERAL",
+  "name": "diamond",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:diamond"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.0
+      },
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 80
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1500
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.5
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 8
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "OFFENSIVE",
+        "value": 300
+      },
+      {
+        "id": "diamond-attack-speed-base",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
+      },
+      {
+        "id": "diamond-attack-speed-base",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -2.5,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "diamond"
+  }
+}

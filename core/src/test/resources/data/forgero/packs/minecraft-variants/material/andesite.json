@@ -1,0 +1,23 @@
+{
+  "type": "STONE",
+  "name": "andesite",
+  "parent": "default_stone",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:andesite"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "default_stone_rarity",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 13
+      }
+    ]
+  },
+  "palette": {
+    "name": "andesite"
+  }
+}

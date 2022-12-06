@@ -14,7 +14,7 @@ public class JsonPathLoader {
         Path core_path = Path.of("invalid");
         try {
             core_path = Path.of(JsonPathLoader.class.getResource(rootFolder).toURI());
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException | NullPointerException e) {
             e.printStackTrace();
         }
         try (var filesStream = Files.walk(core_path, 20)) {

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.testutil;
 
 import com.sigmundgranaas.forgero.property.Attribute;
 import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.property.attribute.Category;
 
 import static com.sigmundgranaas.forgero.property.AttributeType.*;
 import static com.sigmundgranaas.forgero.property.CalculationOrder.BASE;
@@ -17,6 +18,13 @@ public class Properties {
     public static Attribute ATTACK_DAMAGE_10 = new AttributeBuilder(ATTACK_DAMAGE)
             .applyOrder(BASE)
             .applyOperation(ADDITION)
+            .applyValue(10)
+            .build();
+
+    public static Attribute ANY_ATTACK_DAMAGE_10 = new AttributeBuilder(ATTACK_DAMAGE)
+            .applyOrder(BASE)
+            .applyOperation(ADDITION)
+            .applyCategory(Category.ALL)
             .applyValue(10)
             .build();
 

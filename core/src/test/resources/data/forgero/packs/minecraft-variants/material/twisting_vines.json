@@ -1,0 +1,16 @@
+{
+  "type": "PLANT",
+  "name": "twisting_vines",
+  "parent": "vines",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:twisting_vines"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "twisting_vines"
+  }
+}

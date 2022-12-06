@@ -1,0 +1,127 @@
+{
+  "type": "TOOL_BINDING",
+  "models": [
+    {
+      "name": "binding",
+      "template": "binding.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": "60",
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ],
+          "template": "axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "spiked_binding",
+      "template": "spiked_binding.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": "60",
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "spiked_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "spiked_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "type": "GENERATE",
+      "palette": "TRINKET",
+      "template": "square_gem_center.png",
+      "order": 79,
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        },
+        {
+          "target": [
+            "model:spiked_binding.png"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "type:BINDING_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "binding"
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:spiked_binding-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "spiked_binding"
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:spiked_binding-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "spiked_binding"
+    },
+    {
+      "target": [
+        "type:GEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
+    },
+    {
+      "target": [
+        "type:TOTEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
+    }
+  ]
+}
