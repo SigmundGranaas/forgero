@@ -1,17 +1,42 @@
 package com.sigmundgranaas.forgero.loot;
 
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class TreasureInjector {
+    private final List<LootEntry> entries;
+
+    public TreasureInjector() {
+        this.entries = new ArrayList<>();
+    }
+
+
+    private void registerEntries() {
+        var filter = StateFilter.builder()
+                .lowerRarity(70)
+                .upperRarity(100)
+                .types(List.of("PART"));
+        
+        registerEntry(LootEntry.of(filter, LootTables.ABANDONED_MINESHAFT_CHEST));
+    }
+
+    private void registerEntry(LootEntry entry) {
+        this.entries.add(entry);
+    }
 
     public void registerLoot() {
+        registerEntries();
+        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, table, setter) -> {
+            entries.stream().filter(entry -> entry.matches(id)).forEach(entry -> entry.apply(table));
+        });
+
+
         /**
-         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, table, setter) -> {
-         if (id.equals(LootTables.ABANDONED_MINESHAFT_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolType(ForgeroToolTypes.PICKAXE)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(10, 50))
-         );
 
          table.pool(registerSchematicInPool(createStandardConstantPool(),
          SchematicFilter.createSchematicFilter()
@@ -138,7 +163,16 @@ public class TreasureInjector {
          }
          });
          */
+
+
     }
+
+    private LootPool.Builder oneEntry() {
+        return LootPool.builder()
+                .rolls(ConstantLootNumberProvider.create(1));
+    }
+
+
 /*
     private LootPool.Builder registerToolPartsIntoPool(LootPool.Builder pool, ToolPartFilter toolPartFilter) {
         for (ForgeroToolPart toolPart : toolPartFilter.getToolParts()) {
@@ -156,9 +190,6 @@ public class TreasureInjector {
         return pool;
     }
 
-    private LootPool.Builder createStandardConstantPool() {
-        return LootPool.builder()
-                .rolls(ConstantLootNumberProvider.create(1));
-    }
+
         */
 }

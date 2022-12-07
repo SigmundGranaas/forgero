@@ -49,7 +49,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
-        
+
 
         registerRecipes();
         new CommandRegistry().registerCommand();
