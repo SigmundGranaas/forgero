@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.resources;
 
 
-import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.resources.dynamic.DynamicResourceGenerator;
@@ -12,27 +11,17 @@ import com.sigmundgranaas.forgero.type.Type;
 import lombok.Synchronized;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.lang.JLang;
-import net.devtech.arrp.json.models.JModel;
-import net.devtech.arrp.json.models.JTextures;
-import net.devtech.arrp.json.recipe.JIngredient;
-import net.devtech.arrp.json.recipe.JIngredients;
-import net.devtech.arrp.json.recipe.JResult;
-import net.devtech.arrp.json.recipe.JShapelessRecipe;
 import net.devtech.arrp.json.tags.JTag;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgero.item.Items.EMPTY_REPAIR_KIT;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ARRPGenerator {
@@ -45,8 +34,8 @@ public class ARRPGenerator {
         generators.add(generator);
     }
 
-    public void generate() {
-        generateResources();
+    public static void generate() {
+        new ARRPGenerator().generateResources();
         generators.stream().filter(DynamicResourceGenerator::enabled).forEach(generator -> generator.generate(RESOURCE_PACK));
     }
 
@@ -55,9 +44,6 @@ public class ARRPGenerator {
         generateTags();
         generateTagsFromStateTree();
         createMaterialToolTags();
-        createRepairKitsRecipes();
-        createRepairKitModel();
-        createRepairKitLang();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
 
         if (FabricLoader.getInstance().isModLoaded("patchouli")) {
@@ -109,46 +95,4 @@ public class ARRPGenerator {
         }
     }
 
-    private void createRepairKitsRecipes() {
-        var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
-                .map(node -> node.getResources(State.class))
-                .orElse(ImmutableList.<State>builder().build());
-        for (State material : materials) {
-            if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
-                var ingredients = JIngredients.ingredients();
-                ingredients.add(JIngredient.ingredient().item(ForgeroStateRegistry.STATE_TO_CONTAINER.get(material.identifier())));
-                ingredients.add(JIngredient.ingredient().item(EMPTY_REPAIR_KIT));
-                var recipe = JShapelessRecipe.shapeless(ingredients, JResult.result(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit").toString()));
-                RESOURCE_PACK.addRecipe(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"), recipe);
-            }
-        }
-    }
-
-    private void createRepairKitModel() {
-        var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
-                .map(node -> node.getResources(State.class))
-                .orElse(ImmutableList.<State>builder().build());
-        for (State material : materials) {
-            if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
-                var model = new JModel();
-                model.parent("item/generated");
-                model.textures(new JTextures().layer0("forgero:item/base_repair_kit"));
-                RESOURCE_PACK.addModel(model, new Identifier(Forgero.NAMESPACE, "item/" + material.name() + "_repair_kit"));
-            }
-        }
-    }
-
-    private void createRepairKitLang() {
-        var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
-                .map(node -> node.getResources(State.class))
-                .orElse(ImmutableList.<State>builder().build());
-        var lang = new JLang();
-        for (State material : materials) {
-            if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
-                var name = material.name().substring(0, 1).toUpperCase() + material.name().substring(1);
-                lang.item(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"), String.format("%s Repair kit", name));
-            }
-        }
-        RESOURCE_PACK.addLang(new Identifier(Forgero.NAMESPACE, "en_us"), lang);
-    }
 }

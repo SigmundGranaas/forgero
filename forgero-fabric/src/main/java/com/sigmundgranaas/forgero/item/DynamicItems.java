@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.item;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -18,7 +19,10 @@ import static com.sigmundgranaas.forgero.item.Items.EMPTY_REPAIR_KIT;
 public class DynamicItems {
 
     public static void registerDynamicItems() {
-        registerRepairKits();
+        if (ForgeroSettings.SETTINGS.getEnableRepairKits()) {
+            registerRepairKits();
+        }
+
     }
 
     public static List<Item> registerRepairKits() {

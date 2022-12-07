@@ -32,7 +32,7 @@ public class ForgeroSettings {
     private List<String> disabledPacks = new ArrayList<>();
 
     @Builder.Default
-    @SerializedName("enabled_repair_kits")
+    @SerializedName("enable_repair_kits")
     private Boolean enableRepairKits = true;
 
     @Builder.Default
@@ -63,7 +63,7 @@ public class ForgeroSettings {
 
             setIfNotNull(data.get("disabled_resources"), builder::disabledResources);
             setIfNotNull(data.get("disabled_packs"), builder::disabledPacks);
-            setIfNotNull(data.get("enabled_repair_kits"), builder::enableRepairKits);
+            setIfNotNull(data.get("enable_repair_kits"), builder::enableRepairKits);
             setIfNotNull(data.get("resource_logging"), builder::resourceLogging);
             return builder.build();
         }

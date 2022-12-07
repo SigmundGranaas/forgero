@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.SlotData;
+import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.loader.api.FabricLoader;
@@ -47,7 +48,8 @@ public record RecipeCreatorImpl(
     @Override
     public List<RecipeWrapper> createRecipes() {
         List<RecipeWrapper> stateRecipes = compositeRecipes();
-        var repairKits = createRepairKitToolRecipes();
+
+        var repairKits = ForgeroSettings.SETTINGS.getEnableRepairKits() ? createRepairKitToolRecipes() : new ArrayList<RecipeWrapper>();
         List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
         if (FabricLoader.getInstance().isModLoaded("patchouli")) {
             guidebooksRecipes = createGuideBookRecipes();

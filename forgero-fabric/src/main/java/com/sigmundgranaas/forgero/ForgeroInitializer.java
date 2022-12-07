@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
@@ -56,7 +57,9 @@ public class ForgeroInitializer implements ModInitializer {
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
 
-        new ARRPGenerator().generate();
+        ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
+
+        ARRPGenerator.generate();
 
         registerDynamicItems();
 

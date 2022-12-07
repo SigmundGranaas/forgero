@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.model.ModelRegistry;
 import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -39,6 +40,7 @@ public class ForgeroClient implements ClientModInitializer {
         var modelRegistry = new ModelRegistry();
         PipelineBuilder
                 .builder()
+                .register(ForgeroSettings.SETTINGS)
                 .register(FabricPackFinder.supplier())
                 .data(modelRegistry.paletteListener())
                 .data(modelRegistry.modelListener())
