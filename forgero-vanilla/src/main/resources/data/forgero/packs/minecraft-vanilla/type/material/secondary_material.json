@@ -10,6 +10,9 @@
     },
     {
       "name": "STRING"
+    },
+    {
+      "name": "FEATHER"
     }
   ]
 }
