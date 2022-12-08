@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.loot;
 
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +15,13 @@ public class TreasureInjector {
 
 
     private void registerEntries() {
-        var filter = StateFilter.builder()
-                .lowerRarity(70)
-                .upperRarity(100)
-                .types(List.of("PART"));
-        
-        registerEntry(LootEntry.of(filter, LootTables.ABANDONED_MINESHAFT_CHEST));
+        mineshaft();
+        stronghold();
+        ancientCity();
+        pyramid();
+        junglePyramid();
+        toolSmith();
+        ruinedPortal();
     }
 
     private void registerEntry(LootEntry entry) {
@@ -36,160 +35,184 @@ public class TreasureInjector {
         });
 
 
-        /**
-
-         table.pool(registerSchematicInPool(createStandardConstantPool(),
-         SchematicFilter.createSchematicFilter()
-         .filterToolType(ForgeroToolTypes.PICKAXE)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(0, 50))
-         );
-         }
-         if (id.equals(LootTables.END_CITY_TREASURE_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(50, 100))
-         );
-         table.pool(registerSchematicInPool(createStandardConstantPool(),
-         SchematicFilter.createSchematicFilter()
-         .filterLevel(50, 100))
-         );
-         }
-         if (id.equals(LootTables.DESERT_PYRAMID_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolType(ForgeroToolTypes.SHOVEL)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(20, 60))
-         );
-
-         table.pool(registerSchematicInPool(createStandardConstantPool(),
-         SchematicFilter.createSchematicFilter()
-         .filterToolType(ForgeroToolTypes.SHOVEL)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(0, 50))
-         );
-         }
-         if (id.equals(LootTables.SHIPWRECK_TREASURE_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolType(ForgeroToolTypes.AXE)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(20, 60))
-         );
-         //axes, swords, ++, 20-60
-         }
-         if (id.equals(LootTables.RUINED_PORTAL_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterMaterial("gold"))
-         );
-         //only gold toolparts
-         }
-         if (id.equals(LootTables.SIMPLE_DUNGEON_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterLevel(30))
-         );
-         //all tool parts, 0-30
-         }
-         if (id.equals(LootTables.PILLAGER_OUTPOST_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolType(List.of(ForgeroToolTypes.AXE))
-         .filterToolPartType(ForgeroToolPartTypes.HANDLE)
-         .filterLevel(30))
-         );
-         //weapons and handles, ++,0-30
-         }
-         if (id.equals(LootTables.STRONGHOLD_LIBRARY_CHEST)) {
-         table.pool(registerSchematicInPool(createStandardConstantPool(),
-         SchematicFilter.createSchematicFilter()
-         .filterLevel(40, 80))
-         );
-         //all schematics, 40-80
-         }
-         if (id.equals(LootTables.WOODLAND_MANSION_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolType(List.of(ForgeroToolTypes.AXE))
-         .filterToolPartType(ForgeroToolPartTypes.HANDLE)
-         .filterLevel(20, 80))
-         );
-
-         table.pool(registerSchematicInPool(createStandardConstantPool(),
-         SchematicFilter.createSchematicFilter()
-         .filterToolType(ForgeroToolTypes.AXE)
-         .filterToolType(ForgeroToolTypes.PICKAXE)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(20, 80))
-         );
-         //weapons and axes and schematics - 20-80
-         }
-         if (id.equals(LootTables.VILLAGE_WEAPONSMITH_CHEST)) {
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolType(List.of(ForgeroToolTypes.AXE))
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(0, 60))
-         );
-         table.pool(registerSchematicInPool(createStandardConstantPool(),
-         SchematicFilter.createSchematicFilter()
-         .filterToolType(ForgeroToolTypes.AXE)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(0, 40))
-         );
-
-         //weapons and axes and schematics - 0-60
-         }
-         if (id.equals(LootTables.VILLAGE_TOOLSMITH_CHEST)) {
-         //TOOLS and schematics - 0-60
-         table.pool(registerToolPartsIntoPool(createStandardConstantPool(),
-         ToolPartFilter.createToolPartFilter()
-         .filterToolType(List.of(ForgeroToolTypes.AXE, ForgeroToolTypes.PICKAXE, ForgeroToolTypes.SHOVEL))
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(0, 60))
-         );
-         table.pool(registerSchematicInPool(createStandardConstantPool(),
-         SchematicFilter.createSchematicFilter()
-         .filterToolType(ForgeroToolTypes.AXE)
-         .filterToolType(ForgeroToolTypes.PICKAXE)
-         .filterToolType(ForgeroToolTypes.SHOVEL)
-         .filterToolPartType(ALL_TOOL_PARTS)
-         .filterLevel(0, 40))
-         );
-
-         }
-         });
-         */
-
-
     }
 
-    private LootPool.Builder oneEntry() {
-        return LootPool.builder()
-                .rolls(ConstantLootNumberProvider.create(1));
+    private void mineshaft() {
+        var partFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(50)
+                .types(List.of("PICKAXE_HEAD", "TOOL_BINDING", "HANDLE"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(LootTables.ABANDONED_MINESHAFT_CHEST))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
+
+        var schematicFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(40)
+                .types(List.of("PICKAXE_HEAD_SCHEMATIC", "HANDLE_SCHEMATIC"));
+        var schematicEntry = SingleLootEntry.builder()
+                .filter(schematicFilter.build()::filter)
+                .target(List.of(LootTables.ABANDONED_MINESHAFT_CHEST))
+                .chance(0.3f)
+                .rolls(1)
+                .build();
+
+        registerEntry(partEntry);
+        registerEntry(schematicEntry);
     }
 
+    private void stronghold() {
+        var partFilter = StateFilter.builder()
+                .lowerRarity(30)
+                .upperRarity(90)
+                .types(List.of("PART"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(LootTables.STRONGHOLD_CROSSING_CHEST, LootTables.STRONGHOLD_CROSSING_CHEST))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
 
-/*
-    private LootPool.Builder registerToolPartsIntoPool(LootPool.Builder pool, ToolPartFilter toolPartFilter) {
-        for (ForgeroToolPart toolPart : toolPartFilter.getToolParts()) {
-            Item toolPartItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, toolPart.getToolPartIdentifier()));
-            pool.with(ItemEntry.builder(toolPartItem).weight(1000 - getToolPartValue(toolPart)));
-        }
-        return pool;
+        var schematicFilter = StateFilter.builder()
+                .lowerRarity(30)
+                .upperRarity(90)
+                .types(List.of("SCHEMATIC"));
+        var schematicEntry = SingleLootEntry.builder()
+                .filter(schematicFilter.build()::filter)
+                .target(List.of(LootTables.STRONGHOLD_CROSSING_CHEST, LootTables.STRONGHOLD_CROSSING_CHEST))
+                .chance(0.3f)
+                .rolls(1)
+                .build();
+
+        registerEntry(partEntry);
+        registerEntry(schematicEntry);
     }
 
-    private LootPool.Builder registerSchematicInPool(LootPool.Builder pool, SchematicFilter toolPartFilter) {
-        for (Schematic pattern : toolPartFilter.getSchematics()) {
-            Item patternItem = Registry.ITEM.get(new Identifier(ForgeroInitializer.MOD_NAMESPACE, pattern.getSchematicIdentifier()));
-            pool.with(ItemEntry.builder(patternItem).weight(100 - pattern.getRarity()));
-        }
-        return pool;
+    private void ancientCity() {
+        var partFilter = StateFilter.builder()
+                .lowerRarity(60)
+                .upperRarity(120)
+                .types(List.of("PART"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(LootTables.ANCIENT_CITY_CHEST, LootTables.ANCIENT_CITY_ICE_BOX_CHEST))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
+
+        var schematicFilter = StateFilter.builder()
+                .lowerRarity(60)
+                .upperRarity(120)
+                .types(List.of("SCHEMATIC"));
+        var schematicEntry = SingleLootEntry.builder()
+                .filter(schematicFilter.build()::filter)
+                .target(List.of(LootTables.ANCIENT_CITY_CHEST, LootTables.ANCIENT_CITY_ICE_BOX_CHEST))
+                .chance(0.3f)
+                .rolls(1)
+                .build();
+
+        registerEntry(partEntry);
+        registerEntry(schematicEntry);
     }
 
+    private void pyramid() {
+        var partFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(50)
+                .types(List.of("SHOVEL_HEAD", "TOOL_BINDING", "HANDLE"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(LootTables.DESERT_PYRAMID_CHEST))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
 
-        */
+        var schematicFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(40)
+                .types(List.of("SHOVEL_HEAD_SCHEMATIC", "HANDLE_SCHEMATIC"));
+        var schematicEntry = SingleLootEntry.builder()
+                .filter(schematicFilter.build()::filter)
+                .target(List.of(LootTables.DESERT_PYRAMID_CHEST))
+                .chance(0.3f)
+                .rolls(1)
+                .build();
+
+        registerEntry(partEntry);
+        registerEntry(schematicEntry);
+    }
+
+    private void junglePyramid() {
+        var partFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(50)
+                .types(List.of("AXE_HEAD", "TOOL_BINDING", "HANDLE"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(LootTables.JUNGLE_TEMPLE_CHEST))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
+
+        var schematicFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(40)
+                .types(List.of("AXE_HEAD_SCHEMATIC", "HANDLE_SCHEMATIC"));
+        var schematicEntry = SingleLootEntry.builder()
+                .filter(schematicFilter.build()::filter)
+                .target(List.of(LootTables.JUNGLE_TEMPLE_CHEST))
+                .chance(0.3f)
+                .rolls(1)
+                .build();
+
+        registerEntry(partEntry);
+        registerEntry(schematicEntry);
+    }
+
+    private void toolSmith() {
+        var partFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(50)
+                .types(List.of("PART"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(LootTables.VILLAGE_TOOLSMITH_CHEST))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
+
+        var schematicFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(40)
+                .types(List.of("SCHEMATIC"));
+        var schematicEntry = SingleLootEntry.builder()
+                .filter(schematicFilter.build()::filter)
+                .target(List.of(LootTables.VILLAGE_TOOLSMITH_CHEST))
+                .chance(0.3f)
+                .rolls(1)
+                .build();
+
+        registerEntry(partEntry);
+        registerEntry(schematicEntry);
+    }
+
+    private void ruinedPortal() {
+        var partFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(90)
+                .include(List.of("gold"))
+                .types(List.of("PART"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(LootTables.RUINED_PORTAL_CHEST))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
+
+        registerEntry(partEntry);
+    }
+
 }
