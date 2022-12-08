@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forgero:spruce-kimiri_sword_guard-schematic_recipe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "okay": {
+      "conditions": {
+        "recipe": "forgero:spruce-kimiri_sword_guard-schematic_recipe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "okay",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forgero:spruce-kimiri_sword_guard-schematic_recipe"
+    ]
+  }
+}

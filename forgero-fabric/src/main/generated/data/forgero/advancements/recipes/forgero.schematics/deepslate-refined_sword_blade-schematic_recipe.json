@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forgero:deepslate-refined_sword_blade-schematic_recipe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "okay": {
+      "conditions": {
+        "recipe": "forgero:deepslate-refined_sword_blade-schematic_recipe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "okay",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forgero:deepslate-refined_sword_blade-schematic_recipe"
+    ]
+  }
+}
