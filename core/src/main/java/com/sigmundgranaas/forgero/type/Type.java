@@ -24,7 +24,14 @@ public interface Type extends Matchable {
     Type BLADE = new SimpleType("BLADE", Optional.empty(), new TypeMatcher());
     Type SWORD_BLADE = new SimpleType("SWORD_BLADE", Optional.of(BLADE), new TypeMatcher());
 
+    Type BOW = new SimpleType("BOW", Optional.of(WEAPON), new TypeMatcher());
 
+    Type UNSTRUNG_BOW = new SimpleType("UNSTRUNG_BOW", Optional.of(WEAPON), new TypeMatcher());
+
+    Type ARROW = new SimpleType("ARROW", Optional.empty(), new TypeMatcher());
+
+    Type ARROW_HEAD = new SimpleType("ARROW_HEAD", Optional.of(PART), new TypeMatcher());
+    
     Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
 
     Type TRINKET = new SimpleType("TRINKET", Optional.empty(), new SchematicMatcher());

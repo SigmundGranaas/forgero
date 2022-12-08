@@ -54,6 +54,8 @@ public class StateToItemConverter {
     private ItemGroup getItemGroup(State state) {
         if (state.test(Type.TOOL)) {
             return ItemGroups.FORGERO_TOOLS;
+        } else if (state.test(Type.BOW) || state.test(Type.ARROW) || state.test(Type.ARROW_HEAD)) {
+            return ItemGroups.FORGERO_BOWS;
         } else if (state.test(Type.WEAPON)) {
             return ItemGroups.FORGERO_WEAPONS;
         } else if (state.test(Type.PART)) {

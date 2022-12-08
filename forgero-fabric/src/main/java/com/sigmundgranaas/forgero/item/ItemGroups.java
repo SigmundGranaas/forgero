@@ -36,6 +36,11 @@ public class ItemGroups {
             .icon(ItemGroups::createTrinketIcon)
             .build();
 
+    public static final ItemGroup FORGERO_BOWS = FabricItemGroupBuilder.create(
+                    new Identifier(ForgeroInitializer.MOD_NAMESPACE, "bows"))
+            .icon(ItemGroups::createBowIcon)
+            .build();
+
     private static ItemStack createForgeroToolIcon() {
         /**
          ForgeroToolPart head = new ToolPartHeadBuilder(ForgeroRegistry.TOOL_PART.getHead("iron-pickaxehead").get())
@@ -74,5 +79,9 @@ public class ItemGroups {
 
     private static ItemStack createTrinketIcon() {
         return new ItemStack(Registry.ITEM.get(new Identifier("forgero:redstone-gem")));
+    }
+
+    private static ItemStack createBowIcon() {
+        return new ItemStack(Registry.ITEM.get(new Identifier("minecraft:bow")));
     }
 }

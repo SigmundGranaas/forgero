@@ -1,0 +1,20 @@
+{
+  "type": "ARROW_HEAD",
+  "models": [
+    {
+      "name": "arrow_head",
+      "template": "arrow_head.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "type:ARROW_HEAD_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "arrow_head"
+    }
+  ]
+}
