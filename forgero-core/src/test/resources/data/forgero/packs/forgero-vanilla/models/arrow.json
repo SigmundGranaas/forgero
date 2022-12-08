@@ -1,0 +1,30 @@
+{
+  "type": "ARROW",
+  "models": [
+    {
+      "name": "arrow",
+      "template": "arrow.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 10
+    },
+
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "type:ARROW_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "arrow",
+      "order": 20
+    },
+    {
+      "target": [
+        "type:ARROW_HEAD",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "arrow_head"
+    }
+  ]
+}
