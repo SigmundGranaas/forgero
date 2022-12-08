@@ -43,8 +43,6 @@ public class TreasureInjector {
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, table, setter) -> {
             entries.stream().filter(entry -> entry.matches(id)).forEach(entry -> entry.apply(table));
         });
-
-
     }
 
     private void mineshaft() {

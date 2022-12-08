@@ -29,7 +29,7 @@ public class SingleLootEntry implements LootEntry {
     public void apply(LootTable.Builder builder) {
         var pool = LootPool.builder()
                 .rolls(BinomialLootNumberProvider.create(rolls, chance));
-        filter.get().forEach(item -> pool.with(ItemEntry.builder(item).apply(new GemLevelFunction.Builder().add(5)).weight(1)));
+        filter.get().forEach(item -> pool.with(ItemEntry.builder(item).apply(new GemLevelFunction.Builder()).weight(1)));
         builder.pool(pool);
     }
 
