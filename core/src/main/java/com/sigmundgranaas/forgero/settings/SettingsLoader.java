@@ -32,7 +32,6 @@ public class SettingsLoader {
             return settings;
 
         } catch (Exception e) {
-            Forgero.LOGGER.error(e);
             Forgero.LOGGER.info("No Forgero settings file detected in {}", path);
         }
         return ForgeroSettings.builder().build();

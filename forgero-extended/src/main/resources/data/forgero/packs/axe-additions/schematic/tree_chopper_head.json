@@ -97,7 +97,7 @@
       {
         "type": "VEIN_MINING_PATTERN",
         "depth": 12,
-        "tag": "minecraft:block/logs"
+        "tag": "minecraft:logs"
       }
     ]
   },
