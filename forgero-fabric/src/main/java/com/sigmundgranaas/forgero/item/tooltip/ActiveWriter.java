@@ -32,7 +32,7 @@ public class ActiveWriter implements Writer {
             MutableText propertyText = Text.literal("  ")
                     .append(Text.translatable(Writer.toTranslationKey("vein_mining")))
                     .append(Text.literal(": "))
-                    .append(Text.translatable("depth"))
+                    .append(Text.translatable("depth "))
                     .append(Text.literal(String.valueOf(veinBreaking.depth())))
                     .formatted(Formatting.WHITE);
             tooltip.add(propertyText);
