@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forgero:copper-katana_blade-schematic_recipe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "okay": {
+      "conditions": {
+        "recipe": "forgero:copper-katana_blade-schematic_recipe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "okay",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forgero:copper-katana_blade-schematic_recipe"
+    ]
+  }
+}
