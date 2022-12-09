@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.client;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.client.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
@@ -8,6 +10,8 @@ import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
+import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -53,6 +57,13 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private void registerToolPartTextures(ModelRegistry modelRegistry) {
+        var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
+                .map(node -> node.getResources(State.class))
+                .orElse(ImmutableList.<State>builder().build());
+        for (State material : materials) {
+            ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null));
+        }
+        
         TEXTURES.putAll(modelRegistry.getTextures());
         TEXTURES.values().forEach(texture -> {
             ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.name().replace(".png", ""))));
