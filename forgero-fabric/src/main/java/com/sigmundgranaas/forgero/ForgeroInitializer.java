@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.item.DynamicItems.registerDynamicItems;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -51,13 +53,18 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
-
+        
 
         Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
         registerRecipes();
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
-        new ARRPGenerator().generate();
+
+        ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
+
+        ARRPGenerator.generate();
+
+        registerDynamicItems();
 
         register();
     }
