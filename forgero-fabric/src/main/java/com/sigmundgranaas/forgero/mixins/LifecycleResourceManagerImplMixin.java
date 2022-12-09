@@ -21,7 +21,6 @@ public abstract class LifecycleResourceManagerImplMixin {
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) {
-
         if (id.getNamespace().equals(ForgeroInitializer.MOD_NAMESPACE) && id.getPath().contains(".png")) {
             var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
             if (TEXTURES.containsKey(textureId)) {

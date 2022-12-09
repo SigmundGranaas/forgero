@@ -3,6 +3,8 @@ package com.sigmundgranaas.forgero.resources.dynamic;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.client.ForgeroClient;
+import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
@@ -39,6 +41,8 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
         createRepairKitsRecipes(pack);
         createRepairKitLang(pack);
         createRepairKitModel(pack);
+
+
     }
 
     private void createRepairKitsRecipes(RuntimeResourcePack pack) {
@@ -61,10 +65,14 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
                 .map(node -> node.getResources(State.class))
                 .orElse(ImmutableList.<State>builder().build());
         for (State material : materials) {
+            ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null));
             if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
                 var model = new JModel();
                 model.parent("item/generated");
-                model.textures(new JTextures().layer0("forgero:item/base_repair_kit"));
+                //model.textures(new JTextures().layer0("forgero:item/base_repair_kit"));
+                model.textures(new JTextures().layer0("forgero:item/repair_kit_leather_base")
+                        .layer1("forgero:item/repair_kit_needle_base")
+                        .layer2(String.format("forgero:item/%s-repair_kit", material.name())));
                 pack.addModel(model, new Identifier(Forgero.NAMESPACE, "item/" + material.name() + "_repair_kit"));
             }
         }

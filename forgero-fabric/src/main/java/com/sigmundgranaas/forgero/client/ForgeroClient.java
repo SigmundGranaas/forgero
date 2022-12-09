@@ -53,9 +53,11 @@ public class ForgeroClient implements ClientModInitializer {
     }
 
     private void registerToolPartTextures(ModelRegistry modelRegistry) {
-        TEXTURES = modelRegistry.getTextures();
+        TEXTURES.putAll(modelRegistry.getTextures());
         TEXTURES.values().forEach(texture -> {
             ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + texture.name().replace(".png", ""))));
         });
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + "repair_kit_leather_base")));
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(ForgeroInitializer.MOD_NAMESPACE, "item/" + "repair_kit_needle_base")));
     }
 }
