@@ -20,22 +20,7 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "sword_blade_guard.png",
-      "order": 55,
-      "offset": [
-        -4,
-        -4
-      ],
-      "variants": [
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            -2,
-            -2
-          ]
-        }
-      ]
+      "order": 55
     },
     {
       "name": "sword_blade_trinket",
