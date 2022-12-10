@@ -7,6 +7,9 @@ public class PassivePropertyBuilder {
         if (propertyPOJO.type == PassivePropertyType.STATIC) {
             return new StaticProperty(StaticPassiveType.valueOf(propertyPOJO.tag.toUpperCase()));
         } else {
+            if (propertyPOJO.tag.equals("EMISSIVE")) {
+                return new LeveledProperty(LeveledPassiveType.EMISSIVE);
+            }
             return new LeveledProperty(LeveledPassiveType.MAGNETIC);
         }
     }

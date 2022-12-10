@@ -31,6 +31,10 @@ repositories {
     maven { url = "https://api.modrinth.com/maven/" }
     maven { url = 'https://maven.blamejared.com' }
     maven { url = "https://storage.googleapis.com/devan-maven/" }
+    maven {
+        name 'Gegy'
+        url 'https://maven.gegy.dev'
+    }
 
 
     // Add repositories to retrieve artifacts from in here.
@@ -57,6 +61,10 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
     modImplementation("net.devtech:arrp:0.6.2")
+
+    modImplementation "curse.maven:modmenu-308702:4145207"
+    modImplementation "curse.maven:lambdynamiclights-393442:3824820"
+    modImplementation("dev.lambdaurora:spruceui:4.1.0+1.19.2")
 
     //Twilight forest compat
     //modImplementation "teamtwilight:twilightforest:4.1.1102:universal"
