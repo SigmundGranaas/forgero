@@ -20,8 +20,6 @@ public class SettingsLoader {
     public static ForgeroSettings load() {
         Path path = Path.of(settingsLocation);
         try (InputStream stream = Files.newInputStream(path)) {
-
-
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(ForgeroSettings.class, ForgeroSettings.deserializer);
             Gson settingsGson = gsonBuilder.create();
@@ -34,7 +32,6 @@ public class SettingsLoader {
             return settings;
 
         } catch (Exception e) {
-            Forgero.LOGGER.error(e);
             Forgero.LOGGER.info("No Forgero settings file detected in {}", path);
         }
         return ForgeroSettings.builder().build();

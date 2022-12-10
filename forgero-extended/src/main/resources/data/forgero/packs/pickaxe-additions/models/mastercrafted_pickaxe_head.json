@@ -16,7 +16,7 @@
     },
     {
       "name": "pointy_pickaxe_head",
-      "modelType": "GENERATE",
+      "type": "GENERATE",
       "template": "pointy_pickaxe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 53

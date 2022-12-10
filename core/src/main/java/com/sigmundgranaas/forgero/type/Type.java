@@ -9,8 +9,9 @@ import com.sigmundgranaas.forgero.util.match.Matchable;
 import java.util.Optional;
 
 public interface Type extends Matchable {
+    Type HOLDABLE = new SimpleType("HOLDABLE", Optional.empty(), new TypeMatcher());
 
-    Type TOOL = new SimpleType("TOOL", Optional.empty(), new TypeMatcher());
+    Type TOOL = new SimpleType("TOOL", Optional.of(HOLDABLE), new TypeMatcher());
     Type PICKAXE = new SimpleType("PICKAXE", Optional.of(TOOL), new TypeMatcher());
     Type AXE = new SimpleType("AXE", Optional.of(TOOL), new TypeMatcher());
     Type WEAPON = new SimpleType("WEAPON", Optional.empty(), new TypeMatcher());
@@ -33,6 +34,7 @@ public interface Type extends Matchable {
 
 
     Type MATERIAL = new SimpleType("MATERIAL", Optional.empty(), new TypeMatcher());
+    Type TOOL_MATERIAL = new SimpleType("TOOL_MATERIAL", Optional.of(MATERIAL), new TypeMatcher());
     Type OAK = new SimpleType("OAK", Optional.empty(), new TypeMatcher());
 
     static Type of(String name) {

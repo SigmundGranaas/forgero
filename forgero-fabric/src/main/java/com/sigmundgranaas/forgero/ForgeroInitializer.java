@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero;
 import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
+import com.sigmundgranaas.forgero.loot.function.GemLevelFunction;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
@@ -12,10 +13,12 @@ import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
@@ -26,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.item.DynamicItems.registerDynamicItems;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -51,10 +55,16 @@ public class ForgeroInitializer implements ModInitializer {
                 .execute();
         
 
+        Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
         registerRecipes();
         new CommandRegistry().registerCommand();
         new TreasureInjector().registerLoot();
-        new ARRPGenerator().generate();
+
+        ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
+
+        ARRPGenerator.generate();
+
+        registerDynamicItems();
 
         register();
     }

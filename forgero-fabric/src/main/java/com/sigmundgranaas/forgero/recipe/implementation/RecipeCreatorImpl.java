@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.recipe.implementation;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -13,6 +14,9 @@ import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.SlotData;
+import com.sigmundgranaas.forgero.settings.ForgeroSettings;
+import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
@@ -44,12 +48,14 @@ public record RecipeCreatorImpl(
     @Override
     public List<RecipeWrapper> createRecipes() {
         List<RecipeWrapper> stateRecipes = compositeRecipes();
+
+        var repairKits = ForgeroSettings.SETTINGS.getEnableRepairKits() ? createRepairKitToolRecipes() : new ArrayList<RecipeWrapper>();
         List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
         if (FabricLoader.getInstance().isModLoaded("patchouli")) {
             guidebooksRecipes = createGuideBookRecipes();
         }
 
-        var recipes = List.of(guidebooksRecipes, stateRecipes);
+        var recipes = List.of(guidebooksRecipes, stateRecipes, repairKits);
         return recipes.stream().flatMap(List::stream).collect(Collectors.toList());
     }
 
@@ -79,6 +85,35 @@ public record RecipeCreatorImpl(
         List<RecipeWrapper> recipes = new ArrayList<>();
         recipes.addAll(ForgeroStateRegistry.CONSTRUCTS.stream().map(this::upgradeRecipes).flatMap(List::stream).toList());
         recipes.addAll(ForgeroStateRegistry.RECIPES.stream().map(this::createRecipes).flatMap(Optional::stream).toList());
+        return recipes;
+    }
+
+    private List<RecipeWrapper> createRepairKitToolRecipes() {
+        var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
+                .map(node -> node.getResources(State.class))
+                .orElse(ImmutableList.<State>builder().build());
+        var recipes = new ArrayList<RecipeWrapper>();
+        for (State material : materials) {
+            if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
+
+                JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
+                template.addProperty("type", "forgero:repair_kit_recipe");
+                JsonArray ingredients = template.getAsJsonArray("ingredients");
+                JsonObject toolTag = new JsonObject();
+                toolTag.addProperty("tag", "forgero:" + String.format("%s_tool", material.name()));
+                JsonObject repairKit = new JsonObject();
+                repairKit.addProperty("item", "forgero:" + material.name() + "_repair_kit");
+
+                ingredients.add(toolTag);
+                ingredients.add(repairKit);
+                template.add("ingredients", ingredients);
+
+                template.getAsJsonObject("result").addProperty("item", "forgero:" + material.name() + "_repair_kit");
+                recipes.add(new RecipeWrapperImpl(new Identifier(ForgeroInitializer.MOD_NAMESPACE, material.name() + "_tool_repair_kit_recipe"), template, RecipeTypes.REPAIR_KIT_RECIPE));
+            }
+        }
+
+
         return recipes;
     }
 
