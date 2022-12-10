@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.resource;
 
+import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.resource.data.DataBuilder;
 import com.sigmundgranaas.forgero.resource.data.StateConverter;
 import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
@@ -23,10 +24,11 @@ public class ResourcePipeline {
 
     private List<RecipeData> recipes;
 
-    private ForgeroSettings settings;
+    private final ForgeroSettings settings;
+    private final Set<String> dependencies;
 
 
-    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, ForgeroSettings settings) {
+    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, ForgeroSettings settings, Set<String> dependencies) {
         this.packages = packages;
         this.dataListeners = dataListeners;
         this.inflatedDataListener = inflatedDataListener;
@@ -36,6 +38,7 @@ public class ResourcePipeline {
         this.idMapper = new HashMap<>();
         this.recipes = new ArrayList<>();
         this.settings = settings;
+        this.dependencies = dependencies;
     }
 
     public void execute() {
@@ -74,12 +77,28 @@ public class ResourcePipeline {
     }
 
     private List<DataPackage> validatePackages(List<DataPackage> packages) {
-        var packs = new HashSet<String>();
-        packs.add("forgero");
-        packs.add("minecraft");
+        dependencies.add("forgero");
+        dependencies.add("minecraft");
 
-        packages.forEach(pack -> packs.add(pack.name()));
-        return packages.stream().filter(settings::filterPacks).filter(pack -> packs.containsAll(pack.dependencies())).toList();
+        packages.forEach(pack -> dependencies.add(pack.name()));
+
+
+        return packages.stream().filter(this::filterPackages).toList();
+    }
+
+    private boolean filterPackages(DataPackage dataPackage){
+        if(!settings.filterPacks(dataPackage)){
+          return false;
+        }
+        if(!dependencies.containsAll(dataPackage.dependencies())){
+            if(settings.getResourceLogging()){
+                var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
+                Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier() , missingDependencies);
+            }
+            return false;
+        }
+
+        return true;
     }
 
     private List<DataResource> validateResources(List<DataPackage> resources) {

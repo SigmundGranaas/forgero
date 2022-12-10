@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.Forgero;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -33,8 +34,23 @@ public class SettingsLoader {
 
         } catch (Exception e) {
             Forgero.LOGGER.info("No Forgero settings file detected in {}", path);
+            createSettingsFile();
         }
         return ForgeroSettings.builder().build();
     }
 
+    public static void createSettingsFile(){
+        Path path = Path.of(settingsLocation);
+        try ( FileWriter writer = new FileWriter(path.toString())) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(ForgeroSettings.class, ForgeroSettings.deserializer);
+            Gson settingsGson = gsonBuilder.setPrettyPrinting().create();
+            ForgeroSettings settings = ForgeroSettings.builder().build();
+           var json = settingsGson.toJson(settings);
+           writer.write(json);
+
+        } catch (Exception ignored) {
+
+        }
+    }
 }
