@@ -28,7 +28,7 @@ import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBl
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
-    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER;
+    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
     public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
         @Override
         public ItemStack transferSlot(PlayerEntity player, int index) {
@@ -40,15 +40,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             return true;
         }
     };
-
-    static {
-
-        //We use registerSimple here because our Entity is not an ExtendedScreenHandlerFactory
-        //but a NamedScreenHandlerFactory.
-        //In a later Tutorial you will see what ExtendedScreenHandlerFactory can do!
-        ASSEMBLY_STATION_SCREEN_HANDLER = Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, new ScreenHandlerType<>(AssemblyStationScreenHandler::new));
-    }
-
     private final SimpleInventory inventory;
     private final ScreenHandlerContext context;
     private final PlayerEntity player;

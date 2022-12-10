@@ -28,14 +28,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock {
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
-    public static final Block ASSEMBLY_STATION_BLOCK;
-    public static final BlockItem ASSEMBLY_STATION_ITEM;
+    public static final Block ASSEMBLY_STATION_BLOCK =  new AssemblyStationBlock(AbstractBlock.Settings.of(Material.METAL));
+    public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
 
     static {
-        ASSEMBLY_STATION_BLOCK = Registry.register(Registry.BLOCK, ASSEMBLY_STATION, new AssemblyStationBlock(AbstractBlock.Settings.of(Material.METAL)));
-        ASSEMBLY_STATION_ITEM = Registry.register(Registry.ITEM, ASSEMBLY_STATION, new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC)));
+
     }
 
     protected AssemblyStationBlock(Settings settings) {

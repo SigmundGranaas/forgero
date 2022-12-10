@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero;
 
+import com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock;
 import com.sigmundgranaas.forgero.command.CommandRegistry;
 import com.sigmundgranaas.forgero.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
@@ -18,6 +19,11 @@ import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Material;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
@@ -28,6 +34,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.*;
+import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.item.DynamicItems.registerDynamicItems;
 
@@ -41,6 +49,10 @@ public class ForgeroInitializer implements ModInitializer {
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(PatternBreaking.predicate, PatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
+
+         Registry.register(Registry.BLOCK, ASSEMBLY_STATION,ASSEMBLY_STATION_BLOCK);
+         Registry.register(Registry.ITEM, ASSEMBLY_STATION,ASSEMBLY_STATION_ITEM );
+        Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER );
 
         PipelineBuilder
                 .builder()
