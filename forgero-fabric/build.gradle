@@ -55,7 +55,7 @@ dependencies {
     include project(':forgero-core')
     include project(':forgero-vanilla')
     include project(':forgero-extended')
-    include project(':forgero-compat')
+    //include project(':forgero-compat')
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 

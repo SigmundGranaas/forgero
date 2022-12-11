@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-fabric-compat",
+  "id": "forgero-core",
   "version": "${version}",
-  "name": "Forgero Fabric Compatability",
+  "name": "Forgero core",
   "description": "Equipment crafting expansion mod for Fabric!",
   "authors": [
     "Sigmund Granaas Sandring"
@@ -15,9 +15,6 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
-    "dynamiclights": [
-      "com.sigmundgranaas.forgero.dynamiclights.DynamicLightsRegistryEndpoint"
-    ]
   },
   "mixins": [
   ],

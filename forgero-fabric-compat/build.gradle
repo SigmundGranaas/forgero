@@ -90,11 +90,11 @@ dependencies {
     //modImplementation "curse.maven:owo-lib-532610:3824297"
     //modImplementation 'com.github.Draylar:magna:1.7.0-1.18.2'
 
-    include "net.devtech:arrp:0.6.2"
-    include project(':forgero-core')
-    include project(':forgero-vanilla')
-    include project(':forgero-extended')
-    include project(':forgero-fabric')
+    //include "net.devtech:arrp:0.6.2"
+    //include project(':forgero-core')
+    //include project(':forgero-vanilla')
+    //include project(':forgero-extended')
+    //include project(':forgero-fabric')
     include project(':forgero-compat')
     //Polymorph testing
 
