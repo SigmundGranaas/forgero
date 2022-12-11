@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Tools can be crafted by combining tool part in a crafting table. A tool requires a handle and a head. The binding is optional, but can yield supply the tool with additional attributes just like the other tools parts. The tools type, i.e. pickaxe, is decided by which head component you have used."
+      "text": "Tools are crafted by combining the appropriate parts in the crafting table. Most tools consist of a handle and a head/blade. Most tools can also be upgraded with a binding after they have been crafted to provide further enhancements to your tools"
     },
     {
       "type": "patchouli:crafting",

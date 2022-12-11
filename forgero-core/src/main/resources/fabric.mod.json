@@ -22,8 +22,7 @@
     "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.19.x",
-    "java": ">=17",
-    "lambdynlights": "*"
+    "java": ">=17"
   },
   "custom": {
   }
