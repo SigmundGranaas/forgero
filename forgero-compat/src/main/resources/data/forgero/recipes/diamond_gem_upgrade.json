@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:diamond-gem"
+  },
+  "addition": {
+    "item": "forgero:diamond-gem"
+  },
+  "result": {
+    "item": "forgero:diamond-gem"
+  }
+}
+

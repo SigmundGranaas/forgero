@@ -46,10 +46,11 @@ repositories {
 
 dependencies {
 
-    implementation project(':core')
+    implementation project(':forgero-core')
     modImplementation project(':forgero-fabric')
     modImplementation project(':forgero-vanilla')
     modImplementation project(':forgero-extended')
+    modImplementation project(':forgero-compat')
     //implementation project(':common')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -90,10 +91,11 @@ dependencies {
     //modImplementation 'com.github.Draylar:magna:1.7.0-1.18.2'
 
     include "net.devtech:arrp:0.6.2"
-    include project(':core')
+    include project(':forgero-core')
     include project(':forgero-vanilla')
     include project(':forgero-extended')
     include project(':forgero-fabric')
+    include project(':forgero-compat')
     //Polymorph testing
 
     //modImplementation "curse.maven:cardinal-components-318449:3669769"
@@ -140,57 +142,9 @@ jar {
 
 // configure the maven publication
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            // add all the jars that should be included when publishing to maven
 
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/sigmundgranaas/forgero"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
 }
 
-
-curseforge {
-    apiKey = System.getenv("CurseForgeApiKey") ?: ""
-    project {
-        id = '581435'
-        changelogType = "markdown"
-        changelog = file('changelog.md')
-
-        releaseType = 'release'
-        addGameVersion project.minecraft_version
-        addGameVersion 'Fabric'
-        addGameVersion "Java 17"
-
-        mainArtifact(remapJar) {
-            displayName = "Forgero [Fabric]: $rootProject.version"
-            relations {
-                embeddedLibrary 'arrp'
-                requiredDependency 'fabric-api'
-                optionalDependency 'patchouli'
-            }
-        }
-    }
-    options {
-        forgeGradleIntegration = false // defaults to true
-    }
-}
 
 sourceSets {
     forgero {
@@ -214,41 +168,6 @@ sourceSets {
 
 loom {
 
-
-    runs {
-        testmodServer {
-            server()
-            ideConfigGenerated project.rootProject == project
-            name = "Testmod Server"
-
-            source sourceSets.test
-        }
-        gametest {
-            inherit testmodServer
-
-            name "Game Test"
-
-
-            // Enable the gametest runner
-            vmArg "-Dfabric-api.gametest"
-            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-            runDir "build/gametest"
-        }
-        autoTestServer {
-            inherit testmodServer
-
-            name "Auto Test Server"
-            vmArg "-Dfabric.autoTest"
-        }
-
-        gametestClient {
-            inherit testmodServer
-            client()
-
-            name "test client"
-            //vmArg "-Dfabric.autoTest"
-        }
-    }
 }
 
 test {
