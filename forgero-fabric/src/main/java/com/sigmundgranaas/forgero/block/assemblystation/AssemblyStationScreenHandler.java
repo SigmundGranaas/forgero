@@ -20,6 +20,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -27,7 +28,7 @@ import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBl
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
-    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER;
+    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
     public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
         @Override
         public ItemStack transferSlot(PlayerEntity player, int index) {
@@ -39,15 +40,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             return true;
         }
     };
-
-    static {
-
-        //We use registerSimple here because our Entity is not an ExtendedScreenHandlerFactory
-        //but a NamedScreenHandlerFactory.
-        //In a later Tutorial you will see what ExtendedScreenHandlerFactory can do!
-        ASSEMBLY_STATION_SCREEN_HANDLER = Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, new ScreenHandlerType<>(AssemblyStationScreenHandler::new));
-    }
-
     private final SimpleInventory inventory;
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
@@ -66,13 +58,13 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         super(AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER, syncId);
         this.player = playerInventory.player;
         this.context = context;
-        this.inventory = new SimpleInventory(9);
+        this.inventory = new SimpleInventory(10);
         inventory.addListener(this::onContentChanged);
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player);
         SimpleInventory compositeInventory = new SimpleInventory(1);
         compositeInventory.addListener(this::onCompositeSlotChanged);
-        this.compositeSlot = new CompositeSlot(compositeInventory, 0, 34, 34);
+        this.compositeSlot = new CompositeSlot(compositeInventory, 0, 34, 34, inventory);
 
         //This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
         //This will not render the background of the slots however, this is the Screens job
@@ -118,7 +110,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
     public ItemStack transferSlot(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
+        if (slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
             if (invSlot < this.inventory.size()) {
@@ -138,6 +130,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
         return newStack;
     }
+
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
@@ -168,10 +161,10 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             if (!world.isClient && compositeSlot.isRemovable()) {
                 ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                 var output = craftInventory(world);
-                if (output.isPresent() && compositeSlot.isEmpty()) {
+                if (output.isPresent() && compositeSlot.isRemovable() && StateConverter.of(output.get()).filter(Composite.class::isInstance).isPresent()) {
                     compositeSlot.setStack(output.get());
                     serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
-                } else if (!compositeSlot.isEmpty() && output.isEmpty()) {
+                } else if (!compositeSlot.isEmpty() && output.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.composite)) {
                     compositeSlot.removeCompositeIngredient();
                     serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
                 }
@@ -213,10 +206,19 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         });
     }
 
+    private List<ItemStack> deconstructedItems(Composite composite) {
+        return composite.disassemble().stream().map(StateConverter::of).toList();
+    }
+
+    private boolean isDeconstructedInventory(Composite composite) {
+        var deconstructed = deconstructedItems(composite);
+        return IntStream.range(0, deconstructed.size()).allMatch(index -> deconstructed.get(index).getItem() == inventory.getStack(index).getItem());
+    }
+
     private Optional<ItemStack> craftInventory(World world) {
         if (!world.isClient) {
             var craftingInventory = new CraftingInventory(dummyHandler, 3, 3);
-            IntStream.range(0, 9).forEach(index -> craftingInventory.setStack(index, this.inventory.getStack(index)));
+            IntStream.range(0, 8).forEach(index -> craftingInventory.setStack(index, this.inventory.getStack(index)));
             return world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingInventory, world).map(recipe -> recipe.craft(craftingInventory));
         }
         return Optional.empty();
@@ -227,23 +229,21 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         this.context.run((world, pos) -> {
             if (!world.isClient) {
                 compositeSlot.removeCompositeIngredient();
-                inventory.clear();
+                IntStream.range(0, 8).filter(index -> !inventory.isEmpty()).forEach(index -> inventory.getStack(index).decrement(1));
             }
         });
     }
 
-    private void onItemAddedToCraftingSlots() {
-
-    }
-
     private static class CompositeSlot extends Slot {
+        private final Inventory craftingInventory;
         private Composite composite;
-        private boolean isConstructed;
+        private boolean isConstructed = false;
         private boolean doneConstructing = false;
 
 
-        public CompositeSlot(Inventory inventory, int index, int x, int y) {
+        public CompositeSlot(Inventory inventory, int index, int x, int y, Inventory craftingInventory) {
             super(inventory, index, x, y);
+            this.craftingInventory = craftingInventory;
         }
 
         Optional<Composite> getComposite() {
@@ -272,25 +272,26 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             this.composite = null;
             this.isConstructed = false;
             this.doneConstructing = true;
-            this.inventory.getStack(0).decrement(1);
-        }
-
-        public void addSuggestedComposite(Composite composite) {
-            this.composite = composite;
-            this.isConstructed = true;
+            if (!this.inventory.getStack(0).isEmpty()) {
+                this.inventory.getStack(0).decrement(1);
+            }
         }
 
         @Override
         public boolean canInsert(ItemStack stack) {
-            return StateConverter.of(stack).filter(Composite.class::isInstance).isPresent();
+            return StateConverter.of(stack).filter(Composite.class::isInstance).isPresent() && craftingInventory.isEmpty();
         }
+
 
         public void doneConstructing() {
             this.doneConstructing = true;
         }
 
         public boolean isRemovable() {
-            return doneConstructing;
+            if (craftingInventory.isEmpty()) {
+                return true;
+            }
+            return doneConstructing || !isConstructed;
         }
     }
 }

@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.loot;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootTables;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ public class TreasureInjector {
         witch();
         zombie();
         pillager();
+
+        smallForgingHouse();
     }
 
     private void registerEntry(LootEntry entry) {
@@ -529,5 +532,47 @@ public class TreasureInjector {
                 .rolls(2)
                 .build();
         registerEntry(gemEntry);
+    }
+
+    private void smallForgingHouse() {
+
+        var id = new Identifier("forgero:chests/small_forging_house_plains");
+        var partFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(80)
+                .types(List.of("PART"));
+        var partEntry = SingleLootEntry.builder()
+                .filter(partFilter.build()::filter)
+                .target(List.of(id))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
+
+        var gemFilter = StateFilter.builder()
+                .lowerRarity(30)
+                .upperRarity(60)
+                .types(List.of("GEM"));
+        var gemEntry = SingleLootEntry.builder()
+                .filter(gemFilter.build()::filter)
+                .target(List.of(id))
+                .chance(0.3f)
+                .rolls(2)
+                .build();
+        registerEntry(gemEntry);
+
+        var schematicFilter = StateFilter.builder()
+                .lowerRarity(10)
+                .upperRarity(50)
+                .types(List.of("SCHEMATIC"));
+        var schematicEntry = SingleLootEntry.builder()
+                .filter(schematicFilter.build()::filter)
+                .target(List.of(id))
+                .chance(0.3f)
+                .rolls(1)
+                .build();
+
+
+        registerEntry(partEntry);
+        registerEntry(schematicEntry);
     }
 }

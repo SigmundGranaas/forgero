@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=south": {
       "model": "forgero:block/assembly_station"
+    },
+    "facing=west": {
+      "model": "forgero:block/assembly_station",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "forgero:block/assembly_station",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "forgero:block/assembly_station",
+      "y": 270
     }
   }
 }
