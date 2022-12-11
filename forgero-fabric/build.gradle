@@ -73,13 +73,13 @@ dependencies {
     //modImplementation "de.guntram.mcmod:crowdin-translate:1.4+1.18.2"
 
     //mythicmetals testing
-    modImplementation "curse.maven:alloy-forgery-438718:3942534"
-    modImplementation "curse.maven:cloth-config-348521:3972420"
-    modImplementation "curse.maven:mythicmetals-410127:4118479"
-    modImplementation "curse.maven:owo-lib-532610:4028921"
-    modImplementation 'com.github.Draylar:magna:1.8.0-1.19.2'
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.2"
+    //modImplementation "curse.maven:alloy-forgery-438718:3942534"
+    //modImplementation "curse.maven:cloth-config-348521:3972420"
+    //modImplementation "curse.maven:mythicmetals-410127:4118479"
+    //modImplementation "curse.maven:owo-lib-532610:4028921"
+    //modImplementation 'com.github.Draylar:magna:1.8.0-1.19.2'
+    //modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
+    //modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.2"
 
     include "net.devtech:arrp:0.6.2"
     include project(':core')
