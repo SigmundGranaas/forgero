@@ -14,7 +14,7 @@
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.0
+        "value": 5
       },
       {
         "type": "MINING_SPEED",
@@ -26,14 +26,14 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 30
+        "value": 95
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 200
+        "value": 1700.0
       },
       {
         "id": "metal-base-attack",

@@ -26,14 +26,14 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 30
+        "value": 38
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 200
+        "value": 450.0
       },
       {
         "id": "metal-base-attack",
