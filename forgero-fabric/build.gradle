@@ -11,6 +11,9 @@ group = rootProject.maven_group
 repositories {
     mavenCentral()
 
+    mavenLocal()
+    maven { url = "https://storage.googleapis.com/devan-maven/" }
+    maven { url = "https://maven.shedaniel.me/" }
     maven {
         url "https://cursemaven.com"
         content {
@@ -20,10 +23,6 @@ repositories {
     repositories {
         maven { url 'https://maven.blamejared.com' }
     }
-    mavenLocal()
-    maven { url = "https://storage.googleapis.com/devan-maven/" }
-    maven { url = "https://maven.shedaniel.me/" }
-
 
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
@@ -36,6 +35,8 @@ dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
     implementation project(':forgero-extended')
+    implementation project(':forgero-compat')
+    //modImplementation project(':forgero-fabric-compat')
     //implementation project(':common')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -54,6 +55,7 @@ dependencies {
     include project(':forgero-core')
     include project(':forgero-vanilla')
     include project(':forgero-extended')
+    include project(':forgero-compat')
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 

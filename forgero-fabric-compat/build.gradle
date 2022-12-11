@@ -45,12 +45,12 @@ repositories {
 }
 
 dependencies {
-
     implementation project(':forgero-core')
-    modImplementation project(':forgero-fabric')
-    modImplementation project(':forgero-vanilla')
-    modImplementation project(':forgero-extended')
-    modImplementation project(':forgero-compat')
+    implementation project(':forgero-vanilla')
+    implementation project(':forgero-extended')
+    implementation project(':forgero-compat')
+    implementation project(':forgero-fabric')
+
     //implementation project(':common')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
