@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "forgero",
+  "id": "forgero-fabric-compat",
   "version": "${version}",
   "name": "Forgero",
   "description": "Equipment crafting expansion mod for Fabric!",
@@ -15,26 +15,19 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "com.sigmundgranaas.forgero.client.ForgeroClient"
-    ],
-    "main": [
-      "com.sigmundgranaas.forgero.ForgeroInitializer"
-    ],
-    "fabric-datagen": [
-      "com.sigmundgranaas.forgero.datagen.ForgeroDataGeneration"
+    "dynamiclights": [
+      "com.sigmundgranaas.forgero.dynamiclights.DynamicLightsRegistryEndpoint"
     ]
   },
   "mixins": [
-    "forgero.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.19.x",
-    "java": ">=17"
+    "java": ">=17",
+    "lambdynlights": "*"
   },
   "custom": {
-    "forgeroResource": true
   }
 }

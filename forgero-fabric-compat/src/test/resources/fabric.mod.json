@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "test",
+  "version": "${version}",
+  "environment": "*",
+  "description": "Forgero game tests",
+  "license": "MIT",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "entrypoints": {
+  }
+}

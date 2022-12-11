@@ -10,6 +10,5 @@ pluginManagement {
 
 
 rootProject.name = 'forgero'
-include 'common', 'forgero-fabric', 'forge', 'forgero-extended', 'forgero-vanilla', 'core'
-include 'core'
+include 'common', 'forgero-fabric', 'forge', 'forgero-extended', 'forgero-vanilla', 'core', 'forgero-fabric-compat'
 
