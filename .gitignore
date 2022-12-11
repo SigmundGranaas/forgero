@@ -131,6 +131,10 @@ output/
 /forgero-extended/run/
 /forgero-extended/build/
 
+/forgero-fabric-compat/logs/
+/forgero-fabric-compat/run/
+/forgero-fabric-compat/build/
+
 /core/logs/
 /core/run/
 /core/build/

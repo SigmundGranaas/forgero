@@ -54,7 +54,6 @@ public class ForgeroInitializer implements ModInitializer {
         Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
         Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
 
-
         PipelineBuilder
                 .builder()
                 .register(ForgeroSettings.SETTINGS)
@@ -79,6 +78,7 @@ public class ForgeroInitializer implements ModInitializer {
         ARRPGenerator.generate();
 
         registerDynamicItems();
+
 
         register();
     }

@@ -11,35 +11,18 @@ group = rootProject.maven_group
 repositories {
     mavenCentral()
 
+    mavenLocal()
+    maven { url = "https://storage.googleapis.com/devan-maven/" }
+    maven { url = "https://maven.shedaniel.me/" }
     maven {
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
-    mavenLocal()
-    maven { url = "https://modmaven.dev/" }
-    maven { url = "https://minecraft.guntram.de/maven/" }
-    maven { url = "https://www.cursemaven.com" }
-    maven { url = "https://maven.shedaniel.me/" }
-    maven { url = "https://maven.terraformersmc.com/" }
-    maven { url = "https://maven.wispforest.io/" }
-    maven { url = "https://jitpack.io" }
-    maven { url = "https://ladysnake.jfrog.io/artifactory/mods" }
-    maven { url = "https://maven.cafeteria.dev" }
-    maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }
-    maven { url = "https://api.modrinth.com/maven/" }
-    maven { url = 'https://maven.blamejared.com' }
-    maven { url = "https://storage.googleapis.com/devan-maven/" }
-    maven {
-        url 'https://kneelawk.com/maven/'
-        name 'Kneelawk Maven'
+    repositories {
+        maven { url 'https://maven.blamejared.com' }
     }
-    maven {
-        name = "BuildCraft"
-        url = "https://mod-buildcraft.com/maven"
-    }
-
 
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
@@ -49,9 +32,11 @@ repositories {
 }
 
 dependencies {
-    implementation project(':core')
+    implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
     implementation project(':forgero-extended')
+    implementation project(':forgero-compat')
+    //modImplementation project(':forgero-fabric-compat')
     //implementation project(':common')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -66,55 +51,12 @@ dependencies {
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
     modImplementation("net.devtech:arrp:0.6.2")
 
-    //Wired redstone compat
-    //modImplementation "curse.maven:wired-redstone-639871:4162194"
-    //modImplementation "curse.maven:fabric-language-kotlin-308769:4123973"
-    //modImplementation("com.kneelawk:graphlib:0.3.4+1.19")
-    //modImplementation("alexiil.mc.lib:libmultipart-all:0.8.0-pre.1.6+kneelawk")
-    //include("alexiil.mc.lib:libmultipart-all::0.8.0-pre.1.6+kneelawk")
-    //modImplementation("com.kneelawk:lmp-compat:0.2.1+1.19")
-
-
-    //Twilight forest compat
-    //modImplementation "teamtwilight:twilightforest:4.1.1102:universal"
-
-    //continuity testing
-    //modImplementation "curse.maven:continuity-531351:3822250"
-
-    //alloygery testing
-    //modImplementation "curse.maven:alloygery-573592:3778894"
-    //modImplementation "curse.maven:nbtcrafting-314633:3707208"
-
-    //Therassium testing
-    //modImplementation "curse.maven:therassium-554562:3829121"
-    //modImplementation "de.guntram.mcmod:crowdin-translate:1.4+1.18.2"
-
-    //mythicmetals testing
-    //modImplementation "curse.maven:alloy-forgery-438718:3942534"
-    //modImplementation "curse.maven:cloth-config-348521:3972420"
-    //modImplementation "curse.maven:mythicmetals-410127:4118479"
-    //modImplementation "curse.maven:owo-lib-532610:4028921"
-    //modImplementation 'com.github.Draylar:magna:1.8.0-1.19.2'
-    //modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
-    //modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.2"
-
     include "net.devtech:arrp:0.6.2"
-    include project(':core')
+    include project(':forgero-core')
     include project(':forgero-vanilla')
     include project(':forgero-extended')
-    //Polymorph testing
+    include project(':forgero-compat')
 
-    //modImplementation "curse.maven:cardinal-components-318449:3669769"
-    //modImplementation "curse.maven:cardinal-components-318449:3669770"
-    //modImplementation "curse.maven:cardinal-components-318449:3669771"
-    //modImplementation "curse.maven:cardinal-components-318449:3954773"
-    //modImplementation "curse.maven:cardinal-components-318449:3954769"
-    //modImplementation "curse.maven:polymorph-397434:3793108"
-
-    //modImplementation "curse.maven:combatedit-385513:3869344"
-
-    //modImplementation 'com.ptsmods:devlogin:2.1'
-    // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 
