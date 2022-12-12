@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "forgero",
   "version": "${version}",
-  "name": "Forgero",
+  "name": "Forgero for Fabric",
   "description": "Equipment crafting expansion mod for Fabric!",
   "authors": [
     "Sigmund Granaas Sandring"
