@@ -1,16 +1,26 @@
 {
-  "name": "Using a schematic",
+  "name": "Schematics",
   "icon": "forgero:pickaxe_head-schematic",
   "category": "forgero:getting_started_category",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Schematics are the most important factor when creating tool parts. They decide the primary functionality of the tool part. Schematics will decide which type of tool it is, as well as how it looks. Different schematics can create different looking tools. Schematics can vary both in attributes, functionality and looks! The schematics with better attributes will be more rare, and harder to come by."
+      "text": "Schematics are the foundation of every tool part. It decides the shape, function and stats of a tool part. Schematics are required in order to create different parts, and can be found scattered around the world."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Crafting",
+      "text": "If you already have an existing tool part, you can create a schematic from it by combining it with a piece of paper in the crafting table"
     },
     {
       "type": "patchouli:text",
       "title": "Looting",
       "text": "Only the basic schematics can be crafted from existing tools. If you want to better schematics, you have to head out into the world and explore. Schematics have different rarity, and will appear in different loot chest depending on their rarity"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Using the schematic",
+      "text": "Schematics are used to craft parts. Every schematic will craft a unique tool part when combined with the appropriate amount of material, which is listed in the description."
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "name": "Shovel head Schematic",
-  "icon": "forgero:shovel_head-schematic",
+  "name": "Hoe head Schematics",
+  "icon": "forgero:hoe_head-schematic",
   "category": "forgero:schematic_category",
   "pages": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-shovel_head-schematic_recipe"
+      "recipe": "forgero:hoe-shovel_head-schematic_recipe"
     }
   ]
 }

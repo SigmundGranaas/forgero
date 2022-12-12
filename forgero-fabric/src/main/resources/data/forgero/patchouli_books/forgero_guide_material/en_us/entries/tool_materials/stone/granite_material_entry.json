@@ -1,0 +1,11 @@
+{
+  "name": "Granite",
+  "icon": "minecraft:granite",
+  "category": "forgero:primary_materials_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Granite is a intrusive igneous rock composed mostly of quartz. It forms from the slow crystallization of magma below the surface "
+    }
+  ]
+}

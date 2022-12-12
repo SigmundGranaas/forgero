@@ -1,0 +1,11 @@
+{
+  "name": "Netherite",
+  "icon": "minecraft:netherite_ingot",
+  "category": "forgero:primary_materials_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Netherite is the most durable metal available, but can only be found by mining ancient debree in the nether. Crafting netherite tools might be expensive, as it still requires the same amount of material as other materials to craft parts. Still, the attributes of netherite is unmatched. It's natural association with high heat also makes it resistant to lava and flames"
+    }
+  ]
+}

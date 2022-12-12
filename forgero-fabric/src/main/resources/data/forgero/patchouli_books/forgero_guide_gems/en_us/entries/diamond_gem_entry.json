@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The diamond gem can be applied to all tool parts, and increase the durability of tools"
+      "text": "The Diamond gem can be applied to all tool parts, and increase the durability the part its applied to"
     },
     {
       "type": "patchouli:crafting",

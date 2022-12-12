@@ -1,0 +1,11 @@
+{
+  "name": "calcite",
+  "icon": "minecraft:calcite",
+  "category": "forgero:primary_materials_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Calcite is actually a mineral, and is an extremely common component of limestone. Although it shares the same family as diamonds being a mineral, it's attributes are closer to that of stone. "
+    }
+  ]
+}

@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityAttackMixin {
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 0)

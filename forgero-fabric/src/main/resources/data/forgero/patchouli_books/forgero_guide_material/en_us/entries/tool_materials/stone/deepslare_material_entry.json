@@ -1,0 +1,11 @@
+{
+  "name": "Deepslate",
+  "icon": "minecraft:deepslate",
+  "category": "forgero:primary_materials_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Deepslate is a harder rock found much further underground than normal rocks. Deepslate is tougher than regular stone, and has a much darker colour. it's density makes it tougher than normal stone, but not as good as metals"
+    }
+  ]
+}

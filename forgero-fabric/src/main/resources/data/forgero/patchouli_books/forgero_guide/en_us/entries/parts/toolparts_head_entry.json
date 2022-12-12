@@ -5,13 +5,19 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The tool part head is an essential part of the tool, as it will decide which type of tool you will craft."
+      "text": "The head of a tool part is the deciding factor for which tool you will craft, there are unique variants of heads for every tool available in Minecraft"
     },
     {
       "type": "patchouli:crafting",
       "title": "Crafting heads",
       "recipe": "forgero:iron-pickaxe_head",
       "recipe2": "forgero:netherite-axe_head"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting heads",
+      "recipe": "forgero:iron-hoe_head_head",
+      "recipe2": "forgero:netherite-shovel_head"
     }
   ]
 }
