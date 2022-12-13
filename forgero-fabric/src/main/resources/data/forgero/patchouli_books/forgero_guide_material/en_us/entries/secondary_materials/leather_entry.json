@@ -1,11 +1,11 @@
 {
-  "name": "Acacia",
-  "icon": "minecraft:acacia_log",
-  "category": "forgero:primary_materials_category",
+  "name": "Leather",
+  "icon": "minecraft:leather",
+  "category": "forgero:secondary_materials_category",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "Leather is an extremely useful utility material, suitable for increasing the handling of tools and weapons. Will provide decent upgraded when used to wrap handles, or providing a scabbard for your blade"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "name": "Hoe head Schematics",
   "icon": "forgero:hoe_head-schematic",
-  "category": "forgero:schematic_category",
+  "category": "forgero:tools_category",
   "pages": [
     {
       "type": "patchouli:text",

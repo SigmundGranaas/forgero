@@ -1,0 +1,15 @@
+{
+  "name": "Pummel schematic",
+  "icon": "forgero:shovel_head-schematic",
+  "category": "forgero:tools_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Forgero's crafting system is really flexible, allowing you to create parts which can be upgraded by other parts. A pummel is a special type of part which can fit on the bottom of certain handles"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:iron-pummel-schematic_recipe"
+    }
+  ]
+}

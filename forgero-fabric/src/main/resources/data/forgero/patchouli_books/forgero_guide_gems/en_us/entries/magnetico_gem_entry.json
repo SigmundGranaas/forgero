@@ -9,8 +9,13 @@
     },
     {
       "type": "patchouli:crafting",
-      "title": "Crafting a quartz",
-      "recipe": "forgero:magnetico-gem"
+      "title": "Crafting a magnetico gem",
+      "recipe": "forgero:magnetico_gem"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a magnetico",
+      "recipe": "forgero:magnetico"
     }
   ]
 }

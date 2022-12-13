@@ -1,7 +1,7 @@
 {
   "name": "The undying totem",
-  "icon": "forgero:undying_totem",
-  "category": "forgero:gems_category",
+  "icon": "forgero:undying-totem",
+  "category": "forgero:trinkets_category",
   "pages": [
     {
       "type": "patchouli:text",
