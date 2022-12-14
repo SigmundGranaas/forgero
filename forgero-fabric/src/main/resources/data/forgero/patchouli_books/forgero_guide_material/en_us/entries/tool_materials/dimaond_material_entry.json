@@ -5,7 +5,13 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "Diamonds are one of the rarest gems found underground. The hardness of a diamond makes it excellent for parts that needs to break blocks. Diamond tools are known for their durability and speed. "
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Diamond",
+      "item": "minecraft:diamond",
+      "text": ""
     }
   ]
 }

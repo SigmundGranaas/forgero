@@ -5,7 +5,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "The jungle trees are the tallest growing trees. The ability to grow to such heights are due to the challenging, but warm and moist conditions of the jungle. Jungle wood is extremely flexible, making it ideal for parts that benefits from flexibility."
+    },{
+      "type": "patchouli:spotlight",
+      "title": "Jungle",
+      "item": "minecraft:jungle_log",
+      "text": ""
     }
   ]
 }

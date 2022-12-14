@@ -4,5 +4,6 @@
   "subtitle": "Forgero Complete Reference",
   "creative_tab": "toolparts",
   "version": "0.10.0",
+  "show_progress": false,
   "allow_extensions": true
 }

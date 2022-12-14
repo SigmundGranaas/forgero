@@ -6,6 +6,12 @@
     {
       "type": "patchouli:text",
       "text": "Glowstone is an extremely fragile material, making it unsuitable for constructing or reinforcing tools. However, its light emitting properties makes it light up areas if used to upgrade tools and parts."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Glowstone",
+      "item": "minecraft:glowstone_dust",
+      "text": ""
     }
   ]
 }

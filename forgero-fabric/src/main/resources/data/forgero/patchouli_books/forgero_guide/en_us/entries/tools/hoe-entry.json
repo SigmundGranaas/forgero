@@ -1,15 +1,15 @@
 {
-  "name": "Pickaxehead Schematic",
-  "icon": "forgero:pickaxe_head-schematic",
+  "name": "Hoes",
+  "icon": "forgero:copper-hoe",
   "category": "forgero:tools_category",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The default pickaxe head schematic creates a basic pickaxe head very much like the vanilla pickaxe. The stats and material costs are mostly identical to the vanilla version, and serves as a starting point on your tool crafting adventure"
+      "text": "Hoes are mainly used for preparing farmland, but are also suitable for cutting down vegetation. Although it deals very little damage, the hoe is a swift tool which can perform rapid attacks."
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-pickaxe_head-schematic_recipe"
+      "recipe": "forgero:copper-hoe"
     }
   ]
 }

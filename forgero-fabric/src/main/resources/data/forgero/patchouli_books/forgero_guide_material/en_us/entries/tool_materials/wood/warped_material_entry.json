@@ -5,7 +5,13 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "The warped fungus, is another variety of fungus found in the nether. They only occurs in warped forests which are known for their relative peace and silence."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Warped fungus",
+      "item": "minecraft:warped_stem",
+      "text": ""
     }
   ]
 }

@@ -5,7 +5,13 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "Dark oak is only found in thick dark oak forests. Dark oak is similar to normal oak, but the color is much darker, and the wood is much harder than ordinary oak."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Dark oak",
+      "item": "minecraft:dark_oak_log",
+      "text": ""
     }
   ]
 }

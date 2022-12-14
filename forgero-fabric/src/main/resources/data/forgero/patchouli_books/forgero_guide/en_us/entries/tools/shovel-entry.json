@@ -1,15 +1,15 @@
 {
-  "name": "Shovel head Schematic",
-  "icon": "forgero:shovel_head-schematic",
+  "name": "Shovels",
+  "icon": "forgero:stone-shovel",
   "category": "forgero:tools_category",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The default shovelhead schematic creates a basic shovelhead. When combined with a handle, it will create a shovel almost identical to the vanilla shovel, with some additional slots for upgrades"
+      "text": "Shovels are used to dig softer blocks like dirt and sand. They can also be used to create paths, which will make travelling more efficient. Shovel are cheap to create, and can be crafted by combining a shovel head an a handle in the crafting table."
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-shovel_head-schematic_recipe"
+      "recipe": "forgero:stone-shovel"
     }
   ]
 }

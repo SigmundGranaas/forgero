@@ -1,11 +1,17 @@
 {
-  "name": "Crimson",
+  "name": "Crimson fungus",
   "icon": "minecraft:crimson_stem",
   "category": "forgero:primary_materials_category",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "The crimson fungus, is only found in the nether, and has a distinctive red color. The trunk of this mushroom is actually hard enough to be used in construction of tools."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Crimson fungus",
+      "item": "minecraft:crimson_stem",
+      "text": ""
     }
   ]
 }

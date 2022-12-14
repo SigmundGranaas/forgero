@@ -5,7 +5,13 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "Birch are small to medium sized trees, with a distinctive white-colored bark. Birch is a versatile tree, which has proven useful as a material for creating tool parts."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Birch",
+      "item": "minecraft:birch_log",
+      "text": ""
     }
   ]
 }

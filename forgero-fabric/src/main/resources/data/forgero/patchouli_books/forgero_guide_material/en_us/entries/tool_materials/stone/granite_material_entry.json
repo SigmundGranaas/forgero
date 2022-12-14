@@ -6,6 +6,12 @@
     {
       "type": "patchouli:text",
       "text": "Granite is a intrusive igneous rock composed mostly of quartz. It forms from the slow crystallization of magma below the surface "
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "granite",
+      "item": "minecraft:granite",
+      "text": ""
     }
   ]
 }

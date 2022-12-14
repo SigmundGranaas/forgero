@@ -6,6 +6,12 @@
     {
       "type": "patchouli:text",
       "text": "Vines can be wrapped around tools and weapons to provide som benefits to handling"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Vines",
+      "item": "minecraft:vine",
+      "text": ""
     }
   ]
 }

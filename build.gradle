@@ -6,10 +6,3 @@ archives_base_name = project.archives_base_name
 configure(subprojects) {
     apply plugin: 'java-library'
 }
-
-task copyJars(type: Copy, dependsOn: subprojects.jar) {
-    from(subprojects.jar)
-    into project.file('dest')
-}
-
-task copyFiles(dependsOn: [copyJars])

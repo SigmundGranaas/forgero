@@ -16,7 +16,7 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting heads",
-      "recipe": "forgero:iron-hoe_head_head",
+      "recipe": "forgero:iron-hoe_head",
       "recipe2": "forgero:netherite-shovel_head"
     }
   ]

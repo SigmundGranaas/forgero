@@ -6,6 +6,12 @@
     {
       "type": "patchouli:text",
       "text": "Andesite is a grey, vulcanic rock commonly found underground in vulcanic areas. It's properties are very similar to normal rocks"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Andesite",
+      "item": "minecraft:andesite",
+      "text": ""
     }
   ]
 }

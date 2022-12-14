@@ -5,7 +5,13 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Oak is a very basic materials, but still decent for handles, and before materials like stone are availible"
+      "text": "The spruce tree is a hardy tree, which can survive areas covered in snow. Spruce trees grow long and thin, and is a very hard wood, which makes them useful in parts which benefits from relative stiffness."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Spruce",
+      "item": "minecraft:spruce_log",
+      "text": ""
     }
   ]
 }

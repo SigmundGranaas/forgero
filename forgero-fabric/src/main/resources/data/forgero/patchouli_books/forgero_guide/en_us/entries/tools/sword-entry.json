@@ -1,15 +1,15 @@
 {
-  "name": "Hoe head Schematics",
-  "icon": "forgero:hoe_head-schematic",
+  "name": "Swords",
+  "icon": "forgero:netherite-sword",
   "category": "forgero:tools_category",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Hoe heads will a standard hoe when combined with a handle. For more existing variants fot this tool, you need to discover other hoe head schematics."
+      "text": "If you need protection, sword are your best option. They are fast, and deals a lot of damage to foes. Although they are mostly used as weapons, they also seem quite good at cutting down cobweb."
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-hoe_head-schematic_recipe"
+      "recipe": "forgero:gold-axe"
     }
   ]
 }
