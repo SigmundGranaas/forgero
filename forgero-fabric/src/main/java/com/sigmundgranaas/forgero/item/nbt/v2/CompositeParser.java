@@ -54,8 +54,14 @@ public class CompositeParser implements CompoundParser<State> {
         if (compound.contains(INGREDIENTS_IDENTIFIER)) {
             parseEntries(compound.getList(INGREDIENTS_IDENTIFIER, NbtElement.COMPOUND_TYPE)).forEach(builder::addIngredient);
         }
+        if (compound.contains(INGREDIENTS_IDENTIFIER)) {
+            parseEntries(compound.getList(INGREDIENTS_IDENTIFIER, NbtElement.STRING_TYPE)).forEach(builder::addIngredient);
+        }
         if (compound.contains(UPGRADES_IDENTIFIER)) {
             parseEntries(compound.getList(UPGRADES_IDENTIFIER, NbtElement.COMPOUND_TYPE)).forEach(builder::addUpgrade);
+        }
+        if (compound.contains(UPGRADES_IDENTIFIER)) {
+            parseEntries(compound.getList(UPGRADES_IDENTIFIER, NbtElement.STRING_TYPE)).forEach(builder::addUpgrade);
         }
         return Optional.of(builder.build());
     }

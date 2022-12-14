@@ -1,7 +1,0 @@
-{
-  "parent": "forgero:materials_category",
-  "name": "Primary Materials",
-  "description": "Primary materials can be used alongside schematics to ",
-  "icon": "minecraft:iron_ingot",
-  "sortnum": 2
-}

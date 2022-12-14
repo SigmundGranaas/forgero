@@ -1,0 +1,16 @@
+{
+  "name": "Quartz gem",
+  "icon": "forgero:quartz-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The quartz gem provides a slight upgrade to the offensive capabilities of your tool, as well as some mining speed"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a quartz gem",
+      "recipe": "forgero:quartz-gem"
+    }
+  ]
+}
