@@ -37,7 +37,7 @@ public class GemUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRecip
         parent.renderIngredient(ms, recipeX + 4, recipeY + 4, mouseX, mouseY, ((AccessorSmithingRecipe) recipe).getBase());
         parent.renderIngredient(ms, recipeX + 4, recipeY + 23, mouseX, mouseY, ((AccessorSmithingRecipe) recipe).getAddition());
         parent.renderItemStack(ms, recipeX + 40, recipeY + 13, mouseX, mouseY, recipe.createIcon());
-        parent.renderItemStack(ms, recipeX + 76, recipeY + 13, mouseX, mouseY, recipe.getOutput());
+        parent.renderItemStack(ms, recipeX + 76, recipeY + 13, mouseX, mouseY, getRecipeOutput(recipe));
     }
 
     @Override
@@ -45,10 +45,11 @@ public class GemUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRecip
         if (recipe == null) {
             return ItemStack.EMPTY;
         }
+
         var gemState = StateConverter.of(recipe.getOutput());
         if (gemState.isPresent() && gemState.get() instanceof LeveledState leveledState) {
             var leveled = leveledState.levelUp();
-            return StateConverter.of(leveled.setLevel(9));
+            return StateConverter.of(leveled);
         }
 
         return recipe.getOutput();
