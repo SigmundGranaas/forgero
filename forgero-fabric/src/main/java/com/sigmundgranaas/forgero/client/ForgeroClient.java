@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.client.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
 import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.patchouli.GemUpgradeRecipePage;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
@@ -42,6 +43,7 @@ public class ForgeroClient implements ClientModInitializer {
     public void onInitializeClient() {
         initializeItemModels();
         HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
+        GemUpgradeRecipePage.register();
     }
 
     private void initializeItemModels() {

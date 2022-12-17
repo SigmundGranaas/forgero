@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.item.DynamicItems;
 import com.sigmundgranaas.forgero.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.loot.function.GemLevelFunction;
-import com.sigmundgranaas.forgero.patchouli.GemUpgradeRecipePage;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
@@ -76,7 +75,7 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerCommands);
         handler.run();
 
-        GemUpgradeRecipePage.register();
+
     }
 
     private void registerBlocks() {
