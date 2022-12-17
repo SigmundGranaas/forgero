@@ -1,15 +1,18 @@
 package com.sigmundgranaas.forgero;
 
 import com.sigmundgranaas.forgero.command.CommandRegistry;
+import com.sigmundgranaas.forgero.item.DynamicItems;
 import com.sigmundgranaas.forgero.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.loot.function.GemLevelFunction;
+import com.sigmundgranaas.forgero.patchouli.GemUpgradeRecipePage;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.property.handler.TaggedPatternBreaking;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
+import com.sigmundgranaas.forgero.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
@@ -35,7 +38,6 @@ import java.util.stream.Collectors;
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgero.item.DynamicItems.registerDynamicItems;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -50,10 +52,6 @@ public class ForgeroInitializer implements ModInitializer {
 
         var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
-        Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
-        Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
-        Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
-
         PipelineBuilder
                 .builder()
                 .register(ForgeroSettings.SETTINGS)
@@ -67,23 +65,45 @@ public class ForgeroInitializer implements ModInitializer {
                 .build()
                 .execute();
 
+        var handler = RegistryHandler.HANDLER;
+        handler.accept(this::registerBlocks);
+        handler.accept(this::registerAARPRecipes);
+        handler.accept(this::registerStates);
+        handler.accept(this::registerLootFunctions);
+        handler.accept(this::registerRecipes);
+        handler.accept(DynamicItems::registerDynamicItems);
+        handler.accept(this::registerTreasure);
+        handler.accept(this::registerCommands);
+        handler.run();
 
-        Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
-        registerRecipes();
-        new CommandRegistry().registerCommand();
-        new TreasureInjector().registerLoot();
+        GemUpgradeRecipePage.register();
+    }
 
+    private void registerBlocks() {
+        Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
+        Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
+        Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+    }
+
+    private void registerAARPRecipes() {
         ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
 
         ARRPGenerator.generate();
-
-        registerDynamicItems();
-
-
-        register();
     }
 
-    private void register() {
+    private void registerLootFunctions() {
+        Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+    }
+
+    private void registerTreasure() {
+        new TreasureInjector().registerLoot();
+    }
+
+    private void registerCommands() {
+        new CommandRegistry().registerCommand();
+    }
+
+    private void registerStates() {
         var sortingMap = new HashMap<String, Integer>();
 
         ForgeroStateRegistry.STATES.all().stream().filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));

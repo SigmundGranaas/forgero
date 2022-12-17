@@ -10,7 +10,7 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting a quartz gem",
-      "recipe": "forgero:quartz-gem"
+      "recipe": "forgero:quartz_gem"
     }
   ]
 }
