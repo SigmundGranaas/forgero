@@ -13,7 +13,7 @@ public enum RecipeTypes {
     SCHEMATIC_PART_CRAFTING,
     TOOLPART_SCHEMATIC_RECIPE;
 
-    String getName() {
+    public String getName() {
         return this.name().toLowerCase(Locale.ROOT);
     }
 }
