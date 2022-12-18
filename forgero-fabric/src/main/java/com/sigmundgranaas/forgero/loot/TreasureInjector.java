@@ -15,7 +15,6 @@ public class TreasureInjector {
         this.entries = new ArrayList<>();
     }
 
-
     private void registerEntries() {
         mineshaft();
         stronghold();
@@ -43,6 +42,9 @@ public class TreasureInjector {
 
     public void registerLoot() {
         registerEntries();
+        if (ExtendedLootTable.isValid()) {
+            ExtendedLootTable.register();
+        }
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, table, setter) -> {
             entries.stream().filter(entry -> entry.matches(id)).forEach(entry -> entry.apply(table));
         });
