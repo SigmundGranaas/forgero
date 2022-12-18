@@ -35,7 +35,7 @@ dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
     implementation project(':forgero-extended')
-    implementation project(':forgero-structures')
+    //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
     //modImplementation project(':forgero-fabric-compat')
     //implementation project(':common')
@@ -48,7 +48,7 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modApi  "net.fabricmc:fabric-loader:${project.loader_version}"
+    modApi "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "vazkii.patchouli:Patchouli:1.19.2-77-FABRIC"
     modImplementation("net.devtech:arrp:0.6.2")
 

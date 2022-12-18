@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x",
+    "x "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "forgero:oak-handle"
+  }
+}
