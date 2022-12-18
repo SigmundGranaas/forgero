@@ -1,0 +1,63 @@
+{
+  "type": "TOOL_BINDING",
+  "name": "string-binding",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "TOOL_BINDING",
+    "target": "CREATE",
+    "recipes": [
+
+    ],
+    "components": [
+      {
+        "unique": true,
+        "id": "forgero:binding-schematic"
+      },
+      {
+        "unique": true,
+        "id": "minecraft:string"
+      }
+    ],
+    "slots": [
+
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "LOCAL",
+        "value": 10
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2.4
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.0
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -3.0
+      }
+    ]
+  }
+}

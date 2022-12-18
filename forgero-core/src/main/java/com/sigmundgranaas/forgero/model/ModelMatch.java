@@ -12,6 +12,8 @@ import com.sigmundgranaas.forgero.util.match.NameMatch;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
+
 public record ModelMatch(List<String> criteria, String matchType) implements Matchable {
     @Override
     public boolean test(Matchable match, Context context) {
@@ -44,7 +46,10 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
             if (matchType.equals("UPGRADE")) {
                 return criteria.stream().allMatch(criteria -> upgradeTest(slot, criteria, context));
             } else if (slot.get().isPresent() && criteria.size() == 1) {
-                return ingredientTest(slot.get().get(), criteria.get(0), context);
+                if (ingredientTest(slot.get().get(), criteria.get(0), context)) {
+                    return true;
+                }
+                return slot.get().get().name().equals(criteria.get(0));
             } else if (slot.get().isPresent()) {
                 return criteria.stream().allMatch(criteria -> ingredientTest(slot.get().get(), criteria, context));
             }
@@ -63,6 +68,8 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
             return ingredient.identifier().contains(criteria.replace("id:", ""));
         } else if (criteria.contains("model")) {
             return context.test(new ModelMatchEntry(criteria.replace("model:", "")), context);
+        } else if (ingredient.name().split(ELEMENT_SEPARATOR)[0].equals(criteria)) {
+            return true;
         }
         return ingredient.test(new NameMatch(criteria), context);
     }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "x x",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:oak_planks"
+    }
+  },
+  "result": {
+    "item": "forgero:oak-sword_guard"
+  }
+}

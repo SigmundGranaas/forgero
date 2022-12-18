@@ -158,19 +158,24 @@ public class DataBuilder {
 
                     templateIngredients.add(ingredients);
                 } else {
-                    var resource =
-                            tree.find(ingredient.type())
-                                    .map(node -> node.getResources(DataResource.class))
-                                    .map(element -> element.stream().filter(res -> res.resourceType() == DEFAULT)
-                                            .toList())
-                                    .orElse(Collections.emptyList());
-                    var ingredients = resource
-                            .stream()
-                            .map(res -> IngredientData.builder().id(res.identifier()).build())
-                            .toList();
 
-                    templateIngredients.add(ingredients);
-                }
+                       var resource =
+                               tree.find(ingredient.type())
+                                       .map(node -> node.getResources(DataResource.class))
+                                       .map(element -> element.stream().filter(res -> res.resourceType() == DEFAULT)
+                                               .toList())
+                                       .orElse(Collections.emptyList());
+                       var ingredients = resource
+                               .stream()
+                               .map(res -> IngredientData.builder().id(res.identifier()).build())
+                               .toList();
+
+                       templateIngredients.add(ingredients);
+                   }
+
+
+            }else if(!ingredient.id().equals(EMPTY_IDENTIFIER)){
+                templateIngredients.add(List.of(ingredient));
             }
         }
 
@@ -323,7 +328,11 @@ public class DataBuilder {
     }
 
     private String idToName(String id) {
-        return id.split(":")[1];
+        String[] split =  id.split(":");
+        if(split.length > 1){
+            return split[1];
+        }
+        return id;
     }
 
     @SuppressWarnings("unused")
