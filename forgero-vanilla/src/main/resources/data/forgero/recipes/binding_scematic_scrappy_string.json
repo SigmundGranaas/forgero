@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "forgero:string-scrappy_binding"
+    }
+  ],
+  "result": {
+    "item": "forgero:binding-schematic"
+  }
+}

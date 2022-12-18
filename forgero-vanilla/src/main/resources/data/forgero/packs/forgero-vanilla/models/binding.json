@@ -5,7 +5,7 @@
       "name": "binding",
       "template": "binding.png",
       "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
+      "palette": "MATERIAL",
       "order": "60",
       "variants": [
         {
@@ -85,7 +85,7 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
+        "type:MATERIAL",
         "type:BINDING_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
@@ -93,15 +93,7 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
-        "id:spiked_binding-schematic"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "spiked_binding"
-    },
-    {
-      "target": [
-        "type:TOOL_MATERIAL",
+        "type:MATERIAL",
         "id:spiked_binding-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
