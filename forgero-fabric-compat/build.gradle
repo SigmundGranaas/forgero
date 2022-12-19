@@ -95,7 +95,7 @@ dependencies {
     //include project(':forgero-vanilla')
     //include project(':forgero-extended')
     //include project(':forgero-fabric')
-    include project(':forgero-compat')
+    //include project(':forgero-compat')
     //Polymorph testing
 
     //modImplementation "curse.maven:cardinal-components-318449:3669769"
@@ -110,9 +110,8 @@ dependencies {
     //modImplementation 'com.ptsmods:devlogin:2.1'
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-
 }
+
 
 processResources {
     inputs.property "version", rootProject.version
@@ -131,7 +130,7 @@ java {
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
     // if it is present.
     // If you remove this line, sources will not be generated.
-    withSourcesJar()
+    //withSourcesJar()
 }
 
 jar {
@@ -164,10 +163,6 @@ sourceSets {
         compileClasspath += test.compileClasspath
         runtimeClasspath += test.runtimeClasspath
     }
-}
-
-loom {
-
 }
 
 test {

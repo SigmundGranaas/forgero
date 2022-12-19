@@ -2,7 +2,19 @@ version = project.mod_version
 group = project.maven_group
 archives_base_name = project.archives_base_name
 
-
 configure(subprojects) {
     apply plugin: 'java-library'
+}
+
+task buildSubProjects {
+    group = 'build'
+    dependsOn getTasksByName('build', true)
+}
+
+task copyJars(type: Copy) {
+    group = 'build'
+    dependsOn('buildSubProjects')
+    from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
+    exclude "**/*-dev.jar"
+    into "$buildDir/libs"
 }

@@ -37,7 +37,6 @@ dependencies {
     implementation project(':forgero-extended')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
-    //modImplementation project(':forgero-fabric-compat')
     //implementation project(':common')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -49,18 +48,25 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modApi "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "vazkii.patchouli:Patchouli:1.19.2-77-FABRIC"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("net.devtech:arrp:0.6.2")
 
     include "net.devtech:arrp:0.6.2"
     include project(':forgero-core')
-    include project(':forgero-vanilla')
-    include project(':forgero-extended')
-    //include project(':forgero-compat')
+}
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-
+tasks.register("buildComplete") {
+    group = "build"
+    dependencies {
+        include project(':forgero-vanilla')
+        include project(':forgero-extended')
+        include project(':forgero-compat')
+        include project(':forgero-structures')
+    }
+    jar {
+        archivesBaseName = "${archivesBaseName}-complete"
+    }
+    dependsOn(build)
 }
 
 processResources {
@@ -69,18 +75,6 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": rootProject.version
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    //it.options.release = 17
-}
-
-java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
 }
 
 jar {
@@ -167,6 +161,22 @@ loom {
 
 
     runs {
+        clientExtended {
+            dependencies {
+                implementation project(':forgero-vanilla')
+                implementation project(':forgero-extended')
+                implementation project(':forgero-structures')
+                implementation project(':forgero-compat')
+            }
+            client()
+        }
+        clientVanilla {
+            dependencies {
+                implementation project(':forgero-vanilla')
+            }
+            client()
+        }
+
         datagenClient {
             inherit client
             name "Data Generation"
@@ -180,7 +190,6 @@ loom {
             server()
             ideConfigGenerated project.rootProject == project
             name = "Testmod Server"
-
             source sourceSets.test
         }
         gametest {
@@ -217,5 +226,3 @@ test {
     testLogging.events("failed")
     testLogging.info.events = ["failed", "skipped"]
 }
-
-//test.dependsOn runGametest

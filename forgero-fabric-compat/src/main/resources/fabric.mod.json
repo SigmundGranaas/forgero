@@ -17,6 +17,9 @@
   "entrypoints": {
     "dynamiclights": [
       "com.sigmundgranaas.forgero.dynamiclights.DynamicLightsRegistryEndpoint"
+    ],
+    "client": [
+      "com.sigmundgranaas.forgero.ForgeroCompatClient"
     ]
   },
   "mixins": [
@@ -25,7 +28,8 @@
     "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.19.x",
-    "java": ">=17"
+    "java": ">=17",
+    "forgero": "*"
   },
   "custom": {
   }
