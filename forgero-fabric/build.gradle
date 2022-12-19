@@ -55,16 +55,20 @@ dependencies {
     include project(':forgero-core')
 }
 
-tasks.register("buildComplete") {
+task buildComplete() {
     group = "build"
+    archivesBaseName = "${archivesBaseName}-complete"
+    loom {
+        mixin {
+            defaultRefmapName = "forgero-fabric-refmap.json"
+        }
+    }
     dependencies {
         include project(':forgero-vanilla')
         include project(':forgero-extended')
         include project(':forgero-compat')
         include project(':forgero-structures')
-    }
-    jar {
-        archivesBaseName = "${archivesBaseName}-complete"
+        include project(':forgero-fabric-compat')
     }
     dependsOn(build)
 }
@@ -79,7 +83,7 @@ processResources {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${rootProject.archivesBaseName}" }
+        rename { "${it}_${archivesBaseName}" }
     }
 }
 
@@ -158,8 +162,6 @@ sourceSets {
 }
 
 loom {
-
-
     runs {
         clientExtended {
             dependencies {

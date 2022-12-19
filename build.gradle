@@ -2,6 +2,32 @@ version = project.mod_version
 group = project.maven_group
 archives_base_name = project.archives_base_name
 
+subprojects {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven { url = "https://modmaven.dev/" }
+        maven { url = "https://minecraft.guntram.de/maven/" }
+        maven { url = "https://www.cursemaven.com" }
+        maven { url = "https://maven.shedaniel.me/" }
+        maven { url = "https://maven.terraformersmc.com/" }
+        maven { url = "https://maven.wispforest.io/" }
+        maven { url = "https://jitpack.io" }
+        maven { url = "https://ladysnake.jfrog.io/artifactory/mods" }
+        maven { url = "https://maven.cafeteria.dev" }
+        maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }
+        maven { url = "https://api.modrinth.com/maven/" }
+        maven { url = 'https://maven.blamejared.com' }
+        maven { url = "https://storage.googleapis.com/devan-maven/" }
+        maven {
+            name 'Gegy'
+            url 'https://maven.gegy.dev'
+        }
+    }
+}
+
 configure(subprojects) {
     apply plugin: 'java-library'
 }
@@ -11,9 +37,12 @@ task buildSubProjects {
     dependsOn getTasksByName('build', true)
 }
 
+task buildFabric(type: GradleBuild) {
+    tasks = ['forgero-fabric:buildExtended', 'forgero-fabric:buildComplete']
+}
+
 task copyJars(type: Copy) {
     group = 'build'
-    dependsOn('buildSubProjects')
     from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
     exclude "**/*-dev.jar"
     into "$buildDir/libs"
