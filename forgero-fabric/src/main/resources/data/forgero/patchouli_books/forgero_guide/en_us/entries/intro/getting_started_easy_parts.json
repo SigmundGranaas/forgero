@@ -9,30 +9,30 @@
     },
     {
       "type": "patchouli:crafting",
-      "title": "Crafting basic wooden heads",
+      "title": "Basic wooden heads",
       "recipe": "forgero:basic_wood_axe_head",
       "recipe2": "forgero:basic_wood_pickaxe_head"
     },
     {
       "type": "patchouli:crafting",
-      "title": "Crafting basic wooden heads",
+      "title": "Basic wooden heads",
       "recipe": "forgero:basic_wood_hoe_head",
       "recipe2": "forgero:basic_wood_shovel_head"
     },
     {
       "type": "patchouli:crafting",
-      "title": "Crafting a basic blade and a guard",
+      "title": "Basic blade and a guard",
       "recipe": "forgero:basic_wood_sword_blade",
       "recipe2": "forgero:basic_wood_sword_guard"
     },
     {
       "type": "patchouli:crafting",
-      "title": "Crafting a basic handle",
+      "title": "Basic handle",
       "recipe": "forgero:basic_wood_handle"
     },
     {
       "type": "patchouli:crafting",
-      "title": "Crafting basic bindings",
+      "title": "Basic bindings",
       "recipe": "forgero:basic_leather_binding",
       "recipe2": "forgero:basic_string_binding"
     }

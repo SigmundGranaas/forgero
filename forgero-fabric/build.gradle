@@ -57,7 +57,7 @@ dependencies {
 
 task buildComplete() {
     group = "build"
-    archivesBaseName = "${archivesBaseName}-complete"
+    archivesBaseName = "${archivesBaseName}-full"
     loom {
         mixin {
             defaultRefmapName = "forgero-fabric-refmap.json"

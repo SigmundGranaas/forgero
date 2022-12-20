@@ -34,7 +34,8 @@ dependencies {
     implementation project(':forgero-vanilla')
     implementation project(':forgero-extended')
     implementation project(':forgero-compat')
-    implementation project(':forgero-fabric')
+    implementation project(':forgero-structures')
+    modImplementation project(':forgero-fabric')
 
     //implementation project(':common')
 
