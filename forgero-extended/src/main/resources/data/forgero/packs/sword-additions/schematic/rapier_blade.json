@@ -48,13 +48,13 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.8
+        "value": 1.7
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 0.8
       },
       {
         "type": "RARITY",
@@ -66,7 +66,7 @@
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.7
+        "value": -2.6
       },
       {
         "type": "MINING_SPEED",

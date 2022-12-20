@@ -14,6 +14,13 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 14
+      },
+      {
+        "id": "default_stone_durability",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 120.0
       }
     ]
   },

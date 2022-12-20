@@ -79,13 +79,13 @@
       {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
+        "operation": "MULTIPLICATION",
         "value": -0.1
       },
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
+        "operation": "MULTIPLICATION",
         "value": -0.1
       }
     ]

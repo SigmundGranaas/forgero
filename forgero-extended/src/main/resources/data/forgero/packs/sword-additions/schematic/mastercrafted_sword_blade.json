@@ -45,7 +45,7 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
         "description": "sword_guard",
         "type": "SECONDARY_MATERIAL",

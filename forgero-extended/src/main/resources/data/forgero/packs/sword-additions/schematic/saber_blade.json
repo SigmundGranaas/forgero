@@ -60,7 +60,7 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 32
+        "value": 42
       },
       {
         "type": "ATTACK_DAMAGE",
@@ -78,7 +78,7 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 1.1
       },
       {
         "type": "ATTACK_SPEED",

@@ -19,7 +19,7 @@
         "value": 10
       },
       {
-        "id": "default_stone_speed_level",
+        "id": "default_stone_mining_speed",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -53,6 +53,13 @@
         }
       },
       {
+        "id": "stone_attack_speed",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
+      },
+      {
         "id": "default_stone_attack_speed_handle",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
@@ -64,6 +71,54 @@
             "HANDLE"
           ]
         }
+      },
+      {
+        "id": "default_stone_rarity_upgrade",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 2
+      },
+      {
+        "id": "default_stone_attack_offensive_upgrade",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 0.3
+      },
+      {
+        "id": "default_stone_mining_speed_offensive_upgrade",
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 0.5
+      },
+      {
+        "id": "default_stone_durability_offensive_upgrade",
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 30
+      },
+      {
+        "id": "default_stone_durability_utility_upgrade",
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 10
+      },
+      {
+        "id": "default_stone_attack_speed_utility_upgrade",
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 0.1
       }
     ]
   }

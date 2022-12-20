@@ -74,6 +74,18 @@
         "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.4
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "value": 0.95
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "value": 0.95
       }
     ]
   },

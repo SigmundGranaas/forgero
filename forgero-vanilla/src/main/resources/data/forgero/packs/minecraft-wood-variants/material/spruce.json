@@ -20,14 +20,22 @@
         "order": "BASE",
         "category": "OFFENSIVE",
         "operation": "ADDITION",
-        "value": 0.2
+        "value": 0.4
+      },
+      {
+        "id": "wood-durability-composite-base",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 50.0
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "category": "OFFENSIVE",
         "operation": "ADDITION",
-        "value": 0.2
+        "value": 0.1
       },
       {
         "type": "ATTACK_SPEED",
@@ -41,7 +49,7 @@
         "order": "BASE",
         "category": "UTILITY",
         "operation": "MULTIPLICATION",
-        "value": 1.05
+        "value": 1.1
       }
     ],
     "passive": [],

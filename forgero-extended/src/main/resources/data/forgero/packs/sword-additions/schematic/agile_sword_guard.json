@@ -59,7 +59,7 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 24
+        "value": 56
       },
       {
         "type": "RARITY",
@@ -73,14 +73,14 @@
         "order": "COMPOSITE",
         "category": "UTILITY",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0.3
       },
       {
         "type": "ATTACK_SPEED",
         "order": "BASE",
         "category": "UTILITY",
         "operation": "ADDITION",
-        "value": 0.3
+        "value": 0.2
       }
     ]
   },

@@ -59,13 +59,6 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 0
-      },
-      {
-        "id": "wood-mining-level-composite-base",
-        "type": "MINING_LEVEL",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 1
       }
     ],
     "passive": [],

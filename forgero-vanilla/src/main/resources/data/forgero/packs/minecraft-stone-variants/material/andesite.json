@@ -14,6 +14,40 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 13
+      },
+      {
+        "id": "default_stone_mining_speed",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "id": "default_stone_durability",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 80.0
+      },
+      {
+        "id": "default_stone_attack_damage",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.7
+      },
+      {
+        "id": "default_stone_attack_speed_handle",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -1.4,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
       }
     ]
   },
