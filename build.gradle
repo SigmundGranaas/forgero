@@ -37,10 +37,6 @@ task buildSubProjects {
     dependsOn getTasksByName('build', true)
 }
 
-task buildFabric(type: GradleBuild) {
-    tasks = ['forgero-fabric:buildExtended', 'forgero-fabric:buildComplete']
-}
-
 task copyJars(type: Copy) {
     group = 'build'
     from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
