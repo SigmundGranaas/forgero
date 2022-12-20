@@ -80,7 +80,7 @@ public class AxeTest extends ForgeroPackageTest {
                 .add(MINING_SPEED, 9, 1)
                 .add(RARITY, 88, 10)
                 .add(ATTACK_DAMAGE, 8, 1.5)
-                .add(ATTACK_SPEED, -3.4, 0.2)
+                .add(ATTACK_SPEED, -3.2, 0.4)
                 .run();
     }
 }

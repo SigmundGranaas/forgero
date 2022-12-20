@@ -8,6 +8,10 @@ plugins {
 version = rootProject.mod_version
 group = rootProject.maven_group
 
+configurations {
+    full
+}
+
 repositories {
     mavenCentral()
 
@@ -55,22 +59,33 @@ dependencies {
     include project(':forgero-core')
 }
 
-task buildComplete() {
+task assembleComplete(type: Jar) {
     group = "build"
-    archivesBaseName = "${archivesBaseName}-full"
+
     loom {
         mixin {
             defaultRefmapName = "forgero-fabric-refmap.json"
         }
     }
-    dependencies {
-        include project(':forgero-vanilla')
-        include project(':forgero-extended')
-        include project(':forgero-compat')
-        include project(':forgero-structures')
-        include project(':forgero-fabric-compat')
+    remapJar {
+        if (gradle.startParameter.taskNames.stream().anyMatch("assembleComplete"::equals)) {
+            dependencies {
+                include project(':forgero-vanilla')
+                include project(':forgero-extended')
+                include project(':forgero-compat')
+                include project(':forgero-structures')
+                include project(':forgero-fabric-compat')
+            }
+        }
+
     }
-    dependsOn(build)
+
+    jar {
+        if (gradle.startParameter.taskNames.stream().anyMatch("assembleComplete"::equals)) {
+            archivesBaseName = "${archivesBaseName}-full"
+        }
+    }
+    finalizedBy(assemble)
 }
 
 processResources {

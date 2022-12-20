@@ -42,4 +42,5 @@ task copyJars(type: Copy) {
     from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
     exclude "**/*-dev.jar"
     into "$buildDir/libs"
+    dependsOn(buildSubProjects)
 }

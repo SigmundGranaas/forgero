@@ -18,7 +18,7 @@ public class SwordTest extends ForgeroPackageTest {
                 .add(DURABILITY, 50, 10)
                 .add(MINING_SPEED, 2, 1)
                 .add(RARITY, 12, 5)
-                .add(ATTACK_DAMAGE, 4, 0.5)
+                .add(ATTACK_DAMAGE, 3.5, 0.5)
                 .add(ATTACK_SPEED, -2.8, 0.5)
                 .run();
     }
@@ -80,7 +80,7 @@ public class SwordTest extends ForgeroPackageTest {
                 .add(MINING_SPEED, 9, 1)
                 .add(RARITY, 88, 10)
                 .add(ATTACK_DAMAGE, 7, 1.5)
-                .add(ATTACK_SPEED, -3.2, 0.2)
+                .add(ATTACK_SPEED, -3.2, 0.3)
                 .run();
     }
 }
