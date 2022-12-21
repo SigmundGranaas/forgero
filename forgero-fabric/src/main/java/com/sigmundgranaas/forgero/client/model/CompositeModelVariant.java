@@ -27,9 +27,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.sigmundgranaas.forgero.client.ForgeroClient.TEXTURES;
-import static net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE;
-
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private final LoadingCache<ItemStack, FabricBakedModel> cache;
     private final ModelRegistry registry;
@@ -111,7 +108,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     @Nullable
     @Override
     public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-        TEXTURES.values().stream().map(texture -> new SpriteIdentifier(BLOCK_ATLAS_TEXTURE, new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", "")))).forEach(textureGetter::apply);
         if (this.loader == null || this.loader != baker) {
             this.loader = baker;
             this.textureGetter = textureGetter;

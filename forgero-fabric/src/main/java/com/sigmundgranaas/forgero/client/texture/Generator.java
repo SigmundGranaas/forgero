@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.client.texture;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.models.JModel;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.ResourceTexture;
 import net.minecraft.util.Identifier;
 
 import static com.sigmundgranaas.forgero.client.ForgeroClient.TEXTURES;
@@ -11,17 +11,31 @@ import static com.sigmundgranaas.forgero.client.ForgeroClient.TEXTURES;
 public class Generator {
     public static final RuntimeResourcePack RESOURCE_PACK_CLIENT = RuntimeResourcePack.create("forgero:builtin");
 
-    public static void generateModels() {
-        TEXTURES.values().forEach(texture -> {
-            Identifier id = new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""));
-            if (MinecraftClient.getInstance().getTextureManager() != null) {
-                MinecraftClient.getInstance().getTextureManager().registerTexture(id, new ResourceTexture(id));
-            }
+    public static void generate() {
+        new Generator().generateModels();
+    }
 
-            JModel model = new JModel();
-            model.parent("item/generated");
-            model.textures(JModel.textures().layer0(new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", "")).toString()));
-            RESOURCE_PACK_CLIENT.addModel(model, new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", "")));
-        });
+    public void generateModels() {
+        JsonArray textures = new JsonArray();
+        JsonObject atlas = new JsonObject();
+
+        TEXTURES.values().stream()
+                .map(this::texture)
+                .map(this::textureEntry)
+                .forEach(textures::add);
+        atlas.add("sources", textures);
+
+        RESOURCE_PACK_CLIENT.addAsset(new Identifier("minecraft:atlases/blocks.json"), atlas.toString().getBytes());
+    }
+
+    private JsonObject textureEntry(String texture) {
+        JsonObject entry = new JsonObject();
+        entry.addProperty("type", "single");
+        entry.addProperty("resource", texture);
+        return entry;
+    }
+
+    private String texture(PaletteTemplateModel templateModel) {
+        return new Identifier(templateModel.nameSpace(), "item/" + templateModel.name().replace(".png", "")).toString();
     }
 }
