@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 public class RepairKitRecipe extends ShapelessRecipe {
 
     public RepairKitRecipe(ShapelessRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
+        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(), recipe.getIngredients());
     }
 
     @Override

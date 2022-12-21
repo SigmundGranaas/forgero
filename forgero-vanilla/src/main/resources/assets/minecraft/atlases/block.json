@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "forgero:item/oak-pickaxe_head"
+    },
+    {
+      "type": "single",
+      "resource": "forgero:item/oak-handle"
+    }
+  ]
+}

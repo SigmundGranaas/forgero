@@ -3,8 +3,9 @@ package com.sigmundgranaas.forgero.registry.impl;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.registry.RecipeRegistry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 
@@ -26,6 +27,6 @@ public record RecipeRegistryImpl(
 
     @Override
     public void registerRecipeSerializers() {
-        collection.getRecipeTypes().forEach(serializer -> Registry.register(Registry.RECIPE_SERIALIZER, serializer.getIdentifier(), serializer.getSerializer()));
+        collection.getRecipeTypes().forEach(serializer -> Registry.register(Registries.RECIPE_SERIALIZER, serializer.getIdentifier(), serializer.getSerializer()));
     }
 }

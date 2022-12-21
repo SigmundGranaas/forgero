@@ -20,13 +20,15 @@ import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,9 +81,9 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void registerBlocks() {
-        Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
-        Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
-        Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+        Registry.register(Registries.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
+        Registry.register(Registries.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
+        Registry.register(Registries.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
     }
 
     private void registerAARPRecipes() {
@@ -91,7 +93,7 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void registerLootFunctions() {
-        Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+        Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
     }
 
     private void registerTreasure() {
@@ -108,14 +110,15 @@ public class ForgeroInitializer implements ModInitializer {
         ForgeroStateRegistry.STATES.all().stream().filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
 
         ForgeroStateRegistry.STATES.all().stream()
-                .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
+                .filter(state -> !Registries.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
                 .sorted((element1, element2) -> compareStates(element1, element2, sortingMap))
                 .forEach(state -> {
                     try {
                         var converter = StateToItemConverter.of(state);
                         Identifier identifier = converter.id();
                         var item = converter.convert();
-                        Registry.register(Registry.ITEM, identifier, item);
+                        Registry.register(Registries.ITEM, identifier, item);
+                        ItemGroupEvents.modifyEntriesEvent(converter.getItemGroup(state)).register(entries -> entries.add(item));
                     } catch (InvalidIdentifierException e) {
                         LOGGER.error("invalid identifier: {}", state.identifier());
                         LOGGER.error(e);

@@ -61,6 +61,7 @@ public class ARRPGenerator {
 
     private void createTagFromType(MutableTypeNode node) {
         JTag typeTag = new JTag();
+
         var states = node.getResources(State.class);
         if (states.size() > 0) {
             states.stream()

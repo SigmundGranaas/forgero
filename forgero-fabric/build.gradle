@@ -53,9 +53,9 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modApi "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation("net.devtech:arrp:0.6.2")
+    modImplementation("net.devtech:arrp:0.6.7")
 
-    include "net.devtech:arrp:0.6.2"
+    include "net.devtech:arrp:0.6.7"
     include project(':forgero-core')
 }
 

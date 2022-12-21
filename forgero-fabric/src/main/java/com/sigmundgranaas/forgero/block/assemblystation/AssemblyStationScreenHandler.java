@@ -11,27 +11,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.ASSEMBLY_STATION;
-
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
-    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
     public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
+
         @Override
-        public ItemStack transferSlot(PlayerEntity player, int index) {
+        public ItemStack quickMove(PlayerEntity player, int slot) {
             return ItemStack.EMPTY;
         }
 
@@ -107,13 +105,13 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
     // Shift + Player Inv Slot
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot) {
+    public ItemStack quickMove(PlayerEntity player, int slot) {
         ItemStack newStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(invSlot);
-        if (slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        Slot currentSlot = this.slots.get(slot);
+        if (currentSlot.hasStack()) {
+            ItemStack originalStack = currentSlot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < this.inventory.size()) {
+            if (slot < this.inventory.size()) {
                 if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
@@ -122,15 +120,14 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                currentSlot.setStack(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                currentSlot.markDirty();
             }
         }
 
         return newStack;
-    }
-
+    }    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
@@ -197,8 +194,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                 } else if (disassemblyStack.getItem() == Items.DIAMOND_PICKAXE) {
                     inventory.setStack(0, empty);
                     setPreviousTrackedSlot(0, empty);
-                    inventory.setStack(2, new ItemStack(Registry.ITEM.get(new Identifier("forgero:oak-handle"))));
-                    inventory.setStack(1, new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe_head"))));
+                    inventory.setStack(2, new ItemStack(Registries.ITEM.get(new Identifier("forgero:oak-handle"))));
+                    inventory.setStack(1, new ItemStack(Registries.ITEM.get(new Identifier("forgero:diamond-pickaxe_head"))));
                     serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
                 }
 
@@ -294,4 +291,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             return doneConstructing || !isConstructed;
         }
     }
+
+
+
+
 }

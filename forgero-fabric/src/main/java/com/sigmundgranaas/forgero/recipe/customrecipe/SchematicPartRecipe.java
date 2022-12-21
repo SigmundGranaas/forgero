@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 public class SchematicPartRecipe extends ShapelessRecipe {
 
     public SchematicPartRecipe(ShapelessRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
+        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(), recipe.getIngredients());
     }
 
     @Override

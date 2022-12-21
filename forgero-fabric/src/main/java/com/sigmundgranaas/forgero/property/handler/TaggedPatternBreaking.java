@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 import net.minecraft.block.BlockState;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -25,6 +25,6 @@ public class TaggedPatternBreaking extends PatternBreaking {
 
     @Override
     public boolean checkBlock(BlockState state) {
-        return state.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(tag)));
+        return state.isIn(TagKey.of(RegistryKeys.BLOCK, new Identifier(tag)));
     }
 }

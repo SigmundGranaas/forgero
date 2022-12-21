@@ -1,37 +1,37 @@
 package com.sigmundgranaas.forgero.item;
 
 import com.sigmundgranaas.forgero.ForgeroInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ItemGroups {
     public static final String FORGERO_GROUP = "forgero";
 
-    public static final ItemGroup FORGERO_TOOL_PARTS = FabricItemGroupBuilder.create(
+    public static final ItemGroup FORGERO_TOOL_PARTS = FabricItemGroup.builder(
                     new Identifier(ForgeroInitializer.MOD_NAMESPACE, "parts"))
             .icon(ItemGroups::createPartIcon)
             .build();
 
-    public static final ItemGroup FORGERO_SCHEMATICS = FabricItemGroupBuilder.create(
+    public static final ItemGroup FORGERO_SCHEMATICS = FabricItemGroup.builder(
                     new Identifier(ForgeroInitializer.MOD_NAMESPACE, "schematics"))
             .icon(ItemGroups::createSchematicIcon)
             .build();
 
-    public static final ItemGroup FORGERO_TOOLS = FabricItemGroupBuilder.create(
+    public static final ItemGroup FORGERO_TOOLS = FabricItemGroup.builder(
                     new Identifier(ForgeroInitializer.MOD_NAMESPACE, "tools"))
             .icon(ItemGroups::createForgeroToolIcon)
             .build();
 
-    public static final ItemGroup FORGERO_WEAPONS = FabricItemGroupBuilder.create(
+    public static final ItemGroup FORGERO_WEAPONS = FabricItemGroup.builder(
                     new Identifier(ForgeroInitializer.MOD_NAMESPACE, "weapons"))
             .icon(ItemGroups::createWeaponIcon)
             .build();
 
-    public static final ItemGroup FORGERO_GEMS = FabricItemGroupBuilder.create(
+    public static final ItemGroup FORGERO_GEMS = FabricItemGroup.builder(
                     new Identifier(ForgeroInitializer.MOD_NAMESPACE, "trinkets"))
             .icon(ItemGroups::createTrinketIcon)
             .build();
@@ -65,14 +65,14 @@ public class ItemGroups {
     }
 
     private static ItemStack createSchematicIcon() {
-        return new ItemStack(Registry.ITEM.get(new Identifier("forgero:pickaxe_head-schematic")));
+        return new ItemStack(Registries.ITEM.get(new Identifier("forgero:pickaxe_head-schematic")));
     }
 
     private static ItemStack createPartIcon() {
-        return new ItemStack(Registry.ITEM.get(new Identifier("forgero:iron-pickaxe_head")));
+        return new ItemStack(Registries.ITEM.get(new Identifier("forgero:iron-pickaxe_head")));
     }
 
     private static ItemStack createTrinketIcon() {
-        return new ItemStack(Registry.ITEM.get(new Identifier("forgero:redstone-gem")));
+        return new ItemStack(Registries.ITEM.get(new Identifier("forgero:redstone-gem")));
     }
 }

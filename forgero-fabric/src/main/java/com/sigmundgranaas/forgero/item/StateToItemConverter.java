@@ -6,11 +6,12 @@ import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ToolMaterials;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class StateToItemConverter {
     private final State state;
@@ -48,10 +49,12 @@ public class StateToItemConverter {
     }
 
     private Item defaultStateItem() {
-        return new DefaultStateItem(new FabricItemSettings().group(getItemGroup(state)), state);
+        var item = new DefaultStateItem(new FabricItemSettings(), state);
+        ItemGroupEvents.modifyEntriesEvent(getItemGroup(state)).register(entries -> entries.add(item));
+        return item;
     }
 
-    private ItemGroup getItemGroup(State state) {
+    public ItemGroup getItemGroup(State state) {
         if (state.test(Type.TOOL)) {
             return ItemGroups.FORGERO_TOOLS;
         } else if (state.test(Type.WEAPON)) {
@@ -63,16 +66,14 @@ public class StateToItemConverter {
         } else if (state.test(Type.TRINKET)) {
             return ItemGroups.FORGERO_GEMS;
         }
-        return ItemGroup.MISC;
+        return net.minecraft.item.ItemGroups.INGREDIENTS;
     }
 
     private FabricItemSettings getItemSettings(State state) {
         var settings = new FabricItemSettings();
 
-        settings.group(getItemGroup(state));
-
         if (state.name().contains("schematic")) {
-            settings.recipeRemainder(Registry.ITEM.get(new Identifier(state.identifier())));
+            settings.recipeRemainder(Registries.ITEM.get(new Identifier(state.identifier())));
         }
 
         if (state.name().contains("netherite")) {

@@ -49,7 +49,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
-    modImplementation("net.devtech:arrp:0.6.2")
+    modImplementation("net.devtech:arrp:0.6.7")
 
     modImplementation "curse.maven:modmenu-308702:4145207"
     modImplementation "curse.maven:lambdynamiclights-393442:3824820"

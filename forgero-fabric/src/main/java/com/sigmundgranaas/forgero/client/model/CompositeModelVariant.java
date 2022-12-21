@@ -10,8 +10,9 @@ import com.sigmundgranaas.forgero.model.*;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
-import net.minecraft.client.render.model.ModelLoader;
+import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
@@ -26,10 +27,13 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.sigmundgranaas.forgero.client.ForgeroClient.TEXTURES;
+import static net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE;
+
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private final LoadingCache<ItemStack, FabricBakedModel> cache;
     private final ModelRegistry registry;
-    private ModelLoader loader;
+    private Baker loader;
     private Function<SpriteIdentifier, Sprite> textureGetter;
 
     public CompositeModelVariant(ModelRegistry modelRegistry) {
@@ -51,17 +55,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         return ((BakedModel) cache.getUnchecked(stack));
     }
 
-    @Nullable
-    @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-
-        if (this.loader == null || this.loader != loader) {
-            this.loader = loader;
-            this.textureGetter = textureGetter;
-            cache.invalidateAll();
-        }
-        return this;
-    }
 
     private Optional<FabricBakedModel> convertModel(ModelTemplate template) {
         var unbakedModel = template.convert(this::modelConverter);
@@ -110,4 +103,20 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
         template.getModels().forEach(model -> textureCollector(model, accumulator));
     }
 
+    @Override
+    public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+
+    }
+
+    @Nullable
+    @Override
+    public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+        TEXTURES.values().stream().map(texture -> new SpriteIdentifier(BLOCK_ATLAS_TEXTURE, new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", "")))).forEach(textureGetter::apply);
+        if (this.loader == null || this.loader != baker) {
+            this.loader = baker;
+            this.textureGetter = textureGetter;
+            cache.invalidateAll();
+        }
+        return this;
+    }
 }

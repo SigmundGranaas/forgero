@@ -7,10 +7,12 @@ import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -26,13 +28,15 @@ public class DynamicItems {
     }
 
     public static List<Item> registerRepairKits() {
-        return ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
+        var items = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
                 .map(node -> node.getResources(State.class))
                 .orElse(ImmutableList.<State>builder().build())
                 .stream()
                 .map(material -> new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"))
-                .map(identifier -> Registry.register(Registry.ITEM, identifier, new Item(new FabricItemSettings().group(ItemGroup.MISC).recipeRemainder(EMPTY_REPAIR_KIT))))
+                .map(identifier -> Registry.register(Registries.ITEM, identifier, new Item(new FabricItemSettings().recipeRemainder(EMPTY_REPAIR_KIT))))
                 .toList();
+        items.forEach(item -> ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(item)));
 
+        return items;
     }
 }
