@@ -15,6 +15,7 @@ import com.sigmundgranaas.forgero.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.resources.dynamic.PartToSchematicGenerator;
 import com.sigmundgranaas.forgero.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
@@ -86,7 +87,7 @@ public class ForgeroInitializer implements ModInitializer {
 
     private void registerAARPRecipes() {
         ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
-
+        ARRPGenerator.register(PartToSchematicGenerator::new);
         ARRPGenerator.generate();
     }
 

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
@@ -34,9 +35,16 @@ public class ARRPGenerator {
         generators.add(generator);
     }
 
+    @Synchronized
+    public static void register(Supplier<DynamicResourceGenerator> supplier) {
+        generators.add(supplier.get());
+    }
+
     public static void generate() {
         new ARRPGenerator().generateResources();
-        generators.stream().filter(DynamicResourceGenerator::enabled).forEach(generator -> generator.generate(RESOURCE_PACK));
+        generators.stream()
+                .filter(DynamicResourceGenerator::enabled)
+                .forEach(generator -> generator.generate(RESOURCE_PACK));
     }
 
 
