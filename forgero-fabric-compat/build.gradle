@@ -30,12 +30,12 @@ repositories {
 }
 
 dependencies {
-    //implementation project(':forgero-core')
-    //implementation project(':forgero-vanilla')
-    //implementation project(':forgero-extended')
-    //implementation project(':forgero-compat')
-    //implementation project(':forgero-structures')
-    modImplementation project(':forgero-fabric')
+    implementation project(':forgero-core')
+    implementation project(':forgero-vanilla')
+    implementation project(':forgero-extended')
+    implementation project(':forgero-compat')
+    implementation project(':forgero-structures')
+    implementation project(path: ':forgero-fabric', configuration: 'dev')
 
     //implementation project(':common')
 
@@ -50,8 +50,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 
-
-    //modImplementation("net.devtech:arrp:0.6.2")
+    modImplementation("net.devtech:arrp:0.6.2")
 
     //dynamiclights compat
     //modImplementation "curse.maven:modmenu-308702:4145207"

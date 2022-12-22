@@ -16,10 +16,13 @@ import com.sigmundgranaas.forgero.type.TypeTree;
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static com.sigmundgranaas.forgero.util.Identifiers.CREATE_IDENTIFIER;
+
 public class StateConverter implements DataConverter<State> {
     private final HashMap<String, State> states = new HashMap<>();
     private final TypeTree tree;
     private final HashMap<String, String> nameMapping = new HashMap<>();
+    private final List<String> createStates = new ArrayList<>();
 
     public StateConverter(TypeTree tree) {
         this.tree = tree;
@@ -27,6 +30,9 @@ public class StateConverter implements DataConverter<State> {
 
     @Override
     public Optional<State> convert(DataResource resource) {
+        if (resource.container().isPresent() && resource.container().get().getType().equals(CREATE_IDENTIFIER)) {
+            createStates.add(resource.identifier());
+        }
         if (resource.type().equals("GEM")) {
             return createGem(resource);
         } else if (resource.construct().isEmpty()) {
@@ -42,6 +48,10 @@ public class StateConverter implements DataConverter<State> {
 
     public HashMap<String, String> nameMapper() {
         return nameMapping;
+    }
+
+    public List<String> createStates() {
+        return createStates;
     }
 
     private Optional<State> createComposite(DataResource resource) {

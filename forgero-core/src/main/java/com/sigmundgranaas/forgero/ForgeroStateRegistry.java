@@ -7,14 +7,13 @@ import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ForgeroStateRegistry {
     public static ResourceRegistry<State> STATES;
+
+    public static List<State> CREATE_STATES;
     public static Map<String, String> STATE_TO_CONTAINER;
     public static Map<String, String> CONTAINER_TO_STATE;
     public static Set<String> COMPOSITES;
@@ -67,6 +66,14 @@ public class ForgeroStateRegistry {
         return (resources, tree, idMapper) -> {
             if (CONSTRUCTS == null) {
                 CONSTRUCTS = resources.stream().filter(res -> res.construct().isPresent()).toList();
+            }
+        };
+    }
+
+    public static ResourceListener<List<String>> createStateListener() {
+        return (resources, tree, idMapper) -> {
+            if (CREATE_STATES == null) {
+                CREATE_STATES = resources.stream().map(STATES::get).flatMap(Optional::stream).toList();
             }
         };
     }
