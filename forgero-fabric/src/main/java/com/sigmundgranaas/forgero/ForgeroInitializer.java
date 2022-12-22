@@ -59,6 +59,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .register(FabricPackFinder.supplier())
                 .state(ForgeroStateRegistry.stateListener())
                 .state(ForgeroStateRegistry.compositeListener())
+                .createStates(ForgeroStateRegistry.createStateListener())
                 .inflated(ForgeroStateRegistry.constructListener())
                 .inflated(ForgeroStateRegistry.containerListener())
                 .recipes(ForgeroStateRegistry.recipeListener())
@@ -106,10 +107,12 @@ public class ForgeroInitializer implements ModInitializer {
     private void registerStates() {
         var sortingMap = new HashMap<String, Integer>();
 
-        ForgeroStateRegistry.STATES.all().stream().filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
-
         ForgeroStateRegistry.STATES.all().stream()
+                .filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
+
+        ForgeroStateRegistry.CREATE_STATES.stream()
                 .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
+                .filter(state -> !Registry.ITEM.containsId(new Identifier(state.identifier())))
                 .sorted((element1, element2) -> compareStates(element1, element2, sortingMap))
                 .forEach(state -> {
                     try {
