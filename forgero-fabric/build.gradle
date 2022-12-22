@@ -55,6 +55,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("net.devtech:arrp:0.6.2")
 
+
     include "net.devtech:arrp:0.6.2"
     include project(':forgero-core')
 }
