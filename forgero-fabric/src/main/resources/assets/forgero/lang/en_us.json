@@ -1,6 +1,7 @@
 {
   "block.forgero.assembly_station": "Assembly station",
   "itemGroup.forgero.forgero": "Forgero",
+  "util.forgero.name_separator": " ",
   "advancements.forgero.root.title": "A world of possibilities",
   "advancements.forgero.root.description": "Discover the world of Forgero",
   "advancements.forgero.toolpart.title": "An essential ingredient",

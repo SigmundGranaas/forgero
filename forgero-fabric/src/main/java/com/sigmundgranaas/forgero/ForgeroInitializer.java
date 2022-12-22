@@ -20,13 +20,11 @@ import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import org.apache.logging.log4j.LogManager;
@@ -60,6 +58,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .register(FabricPackFinder.supplier())
                 .state(ForgeroStateRegistry.stateListener())
                 .state(ForgeroStateRegistry.compositeListener())
+                .createStates(ForgeroStateRegistry.createStateListener())
                 .inflated(ForgeroStateRegistry.constructListener())
                 .inflated(ForgeroStateRegistry.containerListener())
                 .recipes(ForgeroStateRegistry.recipeListener())
@@ -88,7 +87,7 @@ public class ForgeroInitializer implements ModInitializer {
 
     private void registerAARPRecipes() {
         ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
-
+        ARRPGenerator.register(PartToSchematicGenerator::new);
         ARRPGenerator.generate();
     }
 
@@ -107,10 +106,12 @@ public class ForgeroInitializer implements ModInitializer {
     private void registerStates() {
         var sortingMap = new HashMap<String, Integer>();
 
-        ForgeroStateRegistry.STATES.all().stream().filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
-
         ForgeroStateRegistry.STATES.all().stream()
+                .filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
+
+        ForgeroStateRegistry.CREATE_STATES.stream()
                 .filter(state -> !Registries.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
+                .filter(state -> !Registries.ITEM.containsId(new Identifier(state.identifier())))
                 .sorted((element1, element2) -> compareStates(element1, element2, sortingMap))
                 .forEach(state -> {
                     try {

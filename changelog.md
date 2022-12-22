@@ -5,7 +5,14 @@
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
 
-### Changelog 0.10.0
+## Changelog 0.10.1
+
+* Removed uses of Fabric resource generators. Replaced with dynamic ARRP generators.
+* Fixed mythicmetals integration, and optimised some materials
+* Fixed materials count for reinforced handle
+* Created a naming split element, to make it easier to negate spacing in names for some languages
+
+## Changelog 0.10.0
 
 * Completely revamped the core design and structure of Forgero
 * Basically rewrote the system from scratch ( Yay..... )
@@ -20,3 +27,13 @@ you have backed up your save.**
 * Repair kits for all materials (craft base kit with leather + iron, then craft repair kit from base kit + desired
   material)
 * New materials available (Polar bear pelt)
+
+
+
+
+
+
+
+
+
+

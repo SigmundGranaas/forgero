@@ -4,7 +4,6 @@ package com.sigmundgranaas.forgero.resources;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.resources.dynamic.DynamicResourceGenerator;
-import com.sigmundgranaas.forgero.resources.external.Patchouli;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.type.Type;
@@ -12,13 +11,13 @@ import lombok.Synchronized;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.tags.JTag;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
@@ -34,9 +33,16 @@ public class ARRPGenerator {
         generators.add(generator);
     }
 
+    @Synchronized
+    public static void register(Supplier<DynamicResourceGenerator> supplier) {
+        generators.add(supplier.get());
+    }
+
     public static void generate() {
         new ARRPGenerator().generateResources();
-        generators.stream().filter(DynamicResourceGenerator::enabled).forEach(generator -> generator.generate(RESOURCE_PACK));
+        generators.stream()
+                .filter(DynamicResourceGenerator::enabled)
+                .forEach(generator -> generator.generate(RESOURCE_PACK));
     }
 
 
@@ -45,10 +51,6 @@ public class ARRPGenerator {
         generateTagsFromStateTree();
         createMaterialToolTags();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
-
-        if (FabricLoader.getInstance().isModLoaded("patchouli")) {
-            new Patchouli().registerResources(RESOURCE_PACK);
-        }
     }
 
     public void generateTags() {

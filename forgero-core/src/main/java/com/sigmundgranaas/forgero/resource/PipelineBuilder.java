@@ -20,6 +20,8 @@ public class PipelineBuilder {
     private final List<ResourceListener<Map<String, State>>> stateListener = new ArrayList<>();
     private final List<ResourceListener<List<RecipeData>>> recipeListener = new ArrayList<>();
 
+    private final List<ResourceListener<List<String>>> createStateListener = new ArrayList<>();
+
     private ForgeroSettings settings = ForgeroSettings.builder().build();
 
     public static PipelineBuilder builder() {
@@ -54,6 +56,11 @@ public class PipelineBuilder {
         return this;
     }
 
+    public PipelineBuilder createStates(ResourceListener<List<String>> listener) {
+        createStateListener.add(listener);
+        return this;
+    }
+
     public PipelineBuilder register(PackageSupplier supplier) {
         var packs = supplier.supply();
         if (settings.getResourceLogging()) {
@@ -74,6 +81,6 @@ public class PipelineBuilder {
     }
 
     public ResourcePipeline build() {
-        return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, settings, dependencies);
+        return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, settings, dependencies, createStateListener);
     }
 }

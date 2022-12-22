@@ -8,13 +8,25 @@ subprojects {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
+        mavenCentral()
+        mavenLocal()
+        maven { url = "https://storage.googleapis.com/devan-maven/" }
+        maven { url = "https://maven.shedaniel.me/" }
+        maven {
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+        repositories {
+            maven { url 'https://maven.blamejared.com' }
+        }
         maven { url = "https://modmaven.dev/" }
         maven { url = "https://minecraft.guntram.de/maven/" }
         maven { url = "https://www.cursemaven.com" }
         maven { url = "https://maven.shedaniel.me/" }
         maven { url = "https://maven.terraformersmc.com/" }
         maven { url = "https://maven.wispforest.io/" }
-        maven { url = "https://jitpack.io" }
         maven { url = "https://ladysnake.jfrog.io/artifactory/mods" }
         maven { url = "https://maven.cafeteria.dev" }
         maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }

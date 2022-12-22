@@ -18,18 +18,21 @@
         "value": 4
       },
       {
+        "id": "metal-base-mining_speed",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 5
+        "value": 7
       },
       {
+        "id": "metal-base-rarity",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 70
       },
       {
+        "id": "metal-base-durability",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -55,6 +58,14 @@
             "AXE_HEAD"
           ]
         }
+      },
+      {
+        "id": "default_metal_rarity_upgrade",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 30
       }
     ]
   }

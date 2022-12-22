@@ -24,7 +24,7 @@ public interface Writer {
         MutableText text = Text.literal("");
         for (String element : state.name().split("-")) {
             text.append(Text.translatable(Writer.toTranslationKey(element)));
-            text.append(Text.literal(" "));
+            text.append(Text.translatable("util.forgero.name_separator"));
         }
         return text;
     }
