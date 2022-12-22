@@ -8,6 +8,19 @@ subprojects {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
+        mavenCentral()
+        mavenLocal()
+        maven { url = "https://storage.googleapis.com/devan-maven/" }
+        maven { url = "https://maven.shedaniel.me/" }
+        maven {
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+        repositories {
+            maven { url 'https://maven.blamejared.com' }
+        }
         maven { url = "https://modmaven.dev/" }
         maven { url = "https://minecraft.guntram.de/maven/" }
         maven { url = "https://www.cursemaven.com" }
