@@ -53,9 +53,9 @@ public class StateToItemConverter {
 
     private ItemGroup getItemGroup(State state) {
         if (state.test(Type.TOOL)) {
-            return ItemGroups.FORGERO_TOOLS;
+            return ItemGroup.TOOLS;
         } else if (state.test(Type.WEAPON)) {
-            return ItemGroups.FORGERO_WEAPONS;
+            return ItemGroup.COMBAT;
         } else if (state.test(Type.PART)) {
             return ItemGroups.FORGERO_TOOL_PARTS;
         } else if (state.test(Type.SCHEMATIC)) {
