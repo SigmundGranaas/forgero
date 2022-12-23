@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.StateProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
@@ -18,9 +19,9 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State, StateItem {
-    private final State DEFAULT;
+    private final StateProvider DEFAULT;
 
-    public DynamicPickaxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+    public DynamicPickaxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
     }
@@ -59,7 +60,7 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
 
     @Override
     public State defaultState() {
-        return DEFAULT;
+        return DEFAULT.get();
     }
 }
 

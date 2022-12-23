@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.StateProvider;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -15,16 +16,16 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class DynamicSwordItem extends SwordItem implements StateItem {
-    private final State DEFAULT;
+    private final StateProvider DEFAULT;
 
-    public DynamicSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+    public DynamicSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
     }
 
     @Override
     public State defaultState() {
-        return DEFAULT;
+        return DEFAULT.get();
     }
 
     @Override

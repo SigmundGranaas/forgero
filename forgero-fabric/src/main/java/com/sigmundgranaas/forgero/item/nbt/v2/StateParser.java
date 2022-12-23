@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.registry.StateSupplier;
+import com.sigmundgranaas.forgero.registry.StateFinder;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.nbt.NbtCompound;
 
@@ -9,11 +9,11 @@ import java.util.Optional;
 import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.*;
 
 public class StateParser implements CompoundParser<State> {
-    private final StateSupplier supplier;
+    private final StateFinder supplier;
     private final CompositeParser compositeParser;
     private final LeveledParser leveledParser;
 
-    public StateParser(StateSupplier supplier) {
+    public StateParser(StateFinder supplier) {
         this.supplier = supplier;
         this.compositeParser = new CompositeParser(supplier);
         this.leveledParser = new LeveledParser(supplier);

@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.StateProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.HoeItem;
@@ -18,9 +19,9 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class DynamicHoeItem extends HoeItem implements DynamicAttributeItem, State, StateItem {
-    private final State DEFAULT;
+    private final StateProvider DEFAULT;
 
-    public DynamicHoeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+    public DynamicHoeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
     }
@@ -59,7 +60,7 @@ public class DynamicHoeItem extends HoeItem implements DynamicAttributeItem, Sta
 
     @Override
     public State defaultState() {
-        return DEFAULT;
+        return DEFAULT.get();
     }
 }
 

@@ -128,8 +128,7 @@ public record RecipeCreatorImpl(
     }
 
     private List<RecipeWrapper> upgradeRecipes(DataResource res) {
-        var recipes = new ArrayList<RecipeWrapper>();
-        recipes.addAll(res.construct().get().slots().stream().map(slot -> compositeUpgrade(slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier()))).flatMap(Optional::stream).toList());
+        var recipes = new ArrayList<RecipeWrapper>(res.construct().get().slots().stream().map(slot -> compositeUpgrade(slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier()))).flatMap(Optional::stream).toList());
         return recipes;
     }
 
@@ -171,7 +170,7 @@ public record RecipeCreatorImpl(
             }
             object.addProperty("item", id);
         } else if (!data.id().equals(EMPTY_IDENTIFIER)) {
-            object.addProperty("tag", "forgero:" + ForgeroStateRegistry.STATES.get(ForgeroStateRegistry.ID_MAPPER.get(data.id())).get().type().typeName().toLowerCase());
+            object.addProperty("tag", "forgero:" + ForgeroStateRegistry.stateFinder().get(ForgeroStateRegistry.ID_MAPPER.get(data.id())).get().type().typeName().toLowerCase());
         } else {
             object.addProperty("tag", "forgero:" + data.type().toLowerCase());
         }
