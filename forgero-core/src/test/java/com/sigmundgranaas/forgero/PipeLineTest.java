@@ -24,6 +24,6 @@ public class PipeLineTest {
     @Test
     void loadResources() {
         defaultResourcePipeLineTest().build().execute();
-        Assertions.assertTrue(ForgeroStateRegistry.STATES.get("forgero:oak-pickaxe").isPresent());
+        Assertions.assertTrue(ForgeroStateRegistry.stateFinder().get("forgero:oak-pickaxe").isPresent());
     }
 }

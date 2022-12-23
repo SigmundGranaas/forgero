@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero;
 
+import com.sigmundgranaas.forgero.registry.StateFinder;
 import com.sigmundgranaas.forgero.resource.ResourceListener;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
@@ -12,7 +13,6 @@ import java.util.stream.Collectors;
 
 public class ForgeroStateRegistry {
     public static ResourceRegistry<State> STATES;
-
     public static List<State> CREATE_STATES;
     public static Map<String, String> STATE_TO_CONTAINER;
     public static Map<String, String> CONTAINER_TO_STATE;
@@ -21,6 +21,10 @@ public class ForgeroStateRegistry {
     public static TypeTree TREE;
     public static Map<String, String> ID_MAPPER;
     public static List<RecipeData> RECIPES;
+
+    public static StateFinder stateFinder() {
+        return STATES::get;
+    }
 
     public static ResourceListener<Map<String, State>> stateListener() {
         return (resources, tree, idMapper) -> {

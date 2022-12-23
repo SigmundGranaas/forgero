@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface CompoundParser<T> {
-    CompoundParser<State> STATE_PARSER = new StateParser(ForgeroStateRegistry.STATES::get);
+    CompoundParser<State> STATE_PARSER = new StateParser(ForgeroStateRegistry.stateFinder());
 
     Optional<T> parse(NbtCompound compound);
 }

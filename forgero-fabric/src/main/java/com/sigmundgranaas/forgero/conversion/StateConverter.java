@@ -1,61 +1,59 @@
 package com.sigmundgranaas.forgero.conversion;
 
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.item.StateItem;
-import com.sigmundgranaas.forgero.item.nbt.v2.StateEncoder;
+import com.sigmundgranaas.forgero.registry.StateFinder;
 import com.sigmundgranaas.forgero.state.State;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.item.nbt.v2.CompoundParser.STATE_PARSER;
-import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 public interface StateConverter {
+    StateFinder finder = ForgeroStateRegistry.stateFinder();
+
     static Optional<State> of(ItemStack stack) {
-        if (stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
-            return STATE_PARSER.parse(stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER));
-        } else {
-            return of(stack.getItem());
-        }
+        return new StackToItemConverter().convert(stack);
     }
 
     static Optional<State> of(Item item) {
-        String id = Registry.ITEM.getId(item).toString();
-        var stateFromId = ForgeroStateRegistry.STATES.get(id);
-        if (stateFromId.isPresent()) {
-            return stateFromId;
-        } else if (ForgeroStateRegistry.CONTAINER_TO_STATE.containsKey(id)) {
-            return ForgeroStateRegistry.STATES.get(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));
-        } else {
-            if (item instanceof StateItem stateItem) {
-                return Optional.of(stateItem.defaultState());
-            }
-        }
-        return Optional.empty();
+        return new ItemToStateConverter(StateConverter::itemToStateFinder).convert(item);
     }
 
     static ItemStack of(State state) {
-        NbtCompound compound = new NbtCompound();
-        compound.put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(state));
-        if (Registry.ITEM.containsId(new Identifier(state.identifier()))) {
-            var stack = new ItemStack(Registry.ITEM.get(new Identifier(state.identifier())));
-            stack.setNbt(compound);
-            return stack;
-        } else {
-            String mappedId = ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier());
-            if (Registry.ITEM.containsId(new Identifier(mappedId))) {
-                return new ItemStack(Registry.ITEM.get(new Identifier(mappedId)));
-            }
-        }
-        return ItemStack.EMPTY;
+        return new StateToStackConverter(StateConverter::itemFinder, StateConverter::containerMapper).convert(state);
     }
 
-    static Optional<State> of(Identifier id) {
+    static Optional<Item> itemFinder(Identifier id) {
+        if (Registry.ITEM.containsId(id)) {
+            return Optional.of(Registry.ITEM.get(id));
+        }
         return Optional.empty();
+    }
+
+    static Identifier idFinder(Item id) {
+        return Registry.ITEM.getId(id);
+    }
+
+    static Optional<State> itemToStateFinder(Item item) {
+        return stateFinder(idFinder(item).toString());
+    }
+
+    static Optional<State> stateFinder(String id) {
+        if (finder.get(id).isPresent()) {
+            return finder.get(id);
+        } else if (containerMapper(id).isPresent()) {
+            return containerToStateMapper(id).flatMap(finder::get);
+        }
+        return Optional.empty();
+    }
+
+    static Optional<Identifier> containerMapper(String id) {
+        return Optional.ofNullable(ForgeroStateRegistry.STATE_TO_CONTAINER.get(id)).map(Identifier::new);
+    }
+
+    static Optional<String> containerToStateMapper(String id) {
+        return Optional.ofNullable(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));
     }
 }
