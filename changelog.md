@@ -1,4 +1,4 @@
-# Forgero Beta release 0.10.0
+******# Forgero Beta release 0.10.0
 
 ## ! Warning !
 
@@ -26,14 +26,6 @@ you have backed up your save.**
 * Performance improvements when rendering item models
 * Repair kits for all materials (craft base kit with leather + iron, then craft repair kit from base kit + desired
   material)
-* New materials available (Polar bear pelt)
-
-
-
-
-
-
-
-
+* New materials available (Polar bear pelt)******
 
 

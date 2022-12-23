@@ -5,6 +5,6 @@ import com.sigmundgranaas.forgero.state.State;
 import java.util.Optional;
 
 @FunctionalInterface
-public interface StateSupplier {
+public interface StateFinder {
     Optional<State> get(String id);
 }

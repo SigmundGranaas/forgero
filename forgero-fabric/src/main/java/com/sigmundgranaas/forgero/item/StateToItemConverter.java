@@ -28,15 +28,15 @@ public class StateToItemConverter {
         int attack_damage = (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
         float attack_speed = state.stream().applyAttribute(AttributeType.ATTACK_SPEED);
         if (state.type().test(Type.of("SWORD"), context)) {
-            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
+            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
         } else if (state.type().test(Type.of("PICKAXE"), context)) {
-            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
+            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
         } else if (state.type().test(Type.of("AXE"), context)) {
-            return new DynamicAxeItem(ToolMaterials.WOOD, attack_damage, attack_speed, getItemSettings(state), state);
+            return new DynamicAxeItem(ToolMaterials.WOOD, attack_damage, attack_speed, getItemSettings(state), () -> state);
         } else if (state.type().test(Type.of("HOE"), context)) {
-            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
+            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
-            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), state);
+            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
         } else if (state.type().test(Type.GEM)) {
             return new GemItem(getItemSettings(state), state);
         }

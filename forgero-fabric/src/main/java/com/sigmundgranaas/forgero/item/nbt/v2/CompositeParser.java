@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.item.nbt.v2;
 
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.registry.StateSupplier;
+import com.sigmundgranaas.forgero.registry.StateFinder;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
@@ -16,9 +16,9 @@ import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.*;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class CompositeParser implements CompoundParser<State> {
-    private final StateSupplier supplier;
+    private final StateFinder supplier;
 
-    public CompositeParser(StateSupplier supplier) {
+    public CompositeParser(StateFinder supplier) {
         this.supplier = supplier;
     }
 
