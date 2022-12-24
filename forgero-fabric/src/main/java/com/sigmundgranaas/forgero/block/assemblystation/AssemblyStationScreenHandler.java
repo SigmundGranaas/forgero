@@ -24,11 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.ASSEMBLY_STATION;
-
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
-    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
     public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
         @Override
         public ItemStack transferSlot(PlayerEntity player, int index) {
@@ -43,8 +40,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
     private final SimpleInventory inventory;
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
-    private final CompositeSlot compositeSlot;
-
+    private final CompositeSlot compositeSlot;    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
@@ -101,6 +97,19 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
     }
 
     @Override
+    protected void dropInventory(PlayerEntity player, Inventory inventory) {
+        super.dropInventory(player, inventory);
+    }
+
+    @Override
+    public void close(PlayerEntity player) {
+        super.close(player);
+        this.context.run((world, pos) -> {
+            this.dropInventory(player, this.inventory);
+        });
+    }
+
+    @Override
     public boolean canUse(PlayerEntity player) {
         return this.inventory.canPlayerUse(player);
     }
@@ -130,7 +139,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
         return newStack;
     }
-
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
@@ -294,4 +302,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             return doneConstructing || !isConstructed;
         }
     }
+
+
+
+
 }
