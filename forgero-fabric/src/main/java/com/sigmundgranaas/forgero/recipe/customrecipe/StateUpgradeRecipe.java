@@ -28,10 +28,12 @@ public class StateUpgradeRecipe extends SmithingRecipe {
             return false;
         }
         if (super.matches(inventory, world)) {
-            var originStateOpt = StateConverter.of(inventory.getStack(0));
+            var originStateOpt = StateConverter.of(inventory.getStack(0))
+                    .filter(Composite.class::isInstance)
+                    .map(Composite.class::cast);
             var upgradeOpt = StateConverter.of(inventory.getStack(1));
-            if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite composite) {
-                return composite.canUpgrade(upgradeOpt.get());
+            if (originStateOpt.isPresent() && upgradeOpt.isPresent()) {
+                return originStateOpt.get().canUpgrade(upgradeOpt.get());
             }
         }
         return false;
