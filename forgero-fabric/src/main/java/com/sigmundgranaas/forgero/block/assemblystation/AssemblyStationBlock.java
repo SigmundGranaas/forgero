@@ -18,7 +18,6 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -27,14 +26,28 @@ import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock {
+
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
-    public static final Block ASSEMBLY_STATION_BLOCK =  new AssemblyStationBlock(AbstractBlock.Settings.of(Material.METAL));
+    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(AbstractBlock.Settings.of(Material.METAL));
     public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
+    private static VoxelShape SHAPE;
 
     static {
 
+    }
+
+    static {
+        VoxelShape shape = VoxelShapes.empty();
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.25, 0.625, 0, 1.75, 0.75, 1));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0.375, 0.0625, 1.6875, 0.625, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.5625, 0, 0.0625, 1.6875, 0.375, 0.1875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.5625, 0, 0.8125, 1.6875, 0.375, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.8125, 0.4375, 0.375, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.0625, 0.4375, 0.375, 0.1875));
+
+        SHAPE = shape.simplify();
     }
 
     protected AssemblyStationBlock(Settings settings) {
@@ -140,24 +153,12 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
         return true;
     }
 
-    public VoxelShape makeShape() {
-        VoxelShape shape = VoxelShapes.empty();
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.25, 0.625, 0, 1.75, 0.75, 1));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0.375, 0.0625, 1.6875, 0.625, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.5625, 0, 0.0625, 1.6875, 0.375, 0.1875));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.5625, 0, 0.8125, 1.6875, 0.375, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.8125, 0.4375, 0.375, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.0625, 0.4375, 0.375, 0.1875));
-
-        return shape;
-    }
-
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         AssemblyStationPart part = state.get(PART);
         if (part == AssemblyStationPart.LEFT) {
-            return rotateShape(Direction.SOUTH, state.get(FACING), makeShape());
+            return rotateShape(Direction.SOUTH, state.get(FACING), SHAPE);
         }
-        return VoxelShapes.empty();
+        return rotateShape(Direction.SOUTH, state.get(FACING), SHAPE.offset(-1, 0, 0));
     }
 
     public enum AssemblyStationPart implements StringIdentifiable {
@@ -166,7 +167,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
         private final String name;
 
-        private AssemblyStationPart(String name) {
+        AssemblyStationPart(String name) {
             this.name = name;
         }
 
