@@ -7,6 +7,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.ForgeroStateRegistry.CONTAINER_TO_STATE;
 import static com.sigmundgranaas.forgero.utils.StateUtils.stateFinder;
 
 public class ItemUtils {
@@ -22,7 +23,8 @@ public class ItemUtils {
     }
 
     public static Optional<State> itemToStateFinder(Item item) {
-        return stateFinder(idFinder(item).toString());
+        var id = idFinder(item).toString();
+        return stateFinder(id).or(() -> Optional.ofNullable(CONTAINER_TO_STATE.get(id)).flatMap(StateUtils::stateFinder));
     }
 
 }
