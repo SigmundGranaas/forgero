@@ -24,12 +24,12 @@ public class LeveledParser implements CompoundParser<State> {
         }
         if (compound.contains(LEVEL_IDENTIFIER)) {
             int level = compound.getInt(LEVEL_IDENTIFIER);
-            var state = supplier.get(compound.getString(ID_IDENTIFIER));
+            var state = supplier.find(compound.getString(ID_IDENTIFIER));
             if (state.isPresent() && state.get() instanceof LeveledState leveledState) {
                 return Optional.of(leveledState.setLevel(level));
             }
         } else {
-            return supplier.get(compound.getString(ID_IDENTIFIER));
+            return supplier.find(compound.getString(ID_IDENTIFIER));
         }
         return Optional.empty();
     }

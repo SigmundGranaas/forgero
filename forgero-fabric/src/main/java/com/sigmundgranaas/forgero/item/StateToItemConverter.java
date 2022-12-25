@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.item;
 import com.sigmundgranaas.forgero.item.tool.*;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.StateProvider;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -13,30 +14,31 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class StateToItemConverter {
-    private final State state;
+    private final StateProvider provider;
 
-    public StateToItemConverter(State state) {
-        this.state = state;
+    public StateToItemConverter(StateProvider provider) {
+        this.provider = provider;
     }
 
-    public static StateToItemConverter of(State state) {
-        return new StateToItemConverter(state);
+    public static StateToItemConverter of(StateProvider provider) {
+        return new StateToItemConverter(provider);
     }
 
     public Item convert() {
         var context = Context.of();
+        var state = provider.get();
         int attack_damage = (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
         float attack_speed = state.stream().applyAttribute(AttributeType.ATTACK_SPEED);
         if (state.type().test(Type.of("SWORD"), context)) {
-            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
+            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.of("PICKAXE"), context)) {
-            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
+            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.of("AXE"), context)) {
             return new DynamicAxeItem(ToolMaterials.WOOD, attack_damage, attack_speed, getItemSettings(state), () -> state);
         } else if (state.type().test(Type.of("HOE"), context)) {
-            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
+            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
-            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), () -> state);
+            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.GEM)) {
             return new GemItem(getItemSettings(state), state);
         }
@@ -44,11 +46,11 @@ public class StateToItemConverter {
     }
 
     public Identifier id() {
-        return new Identifier(state.nameSpace(), state.name());
+        return new Identifier(provider.get().nameSpace(), provider.get().name());
     }
 
     private Item defaultStateItem() {
-        return new DefaultStateItem(new FabricItemSettings().group(getItemGroup(state)), state);
+        return new DefaultStateItem(new FabricItemSettings().group(getItemGroup(provider.get())), provider);
     }
 
     private ItemGroup getItemGroup(State state) {

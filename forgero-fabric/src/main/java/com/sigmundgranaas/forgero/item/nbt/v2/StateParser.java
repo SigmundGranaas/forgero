@@ -29,7 +29,7 @@ public class StateParser implements CompoundParser<State> {
             return leveledParser.parse(compound);
         }
 
-        return supplier.get(compound.getString(ID_IDENTIFIER));
+        return supplier.find(compound.getString(ID_IDENTIFIER));
     }
 
 }
