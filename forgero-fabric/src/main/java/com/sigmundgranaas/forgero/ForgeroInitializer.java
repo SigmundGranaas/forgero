@@ -21,10 +21,14 @@ import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
@@ -33,6 +37,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.*;
@@ -52,6 +58,8 @@ public class ForgeroInitializer implements ModInitializer {
 
         var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
+        dataReloader(availableDependencies);
+
         PipelineBuilder
                 .builder()
                 .register(ForgeroSettings.SETTINGS)
@@ -65,6 +73,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
+
 
         var handler = RegistryHandler.HANDLER;
         handler.accept(this::registerBlocks);
@@ -92,6 +101,27 @@ public class ForgeroInitializer implements ModInitializer {
         ARRPGenerator.generate();
     }
 
+    private void dataReloader(Set<String> dependencies) {
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public void reload(ResourceManager manager) {
+                PipelineBuilder
+                        .builder()
+                        .register(ForgeroSettings.SETTINGS)
+                        .register(dependencies)
+                        .register(FabricPackFinder.supplier())
+                        .state(ForgeroStateRegistry.stateListener())
+                        .build()
+                        .execute();
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "data");
+            }
+        });
+    }
+
     private void registerLootFunctions() {
         Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
     }
@@ -107,13 +137,13 @@ public class ForgeroInitializer implements ModInitializer {
     private void registerStates() {
         var sortingMap = new HashMap<String, Integer>();
 
-        ForgeroStateRegistry.STATES.all().stream()
+        ForgeroStateRegistry.STATES.all().stream().map(Supplier::get)
                 .filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
 
         ForgeroStateRegistry.CREATE_STATES.stream()
-                .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
-                .filter(state -> !Registry.ITEM.containsId(new Identifier(state.identifier())))
-                .sorted((element1, element2) -> compareStates(element1, element2, sortingMap))
+                .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
+                .filter(state -> !Registry.ITEM.containsId(new Identifier(state.get().identifier())))
+                .sorted((element1, element2) -> compareStates(element1.get(), element2.get(), sortingMap))
                 .forEach(state -> {
                     try {
                         var converter = StateToItemConverter.of(state);
@@ -121,11 +151,12 @@ public class ForgeroInitializer implements ModInitializer {
                         var item = converter.convert();
                         Registry.register(Registry.ITEM, identifier, item);
                     } catch (InvalidIdentifierException e) {
-                        LOGGER.error("invalid identifier: {}", state.identifier());
+                        LOGGER.error("invalid identifier: {}", state.get().identifier());
                         LOGGER.error(e);
                     }
                 });
     }
+
 
     private int getOrderingFromState(Map<String, Integer> map, State state) {
         var name = materialName(state);

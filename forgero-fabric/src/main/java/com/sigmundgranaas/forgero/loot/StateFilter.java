@@ -47,7 +47,7 @@ public class StateFilter {
                 .forEach(states::add);
 
         ids.stream()
-                .map(id -> ForgeroStateRegistry.stateFinder().get(id))
+                .map(id -> ForgeroStateRegistry.stateFinder().find(id))
                 .flatMap(Optional::stream)
                 .filter(this::filter)
                 .forEach(states::add);

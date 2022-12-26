@@ -1,19 +1,23 @@
 package com.sigmundgranaas.forgero;
 
+import com.sigmundgranaas.forgero.registry.StateCollection;
 import com.sigmundgranaas.forgero.registry.StateFinder;
+import com.sigmundgranaas.forgero.registry.impl.ReloadableStateRegistry;
 import com.sigmundgranaas.forgero.resource.ResourceListener;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.StateProvider;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ForgeroStateRegistry {
-    public static ResourceRegistry<State> STATES;
-    public static List<State> CREATE_STATES;
+    public static StateCollection STATES;
+    public static List<StateProvider> CREATE_STATES;
     public static Map<String, String> STATE_TO_CONTAINER;
     public static Map<String, String> CONTAINER_TO_STATE;
     public static Set<String> COMPOSITES;
@@ -23,15 +27,20 @@ public class ForgeroStateRegistry {
     public static List<RecipeData> RECIPES;
 
     public static StateFinder stateFinder() {
-        return STATES::get;
+        return (id) -> STATES.find(id).map(Supplier::get);
     }
 
     public static ResourceListener<Map<String, State>> stateListener() {
         return (resources, tree, idMapper) -> {
             if (STATES == null) {
-                STATES = ResourceRegistry.of(resources, tree);
+                var registry = new ReloadableStateRegistry();
+                resources.values().forEach(registry::register);
+                resources.values().forEach(state -> tree.find(state.type()).ifPresent(node -> node.addResource(state, State.class)));
+                STATES = registry;
                 TREE = tree;
                 ID_MAPPER = idMapper;
+            } else if (STATES instanceof ReloadableStateRegistry registry) {
+                resources.values().forEach(registry::update);
             }
         };
     }
@@ -76,8 +85,13 @@ public class ForgeroStateRegistry {
 
     public static ResourceListener<List<String>> createStateListener() {
         return (resources, tree, idMapper) -> {
-            if (CREATE_STATES == null) {
-                CREATE_STATES = resources.stream().map(STATES::get).flatMap(Optional::stream).toList();
+            if (CREATE_STATES == null && STATES != null) {
+                CREATE_STATES = resources.stream()
+                        .map(STATES::find)
+                        .flatMap(Optional::stream)
+                        .filter(StateProvider.class::isInstance)
+                        .map(StateProvider.class::cast)
+                        .toList();
             }
         };
     }

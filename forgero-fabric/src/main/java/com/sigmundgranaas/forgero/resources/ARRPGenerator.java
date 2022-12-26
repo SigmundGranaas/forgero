@@ -74,27 +74,30 @@ public class ARRPGenerator {
     }
 
     private void createMaterialToolTags() {
-        var node = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL);
-        var toolNode = ForgeroStateRegistry.TREE.find(Type.HOLDABLE);
-        if (node.isPresent() && toolNode.isPresent()) {
-            var tools = toolNode.get().getResources(State.class);
-            var materials = node.get().getResources(State.class);
 
-            var materialMap = materials.stream().collect(Collectors.toMap(State::name, material -> tools.stream().filter(tool -> Arrays.stream(tool.name().split(ELEMENT_SEPARATOR)).anyMatch(nameElement -> nameElement.equals(material.name()))).toList()));
+        var tools = ForgeroStateRegistry.STATES.find(Type.TOOL_MATERIAL);
+        var materials = ForgeroStateRegistry.STATES.find(Type.HOLDABLE);
 
-            for (Map.Entry<String, List<State>> entry : materialMap.entrySet()) {
-                String key = entry.getKey();
-                List<State> states = entry.getValue();
-                JTag materialToolTag = new JTag();
-                if (states.size() > 0) {
-                    states.stream()
-                            .map(State::identifier)
-                            .map(Identifier::new)
-                            .forEach(materialToolTag::add);
-                    RESOURCE_PACK.addTag(new Identifier(Forgero.NAMESPACE, "items/" + key + "_tool"), materialToolTag);
-                }
+        Map<String, List<State>> materialMap = materials.stream()
+                .collect(Collectors.toMap(supplier -> supplier.get().name(), material -> tools.stream()
+                        .filter(tool -> Arrays.stream(tool.get().name().split(ELEMENT_SEPARATOR))
+                                .anyMatch(nameElement -> nameElement.equals(material.get().name())))
+                        .map(Supplier::get)
+                        .toList()));
+
+        for (Map.Entry<String, List<State>> entry : materialMap.entrySet()) {
+            String key = entry.getKey();
+            List<State> states = entry.getValue();
+            JTag materialToolTag = new JTag();
+            if (states.size() > 0) {
+                states.stream()
+                        .map(State::identifier)
+                        .map(Identifier::new)
+                        .forEach(materialToolTag::add);
+                RESOURCE_PACK.addTag(new Identifier(Forgero.NAMESPACE, "items/" + key + "_tool"), materialToolTag);
             }
         }
+
     }
 
 }

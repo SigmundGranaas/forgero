@@ -6,11 +6,11 @@ import com.sigmundgranaas.forgero.state.State;
 
 public class StateHelper {
     public static State state(String id) {
-        return ForgeroStateRegistry.stateFinder().get(id).orElseThrow();
+        return ForgeroStateRegistry.stateFinder().find(id).orElseThrow();
     }
 
     public static Composite composite(String id) {
-        return (Composite) ForgeroStateRegistry.stateFinder().get(id).orElseThrow();
+        return (Composite) ForgeroStateRegistry.stateFinder().find(id).orElseThrow();
     }
 
 }

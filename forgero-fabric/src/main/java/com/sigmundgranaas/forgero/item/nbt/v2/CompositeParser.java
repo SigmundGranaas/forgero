@@ -31,12 +31,12 @@ public class CompositeParser implements CompoundParser<State> {
 
         if (compound.contains(ID_IDENTIFIER)) {
             var id = compound.getString(ID_IDENTIFIER);
-            var stateOpt = supplier.get(id);
+            var stateOpt = supplier.find(id);
 
             if (stateOpt.isPresent() && stateOpt.get() instanceof Composite composite) {
                 builder = Composite.builder(composite.slots());
             } else if (ForgeroStateRegistry.CONTAINER_TO_STATE.containsKey(id)) {
-                return supplier.get(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));
+                return supplier.find(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));
             }
             builder.id(id);
         } else {
@@ -77,10 +77,10 @@ public class CompositeParser implements CompoundParser<State> {
 
     private Optional<State> parseEntry(NbtElement element) {
         if (element.getType() == NbtElement.STRING_TYPE) {
-            return supplier.get(element.asString());
+            return supplier.find(element.asString());
         } else if (element.getType() == NbtElement.COMPOUND_TYPE) {
             if (element instanceof NbtCompound compound) {
-                return parseCompound(compound, supplier::get);
+                return parseCompound(compound, supplier::find);
             } else {
                 return Optional.empty();
             }

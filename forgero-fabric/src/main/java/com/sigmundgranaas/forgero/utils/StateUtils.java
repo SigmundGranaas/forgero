@@ -11,10 +11,10 @@ public class StateUtils {
     public static StateFinder finder = ForgeroStateRegistry.stateFinder();
 
     public static Optional<State> stateFinder(String id) {
-        if (finder.get(id).isPresent()) {
-            return finder.get(id);
+        if (finder.find(id).isPresent()) {
+            return finder.find(id);
         } else if (containerMapper(id).isPresent()) {
-            return containerToStateMapper(id).flatMap(finder::get);
+            return containerToStateMapper(id).flatMap(finder::find);
         }
         return Optional.empty();
     }

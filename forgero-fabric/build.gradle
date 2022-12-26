@@ -20,7 +20,7 @@ artifacts {
 
 dependencies {
     implementation project(':forgero-core')
-    implementation project(':forgero-vanilla')
+    implementation project(path: ':forgero-vanilla', configuration: 'dev')
     implementation project(':forgero-extended')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
@@ -144,14 +144,6 @@ sourceSets {
     forgero {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
-    }
-
-    main {
-        resources {
-            srcDirs += [
-                    'src/main/generated'
-            ]
-        }
     }
 
     test {

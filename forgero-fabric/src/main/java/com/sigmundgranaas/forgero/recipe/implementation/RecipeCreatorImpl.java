@@ -170,7 +170,7 @@ public record RecipeCreatorImpl(
             }
             object.addProperty("item", id);
         } else if (!data.id().equals(EMPTY_IDENTIFIER)) {
-            object.addProperty("tag", "forgero:" + ForgeroStateRegistry.stateFinder().get(ForgeroStateRegistry.ID_MAPPER.get(data.id())).get().type().typeName().toLowerCase());
+            object.addProperty("tag", "forgero:" + ForgeroStateRegistry.stateFinder().find(ForgeroStateRegistry.ID_MAPPER.get(data.id())).get().type().typeName().toLowerCase());
         } else {
             object.addProperty("tag", "forgero:" + data.type().toLowerCase());
         }
