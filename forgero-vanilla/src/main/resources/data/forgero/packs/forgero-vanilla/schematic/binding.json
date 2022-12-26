@@ -1,7 +1,6 @@
 {
   "type": "BINDING_SCHEMATIC",
   "name": "binding-schematic",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"

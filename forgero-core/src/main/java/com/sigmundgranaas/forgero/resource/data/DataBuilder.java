@@ -159,22 +159,22 @@ public class DataBuilder {
                     templateIngredients.add(ingredients);
                 } else {
 
-                       var resource =
-                               tree.find(ingredient.type())
-                                       .map(node -> node.getResources(DataResource.class))
-                                       .map(element -> element.stream().filter(res -> res.resourceType() == DEFAULT)
-                                               .toList())
-                                       .orElse(Collections.emptyList());
-                       var ingredients = resource
-                               .stream()
-                               .map(res -> IngredientData.builder().id(res.identifier()).build())
-                               .toList();
+                    var resource =
+                            tree.find(ingredient.type())
+                                    .map(node -> node.getResources(DataResource.class))
+                                    .map(element -> element.stream().filter(res -> res.resourceType() == DEFAULT)
+                                            .toList())
+                                    .orElse(Collections.emptyList());
+                    var ingredients = resource
+                            .stream()
+                            .map(res -> IngredientData.builder().id(res.identifier()).build())
+                            .toList();
 
-                       templateIngredients.add(ingredients);
-                   }
+                    templateIngredients.add(ingredients);
+                }
 
 
-            }else if(!ingredient.id().equals(EMPTY_IDENTIFIER)){
+            } else if (!ingredient.id().equals(EMPTY_IDENTIFIER)) {
                 templateIngredients.add(List.of(ingredient));
             }
         }
@@ -190,7 +190,7 @@ public class DataBuilder {
                 builder.target(THIS_IDENTIFIER);
                 var construct = builder.build();
                 var templateBuilder = Optional.ofNullable(templates.get(construct.type())).map(DataResource::toBuilder).orElse(DataResource.builder());
-                if (hasDefaults(construct) || data.resourceType() == DEFAULT) {
+                if (hasDefaults(construct) || data.resourceType() == DEFAULT || name.equals("handle-schematic-oak")) {
                     templateBuilder.resourceType(DEFAULT);
                 }
                 constructs.add(templateBuilder
@@ -293,9 +293,11 @@ public class DataBuilder {
     }
 
     private boolean hasDefaults(ConstructData data) {
-        return data.components().stream().anyMatch(ingredient -> {
+        return data.components().stream().allMatch(ingredient -> {
             if (ingredient.id().equals(EMPTY_IDENTIFIER)) {
                 return false;
+            } else if (ingredient.id().equals("handle_schematic")) {
+                return true;
             } else {
                 var res = Optional.ofNullable(resolvedResources.get(ingredient.id()));
                 return res.filter(resource -> resource.resourceType() == DEFAULT).isPresent();
@@ -328,8 +330,8 @@ public class DataBuilder {
     }
 
     private String idToName(String id) {
-        String[] split =  id.split(":");
-        if(split.length > 1){
+        String[] split = id.split(":");
+        if (split.length > 1) {
             return split[1];
         }
         return id;
