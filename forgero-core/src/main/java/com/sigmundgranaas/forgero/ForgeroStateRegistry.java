@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.state.StateProvider;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,18 @@ public class ForgeroStateRegistry {
     public static List<RecipeData> RECIPES;
 
     public static StateFinder stateFinder() {
-        return (id) -> STATES.find(id).map(Supplier::get);
+        return (id) ->
+        {
+            if (isState().apply(id)) {
+                return STATES.find(id).map(Supplier::get);
+            } else {
+                return Optional.empty();
+            }
+        };
+    }
+
+    public static Function<String, Boolean> isState() {
+        return (id) -> STATES.contains(id) || CONTAINER_TO_STATE.containsKey(id);
     }
 
     public static ResourceListener<Map<String, State>> stateListener() {

@@ -13,5 +13,7 @@ public interface StateCollection {
 
     ImmutableList<StateProvider> find(Type type);
 
+    boolean contains(String id);
+
     ImmutableList<StateProvider> all();
 }
