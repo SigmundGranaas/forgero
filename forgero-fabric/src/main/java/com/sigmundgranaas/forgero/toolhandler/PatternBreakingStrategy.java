@@ -30,6 +30,9 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
             return Collections.emptyList();
         }
         int centerY = (breakingPattern.getPattern().length - 1) / 2;
+        if (breakingPattern.getPattern().length == 2) {
+            centerY = 1;
+        }
         int centerX = (breakingPattern.getPattern()[0].length() - 1) / 2;
         if (breakingPattern.getPattern().length == 1) {
             centerY = 0;
