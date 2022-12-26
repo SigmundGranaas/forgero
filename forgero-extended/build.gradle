@@ -31,7 +31,15 @@ processResources {
 
 
 tasks.withType(Test) {
-    
+    sourceSets {
+        test {
+            resources {
+                srcDirs += [
+                        project(':forgero-vanilla').sourceSets.main.resources
+                ]
+            }
+        }
+    }
 }
 
 test {
