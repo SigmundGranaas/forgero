@@ -51,16 +51,16 @@ public class StateToItemConverter {
     }
 
     private Item defaultStateItem() {
-        var item = new DefaultStateItem(new FabricItemSettings(), state);
-        ItemGroupEvents.modifyEntriesEvent(getItemGroup(state)).register(entries -> entries.add(item));
+        var item = new DefaultStateItem(new FabricItemSettings(), provider);
+        ItemGroupEvents.modifyEntriesEvent(getItemGroup(provider.get())).register(entries -> entries.add(item));
         return item;
     }
 
     public ItemGroup getItemGroup(State state) {
         if (state.test(Type.TOOL)) {
-            return ItemGroup.TOOLS;
+            return net.minecraft.item.ItemGroups.TOOLS;
         } else if (state.test(Type.WEAPON)) {
-            return ItemGroup.COMBAT;
+            return net.minecraft.item.ItemGroups.COMBAT;
         } else if (state.test(Type.PART)) {
             return ItemGroups.FORGERO_TOOL_PARTS;
         } else if (state.test(Type.SCHEMATIC)) {

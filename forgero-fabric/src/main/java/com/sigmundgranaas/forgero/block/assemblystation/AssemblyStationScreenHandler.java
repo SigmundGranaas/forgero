@@ -38,10 +38,10 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             return true;
         }
     };
-    private final SimpleInventory inventory;
+    private final SimpleInventory inventory;    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
-    private final CompositeSlot compositeSlot;    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
+    private final CompositeSlot compositeSlot;
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
@@ -140,8 +140,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
         return newStack;
     }
-
-    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {

@@ -143,19 +143,16 @@ public class ForgeroInitializer implements ModInitializer {
                 .filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
 
         ForgeroStateRegistry.CREATE_STATES.stream()
-                .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
-                .filter(state -> !Registry.ITEM.containsId(new Identifier(state.get().identifier())))
+                .filter(state -> !Registries.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
+                .filter(state -> !Registries.ITEM.containsId(new Identifier(state.get().identifier())))
                 .sorted((element1, element2) -> compareStates(element1.get(), element2.get(), sortingMap))
-                .filter(state -> !Registries.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier()))))
-                .filter(state -> !Registries.ITEM.containsId(new Identifier(state.identifier())))
-                .sorted((element1, element2) -> compareStates(element1, element2, sortingMap))
                 .forEach(state -> {
                     try {
                         var converter = StateToItemConverter.of(state);
                         Identifier identifier = converter.id();
                         var item = converter.convert();
                         Registry.register(Registries.ITEM, identifier, item);
-                        ItemGroupEvents.modifyEntriesEvent(converter.getItemGroup(state)).register(entries -> entries.add(item));
+                        ItemGroupEvents.modifyEntriesEvent(converter.getItemGroup(state.get())).register(entries -> entries.add(item));
                     } catch (InvalidIdentifierException e) {
                         LOGGER.error("invalid identifier: {}", state.get().identifier());
                         LOGGER.error(e);

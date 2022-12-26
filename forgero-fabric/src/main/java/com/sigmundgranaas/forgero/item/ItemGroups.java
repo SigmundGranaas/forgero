@@ -21,7 +21,7 @@ public class ItemGroups {
             .icon(ItemGroups::createSchematicIcon)
             .build();
 
-    public static final ItemGroup FORGERO_GEMS = FabricItemGroupBuilder.create(
+    public static final ItemGroup FORGERO_GEMS = FabricItemGroup.builder(
                     new Identifier(ForgeroInitializer.MOD_NAMESPACE, "trinkets"))
             .icon(ItemGroups::createTrinketIcon)
             .build();
