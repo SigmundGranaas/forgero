@@ -37,7 +37,7 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3,
+        "value": 2,
         "condition": {
           "target": "TYPE",
           "tag": [
