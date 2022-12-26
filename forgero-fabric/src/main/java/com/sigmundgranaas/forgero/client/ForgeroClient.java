@@ -12,16 +12,24 @@ import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.type.Type;
 import net.devtech.arrp.api.RRPCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,7 +65,7 @@ public class ForgeroClient implements ClientModInitializer {
                 .data(modelRegistry.modelListener())
                 .build()
                 .execute();
-
+        assetReloader();
         registerToolPartTextures(modelRegistry);
         var modelProvider = new ForgeroModelVariantProvider(modelRegistry);
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
@@ -75,5 +83,19 @@ public class ForgeroClient implements ClientModInitializer {
         Generator.generate();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(Generator.RESOURCE_PACK_CLIENT));
 
+    }
+
+    private void assetReloader() {
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public void reload(ResourceManager manager) {
+                TextureGenerator.INSTANCE.clear();
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "dynamic_textures");
+            }
+        });
     }
 }

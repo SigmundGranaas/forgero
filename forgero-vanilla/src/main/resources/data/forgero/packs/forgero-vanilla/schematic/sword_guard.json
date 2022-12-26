@@ -1,7 +1,6 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
   "name": "sword_guard-schematic",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"

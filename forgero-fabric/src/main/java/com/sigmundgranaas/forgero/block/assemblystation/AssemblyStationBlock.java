@@ -27,15 +27,52 @@ import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock {
+
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
     public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(AbstractBlock.Settings.of(Material.METAL));
     public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings());
 
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
+    private static final VoxelShape SHAPE;
+
+    private static final VoxelShape SHAPE_LEFT;
+
+    private static final VoxelShape SHAPE_RIGHT;
+
+    static {
+
+    }
 
     static {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
+        VoxelShape shape = VoxelShapes.empty();
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.875, 0, 1.875, 1, 1));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.1875, 0, 0.75, 0.375, 0.625, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.1875, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.375, 0.25, 0.938125, 1.625, 0.8125, 0.938125));
+
+
+        SHAPE = shape.simplify();
+
+        VoxelShape shapeLeft = VoxelShapes.empty();
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 1));
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.75, 0.375, 0.625, 0.9375));
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0.625, 0.0625, 1, 0.875, 0.9375));
+
+        SHAPE_LEFT = shapeLeft.simplify();
+
+        VoxelShape shapeRight = VoxelShapes.empty();
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.875, 0, 1.875, 1, 1));
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
+
+        SHAPE_RIGHT = shapeRight.simplify();
     }
 
     protected AssemblyStationBlock(Settings settings) {
@@ -104,14 +141,21 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
     }
 
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        AssemblyStationPart part = state.get(PART);
+        BlockPos blockPos;
+        if (part == AssemblyStationPart.LEFT) {
+            blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+        } else {
+            blockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
+        }
         if (!world.isClient && player.isCreative()) {
-            BlockPos blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
             world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
             world.updateNeighbors(pos, Blocks.AIR);
             state.updateNeighbors(world, pos, 3);
-        }
 
+        }
         super.onBreak(world, pos, state, player);
+        super.onBreak(world, blockPos, state, player);
     }
 
     @Override
@@ -141,24 +185,12 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
         return true;
     }
 
-    public VoxelShape makeShape() {
-        VoxelShape shape = VoxelShapes.empty();
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.25, 0.625, 0, 1.75, 0.75, 1));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0.375, 0.0625, 1.6875, 0.625, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.5625, 0, 0.0625, 1.6875, 0.375, 0.1875));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.5625, 0, 0.8125, 1.6875, 0.375, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.8125, 0.4375, 0.375, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.0625, 0.4375, 0.375, 0.1875));
-
-        return shape;
-    }
-
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         AssemblyStationPart part = state.get(PART);
         if (part == AssemblyStationPart.LEFT) {
-            return rotateShape(Direction.SOUTH, state.get(FACING), makeShape());
+            return rotateShape(Direction.SOUTH, state.get(FACING), SHAPE_LEFT.offset(0, 0, 0));
         }
-        return VoxelShapes.empty();
+        return rotateShape(Direction.SOUTH, state.get(FACING), SHAPE_RIGHT.offset(-1, 0, 0));
     }
 
     public enum AssemblyStationPart implements StringIdentifiable {
@@ -167,7 +199,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
         private final String name;
 
-        private AssemblyStationPart(String name) {
+        AssemblyStationPart(String name) {
             this.name = name;
         }
 

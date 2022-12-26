@@ -1,9 +1,19 @@
-# Forgero Beta release 0.10.0
+# Forgero Beta release 0.10.2
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.2
+
+* Fixed path mining pickaxe pattern mining description
+* Implemented basic resource reloading data/assets
+* Fixed patchouli advancement only generating when patchouli is loaded
+* Improved assembly table model and voxel shape
+* Assembly table drops inventory when closed
+* Removed custom Forgero tool and weapon groups
+* Removed generated oak variants of extended tools
 
 ## Changelog 0.10.1
 
@@ -27,13 +37,5 @@ you have backed up your save.**
 * Repair kits for all materials (craft base kit with leather + iron, then craft repair kit from base kit + desired
   material)
 * New materials available (Polar bear pelt)
-
-
-
-
-
-
-
-
 
 

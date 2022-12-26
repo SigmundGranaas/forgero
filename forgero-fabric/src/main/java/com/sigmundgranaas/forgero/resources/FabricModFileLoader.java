@@ -25,7 +25,11 @@ public class FabricModFileLoader {
 
     public Optional<InputStream> loadFileFromMods(String resource) {
         if (resourceExists(resource)) {
-            return containers.stream().map(container -> container.loadResource(resource)).flatMap(Optional::stream).findFirst();
+            return containers.stream()
+                    .filter(container -> container.containsResource(resource))
+                    .map(container -> container.loadResource(resource))
+                    .flatMap(Optional::stream)
+                    .findFirst();
         }
 //var result = containers.stream()
         return Optional.empty();

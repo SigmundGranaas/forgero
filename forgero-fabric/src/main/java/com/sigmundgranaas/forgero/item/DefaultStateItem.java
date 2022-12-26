@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.StateProvider;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
@@ -16,21 +17,21 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class DefaultStateItem extends Item implements StateItem, State {
-    private final State DEFAULT;
+    private final StateProvider DEFAULT;
 
-    public DefaultStateItem(Settings settings, State defaultState) {
+    public DefaultStateItem(Settings settings, StateProvider defaultState) {
         super(settings);
         this.DEFAULT = defaultState;
     }
 
     @Override
     public State defaultState() {
-        return DEFAULT;
+        return DEFAULT.get();
     }
 
     @Override
     public Text getName() {
-        return Writer.nameToTranslatableText(DEFAULT);
+        return Writer.nameToTranslatableText(defaultState());
     }
 
     @Override
@@ -46,22 +47,22 @@ public class DefaultStateItem extends Item implements StateItem, State {
 
     @Override
     public String name() {
-        return DEFAULT.name();
+        return defaultState().name();
     }
 
     @Override
     public String nameSpace() {
-        return DEFAULT.nameSpace();
+        return defaultState().nameSpace();
     }
 
     @Override
     public Type type() {
-        return DEFAULT.type();
+        return defaultState().type();
     }
 
     @Override
     public boolean test(Matchable match, Context context) {
-        return DEFAULT.test(match, context);
+        return defaultState().test(match, context);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class DefaultStateItem extends Item implements StateItem, State {
 
     @Override
     public PropertyContainer defaultProperties() {
-        return DEFAULT;
+        return defaultState();
     }
 
     @Override

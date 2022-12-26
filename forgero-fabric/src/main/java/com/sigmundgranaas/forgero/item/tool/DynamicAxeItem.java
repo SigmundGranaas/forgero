@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.item.StateItem;
 import com.sigmundgranaas.forgero.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.state.StateProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.AxeItem;
@@ -17,9 +18,9 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class DynamicAxeItem extends AxeItem implements StateItem {
-    private final State DEFAULT;
+    private final StateProvider DEFAULT;
 
-    public DynamicAxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, State defaultState) {
+    public DynamicAxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
     }
@@ -57,7 +58,7 @@ public class DynamicAxeItem extends AxeItem implements StateItem {
 
     @Override
     public State defaultState() {
-        return DEFAULT;
+        return DEFAULT.get();
     }
 }
 

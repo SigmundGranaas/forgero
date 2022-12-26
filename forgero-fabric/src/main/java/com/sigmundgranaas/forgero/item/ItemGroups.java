@@ -21,17 +21,7 @@ public class ItemGroups {
             .icon(ItemGroups::createSchematicIcon)
             .build();
 
-    public static final ItemGroup FORGERO_TOOLS = FabricItemGroup.builder(
-                    new Identifier(ForgeroInitializer.MOD_NAMESPACE, "tools"))
-            .icon(ItemGroups::createForgeroToolIcon)
-            .build();
-
-    public static final ItemGroup FORGERO_WEAPONS = FabricItemGroup.builder(
-                    new Identifier(ForgeroInitializer.MOD_NAMESPACE, "weapons"))
-            .icon(ItemGroups::createWeaponIcon)
-            .build();
-
-    public static final ItemGroup FORGERO_GEMS = FabricItemGroup.builder(
+    public static final ItemGroup FORGERO_GEMS = FabricItemGroupBuilder.create(
                     new Identifier(ForgeroInitializer.MOD_NAMESPACE, "trinkets"))
             .icon(ItemGroups::createTrinketIcon)
             .build();

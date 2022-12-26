@@ -98,8 +98,7 @@
         "type": "BLOCK_BREAKING_PATTERN",
         "pattern": [
           "X",
-          "x",
-          " "
+          "x"
         ]
       }
     ]
