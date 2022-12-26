@@ -1,0 +1,15 @@
+{
+  "name": "Shovels",
+  "icon": "forgero:stone-shovel",
+  "category": "forgero:tools_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Shovels are used to dig softer blocks like dirt and sand. They can also be used to create paths, which will make travelling more efficient. Shovel are cheap to create, and can be crafted by combining a shovel head an a handle in the crafting table."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:stone-shovel"
+    }
+  ]
+}

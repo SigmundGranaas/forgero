@@ -5,10 +5,12 @@ pluginManagement {
             url = 'https://maven.fabricmc.net/'
         }
         gradlePluginPortal()
+        maven { url "https://maven.architectury.dev/" }
+        maven { url "https://files.minecraftforge.net/maven/" }
     }
 }
 
 
 rootProject.name = 'forgero'
-include 'forgero-fabric', 'forgero-extended', 'forgero-vanilla', 'forgero-core', 'forgero-fabric-compat', 'forgero-compat', 'forgero-structures'
+include 'forgero-fabric', 'forgero-extended', 'forgero-vanilla', 'forgero-core', 'forgero-fabric-compat', 'forgero-compat', 'forgero-structures', 'forgero-forge'
 
