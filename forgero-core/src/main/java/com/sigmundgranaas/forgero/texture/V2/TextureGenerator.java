@@ -38,6 +38,10 @@ public class TextureGenerator {
         return Optional.empty();
     }
 
+    public void clear() {
+        service.clear();
+    }
+
     private void saveImage(RawTexture texture, String name) {
         var outputPath = "./export/generated_textures/";
         File outputFile = new File(outputPath + name);

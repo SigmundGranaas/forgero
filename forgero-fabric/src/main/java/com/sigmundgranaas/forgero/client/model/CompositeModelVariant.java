@@ -54,7 +54,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     @Nullable
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-
         if (this.loader == null || this.loader != loader) {
             this.loader = loader;
             this.textureGetter = textureGetter;

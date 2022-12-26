@@ -35,6 +35,7 @@ public class ForgeroStateRegistry {
             if (STATES == null) {
                 var registry = new ReloadableStateRegistry();
                 resources.values().forEach(registry::register);
+                resources.values().forEach(state -> tree.find(state.type()).ifPresent(node -> node.addResource(state, State.class)));
                 STATES = registry;
                 TREE = tree;
                 ID_MAPPER = idMapper;
