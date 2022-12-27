@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.command;
 
-import com.sigmundgranaas.forgero.ForgeroInitializer;
+import com.sigmundgranaas.forgero.Forgero;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,7 +22,7 @@ public class CommandRegistry {
 
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, test) -> {
             dispatcher.register(CommandManager.literal("forgero").executes(context -> {
-                ForgeroInitializer.LOGGER.info("Called Forgero command with no arguments");
+                Forgero.LOGGER.info("Called Forgero command with no arguments");
 
                 return 1;
             }));
