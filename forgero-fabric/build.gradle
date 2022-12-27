@@ -21,6 +21,7 @@ artifacts {
 dependencies {
     implementation project(':forgero-core')
     implementation project(path: ':forgero-vanilla', configuration: 'dev')
+    implementation project(path: ':minecraft-common', configuration: 'dev')
     implementation project(':forgero-extended')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
@@ -41,6 +42,7 @@ dependencies {
 
     include "net.devtech:arrp:0.6.2"
     include project(':forgero-core')
+    include project(':minecraft-common')
 }
 
 task assembleComplete(type: Jar) {
