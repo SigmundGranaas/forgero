@@ -26,9 +26,8 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modApi "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    include project(':forgero-core')
 }
+
 loom {
     accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
 }
