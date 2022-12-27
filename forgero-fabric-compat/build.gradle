@@ -36,6 +36,7 @@ dependencies {
     implementation project(':forgero-compat')
     implementation project(':forgero-structures')
     implementation project(path: ':forgero-fabric', configuration: 'dev')
+    implementation project(path: ':minecraft-common', configuration: 'dev')
 
     //implementation project(':common')
 

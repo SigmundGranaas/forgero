@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.mixins;
 
-import com.sigmundgranaas.forgero.ForgeroInitializer;
 import com.sigmundgranaas.forgero.resources.FileService;
 import com.sigmundgranaas.forgero.texture.V2.FileLoader;
 import com.sigmundgranaas.forgero.texture.V2.TextureGenerator;
@@ -21,7 +20,7 @@ public abstract class LifecycleResourceManagerImplMixin {
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) {
-        if ( id.getPath().contains(".png")) {
+        if (id.getPath().contains(".png")) {
             var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
             if (TEXTURES.containsKey(textureId)) {
                 FileLoader loader = new FileService();
