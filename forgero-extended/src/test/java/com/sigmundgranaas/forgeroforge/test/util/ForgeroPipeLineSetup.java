@@ -2,13 +2,14 @@ package com.sigmundgranaas.forgeroforge.test.util;
 
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
 import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
+import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
 
 import java.util.List;
 
 import static com.sigmundgranaas.forgero.ForgeroStateRegistry.*;
-import static com.sigmundgranaas.forgeroforge.resource.ForgeroVanilla.VANILLA_SUPPLIER;
+import static com.sigmundgranaas.forgero.resource.ForgeroVanilla.VANILLA_SUPPLIER;
+import static com.sigmundgranaas.forgero.resource.data.Constant.*;
 
 public class ForgeroPipeLineSetup {
 

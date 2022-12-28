@@ -2,10 +2,10 @@ package com.sigmundgranaas.forgeroforge.nbt.v2;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgeroforge.item.nbt.v2.StateParser;
+import com.sigmundgranaas.forgerocommon.item.nbt.v2.StateParser;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgeroforge.resources.FabricPackFinder;
+import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Ingredient;

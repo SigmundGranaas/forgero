@@ -1,12 +1,17 @@
 package com.sigmundgranaas.forgeroforge;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.resource.data.v2.loading.FileResourceLoader;
+import com.sigmundgranaas.forgero.resource.data.v2.ResourceLocator;
 import com.sigmundgranaas.forgero.resource.data.v2.ResourcePool;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.TypeData;
 import com.sigmundgranaas.forgero.resource.data.v2.factory.TypeFactory;
+import com.sigmundgranaas.forgero.resource.data.v2.loading.DefaultMapper;
+import com.sigmundgranaas.forgero.resource.data.v2.loading.FileResourceLoader;
+import com.sigmundgranaas.forgero.resource.data.v2.loading.JsonContentFilter;
+import com.sigmundgranaas.forgero.resource.data.v2.loading.PathWalker;
 import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.util.loader.PathFinder;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
@@ -19,6 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TypeTreeTest {
+
+    public static ResourceLocator WALKER = PathWalker.builder()
+            .pathFinder(PathFinder::ClassLoaderFinder)
+            .contentFilter(new JsonContentFilter())
+            .depth(20)
+            .build();
 
     public static List<TypeData> createDataList() {
         var schematic = new TypeData("SCHEMATIC", Optional.empty(), Collections.emptyList());
@@ -51,7 +62,7 @@ class TypeTreeTest {
 
     @Test
     void loadTypeTreeFromJson() throws URISyntaxException {
-        FileResourceLoader loader = new FileResourceLoader(CORE_PATH, walker);
+        FileResourceLoader loader = new FileResourceLoader(CORE_PATH, WALKER, new DefaultMapper());
         var tree = new TypeTree();
         new TypeFactory().convertJsonToData(loader.load()).forEach(tree::addNode);
         tree.resolve();
@@ -63,7 +74,7 @@ class TypeTreeTest {
 
     @Test
     void loadedTypeTree() throws URISyntaxException {
-        FileResourceLoader loader = new FileResourceLoader(CORE_PATH, walker);
+        FileResourceLoader loader = new FileResourceLoader(CORE_PATH, WALKER, new DefaultMapper());
         ResourcePool pool = new ResourcePool(ImmutableList.<DataResource>builder().addAll(loader.load()).build());
         var tree = pool.createLoadedTypeTree();
         var pick = tree.find("PICKAXE").orElseThrow();

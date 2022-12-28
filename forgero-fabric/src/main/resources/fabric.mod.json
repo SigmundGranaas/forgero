@@ -16,13 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.sigmundgranaas.forgero.client.ForgeroClient"
+      "com.sigmundgranaas.forgerofabric.client.ForgeroClient"
     ],
     "main": [
-      "com.sigmundgranaas.forgero.ForgeroInitializer"
-    ],
-    "fabric-datagen": [
-      "com.sigmundgranaas.forgero.datagen.ForgeroDataGeneration"
+      "com.sigmundgranaas.forgerofabric.ForgeroInitializer"
     ]
   },
   "mixins": [

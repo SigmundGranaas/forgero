@@ -5,6 +5,7 @@ import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.resource.data.ResourceLoader;
 import com.sigmundgranaas.forgero.resource.data.v2.ResourceCollectionMapper;
+import com.sigmundgranaas.forgero.resource.data.v2.ResourceLocator;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 
 import java.io.File;
@@ -15,17 +16,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class FileResourceLoader implements ResourceLoader {
     private final String folder;
-    private final PathWalker walker;
+    private final ResourceLocator walker;
 
     private final ResourceCollectionMapper mapper;
 
-    public FileResourceLoader(String folderPath, PathWalker walker, ResourceCollectionMapper mapper) {
+    public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper) {
         this.folder = folderPath;
         this.walker = walker;
         this.mapper = mapper;
     }
 
-    public static FileResourceLoader of(String folderPath, PathWalker walker, List<ResourceCollectionMapper> mappers) {
+    public static FileResourceLoader of(String folderPath, ResourceLocator walker, List<ResourceCollectionMapper> mappers) {
         var mapper = mappers.stream().reduce(ResourceCollectionMapper.DEFAULT, (mapper1, mapper2) -> mapper1.andThen(mapper2));
         return new FileResourceLoader(folderPath, walker, mapper);
     }

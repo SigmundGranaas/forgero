@@ -1,9 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.sigmundgranaas.forgeroforge.mixins",
+  "package": "com.sigmundgranaas.forgerocommon.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ItemUUIDMixin"
   ],
   "client": [
     "JsonUnbakedModelOverrideMixin"

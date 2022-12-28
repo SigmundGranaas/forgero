@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgeroforge.nbt;
 
-import com.sigmundgranaas.forgeroforge.item.nbt.v2.NbtConstants;
+import com.sigmundgranaas.forgerocommon.item.nbt.v2.NbtConstants;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
-import static com.sigmundgranaas.forgeroforge.item.nbt.v2.NbtConstants.COMPOSITE_IDENTIFIER;
+import static com.sigmundgranaas.forgerocommon.item.nbt.v2.NbtConstants.COMPOSITE_IDENTIFIER;
 
 public class NBTs {
     public static NbtCompound HANDLE_NBT = handle();
