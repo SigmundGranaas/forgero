@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.resource.data.v2.data;
 
+import com.sigmundgranaas.forgero.util.Identifiers;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,8 +8,6 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder
 public class ModelEntryData {
@@ -30,6 +29,6 @@ public class ModelEntryData {
 
     @NotNull
     public String getTemplate() {
-        return Objects.requireNonNullElse(template, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(template, Identifiers.EMPTY_IDENTIFIER);
     }
 }

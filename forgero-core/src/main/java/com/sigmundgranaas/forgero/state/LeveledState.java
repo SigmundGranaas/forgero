@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.state;
 
+import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.property.Attribute;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.Target;
-import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.type.Type;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;

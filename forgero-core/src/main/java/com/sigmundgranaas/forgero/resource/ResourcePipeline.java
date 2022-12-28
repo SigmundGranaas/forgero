@@ -1,17 +1,19 @@
 package com.sigmundgranaas.forgero.resource;
 
+import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.resource.data.DataBuilder;
 import com.sigmundgranaas.forgero.resource.data.StateConverter;
-import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.resource.data.v2.factory.TypeFactory;
+import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class ResourcePipeline {
     private final List<DataPackage> packages;
@@ -49,9 +51,11 @@ public class ResourcePipeline {
         List<DataResource> validatedResources = validateResources(validatedPackages);
 
         tree = assembleTypeTree(validatedResources);
-
+        Stopwatch timer = Stopwatch.createStarted();
         var dataBuilder = DataBuilder.of(validatedResources, tree);
         List<DataResource> resources = dataBuilder.buildResources();
+        Forgero.LOGGER.info("Resource conversion: " + timer.stop());
+
         this.recipes = dataBuilder.recipes();
 
         Map<String, State> states = mapStates(resources);
@@ -106,6 +110,11 @@ public class ResourcePipeline {
     }
 
     private List<DataResource> validateResources(List<DataPackage> resources) {
-        return resources.stream().map(DataPackage::data).flatMap(List::stream).filter(settings::filterResources).toList();
+        return resources.parallelStream()
+                .map(DataPackage::data)
+                .map(Supplier::get)
+                .flatMap(List::stream)
+                .filter(settings::filterResources)
+                .toList();
     }
 }

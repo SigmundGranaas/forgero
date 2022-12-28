@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero;
 
-import com.sigmundgranaas.forgero.registry.StateCollection;
 import com.sigmundgranaas.forgero.registry.StateFinder;
-import com.sigmundgranaas.forgero.registry.impl.ReloadableStateRegistry;
-import com.sigmundgranaas.forgero.resource.ResourceListener;
-import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.state.StateProvider;
 import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.registry.StateCollection;
+import com.sigmundgranaas.forgero.registry.impl.ReloadableStateRegistry;
+import com.sigmundgranaas.forgero.resource.ResourceListener;
+import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 
 import java.util.*;
 import java.util.function.Function;

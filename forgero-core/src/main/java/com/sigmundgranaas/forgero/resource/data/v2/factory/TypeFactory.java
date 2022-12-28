@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.resource.data.v2.factory;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.util.Identifiers;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.resource.data.v2.data.TypeData;
@@ -9,8 +10,6 @@ import com.sigmundgranaas.forgero.resource.data.v2.data.namedElement;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 public class TypeFactory {
     public static List<TypeData> convert(List<DataResource> resources) {
@@ -31,10 +30,10 @@ public class TypeFactory {
     public List<TypeData> handleTypeResource(DataResource type) {
         String name = type.name();
         TypeData data;
-        if (name.equals(EMPTY_IDENTIFIER)) {
+        if (name.equals(Identifiers.EMPTY_IDENTIFIER)) {
             return Collections.emptyList();
         }
-        if (type.parent().equals(EMPTY_IDENTIFIER)) {
+        if (type.parent().equals(Identifiers.EMPTY_IDENTIFIER)) {
             data = new TypeData(name, Optional.empty(), Collections.emptyList());
         } else {
             data = new TypeData(name, Optional.of(type.parent()), Collections.emptyList());

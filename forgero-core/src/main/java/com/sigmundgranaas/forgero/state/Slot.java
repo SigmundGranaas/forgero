@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.state;
 
-import com.sigmundgranaas.forgero.property.PropertyContainer;
 import com.sigmundgranaas.forgero.property.attribute.Category;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import com.sigmundgranaas.forgero.property.PropertyContainer;
 
 import java.util.Collections;
 import java.util.Optional;

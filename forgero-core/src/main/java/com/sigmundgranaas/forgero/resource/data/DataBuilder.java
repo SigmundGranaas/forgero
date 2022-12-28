@@ -1,19 +1,18 @@
 package com.sigmundgranaas.forgero.resource.data;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.identifier.Common;
+import com.sigmundgranaas.forgero.resource.data.v2.data.*;
+import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.util.Identifiers;
 import com.sigmundgranaas.forgero.resource.data.v2.data.ConstructData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.type.TypeTree;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgero.resource.data.v2.data.ResourceType.*;
-import static com.sigmundgranaas.forgero.util.Identifiers.*;
 
 @SuppressWarnings("DuplicatedCode")
 public class DataBuilder {
@@ -53,7 +52,7 @@ public class DataBuilder {
 
     private void mapParentResources() {
         var namedResources = resources.stream().collect(Collectors.toMap((DataResource::name), (dataResource -> dataResource), (present, newRes) -> newRes));
-        namedResources.remove(EMPTY_IDENTIFIER);
+        namedResources.remove(Identifiers.EMPTY_IDENTIFIER);
         this.resources = namedResources.values().stream()
                 .map(res -> applyParent(namedResources, res))
                 .filter(this::notAbstract)
@@ -97,7 +96,7 @@ public class DataBuilder {
 
             for (DataResource resource : temporaryResolved) {
                 unresolvedConstructs = unresolvedConstructs.stream().filter(res -> !res.identifier().equals(resource.identifier())).collect(Collectors.toList());
-                if (resource.resourceType() != CONSTRUCT_TEMPLATE) {
+                if (resource.resourceType() != ResourceType.CONSTRUCT_TEMPLATE) {
                     addResource(resource);
                 }
             }
@@ -115,9 +114,9 @@ public class DataBuilder {
             return Collections.emptyList();
         }
         var construct = resource.construct().get();
-        if (construct.target().equals(THIS_IDENTIFIER)) {
+        if (construct.target().equals(Identifiers.THIS_IDENTIFIER)) {
             return List.of(resource);
-        } else if (construct.target().equals(CREATE_IDENTIFIER)) {
+        } else if (construct.target().equals(Identifiers.CREATE_IDENTIFIER)) {
             var constructs = mapConstructData(resource)
                     .stream()
                     .toList();
@@ -141,9 +140,9 @@ public class DataBuilder {
         var components = data.construct().get().components();
         var templateIngredients = new ArrayList<List<IngredientData>>();
         for (IngredientData ingredient : components) {
-            if (ingredient.id().equals(THIS_IDENTIFIER)) {
+            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
                 templateIngredients.add(List.of(IngredientData.builder().id(data.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(EMPTY_IDENTIFIER)) {
+            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
                 if (ingredient.unique()) {
                     var resources = tree.find(ingredient.type())
                             .map(node -> node.getResources(DataResource.class))
@@ -162,7 +161,7 @@ public class DataBuilder {
                     var resource =
                             tree.find(ingredient.type())
                                     .map(node -> node.getResources(DataResource.class))
-                                    .map(element -> element.stream().filter(res -> res.resourceType() == DEFAULT)
+                                    .map(element -> element.stream().filter(res -> res.resourceType() == ResourceType.DEFAULT)
                                             .toList())
                                     .orElse(Collections.emptyList());
                     var ingredients = resource
@@ -174,7 +173,7 @@ public class DataBuilder {
                 }
 
 
-            } else if (!ingredient.id().equals(EMPTY_IDENTIFIER)) {
+            } else if (!ingredient.id().equals(Identifiers.EMPTY_IDENTIFIER)) {
                 templateIngredients.add(List.of(ingredient));
             }
         }
@@ -186,12 +185,12 @@ public class DataBuilder {
                 newComponents.add(templateIngredients.get(0).get(i));
                 newComponents.add(templateIngredients.get(1).get(j));
                 builder.components(newComponents);
-                String name = String.join(ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
-                builder.target(THIS_IDENTIFIER);
+                String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
+                builder.target(Identifiers.THIS_IDENTIFIER);
                 var construct = builder.build();
                 var templateBuilder = Optional.ofNullable(templates.get(construct.type())).map(DataResource::toBuilder).orElse(DataResource.builder());
-                if (hasDefaults(construct) || data.resourceType() == DEFAULT || name.equals("handle-schematic-oak")) {
-                    templateBuilder.resourceType(DEFAULT);
+                if (hasDefaults(construct) || data.resourceType() == ResourceType.DEFAULT || name.equals("handle-schematic-oak")) {
+                    templateBuilder.resourceType(ResourceType.DEFAULT);
                 }
                 constructs.add(templateBuilder
                         .construct(construct)
@@ -212,9 +211,9 @@ public class DataBuilder {
         var rootIngredients = data.ingredients();
         var templateIngredients = new ArrayList<List<IngredientData>>();
         for (IngredientData ingredient : rootIngredients) {
-            if (ingredient.id().equals(THIS_IDENTIFIER)) {
+            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
                 templateIngredients.add(List.of(IngredientData.builder().id(rootResource.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(EMPTY_IDENTIFIER)) {
+            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
                 if (ingredient.unique()) {
                     var resources = tree.find(ingredient.type())
                             .map(node -> node.getResources(DataResource.class))
@@ -236,7 +235,7 @@ public class DataBuilder {
                     var resource =
                             tree.find(ingredient.type())
                                     .map(node -> node.getResources(DataResource.class))
-                                    .map(element -> element.stream().filter(res -> res.resourceType() == DEFAULT)
+                                    .map(element -> element.stream().filter(res -> res.resourceType() == ResourceType.DEFAULT)
                                             .toList())
                                     .orElse(Collections.emptyList());
                     var ingredients = resource
@@ -256,7 +255,7 @@ public class DataBuilder {
                 var newComponents = new ArrayList<IngredientData>();
                 newComponents.add(templateIngredients.get(0).get(i));
                 newComponents.add(templateIngredients.get(1).get(j));
-                String name = String.join(ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
+                String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
                 recipes.add(RecipeData.builder()
                         .ingredients(newComponents)
                         .craftingType(data.type())
@@ -274,11 +273,11 @@ public class DataBuilder {
         }
         var construct = resource.construct().get();
         for (IngredientData data : construct.components()) {
-            if (!data.id().equals(EMPTY_IDENTIFIER) && resolvedResources.containsKey(data.id())) {
+            if (!data.id().equals(Identifiers.EMPTY_IDENTIFIER) && resolvedResources.containsKey(data.id())) {
                 break;
-            } else if (data.id().equals(THIS_IDENTIFIER)) {
+            } else if (data.id().equals(Identifiers.THIS_IDENTIFIER)) {
                 break;
-            } else if (!data.type().equals(EMPTY_IDENTIFIER) && treeContainsTag(data.type())) {
+            } else if (!data.type().equals(Identifiers.EMPTY_IDENTIFIER) && treeContainsTag(data.type())) {
                 break;
             } else {
                 return false;
@@ -288,25 +287,25 @@ public class DataBuilder {
     }
 
     private boolean notAbstract(DataResource resource) {
-        return resource.resourceType() != ABSTRACT;
+        return resource.resourceType() != ResourceType.ABSTRACT;
 
     }
 
     private boolean hasDefaults(ConstructData data) {
         return data.components().stream().allMatch(ingredient -> {
-            if (ingredient.id().equals(EMPTY_IDENTIFIER)) {
+            if (ingredient.id().equals(Identifiers.EMPTY_IDENTIFIER)) {
                 return false;
             } else if (ingredient.id().equals("handle_schematic")) {
                 return true;
             } else {
                 var res = Optional.ofNullable(resolvedResources.get(ingredient.id()));
-                return res.filter(resource -> resource.resourceType() == DEFAULT).isPresent();
+                return res.filter(resource -> resource.resourceType() == ResourceType.DEFAULT).isPresent();
             }
         });
     }
 
     private boolean hasParent(DataResource data) {
-        return !data.parent().equals(EMPTY_IDENTIFIER) && !data.name().equals(EMPTY_IDENTIFIER) && isStatefulResource(data);
+        return !data.parent().equals(Identifiers.EMPTY_IDENTIFIER) && !data.name().equals(Identifiers.EMPTY_IDENTIFIER) && isStatefulResource(data);
     }
 
     private boolean treeContainsTag(String tag) {
@@ -357,16 +356,16 @@ public class DataBuilder {
     }
 
     private boolean isTemplate(DataResource resource) {
-        return resource.resourceType() == CONSTRUCT_TEMPLATE;
+        return resource.resourceType() == ResourceType.CONSTRUCT_TEMPLATE;
     }
 
     @SuppressWarnings("RedundantIfStatement")
     private boolean isStatefulResource(DataResource resource) {
-        if (resource.resourceType() == PACKAGE) {
+        if (resource.resourceType() == ResourceType.PACKAGE) {
             return false;
-        } else if (resource.resourceType() == TYPE_DEFINITION) {
+        } else if (resource.resourceType() == ResourceType.TYPE_DEFINITION) {
             return false;
-        } else if (resource.name().equals(EMPTY_IDENTIFIER)) {
+        } else if (resource.name().equals(Identifiers.EMPTY_IDENTIFIER)) {
             return false;
         }
         return true;

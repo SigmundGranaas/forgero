@@ -1,21 +1,20 @@
 package com.sigmundgranaas.forgero.resource.data.v2.data;
 
+import com.sigmundgranaas.forgero.util.Identifiers;
 import lombok.Builder;
 
 import javax.annotation.Nullable;
 
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
-
 @Builder(toBuilder = true)
 public class ContextData {
     @Builder.Default
-    private final String fileName = EMPTY_IDENTIFIER;
+    private final String fileName = Identifiers.EMPTY_IDENTIFIER;
 
     @Builder.Default
-    private final String folder = EMPTY_IDENTIFIER;
+    private final String folder = Identifiers.EMPTY_IDENTIFIER;
 
     @Builder.Default
-    private final String path = EMPTY_IDENTIFIER;
+    private final String path = Identifiers.EMPTY_IDENTIFIER;
 
     @Nullable
     private final String parent;

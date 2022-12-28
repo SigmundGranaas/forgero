@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.texture.V2;
 
 
-import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.Forgero;
 
 import javax.imageio.ImageIO;
 import java.io.File;

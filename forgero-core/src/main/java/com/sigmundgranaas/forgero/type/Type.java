@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.type;
 
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.util.TypeMatcher;
 import com.sigmundgranaas.forgero.util.match.Context;
 import com.sigmundgranaas.forgero.util.match.Matchable;
+import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.texture.V2.recolor;
 
+import com.sigmundgranaas.forgero.texture.utils.RgbColour;
 import com.sigmundgranaas.forgero.texture.V2.Palette;
 import com.sigmundgranaas.forgero.texture.V2.TemplateTexture;
 import com.sigmundgranaas.forgero.texture.template.PixelInformation;
-import com.sigmundgranaas.forgero.texture.utils.RgbColour;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

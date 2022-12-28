@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.resource.data.v2.data;
 
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.property.attribute.Category;
+import com.sigmundgranaas.forgero.util.Identifiers;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,8 +10,6 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder(toBuilder = true)
 public class SlotData {
@@ -20,16 +19,16 @@ public class SlotData {
 
     @Builder.Default
     @Nullable
-    private final String type = EMPTY_IDENTIFIER;
+    private final String type = Identifiers.EMPTY_IDENTIFIER;
 
     @Builder.Default
     @Nullable
-    private final String description = EMPTY_IDENTIFIER;
+    private final String description = Identifiers.EMPTY_IDENTIFIER;
 
     @SerializedName(value = "upgrade_type", alternate = "upgradeType")
     @Builder.Default
     @Nullable
-    private String upgradeType = EMPTY_IDENTIFIER;
+    private String upgradeType = Identifiers.EMPTY_IDENTIFIER;
 
 
     @Builder.Default
@@ -37,7 +36,7 @@ public class SlotData {
 
     @NotNull
     public String upgradeType() {
-        return Objects.requireNonNullElse(upgradeType, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(upgradeType, Identifiers.EMPTY_IDENTIFIER);
     }
 
     @NotNull
@@ -47,12 +46,12 @@ public class SlotData {
 
     @NotNull
     public String type() {
-        return Objects.requireNonNullElse(type, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(type, Identifiers.EMPTY_IDENTIFIER);
     }
 
     @NotNull
     public String description() {
-        return Objects.requireNonNullElse(description, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(description, Identifiers.EMPTY_IDENTIFIER);
     }
 
 

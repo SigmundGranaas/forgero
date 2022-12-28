@@ -9,8 +9,6 @@ import com.sigmundgranaas.forgero.util.match.NameMatch;
 
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.model.CompositeModelEntry.findUpgradeModel;
-
 public record TemplatedModelEntry(String template) implements ModelMatcher {
 
     @Override
@@ -31,7 +29,7 @@ public record TemplatedModelEntry(String template) implements ModelMatcher {
             composite.slots().stream()
                     .filter(Slot::filled)
                     .map(slot ->
-                            findUpgradeModel(slot, composite, context, provider)
+                            CompositeModelEntry.findUpgradeModel(slot, composite, context, provider)
                     ).flatMap(Optional::stream)
                     .forEach(compositeModelTemplate::add);
             return Optional.of(compositeModelTemplate);

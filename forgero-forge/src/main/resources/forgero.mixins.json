@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.sigmundgranaas.forgero.mixin",
+  "package": "com.sigmundgranaas.forgeroforge.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],

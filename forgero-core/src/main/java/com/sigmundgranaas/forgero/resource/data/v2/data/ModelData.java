@@ -1,14 +1,13 @@
 package com.sigmundgranaas.forgero.resource.data.v2.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.util.Identifiers;
 import lombok.Builder;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder(toBuilder = true)
 public class ModelData {
@@ -22,13 +21,13 @@ public class ModelData {
     @Builder.Default
     @SerializedName(value = "modelType", alternate = "type")
     @Nullable
-    private String modelType = EMPTY_IDENTIFIER;
+    private String modelType = Identifiers.EMPTY_IDENTIFIER;
     @Builder.Default
     @Nullable
-    private String template = EMPTY_IDENTIFIER;
+    private String template = Identifiers.EMPTY_IDENTIFIER;
     @Builder.Default
     @Nullable
-    private String name = EMPTY_IDENTIFIER;
+    private String name = Identifiers.EMPTY_IDENTIFIER;
     @Builder.Default
     @Nullable
     private List<ModelEntryData> variants = Collections.emptyList();
@@ -37,24 +36,24 @@ public class ModelData {
     private List<Float> offset = Collections.emptyList();
     @Builder.Default
     @Nullable
-    private String palette = EMPTY_IDENTIFIER;
+    private String palette = Identifiers.EMPTY_IDENTIFIER;
 
     public List<String> getTarget() {
         return Objects.requireNonNullElse(target, Collections.emptyList());
     }
 
     public String getModelType() {
-        return Objects.requireNonNullElse(modelType, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(modelType, Identifiers.EMPTY_IDENTIFIER);
 
     }
 
     public String getTemplate() {
-        return Objects.requireNonNullElse(template, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(template, Identifiers.EMPTY_IDENTIFIER);
 
     }
 
     public String getName() {
-        return Objects.requireNonNullElse(name, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(name, Identifiers.EMPTY_IDENTIFIER);
 
     }
 
@@ -74,6 +73,6 @@ public class ModelData {
     }
 
     public String getPalette() {
-        return Objects.requireNonNullElse(palette, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(palette, Identifiers.EMPTY_IDENTIFIER);
     }
 }

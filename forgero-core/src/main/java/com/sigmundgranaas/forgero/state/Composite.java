@@ -17,8 +17,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.property.attribute.Category.UPGRADE_CATEGORIES;
-
 @SuppressWarnings("ClassCanBeRecord")
 public class Composite implements Upgradeable<Composite> {
     private final List<State> ingredientList;
@@ -123,7 +121,7 @@ public class Composite implements Upgradeable<Composite> {
 
     private boolean filterAttribute(Property property) {
         if (property instanceof Attribute attribute) {
-            if (UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
+            if (Category.UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
                 return true;
             }
         }

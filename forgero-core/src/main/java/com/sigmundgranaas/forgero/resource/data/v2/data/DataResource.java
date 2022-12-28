@@ -2,9 +2,10 @@ package com.sigmundgranaas.forgero.resource.data.v2.data;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.state.Identifiable;
+import com.sigmundgranaas.forgero.util.Identifiers;
 import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.resource.data.SchemaVersion;
-import com.sigmundgranaas.forgero.state.Identifiable;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,22 +13,20 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
-
 @Builder(toBuilder = true)
 public class DataResource implements Identifiable {
 
     @Builder.Default
     @Nullable
-    private String name = EMPTY_IDENTIFIER;
+    private String name = Identifiers.EMPTY_IDENTIFIER;
 
     @Builder.Default
     @Nullable
-    private String namespace = EMPTY_IDENTIFIER;
+    private String namespace = Identifiers.EMPTY_IDENTIFIER;
 
     @Builder.Default
     @Nullable
-    private String type = EMPTY_IDENTIFIER;
+    private String type = Identifiers.EMPTY_IDENTIFIER;
 
     @SerializedName(value = "resource_type", alternate = "json_resource_type")
     @Builder.Default()
@@ -36,7 +35,7 @@ public class DataResource implements Identifiable {
 
     @Builder.Default
     @Nullable
-    private String parent = EMPTY_IDENTIFIER;
+    private String parent = Identifiers.EMPTY_IDENTIFIER;
 
     @Builder.Default
     @Nullable
@@ -90,13 +89,13 @@ public class DataResource implements Identifiable {
 
     @NotNull
     public String name() {
-        return Objects.requireNonNullElse(name, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(name, Identifiers.EMPTY_IDENTIFIER);
     }
 
     @Override
     @NotNull
     public String nameSpace() {
-        return Objects.requireNonNullElse(namespace, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(namespace, Identifiers.EMPTY_IDENTIFIER);
     }
 
     public int priority() {
@@ -105,7 +104,7 @@ public class DataResource implements Identifiable {
 
     @NotNull
     public String type() {
-        return type == null ? EMPTY_IDENTIFIER : type;
+        return type == null ? Identifiers.EMPTY_IDENTIFIER : type;
     }
 
     @NotNull
@@ -115,7 +114,7 @@ public class DataResource implements Identifiable {
 
     @NotNull
     public String parent() {
-        return Objects.requireNonNullElse(parent, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(parent, Identifiers.EMPTY_IDENTIFIER);
     }
 
     @NotNull

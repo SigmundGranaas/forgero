@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.texture.palette;
 
+import com.sigmundgranaas.forgero.texture.palette.material.MaterialPalette;
 import com.sigmundgranaas.forgero.identifier.texture.toolpart.PaletteIdentifier;
 import com.sigmundgranaas.forgero.texture.Texture;
-import com.sigmundgranaas.forgero.texture.palette.material.MaterialPalette;
 import com.sigmundgranaas.forgero.texture.utils.RgbColour;
 
 import java.awt.image.BufferedImage;

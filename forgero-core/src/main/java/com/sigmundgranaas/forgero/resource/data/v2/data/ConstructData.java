@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.resource.data.v2.data;
 
+import com.sigmundgranaas.forgero.util.Identifiers;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,9 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
-import static com.sigmundgranaas.forgero.util.Identifiers.THIS_IDENTIFIER;
 
 @Builder(toBuilder = true)
 public class ConstructData {
@@ -27,11 +25,11 @@ public class ConstructData {
 
     @Nullable
     @Builder.Default
-    private final String target = THIS_IDENTIFIER;
+    private final String target = Identifiers.THIS_IDENTIFIER;
 
     @Nullable
     @Builder.Default
-    private final String type = EMPTY_IDENTIFIER;
+    private final String type = Identifiers.EMPTY_IDENTIFIER;
 
     @Nullable
     @Builder.Default
@@ -43,12 +41,12 @@ public class ConstructData {
 
     @NotNull
     public String target() {
-        return Objects.requireNonNullElse(target, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(target, Identifiers.EMPTY_IDENTIFIER);
     }
 
     @NotNull
     public String type() {
-        return Objects.requireNonNullElse(type, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(type, Identifiers.EMPTY_IDENTIFIER);
     }
 
     @NotNull

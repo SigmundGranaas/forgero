@@ -14,11 +14,8 @@ import java.util.stream.Collectors;
 
 public class TemplateTexture implements Texture {
     private final BufferedImage template;
-
-    private List<PixelInformation> pixelValues;
-
     private final RecolorStrategy strategy;
-
+    private List<PixelInformation> pixelValues;
     private List<RgbColour> greyScaleValues;
 
     public TemplateTexture(BufferedImage template, RecolorStrategy strategy) {

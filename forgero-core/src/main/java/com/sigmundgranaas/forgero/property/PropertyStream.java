@@ -6,14 +6,13 @@ import com.sigmundgranaas.forgero.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.property.passive.Static;
 import com.sigmundgranaas.forgero.util.ForwardingStream;
+import com.sigmundgranaas.forgero.util.Identifiers;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 /**
  * The property stream is a special stream for handling property specific operations.
@@ -48,12 +47,12 @@ public record PropertyStream(
 
         Map<String, Attribute> idMap = rootAttributes
                 .stream()
-                .filter(attribute -> !attribute.getId().equals(EMPTY_IDENTIFIER))
+                .filter(attribute -> !attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
                 .collect(Collectors.toMap(Attribute::getId, attribute -> attribute, (existing, replacement) -> existing.getPriority() > replacement.getPriority() ? existing : replacement));
 
         var nonIdAttributes = rootAttributes
                 .stream()
-                .filter(attribute -> attribute.getId().equals(EMPTY_IDENTIFIER))
+                .filter(attribute -> attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
                 .toList();
 
         return Stream.of(idMap.values(), nonIdAttributes)

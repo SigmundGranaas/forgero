@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.resource;
 
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
-import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
+import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 

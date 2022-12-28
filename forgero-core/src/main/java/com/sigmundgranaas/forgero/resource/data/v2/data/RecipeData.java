@@ -1,13 +1,12 @@
 package com.sigmundgranaas.forgero.resource.data.v2.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.util.Identifiers;
 import lombok.Builder;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 @SuppressWarnings("ClassCanBeRecord")
 @Builder(toBuilder = true)
@@ -23,10 +22,10 @@ public class RecipeData {
     }
 
     public String type() {
-        return Objects.requireNonNullElse(craftingType, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(craftingType, Identifiers.EMPTY_IDENTIFIER);
     }
 
     public String target() {
-        return Objects.requireNonNullElse(target, EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(target, Identifiers.EMPTY_IDENTIFIER);
     }
 }

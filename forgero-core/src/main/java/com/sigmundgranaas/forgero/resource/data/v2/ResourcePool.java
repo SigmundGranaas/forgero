@@ -9,12 +9,11 @@ import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Ingredient;
 import com.sigmundgranaas.forgero.type.ResolvedTypeTree;
 import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.util.Identifiers;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class ResourcePool {
@@ -38,7 +37,7 @@ public class ResourcePool {
         tree.resolve();
 
         var resourceMap = resources.stream()
-                .filter(resource -> Objects.nonNull(resource.name()) && !resource.name().equals(EMPTY_IDENTIFIER))
+                .filter(resource -> Objects.nonNull(resource.name()) && !resource.name().equals(Identifiers.EMPTY_IDENTIFIER))
                 .filter(resource -> resource.resourceType() != ResourceType.TYPE_DEFINITION)
                 .collect(Collectors.groupingBy((DataResource::type), Collectors.mapping(resource -> resource, Collectors.toList())));
 

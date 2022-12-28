@@ -5,10 +5,9 @@ import com.sigmundgranaas.forgero.property.*;
 import com.sigmundgranaas.forgero.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.property.attribute.Category;
 import com.sigmundgranaas.forgero.property.passive.PassivePropertyType;
+import com.sigmundgranaas.forgero.util.Identifiers;
 
 import java.util.List;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 /**
  * POJO used for parsing all properties from JSON files.
@@ -32,7 +31,7 @@ public class PropertyPojo {
 
     public static class Attribute {
         public int priority = 0;
-        public String id = EMPTY_IDENTIFIER;
+        public String id = Identifiers.EMPTY_IDENTIFIER;
         public AttributeType type;
         public CalculationOrder order;
         public NumericOperation operation;

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.type;
 
 
+import com.sigmundgranaas.forgero.util.Identifiers;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.resource.data.v2.data.TypeData;
 
@@ -8,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
 
 public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
     private final List<MutableTypeNode> rootNodes;
@@ -102,6 +101,6 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
     }
 
     public Type type(String type) {
-        return find(type).map(MutableTypeNode::type).orElse(Type.of(EMPTY_IDENTIFIER));
+        return find(type).map(MutableTypeNode::type).orElse(Type.of(Identifiers.EMPTY_IDENTIFIER));
     }
 }

@@ -12,11 +12,10 @@ import com.sigmundgranaas.forgero.state.slot.EmptySlot;
 import com.sigmundgranaas.forgero.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.type.Type;
 import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.util.Identifiers;
 
 import java.util.*;
 import java.util.stream.IntStream;
-
-import static com.sigmundgranaas.forgero.util.Identifiers.CREATE_IDENTIFIER;
 
 public class StateConverter implements DataConverter<State> {
     private final HashMap<String, State> states = new HashMap<>();
@@ -30,7 +29,7 @@ public class StateConverter implements DataConverter<State> {
 
     @Override
     public Optional<State> convert(DataResource resource) {
-        if (resource.container().isPresent() && resource.container().get().getType().equals(CREATE_IDENTIFIER)) {
+        if (resource.container().isPresent() && resource.container().get().getType().equals(Identifiers.CREATE_IDENTIFIER)) {
             createStates.add(resource.identifier());
         }
         if (resource.type().equals("GEM")) {
