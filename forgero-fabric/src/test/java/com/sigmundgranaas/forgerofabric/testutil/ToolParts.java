@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgeroforge.testutil;
+package com.sigmundgranaas.forgerofabric.testutil;
 
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.slot.EmptySlot;
@@ -6,8 +6,8 @@ import com.sigmundgranaas.forgero.state.slot.EmptySlot;
 import java.util.Collections;
 import java.util.List;
 
-import static com.sigmundgranaas.forgeroforge.testutil.Materials.IRON;
-import static com.sigmundgranaas.forgeroforge.testutil.Materials.OAK;
+import static com.sigmundgranaas.forgerofabric.testutil.Materials.IRON;
+import static com.sigmundgranaas.forgerofabric.testutil.Materials.OAK;
 
 public class ToolParts {
     public static Composite HANDLE = Composite.builder()

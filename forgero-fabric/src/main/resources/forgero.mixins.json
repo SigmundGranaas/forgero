@@ -9,7 +9,6 @@
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",
-    "ItemUUIDMixin",
     "LivingEntityMagneticMixin",
     "LivingEntityReapingMixin",
     "LivingEntityUndyingMixin",
@@ -24,7 +23,6 @@
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
-    "JsonUnbakedModelOverrideMixin",
     "LifecycleResourceManagerImplMixin",
     "PlayerInteractionManagerMixin"
   ],

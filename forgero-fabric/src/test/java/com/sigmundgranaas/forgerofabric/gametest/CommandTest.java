@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgeroforge.gametest;
+package com.sigmundgranaas.forgerofabric.gametest;
 
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

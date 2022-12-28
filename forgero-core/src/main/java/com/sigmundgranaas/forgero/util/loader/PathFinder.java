@@ -11,7 +11,14 @@ import java.util.Optional;
 @FunctionalInterface
 public interface PathFinder {
     static Optional<Path> ClassLoaderFinder(String path) {
-        Optional<URL> url = Optional.ofNullable(PathFinder.class.getClassLoader().getResource(path));
+        Optional<URL> url = Optional.ofNullable(PathFinder.class.getClassLoader().getResource(path))
+                .or(() -> Optional.ofNullable(PathFinder.class.getClassLoader().getResource(path.substring(1))));
+        return url.flatMap(PathFinder::uriConverter).map(Path::of);
+    }
+
+    static Optional<Path> ClassFinder(String path) {
+        Optional<URL> url = Optional.ofNullable(PathFinder.class.getResource(path))
+                .or(() -> Optional.ofNullable(PathFinder.class.getResource(path.substring(1))));
         return url.flatMap(PathFinder::uriConverter).map(Path::of);
     }
 

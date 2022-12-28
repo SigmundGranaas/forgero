@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.item.StateItem;
 import com.sigmundgranaas.forgero.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.TargetTypes;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.property.attribute.SingleTarget;
-import com.sigmundgranaas.forgerocommon.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgerocommon.item.StateItem;
+import com.sigmundgranaas.forgerocommon.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgerocommon.toolhandler.BlockBreakingHandler;
 import com.sigmundgranaas.forgerocommon.toolhandler.PatternBreakingStrategy;
 import com.sigmundgranaas.forgerocommon.toolhandler.VeinMiningStrategy;
@@ -43,7 +43,7 @@ public abstract class PlayerInteractionManagerMixin {
         if (this.currentBreakingProgress >= 1.0F) {
             if (this.client.player.getMainHandStack().getItem() instanceof StateItem stateItem && client.player != null) {
                 State tool = stateItem.dynamicState(client.player.getMainHandStack());
-                var activeProperties = Property.stream(tool.getProperties(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
+                var activeProperties = Property.stream(tool.applyProperty(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
                 if (!activeProperties.isEmpty()) {
                     List<Pair<BlockState, BlockPos>> availableBlocks;
                     if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {

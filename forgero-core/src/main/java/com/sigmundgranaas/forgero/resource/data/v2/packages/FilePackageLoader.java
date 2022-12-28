@@ -3,10 +3,11 @@ package com.sigmundgranaas.forgero.resource.data.v2.packages;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.resource.data.ResourceLoader;
 import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
-import com.sigmundgranaas.forgero.resource.data.v2.loading.FileResourceLoader;
+import com.sigmundgranaas.forgero.resource.data.v2.ResourceLocator;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.resource.data.v2.loading.DefaultMapper;
+import com.sigmundgranaas.forgero.resource.data.v2.loading.FileResourceLoader;
 import com.sigmundgranaas.forgero.resource.data.v2.loading.JsonContentFilter;
 import com.sigmundgranaas.forgero.resource.data.v2.loading.PathWalker;
 import com.sigmundgranaas.forgero.util.Identifiers;
@@ -19,9 +20,9 @@ public class FilePackageLoader implements Supplier<DataPackage> {
     private final ResourceLoader loader;
 
     public FilePackageLoader(String folderPath) {
-        PathWalker walker = PathWalker.builder()
+        ResourceLocator walker = PathWalker.builder()
                 .contentFilter(new JsonContentFilter())
-                .pathFinder(PathFinder::ClassLoaderFinder)
+                .pathFinder(PathFinder::ClassFinder)
                 .build();
         this.loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
     }

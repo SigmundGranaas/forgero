@@ -8,8 +8,8 @@ import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
 import java.util.List;
 
 import static com.sigmundgranaas.forgero.ForgeroStateRegistry.*;
-import static com.sigmundgranaas.forgero.resource.ForgeroVanilla.VANILLA_SUPPLIER;
 import static com.sigmundgranaas.forgero.resource.data.Constant.*;
+import static com.sigmundgranaas.forgero.vanilla.ForgeroVanilla.VANILLA_SUPPLIER;
 
 public class ForgeroPipeLineSetup {
 

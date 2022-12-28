@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TypeTreeTest {
 
     public static ResourceLocator WALKER = PathWalker.builder()
-            .pathFinder(PathFinder::ClassLoaderFinder)
+            .pathFinder(PathFinder::ClassFinder)
             .contentFilter(new JsonContentFilter())
             .depth(20)
             .build();

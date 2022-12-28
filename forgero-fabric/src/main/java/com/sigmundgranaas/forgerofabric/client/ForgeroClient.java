@@ -3,16 +3,16 @@ package com.sigmundgranaas.forgerofabric.client;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgerofabric.client.model.ForgeroModelVariantProvider;
-import com.sigmundgranaas.forgerofabric.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
 import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgerocommon.block.assemblystation.AssemblyStationScreen;
+import com.sigmundgranaas.forgerofabric.client.model.ForgeroModelVariantProvider;
+import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.sigmundgranaas.forgerofabric.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgerocommon.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
@@ -43,7 +43,6 @@ public class ForgeroClient implements ClientModInitializer {
     public void onInitializeClient() {
         initializeItemModels();
         HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
-
     }
 
     private void initializeItemModels() {

@@ -1,17 +1,18 @@
-package com.sigmundgranaas.forgeroforge.nbt.v2;
+package com.sigmundgranaas.forgerofabric.nbt.v2;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgerocommon.item.nbt.v2.StateParser;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Ingredient;
 import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgeroforge.testutil.Materials;
-import com.sigmundgranaas.forgeroforge.testutil.Schematics;
+import com.sigmundgranaas.forgerocommon.item.nbt.v2.StateParser;
+import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
+import com.sigmundgranaas.forgerofabric.testutil.Materials;
+import com.sigmundgranaas.forgerofabric.testutil.Schematics;
+import com.sigmundgranaas.forgerofabric.testutil.ToolParts;
 import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,17 +22,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgeroforge.nbt.NBTs.PICKAXE_NBT;
-import static com.sigmundgranaas.forgeroforge.testutil.ToolParts.HANDLE;
-import static com.sigmundgranaas.forgeroforge.testutil.ToolParts.PICKAXE_HEAD;
+import static com.sigmundgranaas.forgerofabric.nbt.NBTs.PICKAXE_NBT;
 
 
 public class NbtToStateTest {
 
     public static Optional<State> ingredientSupplier(String id) {
         return switch (id) {
-            case "forgero#oak-handle" -> Optional.of(Ingredient.of(HANDLE));
-            case "forgero#iron-pickaxe_head" -> Optional.of(Ingredient.of(PICKAXE_HEAD));
+            case "forgero#oak-handle" -> Optional.of(Ingredient.of(ToolParts.HANDLE));
+            case "forgero#iron-pickaxe_head" -> Optional.of(Ingredient.of(ToolParts.PICKAXE_HEAD));
             case "forgero#iron" -> Optional.of(Materials.IRON);
             case "forgero#oak" -> Optional.of(Materials.OAK);
             case "forgero#pickaxehead-schematic" -> Optional.of(Schematics.PICKAXE_HEAD_SCHEMATIC);

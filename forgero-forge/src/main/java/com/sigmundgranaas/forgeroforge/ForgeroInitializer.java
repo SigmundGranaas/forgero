@@ -26,7 +26,7 @@ public class ForgeroInitializer {
                 .builder()
                 .register(ForgeroSettings.SETTINGS)
                 .register(dependencies)
-                .register(new ForgePackFinder(dependencies))
+                .register(new ForgePackFinder())
                 .state(ForgeroStateRegistry.stateListener())
                 .state(ForgeroStateRegistry.compositeListener())
                 .createStates(ForgeroStateRegistry.createStateListener())

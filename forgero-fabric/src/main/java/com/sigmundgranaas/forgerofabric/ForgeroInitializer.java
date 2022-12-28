@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgerofabric;
 
+import com.google.common.base.Stopwatch;
+import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.active.ActivePropertyRegistry;
@@ -60,7 +62,7 @@ public class ForgeroInitializer implements ModInitializer {
         var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
         dataReloader(availableDependencies);
-
+        Stopwatch timer = Stopwatch.createStarted();
         PipelineBuilder
                 .builder()
                 .register(ForgeroSettings.SETTINGS)
@@ -74,7 +76,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
-
+        Forgero.LOGGER.info("Total load time: " + timer.stop());
         var handler = RegistryHandler.HANDLER;
         handler.accept(this::registerBlocks);
         handler.accept(this::registerAARPRecipes);
@@ -85,8 +87,6 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerTreasure);
         handler.accept(this::registerCommands);
         handler.run();
-
-
     }
 
     private void registerBlocks() {

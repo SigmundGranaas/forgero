@@ -17,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
 public class FileResourceLoader implements ResourceLoader {
     private final String folder;
     private final ResourceLocator walker;
-
     private final ResourceCollectionMapper mapper;
 
     public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper) {

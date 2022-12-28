@@ -1,23 +1,22 @@
-package com.sigmundgranaas.forgeroforge.nbt.v2;
+package com.sigmundgranaas.forgerofabric.nbt.v2;
 
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.settings.ForgeroSettings;
+import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgerocommon.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgerocommon.item.nbt.v2.CompositeParser;
 import com.sigmundgranaas.forgerocommon.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgerocommon.item.nbt.v2.StateParser;
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgerofabric.testutil.Tools;
+import com.sigmundgranaas.forgerofabric.testutil.Upgrades;
 import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static com.sigmundgranaas.forgeroforge.testutil.Tools.IRON_PICKAXE;
-import static com.sigmundgranaas.forgeroforge.testutil.Upgrades.BINDING;
 
 public class StateNbtConversionTest {
     private static final CompoundEncoder<State> encoder = new CompositeEncoder();
@@ -40,7 +39,7 @@ public class StateNbtConversionTest {
 
     @Test
     void encodeCompoundParseCompound() {
-        NbtCompound compound = encoder.encode(IRON_PICKAXE);
+        NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE);
 
         var pickaxe = parser.parse(compound).orElseThrow();
         Assertions.assertEquals("iron-pickaxe", pickaxe.name());
@@ -48,7 +47,7 @@ public class StateNbtConversionTest {
 
     @Test
     void encodeCompoundParseCompoundWithIngredients() {
-        NbtCompound compound = encoder.encode(IRON_PICKAXE);
+        NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE);
         var pickaxe = parser.parse(compound).map(Composite.class::cast).orElseThrow();
         Assertions.assertEquals(2, pickaxe.ingredients().size());
         Assertions.assertEquals("oak-handle", pickaxe.ingredients().get(0).name());
@@ -57,7 +56,7 @@ public class StateNbtConversionTest {
 
     @Test
     void encodeCompoundParseCompoundWithUpgrades() {
-        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(BINDING));
+        NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.upgrade(Upgrades.BINDING));
         var pickaxe = StateParser.STATE_PARSER.parse(compound).map(Composite.class::cast).orElseThrow();
         //Assertions.assertEquals(0, pickaxe.upgrades().size());
         //Assertions.assertEquals("oak-binding", pickaxe.upgrades().get(0).name());
@@ -65,7 +64,7 @@ public class StateNbtConversionTest {
 
     @Test
     void encodeCompoundParseCompoundWithProperties() {
-        NbtCompound compound = encoder.encode(IRON_PICKAXE.upgrade(BINDING));
+        NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.upgrade(Upgrades.BINDING));
         var pickaxe = parser.parse(compound).map(Composite.class::cast).orElseThrow();
         Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
         Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttributeType.DURABILITY));

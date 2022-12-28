@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgeroforge.testutil;
+package com.sigmundgranaas.forgerofabric.testutil;
 
 import com.sigmundgranaas.forgero.property.attribute.Category;
 import com.sigmundgranaas.forgero.state.Composite;

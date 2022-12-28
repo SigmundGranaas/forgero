@@ -3,23 +3,21 @@ package com.sigmundgranaas.forgeroforge.pack;
 import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
-import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
 import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
+import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class ForgePackFinder implements PackageSupplier {
     public final String PACK_LOCATION = "/data/forgero/packs/";
-    private final Set<String> dependencies;
 
-    public ForgePackFinder(Set<String> dependencies) {
-        this.dependencies = dependencies;
+    public ForgePackFinder() {
+
     }
 
     @Override
@@ -30,7 +28,9 @@ public class ForgePackFinder implements PackageSupplier {
                 .map(Path::getFileName)
                 .map(Path::toString)
                 .filter(name -> !name.equals("packs"))
-                .map(name -> CompletableFuture.supplyAsync(() -> new FilePackageLoader(PACK_LOCATION + name).get()))
+                .map(name -> PACK_LOCATION + name)
+                .map(FilePackageLoader::new)
+                .map(CompletableFuture::supplyAsync)
                 .toList();
 
         var completeResources = resources.stream()
@@ -45,7 +45,7 @@ public class ForgePackFinder implements PackageSupplier {
             var path = Path.of(this.getClass().getClassLoader().getResource(PACK_LOCATION).toURI());
             try (var filesStream = Files.walk(path, depth)) {
                 return filesStream.toList();
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 Forgero.LOGGER.error("Unable to list files from {}", resourceLocation);
                 Forgero.LOGGER.error(e);
             }

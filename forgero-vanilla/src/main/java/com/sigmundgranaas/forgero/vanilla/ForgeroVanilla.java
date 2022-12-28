@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.resource;
+package com.sigmundgranaas.forgero.vanilla;
 
 import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
 import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgeroforge.nbt;
+package com.sigmundgranaas.forgerofabric.nbt;
 
 import com.sigmundgranaas.forgerocommon.item.nbt.v2.NbtConstants;
 import net.minecraft.nbt.NbtCompound;

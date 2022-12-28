@@ -1,12 +1,12 @@
-package com.sigmundgranaas.forgeroforge.nbt.v2;
+package com.sigmundgranaas.forgerofabric.nbt.v2;
 
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgerocommon.item.nbt.v2.CompositeEncoder;
-import com.sigmundgranaas.forgerocommon.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgerocommon.item.nbt.v2.CompositeEncoder;
+import com.sigmundgranaas.forgerocommon.item.nbt.v2.CompoundEncoder;
+import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -15,8 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgerocommon.item.nbt.v2.NbtConstants.*;
-import static com.sigmundgranaas.forgeroforge.testutil.Tools.IRON_PICKAXE;
-import static com.sigmundgranaas.forgeroforge.testutil.Upgrades.BINDING;
+import static com.sigmundgranaas.forgerofabric.testutil.Tools.IRON_PICKAXE;
+import static com.sigmundgranaas.forgerofabric.testutil.Upgrades.BINDING;
 
 
 public class StateToNbtTest {

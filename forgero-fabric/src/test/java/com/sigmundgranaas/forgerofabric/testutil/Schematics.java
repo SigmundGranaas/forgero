@@ -1,10 +1,10 @@
-package com.sigmundgranaas.forgeroforge.testutil;
+package com.sigmundgranaas.forgerofabric.testutil;
 
 import com.sigmundgranaas.forgero.state.Ingredient;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgeroforge.testutil.Properties.ATTACK_DAMAGE_1;
+import static com.sigmundgranaas.forgerofabric.testutil.Properties.ATTACK_DAMAGE_1;
 
 
 public class Schematics {

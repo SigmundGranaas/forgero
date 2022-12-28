@@ -10,7 +10,7 @@
   ],
   "entrypoints": {
     "fabric-gametest": [
-      "com.sigmundgranaas.forgero.gametest.CommandTest"
+      "com.sigmundgranaas.forgerofabric.gametest.CommandTest"
     ]
   }
 }
