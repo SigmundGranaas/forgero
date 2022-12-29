@@ -52,6 +52,7 @@ task assembleComplete(type: Jar) {
             defaultRefmapName = "forgero-fabric-refmap.json"
         }
     }
+    
     remapJar {
         if (gradle.startParameter.taskNames.stream().anyMatch("assembleComplete"::equals)) {
             dependencies {
