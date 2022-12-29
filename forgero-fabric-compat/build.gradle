@@ -8,27 +8,6 @@ plugins {
 version = rootProject.mod_version
 group = rootProject.maven_group
 
-repositories {
-    mavenCentral()
-    maven {
-        url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-
-    }
-    maven {
-        name 'Gegy'
-        url 'https://maven.gegy.dev'
-    }
-    mavenLocal()
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-}
-
 dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
@@ -49,6 +28,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 
     modImplementation("net.devtech:arrp:0.6.2")
@@ -117,11 +97,6 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": rootProject.version
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    //it.options.release = 17
 }
 
 java {

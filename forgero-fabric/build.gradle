@@ -25,7 +25,6 @@ dependencies {
     implementation project(':forgero-extended')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
-    //implementation project(':common')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 

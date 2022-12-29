@@ -1,4 +1,5 @@
 plugins {
+    id "idea"
     id "fabric-loom" version "1.0.12" apply true
 }
 
@@ -22,6 +23,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'org.projectlombok:lombok:1.18.24'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -33,6 +35,12 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": rootProject.version
+    }
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${rootProject.archivesBaseName}" }
     }
 }
 
