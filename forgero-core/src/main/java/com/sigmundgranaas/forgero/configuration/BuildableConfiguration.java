@@ -9,15 +9,17 @@ import lombok.Builder;
 
 @Builder
 public class BuildableConfiguration implements ForgeroConfiguration {
-    private InputStreamLoader loader;
+    @Builder.Default
+    private InputStreamLoader loader = ForgeroConfiguration.DEFAULT.streamLoader();
 
-    private ResourceLocator locator;
-
-    private PathFinder finder;
-
-    private ImmutableSet<String> availableDependencies;
-
-    private ForgeroSettings settings;
+    @Builder.Default
+    private ResourceLocator locator = ForgeroConfiguration.DEFAULT.locator();
+    @Builder.Default
+    private PathFinder finder = ForgeroConfiguration.DEFAULT.pathFinder();
+    @Builder.Default
+    private ImmutableSet<String> availableDependencies = ForgeroConfiguration.DEFAULT.availableDependencies();
+    @Builder.Default
+    private ForgeroSettings settings = ForgeroConfiguration.DEFAULT.settings();
 
     @Override
     public InputStreamLoader streamLoader() {

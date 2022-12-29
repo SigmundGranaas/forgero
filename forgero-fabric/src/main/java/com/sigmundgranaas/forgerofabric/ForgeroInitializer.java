@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgerofabric;
 
-import com.google.common.base.Stopwatch;
-import com.sigmundgranaas.forgero.Forgero;
+import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.configuration.BuildableConfiguration;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
@@ -62,11 +62,15 @@ public class ForgeroInitializer implements ModInitializer {
         var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
         dataReloader(availableDependencies);
-        Stopwatch timer = Stopwatch.createStarted();
+
+        var configuration = BuildableConfiguration.builder()
+                .settings(ForgeroSettings.SETTINGS)
+                .availableDependencies(ImmutableSet.copyOf(availableDependencies))
+                .build();
+
         PipelineBuilder
                 .builder()
-                .register(ForgeroSettings.SETTINGS)
-                .register(availableDependencies)
+                .register(() -> configuration)
                 .register(FabricPackFinder.supplier())
                 .state(ForgeroStateRegistry.stateListener())
                 .state(ForgeroStateRegistry.compositeListener())
@@ -76,7 +80,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .recipes(ForgeroStateRegistry.recipeListener())
                 .build()
                 .execute();
-        Forgero.LOGGER.info("Total load time: " + timer.stop());
+
         var handler = RegistryHandler.HANDLER;
         handler.accept(this::registerBlocks);
         handler.accept(this::registerAARPRecipes);
@@ -105,10 +109,13 @@ public class ForgeroInitializer implements ModInitializer {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
+                var config = BuildableConfiguration.builder()
+                        .availableDependencies(ImmutableSet.copyOf(dependencies))
+                        .build();
+
                 PipelineBuilder
                         .builder()
-                        .register(ForgeroSettings.SETTINGS)
-                        .register(dependencies)
+                        .register(() -> config)
                         .register(FabricPackFinder.supplier())
                         .state(ForgeroStateRegistry.stateListener())
                         .build()

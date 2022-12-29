@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.resource.data.v2.loading;
 
 
-import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.resource.data.ResourceLoader;
 import com.sigmundgranaas.forgero.resource.data.v2.ResourceCollectionMapper;
@@ -51,7 +50,6 @@ public class FileResourceLoader implements ResourceLoader {
     }
 
     private List<DataResource> rawResources(List<Path> paths) {
-        Stopwatch timer = Stopwatch.createStarted();
         var resources = paths.stream()
                 .map(this::getFilePath)
                 .flatMap(Optional::stream)
@@ -63,7 +61,6 @@ public class FileResourceLoader implements ResourceLoader {
                 .map(CompletableFuture::join)
                 .flatMap(Optional::stream)
                 .toList();
-        Forgero.LOGGER.info("Method took: " + timer.stop());
         return completedResources;
     }
 

@@ -1,16 +1,17 @@
 package com.sigmundgranaas.forgerofabric.client;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.configuration.BuildableConfiguration;
+import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
 import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgerofabric.client.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import net.fabricmc.api.ClientModInitializer;
@@ -51,8 +52,7 @@ public class ForgeroClient implements ClientModInitializer {
 
         PipelineBuilder
                 .builder()
-                .register(availableDependencies)
-                .register(ForgeroSettings.SETTINGS)
+                .register(() -> BuildableConfiguration.builder().availableDependencies(ImmutableSet.copyOf(availableDependencies)).build())
                 .register(FabricPackFinder.supplier())
                 .data(modelRegistry.paletteListener())
                 .data(modelRegistry.modelListener())

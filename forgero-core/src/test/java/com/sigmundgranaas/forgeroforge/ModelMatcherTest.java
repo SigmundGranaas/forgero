@@ -28,7 +28,10 @@ public class ModelMatcherTest {
     @Test
     void getProperModel() {
         var registry = new ModelRegistry();
-        PipeLineTest.defaultResourcePipeLineTest().data(registry.paletteListener()).data(registry.modelListener()).build().execute();
+        PipeLineTest.defaultResourcePipeLineTest()
+                .data(registry.paletteListener())
+                .data(registry.modelListener())
+                .build().execute();
         var pickaxe = IRON_PICKAXE;
         var pickaxeModel = registry.find(pickaxe);
         Assertions.assertTrue(pickaxeModel.isPresent());
@@ -53,7 +56,6 @@ public class ModelMatcherTest {
 
     @Test
     void getModelFromPipeLine() {
-
         var registry = new ModelRegistry();
         PipeLineTest.defaultResourcePipeLineTest().data(registry.paletteListener()).data(registry.modelListener()).build().execute();
         var handle = HANDLE;

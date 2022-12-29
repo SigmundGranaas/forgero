@@ -6,30 +6,29 @@ import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class PipelineBuilder {
 
     private final List<DataPackage> packages = new ArrayList<>();
-    private final Set<String> dependencies = new HashSet<>();
     private final List<ResourceListener<List<DataResource>>> dataListeners = new ArrayList<>();
     private final List<ResourceListener<List<DataResource>>> inflatedDataListener = new ArrayList<>();
     private final List<ResourceListener<Map<String, State>>> stateListener = new ArrayList<>();
     private final List<ResourceListener<List<RecipeData>>> recipeListener = new ArrayList<>();
     private final List<ResourceListener<List<String>>> createStateListener = new ArrayList<>();
-    private Supplier<ForgeroConfiguration> configProvider;
-    private ForgeroSettings settings = ForgeroSettings.builder().build();
+    private Supplier<ForgeroConfiguration> configProvider = () -> ForgeroConfiguration.DEFAULT;
 
     public static PipelineBuilder builder() {
         return new PipelineBuilder();
     }
 
     public PipelineBuilder register(DataPackage dataPackage) {
-        if (settings.getResourceLogging()) {
+        if (configProvider.get() != null && configProvider.get().settings().getResourceLogging()) {
             Forgero.LOGGER.info("Registered {}", dataPackage.name());
         }
         packages.add(dataPackage);
@@ -63,20 +62,10 @@ public class PipelineBuilder {
 
     public PipelineBuilder register(PackageSupplier supplier) {
         var packs = supplier.supply();
-        if (settings.getResourceLogging()) {
+        if (configProvider.get() != null && configProvider.get().settings().getResourceLogging()) {
             packs.forEach(pack -> Forgero.LOGGER.info("Registered {}", pack.name()));
         }
         packages.addAll(packs);
-        return this;
-    }
-
-    public PipelineBuilder register(ForgeroSettings settings) {
-        this.settings = settings;
-        return this;
-    }
-
-    public PipelineBuilder register(Set<String> dependencies) {
-        this.dependencies.addAll(dependencies);
         return this;
     }
 
@@ -86,6 +75,6 @@ public class PipelineBuilder {
     }
 
     public ResourcePipeline build() {
-        return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, settings, dependencies, createStateListener);
+        return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, createStateListener, configProvider.get());
     }
 }

@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import net.minecraft.nbt.NbtCompound;
@@ -26,7 +25,6 @@ public class StateToNbtTest {
     void genData() {
         PipelineBuilder
                 .builder()
-                .register(ForgeroSettings.SETTINGS)
                 .register(FabricPackFinder.supplier())
                 .state(ForgeroStateRegistry.stateListener())
                 .state(ForgeroStateRegistry.compositeListener())

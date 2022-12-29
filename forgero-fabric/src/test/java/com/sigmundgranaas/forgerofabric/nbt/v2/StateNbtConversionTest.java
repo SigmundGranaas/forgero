@@ -1,15 +1,14 @@
 package com.sigmundgranaas.forgerofabric.nbt.v2;
 
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeParser;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateParser;
+import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgerofabric.testutil.Tools;
 import com.sigmundgranaas.forgerofabric.testutil.Upgrades;
@@ -26,7 +25,6 @@ public class StateNbtConversionTest {
     void genData() {
         PipelineBuilder
                 .builder()
-                .register(ForgeroSettings.SETTINGS)
                 .register(FabricPackFinder.supplier())
                 .state(ForgeroStateRegistry.stateListener())
                 .state(ForgeroStateRegistry.compositeListener())

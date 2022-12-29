@@ -2,13 +2,13 @@ package com.sigmundgranaas.forgero.resource;
 
 import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.resource.data.DataBuilder;
 import com.sigmundgranaas.forgero.resource.data.StateConverter;
+import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.resource.data.v2.factory.TypeFactory;
-import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.TypeTree;
 
@@ -23,15 +23,16 @@ public class ResourcePipeline {
     private final List<ResourceListener<List<RecipeData>>> recipeListener;
 
     private final List<ResourceListener<List<String>>> createStateListener;
-    private final ForgeroSettings settings;
+
     private final Set<String> dependencies;
+    private final ForgeroConfiguration configuration;
     private List<String> createsStates;
     private Map<String, String> idMapper;
     private TypeTree tree;
     private List<RecipeData> recipes;
 
 
-    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, ForgeroSettings settings, Set<String> dependencies, List<ResourceListener<List<String>>> createStateListener) {
+    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration) {
         this.packages = packages;
         this.dataListeners = dataListeners;
         this.inflatedDataListener = inflatedDataListener;
@@ -41,8 +42,8 @@ public class ResourcePipeline {
         this.tree = new TypeTree();
         this.idMapper = new HashMap<>();
         this.recipes = new ArrayList<>();
-        this.settings = settings;
-        this.dependencies = dependencies;
+        this.dependencies = new HashSet<>();
+        this.configuration = configuration;
     }
 
     public void execute() {
@@ -95,11 +96,11 @@ public class ResourcePipeline {
     }
 
     private boolean filterPackages(DataPackage dataPackage) {
-        if (!settings.filterPacks(dataPackage)) {
+        if (!configuration.settings().filterPacks(dataPackage)) {
             return false;
         }
-        if (!dependencies.containsAll(dataPackage.dependencies())) {
-            if (settings.getResourceLogging()) {
+        if (!configuration.availableDependencies().containsAll(dataPackage.dependencies())) {
+            if (configuration.settings().getResourceLogging()) {
                 var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
                 Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
             }
@@ -114,7 +115,7 @@ public class ResourcePipeline {
                 .map(DataPackage::data)
                 .map(Supplier::get)
                 .flatMap(List::stream)
-                .filter(settings::filterResources)
+                .filter(configuration.settings()::filterResources)
                 .toList();
     }
 }
