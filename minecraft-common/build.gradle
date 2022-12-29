@@ -28,6 +28,14 @@ dependencies {
     modApi "net.fabricmc:fabric-loader:${project.loader_version}"
 }
 
+processResources {
+    inputs.property "version", rootProject.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": rootProject.version
+    }
+}
+
 loom {
     accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
 }
