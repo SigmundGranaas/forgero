@@ -2,10 +2,10 @@ package com.sigmundgranaas.forgerofabric.mixins;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgerocommon.toolhandler.DynamicAttributeTool;
-import com.sigmundgranaas.forgerocommon.toolhandler.DynamicDurability;
-import com.sigmundgranaas.forgerocommon.toolhandler.DynamicEffectiveNess;
-import com.sigmundgranaas.forgerocommon.toolhandler.DynamicMiningSpeed;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;

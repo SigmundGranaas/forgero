@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.property.passive.StaticPassiveType;
 import com.sigmundgranaas.forgero.state.Composite;
 import net.minecraft.entity.ItemEntity;

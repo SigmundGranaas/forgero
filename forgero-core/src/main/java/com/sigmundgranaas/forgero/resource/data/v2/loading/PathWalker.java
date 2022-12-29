@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-@Builder
+@Builder(toBuilder = true)
 public class PathWalker implements ResourceLocator {
     @Builder.Default
     private PathFinder pathFinder = (path) -> Optional.empty();

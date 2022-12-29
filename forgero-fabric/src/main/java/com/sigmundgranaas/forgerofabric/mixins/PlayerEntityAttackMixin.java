@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgerocommon.toolhandler.EntityTarget;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;

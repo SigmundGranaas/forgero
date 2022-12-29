@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgerofabric.client.model;
 
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.model.ModelRegistry;
-import com.sigmundgranaas.forgerocommon.client.model.CompositeModelVariant;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.CompositeModelVariant;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
 import net.minecraft.client.render.model.UnbakedModel;

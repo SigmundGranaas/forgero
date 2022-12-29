@@ -3,6 +3,9 @@ package com.sigmundgranaas.forgerofabric;
 import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.Forgero;
 import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
+import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
+import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
@@ -10,9 +13,6 @@ import com.sigmundgranaas.forgero.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgerocommon.item.DynamicItems;
-import com.sigmundgranaas.forgerocommon.property.handler.PatternBreaking;
-import com.sigmundgranaas.forgerocommon.property.handler.TaggedPatternBreaking;
 import com.sigmundgranaas.forgerofabric.command.CommandRegistry;
 import com.sigmundgranaas.forgerofabric.item.StateToItemConverter;
 import com.sigmundgranaas.forgerofabric.loot.TreasureInjector;
@@ -45,8 +45,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgerocommon.block.assemblystation.AssemblyStationBlock.*;
-import static com.sigmundgranaas.forgerocommon.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 
 
 public class ForgeroInitializer implements ModInitializer {

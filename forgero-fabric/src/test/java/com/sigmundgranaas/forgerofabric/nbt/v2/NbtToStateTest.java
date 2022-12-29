@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.Composite;
 import com.sigmundgranaas.forgero.state.Ingredient;
 import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgerocommon.item.nbt.v2.StateParser;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateParser;
 import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgerofabric.testutil.Materials;
 import com.sigmundgranaas.forgerofabric.testutil.Schematics;

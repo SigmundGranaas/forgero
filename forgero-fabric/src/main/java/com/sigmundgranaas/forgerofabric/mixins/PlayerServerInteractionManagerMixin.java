@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.property.Property;
 import com.sigmundgranaas.forgero.property.TargetTypes;
 import com.sigmundgranaas.forgero.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.property.attribute.SingleTarget;
-import com.sigmundgranaas.forgerocommon.property.handler.PatternBreaking;
+import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgerocommon.toolhandler.BlockBreakingHandler;
-import com.sigmundgranaas.forgerocommon.toolhandler.PatternBreakingStrategy;
-import com.sigmundgranaas.forgerocommon.toolhandler.VeinMiningStrategy;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PatternBreakingStrategy;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.VeinMiningStrategy;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.server.network.ServerPlayerEntity;

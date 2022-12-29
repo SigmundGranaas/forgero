@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.recipe.implementation.SmithingRecipeGetters;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.SmithingRecipe;

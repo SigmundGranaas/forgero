@@ -1,27 +1,27 @@
 package com.sigmundgranaas.forgero.resource;
 
 import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
+import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class PipelineBuilder {
 
     private final List<DataPackage> packages = new ArrayList<>();
-
     private final Set<String> dependencies = new HashSet<>();
     private final List<ResourceListener<List<DataResource>>> dataListeners = new ArrayList<>();
     private final List<ResourceListener<List<DataResource>>> inflatedDataListener = new ArrayList<>();
     private final List<ResourceListener<Map<String, State>>> stateListener = new ArrayList<>();
     private final List<ResourceListener<List<RecipeData>>> recipeListener = new ArrayList<>();
-
     private final List<ResourceListener<List<String>>> createStateListener = new ArrayList<>();
-
+    private Supplier<ForgeroConfiguration> configProvider;
     private ForgeroSettings settings = ForgeroSettings.builder().build();
 
     public static PipelineBuilder builder() {
@@ -77,6 +77,11 @@ public class PipelineBuilder {
 
     public PipelineBuilder register(Set<String> dependencies) {
         this.dependencies.addAll(dependencies);
+        return this;
+    }
+
+    public PipelineBuilder register(Supplier<ForgeroConfiguration> config) {
+        this.configProvider = config;
         return this;
     }
 

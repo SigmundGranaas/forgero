@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.conversion.StateConverter;
-import com.sigmundgranaas.forgerocommon.item.nbt.v2.StateEncoder;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.property.passive.StaticPassiveType;
 import com.sigmundgranaas.forgero.state.Composite;
 import net.minecraft.advancement.criterion.Criteria;
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgerocommon.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityUndyingMixin {

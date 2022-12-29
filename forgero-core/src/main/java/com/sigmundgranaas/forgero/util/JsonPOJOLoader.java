@@ -36,6 +36,6 @@ public class JsonPOJOLoader {
 
     @Nullable
     public static InputStream getInputStream(String path) {
-        return JsonPOJOLoader.class.getClassLoader().getResourceAsStream(path);
+        return JsonPOJOLoader.class.getResourceAsStream(path);
     }
 }

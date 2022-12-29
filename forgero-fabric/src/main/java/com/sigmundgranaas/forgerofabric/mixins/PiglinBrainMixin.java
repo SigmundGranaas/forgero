@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.property.passive.Static;
 import com.sigmundgranaas.forgero.property.passive.StaticPassiveType;
 import net.minecraft.entity.LivingEntity;

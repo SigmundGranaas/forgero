@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgerocommon.toolhandler.MagneticHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.MagneticHandler;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

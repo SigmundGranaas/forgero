@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgerofabric.item;
 
-import com.sigmundgranaas.forgerocommon.item.DefaultStateItem;
-import com.sigmundgranaas.forgerocommon.item.GemItem;
-import com.sigmundgranaas.forgerocommon.item.tool.*;
+import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.*;
 import com.sigmundgranaas.forgero.property.AttributeType;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.state.StateProvider;

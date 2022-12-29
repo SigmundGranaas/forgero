@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgerofabric.mixins;
 
-import com.sigmundgranaas.forgerocommon.item.DynamicAttributeItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
 import net.fabricmc.fabric.impl.client.indigo.renderer.render.ItemRenderContext;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;

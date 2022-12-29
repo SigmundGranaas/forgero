@@ -16,7 +16,7 @@ import net.devtech.arrp.json.recipe.JResult;
 import net.devtech.arrp.json.recipe.JShapelessRecipe;
 import net.minecraft.util.Identifier;
 
-import static com.sigmundgranaas.forgerocommon.item.Items.EMPTY_REPAIR_KIT;
+import static com.sigmundgranaas.forgero.minecraft.common.item.Items.EMPTY_REPAIR_KIT;
 
 public class RepairKitResourceGenerator implements DynamicResourceGenerator {
     private final ForgeroSettings settings;

@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgerocommon.block.assemblystation.AssemblyStationScreen;
+import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgerofabric.client.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import net.fabricmc.api.ClientModInitializer;
@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.sigmundgranaas.forgerocommon.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {

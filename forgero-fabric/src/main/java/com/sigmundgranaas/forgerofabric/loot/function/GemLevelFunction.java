@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgerofabric.loot.function;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.sigmundgranaas.forgerocommon.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.state.LeveledState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
@@ -12,8 +12,8 @@ import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 
-import static com.sigmundgranaas.forgerocommon.item.nbt.v2.CompoundEncoder.ENCODER;
-import static com.sigmundgranaas.forgerocommon.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder.ENCODER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 import static java.lang.Math.exp;
 
 public class GemLevelFunction extends ConditionalLootFunction {

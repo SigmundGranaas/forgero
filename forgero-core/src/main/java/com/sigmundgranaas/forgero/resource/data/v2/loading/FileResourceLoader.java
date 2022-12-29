@@ -7,6 +7,8 @@ import com.sigmundgranaas.forgero.resource.data.ResourceLoader;
 import com.sigmundgranaas.forgero.resource.data.v2.ResourceCollectionMapper;
 import com.sigmundgranaas.forgero.resource.data.v2.ResourceLocator;
 import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.util.loader.ClassLoader;
+import com.sigmundgranaas.forgero.util.loader.InputStreamLoader;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -19,15 +21,26 @@ public class FileResourceLoader implements ResourceLoader {
     private final ResourceLocator walker;
     private final ResourceCollectionMapper mapper;
 
+    private final InputStreamLoader streamLoader;
+
+    public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper, InputStreamLoader loader) {
+        this.folder = folderPath;
+        this.walker = walker;
+        this.mapper = mapper;
+        this.streamLoader = loader;
+    }
+
     public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper) {
         this.folder = folderPath;
         this.walker = walker;
         this.mapper = mapper;
+        this.streamLoader = new ClassLoader();
     }
 
     public static FileResourceLoader of(String folderPath, ResourceLocator walker, List<ResourceCollectionMapper> mappers) {
         var mapper = mappers.stream().reduce(ResourceCollectionMapper.DEFAULT, (mapper1, mapper2) -> mapper1.andThen(mapper2));
-        return new FileResourceLoader(folderPath, walker, mapper);
+
+        return new FileResourceLoader(folderPath, walker, mapper, new ClassLoader());
     }
 
     @Override
@@ -42,7 +55,7 @@ public class FileResourceLoader implements ResourceLoader {
         var resources = paths.stream()
                 .map(this::getFilePath)
                 .flatMap(Optional::stream)
-                .map(FileResourceProvider::new)
+                .map(this::fileProvider)
                 .map(CompletableFuture::supplyAsync)
                 .toList();
 
@@ -54,6 +67,9 @@ public class FileResourceLoader implements ResourceLoader {
         return completedResources;
     }
 
+    private FileResourceProvider fileProvider(String path) {
+        return new FileResourceProvider(path, streamLoader);
+    }
 
     private Optional<String> getFilePath(Path path) {
         String[] elements = path.toString().split("data");

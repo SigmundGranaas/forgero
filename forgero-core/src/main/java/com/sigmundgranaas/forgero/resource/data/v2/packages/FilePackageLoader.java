@@ -22,9 +22,23 @@ public class FilePackageLoader implements Supplier<DataPackage> {
     public FilePackageLoader(String folderPath) {
         ResourceLocator walker = PathWalker.builder()
                 .contentFilter(new JsonContentFilter())
-                .pathFinder(PathFinder::ClassFinder)
+                .pathFinder(PathFinder::ClassLoaderFinder)
                 .build();
         this.loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
+    }
+
+    public FilePackageLoader(ResourceLoader loader) {
+        this.loader = loader;
+    }
+
+    public static Supplier<DataPackage> of(String folderPath) {
+        ResourceLocator walker = PathWalker.builder()
+                .contentFilter(new JsonContentFilter())
+                .pathFinder(PathFinder::ClassLoaderFinder)
+                .build();
+        var loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
+
+        return new FilePackageLoader(loader);
     }
 
     @Override
