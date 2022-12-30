@@ -34,4 +34,4 @@ jobs:
       - name: stop gradle tasks
         run: gradle --stop
       - name: Execute Gradle build
-        run: ./gradlew forgero-core:build --debug
+        run: ./gradlew forgero-core:build
