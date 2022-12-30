@@ -45,6 +45,10 @@ loom {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.failOnError(false)
+}
+
 dependencies {
     implementation forgeDependencies(project(':forgero-core'))
     implementation project(':forgero-vanilla')

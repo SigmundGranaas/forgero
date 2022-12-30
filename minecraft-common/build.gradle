@@ -46,6 +46,6 @@ jar {
 }
 
 loom {
-
+  
     accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
 }
