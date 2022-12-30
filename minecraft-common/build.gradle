@@ -39,11 +39,13 @@ processResources {
 }
 
 jar {
+
     from("LICENSE") {
         rename { "${it}_${rootProject.archivesBaseName}" }
     }
 }
 
 loom {
+
     accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
 }
