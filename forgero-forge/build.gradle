@@ -47,7 +47,7 @@ loom {
 
 dependencies {
     implementation forgeDependencies(project(':forgero-core'))
-    implementation forgeDependencies(project(':forgero-vanilla'))
+    implementation project(':forgero-vanilla')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation 'org.jetbrains:annotations:23.0.0'
@@ -59,8 +59,8 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     forge "net.minecraftforge:forge:${project.forge_version}"
 
-    include project(':forgero-core')
-    include project(':forgero-vanilla')
+    //include project(':forgero-core')
+    //include project(':forgero-vanilla')
 }
 
 processResources {
