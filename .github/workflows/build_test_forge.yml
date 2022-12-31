@@ -36,4 +36,5 @@ jobs:
       - name: Set up project configuration
         run: ./gradlew --continue
       - name: Execute Gradle build
+        if: ${{ always() }}
         run: ./gradlew forgero-core:build
