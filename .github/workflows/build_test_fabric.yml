@@ -33,7 +33,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: stop gradle tasks
         run: ./gradlew --stop
-      - name: stop gradle tasks
+      - name: Set up project configuration
         run: ./gradlew --continue
       - name: Execute Gradle build
         run: ./gradlew forgero-core:build

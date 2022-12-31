@@ -45,15 +45,9 @@ configure(subprojects) {
     apply plugin: 'java-library'
 }
 
-task buildSubProjects {
-    group = 'build'
-    dependsOn getTasksByName('build', true)
-}
-
 task copyJars(type: Copy) {
     group = 'build'
     from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
     exclude "**/*-dev.jar"
     into "$buildDir/libs"
-    dependsOn(buildSubProjects)
 }
