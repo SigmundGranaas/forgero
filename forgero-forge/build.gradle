@@ -60,7 +60,10 @@ dependencies {
     include project(':forgero-vanilla')
 
     api project(':forgero-core')
-    api project(':forgero-vanilla')
+    implementation project(':forgero-vanilla')
+
+    runtimeOnly forgeRuntimeLibrary(project(':forgero-vanilla'))
+    runtimeOnly forgeRuntimeLibrary(project(':forgero-core'))
 }
 
 processResources {
