@@ -32,6 +32,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: stop gradle tasks
-        run: gradle --stop
+        run: ./gradlew --stop
+      - name: stop gradle tasks
+        run: ./gradlew --continue
       - name: Execute Gradle build
-        run: ./gradlew forgero-fabric:build
+        run: ./gradlew forgero-core:build
