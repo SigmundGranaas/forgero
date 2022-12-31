@@ -33,4 +33,4 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
-          arguments: forgero-fabric:build --continue --stacktrace
+          arguments: forgero-fabric:build --stacktrace

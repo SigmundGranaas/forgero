@@ -53,6 +53,9 @@ dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
 
+    implementation forgeDependencies(project(':forgero-core'))
+    implementation forgeDependencies(project(':forgero-vanilla'))
+
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'org.projectlombok:lombok:1.18.24'
