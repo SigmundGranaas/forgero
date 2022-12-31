@@ -33,10 +33,4 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
-          arguments: build --continue
-      - name: Execute Gradle build
-        uses: gradle/gradle-build-action@v2
-        if: ${{ failure() || success() }}
-        with:
-          gradle-version: wrapper
-          arguments: build
+          arguments: build --continue build
