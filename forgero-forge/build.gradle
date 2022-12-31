@@ -50,8 +50,7 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-    implementation project(':forgero-core')
-    implementation project(':forgero-vanilla')
+
 
     implementation forgeDependencies(project(':forgero-core'))
     implementation forgeDependencies(project(':forgero-vanilla'))
@@ -66,8 +65,11 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     forge "net.minecraftforge:forge:${project.forge_version}"
 
-    //include project(':forgero-core')
-    //include project(':forgero-vanilla')
+    include project(':forgero-core')
+    include project(':forgero-vanilla')
+
+    implementation project(':forgero-core')
+    implementation project(':forgero-vanilla')
 }
 
 processResources {
