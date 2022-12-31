@@ -45,14 +45,7 @@ loom {
     }
 }
 
-tasks.withType(JavaCompile) {
-    options.failOnError(false)
-}
-
 dependencies {
-    runtimeOnly forgeDependencies(project(':forgero-core'))
-    runtimeOnly forgeDependencies(project(':forgero-vanilla'))
-
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'org.projectlombok:lombok:1.18.24'
