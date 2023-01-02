@@ -61,11 +61,11 @@ dependencies {
 
     api project(':forgero-core')
     implementation project(':forgero-vanilla')
-    api project(':minecraft-common')
+    //compileOnlyApi project(path: ':minecraft-common', configuration: 'dev')
 
     runtimeOnly forgeRuntimeLibrary(project(':forgero-vanilla'))
     runtimeOnly forgeRuntimeLibrary(project(':forgero-core'))
-    runtimeOnly forgeRuntimeLibrary(project(path: ':minecraft-common', configuration: 'dev'))
+    modImplementation forgeDependencies(project(':minecraft-common'))
 }
 
 processResources {

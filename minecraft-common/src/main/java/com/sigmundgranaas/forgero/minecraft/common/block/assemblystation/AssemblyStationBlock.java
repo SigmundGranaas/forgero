@@ -32,25 +32,12 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
     public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
-    private static final VoxelShape SHAPE;
 
     private static final VoxelShape SHAPE_LEFT;
 
     private static final VoxelShape SHAPE_RIGHT;
 
     static {
-        VoxelShape shape = VoxelShapes.empty();
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.875, 0, 1.875, 1, 1));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.1875, 0, 0.75, 0.375, 0.625, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.1875, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.375, 0.25, 0.938125, 1.625, 0.8125, 0.938125));
-
-
-        SHAPE = shape.simplify();
-
         VoxelShape shapeLeft = VoxelShapes.empty();
         shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 1));
         shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));

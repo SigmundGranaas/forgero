@@ -29,6 +29,7 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
