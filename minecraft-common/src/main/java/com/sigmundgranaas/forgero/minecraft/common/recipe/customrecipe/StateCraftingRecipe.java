@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;

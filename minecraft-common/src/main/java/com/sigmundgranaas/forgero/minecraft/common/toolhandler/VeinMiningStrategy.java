@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
-import com.sigmundgranaas.forgero.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

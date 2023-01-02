@@ -1,17 +1,17 @@
 package com.sigmundgranaas.forgeroforge;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.resource.data.v2.ResourceLocator;
-import com.sigmundgranaas.forgero.resource.data.v2.ResourcePool;
-import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.resource.data.v2.data.TypeData;
-import com.sigmundgranaas.forgero.resource.data.v2.factory.TypeFactory;
-import com.sigmundgranaas.forgero.resource.data.v2.loading.DefaultMapper;
-import com.sigmundgranaas.forgero.resource.data.v2.loading.FileResourceLoader;
-import com.sigmundgranaas.forgero.resource.data.v2.loading.JsonContentFilter;
-import com.sigmundgranaas.forgero.resource.data.v2.loading.PathWalker;
-import com.sigmundgranaas.forgero.type.TypeTree;
-import com.sigmundgranaas.forgero.util.loader.PathFinder;
+import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
+import com.sigmundgranaas.forgero.core.resource.data.v2.ResourcePool;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.factory.TypeFactory;
+import com.sigmundgranaas.forgero.core.resource.data.v2.loading.DefaultMapper;
+import com.sigmundgranaas.forgero.core.resource.data.v2.loading.FileResourceLoader;
+import com.sigmundgranaas.forgero.core.resource.data.v2.loading.JsonContentFilter;
+import com.sigmundgranaas.forgero.core.resource.data.v2.loading.PathWalker;
+import com.sigmundgranaas.forgero.core.type.TypeTree;
+import com.sigmundgranaas.forgero.core.util.loader.PathFinder;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.resource.data.Constant.CORE_PATH;
+import static com.sigmundgranaas.forgero.core.resource.data.Constant.CORE_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgeroforge;
 
-import com.sigmundgranaas.forgero.property.*;
-import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.property.attribute.SingleTarget;
-import com.sigmundgranaas.forgero.property.attribute.ToolPartTarget;
+import com.sigmundgranaas.forgero.core.property.*;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.attribute.SingleTarget;
+import com.sigmundgranaas.forgero.core.property.attribute.ToolPartTarget;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
-import com.sigmundgranaas.forgero.property.passive.LeveledProperty;
-import com.sigmundgranaas.forgero.property.passive.PassiveProperty;
-import com.sigmundgranaas.forgero.property.passive.StaticProperty;
+import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
+import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
+import com.sigmundgranaas.forgero.core.property.passive.StaticProperty;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

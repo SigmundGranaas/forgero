@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.state.Identifiable;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.state.State;
 import lombok.Builder;
 import lombok.Data;
 import net.minecraft.item.Item;

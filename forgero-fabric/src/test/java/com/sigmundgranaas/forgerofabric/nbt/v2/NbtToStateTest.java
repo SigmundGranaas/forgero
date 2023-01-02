@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgerofabric.nbt.v2;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.Ingredient;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateParser;
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.Ingredient;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgerofabric.testutil.Materials;
 import com.sigmundgranaas.forgerofabric.testutil.Schematics;
 import com.sigmundgranaas.forgerofabric.testutil.ToolParts;

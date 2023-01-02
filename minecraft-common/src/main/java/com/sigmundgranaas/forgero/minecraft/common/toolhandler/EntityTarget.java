@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
-import com.sigmundgranaas.forgero.property.Target;
-import com.sigmundgranaas.forgero.property.TargetTypes;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.TargetTypes;
 import net.minecraft.entity.EntityType;
 
 import java.util.Collections;

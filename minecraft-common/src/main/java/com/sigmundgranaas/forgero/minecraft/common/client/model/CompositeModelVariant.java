@@ -5,7 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import com.sigmundgranaas.forgero.model.*;
+import com.sigmundgranaas.forgero.core.model.*;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;

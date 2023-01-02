@@ -19,7 +19,7 @@
       "com.sigmundgranaas.forgerofabric.client.ForgeroClient"
     ],
     "main": [
-      "com.sigmundgranaas.forgerofabric.ForgeroInitializer"
+      "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"
     ]
   },
   "mixins": [

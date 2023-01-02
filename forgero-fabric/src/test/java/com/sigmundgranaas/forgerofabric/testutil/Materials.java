@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgerofabric.testutil;
 
-import com.sigmundgranaas.forgero.state.Ingredient;
+import com.sigmundgranaas.forgero.core.state.Ingredient;
 
 import java.util.List;
 

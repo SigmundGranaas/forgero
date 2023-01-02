@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgeroforge;
 
-import com.sigmundgranaas.forgero.ResourceRegistry;
-import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.core.ResourceRegistry;
+import com.sigmundgranaas.forgero.core.type.TypeTree;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

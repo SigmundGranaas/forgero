@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgerofabric.testutil;
 
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.slot.EmptySlot;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.slot.EmptySlot;
 
 import java.util.Collections;
 import java.util.List;

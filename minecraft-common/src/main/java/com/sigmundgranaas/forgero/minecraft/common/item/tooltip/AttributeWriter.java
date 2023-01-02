@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.property.Property;
-import com.sigmundgranaas.forgero.property.Target;
-import com.sigmundgranaas.forgero.property.attribute.AttributeHelper;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.property.AttributeType.*;
+import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
 
 public class AttributeWriter implements Writer {
     private final List<Text> tooltip;

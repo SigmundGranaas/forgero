@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
-import com.sigmundgranaas.forgero.property.active.ActiveProperty;
-import com.sigmundgranaas.forgero.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
+import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

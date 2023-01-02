@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.resources.loader;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import net.fabricmc.loader.api.ModContainer;
 
 import java.io.IOException;

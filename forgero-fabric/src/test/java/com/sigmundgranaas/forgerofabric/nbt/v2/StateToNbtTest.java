@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgerofabric.nbt.v2;
 
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
-import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgerofabric.resources.FabricPackFinder;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;

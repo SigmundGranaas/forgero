@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgeroforge;
 
-import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
+import com.sigmundgranaas.forgero.core.resource.data.v2.packages.FilePackageLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.sigmundgranaas.forgero.resource.data.Constant.CORE_PATH;
+import static com.sigmundgranaas.forgero.core.resource.data.Constant.CORE_PATH;
 
 public class DataPackageSupplierTest {
 

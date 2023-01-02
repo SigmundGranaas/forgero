@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgeroforge.test.util;
 
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.state.State;
 
 import java.util.ArrayList;
 import java.util.List;

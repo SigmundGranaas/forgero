@@ -4,19 +4,19 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.resource.data.v2.data.IngredientData;
-import com.sigmundgranaas.forgero.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.resource.data.v2.data.SlotData;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.SlotData;
+import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
@@ -27,8 +27,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgero.util.Identifiers.EMPTY_IDENTIFIER;
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 //TODO Lots of deprecated methods are used to create recipes.
 //TODO THIS IS NOT OBJECT ORIENTED AT ALL, rework to use objects

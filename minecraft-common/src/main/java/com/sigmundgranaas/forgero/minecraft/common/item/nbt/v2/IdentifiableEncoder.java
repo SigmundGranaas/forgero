@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.state.Identifiable;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
 import net.minecraft.nbt.NbtCompound;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.*;

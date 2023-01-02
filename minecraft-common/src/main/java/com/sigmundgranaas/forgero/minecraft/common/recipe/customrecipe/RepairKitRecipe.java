@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;

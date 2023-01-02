@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgerofabric.dynamiclights;
 
-import com.sigmundgranaas.forgero.property.passive.LeveledPassiveType;
-import com.sigmundgranaas.forgero.property.passive.LeveledProperty;
-import com.sigmundgranaas.forgero.property.passive.PassivePropertyType;
+import com.sigmundgranaas.forgero.core.property.passive.LeveledPassiveType;
+import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
+import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyType;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 import net.minecraft.entity.EntityType;

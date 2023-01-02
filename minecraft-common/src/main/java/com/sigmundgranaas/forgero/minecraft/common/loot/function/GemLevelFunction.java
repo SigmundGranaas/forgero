@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
-import com.sigmundgranaas.forgero.state.LeveledState;
+import com.sigmundgranaas.forgero.core.state.LeveledState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
