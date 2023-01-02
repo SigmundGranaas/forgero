@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgerofabric.dynamiclights;
+package com.sigmundgranaas.forgero.fabric.dynamiclights;
 
 import com.sigmundgranaas.forgero.property.passive.LeveledPassiveType;
 import com.sigmundgranaas.forgero.property.passive.LeveledProperty;

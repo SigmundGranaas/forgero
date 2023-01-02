@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgerofabric.patchouli;
+package com.sigmundgranaas.forgero.fabric.patchouli;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.Forgero;

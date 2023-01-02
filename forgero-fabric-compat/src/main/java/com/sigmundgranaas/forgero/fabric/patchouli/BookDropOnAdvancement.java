@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgerofabric.patchouli;
+package com.sigmundgranaas.forgero.fabric.patchouli;
 
 import net.minecraft.util.Identifier;
 

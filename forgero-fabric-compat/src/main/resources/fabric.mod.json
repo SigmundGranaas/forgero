@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "dynamiclights": [
-      "com.sigmundgranaas.forgero.dynamiclights.DynamicLightsRegistryEndpoint"
+      "com.sigmundgranaas.forgero.fabric.dynamiclights.DynamicLightsRegistryEndpoint"
     ],
     "client": [
-      "com.sigmundgranaas.forgero.ForgeroCompatClient"
+      "com.sigmundgranaas.forgero.fabric.ForgeroCompatClient"
     ]
   },
   "mixins": [

@@ -1,7 +1,7 @@
-package com.sigmundgranaas.forgerofabric;
+package com.sigmundgranaas.forgero.fabric;
 
-import com.sigmundgranaas.forgerofabric.patchouli.BookDropOnAdvancement;
-import com.sigmundgranaas.forgerofabric.patchouli.GemUpgradeRecipePage;
+import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
+import com.sigmundgranaas.forgero.fabric.patchouli.GemUpgradeRecipePage;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 
