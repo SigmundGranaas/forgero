@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgeroforge;
 
-import com.sigmundgranaas.forgero.model.CompositeModelTemplate;
-import com.sigmundgranaas.forgero.model.ModelRegistry;
-import com.sigmundgranaas.forgero.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.resource.data.v2.data.ModelData;
-import com.sigmundgranaas.forgero.resource.data.v2.data.PaletteData;
-import com.sigmundgranaas.forgero.type.TypeTree;
+import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
+import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.PaletteData;
+import com.sigmundgranaas.forgero.core.type.TypeTree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

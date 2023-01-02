@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.conversion;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.item.Item;
 
 import java.util.Optional;

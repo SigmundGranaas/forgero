@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.patchouli;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.state.LeveledState;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import net.minecraft.client.gui.DrawableHelper;

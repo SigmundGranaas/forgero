@@ -3,10 +3,10 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.util.Utils;
+import com.sigmundgranaas.forgero.core.util.Utils;
 
 import java.io.InputStreamReader;
 import java.util.HashMap;

@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.property.handler;
 
-import com.sigmundgranaas.forgero.property.ActivePropertyType;
-import com.sigmundgranaas.forgero.property.Target;
-import com.sigmundgranaas.forgero.property.active.ActiveProperty;
-import com.sigmundgranaas.forgero.property.active.BreakingDirection;
-import com.sigmundgranaas.forgero.resource.data.PropertyPojo;
+import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
+import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import net.minecraft.block.BlockState;
 
 import java.util.function.Function;

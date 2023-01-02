@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgeroforge.registry;
 
-import com.sigmundgranaas.forgero.registry.impl.ReloadableStateRegistry;
+import com.sigmundgranaas.forgero.core.registry.impl.ReloadableStateRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

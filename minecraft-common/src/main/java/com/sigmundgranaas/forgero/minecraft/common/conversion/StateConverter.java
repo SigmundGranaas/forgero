@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.conversion;
 
 import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.utils.ItemUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

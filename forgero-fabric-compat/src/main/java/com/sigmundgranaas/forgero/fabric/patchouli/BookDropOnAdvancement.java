@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 
 import net.minecraft.util.Identifier;
 
-import static com.sigmundgranaas.forgerofabric.resources.ARRPGenerator.RESOURCE_PACK;
+import static com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator.RESOURCE_PACK;
 
 public class BookDropOnAdvancement {
     private static final String Advancement = "{\"type\":\"advancement_reward\",\"pools\":[{\"rolls\":1,\"entries\":[{\"type\":\"item\",\"name\":\"patchouli:guide_book\",\"functions\":[{\"function\":\"set_nbt\",\"tag\":\"{\\\"patchouli:book\\\":\\\"forgero:forgero_guide\\\"}\"}]}]}]}";

@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgeroforge.test.attribute.tool;
 
-import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgeroforge.test.util.AttributeTester;
 import com.sigmundgranaas.forgeroforge.test.util.ForgeroPackageTest;
 import org.junit.jupiter.api.Test;
 
-import static com.sigmundgranaas.forgero.property.AttributeType.*;
+import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
 import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
 
 /**

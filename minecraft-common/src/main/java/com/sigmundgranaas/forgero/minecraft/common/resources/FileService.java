@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.resources;
 
-import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.identifier.texture.TemplateIdentifier;
-import com.sigmundgranaas.forgero.identifier.texture.TextureIdentifier;
-import com.sigmundgranaas.forgero.identifier.texture.toolpart.PaletteIdentifier;
-import com.sigmundgranaas.forgero.texture.V2.FileLoader;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.identifier.texture.TemplateIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.texture.TextureIdentifier;
+import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier;
+import com.sigmundgranaas.forgero.core.texture.V2.FileLoader;
 
 import java.io.InputStream;
 import java.util.Optional;

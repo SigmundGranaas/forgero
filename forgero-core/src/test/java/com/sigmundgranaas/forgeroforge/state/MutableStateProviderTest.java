@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgeroforge.state;
 
-import com.sigmundgranaas.forgero.state.MutableStateProvider;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgero.core.state.MutableStateProvider;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

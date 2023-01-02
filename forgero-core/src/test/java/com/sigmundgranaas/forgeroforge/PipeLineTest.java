@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgeroforge;
 
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.core.resource.data.v2.packages.FilePackageLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.ForgeroStateRegistry.*;
-import static com.sigmundgranaas.forgero.resource.data.Constant.MINECRAFT_PACKAGE;
-import static com.sigmundgranaas.forgero.resource.data.Constant.VANILLA_PACKAGE;
+import static com.sigmundgranaas.forgero.core.ForgeroStateRegistry.*;
+import static com.sigmundgranaas.forgero.core.resource.data.Constant.MINECRAFT_PACKAGE;
+import static com.sigmundgranaas.forgero.core.resource.data.Constant.VANILLA_PACKAGE;
 
 public class PipeLineTest {
     public static PipelineBuilder defaultResourcePipeLineTest() {

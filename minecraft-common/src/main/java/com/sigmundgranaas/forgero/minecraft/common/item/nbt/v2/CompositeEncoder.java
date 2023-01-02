@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 

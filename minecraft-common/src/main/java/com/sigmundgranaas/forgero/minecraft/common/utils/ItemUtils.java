@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.utils;
 
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.ForgeroStateRegistry.CONTAINER_TO_STATE;
+import static com.sigmundgranaas.forgero.core.ForgeroStateRegistry.CONTAINER_TO_STATE;
 
 public class ItemUtils {
     public static Optional<Item> itemFinder(Identifier id) {

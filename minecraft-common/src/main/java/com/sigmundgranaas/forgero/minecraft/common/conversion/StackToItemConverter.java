@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.conversion;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundParser;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.item.ItemStack;
 
 import java.util.Optional;

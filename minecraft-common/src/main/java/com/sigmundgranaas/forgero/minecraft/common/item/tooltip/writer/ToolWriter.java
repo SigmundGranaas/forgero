@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tooltip.writer;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.AttributeWriter;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.property.attribute.AttributeHelper;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 

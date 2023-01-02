@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.core.state.Composite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;

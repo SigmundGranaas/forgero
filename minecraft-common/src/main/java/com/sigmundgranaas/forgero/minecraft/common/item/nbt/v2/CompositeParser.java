@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.registry.StateFinder;
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.registry.StateFinder;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 

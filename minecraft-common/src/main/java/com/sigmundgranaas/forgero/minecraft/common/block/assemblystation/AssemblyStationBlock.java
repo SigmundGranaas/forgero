@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

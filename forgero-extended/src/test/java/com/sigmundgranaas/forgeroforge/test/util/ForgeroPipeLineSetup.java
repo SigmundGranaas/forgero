@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgeroforge.test.util;
 
 import com.google.common.collect.ImmutableSet;
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.configuration.BuildableConfiguration;
-import com.sigmundgranaas.forgero.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.resource.data.v2.PackageSupplier;
-import com.sigmundgranaas.forgero.resource.data.v2.packages.FilePackageLoader;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.configuration.BuildableConfiguration;
+import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.core.resource.data.v2.PackageSupplier;
+import com.sigmundgranaas.forgero.core.resource.data.v2.packages.FilePackageLoader;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.ForgeroStateRegistry.*;
-import static com.sigmundgranaas.forgero.resource.data.Constant.*;
+import static com.sigmundgranaas.forgero.core.ForgeroStateRegistry.*;
+import static com.sigmundgranaas.forgero.core.resource.data.Constant.*;
 import static com.sigmundgranaas.forgero.vanilla.ForgeroVanilla.VANILLA_SUPPLIER;
 
 public class ForgeroPipeLineSetup {

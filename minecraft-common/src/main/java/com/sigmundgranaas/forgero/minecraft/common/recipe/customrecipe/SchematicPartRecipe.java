@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;

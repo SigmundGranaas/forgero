@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgeroforge.testutil;
 
-import com.sigmundgranaas.forgero.property.attribute.Category;
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.Ingredient;
-import com.sigmundgranaas.forgero.state.slot.EmptySlot;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.Ingredient;
+import com.sigmundgranaas.forgero.core.state.slot.EmptySlot;
 
 import java.util.Set;
 

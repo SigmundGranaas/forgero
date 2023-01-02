@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgeroforge.testutil;
 
-import com.sigmundgranaas.forgero.property.Attribute;
-import com.sigmundgranaas.forgero.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
 
-import static com.sigmundgranaas.forgero.property.AttributeType.*;
-import static com.sigmundgranaas.forgero.property.CalculationOrder.BASE;
-import static com.sigmundgranaas.forgero.property.NumericOperation.ADDITION;
+import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
+import static com.sigmundgranaas.forgero.core.property.CalculationOrder.BASE;
+import static com.sigmundgranaas.forgero.core.property.NumericOperation.ADDITION;
 
 public class Properties {
     public static Attribute ATTACK_DAMAGE_1 = new AttributeBuilder(ATTACK_DAMAGE)

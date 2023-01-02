@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.Optional;

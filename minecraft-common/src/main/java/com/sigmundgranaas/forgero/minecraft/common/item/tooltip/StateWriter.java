@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.writer.*;
-import com.sigmundgranaas.forgero.state.Composite;
-import com.sigmundgranaas.forgero.state.LeveledState;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.LeveledState;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -11,7 +11,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.type.Type.*;
+import static com.sigmundgranaas.forgero.core.type.Type.*;
 
 public class StateWriter implements Writer {
     protected final State state;

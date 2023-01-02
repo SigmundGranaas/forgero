@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgeroforge.test.util.ForgeroPackageTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.sigmundgranaas.forgero.property.AttributeType.DURABILITY;
+import static com.sigmundgranaas.forgero.core.property.AttributeType.DURABILITY;
 import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
 
 public class handle extends ForgeroPackageTest {

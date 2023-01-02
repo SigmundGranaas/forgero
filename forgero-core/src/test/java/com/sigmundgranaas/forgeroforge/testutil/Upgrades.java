@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgeroforge.testutil;
 
-import com.sigmundgranaas.forgero.state.Upgrade;
+import com.sigmundgranaas.forgero.core.state.Upgrade;
 
 import java.util.List;
 

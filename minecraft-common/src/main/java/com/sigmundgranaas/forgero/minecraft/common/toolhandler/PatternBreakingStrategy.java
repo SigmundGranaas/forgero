@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
-import com.sigmundgranaas.forgero.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Pair;

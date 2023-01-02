@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgeroforge;
 
-import com.sigmundgranaas.forgero.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgeroforge.testutil.Types;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

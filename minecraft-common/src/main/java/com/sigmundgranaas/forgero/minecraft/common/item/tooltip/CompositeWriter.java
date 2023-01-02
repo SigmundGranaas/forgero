@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
-import com.sigmundgranaas.forgero.property.attribute.AttributeHelper;
-import com.sigmundgranaas.forgero.state.Composite;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
+import com.sigmundgranaas.forgero.core.state.Composite;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.utils;
 
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.registry.StateFinder;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.registry.StateFinder;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.util.Identifier;
 
 import java.util.Optional;

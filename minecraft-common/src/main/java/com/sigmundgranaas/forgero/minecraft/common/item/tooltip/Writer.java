@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
-import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.state.State;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 public interface Writer {
 
