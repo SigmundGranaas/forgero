@@ -5,6 +5,10 @@
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
 
+## Changelog 0.10.3
+
+* Fixed mining levels on tools
+
 ## Changelog 0.10.2
 
 * Fixed path mining pickaxe pattern mining description

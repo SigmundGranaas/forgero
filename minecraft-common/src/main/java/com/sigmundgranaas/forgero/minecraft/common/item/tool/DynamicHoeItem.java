@@ -28,7 +28,7 @@ public class DynamicHoeItem extends HoeItem implements DynamicAttributeItem, Sta
 
     @Override
     public boolean isEffectiveOn(BlockState state) {
-        return state.isIn(BlockTags.HOE_MINEABLE);
+        return state.isIn(BlockTags.HOE_MINEABLE) && isCorrectMiningLevel(state);
     }
 
     @Override

@@ -9,7 +9,7 @@
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.0
+        "value": 1.0
       },
       {
         "id": "default_stone_rarity",

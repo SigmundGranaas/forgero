@@ -27,7 +27,7 @@ public class DynamicAxeItem extends AxeItem implements StateItem {
 
     @Override
     public boolean isEffectiveOn(BlockState state) {
-        return state.isIn(BlockTags.AXE_MINEABLE);
+        return state.isIn(BlockTags.AXE_MINEABLE) && isCorrectMiningLevel(state);
     }
 
     @Override
