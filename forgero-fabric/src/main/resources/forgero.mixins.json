@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.sigmundgranaas.forgero.mixins",
+  "package": "com.sigmundgranaas.forgero.fabric.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractBlockMixin",
@@ -9,7 +9,6 @@
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",
-    "ItemUUIDMixin",
     "LivingEntityMagneticMixin",
     "LivingEntityReapingMixin",
     "LivingEntityUndyingMixin",
@@ -24,7 +23,6 @@
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
-    "JsonUnbakedModelOverrideMixin",
     "LifecycleResourceManagerImplMixin",
     "PlayerInteractionManagerMixin"
   ],

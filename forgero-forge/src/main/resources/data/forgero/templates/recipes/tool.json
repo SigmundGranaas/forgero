@@ -1,0 +1,18 @@
+{
+  "type": "forgero:tool_recipe",
+  "pattern": [
+    " H",
+    "I "
+  ],
+  "key": {
+    "I": {
+      "item": "HANDLE"
+    },
+    "H": {
+      "item": "HEAD"
+    }
+  },
+  "result": {
+    "item": "TOOL"
+  }
+}

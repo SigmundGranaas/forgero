@@ -25,7 +25,6 @@ dependencies {
     implementation project(':forgero-extended')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
-    //implementation project(':common')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -53,6 +52,7 @@ task assembleComplete(type: Jar) {
             defaultRefmapName = "forgero-fabric-refmap.json"
         }
     }
+    
     remapJar {
         if (gradle.startParameter.taskNames.stream().anyMatch("assembleComplete"::equals)) {
             dependencies {
