@@ -1,30 +1,30 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.sigmundgranaas.forgerofabric.fabric.mixins",
+  "package": "com.sigmundgranaas.forgero.fabric.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "com.sigmundgranaas.forgero.fabric.mixins.AbstractBlockMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.DynamicToolItemStackMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.ItemEntityMagneticMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.ItemSchematicRemainderMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.ItemStackDropGemOnBreakMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.LivingEntityMagneticMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.LivingEntityReapingMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.LivingEntityUndyingMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.MiningToolItemMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.PiglinBrainMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.PlayerEntityAttackMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.PlayerServerInteractionManagerMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.RecipeManagerMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.SmithingRecipeMixin"
+    "AbstractBlockMixin",
+    "DynamicToolItemStackMixin",
+    "ItemEntityMagneticMixin",
+    "ItemSchematicRemainderMixin",
+    "ItemStackDropGemOnBreakMixin",
+    "LivingEntityMagneticMixin",
+    "LivingEntityReapingMixin",
+    "LivingEntityUndyingMixin",
+    "MiningToolItemMixin",
+    "PiglinBrainMixin",
+    "PlayerEntityAttackMixin",
+    "PlayerServerInteractionManagerMixin",
+    "RecipeManagerMixin",
+    "SmithingRecipeMixin"
   ],
   "client": [
-    "com.sigmundgranaas.forgero.fabric.mixins.ItemModelGeneratorMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.ItemRenderContextMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.ItemRenderMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.LifecycleResourceManagerImplMixin",
-    "com.sigmundgranaas.forgero.fabric.mixins.PlayerInteractionManagerMixin"
+    "ItemModelGeneratorMixin",
+    "ItemRenderContextMixin",
+    "ItemRenderMixin",
+    "LifecycleResourceManagerImplMixin",
+    "PlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
