@@ -28,7 +28,7 @@ public class DynamicShovelItem extends ShovelItem implements StateItem {
 
     @Override
     public boolean isEffectiveOn(BlockState state) {
-        return state.isIn(BlockTags.SHOVEL_MINEABLE);
+        return state.isIn(BlockTags.SHOVEL_MINEABLE) && isCorrectMiningLevel(state);
     }
 
     @Override

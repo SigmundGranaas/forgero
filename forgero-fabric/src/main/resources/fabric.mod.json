@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.sigmundgranaas.forgerofabric.client.ForgeroClient"
+      "com.sigmundgranaas.forgero.fabric.client.ForgeroClient"
     ],
     "main": [
       "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"

@@ -28,7 +28,7 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
 
     @Override
     public boolean isEffectiveOn(BlockState state) {
-        return state.isIn(BlockTags.PICKAXE_MINEABLE);
+        return state.isIn(BlockTags.PICKAXE_MINEABLE) && isCorrectMiningLevel(state);
     }
 
     @Override
