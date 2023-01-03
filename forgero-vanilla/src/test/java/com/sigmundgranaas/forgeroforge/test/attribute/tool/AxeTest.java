@@ -17,7 +17,7 @@ public class AxeTest extends ForgeroPackageTest {
         AttributeTester.tester(state("forgero:oak-axe"))
                 .add(DURABILITY, 50, 10)
                 .add(MINING_SPEED, 2, 1)
-                .add(RARITY, 12, 5)
+                .add(RARITY, 6, 5)
                 .add(ATTACK_DAMAGE, 5, 0.5)
                 .add(ATTACK_SPEED, -3.0, 0.5)
                 .run();

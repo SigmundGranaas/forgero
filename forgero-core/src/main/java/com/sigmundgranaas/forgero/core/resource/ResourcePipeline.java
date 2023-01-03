@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.resource;
 
-import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.core.resource.data.DataBuilder;
@@ -52,11 +51,8 @@ public class ResourcePipeline {
         List<DataResource> validatedResources = validateResources(validatedPackages);
 
         tree = assembleTypeTree(validatedResources);
-        Stopwatch timer = Stopwatch.createStarted();
         var dataBuilder = DataBuilder.of(validatedResources, tree);
         List<DataResource> resources = dataBuilder.buildResources();
-        Forgero.LOGGER.info("Resource conversion: " + timer.stop());
-
         this.recipes = dataBuilder.recipes();
 
         Map<String, State> states = mapStates(resources);
@@ -91,7 +87,6 @@ public class ResourcePipeline {
 
         packages.forEach(pack -> dependencies.add(pack.name()));
 
-
         return packages.stream().filter(this::filterPackages).toList();
     }
 
@@ -99,7 +94,7 @@ public class ResourcePipeline {
         if (!configuration.settings().filterPacks(dataPackage)) {
             return false;
         }
-        if (!configuration.availableDependencies().containsAll(dataPackage.dependencies())) {
+        if (!dependencies.containsAll(dataPackage.dependencies())) {
             if (configuration.settings().getResourceLogging()) {
                 var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
                 Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
