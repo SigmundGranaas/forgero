@@ -17,7 +17,7 @@ public class ExtendedPickaxetest extends ForgeroPackageTest {
         AttributeTester.tester(state("forgero:oak-pickaxe"))
                 .add(DURABILITY, 50, 10)
                 .add(MINING_SPEED, 2, 1)
-                .add(RARITY, 12, 5)
+                .add(RARITY, 6, 5)
                 .add(ATTACK_DAMAGE, 3, 0.5)
                 .add(ATTACK_SPEED, -2.8, 0.5)
                 .run();
