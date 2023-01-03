@@ -58,6 +58,7 @@ dependencies {
     //modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
     //modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
     //modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+    //modImplementation "curse.maven:roughly-enough-resources-325625:3837336"
     //modRuntimeOnly "dev.architectury:architectury-fabric:${project.architectury_version}"
     //modApi "curse.maven:modmenu-308702:4145207"
     //modImplementation "com.github.DaFuqs:AdditionalEntityAttributes:${project.aea_versionite}"
