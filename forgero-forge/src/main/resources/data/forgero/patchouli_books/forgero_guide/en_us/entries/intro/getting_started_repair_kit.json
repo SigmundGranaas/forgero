@@ -1,0 +1,23 @@
+{
+  "name": "Repair kit",
+  "icon": "forgero:empty_repair_kit",
+  "category": "forgero:getting_started_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Forgero offers craftable and reusable repair kits. Repair kits comes in every material category, and can be used to repair 1/3 of a tools durability. To repair a tools, simply place it in a crafting slot alongside the appropriate repair kit."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Repair kits",
+      "recipe": "forgero:base_repair_kit",
+      "recipe2": "forgero:iron_repair_kit"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Repair kits",
+      "recipe": "forgero:diamond_repair_kit",
+      "recipe2": "forgero:oak_repair_kit"
+    }
+  ]
+}

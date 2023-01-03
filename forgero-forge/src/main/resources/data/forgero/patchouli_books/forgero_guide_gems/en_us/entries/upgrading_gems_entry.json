@@ -1,0 +1,17 @@
+{
+  "name": "Upgrading gems",
+  "icon": "forgero:lapis-gem{CustomModelData:5}",
+  "category": "forgero:gems_category",
+  "prioritized": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Gems can be extremely powerful when combined to create a new, higher level gems. The gems effect will be multiplied with the gem's level. This also means that each level will require twice the amount of gems to upgrade."
+    },
+    {
+      "type": "forgero:gem_upgrade_recipe",
+      "title": "Upgrading gems",
+      "recipe": "forgero:lapis_gem_upgrade"
+    }
+  ]
+}

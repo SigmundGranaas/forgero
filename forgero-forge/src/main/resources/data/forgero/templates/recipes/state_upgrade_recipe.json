@@ -1,0 +1,11 @@
+{
+  "type": "forgero:state_upgrade_recipe",
+  "base": {
+    "item": "BASE_ITEM"
+  },
+  "addition": {
+  },
+  "result": {
+    "item": "UPGRADED_BASE_TOOL_PART"
+  }
+}

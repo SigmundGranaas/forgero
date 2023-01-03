@@ -20,11 +20,11 @@ artifacts {
 
 dependencies {
     implementation project(':forgero-core')
-    implementation project(path: ':forgero-vanilla', configuration: 'dev')
+    implementation project(':forgero-vanilla')
     implementation project(':forgero-extended')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
-    //implementation project(':common')
+    implementation project(path: ':minecraft-common', configuration: 'dev')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -41,6 +41,7 @@ dependencies {
 
     include "net.devtech:arrp:0.6.7"
     include project(':forgero-core')
+    include project(':minecraft-common')
 }
 
 task assembleComplete(type: Jar) {
@@ -51,6 +52,7 @@ task assembleComplete(type: Jar) {
             defaultRefmapName = "forgero-fabric-refmap.json"
         }
     }
+
     remapJar {
         if (gradle.startParameter.taskNames.stream().anyMatch("assembleComplete"::equals)) {
             dependencies {

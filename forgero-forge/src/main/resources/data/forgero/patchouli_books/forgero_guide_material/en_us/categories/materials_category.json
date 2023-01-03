@@ -1,0 +1,6 @@
+{
+  "name": "Materials",
+  "description": "Materials are the core ingredients used when crafting tools alongside your schematics. There are several different types of materials, and they all have different uses. Some materials can only be used for upgrading certain aspects of tools, while some materials are suited for constructing a wide variety of parts, as well as upgrading them.",
+  "icon": "minecraft:iron_ingot",
+  "sortnum": 2
+}

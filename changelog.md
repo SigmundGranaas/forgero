@@ -1,9 +1,18 @@
-# Forgero Beta release 0.10.2
+# Forgero Beta release 0.10.3
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.3
+
+* Fixed compatability with Roughly enough resources
+* Changed data loading to never load disabled packages
+* Fixed mining levels on tools
+* Added drop to Assembly table
+* Added assembly table to mineable tag
+* Fixes various issues with duplicated mining speed application and calculations
 
 ## Changelog 0.10.2
 

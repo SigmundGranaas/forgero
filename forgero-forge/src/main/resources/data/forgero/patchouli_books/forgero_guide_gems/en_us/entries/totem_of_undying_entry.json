@@ -1,0 +1,11 @@
+{
+  "name": "The undying totem",
+  "icon": "minecraft:totem_of_undying",
+  "category": "forgero:trinkets_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The totem of undying is a trinkets which functions the same way holding a totem would, expect it can be applied to your tool. Upon saving your life, the totem will break and be removed from your tool, as well as take a significant chunk of damage."
+    }
+  ]
+}
