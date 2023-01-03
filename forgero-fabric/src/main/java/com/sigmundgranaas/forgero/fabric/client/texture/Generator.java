@@ -1,12 +1,13 @@
-package com.sigmundgranaas.forgero.client.texture;
+package com.sigmundgranaas.forgero.fabric.client.texture;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.minecraft.util.Identifier;
 
-import static com.sigmundgranaas.forgero.client.ForgeroClient.TEXTURES;
+import static com.sigmundgranaas.forgero.fabric.client.ForgeroClient.TEXTURES;
+
 
 public class Generator {
     public static final RuntimeResourcePack RESOURCE_PACK_CLIENT = RuntimeResourcePack.create("forgero:builtin");

@@ -2,9 +2,7 @@ package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.state.State;
 import com.sigmundgranaas.forgero.core.state.State;
-import net.minecraft.block.Block;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;

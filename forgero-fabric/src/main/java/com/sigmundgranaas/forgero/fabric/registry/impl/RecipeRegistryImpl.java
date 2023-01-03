@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.registry.impl;
 
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.recipe.RecipeCollection;
-import com.sigmundgranaas.forgero.registry.RecipeRegistry;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;

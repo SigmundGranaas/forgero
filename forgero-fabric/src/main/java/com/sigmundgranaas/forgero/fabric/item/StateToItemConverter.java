@@ -8,13 +8,6 @@ import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.*;
-import com.sigmundgranaas.forgero.item.tool.*;
-import com.sigmundgranaas.forgero.property.AttributeType;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.state.StateProvider;
-import com.sigmundgranaas.forgero.type.Type;
-import com.sigmundgranaas.forgero.util.match.Context;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -59,7 +52,7 @@ public class StateToItemConverter {
     }
 
     private Item defaultStateItem() {
-        var item = DefaultStateItem(new Item.Settings().group(getItemGroup(provider.get())), provider);
+        var item = new DefaultStateItem(new Item.Settings(), provider);
         ItemGroupEvents.modifyEntriesEvent(getItemGroup(provider.get())).register(entries -> entries.add(item));
         return item;
     }

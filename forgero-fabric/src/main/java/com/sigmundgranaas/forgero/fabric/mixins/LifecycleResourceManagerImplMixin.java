@@ -1,11 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.resources.FileService;
-import com.sigmundgranaas.forgero.texture.V2.FileLoader;
-import com.sigmundgranaas.forgero.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.core.texture.V2.FileLoader;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
-import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
@@ -21,7 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.client.ForgeroClient.TEXTURES;
+import static com.sigmundgranaas.forgero.fabric.client.ForgeroClient.TEXTURES;
+
 
 @Mixin(LifecycledResourceManagerImpl.class)
 public abstract class LifecycleResourceManagerImplMixin {

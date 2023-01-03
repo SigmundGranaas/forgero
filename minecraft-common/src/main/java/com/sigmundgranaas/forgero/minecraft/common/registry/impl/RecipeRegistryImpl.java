@@ -3,6 +3,9 @@ package com.sigmundgranaas.forgero.minecraft.common.registry.impl;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCollection;
 import com.sigmundgranaas.forgero.minecraft.common.registry.RecipeRegistry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 
 import java.util.Map;
 

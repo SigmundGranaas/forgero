@@ -32,7 +32,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
     public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
-    public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
+    public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings());
 
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
@@ -46,8 +46,6 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
     }
 
     static {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
-
         VoxelShape shapeLeft = VoxelShapes.empty();
         shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 1));
         shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));

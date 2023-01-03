@@ -1,11 +1,20 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.BlockTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

@@ -30,6 +30,7 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -53,9 +54,12 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.
 
 public class ForgeroInitializer implements ModInitializer {
 
+    static {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
+    }
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
-    public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+    public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
 
     @Override
     public void onInitialize() {
