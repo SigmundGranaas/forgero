@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.resource.data.ResourceLoader;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.core.resource.data.v2.loading.DefaultMapper;
 import com.sigmundgranaas.forgero.core.resource.data.v2.loading.FileResourceLoader;
 import com.sigmundgranaas.forgero.core.resource.data.v2.loading.JsonContentFilter;
@@ -19,7 +18,10 @@ import java.util.function.Supplier;
 public class FilePackageLoader implements Supplier<DataPackage> {
     private final ResourceLoader loader;
 
+    private final String folderPath;
+
     public FilePackageLoader(String folderPath) {
+        this.folderPath = folderPath;
         ResourceLocator walker = PathWalker.builder()
                 .contentFilter(new JsonContentFilter())
                 .pathFinder(PathFinder::ClassLoaderFinder)
@@ -27,8 +29,9 @@ public class FilePackageLoader implements Supplier<DataPackage> {
         this.loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
     }
 
-    public FilePackageLoader(ResourceLoader loader) {
+    public FilePackageLoader(ResourceLoader loader, String folderPath) {
         this.loader = loader;
+        this.folderPath = folderPath;
     }
 
     public static Supplier<DataPackage> of(String folderPath) {
@@ -38,17 +41,20 @@ public class FilePackageLoader implements Supplier<DataPackage> {
                 .build();
         var loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
 
-        return new FilePackageLoader(loader);
+        return new FilePackageLoader(loader, folderPath);
+    }
+
+    private List<DataResource> resources() {
+        return loader.load();
     }
 
     @Override
     public DataPackage get() {
-        List<DataResource> resources = loader.load();
-        var packageInfo = resources.stream().filter(resource -> resource.resourceType() == ResourceType.PACKAGE).findAny();
+        var packageInfo = loader.loadResource(folderPath + "/package.json");
         var dependencies = packageInfo.map(DataResource::dependencies).orElse(ImmutableList.<String>builder().build());
         var priority = packageInfo.map(DataResource::priority).orElse(5);
         var name = packageInfo.map(DataResource::name).orElse(Identifiers.EMPTY_IDENTIFIER);
         var nameSpace = packageInfo.map(DataResource::nameSpace).orElse(Identifiers.EMPTY_IDENTIFIER);
-        return new DefaultPackage(dependencies, priority, () -> resources, nameSpace, name);
+        return new DefaultPackage(dependencies, priority, this::resources, nameSpace, name);
     }
 }

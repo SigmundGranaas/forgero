@@ -4,8 +4,8 @@ import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import lombok.Builder;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +38,10 @@ public class ForgeroSettings {
     @Builder.Default
     @SerializedName("resource_logging")
     private Boolean resourceLogging = true;
+
+    @Builder.Default
+    @SerializedName("log_disabled_packages")
+    private Boolean logDisabledPackages = false;
 
     public boolean filterResources(DataResource resource) {
         boolean filter = getDisabledResources().stream().noneMatch(disabled -> resource.identifier().equals(disabled));

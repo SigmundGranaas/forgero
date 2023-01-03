@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.resource;
 
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.core.resource.data.v2.PackageSupplier;
@@ -28,9 +27,6 @@ public class PipelineBuilder {
     }
 
     public PipelineBuilder register(DataPackage dataPackage) {
-        if (configProvider.get() != null && configProvider.get().settings().getResourceLogging()) {
-            Forgero.LOGGER.info("Registered {}", dataPackage.name());
-        }
         packages.add(dataPackage);
         return this;
     }
@@ -62,9 +58,6 @@ public class PipelineBuilder {
 
     public PipelineBuilder register(PackageSupplier supplier) {
         var packs = supplier.supply();
-        if (configProvider.get() != null && configProvider.get().settings().getResourceLogging()) {
-            packs.forEach(pack -> Forgero.LOGGER.info("Registered {}", pack.name()));
-        }
         packages.addAll(packs);
         return this;
     }
