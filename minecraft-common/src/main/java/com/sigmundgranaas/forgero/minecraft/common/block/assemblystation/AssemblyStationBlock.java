@@ -2,12 +2,14 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.block.*;
+import net.minecraft.block.enums.BedPart;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
@@ -22,13 +24,16 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
+
+import static net.minecraft.block.Blocks.DEEPSLATE;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock {
 
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
-    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(AbstractBlock.Settings.of(Material.METAL));
+    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
     public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
@@ -128,14 +133,13 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
         } else {
             blockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
         }
-        if (!world.isClient && player.isCreative()) {
+        if (!world.isClient) {
             world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
             world.updateNeighbors(pos, Blocks.AIR);
             state.updateNeighbors(world, pos, 3);
 
         }
         super.onBreak(world, pos, state, player);
-        super.onBreak(world, blockPos, state, player);
     }
 
     @Override
