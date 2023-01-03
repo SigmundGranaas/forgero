@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ForgePackFinder implements PackageSupplier {
     public final String PACK_LOCATION = "/data/forgero/packs/";
-    private ForgeroConfiguration configuration;
+    private final ForgeroConfiguration configuration;
 
     public ForgePackFinder(ForgeroConfiguration configuration) {
         this.configuration = configuration;
@@ -39,7 +39,7 @@ public class ForgePackFinder implements PackageSupplier {
 
     private FilePackageLoader loader(String path) {
         var loader = new FileResourceLoader(path, configuration.locator(), new DefaultMapper(), configuration.streamLoader());
-        return new FilePackageLoader(loader);
+        return new FilePackageLoader(loader, path);
     }
 
     public List<Path> getResourcesInFolder(String resourceLocation) {

@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 public class ResourcePipeline {
     private final List<DataPackage> packages;
@@ -87,7 +86,12 @@ public class ResourcePipeline {
 
         packages.forEach(pack -> dependencies.add(pack.name()));
 
-        return packages.stream().filter(this::filterPackages).toList();
+        var validatedResources = packages.stream().filter(this::filterPackages).toList();
+        if (configuration.settings().getResourceLogging()) {
+            Forgero.LOGGER.info("Registered and validated {} Forgero packages", validatedResources.size());
+            Forgero.LOGGER.info("{}", validatedResources.stream().map(DataPackage::name).toList());
+        }
+        return validatedResources;
     }
 
     private boolean filterPackages(DataPackage dataPackage) {
@@ -95,7 +99,7 @@ public class ResourcePipeline {
             return false;
         }
         if (!dependencies.containsAll(dataPackage.dependencies())) {
-            if (configuration.settings().getResourceLogging()) {
+            if (configuration.settings().getLogDisabledPackages()) {
                 var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
                 Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
             }
@@ -107,8 +111,7 @@ public class ResourcePipeline {
 
     private List<DataResource> validateResources(List<DataPackage> resources) {
         return resources.parallelStream()
-                .map(DataPackage::data)
-                .map(Supplier::get)
+                .map(DataPackage::loadData)
                 .flatMap(List::stream)
                 .filter(configuration.settings()::filterResources)
                 .toList();

@@ -10,7 +10,7 @@ public class DataPackageSupplierTest {
 
     @Test
     void testLoadDataPackage() {
-        var dataPackage = new FilePackageLoader(CORE_PATH).get();
+        var dataPackage = new FilePackageLoader(CORE_PATH + "minecraft-vanilla").get();
         Assertions.assertEquals("minecraft-vanilla", dataPackage.name());
         Assertions.assertEquals("minecraft", dataPackage.nameSpace());
     }

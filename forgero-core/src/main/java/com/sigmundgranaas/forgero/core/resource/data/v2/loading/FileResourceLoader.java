@@ -49,6 +49,11 @@ public class FileResourceLoader implements ResourceLoader {
         return mapper.apply(rawResources);
     }
 
+    @Override
+    public Optional<DataResource> loadResource(String path) {
+        return fileProvider(path).get();
+    }
+
     private List<DataResource> rawResources(List<Path> paths) {
         var resources = paths.stream()
                 .map(this::getFilePath)

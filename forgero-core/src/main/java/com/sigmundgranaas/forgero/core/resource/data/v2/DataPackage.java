@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 public interface DataPackage extends Identifiable {
     static DataPackage of(List<DataResource> data) {
@@ -22,5 +21,5 @@ public interface DataPackage extends Identifiable {
 
     List<String> dependencies();
 
-    Supplier<List<DataResource>> data();
+    List<DataResource> loadData();
 }
