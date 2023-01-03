@@ -1,4 +1,4 @@
-# Forgero Beta release 0.10.2
+# Forgero Beta release 0.10.3
 
 ## ! Warning !
 
