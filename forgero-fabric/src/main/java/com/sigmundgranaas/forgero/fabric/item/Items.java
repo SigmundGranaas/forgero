@@ -1,9 +1,8 @@
-package com.sigmundgranaas.forgero.minecraft.common.item;
+package com.sigmundgranaas.forgero.fabric.item;
 
-import com.sigmundgranaas.forgero.Forgero;
+import com.sigmundgranaas.forgero.core.Forgero;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;

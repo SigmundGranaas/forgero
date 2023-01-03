@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
@@ -28,8 +27,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
     public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
 
+
         @Override
-        public ItemStack quickMove(PlayerEntity player, int slot) {
+        public ItemStack transferSlot(PlayerEntity player, int index) {
             return ItemStack.EMPTY;
         }
 
@@ -38,10 +38,11 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             return true;
         }
     };
-    private final SimpleInventory inventory;    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
+    private final SimpleInventory inventory;
     private final ScreenHandlerContext context;
     private final PlayerEntity player;
     private final CompositeSlot compositeSlot;
+
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
@@ -118,7 +119,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
     // Shift + Player Inv Slot
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack transferSlot(PlayerEntity player, int slot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot currentSlot = this.slots.get(slot);
         if (currentSlot.hasStack()) {

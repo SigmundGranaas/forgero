@@ -1,11 +1,11 @@
-package com.sigmundgranaas.forgero.minecraft.common.item;
+package com.sigmundgranaas.forgero.fabric.item;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.Forgero;
-import com.sigmundgranaas.forgero.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.settings.ForgeroSettings;
-import com.sigmundgranaas.forgero.state.State;
-import com.sigmundgranaas.forgero.type.Type;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.Items.EMPTY_REPAIR_KIT;
+import static com.sigmundgranaas.forgero.fabric.item.Items.EMPTY_REPAIR_KIT;
 
 public class DynamicItems {
 
@@ -35,8 +35,8 @@ public class DynamicItems {
                 .map(material -> new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"))
                 .map(identifier -> Registry.register(Registries.ITEM, identifier, new Item(new FabricItemSettings().recipeRemainder(EMPTY_REPAIR_KIT))))
                 .toList();
-        items.forEach(item -> ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(item)));
 
+        items.forEach(item -> ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(item)));
         return items;
     }
 }

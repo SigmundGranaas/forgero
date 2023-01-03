@@ -1,20 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tag.BlockTags;
+import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -42,17 +33,13 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         return (int) defaultProperties().stream().applyAttribute(Target.EMPTY, AttributeType.MINING_LEVEL);
     }
 
-    default boolean isCorrectMiningLevel(BlockState state){
+    default boolean isCorrectMiningLevel(BlockState state) {
         int i = this.getMiningLevel();
         if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) && i < 3) {
             return false;
         } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL) && i < 2) {
             return false;
-        } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL) && i < 1) {
-            return false;
-        } else {
-            return true;
-        }
+        } else return !state.isIn(BlockTags.NEEDS_STONE_TOOL) || i >= 1;
     }
 
     @Override
