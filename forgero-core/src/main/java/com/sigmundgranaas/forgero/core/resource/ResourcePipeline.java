@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.resource;
 
-import com.google.common.base.Stopwatch;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.core.resource.data.DataBuilder;
@@ -52,11 +51,8 @@ public class ResourcePipeline {
         List<DataResource> validatedResources = validateResources(validatedPackages);
 
         tree = assembleTypeTree(validatedResources);
-        Stopwatch timer = Stopwatch.createStarted();
         var dataBuilder = DataBuilder.of(validatedResources, tree);
         List<DataResource> resources = dataBuilder.buildResources();
-        Forgero.LOGGER.info("Resource conversion: " + timer.stop());
-
         this.recipes = dataBuilder.recipes();
 
         Map<String, State> states = mapStates(resources);
