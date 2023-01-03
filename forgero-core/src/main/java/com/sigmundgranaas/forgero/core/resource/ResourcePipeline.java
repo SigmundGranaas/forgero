@@ -91,7 +91,6 @@ public class ResourcePipeline {
 
         packages.forEach(pack -> dependencies.add(pack.name()));
 
-
         return packages.stream().filter(this::filterPackages).toList();
     }
 
@@ -99,7 +98,7 @@ public class ResourcePipeline {
         if (!configuration.settings().filterPacks(dataPackage)) {
             return false;
         }
-        if (!configuration.availableDependencies().containsAll(dataPackage.dependencies())) {
+        if (!dependencies.containsAll(dataPackage.dependencies())) {
             if (configuration.settings().getResourceLogging()) {
                 var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
                 Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
