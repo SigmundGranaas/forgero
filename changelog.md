@@ -10,6 +10,7 @@ you have backed up your save.**
 * Fixed mining levels on tools
 * Added drop to Assembly table
 * Added assembly table to mineable tag
+* Fixes various issues with duplicated mining speed application and calculations
 
 ## Changelog 0.10.2
 

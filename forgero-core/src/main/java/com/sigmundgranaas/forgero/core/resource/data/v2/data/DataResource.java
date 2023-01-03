@@ -13,20 +13,22 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
 @Builder(toBuilder = true)
 public class DataResource implements Identifiable {
 
     @Builder.Default
     @Nullable
-    private String name = Identifiers.EMPTY_IDENTIFIER;
+    private String name = EMPTY_IDENTIFIER;
 
     @Builder.Default
     @Nullable
-    private String namespace = Identifiers.EMPTY_IDENTIFIER;
+    private String namespace = EMPTY_IDENTIFIER;
 
     @Builder.Default
     @Nullable
-    private String type = Identifiers.EMPTY_IDENTIFIER;
+    private String type = EMPTY_IDENTIFIER;
 
     @SerializedName(value = "resource_type", alternate = "json_resource_type")
     @Builder.Default()
@@ -35,7 +37,7 @@ public class DataResource implements Identifiable {
 
     @Builder.Default
     @Nullable
-    private String parent = Identifiers.EMPTY_IDENTIFIER;
+    private String parent = EMPTY_IDENTIFIER;
 
     @Builder.Default
     @Nullable
@@ -79,7 +81,7 @@ public class DataResource implements Identifiable {
     @SerializedName("custom_data")
     private Map<String, String> customData = new HashMap<>();
 
-    public static <T> List<T> mergeAttributes(List<T> attribute1, List<T> attribute2) {
+    public static <T> List<T> mergeProperty(List<T> attribute1, List<T> attribute2) {
         if (attribute1 == null && attribute2 == null)
             return Collections.emptyList();
         else if (attribute1 != null && attribute2 != null) {
@@ -87,15 +89,24 @@ public class DataResource implements Identifiable {
         } else return Objects.requireNonNullElse(attribute1, attribute2);
     }
 
+    public static  List<PropertyPojo.Attribute> mergeAttributes(List<PropertyPojo.Attribute> attribute1, List<PropertyPojo.Attribute> attribute2) {
+        if (attribute1 == null && attribute2 == null)
+            return Collections.emptyList();
+        else if (attribute1 != null && attribute2 != null) {
+            var filteredMergedAttributes = attribute2.stream().filter(attr -> !attr.id.equals(EMPTY_IDENTIFIER) && attribute1.stream().noneMatch(attribute -> attribute.id.equals(attr.id))).toList();
+            return Stream.of(attribute1,filteredMergedAttributes).flatMap(List::stream).toList();
+        } else return Objects.requireNonNullElse(attribute1, attribute2);
+    }
+
     @NotNull
     public String name() {
-        return Objects.requireNonNullElse(name, Identifiers.EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(name, EMPTY_IDENTIFIER);
     }
 
     @Override
     @NotNull
     public String nameSpace() {
-        return Objects.requireNonNullElse(namespace, Identifiers.EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(namespace, EMPTY_IDENTIFIER);
     }
 
     public int priority() {
@@ -104,7 +115,7 @@ public class DataResource implements Identifiable {
 
     @NotNull
     public String type() {
-        return type == null ? Identifiers.EMPTY_IDENTIFIER : type;
+        return type == null ? EMPTY_IDENTIFIER : type;
     }
 
     @NotNull
@@ -114,7 +125,7 @@ public class DataResource implements Identifiable {
 
     @NotNull
     public String parent() {
-        return Objects.requireNonNullElse(parent, Identifiers.EMPTY_IDENTIFIER);
+        return Objects.requireNonNullElse(parent, EMPTY_IDENTIFIER);
     }
 
     @NotNull
@@ -175,9 +186,11 @@ public class DataResource implements Identifiable {
         var mergeProperties = resource.properties().orElse(new PropertyPojo());
         var newProps = new PropertyPojo();
 
-        newProps.active = mergeAttributes(mergeProperties.active, properties.active).stream().distinct().toList();
-        newProps.passiveProperties = mergeAttributes(mergeProperties.passiveProperties, properties.passiveProperties).stream().distinct().toList();
-        newProps.attributes = mergeAttributes(mergeProperties.attributes, properties.attributes).stream().distinct().toList();
+        newProps.active = mergeProperty(mergeProperties.active, properties.active).stream().distinct().toList();
+        newProps.passiveProperties = mergeProperty(mergeProperties.passiveProperties, properties.passiveProperties).stream().distinct().toList();
+        newProps.attributes = mergeAttributes(properties.attributes, mergeProperties.attributes).stream().distinct().toList();
+
+
 
         return builder.property(newProps).build();
     }
