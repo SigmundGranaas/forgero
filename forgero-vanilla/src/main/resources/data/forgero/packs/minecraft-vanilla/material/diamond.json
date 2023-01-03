@@ -35,7 +35,7 @@
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
+        "operation": "ADDITION",
         "value": 8
       },
       {

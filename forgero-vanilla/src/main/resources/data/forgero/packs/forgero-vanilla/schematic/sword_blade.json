@@ -81,7 +81,7 @@
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
+        "operation": "MULTIPLICATION",
         "value": 1
       },
       {
