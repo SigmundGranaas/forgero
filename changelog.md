@@ -8,6 +8,8 @@ you have backed up your save.**
 ## Changelog 0.10.3
 
 * Fixed mining levels on tools
+* Added drop to Assembly table
+* Added assembly table to mineable tag
 
 ## Changelog 0.10.2
 

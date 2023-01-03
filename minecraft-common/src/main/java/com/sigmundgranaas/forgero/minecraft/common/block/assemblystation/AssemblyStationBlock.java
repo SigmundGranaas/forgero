@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.block.*;
+import net.minecraft.block.enums.BedPart;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -23,6 +24,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
@@ -131,14 +133,13 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
         } else {
             blockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
         }
-        if (!world.isClient && player.isCreative()) {
+        if (!world.isClient) {
             world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
             world.updateNeighbors(pos, Blocks.AIR);
             state.updateNeighbors(world, pos, 3);
 
         }
         super.onBreak(world, pos, state, player);
-        super.onBreak(world, blockPos, state, player);
     }
 
     @Override
