@@ -8,6 +8,7 @@ import net.minecraft.item.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
@@ -25,10 +26,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
+import static net.minecraft.block.Blocks.DEEPSLATE;
+
 public class AssemblyStationBlock extends HorizontalFacingBlock {
 
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
-    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(AbstractBlock.Settings.of(Material.METAL));
+    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
     public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
