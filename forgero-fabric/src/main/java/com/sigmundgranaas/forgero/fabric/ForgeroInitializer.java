@@ -29,7 +29,6 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -51,8 +50,10 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.
 
 
 public class ForgeroInitializer implements ModInitializer {
+
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
+    public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
 
     @Override
     public void onInitialize() {
@@ -86,7 +87,6 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerBlocks);
         handler.accept(this::registerAARPRecipes);
         handler.accept(this::registerStates);
-        handler.accept(this::registerLootFunctions);
         handler.accept(this::registerRecipes);
         handler.accept(DynamicItems::registerDynamicItems);
         handler.accept(this::registerTreasure);
@@ -128,10 +128,6 @@ public class ForgeroInitializer implements ModInitializer {
                 return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "data");
             }
         });
-    }
-
-    private void registerLootFunctions() {
-        Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("forgero:gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
     }
 
     private void registerTreasure() {

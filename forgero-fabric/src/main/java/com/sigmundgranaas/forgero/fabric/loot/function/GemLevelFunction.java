@@ -12,6 +12,7 @@ import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 
+import static com.sigmundgranaas.forgero.fabric.ForgeroInitializer.GEM_LOOT_FUNCTION_TYPE;
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder.ENCODER;
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 import static java.lang.Math.exp;
@@ -47,7 +48,7 @@ public class GemLevelFunction extends ConditionalLootFunction {
 
     @Override
     public LootFunctionType getType() {
-        return new LootFunctionType(new GemLevelFunction.Serializer());
+        return GEM_LOOT_FUNCTION_TYPE;
     }
 
     public static class Builder extends ConditionalLootFunction.Builder<GemLevelFunction.Builder> {
