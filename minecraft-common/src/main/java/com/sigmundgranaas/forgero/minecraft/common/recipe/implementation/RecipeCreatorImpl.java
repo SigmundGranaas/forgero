@@ -6,10 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
@@ -17,6 +13,10 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.SlotData;
 import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
@@ -137,7 +137,7 @@ public record RecipeCreatorImpl(
         template.getAsJsonObject("key").add("H", ingredientToEntry(data.ingredients().get(0)));
         template.getAsJsonObject("key").add("I", ingredientToEntry(data.ingredients().get(1)));
         template.getAsJsonObject("result").addProperty("item", ForgeroStateRegistry.ID_MAPPER.get(data.target()));
-        return Optional.of(new RecipeWrapperImpl(new Identifier(ForgeroStateRegistry.ID_MAPPER.get(data.target())), template, RecipeTypes.STATE_CRAFTING_RECIPE));
+        return Optional.ofNullable(ForgeroStateRegistry.ID_MAPPER.get(data.target())).map(id -> new RecipeWrapperImpl(new Identifier(id), template, RecipeTypes.STATE_CRAFTING_RECIPE));
     }
 
     private RecipeWrapper schematicPartCrafting(RecipeData data) {

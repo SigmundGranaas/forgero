@@ -5,10 +5,6 @@ import com.sigmundgranaas.forgero.core.identifier.Common;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConstructData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,6 +16,7 @@ public class DataBuilder {
     private final List<DataResource> finalResources;
     private final Map<String, DataResource> templates;
     private final TypeTree tree;
+    private Set<String> typeDependencySet = new HashSet<>();
     private List<DataResource> resources;
 
     private List<RecipeData> recipes;
@@ -84,9 +81,10 @@ public class DataBuilder {
                 .forEach(res -> templates.put(res.identifier(), res));
         boolean remainingResources = true;
 
+
         while (remainingResources) {
             int resolvedResources;
-
+            unresolvedConstructs.stream().map(DataResource::construct).flatMap(Optional::stream).map(ConstructData::type).forEach(typeDependencySet::add);
             var temporaryResolved = unresolvedConstructs
                     .stream()
                     .filter(this::hasValidComponents)
@@ -105,6 +103,7 @@ public class DataBuilder {
             if (resolvedResources == 0) {
                 remainingResources = false;
             }
+            typeDependencySet.clear();
         }
     }
 
@@ -273,7 +272,9 @@ public class DataBuilder {
         }
         var construct = resource.construct().get();
         for (IngredientData data : construct.components()) {
-            if (!data.id().equals(Identifiers.EMPTY_IDENTIFIER) && resolvedResources.containsKey(data.id())) {
+            if (!data.type().equals(Identifiers.EMPTY_IDENTIFIER) && typeDependencySet.contains(data.type())) {
+                return false;
+            } else if (!data.id().equals(Identifiers.EMPTY_IDENTIFIER) && resolvedResources.containsKey(data.id())) {
                 break;
             } else if (data.id().equals(Identifiers.THIS_IDENTIFIER)) {
                 break;

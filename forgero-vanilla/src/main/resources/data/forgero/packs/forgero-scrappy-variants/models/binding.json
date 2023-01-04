@@ -1,19 +1,12 @@
 {
-  "type": "TOOL_BINDING",
+  "type": "SWORD_BLADE",
   "models": [
     {
       "target": [
-        "id:string-scrappy_binding"
+        "id:obsidian-sacrificial_blade"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "binding"
-    },
-    {
-      "target": [
-        "id:leather-scrappy_binding"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "binding"
+      "template": "dagger_blade"
     }
   ]
 }

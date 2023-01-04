@@ -1,0 +1,24 @@
+{
+  "type": "SWORD_BLADE",
+  "name": "diamond-sacrificial_blade",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 100
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 80
+      }
+    ]
+  }
+}
