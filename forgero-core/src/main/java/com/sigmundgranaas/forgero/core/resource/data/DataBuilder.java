@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.resource.data;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.identifier.Common;
+import com.sigmundgranaas.forgero.core.resource.data.processor.SchematicConstructInflater;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
@@ -116,9 +117,7 @@ public class DataBuilder {
         if (construct.target().equals(Identifiers.THIS_IDENTIFIER)) {
             return List.of(resource);
         } else if (construct.target().equals(Identifiers.CREATE_IDENTIFIER)) {
-            var constructs = mapConstructData(resource)
-                    .stream()
-                    .toList();
+            var constructs = mapConstructData(resource);
             resources.add(resource.toBuilder().construct(null).build());
             resources.addAll(constructs);
         }
@@ -132,75 +131,17 @@ public class DataBuilder {
                     .flatMap(List::stream)
                     .forEach(recipes::add);
         }
-        List<DataResource> constructs = new ArrayList<>();
         if (data.construct().isEmpty()) {
             return Collections.emptyList();
         }
-        var components = data.construct().get().components();
-        var templateIngredients = new ArrayList<List<IngredientData>>();
-        for (IngredientData ingredient : components) {
-            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
-                templateIngredients.add(List.of(IngredientData.builder().id(data.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
-                if (ingredient.unique()) {
-                    var resources = tree.find(ingredient.type())
-                            .map(node -> node.getResources(DataResource.class))
-                            .map(List::stream)
-                            .map(Stream::toList)
-                            .orElse(Collections.emptyList());
+        var inflater = new SchematicConstructInflater(data,this::findResourceFromType, (id) -> Optional.ofNullable(resolvedResources.get(id)), (id) -> Optional.ofNullable(templates.get(id)));
+        return inflater.process();
+    }
 
-                    var ingredients = resources
-                            .stream()
-                            .map(res -> IngredientData.builder().id(res.identifier()).unique(true).build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                } else {
-
-                    var resource =
-                            tree.find(ingredient.type())
-                                    .map(node -> node.getResources(DataResource.class))
-                                    .map(element -> element.stream().filter(res -> res.resourceType() == ResourceType.DEFAULT)
-                                            .toList())
-                                    .orElse(Collections.emptyList());
-                    var ingredients = resource
-                            .stream()
-                            .map(res -> IngredientData.builder().id(res.identifier()).build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                }
-
-
-            } else if (!ingredient.id().equals(Identifiers.EMPTY_IDENTIFIER)) {
-                templateIngredients.add(List.of(ingredient));
-            }
-        }
-
-        for (int i = 0; i < templateIngredients.get(0).size(); i++) {
-            for (int j = 0; j < templateIngredients.get(1).size(); j++) {
-                var builder = data.construct().get().toBuilder();
-                var newComponents = new ArrayList<IngredientData>();
-                newComponents.add(templateIngredients.get(0).get(i));
-                newComponents.add(templateIngredients.get(1).get(j));
-                builder.components(newComponents);
-                String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
-                builder.target(Identifiers.THIS_IDENTIFIER);
-                var construct = builder.build();
-                var templateBuilder = Optional.ofNullable(templates.get(construct.type())).map(DataResource::toBuilder).orElse(DataResource.builder());
-                if (hasDefaults(construct) || data.resourceType() == ResourceType.DEFAULT || name.equals("handle-schematic-oak")) {
-                    templateBuilder.resourceType(ResourceType.DEFAULT);
-                }
-                constructs.add(templateBuilder
-                        .construct(construct)
-                        .namespace(data.nameSpace())
-                        .container(data.container().get())
-                        .name(name)
-                        .type(construct.type())
-                        .build());
-            }
-        }
-        return constructs;
+    private List<DataResource> findResourceFromType(String type){
+        return tree.find(type)
+                .map(node -> node.getResources(DataResource.class))
+                .orElse(ImmutableList.<DataResource>builder().build());
     }
 
 

@@ -1,18 +1,20 @@
 package com.sigmundgranaas.forgero.core.resource.data.processor;
 
 import com.sigmundgranaas.forgero.core.identifier.Common;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConstructData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 import static com.sigmundgranaas.forgero.core.util.Identifiers.THIS_IDENTIFIER;
 
-public class SchematicConstructInflater {
+public class RecipeInflater {
     private final DataResource resource;
 
     private final Function<String, List<DataResource>> typeFinder;
@@ -21,7 +23,7 @@ public class SchematicConstructInflater {
 
     private final Function<String, Optional<DataResource>> templateProvider;
 
-    public SchematicConstructInflater(DataResource resource, Function<String, List<DataResource>> typeFinder, Function<String, Optional<DataResource>> idFinder, Function<String, Optional<DataResource>> templateProvider) {
+    public RecipeInflater(DataResource resource, Function<String, List<DataResource>> typeFinder, Function<String, Optional<DataResource>> idFinder, Function<String, Optional<DataResource>> templateProvider) {
         this.resource = resource;
         this.typeFinder = typeFinder;
         this.idFinder = idFinder;
@@ -32,41 +34,28 @@ public class SchematicConstructInflater {
         if (invalidData()) {
             return Collections.emptyList();
         }
-        var templateIngredients =
+        var templateIngredients = mapTemplateIngredients();
 
         return inflateIngredients(templateIngredients);
     }
 
-    private List<List<IngredientData>> buildRecipe(RecipeData recipe) {
+    private List<List<IngredientData>> mapTemplateIngredients() {
         var templateIngredients = new ArrayList<List<IngredientData>>();
-        for (IngredientData ingredient : recipe.ingredients()) {
-            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
+        var components = resource.construct().map(ConstructData::components).orElse(Collections.emptyList());
+        for (IngredientData ingredient : components) {
+            if (isThis(ingredient)) {
                 templateIngredients.add(List.of(IngredientData.builder().id(resource.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
+            } else if (isTyped(ingredient)) {
                 if (ingredient.unique()) {
-                    var resources = typeFinder.apply(ingredient.type())
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.identifier())
-                                    .unique(true)
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-                    templateIngredients.add(resources);
+                    templateIngredients.add(findUniqueIngredients(ingredient.type()));
                 } else {
-                    var resources = findDefaultIngredients(ingredient.type())
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.id())
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-
-                    templateIngredients.add(resources);
+                    templateIngredients.add(findDefaultIngredients(ingredient.type()));
                 }
+            } else if (isId(ingredient)) {
+                templateIngredients.add(List.of(ingredient));
             }
         }
-        return recipes;
+        return templateIngredients;
     }
 
     private List<DataResource> inflateIngredients(List<List<IngredientData>> templateIngredients) {
