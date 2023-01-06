@@ -1,9 +1,14 @@
-# Forgero Beta release 0.10.3
+# Forgero Beta release 0.10.4
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.4
+
+* Fixed crash when viewing tooltip with languages using commas instead of periods for decimals
+* Fixed mining level not applying to modded blocks
 
 ## Changelog 0.10.3
 

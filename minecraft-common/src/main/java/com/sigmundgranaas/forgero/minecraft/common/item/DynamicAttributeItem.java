@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -15,6 +16,9 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -43,12 +47,20 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     }
 
     default boolean isCorrectMiningLevel(BlockState state){
-        int i = this.getMiningLevel();
-        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) && i < 3) {
+        int level = this.getMiningLevel();
+
+        for (int i = 1; i < 10; i++) {
+            TagKey<Block> key = TagKey.of(Registry.BLOCK_KEY, new Identifier(String.format("fabric:needs_tool_level_%s", i)));
+            if(state.isIn(key) && level < i){
+                return false;
+            }
+        }
+
+        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) && level < 3) {
             return false;
-        } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL) && i < 2) {
+        } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL) && level < 2) {
             return false;
-        } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL) && i < 1) {
+        } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL) && level < 1) {
             return false;
         } else {
             return true;
