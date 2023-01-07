@@ -3,10 +3,12 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.core.model.*;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;
@@ -19,11 +21,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private final LoadingCache<ItemStack, BakedModel> cache;
+    private final Map<String, BakedModel> defaultCache;
     private final ModelRegistry registry;
     private ModelLoader loader;
     private Function<SpriteIdentifier, Sprite> textureGetter;
@@ -36,11 +43,28 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
                 return converter(stack).flatMap((model) -> convertModel(model)).orElse(new EmptyBakedModel());
             }
         });
+        this.defaultCache = new ConcurrentHashMap<>();
     }
 
 
     public BakedModel getModel(ItemStack stack) {
-        return (cache.getUnchecked(stack));
+        if(stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)){
+            return  cache.getUnchecked(stack);
+        }else if(stack.getItem() instanceof StateItem stateItem){
+            var model = defaultCache.get(stateItem.identifier());
+            if(model != null){
+                return model;
+            }else{
+                var computedModel = ForgeroStateRegistry
+                        .stateFinder()
+                        .find(stateItem.identifier())
+                        .flatMap(registry::find)
+                        .flatMap(this::convertModel)
+                        .orElse(new EmptyBakedModel());
+                defaultCache.put(stateItem.identifier(), computedModel);
+            }
+        }
+        return new EmptyBakedModel();
     }
 
     @Nullable
@@ -50,6 +74,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
             this.loader = loader;
             this.textureGetter = textureGetter;
             cache.invalidateAll();
+            defaultCache.clear();
         }
         return this;
     }

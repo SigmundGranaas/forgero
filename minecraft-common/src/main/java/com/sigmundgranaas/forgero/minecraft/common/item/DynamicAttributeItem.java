@@ -1,7 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
@@ -19,11 +23,30 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
+     LoadingCache<ItemStack, Integer> durabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
+        @Override
+        public @NotNull Integer load(@NotNull ItemStack stack) {
+            if(stack.getItem() instanceof DynamicAttributeItem dynamic){
+               return (int) dynamic.dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
+            }
+            return 1;
+        }
+    });
+
+    LoadingCache<String, Integer> defaultDurabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
+        @Override
+        public @NotNull Integer load(@NotNull String id) {
+            return ForgeroStateRegistry.stateFinder().find(id).map(state -> state.stream().applyAttribute(AttributeType.DURABILITY)).orElse(1f).intValue();
+        }
+    });
 
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
@@ -94,7 +117,14 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     @Override
     default int getDurability(ItemStack stack) {
-        return (int) dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
+        if(stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)){
+            return durabilityCache.getUnchecked(stack);
+        }else{
+            if(stack.getItem() instanceof StateItem state){
+               return defaultDurabilityCache.getUnchecked(state.identifier());
+            }
+        }
+       return 1;
     }
 
     default int getItemBarStep(ItemStack stack) {

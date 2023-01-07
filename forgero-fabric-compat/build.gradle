@@ -33,7 +33,7 @@ dependencies {
 
     //dynamiclights compat
     modImplementation "curse.maven:modmenu-308702:4145207"
-    modImplementation "curse.maven:lambdynamiclights-393442:3824820"
+    modCompileOnly "curse.maven:lambdynamiclights-393442:3824820"
     modImplementation("dev.lambdaurora:spruceui:4.1.0+1.19.2")
 
     //Twilight forest compat
@@ -64,9 +64,12 @@ dependencies {
     //modImplementation "com.github.DaFuqs:AdditionalEntityAttributes:${project.aea_versionite}"
     //include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.rea_version}")
     // Cardinal Components
-    modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
-    modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+    //modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+    //modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
 
+    //IPN testing
+    modImplementation "curse.maven:inventory-profiles-next-495267:4263990"
+    modImplementation "curse.maven:libipn-679177:4263961"
 
     //include project(':forgero-core')
     //include project(':forgero-vanilla')
@@ -87,6 +90,7 @@ dependencies {
     //modImplementation 'com.ptsmods:devlogin:2.1'
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
 }
 
 
