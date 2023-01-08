@@ -32,44 +32,31 @@ public class SchematicConstructInflater {
         if (invalidData()) {
             return Collections.emptyList();
         }
-        var templateIngredients =
+        var templateIngredients = inflateIngredients();
 
-        return inflateIngredients(templateIngredients);
+        return mapTemplateIngredients(templateIngredients);
     }
 
-    private List<List<IngredientData>> buildRecipe(RecipeData recipe) {
+    private List<List<IngredientData>> inflateIngredients() {
         var templateIngredients = new ArrayList<List<IngredientData>>();
-        for (IngredientData ingredient : recipe.ingredients()) {
-            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
+        var components = resource.construct().map(ConstructData::components).orElse(Collections.emptyList());
+        for (IngredientData ingredient : components) {
+            if (isThis(ingredient)) {
                 templateIngredients.add(List.of(IngredientData.builder().id(resource.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
+            } else if (isTyped(ingredient)) {
                 if (ingredient.unique()) {
-                    var resources = typeFinder.apply(ingredient.type())
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.identifier())
-                                    .unique(true)
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-                    templateIngredients.add(resources);
+                    templateIngredients.add(findUniqueIngredients(ingredient.type()));
                 } else {
-                    var resources = findDefaultIngredients(ingredient.type())
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.id())
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-
-                    templateIngredients.add(resources);
+                    templateIngredients.add(findDefaultIngredients(ingredient.type()));
                 }
+            } else if (isId(ingredient)) {
+                templateIngredients.add(List.of(ingredient));
             }
         }
-        return recipes;
+        return templateIngredients;
     }
 
-    private List<DataResource> inflateIngredients(List<List<IngredientData>> templateIngredients) {
+    private List<DataResource> mapTemplateIngredients(List<List<IngredientData>> templateIngredients) {
         List<DataResource> constructs = new ArrayList<>();
 
         for (int i = 0; i < templateIngredients.get(0).size(); i++) {

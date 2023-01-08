@@ -2,12 +2,14 @@ package com.sigmundgranaas.forgero.core.resource.data;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.identifier.Common;
+import com.sigmundgranaas.forgero.core.resource.data.processor.RecipeInflater;
 import com.sigmundgranaas.forgero.core.resource.data.processor.SchematicConstructInflater;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -125,16 +127,18 @@ public class DataBuilder {
     }
 
     private List<DataResource> mapConstructData(DataResource data) {
+        Function<String, Optional<DataResource>> idFinder = (String id) -> Optional.ofNullable(resolvedResources.get(id));
+        Function<String, Optional<DataResource>> templateFinder = (String id) -> Optional.ofNullable(templates.get(id));
+
         if (data.construct().isPresent() && data.construct().get().recipes().isPresent()) {
-            data.construct().get().recipes().get().stream()
-                    .map(recipe -> inflateRecipes(recipe, data))
-                    .flatMap(List::stream)
-                    .forEach(recipes::add);
+            var inflatedRecipes = new RecipeInflater(data, this::findResourceFromType, idFinder, templateFinder)
+                    .process();
+            recipes.addAll(inflatedRecipes);
         }
         if (data.construct().isEmpty()) {
             return Collections.emptyList();
         }
-        var inflater = new SchematicConstructInflater(data,this::findResourceFromType, (id) -> Optional.ofNullable(resolvedResources.get(id)), (id) -> Optional.ofNullable(templates.get(id)));
+        var inflater = new SchematicConstructInflater(data,this::findResourceFromType,idFinder ,templateFinder );
         return inflater.process();
     }
 
