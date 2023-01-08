@@ -36,6 +36,11 @@ dependencies {
     modCompileOnly "curse.maven:lambdynamiclights-393442:3824820"
     modImplementation("dev.lambdaurora:spruceui:4.1.0+1.19.2")
 
+    //toolstats testing
+    //modImplementation "curse.maven:tool-stats-377109:3944167"
+    //modImplementation "net.darkhax.bookshelf:Bookshelf-Fabric-1.19.2:16.1.11"
+
+
     //Twilight forest compat
     //modImplementation "teamtwilight:twilightforest:4.1.1102:universal"
 
@@ -68,8 +73,8 @@ dependencies {
     //modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
 
     //IPN testing
-    modImplementation "curse.maven:inventory-profiles-next-495267:4263990"
-    modImplementation "curse.maven:libipn-679177:4263961"
+    modCompileOnly "curse.maven:inventory-profiles-next-495267:4263990"
+    modCompileOnly "curse.maven:libipn-679177:4263961"
 
     //include project(':forgero-core')
     //include project(':forgero-vanilla')

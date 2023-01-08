@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
@@ -22,11 +23,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
@@ -40,6 +44,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
             return 1;
         }
     });
+    Map<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = new ConcurrentHashMap<>();
 
     LoadingCache<String, Integer> defaultDurabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
         @Override
@@ -93,26 +98,36 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     @Override
     default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
         if (slot.equals(EquipmentSlot.MAINHAND) && stack.getItem() instanceof DynamicAttributeItem && isEquippable()) {
-            Target target = Target.createEmptyTarget();
-            ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            float currentToolDamage = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
-            float baseToolDamage = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
-            //Base attack damage
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) stack.getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
-
-            //Attack damage addition
-            builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
-
-            //Attack speed
-            float baseAttackSpeed = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_SPEED);
-            float currentAttackSpeed = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_SPEED);
-            if (currentAttackSpeed != baseAttackSpeed) {
-                builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
+            if(multiMapCache.containsKey(stack)){
+                return multiMapCache.get(stack);
+            }else{
+                var multimap = createMultiMap(stack);
+                multiMapCache.put(stack, multimap);
+                return multimap;
             }
-            return builder.build();
         } else {
             return EMPTY;
         }
+    }
+
+    private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack){
+        Target target = Target.createEmptyTarget();
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+        float currentToolDamage = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
+        float baseToolDamage = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
+        //Base attack damage
+        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) stack.getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
+
+        //Attack damage addition
+        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
+
+        //Attack speed
+        float baseAttackSpeed = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_SPEED);
+        float currentAttackSpeed = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_SPEED);
+        if (currentAttackSpeed != baseAttackSpeed) {
+            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
+        }
+        return builder.build();
     }
 
     @Override
@@ -129,6 +144,12 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     default int getItemBarStep(ItemStack stack) {
         return Math.round(13.0F - (float) stack.getDamage() * 13.0F / (float) getDurability(stack));
+    }
+
+    default int getDurabilityColor(ItemStack stack) {
+        var durability = (float)getDurability(stack);
+        float f = Math.max(0.0F, (durability - (float) stack.getDamage()) / durability);
+        return MathHelper.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
     }
 
     @Override
