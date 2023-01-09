@@ -6,12 +6,11 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -35,16 +34,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
-     LoadingCache<ItemStack, Integer> durabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
+    LoadingCache<ItemStack, Integer> durabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
         @Override
         public @NotNull Integer load(@NotNull ItemStack stack) {
-            if(stack.getItem() instanceof DynamicAttributeItem dynamic){
-               return (int) dynamic.dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
+            if (stack.getItem() instanceof DynamicAttributeItem dynamic) {
+                return (int) dynamic.dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
             }
             return 1;
         }
     });
     Map<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = new ConcurrentHashMap<>();
+
+    Map<ItemStack, Float> miningSpeedCache = new ConcurrentHashMap<>();
+    
 
     LoadingCache<String, Integer> defaultDurabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
         @Override
@@ -74,12 +76,12 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         return (int) defaultProperties().stream().applyAttribute(Target.EMPTY, AttributeType.MINING_LEVEL);
     }
 
-    default boolean isCorrectMiningLevel(BlockState state){
+    default boolean isCorrectMiningLevel(BlockState state) {
         int level = this.getMiningLevel();
 
         for (int i = 1; i < 10; i++) {
             TagKey<Block> key = TagKey.of(Registry.BLOCK_KEY, new Identifier(String.format("fabric:needs_tool_level_%s", i)));
-            if(state.isIn(key) && level < i){
+            if (state.isIn(key) && level < i) {
                 return false;
             }
         }
@@ -98,9 +100,9 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     @Override
     default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
         if (slot.equals(EquipmentSlot.MAINHAND) && stack.getItem() instanceof DynamicAttributeItem && isEquippable()) {
-            if(multiMapCache.containsKey(stack)){
+            if (multiMapCache.containsKey(stack)) {
                 return multiMapCache.get(stack);
-            }else{
+            } else {
                 var multimap = createMultiMap(stack);
                 multiMapCache.put(stack, multimap);
                 return multimap;
@@ -110,7 +112,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         }
     }
 
-    private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack){
+    private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack) {
         Target target = Target.createEmptyTarget();
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         float currentToolDamage = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
@@ -132,14 +134,14 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     @Override
     default int getDurability(ItemStack stack) {
-        if(stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)){
+        if (stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
             return durabilityCache.getUnchecked(stack);
-        }else{
-            if(stack.getItem() instanceof StateItem state){
-               return defaultDurabilityCache.getUnchecked(state.identifier());
+        } else {
+            if (stack.getItem() instanceof StateItem state) {
+                return defaultDurabilityCache.getUnchecked(state.identifier());
             }
         }
-       return 1;
+        return 1;
     }
 
     default int getItemBarStep(ItemStack stack) {
@@ -147,16 +149,22 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     }
 
     default int getDurabilityColor(ItemStack stack) {
-        var durability = (float)getDurability(stack);
+        var durability = (float) getDurability(stack);
         float f = Math.max(0.0F, (durability - (float) stack.getDamage()) / durability);
         return MathHelper.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
     }
 
     @Override
     default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
+        if (miningSpeedCache.containsKey(stack)) {
+            return miningSpeedCache.get(stack);
+        }
+
         if (stack.getItem() instanceof DynamicAttributeItem dynamic && isEffectiveOn(state)) {
             Target target = new BlockBreakingEfficiencyTarget(state);
-            return dynamic.dynamicProperties(stack).stream().applyAttribute(target, AttributeType.MINING_SPEED);
+            float result = dynamic.dynamicProperties(stack).stream().applyAttribute(target, AttributeType.MINING_SPEED);
+            miningSpeedCache.put(stack, result);
+            return result;
         }
         return 1f;
     }

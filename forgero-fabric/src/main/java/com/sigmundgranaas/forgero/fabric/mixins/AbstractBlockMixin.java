@@ -22,29 +22,59 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Mixin(AbstractBlock.class)
 public class AbstractBlockMixin {
+
+    private static final Map<State, BlockBreakingHandler> strategyMap = new ConcurrentHashMap<>();
+    private static final Map<BlockBreakingHandler, Map<BlockState, Float>> hardnessMap = new ConcurrentHashMap<>();
 
     @Inject(at = @At("HEAD"), method = "calcBlockBreakingDelta", cancellable = true)
     public void calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         if (player.getMainHandStack().getItem() instanceof StateItem stateItem) {
             State toolState = stateItem.dynamicState(player.getMainHandStack());
-            var activeProperties = Property.stream(toolState.applyProperty(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
-            if (!activeProperties.isEmpty()) {
-                float f;
-                if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
-                    f = new BlockBreakingHandler(new PatternBreakingStrategy((PatternBreaking) activeProperties.get(0))).getHardness(state, pos, world, player);
-                } else {
-                    f = new BlockBreakingHandler(new VeinMiningStrategy((VeinBreaking) activeProperties.get(0))).getHardness(state, pos, world, player);
-                }
+            var strategy = getHandler(toolState);
 
+            if (strategy.isPresent()) {
+                var handler = strategy.get();
+                if (hardnessMap.containsKey(handler)) {
+                    var map = hardnessMap.get(handler);
+                    if (map.containsKey(state)) {
+                        cir.setReturnValue(map.get(state));
+                    }
+                } else {
+                    hardnessMap.put(handler, new ConcurrentHashMap<>());
+                }
+                float f = strategy.get().getHardness(state, pos, world, player);
                 if (f == -1.0F) {
                     cir.setReturnValue(0.0F);
                 } else {
+                    hardnessMap.get(handler).put(state, f);
                     cir.setReturnValue(f);
                 }
             }
         }
+    }
+
+    private Optional<BlockBreakingHandler> getHandler(State state) {
+        if (strategyMap.containsKey(state)) {
+            return Optional.ofNullable(strategyMap.get(state));
+        }
+        var activeProperties = Property.stream(state.applyProperty(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
+        if (!activeProperties.isEmpty()) {
+            BlockBreakingHandler handler;
+            if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
+                handler = new BlockBreakingHandler(new PatternBreakingStrategy((PatternBreaking) activeProperties.get(0)));
+            } else {
+                handler = new BlockBreakingHandler(new VeinMiningStrategy((VeinBreaking) activeProperties.get(0)));
+            }
+            strategyMap.put(state, handler);
+            return Optional.of(handler);
+
+        }
+        return Optional.empty();
     }
 }
