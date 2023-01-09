@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero.core;
 
-import com.sigmundgranaas.forgero.core.registry.StateFinder;
-import com.sigmundgranaas.forgero.core.state.Composite;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.registry.StateCollection;
+import com.sigmundgranaas.forgero.core.registry.StateFinder;
 import com.sigmundgranaas.forgero.core.registry.impl.ReloadableStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.ResourceListener;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.core.type.TypeTree;
 
 import java.util.*;
 import java.util.function.Function;
@@ -28,7 +28,7 @@ public class ForgeroStateRegistry {
     public static List<RecipeData> RECIPES;
 
     public static StateFinder stateFinder() {
-        return (id) ->
+        return (String id) ->
         {
             if (isState().apply(id)) {
                 return STATES.find(id).map(Supplier::get);

@@ -329,7 +329,7 @@ public class Composite implements Upgradeable<Composite> {
         }
 
         public Composite build() {
-            if (name == null) {
+            if (name == null && !ingredientList.isEmpty()) {
                 this.name = compositor.compositeName(ingredientList);
             }
             return new Composite(ingredientList, upgradeContainer, name, nameSpace, type);

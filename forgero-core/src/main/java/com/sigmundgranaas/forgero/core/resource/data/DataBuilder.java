@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.resource.data;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.identifier.Common;
 import com.sigmundgranaas.forgero.core.resource.data.processor.RecipeInflater;
 import com.sigmundgranaas.forgero.core.resource.data.processor.SchematicConstructInflater;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
@@ -11,7 +10,8 @@ import com.sigmundgranaas.forgero.core.util.Identifiers;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.sigmundgranaas.forgero.core.util.Identifiers.THIS_IDENTIFIER;
 
 @SuppressWarnings("DuplicatedCode")
 public class DataBuilder {
@@ -116,7 +116,7 @@ public class DataBuilder {
             return Collections.emptyList();
         }
         var construct = resource.construct().get();
-        if (construct.target().equals(Identifiers.THIS_IDENTIFIER)) {
+        if (construct.target().equals(THIS_IDENTIFIER)) {
             return List.of(resource);
         } else if (construct.target().equals(Identifiers.CREATE_IDENTIFIER)) {
             var constructs = mapConstructData(resource);
@@ -138,78 +138,15 @@ public class DataBuilder {
         if (data.construct().isEmpty()) {
             return Collections.emptyList();
         }
-        var inflater = new SchematicConstructInflater(data,this::findResourceFromType,idFinder ,templateFinder );
+        var inflater = new SchematicConstructInflater(data, this::findResourceFromType, idFinder, templateFinder);
         return inflater.process();
     }
 
-    private List<DataResource> findResourceFromType(String type){
+    private List<DataResource> findResourceFromType(String type) {
         return tree.find(type)
                 .map(node -> node.getResources(DataResource.class))
                 .orElse(ImmutableList.<DataResource>builder().build());
     }
-
-
-    private List<RecipeData> inflateRecipes(RecipeData data, DataResource rootResource) {
-        var recipes = new ArrayList<RecipeData>();
-
-        var rootIngredients = data.ingredients();
-        var templateIngredients = new ArrayList<List<IngredientData>>();
-        for (IngredientData ingredient : rootIngredients) {
-            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
-                templateIngredients.add(List.of(IngredientData.builder().id(rootResource.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
-                if (ingredient.unique()) {
-                    var resources = tree.find(ingredient.type())
-                            .map(node -> node.getResources(DataResource.class))
-                            .map(List::stream)
-                            .map(Stream::toList)
-                            .orElse(Collections.emptyList());
-
-                    var ingredients = resources
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.identifier())
-                                    .unique(true)
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                } else {
-                    var resource =
-                            tree.find(ingredient.type())
-                                    .map(node -> node.getResources(DataResource.class))
-                                    .map(element -> element.stream().filter(res -> res.resourceType() == ResourceType.DEFAULT)
-                                            .toList())
-                                    .orElse(Collections.emptyList());
-                    var ingredients = resource
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.identifier())
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                }
-            }
-        }
-        for (int i = 0; i < templateIngredients.get(0).size(); i++) {
-            for (int j = 0; j < templateIngredients.get(1).size(); j++) {
-                var newComponents = new ArrayList<IngredientData>();
-                newComponents.add(templateIngredients.get(0).get(i));
-                newComponents.add(templateIngredients.get(1).get(j));
-                String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
-                recipes.add(RecipeData.builder()
-                        .ingredients(newComponents)
-                        .craftingType(data.type())
-                        .target(rootResource.nameSpace() + ":" + name)
-                        .build());
-            }
-        }
-        return recipes;
-    }
-
 
     private boolean hasValidComponents(DataResource resource) {
         if (resource.construct().isEmpty()) {
@@ -221,7 +158,7 @@ public class DataBuilder {
                 return false;
             } else if (!data.id().equals(Identifiers.EMPTY_IDENTIFIER) && resolvedResources.containsKey(data.id())) {
                 break;
-            } else if (data.id().equals(Identifiers.THIS_IDENTIFIER)) {
+            } else if (data.id().equals(THIS_IDENTIFIER)) {
                 break;
             } else if (!data.type().equals(Identifiers.EMPTY_IDENTIFIER) && treeContainsTag(data.type())) {
                 break;
@@ -272,14 +209,6 @@ public class DataBuilder {
 
     private List<DataResource> resources() {
         return resources;
-    }
-
-    private String idToName(String id) {
-        String[] split = id.split(":");
-        if (split.length > 1) {
-            return split[1];
-        }
-        return id;
     }
 
     @SuppressWarnings("unused")

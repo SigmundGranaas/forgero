@@ -58,15 +58,20 @@ public class StateConverter implements DataConverter<State> {
             var builder = Composite.builder(createSlots(resource.construct().get()));
             builder.type(tree.type(resource.type()));
             builder.nameSpace(resource.nameSpace());
-            resource.construct()
+            //builder.name(resource.name());
+            var ingredients = resource.construct()
                     .map(ConstructData::components)
                     .orElse(Collections.emptyList())
                     .stream()
                     .map(IngredientData::id)
                     .map(nameMapping::get)
                     .map(states::get)
-                    .filter(Objects::nonNull)
-                    .forEach(builder::addIngredient);
+                    .filter(Objects::nonNull).toList();
+
+            ingredients.forEach(builder::addIngredient);
+            if (ingredients.isEmpty()) {
+                builder.name(resource.name());
+            }
             var state = builder.build();
             states.put(state.identifier(), state);
             nameMapping.put(resource.identifier(), state.identifier());

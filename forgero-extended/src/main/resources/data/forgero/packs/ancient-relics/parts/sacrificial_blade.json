@@ -1,9 +1,16 @@
 {
   "type": "SWORD_BLADE",
-  "name": "diamond-sacrificial_blade",
+  "name": "diamond-sacrificial_dagger_blade",
   "container": {
     "type": "CREATE",
     "id": "this"
+  },
+  "construct": {
+    "target": "this",
+    "components": [
+    ],
+    "type": "SWORD_BLADE",
+    "slots": []
   },
   "properties": {
     "attributes": [

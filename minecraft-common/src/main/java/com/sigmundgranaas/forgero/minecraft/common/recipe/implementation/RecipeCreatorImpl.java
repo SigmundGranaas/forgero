@@ -6,11 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.SlotData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
 import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.state.NameCompositor;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
@@ -20,10 +19,8 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTyp
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -133,20 +130,21 @@ public record RecipeCreatorImpl(
     }
 
     private Optional<RecipeWrapper> compositeRecipe(RecipeData data) {
+        var target = resolveTarget(data);
         JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.STATE_CRAFTING_RECIPE).toString()).getAsJsonObject();
         template.getAsJsonObject("key").add("H", ingredientToEntry(data.ingredients().get(0)));
         template.getAsJsonObject("key").add("I", ingredientToEntry(data.ingredients().get(1)));
-        template.getAsJsonObject("result").addProperty("item", ForgeroStateRegistry.ID_MAPPER.get(data.target()));
-        return Optional.ofNullable(ForgeroStateRegistry.ID_MAPPER.get(data.target())).map(id -> new RecipeWrapperImpl(new Identifier(id), template, RecipeTypes.STATE_CRAFTING_RECIPE));
+        template.getAsJsonObject("result").addProperty("item", target);
+        return Optional.of(new RecipeWrapperImpl(new Identifier(data.target()), template, RecipeTypes.STATE_CRAFTING_RECIPE));
     }
 
     private RecipeWrapper schematicPartCrafting(RecipeData data) {
         JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.SCHEMATIC_PART_CRAFTING).toString()).getAsJsonObject();
-        IntStream.range(0, data.ingredients().get(0).amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientToEntry(data.ingredients().get(0))));
-        IntStream.range(0, data.ingredients().get(1).amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientToEntry(data.ingredients().get(1))));
-
+        for (IngredientData ingredient : data.ingredients()) {
+            IntStream.range(0, ingredient.amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientToEntry(ingredient)));
+        }
         template.getAsJsonObject("result").addProperty("item", ForgeroStateRegistry.ID_MAPPER.get(data.target()));
-        return new RecipeWrapperImpl(new Identifier(ForgeroStateRegistry.ID_MAPPER.get(data.target())), template, RecipeTypes.SCHEMATIC_PART_CRAFTING);
+        return new RecipeWrapperImpl(new Identifier(data.target()), template, RecipeTypes.SCHEMATIC_PART_CRAFTING);
     }
 
     private Optional<RecipeWrapper> compositeUpgrade(SlotData data, String target) {
@@ -155,6 +153,66 @@ public record RecipeCreatorImpl(
         template.getAsJsonObject("addition").addProperty("tag", "forgero:" + data.type().toLowerCase());
         template.getAsJsonObject("result").addProperty("item", target);
         return Optional.of(new RecipeWrapperImpl(new Identifier(target + ELEMENT_SEPARATOR + data.type().toLowerCase()), template, RecipeTypes.STATE_UPGRADE_RECIPE));
+    }
+
+    private String resolveTarget(RecipeData data) {
+        var idMapper = ForgeroStateRegistry.ID_MAPPER;
+        if (idMapper.containsKey(data.target())) {
+            return idMapper.get(data.target());
+        } else {
+            var states = data.ingredients().stream()
+                    .map(this::ingredientToDefaultedId)
+                    .map(id -> Optional.ofNullable(idMapper.get(id)).orElse(id))
+                    .map(id -> ForgeroStateRegistry.STATES.find(id))
+                    .flatMap(Optional::stream)
+                    .map(Supplier::get)
+                    .toList();
+
+            return String.format("forgero:%s", new NameCompositor().compositeName(states));
+        }
+    }
+
+    private String ingredientToDefaultedId(IngredientData data) {
+        if (data.type().equals(EMPTY_IDENTIFIER)) {
+            var resource = ForgeroStateRegistry.CONSTRUCTS.stream()
+                    .filter(res -> res.identifier().equals(data.id()))
+                    .findAny();
+            if (resource.isPresent() && resource.get().resourceType() != ResourceType.DEFAULT) {
+                return ForgeroStateRegistry.CONSTRUCTS.stream()
+                        .filter(res -> res.type().equals(resource.get().type()))
+                        .filter(res -> res.resourceType() == ResourceType.DEFAULT)
+                        .filter(res -> sameMaterial(res, resource.get()))
+                        .map(DataResource::identifier)
+                        .findFirst()
+                        .orElse(data.id());
+            } else if (resource.isPresent()) {
+                return resource.get().identifier();
+            }
+            return data.id();
+        } else {
+            return ForgeroStateRegistry.CONSTRUCTS.stream()
+                    .filter(res -> res.type().equals(data.type()))
+                    .filter(res -> res.resourceType() == ResourceType.DEFAULT)
+                    .map(DataResource::identifier)
+                    .findFirst()
+                    .orElse(data.id());
+        }
+    }
+
+    private boolean sameMaterial(DataResource res, DataResource compare) {
+        var test1 = getMaterial(res);
+        var test2 = getMaterial(compare);
+        return test1.isPresent() && test2.isPresent() && test2.get().equals(test1.get());
+    }
+
+    private Optional<String> getMaterial(DataResource res) {
+        return Arrays.stream(res.name().split(ELEMENT_SEPARATOR))
+                .map(element -> ForgeroStateRegistry.STATES.find(Type.MATERIAL).stream().filter(state -> state.get().name().equals(element)).findAny())
+                .flatMap(Optional::stream)
+                .map(Supplier::get)
+                .filter(state -> state.test(Type.MATERIAL))
+                .findFirst()
+                .map(Identifiable::name);
     }
 
     private JsonObject ingredientToEntry(IngredientData data) {

@@ -31,19 +31,17 @@ public class RecipeInflater {
         if (invalidData()) {
             return Collections.emptyList();
         }
-        var templateIngredients = resource.construct()
+
+        return resource.construct()
                 .flatMap(ConstructData::recipes)
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(this::inflateIngredients)
                 .flatMap(List::stream)
                 .toList();
-
-        return Collections.emptyList();
     }
 
-    private List<List<IngredientData>> inflateIngredients(RecipeData recipe) {
-        var recipes = new ArrayList<>();
+    private List<RecipeData> inflateIngredients(RecipeData recipe) {
         var templateIngredients = new ArrayList<List<IngredientData>>();
         for (IngredientData ingredient : recipe.ingredients()) {
             if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
@@ -52,52 +50,38 @@ public class RecipeInflater {
                 if (ingredient.unique()) {
                     templateIngredients.add(findUniqueIngredients(ingredient.type()));
                 } else {
-                    templateIngredients.add(findDefaultIngredients(ingredient.type()));
+                    templateIngredients.add(List.of(ingredient));
                 }
             }
         }
 
+        IngredientCollection collection = new IngredientCollection(templateIngredients.size());
         for (int i = 0; i < templateIngredients.size(); i++) {
-            for (int j = 0; j < templateIngredients.get(i).size(); j++) {
-                var builder = recipe.toBuilder();
-                var ingredients = new ArrayList<IngredientData>();
-                IngredientData currentIngredient = templateIngredients.get(i).get(j);
-                ingredients.add(currentIngredient);
-                HashMap<List<Integer>, List<IngredientData>> mappedValues = new HashMap<>();
-                for (int x = 0; x < templateIngredients.size(); x++) {
-                    if (x == i) {
-                        break;
-                    }
-                    for (int p = 0; p < templateIngredients.get(x).size(); p++) {
-                        if (mappedValues.containsKey()) {
-
-                        }
-                        ingredients.add(templateIngredients.get(x).get(p));
-                    }
-                }
-                builder.ingredients(ingredients);
-                recipes.add(builder.build());
-            }
+            collection.addEntries(i, templateIngredients.get(i));
         }
-        return templateIngredients;
+
+        var ingredients = collection.getCollection()
+                .stream()
+                .map(inflater -> recipe.toBuilder().ingredients(inflater.getIngredients()).build())
+                .toList();
+
+        return buildRecipes(ingredients, recipe);
     }
 
 
-    private List<RecipeData> buildRecipes(List<List<IngredientData>> templateIngredients) {
+    private List<RecipeData> buildRecipes(List<RecipeData> inflatedIngredients, RecipeData originalRecipe) {
         var recipes = new ArrayList<RecipeData>();
-        for (int i = 0; i < templateIngredients.get(0).size(); i++) {
-            for (int j = 0; j < templateIngredients.get(1).size(); j++) {
-                var newComponents = new ArrayList<IngredientData>();
-                newComponents.add(templateIngredients.get(0).get(i));
-                newComponents.add(templateIngredients.get(1).get(j));
-                String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
-                recipes.add(RecipeData.builder()
-                        .ingredients(newComponents)
-                        .craftingType("data.type()")
-                        .target(resource.nameSpace() + ":" + name)
-                        .build());
-            }
+
+        for (RecipeData inflatedIngredient : inflatedIngredients) {
+            var newComponents = inflatedIngredient.ingredients();
+            String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(this::ingredientToName).toList());
+            recipes.add(RecipeData.builder()
+                    .ingredients(newComponents)
+                    .craftingType(originalRecipe.type())
+                    .target(resource.nameSpace() + ":" + name)
+                    .build());
         }
+
         return recipes;
     }
 
@@ -109,17 +93,12 @@ public class RecipeInflater {
         return id;
     }
 
-    private boolean hasDefaults(ConstructData data) {
-        return data.components().stream().allMatch(ingredient -> {
-            if (ingredient.id().equals(Identifiers.EMPTY_IDENTIFIER)) {
-                return false;
-            } else if (ingredient.id().equals("handle_schematic")) {
-                return true;
-            } else {
-                var res = idFinder.apply(ingredient.id());
-                return res.filter(resource -> resource.resourceType() == ResourceType.DEFAULT).isPresent();
-            }
-        });
+    private String ingredientToName(IngredientData data) {
+        if (data.id().equals(EMPTY_IDENTIFIER)) {
+            return typeFinder.apply(data.type()).stream().filter(res -> res.resourceType() == ResourceType.DEFAULT).findFirst().map(DataResource::name).orElse(data.type().toLowerCase());
+        } else {
+            return idToName(data.id());
+        }
     }
 
     private boolean isTyped(IngredientData data) {
@@ -145,19 +124,15 @@ public class RecipeInflater {
                 .toList();
     }
 
-    private List<IngredientData> findDefaultIngredients(String type) {
-        return typeFinder.apply(type).stream()
-                .filter(res -> res.resourceType() == ResourceType.DEFAULT)
-                .map(res -> IngredientData.builder().id(res.identifier()).unique(true).build())
-                .toList();
-    }
-
     public Set<String> dependencies() {
         return resource.construct()
-                .map(ConstructData::components)
-                .map(list -> list.stream()
-                        .map(ingredient -> ingredient.id().equals(EMPTY_IDENTIFIER) ? ingredient.id() : ingredient.type())
-                        .collect(Collectors.toSet()))
-                .orElse(Collections.emptySet());
+                .flatMap(ConstructData::recipes)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(RecipeData::ingredients)
+                .flatMap(List::stream)
+                .map(ingredient -> ingredient.id().equals(EMPTY_IDENTIFIER) ? ingredient.id() : ingredient.type())
+                .collect(Collectors.toSet());
+
     }
 }
