@@ -68,8 +68,12 @@ public class RecipeCreatorImpl implements RecipeCreator {
     }
 
     private List<RecipeGenerator> compositeRecipeGenerators() {
-        return ForgeroStateRegistry.RECIPES.stream()
-                .map(mapper)
+        var optimiser = new CompositeRecipeOptimiser();
+        var recipes = ForgeroStateRegistry.RECIPES.stream()
+                .map(mapper).collect(Collectors.toList());
+        var optimized = optimiser.process(recipes);
+
+        return optimized.stream()
                 .map(this::dataToGenerator)
                 .flatMap(Optional::stream)
                 .toList();

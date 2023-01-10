@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
@@ -34,7 +33,7 @@ public class SchematicPartGenerator implements RecipeGenerator {
         for (IngredientData ingredient : data.ingredients()) {
             IntStream.range(0, ingredient.amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientsToJsonEntry(ingredient)));
         }
-        template.getAsJsonObject("result").addProperty("item", ForgeroStateRegistry.ID_MAPPER.get(data.target()));
+        template.getAsJsonObject("result").addProperty("item", data.target());
         return new RecipeWrapperImpl(new Identifier(data.target()), template, RecipeTypes.SCHEMATIC_PART_CRAFTING);
     }
 

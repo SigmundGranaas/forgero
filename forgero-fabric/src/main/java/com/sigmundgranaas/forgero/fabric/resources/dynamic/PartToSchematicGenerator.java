@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class PartToSchematicGenerator implements DynamicResourceGenerator {
 
@@ -19,6 +20,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 
     private List<Composite> parts() {
         return ForgeroStateRegistry.STATES.all().stream()
+                .map(Supplier::get)
                 .filter(Composite.class::isInstance)
                 .map(Composite.class::cast)
                 .filter(comp -> comp.ingredients().stream().anyMatch(ingredient -> ingredient.name().contains("schematic")))
