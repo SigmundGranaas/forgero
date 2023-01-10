@@ -2,22 +2,17 @@
   "type": "SWORD_BLADE",
   "models": [
     {
-      "name": "sword_blade_material",
-      "variants": [
-        {
-          "target": [
-            "model:knife_blade.png"
-          ],
-          "template": "knife_blade_tip_reinforcement.png"
-        }
-      ]
+      "name": "diamond-sacrificial_blade",
+      "template": "sacrificial_blade.png",
+      "palette": "diamond",
+      "order": "40"
     },
     {
       "target": [
         "id:diamond-sacrificial_dagger_blade"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "knife_blade"
+      "template": "diamond-sacrificial_blade"
     }
   ]
 }

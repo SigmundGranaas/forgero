@@ -28,7 +28,6 @@ public class RecipeTester implements Supplier<Boolean> {
         this.expectedResult = expectedResult;
     }
 
-
     public static RecipeTester ofTool(String head, String handle, String outCome, TestContext context) {
         CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
         inventory.setStack(1, new ItemStack(itemFromString(head)));
