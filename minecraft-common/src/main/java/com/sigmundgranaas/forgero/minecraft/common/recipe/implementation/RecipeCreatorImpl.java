@@ -1,38 +1,35 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
-import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
-import com.sigmundgranaas.forgero.core.state.Identifiable;
-import com.sigmundgranaas.forgero.core.state.NameCompositor;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.Identifier;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.*;
 
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+public class RecipeCreatorImpl implements RecipeCreator {
 
-//TODO Lots of deprecated methods are used to create recipes.
-//TODO THIS IS NOT OBJECT ORIENTED AT ALL, rework to use objects
-public record RecipeCreatorImpl(
-        Map<RecipeTypes, JsonObject> recipeTemplates
-) implements RecipeCreator {
     private static RecipeCreator INSTANCE;
+    private final TemplateGenerator templateGenerator;
+    private final RecipeDataHelper helper;
+    private final RecipeDataMapper mapper;
+
+    public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates) {
+        this.templateGenerator = new TemplateGenerator(recipeTemplates);
+        this.helper = new RecipeDataHelper();
+        this.mapper = new RecipeDataMapper(this.helper);
+    }
 
     public static RecipeCreator getInstance() {
         if (INSTANCE == null) {
@@ -44,194 +41,69 @@ public record RecipeCreatorImpl(
 
     @Override
     public List<RecipeWrapper> createRecipes() {
-        List<RecipeWrapper> stateRecipes = compositeRecipes();
+        List<RecipeGenerator> generators = new ArrayList<>();
+        generators.addAll(compositeRecipeGenerators());
+        generators.addAll(guideBookGenerators());
+        generators.addAll(repairKitToolRecipeGenerators());
+        generators.addAll(constructUpgradeRecipes());
 
-        var repairKits = ForgeroSettings.SETTINGS.getEnableRepairKits() ? createRepairKitToolRecipes() : new ArrayList<RecipeWrapper>();
-        List<? extends RecipeWrapper> guidebooksRecipes = new ArrayList<>();
-        if (FabricLoader.getInstance().isModLoaded("patchouli")) {
-            guidebooksRecipes = createGuideBookRecipes();
-        }
-
-        var recipes = List.of(guidebooksRecipes, stateRecipes, repairKits);
-        return recipes.stream().flatMap(List::stream).collect(Collectors.toList());
+        return generators.parallelStream()
+                .filter(RecipeGenerator::isValid)
+                .map(RecipeGenerator::generate)
+                .toList();
     }
 
-
-    private List<? extends RecipeWrapper> createGuideBookRecipes() {
-        var tags = List.of("bindings", "heads", "handles");
-        return tags.stream().map(toolPartTag -> {
-            JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
-            template.addProperty("type", "patchouli:shapeless_book_recipe");
-            JsonArray ingredients = template.getAsJsonArray("ingredients");
-            JsonObject tag = new JsonObject();
-            tag.addProperty("tag", "forgero:" + toolPartTag);
-            JsonObject book = new JsonObject();
-            book.addProperty("item", "minecraft:book");
-
-            ingredients.add(book);
-            ingredients.add(tag);
-            template.add("ingredients", ingredients);
-
-
-            template.addProperty("book", "forgero:forgero_guide");
-            return new RecipeWrapperImpl(new Identifier(Forgero.NAMESPACE, "forgero_guide_book_recipe_" + toolPartTag), template, RecipeTypes.MISC_SHAPELESS);
-        }).toList();
+    private List<RecipeGenerator> guideBookGenerators() {
+        return Stream.of("bindings", "heads", "handles")
+                .map(tag -> "forgero:" + tag)
+                .map(tag -> new GuideBookGenerator(templateGenerator, tag))
+                .collect(Collectors.toList());
     }
 
-    private List<RecipeWrapper> compositeRecipes() {
-        List<RecipeWrapper> recipes = new ArrayList<>();
-        recipes.addAll(ForgeroStateRegistry.CONSTRUCTS.stream().map(this::upgradeRecipes).flatMap(List::stream).toList());
-        recipes.addAll(ForgeroStateRegistry.RECIPES.stream().map(this::createRecipes).flatMap(Optional::stream).toList());
-        return recipes;
+    private List<RecipeGenerator> constructUpgradeRecipes() {
+        return ForgeroStateRegistry.CONSTRUCTS.stream()
+                .map(this::upgradeRecipes)
+                .flatMap(List::stream)
+                .toList();
     }
 
-    private List<RecipeWrapper> createRepairKitToolRecipes() {
+    private List<RecipeGenerator> compositeRecipeGenerators() {
+        return ForgeroStateRegistry.RECIPES.stream()
+                .map(mapper)
+                .map(this::dataToGenerator)
+                .flatMap(Optional::stream)
+                .toList();
+
+    }
+
+    private List<RecipeGenerator> repairKitToolRecipeGenerators() {
         var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
                 .map(node -> node.getResources(State.class))
                 .orElse(ImmutableList.<State>builder().build());
-        var recipes = new ArrayList<RecipeWrapper>();
+        var recipes = new ArrayList<RecipeGenerator>();
         for (State material : materials) {
-            if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
-
-                JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.TOOLPART_SCHEMATIC_RECIPE).toString()).getAsJsonObject();
-                template.addProperty("type", "forgero:repair_kit_recipe");
-                JsonArray ingredients = template.getAsJsonArray("ingredients");
-                JsonObject toolTag = new JsonObject();
-                toolTag.addProperty("tag", "forgero:" + String.format("%s_tool", material.name()));
-                JsonObject repairKit = new JsonObject();
-                repairKit.addProperty("item", "forgero:" + material.name() + "_repair_kit");
-
-                ingredients.add(toolTag);
-                ingredients.add(repairKit);
-                template.add("ingredients", ingredients);
-
-                template.getAsJsonObject("result").addProperty("item", "forgero:" + material.name() + "_repair_kit");
-                recipes.add(new RecipeWrapperImpl(new Identifier(Forgero.NAMESPACE, material.name() + "_tool_repair_kit_recipe"), template, RecipeTypes.REPAIR_KIT_RECIPE));
-            }
+            recipes.add(new RepairKitRecipeGenerator(material, templateGenerator));
         }
-
-
         return recipes;
     }
 
-    private Optional<RecipeWrapper> createRecipes(RecipeData res) {
-        RecipeTypes type = RecipeTypes.valueOf(res.type());
+    private Optional<RecipeGenerator> dataToGenerator(RecipeData data) {
+        RecipeTypes type = RecipeTypes.of(data.type());
         if (type == RecipeTypes.SCHEMATIC_PART_CRAFTING) {
-            return Optional.of(schematicPartCrafting(res));
+            return Optional.of(new SchematicPartGenerator(helper, data, templateGenerator));
         } else if (type == RecipeTypes.STATE_CRAFTING_RECIPE) {
-            return compositeRecipe(res);
+            return Optional.of(new ToolRecipeCreator(data, helper, templateGenerator));
         }
         return Optional.empty();
     }
 
-    private List<RecipeWrapper> upgradeRecipes(DataResource res) {
-        var recipes = new ArrayList<RecipeWrapper>(res.construct().get().slots().stream().map(slot -> compositeUpgrade(slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier()))).flatMap(Optional::stream).toList());
-        return recipes;
-    }
-
-    private Optional<RecipeWrapper> compositeRecipe(RecipeData data) {
-        var target = resolveTarget(data);
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.STATE_CRAFTING_RECIPE).toString()).getAsJsonObject();
-        template.getAsJsonObject("key").add("H", ingredientToEntry(data.ingredients().get(0)));
-        template.getAsJsonObject("key").add("I", ingredientToEntry(data.ingredients().get(1)));
-        template.getAsJsonObject("result").addProperty("item", target);
-        return Optional.of(new RecipeWrapperImpl(new Identifier(data.target()), template, RecipeTypes.STATE_CRAFTING_RECIPE));
-    }
-
-    private RecipeWrapper schematicPartCrafting(RecipeData data) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.SCHEMATIC_PART_CRAFTING).toString()).getAsJsonObject();
-        for (IngredientData ingredient : data.ingredients()) {
-            IntStream.range(0, ingredient.amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientToEntry(ingredient)));
-        }
-        template.getAsJsonObject("result").addProperty("item", ForgeroStateRegistry.ID_MAPPER.get(data.target()));
-        return new RecipeWrapperImpl(new Identifier(data.target()), template, RecipeTypes.SCHEMATIC_PART_CRAFTING);
-    }
-
-    private Optional<RecipeWrapper> compositeUpgrade(SlotData data, String target) {
-        JsonObject template = JsonParser.parseString(recipeTemplates.get(RecipeTypes.STATE_UPGRADE_RECIPE).toString()).getAsJsonObject();
-        template.getAsJsonObject("base").addProperty("item", target);
-        template.getAsJsonObject("addition").addProperty("tag", "forgero:" + data.type().toLowerCase());
-        template.getAsJsonObject("result").addProperty("item", target);
-        return Optional.of(new RecipeWrapperImpl(new Identifier(target + ELEMENT_SEPARATOR + data.type().toLowerCase()), template, RecipeTypes.STATE_UPGRADE_RECIPE));
-    }
-
-    private String resolveTarget(RecipeData data) {
-        var idMapper = ForgeroStateRegistry.ID_MAPPER;
-        if (idMapper.containsKey(data.target())) {
-            return idMapper.get(data.target());
+    private List<RecipeGenerator> upgradeRecipes(DataResource res) {
+        if (res.construct().isPresent()) {
+            return res.construct().get().slots().stream()
+                    .map(slot -> new SlotUpgradeGenerator(helper, templateGenerator, slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier())))
+                    .collect(Collectors.toList());
         } else {
-            var states = data.ingredients().stream()
-                    .map(this::ingredientToDefaultedId)
-                    .map(id -> Optional.ofNullable(idMapper.get(id)).orElse(id))
-                    .map(id -> ForgeroStateRegistry.STATES.find(id))
-                    .flatMap(Optional::stream)
-                    .map(Supplier::get)
-                    .toList();
-
-            return String.format("forgero:%s", new NameCompositor().compositeName(states));
+            return Collections.emptyList();
         }
-    }
-
-    private String ingredientToDefaultedId(IngredientData data) {
-        if (data.type().equals(EMPTY_IDENTIFIER)) {
-            var resource = ForgeroStateRegistry.CONSTRUCTS.stream()
-                    .filter(res -> res.identifier().equals(data.id()))
-                    .findAny();
-            if (resource.isPresent() && resource.get().resourceType() != ResourceType.DEFAULT) {
-                return ForgeroStateRegistry.CONSTRUCTS.stream()
-                        .filter(res -> res.type().equals(resource.get().type()))
-                        .filter(res -> res.resourceType() == ResourceType.DEFAULT)
-                        .filter(res -> sameMaterial(res, resource.get()))
-                        .map(DataResource::identifier)
-                        .findFirst()
-                        .orElse(data.id());
-            } else if (resource.isPresent()) {
-                return resource.get().identifier();
-            }
-            return data.id();
-        } else {
-            return ForgeroStateRegistry.CONSTRUCTS.stream()
-                    .filter(res -> res.type().equals(data.type()))
-                    .filter(res -> res.resourceType() == ResourceType.DEFAULT)
-                    .map(DataResource::identifier)
-                    .findFirst()
-                    .orElse(data.id());
-        }
-    }
-
-    private boolean sameMaterial(DataResource res, DataResource compare) {
-        var test1 = getMaterial(res);
-        var test2 = getMaterial(compare);
-        return test1.isPresent() && test2.isPresent() && test2.get().equals(test1.get());
-    }
-
-    private Optional<String> getMaterial(DataResource res) {
-        return Arrays.stream(res.name().split(ELEMENT_SEPARATOR))
-                .map(element -> ForgeroStateRegistry.STATES.find(Type.MATERIAL).stream().filter(state -> state.get().name().equals(element)).findAny())
-                .flatMap(Optional::stream)
-                .map(Supplier::get)
-                .filter(state -> state.test(Type.MATERIAL))
-                .findFirst()
-                .map(Identifiable::name);
-    }
-
-    private JsonObject ingredientToEntry(IngredientData data) {
-        var object = new JsonObject();
-        if (data.unique() && !data.id().equals(EMPTY_IDENTIFIER)) {
-            String id;
-            if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(ForgeroStateRegistry.ID_MAPPER.get(data.id()))) {
-                id = ForgeroStateRegistry.STATE_TO_CONTAINER.get(ForgeroStateRegistry.ID_MAPPER.get(data.id()));
-            } else if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsValue(data.id())) {
-                id = ForgeroStateRegistry.STATE_TO_CONTAINER.entrySet().stream().filter(entry -> entry.getValue().equals(data.id())).map(Map.Entry::getKey).findFirst().orElse(data.id());
-            } else {
-                id = data.id();
-            }
-            object.addProperty("item", id);
-        } else if (!data.id().equals(EMPTY_IDENTIFIER)) {
-            object.addProperty("tag", "forgero:" + ForgeroStateRegistry.stateFinder().find(ForgeroStateRegistry.ID_MAPPER.get(data.id())).get().type().typeName().toLowerCase());
-        } else {
-            object.addProperty("tag", "forgero:" + data.type().toLowerCase());
-        }
-        return object;
     }
 }

@@ -13,6 +13,14 @@ public enum RecipeTypes {
     SCHEMATIC_PART_CRAFTING,
     TOOLPART_SCHEMATIC_RECIPE;
 
+    public static RecipeTypes of(String type) {
+        try {
+            return RecipeTypes.valueOf(type.toUpperCase());
+        } catch (Exception e) {
+            return RecipeTypes.MISC_SHAPELESS;
+        }
+    }
+
     public String getName() {
         return this.name().toLowerCase(Locale.ROOT);
     }
