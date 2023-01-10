@@ -10,7 +10,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,12 +93,21 @@ public class AttributeWriter implements Writer {
         if (result != 0f && type == ATTACK_SPEED) {
             result += 4f;
         }
-        DecimalFormat df = new DecimalFormat("#.00");
-        result = Float.parseFloat(df.format(result));
+        result = roundFloat(result);
         if (result != 0f) {
             MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
+        }
+    }
+
+    private float roundFloat(float number) {
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        try {
+            return Float.parseFloat(format.format(number));
+        } catch (NumberFormatException e) {
+            return 1f;
         }
     }
 

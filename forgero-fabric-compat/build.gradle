@@ -53,7 +53,7 @@ dependencies {
     //mythicmetals testing
     //modImplementation "curse.maven:mythicmetals-410127:4118479"
     //modImplementation "curse.maven:alloy-forgery-438718:4073356"
-    //modImplementation "curse.maven:owo-lib-532610:4152949"
+    //modImplementation "curse.maven:owo-lib-532610:4028921"
     //annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
     //modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
     //modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
@@ -64,8 +64,8 @@ dependencies {
     //modImplementation "com.github.DaFuqs:AdditionalEntityAttributes:${project.aea_versionite}"
     //include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.rea_version}")
     // Cardinal Components
-    //modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
-    //modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+    modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+    modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
 
 
     //include project(':forgero-core')
