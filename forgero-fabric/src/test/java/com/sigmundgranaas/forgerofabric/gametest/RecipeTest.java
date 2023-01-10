@@ -24,8 +24,29 @@ public class RecipeTest {
 
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
     public void testCraftOakKatana(TestContext context) {
-        var test = RecipeTester.ofTool("oak-katana_blade", "oak-handle", "forgero:oak-sword", context);
+        var test = RecipeTester.ofTool("oak-katana_blade", "oak-handle", "oak-sword", context);
         assertTrue(test, "unable to craft oak katana");
+        context.complete();
+    }
+
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
+    public void testCreatePickaxeFromSchematic(TestContext context) {
+        var test = RecipeTester.ofPart("pickaxe_head-schematic", "minecraft:oak_planks", 3, "oak-pickaxe_head", context);
+        assertTrue(test, "Unable to craft oak pickaxe head");
+        context.complete();
+    }
+
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
+    public void testCrateMasterCraftedSwordBlade(TestContext context) {
+        var test = RecipeTester.ofPart("mastercrafted_sword_blade-schematic", "minecraft:oak_planks", 3, "oak-mastercrafted_sword_blade", context);
+        assertTrue(test, "Unable to craft oak sword blade");
+        context.complete();
+    }
+
+    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
+    public void testCraftHandle(TestContext context) {
+        var test = RecipeTester.ofPart("handle-schematic", "minecraft:diamond", 2, "diamond-handle", context);
+        assertTrue(test, "Unable to craft diamond handle");
         context.complete();
     }
 

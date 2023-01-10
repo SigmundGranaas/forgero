@@ -48,7 +48,7 @@ public class RecipeInflater {
                 templateIngredients.add(List.of(IngredientData.builder().id(resource.identifier()).unique(true).build()));
             } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
                 if (ingredient.unique()) {
-                    templateIngredients.add(findUniqueIngredients(ingredient.type()));
+                    templateIngredients.add(findUniqueIngredients(ingredient));
                 } else {
                     templateIngredients.add(List.of(ingredient));
                 }
@@ -118,9 +118,9 @@ public class RecipeInflater {
         return resource.construct().isEmpty();
     }
 
-    private List<IngredientData> findUniqueIngredients(String type) {
-        return typeFinder.apply(type).stream()
-                .map(res -> IngredientData.builder().id(res.identifier()).unique(true).build())
+    private List<IngredientData> findUniqueIngredients(IngredientData data) {
+        return typeFinder.apply(data.type()).stream()
+                .map(res -> IngredientData.builder().id(res.identifier()).amount(data.amount()).unique(true).build())
                 .toList();
     }
 

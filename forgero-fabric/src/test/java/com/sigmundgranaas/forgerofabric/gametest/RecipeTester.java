@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
@@ -43,6 +44,15 @@ public class RecipeTester implements Supplier<Boolean> {
             return Registry.ITEM.get(new Identifier("forgero:" + identifier));
         }
         return item;
+    }
+
+    public static RecipeTester ofPart(String schematic, String material, int count, String result, TestContext context) {
+        CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+        inventory.setStack(0, new ItemStack(itemFromString(schematic)));
+        IntStream.range(0, count).forEach(index -> inventory.setStack(index + 1, new ItemStack(itemFromString(material))));
+        Item outcome = itemFromString(result);
+
+        return new RecipeTester(context, inventory, outcome);
     }
 
     public Boolean get() {
