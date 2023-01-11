@@ -27,33 +27,56 @@ import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
-    LoadingCache<ItemStack, Integer> durabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
-        @Override
-        public @NotNull Integer load(@NotNull ItemStack stack) {
-            if (stack.getItem() instanceof DynamicAttributeItem dynamic) {
-                return (int) dynamic.dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
-            }
-            return 1;
-        }
-    });
-    Map<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = new ConcurrentHashMap<>();
+    LoadingCache<ItemStack, Integer> durabilityCache = CacheBuilder.newBuilder()
+            .maximumSize(600)
+            .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
+            .build(new CacheLoader<>() {
+                @Override
+                public @NotNull Integer load(@NotNull ItemStack stack) {
+                    if (stack.getItem() instanceof DynamicAttributeItem dynamic) {
+                        return (int) dynamic.dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
+                    }
+                    return 1;
+                }
+            });
 
-    Map<ItemStack, Float> miningSpeedCache = new ConcurrentHashMap<>();
-    
+    LoadingCache<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = CacheBuilder.newBuilder()
+            .maximumSize(600)
+            .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
+            .build(new CacheLoader<>() {
+                @Override
+                public @NotNull ImmutableMultimap<EntityAttribute, EntityAttributeModifier> load(@NotNull ItemStack stack) {
+                    return ImmutableMultimap.<EntityAttribute, EntityAttributeModifier>builder().build();
+                }
+            });
 
-    LoadingCache<String, Integer> defaultDurabilityCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
-        @Override
-        public @NotNull Integer load(@NotNull String id) {
-            return ForgeroStateRegistry.stateFinder().find(id).map(state -> state.stream().applyAttribute(AttributeType.DURABILITY)).orElse(1f).intValue();
-        }
-    });
+    LoadingCache<ItemStack, Float> miningSpeedCache = CacheBuilder.newBuilder()
+            .maximumSize(600)
+            .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
+            .build(new CacheLoader<>() {
+                @Override
+                public @NotNull Float load(@NotNull ItemStack stack) {
+                    return 1f;
+                }
+            });
+
+    LoadingCache<String, Integer> defaultDurabilityCache = CacheBuilder.newBuilder()
+            .maximumSize(600)
+            .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
+            .build(new CacheLoader<>() {
+                @Override
+                public @NotNull Integer load(@NotNull String id) {
+                    return ForgeroStateRegistry.stateFinder().find(id).map(state -> state.stream().applyAttribute(AttributeType.DURABILITY)).orElse(1f).intValue();
+                }
+            });
 
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
@@ -100,12 +123,10 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     @Override
     default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
         if (slot.equals(EquipmentSlot.MAINHAND) && stack.getItem() instanceof DynamicAttributeItem && isEquippable()) {
-            if (multiMapCache.containsKey(stack)) {
-                return multiMapCache.get(stack);
-            } else {
-                var multimap = createMultiMap(stack);
-                multiMapCache.put(stack, multimap);
-                return multimap;
+            try {
+                return multiMapCache.get(stack, () -> createMultiMap(stack));
+            } catch (ExecutionException e) {
+                return EMPTY;
             }
         } else {
             return EMPTY;
@@ -156,16 +177,18 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     @Override
     default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
-        if (miningSpeedCache.containsKey(stack)) {
-            return miningSpeedCache.get(stack);
-        }
-
         if (stack.getItem() instanceof DynamicAttributeItem dynamic && isEffectiveOn(state)) {
-            Target target = new BlockBreakingEfficiencyTarget(state);
-            float result = dynamic.dynamicProperties(stack).stream().applyAttribute(target, AttributeType.MINING_SPEED);
-            miningSpeedCache.put(stack, result);
-            return result;
+            try {
+                return miningSpeedCache.get(stack, () -> mingSpeedCalculation(dynamic, stack, state));
+            } catch (ExecutionException e) {
+                return 1f;
+            }
         }
         return 1f;
+    }
+
+    private float mingSpeedCalculation(DynamicAttributeItem dynamic, ItemStack stack, BlockState state) {
+        Target target = new BlockBreakingEfficiencyTarget(state);
+        return dynamic.dynamicProperties(stack).stream().applyAttribute(target, AttributeType.MINING_SPEED);
     }
 }
