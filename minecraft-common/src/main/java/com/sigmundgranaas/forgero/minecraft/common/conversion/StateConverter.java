@@ -6,11 +6,21 @@ import com.sigmundgranaas.forgero.minecraft.common.utils.ItemUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public interface StateConverter {
+    static Map<ItemStack, State> cachedStates = new ConcurrentHashMap<>();
+
     static Optional<State> of(ItemStack stack) {
-        return new StackToItemConverter().convert(stack);
+        State state = cachedStates.get(stack);
+        if(state == null){
+           var converted = new StackToItemConverter().convert(stack);
+            converted.ifPresent(value -> cachedStates.put(stack, value));
+           return converted;
+        }
+        return Optional.of(state);
     }
 
     static Optional<State> of(Item item) {

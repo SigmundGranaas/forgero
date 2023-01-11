@@ -10,6 +10,8 @@ you have backed up your save.**
 * Added support for creating custom parts using resources
 * Added tests for common recipes
 * Optimised recipe creation process
+* Improved performance when mining with forgero tools
+* Implemented a lot of caching to help with expensive calculations being made too often
 * Fixed crash when viewing tooltip with languages using commas instead of periods for decimals
 * Fixed mining level not applying to modded blocks
 

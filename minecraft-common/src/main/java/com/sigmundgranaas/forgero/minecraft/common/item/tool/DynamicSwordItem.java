@@ -37,15 +37,12 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
     }
 
     public int getItemBarColor(ItemStack stack) {
-        float f = Math.max(0.0F, ((float) this.getDurability(stack) - (float) stack.getDamage()) / (float) this.getDurability(stack));
-        return MathHelper.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
+        return getDurabilityColor(stack);
     }
-
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
-
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 

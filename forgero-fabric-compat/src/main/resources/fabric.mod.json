@@ -20,6 +20,9 @@
     ],
     "client": [
       "com.sigmundgranaas.forgero.fabric.ForgeroCompatClient"
+    ],
+    "main": [
+      "com.sigmundgranaas.forgero.fabric.ForgeroCompatInitializer"
     ]
   },
   "mixins": [

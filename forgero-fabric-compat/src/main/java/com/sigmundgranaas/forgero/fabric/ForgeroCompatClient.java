@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.fabric;
 
+import com.sigmundgranaas.forgero.fabric.ipn.IpnNextCompat;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.patchouli.GemUpgradeRecipePage;
 import net.fabricmc.api.ClientModInitializer;
@@ -12,5 +13,6 @@ public class ForgeroCompatClient implements ClientModInitializer {
             GemUpgradeRecipePage.register();
             BookDropOnAdvancement.registerBookDrop();
         }
+
     }
 }
