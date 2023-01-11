@@ -11,14 +11,6 @@
     ],
     "type": "SWORD_BLADE",
     "slots": [
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "type": "MATERIAL",
-        "tier": 1
-      }
     ]
   },
   "properties": {
