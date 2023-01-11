@@ -29,7 +29,7 @@ public abstract class LifecycleResourceManagerImplMixin {
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) {
-        if (id.getPath().contains(".png")) {
+        if (id.getPath().contains(".png") && cir.getReturnValue().isEmpty()) {
             var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
             if (TEXTURES.containsKey(textureId)) {
                 FileLoader loader = new FileService();

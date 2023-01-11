@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.state.customvalue.CustomValue;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.type.Type;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object> {
-    static State of(Composite composite) {
-        return new CompositeIngredient(composite);
+    static State of(Construct construct) {
+        return new CompositeIngredient(construct);
     }
 
     static State of(String name, Type type, List<Property> properties) {

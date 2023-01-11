@@ -37,8 +37,7 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
     }
 
     public int getItemBarColor(ItemStack stack) {
-        float f = Math.max(0.0F, ((float) this.getDurability(stack) - (float) stack.getDamage()) / (float) this.getDurability(stack));
-        return MathHelper.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
+        return getDurabilityColor(stack);
     }
 
     @Override

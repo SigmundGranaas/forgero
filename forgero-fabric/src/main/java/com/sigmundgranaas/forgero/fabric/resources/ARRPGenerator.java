@@ -75,7 +75,6 @@ public class ARRPGenerator {
     }
 
     private void createMaterialToolTags() {
-
         var tools = ForgeroStateRegistry.STATES.find(Type.TOOL_MATERIAL);
         var materials = ForgeroStateRegistry.STATES.find(Type.HOLDABLE);
 

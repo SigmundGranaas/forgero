@@ -1,0 +1,18 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "diamond-sacrificial_blade",
+      "template": "sacrificial_blade.png",
+      "palette": "diamond",
+      "order": "40"
+    },
+    {
+      "target": [
+        "id:diamond-sacrificial_dagger_blade"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "diamond-sacrificial_blade"
+    }
+  ]
+}

@@ -1,13 +1,14 @@
 package com.sigmundgranaas.forgero.core.state;
 
-import com.sigmundgranaas.forgero.core.state.slot.SlotContainer;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.core.type.Type;
 
-public class CompositeUpgrade extends Composite implements Upgrade {
-    public CompositeUpgrade(Composite composite) {
-        super(composite.ingredients(), SlotContainer.of(composite.slots()), composite.name(), composite.nameSpace(), composite.type());
+public class CompositeUpgrade extends Construct implements Upgrade {
+    public CompositeUpgrade(Construct construct) {
+        super(construct.ingredients(), SlotContainer.of(construct.slots()), construct.name(), construct.nameSpace(), construct.type());
     }
 
     @Override

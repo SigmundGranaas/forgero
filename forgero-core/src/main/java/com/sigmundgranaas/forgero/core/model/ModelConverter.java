@@ -102,11 +102,14 @@ public class ModelConverter {
     }
 
     private List<ModelMatchPairing> pairings(ModelData data) {
-        List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());
-        var variants = data.getVariants().stream().map(variant -> data.toBuilder().template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() : variant.getTemplate()).target(variant.getTarget()).offset(variant.getOffset()).order(data.order()).build()).collect(Collectors.toList());
-        variants.add(data);
-        return palettes.stream().map(palette -> variants.stream().map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()), Offset.of(entry.getOffset()))).toList()).flatMap(List::stream).toList();
-
+        if (!data.getModelType().equals("GENERATE")) {
+            return List.of(generate(PaletteData.builder().name(data.getPalette()).build(), data.getTemplate(), data.order(), new ArrayList<>(), Offset.of(data.getOffset())));
+        } else {
+            List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());
+            var variants = data.getVariants().stream().map(variant -> data.toBuilder().template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() : variant.getTemplate()).target(variant.getTarget()).offset(variant.getOffset()).order(data.order()).build()).collect(Collectors.toList());
+            variants.add(data);
+            return palettes.stream().map(palette -> variants.stream().map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()), Offset.of(entry.getOffset()))).toList()).flatMap(List::stream).toList();
+        }
     }
 
     private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria, Offset offset) {

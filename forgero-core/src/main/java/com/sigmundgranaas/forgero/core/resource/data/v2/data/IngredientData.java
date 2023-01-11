@@ -35,7 +35,7 @@ public class IngredientData {
     }
 
     public int amount() {
-        return Objects.requireNonNullElse(amount, 1);
+        return amount > 0 ? amount : 1;
     }
 
 }

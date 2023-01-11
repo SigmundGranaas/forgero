@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -21,13 +21,13 @@ public class CompositeEncoder implements CompoundEncoder<State> {
         var compound = identifiableEncoder.encode(element);
         compound.putString(STATE_TYPE_IDENTIFIER, COMPOSITE_IDENTIFIER);
         compound.putString(TYPE_IDENTIFIER, element.type().typeName());
-        if (element instanceof Composite composite) {
+        if (element instanceof Construct construct) {
             var ingredients = new NbtList();
-            composite.ingredients().stream().map(stateEncoder::encode).forEach(ingredients::add);
+            construct.ingredients().stream().map(stateEncoder::encode).forEach(ingredients::add);
             compound.put(INGREDIENTS_IDENTIFIER, ingredients);
 
             var upgrades = new NbtList();
-            composite.upgrades().stream().map(stateEncoder::encode).forEach(upgrades::add);
+            construct.upgrades().stream().map(stateEncoder::encode).forEach(upgrades::add);
             compound.put(UPGRADES_IDENTIFIER, upgrades);
         }
         return compound;

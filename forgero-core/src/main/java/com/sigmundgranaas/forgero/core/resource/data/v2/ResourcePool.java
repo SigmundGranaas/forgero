@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.core.resource.data.v2.factory.TypeFactory;
-import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Ingredient;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.type.ResolvedTypeTree;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
@@ -21,14 +21,14 @@ public class ResourcePool {
     private final TypeTree tree;
     private List<DataResource> resolvedConstructs;
     private List<DataResource> unresolvedConstructs;
-    private List<Composite> composites;
+    private List<Construct> constructs;
 
     public ResourcePool(ImmutableList<DataResource> resources) {
         this.resources = resources;
         this.resolvedConstructs = new ArrayList<>();
         this.unresolvedConstructs = new ArrayList<>();
 
-        this.composites = new ArrayList<>();
+        this.constructs = new ArrayList<>();
         this.tree = new TypeTree();
     }
 
@@ -97,7 +97,7 @@ public class ResourcePool {
         resolvedConstructs.stream()
                 .map(this::constructToComposite)
                 .flatMap(List::stream)
-                .forEach(composites::add);
+                .forEach(constructs::add);
 
 
         return tree.resolve();
@@ -110,7 +110,7 @@ public class ResourcePool {
         return Optional.empty();
     }
 
-    private List<Composite> constructToComposite(DataResource resource) {
+    private List<Construct> constructToComposite(DataResource resource) {
         var jsonIngredients = resource.construct().get().recipes().get().get(0).ingredients();
         var templateIngredients = new ArrayList<List<Ingredient>>();
         for (IngredientData ingredient : jsonIngredients) {
@@ -137,10 +137,10 @@ public class ResourcePool {
             }
         }
 
-        var composites = new ArrayList<Composite>();
+        var composites = new ArrayList<Construct>();
         for (int i = 0; i < templateIngredients.get(0).size(); i++) {
             for (int j = 0; j < templateIngredients.get(1).size(); j++) {
-                var builder = Composite.builder();
+                var builder = Construct.builder();
                 builder.addIngredient(templateIngredients.get(0).get(i));
                 builder.type(tree.type(resource.construct().get().type()));
                 builder.addIngredient(templateIngredients.get(1).get(j));
