@@ -1,18 +1,17 @@
 package com.sigmundgranaas.forgero.core.resource.data;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.identifier.Common;
+import com.sigmundgranaas.forgero.core.resource.data.processor.RecipeInflater;
+import com.sigmundgranaas.forgero.core.resource.data.processor.SchematicConstructInflater;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConstructData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.sigmundgranaas.forgero.core.util.Identifiers.THIS_IDENTIFIER;
 
 @SuppressWarnings("DuplicatedCode")
 public class DataBuilder {
@@ -20,6 +19,7 @@ public class DataBuilder {
     private final List<DataResource> finalResources;
     private final Map<String, DataResource> templates;
     private final TypeTree tree;
+    private Set<String> typeDependencySet = new HashSet<>();
     private List<DataResource> resources;
 
     private List<RecipeData> recipes;
@@ -84,9 +84,10 @@ public class DataBuilder {
                 .forEach(res -> templates.put(res.identifier(), res));
         boolean remainingResources = true;
 
+
         while (remainingResources) {
             int resolvedResources;
-
+            unresolvedConstructs.stream().map(DataResource::construct).flatMap(Optional::stream).map(ConstructData::type).forEach(typeDependencySet::add);
             var temporaryResolved = unresolvedConstructs
                     .stream()
                     .filter(this::hasValidComponents)
@@ -105,6 +106,7 @@ public class DataBuilder {
             if (resolvedResources == 0) {
                 remainingResources = false;
             }
+            typeDependencySet.clear();
         }
     }
 
@@ -114,12 +116,10 @@ public class DataBuilder {
             return Collections.emptyList();
         }
         var construct = resource.construct().get();
-        if (construct.target().equals(Identifiers.THIS_IDENTIFIER)) {
+        if (construct.target().equals(THIS_IDENTIFIER)) {
             return List.of(resource);
         } else if (construct.target().equals(Identifiers.CREATE_IDENTIFIER)) {
-            var constructs = mapConstructData(resource)
-                    .stream()
-                    .toList();
+            var constructs = mapConstructData(resource);
             resources.add(resource.toBuilder().construct(null).build());
             resources.addAll(constructs);
         }
@@ -127,145 +127,26 @@ public class DataBuilder {
     }
 
     private List<DataResource> mapConstructData(DataResource data) {
+        Function<String, Optional<DataResource>> idFinder = (String id) -> Optional.ofNullable(resolvedResources.get(id));
+        Function<String, Optional<DataResource>> templateFinder = (String id) -> Optional.ofNullable(templates.get(id));
+
         if (data.construct().isPresent() && data.construct().get().recipes().isPresent()) {
-            data.construct().get().recipes().get().stream()
-                    .map(recipe -> inflateRecipes(recipe, data))
-                    .flatMap(List::stream)
-                    .forEach(recipes::add);
+            var inflatedRecipes = new RecipeInflater(data, this::findResourceFromType, idFinder, templateFinder)
+                    .process();
+            recipes.addAll(inflatedRecipes);
         }
-        List<DataResource> constructs = new ArrayList<>();
         if (data.construct().isEmpty()) {
             return Collections.emptyList();
         }
-        var components = data.construct().get().components();
-        var templateIngredients = new ArrayList<List<IngredientData>>();
-        for (IngredientData ingredient : components) {
-            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
-                templateIngredients.add(List.of(IngredientData.builder().id(data.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
-                if (ingredient.unique()) {
-                    var resources = tree.find(ingredient.type())
-                            .map(node -> node.getResources(DataResource.class))
-                            .map(List::stream)
-                            .map(Stream::toList)
-                            .orElse(Collections.emptyList());
-
-                    var ingredients = resources
-                            .stream()
-                            .map(res -> IngredientData.builder().id(res.identifier()).unique(true).build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                } else {
-
-                    var resource =
-                            tree.find(ingredient.type())
-                                    .map(node -> node.getResources(DataResource.class))
-                                    .map(element -> element.stream().filter(res -> res.resourceType() == ResourceType.DEFAULT)
-                                            .toList())
-                                    .orElse(Collections.emptyList());
-                    var ingredients = resource
-                            .stream()
-                            .map(res -> IngredientData.builder().id(res.identifier()).build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                }
-
-
-            } else if (!ingredient.id().equals(Identifiers.EMPTY_IDENTIFIER)) {
-                templateIngredients.add(List.of(ingredient));
-            }
-        }
-
-        for (int i = 0; i < templateIngredients.get(0).size(); i++) {
-            for (int j = 0; j < templateIngredients.get(1).size(); j++) {
-                var builder = data.construct().get().toBuilder();
-                var newComponents = new ArrayList<IngredientData>();
-                newComponents.add(templateIngredients.get(0).get(i));
-                newComponents.add(templateIngredients.get(1).get(j));
-                builder.components(newComponents);
-                String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
-                builder.target(Identifiers.THIS_IDENTIFIER);
-                var construct = builder.build();
-                var templateBuilder = Optional.ofNullable(templates.get(construct.type())).map(DataResource::toBuilder).orElse(DataResource.builder());
-                if (hasDefaults(construct) || data.resourceType() == ResourceType.DEFAULT || name.equals("handle-schematic-oak")) {
-                    templateBuilder.resourceType(ResourceType.DEFAULT);
-                }
-                constructs.add(templateBuilder
-                        .construct(construct)
-                        .namespace(data.nameSpace())
-                        .container(data.container().get())
-                        .name(name)
-                        .type(construct.type())
-                        .build());
-            }
-        }
-        return constructs;
+        var inflater = new SchematicConstructInflater(data, this::findResourceFromType, idFinder, templateFinder);
+        return inflater.process();
     }
 
-
-    private List<RecipeData> inflateRecipes(RecipeData data, DataResource rootResource) {
-        var recipes = new ArrayList<RecipeData>();
-
-        var rootIngredients = data.ingredients();
-        var templateIngredients = new ArrayList<List<IngredientData>>();
-        for (IngredientData ingredient : rootIngredients) {
-            if (ingredient.id().equals(Identifiers.THIS_IDENTIFIER)) {
-                templateIngredients.add(List.of(IngredientData.builder().id(rootResource.identifier()).unique(true).build()));
-            } else if (!ingredient.type().equals(Identifiers.EMPTY_IDENTIFIER)) {
-                if (ingredient.unique()) {
-                    var resources = tree.find(ingredient.type())
-                            .map(node -> node.getResources(DataResource.class))
-                            .map(List::stream)
-                            .map(Stream::toList)
-                            .orElse(Collections.emptyList());
-
-                    var ingredients = resources
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.identifier())
-                                    .unique(true)
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                } else {
-                    var resource =
-                            tree.find(ingredient.type())
-                                    .map(node -> node.getResources(DataResource.class))
-                                    .map(element -> element.stream().filter(res -> res.resourceType() == ResourceType.DEFAULT)
-                                            .toList())
-                                    .orElse(Collections.emptyList());
-                    var ingredients = resource
-                            .stream()
-                            .map(res -> IngredientData.builder()
-                                    .id(res.identifier())
-                                    .amount(ingredient.amount())
-                                    .build())
-                            .toList();
-
-                    templateIngredients.add(ingredients);
-                }
-            }
-        }
-        for (int i = 0; i < templateIngredients.get(0).size(); i++) {
-            for (int j = 0; j < templateIngredients.get(1).size(); j++) {
-                var newComponents = new ArrayList<IngredientData>();
-                newComponents.add(templateIngredients.get(0).get(i));
-                newComponents.add(templateIngredients.get(1).get(j));
-                String name = String.join(Common.ELEMENT_SEPARATOR, newComponents.stream().map(IngredientData::id).map(this::idToName).toList());
-                recipes.add(RecipeData.builder()
-                        .ingredients(newComponents)
-                        .craftingType(data.type())
-                        .target(rootResource.nameSpace() + ":" + name)
-                        .build());
-            }
-        }
-        return recipes;
+    private List<DataResource> findResourceFromType(String type) {
+        return tree.find(type)
+                .map(node -> node.getResources(DataResource.class))
+                .orElse(ImmutableList.<DataResource>builder().build());
     }
-
 
     private boolean hasValidComponents(DataResource resource) {
         if (resource.construct().isEmpty()) {
@@ -273,9 +154,11 @@ public class DataBuilder {
         }
         var construct = resource.construct().get();
         for (IngredientData data : construct.components()) {
-            if (!data.id().equals(Identifiers.EMPTY_IDENTIFIER) && resolvedResources.containsKey(data.id())) {
+            if (!data.type().equals(Identifiers.EMPTY_IDENTIFIER) && typeDependencySet.contains(data.type())) {
+                return false;
+            } else if (!data.id().equals(Identifiers.EMPTY_IDENTIFIER) && resolvedResources.containsKey(data.id())) {
                 break;
-            } else if (data.id().equals(Identifiers.THIS_IDENTIFIER)) {
+            } else if (data.id().equals(THIS_IDENTIFIER)) {
                 break;
             } else if (!data.type().equals(Identifiers.EMPTY_IDENTIFIER) && treeContainsTag(data.type())) {
                 break;
@@ -326,14 +209,6 @@ public class DataBuilder {
 
     private List<DataResource> resources() {
         return resources;
-    }
-
-    private String idToName(String id) {
-        String[] split = id.split(":");
-        if (split.length > 1) {
-            return split[1];
-        }
-        return id;
     }
 
     @SuppressWarnings("unused")

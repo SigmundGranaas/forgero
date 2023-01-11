@@ -2,13 +2,14 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
-import com.sigmundgranaas.forgero.core.state.Composite;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.type.Type;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -60,7 +61,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
         var target = StateConverter.of(this.getOutput());
         if (target.isPresent()) {
             var targetState = target.get();
-            var builder = Composite.builder().type(targetState.type()).name(targetState.name()).nameSpace(targetState.nameSpace());
+            var builder = Construct.builder().type(targetState.type()).name(targetState.name()).nameSpace(targetState.nameSpace());
             for (int i = 0; i < craftingInventory.size(); i++) {
                 var stack = craftingInventory.getStack(i);
                 if (this.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).anyMatch(ingredient -> ingredient.test(stack))) {

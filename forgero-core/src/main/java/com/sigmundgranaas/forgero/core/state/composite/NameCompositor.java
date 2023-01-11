@@ -1,5 +1,6 @@
-package com.sigmundgranaas.forgero.core.state;
+package com.sigmundgranaas.forgero.core.state.composite;
 
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 
 import java.util.Comparator;

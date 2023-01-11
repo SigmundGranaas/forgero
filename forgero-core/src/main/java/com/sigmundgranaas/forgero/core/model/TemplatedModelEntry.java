@@ -21,15 +21,15 @@ public record TemplatedModelEntry(String template) implements ModelMatcher {
         var templateModel = provider.find(Identifiable.of(template))
                 .filter(matcher -> matcher.match(state, context))
                 .flatMap(matcher -> matcher.get(state, provider, context));
-        if (state instanceof Composite composite) {
-            context.add(composite.type()).add(new NameMatch(composite.name()));
+        if (state instanceof Composite construct) {
+            context.add(construct.type()).add(new NameMatch(construct.name()));
             var compositeModelTemplate = new CompositeModelTemplate();
             templateModel.ifPresent(compositeModelTemplate::add);
             templateModel.ifPresent(model -> addModelToContext(model, context));
-            composite.slots().stream()
+            construct.slots().stream()
                     .filter(Slot::filled)
                     .map(slot ->
-                            CompositeModelEntry.findUpgradeModel(slot, composite, context, provider)
+                            CompositeModelEntry.findUpgradeModel(slot, construct, context, provider)
                     ).flatMap(Optional::stream)
                     .forEach(compositeModelTemplate::add);
             return Optional.of(compositeModelTemplate);

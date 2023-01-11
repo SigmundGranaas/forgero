@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgeroforge.test.attribute.tool;
 
-import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgeroforge.test.util.AttributeTester;
 import com.sigmundgranaas.forgeroforge.test.util.ForgeroPackageTest;
 import org.junit.jupiter.api.Test;
@@ -69,7 +69,7 @@ public class ExtendedAxeTest extends ForgeroPackageTest {
 
     @Test
     void testDiamondAxeIronHandle() {
-        var pickaxe = Composite.builder()
+        var pickaxe = Construct.builder()
                 .id("forgero:diamond-axe")
                 .addIngredient(state("forgero:iron-handle"))
                 .addIngredient(state("forgero:diamond-axe_head"))

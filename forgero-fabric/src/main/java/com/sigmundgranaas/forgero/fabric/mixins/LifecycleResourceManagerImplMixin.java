@@ -17,13 +17,13 @@ import java.util.Optional;
 @Mixin(LifecycledResourceManagerImpl.class)
 public abstract class LifecycleResourceManagerImplMixin {
 
-    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getResource", at = @At("RETURN"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) {
-        if (id.getPath().contains(".png")) {
+        if (id.getPath().contains(".png") && cir.getReturnValue().isEmpty()) {
             var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
             if (ForgeroClient.TEXTURES.containsKey(textureId)) {
-                FileLoader loader = new FileService();
 
+                FileLoader loader = new FileService();
                 var texture = TextureGenerator.getInstance(loader).getTexture(ForgeroClient.TEXTURES.get(textureId));
                 if (texture.isPresent()) {
                     Resource resource = new Resource(id.getNamespace(), texture.get()::getStream);

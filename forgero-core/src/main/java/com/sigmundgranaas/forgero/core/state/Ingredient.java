@@ -1,13 +1,14 @@
 package com.sigmundgranaas.forgero.core.state;
 
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.type.Type;
 
 import java.util.List;
 
 public interface Ingredient extends State {
-    static Ingredient of(Composite composite) {
-        return new CompositeIngredient(composite);
+    static Ingredient of(Construct construct) {
+        return new CompositeIngredient(construct);
     }
 
     static Ingredient of(String name, Type type, List<Property> properties) {

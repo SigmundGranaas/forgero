@@ -1,10 +1,10 @@
-package com.sigmundgranaas.forgero.core.state.slot;
+package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;

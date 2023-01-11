@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
@@ -96,7 +96,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
             this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 142));
         }
 
-    }    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
+    }
 
     @Override
     protected void dropInventory(PlayerEntity player, Inventory inventory) {
@@ -174,7 +174,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                 if (output.isPresent() && compositeSlot.isRemovable() && StateConverter.of(output.get()).filter(Composite.class::isInstance).isPresent()) {
                     compositeSlot.setStack(output.get());
                     serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
-                } else if (!compositeSlot.isEmpty() && output.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.composite)) {
+                } else if (!compositeSlot.isEmpty() && output.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.construct)) {
                     compositeSlot.removeCompositeIngredient();
                     serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
                 }
@@ -194,7 +194,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                 if (compositeOpt.isPresent()) {
                     if (inventory.isEmpty()) {
                         var composite = compositeOpt.get();
-                        var elements = composite.disassemble();
+                        var elements = composite.components();
                         for (int i = 1; i < elements.size() + 1; i++) {
                             var element = elements.get(i - 1);
                             var newStack = StateConverter.of(element);
@@ -211,19 +211,18 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
                     inventory.setStack(1, new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe_head"))));
                     serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
                 }
-
             }
         });
     }
 
-    private List<ItemStack> deconstructedItems(Composite composite) {
-        return composite.disassemble().stream().map(StateConverter::of).toList();
+    private List<ItemStack> deconstructedItems(Composite construct) {
+        return construct.components().stream().map(StateConverter::of).toList();
     }
 
-    private boolean isDeconstructedInventory(Composite composite) {
-        var deconstructed = deconstructedItems(composite);
+    private boolean isDeconstructedInventory(Composite construct) {
+        var deconstructed = deconstructedItems(construct);
         return IntStream.range(0, deconstructed.size()).allMatch(index -> deconstructed.get(index).getItem() == inventory.getStack(index).getItem());
-    }
+    }    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
 
     private Optional<ItemStack> craftInventory(World world) {
         if (!world.isClient) {
@@ -246,7 +245,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
     private static class CompositeSlot extends Slot {
         private final Inventory craftingInventory;
-        private Composite composite;
+        private Composite construct;
         private boolean isConstructed = false;
         private boolean doneConstructing = false;
 
@@ -257,7 +256,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         }
 
         Optional<Composite> getComposite() {
-            return Optional.ofNullable(composite);
+            return Optional.ofNullable(construct);
         }
 
         public boolean isConstructed() {
@@ -269,17 +268,17 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         }
 
         public boolean isEmpty() {
-            return composite == null;
+            return construct == null;
         }
 
 
-        public void addToolToCompositeSlot(Composite composite) {
-            this.composite = composite;
+        public void addToolToCompositeSlot(Composite construct) {
+            this.construct = construct;
             this.isConstructed = false;
         }
 
         public void removeCompositeIngredient() {
-            this.composite = null;
+            this.construct = null;
             this.isConstructed = false;
             this.doneConstructing = true;
             if (!this.inventory.getStack(0).isEmpty()) {

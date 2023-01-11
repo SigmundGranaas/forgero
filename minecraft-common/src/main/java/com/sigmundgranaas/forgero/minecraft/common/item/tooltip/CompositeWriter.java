@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -44,21 +45,21 @@ public class CompositeWriter implements Writer {
                     mutableText.append(": -").formatted(Formatting.GRAY);
                 }
                 tooltip.add(mutableText);
-                if (context.isAdvanced() && slot.filled() && slot.get().get() instanceof Composite compositeSlot) {
-                    write(compositeSlot, tooltip, context, indent + 2);
+                if (context.isAdvanced() && slot.filled() && slot.get().get() instanceof Construct constructSlot) {
+                    write(constructSlot, tooltip, context, indent + 2);
                 }
             });
         }
 
-        if (composite.ingredients().size() > 0) {
+        if (composite instanceof Construct construct && construct.ingredients().size() > 0) {
             MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append(":").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
-            composite.ingredients().forEach(ingredient -> {
+            construct.ingredients().forEach(ingredient -> {
                 Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
                 MutableText mutableText = Text.literal(stringIndent.toString()).append(Writer.nameToTranslatableText(ingredient)).formatted(rarity.formatting);
                 tooltip.add(mutableText);
-                if (context.isAdvanced() && ingredient instanceof Composite compositeSlot) {
-                    write(compositeSlot, tooltip, context, indent + 2);
+                if (context.isAdvanced() && ingredient instanceof Construct constructSlot) {
+                    write(constructSlot, tooltip, context, indent + 2);
                 }
             });
         }
@@ -85,21 +86,21 @@ public class CompositeWriter implements Writer {
 
                 }
                 tooltip.add(mutableText);
-                if (context.isAdvanced() && slot.filled() && slot.get().get() instanceof Composite compositeSlot) {
-                    write(compositeSlot, tooltip, context, indent + 2);
+                if (context.isAdvanced() && slot.filled() && slot.get().get() instanceof Construct constructSlot) {
+                    write(constructSlot, tooltip, context, indent + 2);
                 }
             });
         }
 
-        if (composite.ingredients().size() > 0) {
+        if (composite instanceof Construct construct && construct.ingredients().size() > 0) {
             MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append(":").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
-            composite.ingredients().forEach(ingredient -> {
+            construct.ingredients().forEach(ingredient -> {
                 Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
                 MutableText mutableText = Text.literal(stringIndent + " ").append(Writer.nameToTranslatableText(ingredient)).formatted(rarity.formatting);
                 tooltip.add(mutableText);
-                if (context.isAdvanced() && ingredient instanceof Composite compositeSlot) {
-                    write(compositeSlot, tooltip, context, indent + 2);
+                if (context.isAdvanced() && ingredient instanceof Construct constructSlot) {
+                    write(constructSlot, tooltip, context, indent + 2);
                 }
             });
         }

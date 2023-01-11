@@ -1,9 +1,10 @@
-package com.sigmundgranaas.forgero.core.state;
+package com.sigmundgranaas.forgero.core.state.upgrade;
 
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.state.Upgrade;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.type.Type;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
