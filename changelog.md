@@ -7,6 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.4
 
+* Fixed various tags which broke some recipes
+* Fixed mod dependencies not applying properly causing compatability with other mods to break
 * Added support for creating custom parts using resources
 * Added tests for common recipes
 * Optimised recipe creation process

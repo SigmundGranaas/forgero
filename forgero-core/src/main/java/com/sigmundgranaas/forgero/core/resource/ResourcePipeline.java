@@ -40,7 +40,7 @@ public class ResourcePipeline {
         this.tree = new TypeTree();
         this.idMapper = new HashMap<>();
         this.recipes = new ArrayList<>();
-        this.dependencies = new HashSet<>();
+        this.dependencies = new HashSet<>(configuration.availableDependencies());
         this.configuration = configuration;
     }
 
