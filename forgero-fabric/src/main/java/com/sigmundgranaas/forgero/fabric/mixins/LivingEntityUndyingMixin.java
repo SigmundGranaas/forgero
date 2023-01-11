@@ -48,10 +48,10 @@ public abstract class LivingEntityUndyingMixin {
             for (Hand hand : hands) {
                 handItem = this.getStackInHand(hand);
                 var stateOpt = StateConverter.of(handItem);
-                if (stateOpt.isPresent() && stateOpt.get() instanceof Composite composite) {
-                    if (composite.stream().getStaticPassiveProperties().anyMatch(prop -> prop.getStaticType() == StaticPassiveType.UNDYING)) {
-                        undyingState = Optional.of(composite);
-                        var newComposite = composite.removeUpgrade("undying-totem");
+                if (stateOpt.isPresent() && stateOpt.get() instanceof Composite construct) {
+                    if (construct.stream().getStaticPassiveProperties().anyMatch(prop -> prop.getStaticType() == StaticPassiveType.UNDYING)) {
+                        undyingState = Optional.of(construct);
+                        var newComposite = construct.removeUpgrade("undying-totem");
                         handItem.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(newComposite));
                         break;
                     }

@@ -18,6 +18,7 @@ import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
@@ -103,6 +104,7 @@ public class ForgeroInitializer implements ModInitializer {
     private void registerAARPRecipes() {
         ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
         ARRPGenerator.register(PartToSchematicGenerator::new);
+        ARRPGenerator.register(MaterialPartTagGenerator::new);
         ARRPGenerator.generate();
     }
 

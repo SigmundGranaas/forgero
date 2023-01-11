@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state.slot;
+package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Slot;

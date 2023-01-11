@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgeroforge.test.attribute.tool;
 
-import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgeroforge.test.util.AttributeTester;
 import com.sigmundgranaas.forgeroforge.test.util.ForgeroPackageTest;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
 public class ExtendedSwordTest extends ForgeroPackageTest {
     @Test
     void testOakShortSword() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:oak-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:oak-shortsword_blade"))
@@ -31,7 +31,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testIronSword() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:iron-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:iron-shortsword_blade"))
@@ -48,7 +48,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testGoldSword() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:gold-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:gold-shortsword_blade"))
@@ -65,7 +65,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testDiamondSword() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:diamond-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:diamond-shortsword_blade"))
@@ -82,7 +82,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testNetheriteSword() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:netherite-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:netherite-shortsword_blade"))
@@ -99,7 +99,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testDiamondBroadSword() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:diamond-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:diamond-broadsword_blade"))
@@ -116,7 +116,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testDiamondKatana() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:diamond-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:diamond-katana_blade"))
@@ -133,7 +133,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testDiamondKnife() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:diamond-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:diamond-knife_blade"))
@@ -151,7 +151,7 @@ public class ExtendedSwordTest extends ForgeroPackageTest {
 
     @Test
     void testDiamondSaber() {
-        var sword = Composite.builder()
+        var sword = Construct.builder()
                 .id("forgero:diamond-sword")
                 .addIngredient(state("forgero:oak-handle"))
                 .addIngredient(state("forgero:diamond-saber_blade"))

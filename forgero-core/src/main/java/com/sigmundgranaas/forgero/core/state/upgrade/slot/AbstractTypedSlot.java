@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state.slot;
+package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Slot;
@@ -12,10 +12,10 @@ import java.util.Set;
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 public abstract class AbstractTypedSlot implements Slot {
+    protected final Set<Category> categories;
     private final Type type;
     private final int index;
     private final String description;
-    protected final Set<Category> categories;
 
     public AbstractTypedSlot(int index, Type type, String description, Set<Category> categories) {
         this.index = index;

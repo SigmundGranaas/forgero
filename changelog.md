@@ -7,6 +7,9 @@ you have backed up your save.**
 
 ## Changelog 0.10.4
 
+* Added support for creating custom parts using resources
+* Added tests for common recipes
+* Optimised recipe creation process
 * Fixed crash when viewing tooltip with languages using commas instead of periods for decimals
 * Fixed mining level not applying to modded blocks
 
