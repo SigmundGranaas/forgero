@@ -27,7 +27,7 @@ public abstract class LifecycleResourceManagerImplMixin {
     @Final
     private List<ResourcePack> packs;
 
-    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getResource", at = @At("RETURN"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) {
         if (id.getPath().contains(".png") && cir.getReturnValue().isEmpty()) {
             var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
