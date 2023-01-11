@@ -10,7 +10,16 @@
     "components": [
     ],
     "type": "SWORD_BLADE",
-    "slots": []
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "MATERIAL",
+        "tier": 1
+      }
+    ]
   },
   "properties": {
     "attributes": [
@@ -18,13 +27,43 @@
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 100
+        "value": 101
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 80
+        "value": 1200
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 7
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "type": "MINING_LEVEL",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": -2.4
+      }
+    ],
+    "passive": [
+      {
+        "type": "STATIC",
+        "tag": "SOUL_REAPING"
       }
     ]
   }

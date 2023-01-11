@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.core.state.NameCompositor;
+import com.sigmundgranaas.forgero.core.state.composite.NameCompositor;
 
 import java.util.Map;
 import java.util.Optional;

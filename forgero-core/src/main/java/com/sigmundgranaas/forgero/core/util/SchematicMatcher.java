@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.util;
 
-import com.sigmundgranaas.forgero.core.util.match.Context;
-import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public class SchematicMatcher extends TypeMatcher {
     @Override

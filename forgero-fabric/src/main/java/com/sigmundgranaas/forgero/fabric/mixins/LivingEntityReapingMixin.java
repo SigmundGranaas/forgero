@@ -21,8 +21,8 @@ public abstract class LivingEntityReapingMixin {
         if (source.getAttacker() instanceof LivingEntity entity) {
             ItemStack stack = entity.getMainHandStack();
             var converted = StateConverter.of(stack);
-            if (converted.isPresent() && converted.get() instanceof Composite composite) {
-                if (composite.stream().getStaticPassiveProperties().anyMatch(prop -> prop.getStaticType() == StaticPassiveType.SOUL_REAPING)) {
+            if (converted.isPresent() && converted.get() instanceof Composite construct) {
+                if (construct.stream().getStaticPassiveProperties().anyMatch(prop -> prop.getStaticType() == StaticPassiveType.SOUL_REAPING)) {
                     ItemStack soul = new ItemStack(Items.DIAMOND);
                     LivingEntity thisEntity = (LivingEntity) (Object) this;
                     ItemEntity itemEntity = new ItemEntity(entity.world, thisEntity.getX(), thisEntity.getY(), thisEntity.getZ(), soul);

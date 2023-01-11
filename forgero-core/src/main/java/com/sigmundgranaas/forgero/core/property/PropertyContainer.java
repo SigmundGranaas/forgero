@@ -11,6 +11,9 @@ public interface PropertyContainer extends Comparable<Object> {
     Function<PropertyContainer, Float> ATTACK_DAMAGE = (PropertyContainer container) -> Property.stream(container.getProperties()).applyAttribute(AttributeType.ATTACK_DAMAGE);
     Function<PropertyContainer, Integer> RARITY = (PropertyContainer container) -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY);
 
+    static PropertyContainer of(List<Property> properties) {
+        return new SimpleContainer(properties);
+    }
 
     @Deprecated
     @NotNull

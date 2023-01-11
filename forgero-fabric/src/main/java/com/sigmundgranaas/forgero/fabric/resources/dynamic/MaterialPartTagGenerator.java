@@ -33,14 +33,14 @@ public class MaterialPartTagGenerator implements DynamicResourceGenerator {
         }
     }
 
-    private void mapTags(Composite composite) {
-        var elements = composite.name().split(ELEMENT_SEPARATOR);
+    private void mapTags(Composite construct) {
+        var elements = construct.name().split(ELEMENT_SEPARATOR);
         if (elements.length > 1) {
-            var tag = String.format("%s-%s", elements[0], composite.type().typeName().toLowerCase());
+            var tag = String.format("%s-%s", elements[0], construct.type().typeName().toLowerCase());
             if (idTagEntries.containsKey(tag)) {
-                idTagEntries.get(tag).add(composite.identifier());
+                idTagEntries.get(tag).add(construct.identifier());
             } else {
-                idTagEntries.put(tag, new ArrayList<>(List.of(composite.identifier())));
+                idTagEntries.put(tag, new ArrayList<>(List.of(construct.identifier())));
             }
         }
     }

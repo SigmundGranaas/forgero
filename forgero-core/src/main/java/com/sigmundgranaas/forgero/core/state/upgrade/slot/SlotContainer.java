@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state.slot;
+package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class SlotContainer {
-    private final ArrayList<Slot> slots;
+    private final List<Slot> slots;
 
-    public SlotContainer(ArrayList<Slot> slots) {
+    public SlotContainer(List<Slot> slots) {
         this.slots = slots;
     }
 
