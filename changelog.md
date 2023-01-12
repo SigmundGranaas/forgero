@@ -5,6 +5,11 @@
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
 
+## Changelog 0.10.4.1
+
+* Fixed patchouli guidebook recipe generator which caused a crash
+* Fixed patchouli entries using old recipe format
+
 ## Changelog 0.10.4
 
 * Fixed various tags which broke some recipes

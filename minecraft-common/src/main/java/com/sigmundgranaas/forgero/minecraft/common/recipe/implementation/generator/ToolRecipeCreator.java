@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator;
 
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
@@ -30,7 +31,7 @@ public class ToolRecipeCreator implements RecipeGenerator {
         jsonTemplate.getAsJsonObject("key").add("H", ingredientsToJsonEntry(data.ingredients().get(0)));
         jsonTemplate.getAsJsonObject("key").add("I", ingredientsToJsonEntry(data.ingredients().get(1)));
         jsonTemplate.getAsJsonObject("result").addProperty("item", data.target());
-        return new RecipeWrapperImpl(new Identifier(ingredientsToRecipeId(data.ingredients())), jsonTemplate, type);
+        return new RecipeWrapperImpl(new Identifier(Forgero.NAMESPACE, ingredientsToRecipeId(data.ingredients())), jsonTemplate, type);
     }
 
     @Override
