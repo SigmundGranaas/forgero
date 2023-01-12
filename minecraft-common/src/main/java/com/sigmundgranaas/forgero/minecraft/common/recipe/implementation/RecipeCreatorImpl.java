@@ -16,11 +16,12 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generat
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RecipeCreatorImpl implements RecipeCreator {
 
     private static RecipeCreator INSTANCE;
+
+    private final List<RecipeGenerator> generators;
     private final TemplateGenerator templateGenerator;
     private final RecipeDataHelper helper;
     private final RecipeDataMapper mapper;
@@ -29,6 +30,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
         this.templateGenerator = new TemplateGenerator(recipeTemplates);
         this.helper = new RecipeDataHelper();
         this.mapper = new RecipeDataMapper(this.helper);
+        this.generators = new ArrayList<>();
     }
 
     public static RecipeCreator getInstance() {
@@ -41,9 +43,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
 
     @Override
     public List<RecipeWrapper> createRecipes() {
-        List<RecipeGenerator> generators = new ArrayList<>();
         generators.addAll(compositeRecipeGenerators());
-        generators.addAll(guideBookGenerators());
         generators.addAll(repairKitToolRecipeGenerators());
         generators.addAll(constructUpgradeRecipes());
 
@@ -53,11 +53,14 @@ public class RecipeCreatorImpl implements RecipeCreator {
                 .toList();
     }
 
-    private List<RecipeGenerator> guideBookGenerators() {
-        return Stream.of("bindings", "heads", "handles")
-                .map(tag -> "forgero:" + tag)
-                .map(tag -> new GuideBookGenerator(templateGenerator, tag))
-                .collect(Collectors.toList());
+    @Override
+    public void registerGenerator(List<RecipeGenerator> generators) {
+        this.generators.addAll(generators);
+    }
+
+    @Override
+    public TemplateGenerator templates() {
+        return templateGenerator;
     }
 
     private List<RecipeGenerator> constructUpgradeRecipes() {

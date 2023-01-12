@@ -72,8 +72,8 @@ dependencies {
     //modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
 
     //IPN testing
-    modCompileOnly "curse.maven:inventory-profiles-next-495267:4263990"
-    modCompileOnly "curse.maven:libipn-679177:4263961"
+    //modCompileOnly "curse.maven:inventory-profiles-next-495267:4263990"
+    //modCompileOnly "curse.maven:libipn-679177:4263961"
 
     //include project(':forgero-core')
     //include project(':forgero-vanilla')
@@ -142,6 +142,26 @@ sourceSets {
     test {
         compileClasspath += test.compileClasspath
         runtimeClasspath += test.runtimeClasspath
+    }
+}
+
+loom {
+    runs {
+        testmodServer {
+            server()
+            ideConfigGenerated project.rootProject == project
+            name = "Testmod Server"
+            source sourceSets.test
+        }
+        gametest {
+            inherit testmodServer
+
+            name "Game Test"
+            // Enable the gametest runner
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+            runDir "build/gametest"
+        }
     }
 }
 
