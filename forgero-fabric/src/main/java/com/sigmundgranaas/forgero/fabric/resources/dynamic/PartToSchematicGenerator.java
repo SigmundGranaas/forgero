@@ -22,7 +22,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
     public void generate(RuntimeResourcePack pack) {
         var recipes = parts().stream().map(this::createRecipe).flatMap(Optional::stream).toList();
         var optimiser = new CompositeRecipeOptimiser();
-        optimiser.process(recipes).stream().map(this::convertRecipeData).forEach(recipe -> pack.addData(new Identifier(recipe.getAsJsonObject("result").get("item").getAsString() + "_schematic_conversion"), recipe.toString().getBytes()));
+        optimiser.process(recipes).stream().map(this::convertRecipeData).forEach(recipe -> pack.addData(new Identifier("forgero:recipes/" + recipe.getAsJsonObject("result").get("item").getAsString().split(":")[1] + ".json"), recipe.toString().getBytes()));
     }
 
     private List<Construct> parts() {
@@ -55,9 +55,5 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
         result.addProperty("item", construct.target());
         json.add("result", result);
         return json;
-    }
-
-    private Identifier id(Construct construct) {
-        return new Identifier(construct.nameSpace(), construct.name() + "-schematic_recipe");
     }
 }
