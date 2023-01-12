@@ -5,9 +5,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -38,9 +38,9 @@ public class RecipeTester implements Supplier<Boolean> {
     }
 
     private static Item itemFromString(String identifier) {
-        Item item = Registries.ITEM.get(new Identifier(identifier));
+        Item item = Registry.ITEM.get(new Identifier(identifier));
         if (item == Items.AIR) {
-            return Registries.ITEM.get(new Identifier("forgero:" + identifier));
+            return Registry.ITEM.get(new Identifier("forgero:" + identifier));
         }
         return item;
     }

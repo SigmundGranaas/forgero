@@ -36,10 +36,10 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modApi "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation("net.devtech:arrp:0.6.7")
+    modImplementation("net.devtech:arrp:0.5.7")
 
 
-    include "net.devtech:arrp:0.6.7"
+    include "net.devtech:arrp:0.5.7"
     include project(':forgero-core')
     include project(':minecraft-common')
 }
@@ -59,7 +59,7 @@ task assembleComplete(type: Jar) {
                 include project(':forgero-vanilla')
                 include project(':forgero-extended')
                 include project(':forgero-compat')
-                include project(':forgero-structures')
+                //include project(':forgero-structures')
                 include project(':forgero-fabric-compat')
             }
         }
@@ -160,7 +160,7 @@ loom {
             dependencies {
                 implementation project(':forgero-vanilla')
                 implementation project(':forgero-extended')
-                implementation project(':forgero-structures')
+                //implementation project(':forgero-structures')
                 implementation project(':forgero-compat')
             }
             client()

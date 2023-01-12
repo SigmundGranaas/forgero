@@ -19,11 +19,11 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,7 +103,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         int level = this.getMiningLevel();
 
         for (int i = 1; i < 10; i++) {
-            TagKey<Block> key = TagKey.of(Registries.BLOCK.getKey(), new Identifier(String.format("fabric:needs_tool_level_%s", i)));
+            TagKey<Block> key = TagKey.of(Registry.BLOCK_KEY, new Identifier(String.format("fabric:needs_tool_level_%s", i)));
             if (state.isIn(key) && level < i) {
                 return false;
             }

@@ -25,20 +25,17 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGene
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,12 +52,9 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.
 
 public class ForgeroInitializer implements ModInitializer {
 
-    static {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
-    }
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
-    public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+    public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
 
     @Override
     public void onInitialize() {
@@ -102,9 +96,9 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void registerBlocks() {
-        Registry.register(Registries.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
-        Registry.register(Registries.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
-        Registry.register(Registries.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+        Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
+        Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
+        Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
     }
 
     private void registerAARPRecipes() {
@@ -153,16 +147,15 @@ public class ForgeroInitializer implements ModInitializer {
                 .filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
 
         ForgeroStateRegistry.CREATE_STATES.stream()
-                .filter(state -> !Registries.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
-                .filter(state -> !Registries.ITEM.containsId(new Identifier(state.get().identifier())))
+                .filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
+                .filter(state -> !Registry.ITEM.containsId(new Identifier(state.get().identifier())))
                 .sorted((element1, element2) -> compareStates(element1.get(), element2.get(), sortingMap))
                 .forEach(state -> {
                     try {
                         var converter = StateToItemConverter.of(state);
                         Identifier identifier = converter.id();
                         var item = converter.convert();
-                        Registry.register(Registries.ITEM, identifier, item);
-                        ItemGroupEvents.modifyEntriesEvent(converter.getItemGroup(state.get())).register(entries -> entries.add(item));
+                        Registry.register(Registry.ITEM, identifier, item);
                     } catch (InvalidIdentifierException e) {
                         LOGGER.error("invalid identifier: {}", state.get().identifier());
                         LOGGER.error(e);

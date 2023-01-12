@@ -8,12 +8,11 @@ import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.*;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class StateToItemConverter {
     private final StateProvider provider;
@@ -52,16 +51,15 @@ public class StateToItemConverter {
     }
 
     private Item defaultStateItem() {
-        var item = new DefaultStateItem(new Item.Settings(), provider);
-        ItemGroupEvents.modifyEntriesEvent(getItemGroup(provider.get())).register(entries -> entries.add(item));
+        var item = new DefaultStateItem(new Item.Settings().group(getItemGroup(provider.get())), provider);
         return item;
     }
 
     public ItemGroup getItemGroup(State state) {
         if (state.test(Type.TOOL)) {
-            return net.minecraft.item.ItemGroups.TOOLS;
+            return net.minecraft.item.ItemGroup.TOOLS;
         } else if (state.test(Type.WEAPON)) {
-            return net.minecraft.item.ItemGroups.COMBAT;
+            return net.minecraft.item.ItemGroup.COMBAT;
         } else if (state.test(Type.PART)) {
             return ItemGroups.FORGERO_TOOL_PARTS;
         } else if (state.test(Type.SCHEMATIC)) {
@@ -69,14 +67,14 @@ public class StateToItemConverter {
         } else if (state.test(Type.TRINKET)) {
             return ItemGroups.FORGERO_GEMS;
         }
-        return net.minecraft.item.ItemGroups.INGREDIENTS;
+        return ItemGroup.MISC;
     }
 
     private Item.Settings getItemSettings(State state) {
-        var settings = new Item.Settings();
+        var settings = new Item.Settings().group(getItemGroup(state));
 
         if (state.name().contains("schematic")) {
-            settings.recipeRemainder(Registries.ITEM.get(new Identifier(state.identifier())));
+            settings.recipeRemainder(Registry.ITEM.get(new Identifier(state.identifier())));
         }
 
         if (state.name().contains("netherite")) {

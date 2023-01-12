@@ -11,7 +11,7 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import vazkii.patchouli.client.book.ClientBookRegistry;
@@ -44,7 +44,7 @@ public class StateCraftingRecipe extends PageCrafting {
             int iconY = recipeY + 2;
             DrawableHelper.drawTexture(ms, iconX, iconY, 0, 64, 11, 11, 128, 256);
             if (parent.isMouseInRelativeRange(mouseX, mouseY, iconX, iconY, 11, 11)) {
-                parent.setTooltip(Text.translatable("patchouli.gui.lexicon.shapeless"));
+                parent.setTooltip(new TranslatableText("patchouli.gui.lexicon.shapeless"));
             }
         }
 

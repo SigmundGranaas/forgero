@@ -1,17 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -44,9 +45,9 @@ public class GemItem extends Item implements StateItem, State {
     @Override
     public Text getName(ItemStack stack) {
         var state = StateConverter.of(stack).orElse(DEFAULT);
-        var text = Text.empty();
+        var text = new LiteralText("");
         if (state instanceof LeveledState leveledState) {
-            text.append(Text.literal(String.format("Level %s ", leveledState.level())));
+            text.append(new LiteralText(String.format("Level %s ", leveledState.level())));
         }
         text.append(Writer.nameToTranslatableText(DEFAULT));
         return text;

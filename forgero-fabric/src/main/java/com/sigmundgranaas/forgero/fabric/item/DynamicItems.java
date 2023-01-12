@@ -7,12 +7,10 @@ import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -33,10 +31,8 @@ public class DynamicItems {
                 .orElse(ImmutableList.<State>builder().build())
                 .stream()
                 .map(material -> new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"))
-                .map(identifier -> Registry.register(Registries.ITEM, identifier, new Item(new FabricItemSettings().recipeRemainder(EMPTY_REPAIR_KIT))))
+                .map(identifier -> Registry.register(Registry.ITEM, identifier, new Item(new FabricItemSettings().group(ItemGroup.COMBAT).recipeRemainder(EMPTY_REPAIR_KIT))))
                 .toList();
-
-        items.forEach(item -> ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.add(item)));
         return items;
     }
 }

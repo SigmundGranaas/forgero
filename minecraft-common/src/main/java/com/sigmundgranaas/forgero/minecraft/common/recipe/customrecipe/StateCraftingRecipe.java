@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
 public class StateCraftingRecipe extends ShapedRecipe {
 
     public StateCraftingRecipe(ShapedRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
+        super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
     }
 
     @Override

@@ -4,8 +4,10 @@ import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.StaticProperty;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class PassiveWriter implements Writer {
 
     private void staticPassive(PassiveProperty passive, List<Text> tooltip) {
         if (passive instanceof StaticProperty staticProperty) {
-            MutableText propertyText = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(staticProperty.getStaticType().toString().toLowerCase()))).formatted(Formatting.WHITE);
+            MutableText propertyText = new LiteralText("  ").append(new TranslatableText(Writer.toTranslationKey(staticProperty.getStaticType().toString().toLowerCase()))).formatted(Formatting.WHITE);
             tooltip.add(propertyText);
         }
     }

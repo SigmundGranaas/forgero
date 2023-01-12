@@ -3,8 +3,10 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.util.List;
 
@@ -21,10 +23,10 @@ public interface Writer {
     }
 
     static Text nameToTranslatableText(State state) {
-        MutableText text = Text.literal("");
+        MutableText text = new LiteralText("");
         for (String element : state.name().split("-")) {
-            text.append(Text.translatable(Writer.toTranslationKey(element)));
-            text.append(Text.translatable("util.forgero.name_separator"));
+            text.append(new TranslatableText(Writer.toTranslationKey(element)));
+            text.append(new TranslatableText("util.forgero.name_separator"));
         }
         return text;
     }

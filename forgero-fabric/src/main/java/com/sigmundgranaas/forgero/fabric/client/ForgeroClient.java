@@ -20,6 +20,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
@@ -28,6 +29,7 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -73,6 +75,13 @@ public class ForgeroClient implements ClientModInitializer {
         }
 
         TEXTURES.putAll(modelRegistry.getTextures());
+
+        TEXTURES.values().forEach(texture -> {
+            ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""))));
+        });
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_leather_base")));
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_needle_base")));
+
         Generator.generate();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(Generator.RESOURCE_PACK_CLIENT));
 

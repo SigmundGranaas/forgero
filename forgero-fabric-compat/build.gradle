@@ -28,7 +28,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
-    modImplementation("net.devtech:arrp:0.6.7")
+    modImplementation("net.devtech:arrp:0.5.7")
 
     //dynamiclights compat
     modImplementation "curse.maven:modmenu-308702:4145207"

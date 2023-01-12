@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.JsonUnbakedModelOverrideMixin;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.Baker;
+import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelElement;
@@ -28,10 +28,10 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
     private final List<PaletteTemplateModel> textures;
     private final Map<String, Offset> offsetMap;
     private final String id;
-    private final Baker loader;
+    private final ModelLoader loader;
     private final Function<SpriteIdentifier, Sprite> textureGetter;
 
-    public Unbaked2DTexturedModel(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, List<PaletteTemplateModel> textures, String id) {
+    public Unbaked2DTexturedModel(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, List<PaletteTemplateModel> textures, String id) {
         this.loader = loader;
         this.textureGetter = textureGetter;
         this.textures = textures;

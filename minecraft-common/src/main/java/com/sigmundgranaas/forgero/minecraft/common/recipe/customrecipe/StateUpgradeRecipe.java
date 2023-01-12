@@ -10,11 +10,14 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerialize
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+
+import java.util.Set;
 
 public class StateUpgradeRecipe extends SmithingRecipe {
     public StateUpgradeRecipe(SmithingRecipeGetters recipe) {
@@ -23,7 +26,7 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 
     @Override
     public boolean matches(Inventory inventory, World world) {
-        if (inventory.containsAny(ItemStack::isEmpty)) {
+        if (inventory.containsAny(Set.of(Items.AIR))) {
             return false;
         }
         if (super.matches(inventory, world)) {

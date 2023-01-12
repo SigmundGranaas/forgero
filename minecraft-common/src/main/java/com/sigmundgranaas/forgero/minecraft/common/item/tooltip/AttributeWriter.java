@@ -6,8 +6,10 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 import java.text.NumberFormat;
@@ -34,7 +36,7 @@ public class AttributeWriter implements Writer {
     public static void write(State state, List<Text> tooltip, TooltipContext context) {
         var attributes = state.getProperties();
 
-        MutableText slots = Text.literal(" Attributes: ").formatted(Formatting.GRAY);
+        MutableText slots = new LiteralText(" Attributes: ").formatted(Formatting.GRAY);
         tooltip.add(slots);
 
         addAttribute(attributes, ATTACK_DAMAGE, "Attack Damage", tooltip);
@@ -48,8 +50,8 @@ public class AttributeWriter implements Writer {
     private static void addAttribute(List<Property> attributes, AttributeType type, String title, List<Text> tooltip) {
         float result = Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
         if (result != 0f) {
-            MutableText miningLevel = Text.translatable(String.format("  %s: ", title)).formatted(Formatting.GRAY);
-            miningLevel.append(Text.translatable(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = new LiteralText(String.format("  %s: ", title)).formatted(Formatting.GRAY);
+            miningLevel.append(new TranslatableText(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
@@ -57,8 +59,8 @@ public class AttributeWriter implements Writer {
     private static void addAttributeInt(List<Property> attributes, AttributeType type, String title, List<Text> tooltip) {
         int result = (int) Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
         if (result != 0) {
-            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(title))).append(" : ").formatted(Formatting.GRAY);
-            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = new LiteralText("  ").append(new TranslatableText(Writer.toTranslationKey(title))).append(" : ").formatted(Formatting.GRAY);
+            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
@@ -82,8 +84,8 @@ public class AttributeWriter implements Writer {
     private void intAttribute(AttributeType type, List<Text> tooltip) {
         int result = (int) helper.attribute(type);
         if (result != 0) {
-            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
-            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = new LiteralText("  ").append(new TranslatableText(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
+            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
@@ -95,8 +97,8 @@ public class AttributeWriter implements Writer {
         }
         result = roundFloat(result);
         if (result != 0f) {
-            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
-            miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
+            MutableText miningLevel = new LiteralText("  ").append(new TranslatableText(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
+            miningLevel.append(new LiteralText(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
     }
@@ -114,7 +116,7 @@ public class AttributeWriter implements Writer {
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
         if (attributes.size() > 0) {
-            MutableText attributes = Text.literal(" ").append(Text.translatable(Writer.toTranslationKey("attributes"))).append(": ").formatted(Formatting.GRAY);
+            MutableText attributes = new LiteralText(" ").append(new TranslatableText(Writer.toTranslationKey("attributes"))).append(": ").formatted(Formatting.GRAY);
             tooltip.add(attributes);
         }
         attributes.forEach(this::writeAttribute);

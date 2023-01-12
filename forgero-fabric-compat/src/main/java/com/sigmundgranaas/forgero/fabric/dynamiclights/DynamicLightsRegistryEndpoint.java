@@ -15,7 +15,7 @@ public class DynamicLightsRegistryEndpoint implements DynamicLightsInitializer {
     @Override
     public void onInitializeDynamicLights() {
         registerDynamicLightHandler(EntityType.PLAYER, (player) -> {
-            for (ItemStack stack : player.getHandItems()) {
+            for (ItemStack stack : player.getItemsHand()) {
                 if (stack.getItem() instanceof StateItem stateItem) {
                     var luma = stateItem.dynamicState(stack)
                             .stream().getPassiveProperties()

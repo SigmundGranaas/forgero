@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.mojang.datafixers.util.Pair;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.*;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -11,8 +12,8 @@ import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.impl
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
+import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
@@ -21,9 +22,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,7 +32,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     private final LoadingCache<ItemStack, BakedModel> cache;
     private final LoadingCache<String, BakedModel> defaultCache;
     private final ModelRegistry registry;
-    private Baker loader;
+    private ModelLoader loader;
     private Function<SpriteIdentifier, Sprite> textureGetter;
 
     public CompositeModelVariant(ModelRegistry modelRegistry) {
@@ -129,13 +128,13 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
     }
 
     @Override
-    public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
-
+    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences) {
+        return Collections.emptyList();
     }
 
     @Nullable
     @Override
-    public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+    public BakedModel bake(ModelLoader baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
         if (this.loader == null || this.loader != baker) {
             this.loader = baker;
             this.textureGetter = textureGetter;

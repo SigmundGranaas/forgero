@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.client;
 
 import com.google.common.base.Charsets;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
@@ -11,20 +10,20 @@ import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.resource.Resource;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedModel {
 
@@ -39,8 +38,8 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 
     public static Reader getReaderForResource(Identifier location) throws IOException {
         Identifier file = new Identifier(location.getNamespace(), location.getPath() + ".json");
-        Optional<Resource> resource = MinecraftClient.getInstance().getResourceManager().getResource(file);
-        return new BufferedReader(new InputStreamReader(resource.get().getInputStream(), Charsets.UTF_8));
+        Resource resource = MinecraftClient.getInstance().getResourceManager().getResource(file);
+        return new BufferedReader(new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
     }
 
 

@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.UUID;
 
 public class CommandTest {
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
     public void TestCreateStationWithOp(TestContext context) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer-op");
         context.getWorld().getServer().getPlayerManager().addToOperators(profile);
@@ -46,7 +46,7 @@ public class CommandTest {
 
     }
 
-    @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
+    @GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
     public void failCreateStationWhenNotOp(TestContext context) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer2");
         context.getWorld().getServer().getPlayerManager().addToOperators(profile);

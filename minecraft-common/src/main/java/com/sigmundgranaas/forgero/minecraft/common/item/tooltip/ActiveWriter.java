@@ -1,11 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
@@ -29,11 +31,11 @@ public class ActiveWriter implements Writer {
 
     private void veinMining(ActiveProperty passive, List<Text> tooltip) {
         if (passive instanceof VeinBreaking veinBreaking) {
-            MutableText propertyText = Text.literal("  ")
-                    .append(Text.translatable(Writer.toTranslationKey("vein_mining")))
-                    .append(Text.literal(": "))
-                    .append(Text.translatable("depth "))
-                    .append(Text.literal(String.valueOf(veinBreaking.depth())))
+            MutableText propertyText = new LiteralText("  ")
+                    .append(new TranslatableText(Writer.toTranslationKey("vein_mining")))
+                    .append(new LiteralText(": "))
+                    .append(new TranslatableText("depth "))
+                    .append(new LiteralText(String.valueOf(veinBreaking.depth())))
                     .formatted(Formatting.WHITE);
             tooltip.add(propertyText);
         }
@@ -41,11 +43,11 @@ public class ActiveWriter implements Writer {
 
     private void patternMining(ActiveProperty passive, List<Text> tooltip) {
         if (passive instanceof PatternBreaking pattern) {
-            MutableText propertyText = Text.literal("  ")
-                    .append(Text.translatable(Writer.toTranslationKey("pattern_mining")))
-                    .append(Text.literal(": "))
-                    .append(Text.translatable(""))
-                    .append(Text.literal(pattern.getPattern()[0].length() + "x" + pattern.getPattern().length))
+            MutableText propertyText = new LiteralText("  ")
+                    .append(new TranslatableText(Writer.toTranslationKey("pattern_mining")))
+                    .append(new LiteralText(": "))
+                    .append(new TranslatableText(""))
+                    .append(new LiteralText(pattern.getPattern()[0].length() + "x" + pattern.getPattern().length))
                     .formatted(Formatting.WHITE);
             tooltip.add(propertyText);
         }

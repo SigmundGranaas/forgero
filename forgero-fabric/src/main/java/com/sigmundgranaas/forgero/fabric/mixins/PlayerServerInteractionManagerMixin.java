@@ -38,10 +38,10 @@ public abstract class PlayerServerInteractionManagerMixin {
     protected ServerWorld world;
 
     @Shadow
-    public abstract void finishMining(BlockPos pos, int sequence, String reason);
+    public abstract void finishMining(BlockPos pos, PlayerActionC2SPacket.Action action, String reason);
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;ILjava/lang/String;)V"), method = "processBlockBreakingAction")
-    public void processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Ljava/lang/String;)V"), method = "processBlockBreakingAction")
+    public void processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, CallbackInfo ci) {
         if (player.getMainHandStack().getItem() instanceof StateItem stateItem) {
             State toolState = stateItem.dynamicState(player.getMainHandStack());
             var activeProperties = Property.stream(toolState.applyProperty(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
@@ -54,7 +54,7 @@ public abstract class PlayerServerInteractionManagerMixin {
                 }
                 for (var block : availableBlocks) {
                     if (!block.getRight().equals(pos)) {
-                        this.finishMining(block.getRight(), sequence, "destroyed");
+                        this.finishMining(block.getRight(), action, "destroyed");
                     }
                 }
             }

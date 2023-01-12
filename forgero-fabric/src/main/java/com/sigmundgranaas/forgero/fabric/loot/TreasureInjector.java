@@ -18,7 +18,6 @@ public class TreasureInjector {
     private void registerEntries() {
         mineshaft();
         stronghold();
-        ancientCity();
         pyramid();
         junglePyramid();
         toolSmithAndPillagerOutPost();
@@ -100,46 +99,6 @@ public class TreasureInjector {
                 .rolls(1)
                 .build();
 
-        registerEntry(partEntry);
-        registerEntry(schematicEntry);
-    }
-
-    private void ancientCity() {
-        var partFilter = StateFilter.builder()
-                .lowerRarity(60)
-                .upperRarity(120)
-                .types(List.of("PART"));
-        var partEntry = SingleLootEntry.builder()
-                .filter(partFilter.build()::filter)
-                .target(List.of(LootTables.ANCIENT_CITY_CHEST, LootTables.ANCIENT_CITY_ICE_BOX_CHEST))
-                .chance(0.3f)
-                .rolls(2)
-                .build();
-
-
-        var gemFilter = StateFilter.builder()
-                .lowerRarity(30)
-                .upperRarity(60)
-                .types(List.of("GEM"));
-        var gemEntry = SingleLootEntry.builder()
-                .filter(gemFilter.build()::filter)
-                .target(List.of(LootTables.ANCIENT_CITY_CHEST, LootTables.ANCIENT_CITY_ICE_BOX_CHEST))
-                .chance(0.3f)
-                .rolls(2)
-                .build();
-
-        var schematicFilter = StateFilter.builder()
-                .lowerRarity(60)
-                .upperRarity(120)
-                .types(List.of("SCHEMATIC"));
-        var schematicEntry = SingleLootEntry.builder()
-                .filter(schematicFilter.build()::filter)
-                .target(List.of(LootTables.ANCIENT_CITY_CHEST, LootTables.ANCIENT_CITY_ICE_BOX_CHEST))
-                .chance(0.3f)
-                .rolls(1)
-                .build();
-
-        registerEntry(gemEntry);
         registerEntry(partEntry);
         registerEntry(schematicEntry);
     }
