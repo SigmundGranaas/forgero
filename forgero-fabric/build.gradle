@@ -13,6 +13,9 @@ configurations {
         canBeResolved = false
         canBeConsumed = true
     }
+    includeComplete {
+        extendsFrom(include)
+    }
 }
 artifacts {
     dev jar
@@ -42,6 +45,17 @@ dependencies {
     include "net.devtech:arrp:0.6.2"
     include project(':forgero-core')
     include project(':minecraft-common')
+    includeComplete project(':forgero-vanilla')
+    includeComplete project(':forgero-extended')
+    includeComplete project(':forgero-compat')
+    includeComplete project(':forgero-structures')
+    includeComplete project(':forgero-fabric-compat')
+}
+
+artifacts {
+    includeComplete(remapSourcesJar) {
+        classifier("full")
+    }
 }
 
 task assembleComplete(type: Jar) {
@@ -56,11 +70,7 @@ task assembleComplete(type: Jar) {
     remapJar {
         if (gradle.startParameter.taskNames.stream().anyMatch("assembleComplete"::equals)) {
             dependencies {
-                include project(':forgero-vanilla')
-                include project(':forgero-extended')
-                include project(':forgero-compat')
-                include project(':forgero-structures')
-                include project(':forgero-fabric-compat')
+
             }
         }
 
@@ -156,21 +166,6 @@ sourceSets {
 
 loom {
     runs {
-        clientExtended {
-            dependencies {
-                implementation project(':forgero-vanilla')
-                implementation project(':forgero-extended')
-                implementation project(':forgero-structures')
-                implementation project(':forgero-compat')
-            }
-            client()
-        }
-        clientVanilla {
-            dependencies {
-                implementation project(':forgero-vanilla')
-            }
-            client()
-        }
 
         testmodServer {
             server()
