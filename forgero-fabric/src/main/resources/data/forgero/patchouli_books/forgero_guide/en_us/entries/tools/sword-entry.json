@@ -8,8 +8,9 @@
       "text": "If you need protection, sword are your best option. They are fast, and deals a lot of damage to foes. Although they are mostly used as weapons, they also seem quite good at cutting down cobweb."
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "forgero:gold-axe"
+      "type": "forgero:state_crafting_recipe",
+      "recipe": "forgero:birch-sword_blade-handle",
+      "recipe2": "forgero:netherite-sword_blade-handle"
     }
   ]
 }

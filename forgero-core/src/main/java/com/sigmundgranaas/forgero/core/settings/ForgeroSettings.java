@@ -24,7 +24,7 @@ public class ForgeroSettings {
     @Builder.Default
     @NotNull
     @SerializedName("disabled_resources")
-    private List<String> disabledResources = new ArrayList<>();
+    private List<String> disabledResources = new ArrayList<>(List.of("forgero:diamond-sacrificial_dagger_blade"));
 
     @Builder.Default
     @NotNull
