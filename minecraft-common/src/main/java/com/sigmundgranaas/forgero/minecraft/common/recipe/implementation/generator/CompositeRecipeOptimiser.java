@@ -46,6 +46,10 @@ public class CompositeRecipeOptimiser {
                 var converted = entry.ingredients().stream().map(this::convertIngredient).toList();
                 var newRecipe = entry.toBuilder().ingredients(converted).build();
                 recipeMap.put(ingredientsToRecipeId(converted), newRecipe);
+            } else if (RecipeTypes.of(entry.type()) == RecipeTypes.TOOLPART_SCHEMATIC_RECIPE) {
+                var converted = entry.ingredients().stream().map(this::convertMaterialSpecificIngredient).toList();
+                var newRecipe = entry.toBuilder().ingredients(converted).build();
+                recipeMap.put(ingredientsToRecipeId(converted), newRecipe);
             } else {
                 recipeMap.put(ingredientsToRecipeId(entry.ingredients()), entry);
             }
@@ -62,6 +66,26 @@ public class CompositeRecipeOptimiser {
         } else {
             return data;
         }
+    }
+
+    private IngredientData convertMaterialSpecificIngredient(IngredientData data) {
+        var converted = removeMaterialFromId(data);
+        if (converted.isPresent()) {
+            placeEntryIntoTagMap(converted.get(), data.id());
+            return data.toBuilder().type(converted.get()).id(EMPTY_IDENTIFIER).build();
+        } else {
+            return data;
+        }
+    }
+
+    private Optional<String> removeMaterialFromId(IngredientData data) {
+        if (!data.id().equals(EMPTY_IDENTIFIER)) {
+            var elements = data.id().split(ELEMENT_SEPARATOR);
+            if (elements.length > 1) {
+                return Optional.of(elements[1]);
+            }
+        }
+        return Optional.empty();
     }
 
     private void placeEntryIntoTagMap(String tag, String id) {

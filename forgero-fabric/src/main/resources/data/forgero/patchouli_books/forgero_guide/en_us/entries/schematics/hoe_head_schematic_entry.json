@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-hoe_head-schematic_recipe"
+      "recipe": "forgero:hoe_head-schematic_recipe"
     }
   ]
 }
