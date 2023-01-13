@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -41,15 +40,6 @@ public interface PropertyContainer extends Comparable<Object> {
         return getRootProperties().stream()
                 .filter(property -> property.applyCondition(target))
                 .toList();
-    }
-
-    default void addProperties(List<Property> properties) {
-
-    }
-
-    @NotNull
-    default List<PropertyPojo> convertRootProperties() {
-        return Collections.emptyList();
     }
 
     @Override

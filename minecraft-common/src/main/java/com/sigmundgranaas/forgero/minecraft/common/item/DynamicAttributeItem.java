@@ -5,10 +5,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.*;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
 import net.minecraft.block.Block;
@@ -32,22 +31,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
-    LoadingCache<ItemStack, Integer> durabilityCache = CacheBuilder.newBuilder()
-            .maximumSize(600)
-            .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
-            .build(new CacheLoader<>() {
-                @Override
-                public @NotNull Integer load(@NotNull ItemStack stack) {
-                    if (stack.getItem() instanceof DynamicAttributeItem dynamic) {
-                        return (int) dynamic.dynamicProperties(stack).stream().applyAttribute(AttributeType.DURABILITY);
-                    }
-                    return 1;
-                }
-            });
-
     LoadingCache<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = CacheBuilder.newBuilder()
             .maximumSize(600)
             .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
@@ -68,16 +52,6 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
                 }
             });
 
-    LoadingCache<String, Integer> defaultDurabilityCache = CacheBuilder.newBuilder()
-            .maximumSize(600)
-            .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
-            .build(new CacheLoader<>() {
-                @Override
-                public @NotNull Integer load(@NotNull String id) {
-                    return ForgeroStateRegistry.stateFinder().find(id).map(state -> state.stream().applyAttribute(AttributeType.DURABILITY)).orElse(1f).intValue();
-                }
-            });
-
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
 
@@ -91,12 +65,12 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     @Override
     default int getMiningLevel(ItemStack stack) {
-        return (int) dynamicProperties(stack).stream().applyAttribute(Target.EMPTY, AttributeType.MINING_LEVEL);
+        return MiningLevel.apply(dynamicProperties(stack));
     }
 
     @Override
     default int getMiningLevel() {
-        return (int) defaultProperties().stream().applyAttribute(Target.EMPTY, AttributeType.MINING_LEVEL);
+        return MiningLevel.apply(defaultProperties());
     }
 
     default boolean isCorrectMiningLevel(BlockState state) {
@@ -136,8 +110,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack) {
         Target target = Target.createEmptyTarget();
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        float currentToolDamage = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_DAMAGE);
-        float baseToolDamage = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
+        float currentToolDamage = AttackDamage.apply(dynamicProperties(stack), target);
+        float baseToolDamage = AttackDamage.apply(defaultProperties());
         //Base attack damage
         builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(((ItemUUIDMixin) stack.getItem()).getATTACK_DAMAGE_MODIFIER_ID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
@@ -145,8 +119,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
         //Attack speed
-        float baseAttackSpeed = dynamicProperties(stack).stream().applyAttribute(target, AttributeType.ATTACK_SPEED);
-        float currentAttackSpeed = defaultProperties().stream().applyAttribute(AttributeType.ATTACK_SPEED);
+        float baseAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
+        float currentAttackSpeed = AttackSpeed.apply(defaultProperties());
         if (currentAttackSpeed != baseAttackSpeed) {
             builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
         }
@@ -155,14 +129,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     @Override
     default int getDurability(ItemStack stack) {
-        if (stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
-            return durabilityCache.getUnchecked(stack);
-        } else {
-            if (stack.getItem() instanceof StateItem state) {
-                return defaultDurabilityCache.getUnchecked(state.identifier());
-            }
-        }
-        return 1;
+        return Durability.apply(dynamicProperties(stack));
     }
 
     default int getItemBarStep(ItemStack stack) {
@@ -177,9 +144,9 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     @Override
     default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
-        if (stack.getItem() instanceof DynamicAttributeItem dynamic && isEffectiveOn(state)) {
+        if (stack.getItem() instanceof PropertyContainer dynamic && isEffectiveOn(state)) {
             try {
-                return miningSpeedCache.get(stack, () -> mingSpeedCalculation(dynamic, stack, state));
+                return miningSpeedCache.get(stack, () -> mingSpeedCalculation(dynamic, state));
             } catch (ExecutionException e) {
                 return 1f;
             }
@@ -187,8 +154,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         return 1f;
     }
 
-    private float mingSpeedCalculation(DynamicAttributeItem dynamic, ItemStack stack, BlockState state) {
+    private float mingSpeedCalculation(PropertyContainer dynamic, BlockState state) {
         Target target = new BlockBreakingEfficiencyTarget(state);
-        return dynamic.dynamicProperties(stack).stream().applyAttribute(target, AttributeType.MINING_SPEED);
+        return MiningSpeed.apply(dynamic, target);
     }
 }

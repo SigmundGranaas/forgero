@@ -85,6 +85,11 @@ public record BaseAttribute(AttributeType attribute,
     }
 
     @Override
+    public String type() {
+        return getAttributeType().toString();
+    }
+
+    @Override
     public boolean applyCondition(Target target) {
         return condition.test(target);
     }

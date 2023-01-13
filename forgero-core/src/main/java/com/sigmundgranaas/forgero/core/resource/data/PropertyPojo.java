@@ -20,6 +20,9 @@ public class PropertyPojo {
     @SerializedName(value = "active")
     public List<PropertyPojo.Active> active;
 
+    @SerializedName(value = "properties")
+    public List<PropertyPojo.Property> properties;
+
     public static class Active {
         public ActivePropertyType type;
         public int depth;
@@ -38,6 +41,19 @@ public class PropertyPojo {
         public float value;
         public PropertyPojo.Condition condition;
         public Category category;
+    }
+
+    public static class Property {
+        public int priority = 0;
+        public String id = Identifiers.EMPTY_IDENTIFIER;
+        public String type;
+        public String name;
+        public float value;
+        public int level;
+        public List<String> tags;
+        public BreakingDirection direction;
+        public String[] pattern;
+        public String description;
     }
 
     public static class Passive {

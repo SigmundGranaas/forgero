@@ -31,6 +31,11 @@ public interface Target {
             public Set<String> getTags() {
                 return Collections.emptySet();
             }
+
+            @Override
+            public int hashCode() {
+                return 0;
+            }
         };
     }
 
