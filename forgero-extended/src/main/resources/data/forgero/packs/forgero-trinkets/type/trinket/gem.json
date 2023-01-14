@@ -1,4 +1,12 @@
 {
   "parent": "TRINKET",
-  "name": "GEM"
+  "name": "GEM",
+  "children": [
+    {
+      "name": "SHAPED_GEM"
+    },
+    {
+      "name": "GEM_COMPOSITE"
+    }
+  ]
 }

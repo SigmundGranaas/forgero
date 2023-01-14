@@ -1,0 +1,41 @@
+{
+  "type": "SHAPED_GEM",
+  "name": "shaped_diamond-gem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 200.0
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "END",
+        "category": "ALL",
+        "operation": "MULTIPLICATION",
+        "value": 1.2,
+        "condition": {
+          "target": "BLOCK",
+          "tag": [
+            "minecraft:base_stone_overworld"
+          ]
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "diamond-gem"
+  }
+}

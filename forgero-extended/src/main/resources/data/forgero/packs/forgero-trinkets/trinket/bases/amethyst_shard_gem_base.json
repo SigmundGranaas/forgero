@@ -1,0 +1,66 @@
+{
+  "type": "GEM_BASE",
+  "name": "amethyst_shard-gem_base",
+  "container": {
+    "id": "minecraft:amethyst_shard"
+  },
+  "construct": {
+    "type": "GEM_COMPOSITE",
+    "target": "CREATE",
+    "recipes": [
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "SHAPED_GEM",
+        "unique": true
+      }
+    ]
+  },
+  "properties": {
+    "properties": {
+      "attributes": [
+        {
+          "type": "RARITY",
+          "order": "BASE",
+          "category": "LOCAL",
+          "operation": "ADDITION",
+          "value": 20
+        },
+        {
+          "type": "ATTACK_DAMAGE",
+          "order": "COMPOSITE",
+          "operation": "MULTIPLICATION",
+          "value": 1
+        },
+        {
+          "type": "DURABILITY",
+          "order": "COMPOSITE",
+          "operation": "MULTIPLICATION",
+          "value": 1
+        },
+        {
+          "id": "gem_base_rarity_multiplication",
+          "type": "RARITY",
+          "order": "COMPOSITE",
+          "operation": "MULTIPLICATION",
+          "value": 1
+        },
+        {
+          "type": "MINING_SPEED",
+          "order": "COMPOSITE",
+          "operation": "MULTIPLICATION",
+          "value": 1
+        },
+        {
+          "type": "ATTACK_SPEED",
+          "order": "COMPOSITE",
+          "operation": "ADDITION",
+          "value": 1
+        }
+      ]
+    }
+  }
+}
