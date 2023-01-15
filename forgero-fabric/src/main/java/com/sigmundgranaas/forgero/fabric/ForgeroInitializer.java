@@ -22,6 +22,7 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.entity.EnderTeleportationEntity;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
@@ -31,12 +32,17 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,6 +62,11 @@ public class ForgeroInitializer implements ModInitializer {
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
     public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+
+    static {
+        EntityType.Builder<EnderTeleportationEntity> builder =  EntityType.Builder.create((EntityType<EnderTeleportationEntity> type, World world) -> new EnderTeleportationEntity(type, world), SpawnGroup.MISC).setDimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10);
+        EnderTeleportationEntity.ENDER_TELEPORT_ENTITY = Registry.register(Registry.ENTITY_TYPE, new Identifier("forgero", "ender_teleportation_entity"), builder.build("ender_teleportation_entity"));
+    }
 
     @Override
     public void onInitialize() {
