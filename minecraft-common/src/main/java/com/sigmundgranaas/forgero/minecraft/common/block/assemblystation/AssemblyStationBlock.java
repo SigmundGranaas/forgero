@@ -5,10 +5,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
@@ -35,7 +32,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
     public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
-    public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings());
+    public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
 
     // a public identifier for multiple parts of our bigger chest
     public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
@@ -43,10 +40,6 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
     private static final VoxelShape SHAPE_LEFT;
 
     private static final VoxelShape SHAPE_RIGHT;
-
-    static {
-
-    }
 
     static {
         VoxelShape shapeLeft = VoxelShapes.empty();

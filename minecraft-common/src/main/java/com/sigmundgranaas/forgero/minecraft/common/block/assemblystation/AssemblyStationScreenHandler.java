@@ -307,7 +307,4 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         }
     }
 
-    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
-
-
 }
