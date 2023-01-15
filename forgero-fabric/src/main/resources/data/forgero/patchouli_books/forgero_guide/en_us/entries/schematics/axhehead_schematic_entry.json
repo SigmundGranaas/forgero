@@ -9,7 +9,8 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:oak-axe_head"
+      "recipe": "forgero:oak-axe_head",
+      "recipe2": "forgero:axe_head-schematic_recipe"
     },
     {
       "type": "patchouli:crafting",

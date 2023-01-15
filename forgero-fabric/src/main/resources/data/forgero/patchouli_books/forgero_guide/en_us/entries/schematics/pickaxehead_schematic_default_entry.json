@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-pickaxe_head-schematic_recipe"
+      "recipe": "forgero:pickaxe_head-schematic_recipe"
     }
   ]
 }
