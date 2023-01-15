@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgerofabric.gametest;
+package com.sigmundgranaas.forgerofabric.testutil;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;

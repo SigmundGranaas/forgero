@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.texture.V2;
 
 
-import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -39,7 +39,9 @@ public class TextureGenerator {
     }
 
     public void clear() {
+
         service.clear();
+
     }
 
     private void saveImage(RawTexture texture, String name) {

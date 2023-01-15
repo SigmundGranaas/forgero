@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.client.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.fabric.client.texture.Generator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
 import net.devtech.arrp.api.RRPCallback;
 import net.fabricmc.api.ClientModInitializer;
@@ -82,7 +83,7 @@ public class ForgeroClient implements ClientModInitializer {
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
-                TextureGenerator.INSTANCE.clear();
+                TextureGenerator.getInstance(new FileService()).clear();
             }
 
             @Override

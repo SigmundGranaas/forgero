@@ -223,7 +223,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
     private boolean isDeconstructedInventory(Composite construct) {
         var deconstructed = deconstructedItems(construct);
         return IntStream.range(0, deconstructed.size()).allMatch(index -> deconstructed.get(index).getItem() == inventory.getStack(index).getItem());
-    }    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
+    }
 
     private Optional<ItemStack> craftInventory(World world) {
         if (!world.isClient) {
@@ -289,7 +289,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
         @Override
         public boolean canInsert(ItemStack stack) {
-            return StateConverter.of(stack).filter(Composite.class::isInstance).isPresent() && craftingInventory.isEmpty();
+            boolean isComposite = StateConverter.of(stack).filter(Composite.class::isInstance).isPresent();
+            boolean noDamage = (stack.getOrCreateNbt().contains("Damage") && stack.getOrCreateNbt().getInt("Damage") == 0) || !stack.getItem().isDamageable();
+            return isComposite && craftingInventory.isEmpty() && noDamage;
         }
 
 
@@ -305,7 +307,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
         }
     }
 
-
+    public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
 
 
 }

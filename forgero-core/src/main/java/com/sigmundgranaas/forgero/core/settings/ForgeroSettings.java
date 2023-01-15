@@ -32,14 +32,27 @@ public class ForgeroSettings {
     private List<String> disabledPacks = new ArrayList<>();
 
     @Builder.Default
+    @NotNull
+    @SerializedName("disable_vanilla_recipes")
+    private Boolean disableVanillaRecipes = false;
+
+    @Builder.Default
+    @NotNull
+    @SerializedName("convert_vanilla_recipes_to_forgero_tools")
+    private Boolean convertVanillaRecipesToForgeroTools = false;
+
+    @Builder.Default
+    @NotNull
     @SerializedName("enable_repair_kits")
     private Boolean enableRepairKits = true;
 
     @Builder.Default
+    @NotNull
     @SerializedName("resource_logging")
     private Boolean resourceLogging = true;
 
     @Builder.Default
+    @NotNull
     @SerializedName("log_disabled_packages")
     private Boolean logDisabledPackages = false;
 
@@ -69,6 +82,8 @@ public class ForgeroSettings {
             setIfNotNull(data.get("disabled_packs"), builder::disabledPacks);
             setIfNotNull(data.get("enable_repair_kits"), builder::enableRepairKits);
             setIfNotNull(data.get("resource_logging"), builder::resourceLogging);
+            setIfNotNull(data.get("disable_vanilla_recipes"), builder::disableVanillaRecipes);
+            setIfNotNull(data.get("convert_vanilla_recipes_to_forgero_tools"), builder::convertVanillaRecipesToForgeroTools);
             return builder.build();
         }
 
