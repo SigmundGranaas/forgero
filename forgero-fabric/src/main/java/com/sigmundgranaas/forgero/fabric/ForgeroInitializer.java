@@ -23,7 +23,6 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
-import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import net.fabricmc.api.ModInitializer;

@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public class AssemblyStationTester {
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "assembly_station_test", required = true)
     public void unableToDisassembleDamagedTool(TestContext context) {
-        var player = context.createMockPlayer();
+        var player = context.createMockCreativePlayer();
         var state = ForgeroStateRegistry.STATES.find("forgero:diamond-pickaxe").map(Supplier::get);
         if (state.isEmpty()) {
             throw new GameTestException("Unable to find item");
