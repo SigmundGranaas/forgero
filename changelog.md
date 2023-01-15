@@ -1,9 +1,19 @@
-# Forgero Beta release 0.10.4
+# Forgero Beta release 0.10.5
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.5
+
+* Added a toggle to convert all vanilla tool recipes to Forgero variants
+* Added a toggle to disable vanilla tool recipes
+* Fixed assembly station being able to deconstruct damaged items
+* New chinese translations by Rad233
+* Simplified schematic conversion recipes
+* Fixed Texture registry being called when not initialized causing a hard crash
+* Added tags for all schematic part types
 
 ## Changelog 0.10.4.1
 
