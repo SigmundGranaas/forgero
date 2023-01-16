@@ -13,7 +13,8 @@
       "com.sigmundgranaas.forgerofabric.gametest.CommandTest",
       "com.sigmundgranaas.forgerofabric.gametest.RecipeTest",
       "com.sigmundgranaas.forgerofabric.gametest.AssemblyStationTester",
-      "com.sigmundgranaas.forgerofabric.gametest.RepairKitTest"
+      "com.sigmundgranaas.forgerofabric.gametest.RepairKitTest",
+      "com.sigmundgranaas.forgerofabric.gametest.UpgradeTest"
     ]
   }
 }
