@@ -10,7 +10,13 @@ public class PassivePropertyBuilder {
             if (propertyPOJO.tag.equals("EMISSIVE")) {
                 return new LeveledProperty(LeveledPassiveType.EMISSIVE);
             }
-            return new LeveledProperty(LeveledPassiveType.MAGNETIC);
+           else if (propertyPOJO.tag.equals("MAGNETIC")) {
+                return new LeveledProperty(LeveledPassiveType.MAGNETIC);
+            }
+           else  if(propertyPOJO.tag.equals("ENDER_TELEPORT")){
+                return new LeveledProperty(LeveledPassiveType.ENDER_TELEPORT);
+            }
+            return new LeveledProperty(LeveledPassiveType.EMISSIVE);
         }
     }
 }

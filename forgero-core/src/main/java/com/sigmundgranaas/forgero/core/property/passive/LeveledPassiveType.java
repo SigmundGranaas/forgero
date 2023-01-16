@@ -4,4 +4,6 @@ public enum LeveledPassiveType {
     MAGNETIC,
 
     EMISSIVE,
+
+    ENDER_TELEPORT,
 }

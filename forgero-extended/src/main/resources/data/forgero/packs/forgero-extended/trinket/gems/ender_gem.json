@@ -14,7 +14,12 @@
         "operation": "ADDITION",
         "value": 30
       }
-    ]
+    ],
+    "passive": [
+      {
+        "type": "LEVELED",
+        "tag": "ENDER_TELEPORT"
+      }]
   },
   "palette": {
     "name": "ender-gem"

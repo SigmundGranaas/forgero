@@ -8,11 +8,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EnderTeleportationEntity extends ThrownEntity {
@@ -27,7 +29,6 @@ public class EnderTeleportationEntity extends ThrownEntity {
     public EnderTeleportationEntity(World world, LivingEntity owner, int maxLength ) {
         super(ENDER_TELEPORT_ENTITY, owner, world);
         this.maxLength = maxLength;
-        super.setNoGravity(true);
     }
 
     @Override
@@ -43,18 +44,10 @@ public class EnderTeleportationEntity extends ThrownEntity {
 
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        super.spawnSprintingParticles();
-        double d = this.getX();
-        double e = this.getY();
-        double f = this.getZ();
-        for(int i = 0; i < 20; ++i) {
-            this.world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, d, e, f, this.random.nextGaussian(), this.random.nextGaussian(), this.random.nextGaussian());
-        }
-
+        world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!this.world.isClient && !this.isRemoved()) {
             Entity entity = this.getOwner();
-            if (entity instanceof ServerPlayerEntity) {
-                ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)entity;
+            if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
                 if (serverPlayerEntity.networkHandler.getConnection().isOpen() && serverPlayerEntity.world == this.world && !serverPlayerEntity.isSleeping()) {
                     if (entity.hasVehicle()) {
                         serverPlayerEntity.requestTeleportAndDismount(this.getX(), this.getY(), this.getZ());
@@ -65,11 +58,26 @@ public class EnderTeleportationEntity extends ThrownEntity {
                     entity.damage(DamageSource.FALL, 5.0F);
                 }
             } else if (entity != null) {
-                entity.requestTeleport(this.getX(), this.getY(), this.getZ());
+                BlockPos pos = new BlockPos(hitResult.getPos());
+                if(world.getBlockState(pos.add(0, 1, 0)).isAir()){
+                    entity.requestTeleport(pos.getX(), pos.getY() + 1, pos.getZ());
+                }else{
+                    entity.requestTeleport(pos.getX(), pos.getY(), pos.getZ());
+                }
                 entity.onLanding();
             }
             this.discard();
-            this.remove(RemovalReason.DISCARDED);
+        }
+
+
+    }
+
+    private void spawnTeleportationParticles(){
+        double d = this.getX();
+        double e = this.getY();
+        double f = this.getZ();
+        for(int i = 0; i < 30; ++i) {
+            this.world.addParticle(ParticleTypes.PORTAL, d, e, f, this.random.nextGaussian() / 5, this.random.nextGaussian() / 5, this.random.nextGaussian() / 5);
         }
     }
 
@@ -78,29 +86,32 @@ public class EnderTeleportationEntity extends ThrownEntity {
 
     }
 
+
+    public void baseTick() {
+        super.baseTick();
+        spawnTeleportationParticles();
+    }
+
     public void tick() {
-        Vec3d vec3d = this.getVelocity();
-        double d = this.getX() + vec3d.x;
-        double e = this.getY() + vec3d.y;
-        double f = this.getZ() + vec3d.z;
-        this.setPosition(d, e, f);
-        this.setPos(d, e, f);
-
-        for(int i = 0; i < 32; ++i) {
-            this.world.addParticle(ParticleTypes.PORTAL, this.getX(), this.getY() + this.random.nextDouble() * 2.0, this.getZ(), this.random.nextGaussian(), 0.0, this.random.nextGaussian());
-        }
-
         Entity entity = this.getOwner();
         if (entity instanceof PlayerEntity && !entity.isAlive()) {
             this.discard();
         } else {
-            super.tick();
-            if(entity instanceof PlayerEntity player && calculateDistanceFromOrigin(player) > maxLength){
-                onCollision(new BlockHitResult(getPos(), Direction.UP, getBlockPos(), true));
-                this.discard();
+            if(entity instanceof ServerPlayerEntity player){
+                super.tick();
+                if(calculateDistanceFromOrigin(player) > maxLength){
+                    onCollision(new BlockHitResult(getPos(), Direction.UP, getBlockPos(), false));
+                }else if(distanceTo(entity) > 20 && numberValue(getVelocity().getX()) < 0.01 && numberValue(getVelocity().getY()) < 0.01 && numberValue(getVelocity().getZ()) < 0.01){
+                    onCollision(new BlockHitResult(getPos(), player.getHorizontalFacing(), getBlockPos(), false));
+                }
             }
         }
     }
+
+    private float numberValue(double value){
+        return (float) Math.sqrt(Math.pow(value, 2));
+    }
+
    private double calculateDistanceFromOrigin(PlayerEntity entity){
         return squaredDistanceTo(entity);
     }
