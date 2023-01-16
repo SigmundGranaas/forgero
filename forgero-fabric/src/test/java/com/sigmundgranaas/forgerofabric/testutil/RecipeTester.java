@@ -9,6 +9,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -54,12 +55,27 @@ public class RecipeTester implements Supplier<Boolean> {
         return new RecipeTester(context, inventory, outcome);
     }
 
-    public Boolean get() {
+    public static RecipeTester repairKit(String kit, ItemStack tool, String result, TestContext context) {
+        CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+        inventory.setStack(0, new ItemStack(itemFromString(kit)));
+        inventory.setStack(1,tool);
+
+        Item outcome = itemFromString(result);
+        return new RecipeTester(context, inventory, outcome);
+    }
+
+    public Optional<ItemStack> craft() {
         return context.getWorld()
                 .getRecipeManager()
                 .getFirstMatch(RecipeType.CRAFTING, inventory, context.getWorld())
                 .map(recipe -> recipe.craft(inventory))
                 .filter(stack -> stack.isOf(expectedResult))
+                .stream()
+                .findAny();
+    }
+
+    public Boolean get() {
+        return craft()
                 .isPresent();
     }
 }
