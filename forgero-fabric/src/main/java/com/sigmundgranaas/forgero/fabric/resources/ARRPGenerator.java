@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric.resources;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -74,14 +75,14 @@ public class ARRPGenerator {
     }
 
     private void createMaterialToolTags() {
-        var tools = ForgeroStateRegistry.STATES.find(Type.TOOL_MATERIAL);
-        var materials = ForgeroStateRegistry.STATES.find(Type.HOLDABLE);
+        var tools = ForgeroStateRegistry.STATES.find(Type.HOLDABLE);
+        var materials = ForgeroStateRegistry.STATES.find(Type.TOOL_MATERIAL);
 
         Map<String, List<State>> materialMap = materials.stream()
-                .collect(Collectors.toMap(supplier -> supplier.get().name(), material -> tools.stream()
-                        .filter(tool -> Arrays.stream(tool.get().name().split(ELEMENT_SEPARATOR))
-                                .anyMatch(nameElement -> nameElement.equals(material.get().name())))
-                        .map(Supplier::get)
+                .map(Supplier::get)
+                .collect(Collectors.toMap(Identifiable::name, material -> tools.stream().map(Supplier::get)
+                        .filter(tool -> Arrays.stream(tool.name().split(ELEMENT_SEPARATOR))
+                                .anyMatch(nameElement -> nameElement.equals(material.name())))
                         .toList()));
 
         for (Map.Entry<String, List<State>> entry : materialMap.entrySet()) {

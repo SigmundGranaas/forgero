@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.5
 
+* Fixed repair kits not working, and added a gametest to assert that it functions correctly
 * Added a toggle to convert all vanilla tool recipes to Forgero variants
 * Added a toggle to disable vanilla tool recipes
 * Fixed assembly station being able to deconstruct damaged items
