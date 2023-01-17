@@ -2,14 +2,15 @@
   "schemaVersion": 1,
   "id": "forgero-fabric-compat",
   "version": "${version}",
-  "name": "Forgero Fabric Compatability",
+  "name": "Forgero Fabric compatibility pack",
   "description": "Equipment crafting expansion mod for Fabric!",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
   "contact": {
-    "website": "https://sigmundgranaas.com",
-    "repo": "https://github.com/sigmundgranaas/forgero"
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
@@ -39,5 +40,16 @@
     "lambdynamiclights": "*"
   },
   "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero"
+      }
+    }
   }
 }
