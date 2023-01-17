@@ -9,5 +9,9 @@
     "SigmundGranaas"
   ],
   "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgerofabric.gametest.EmptyTest"
+
+    ]
   }
 }
