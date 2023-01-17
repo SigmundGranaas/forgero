@@ -38,6 +38,9 @@ subprojects {
             name 'Gegy'
             url 'https://maven.gegy.dev'
         }
+        repositories {
+            maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+        }
     }
 }
 

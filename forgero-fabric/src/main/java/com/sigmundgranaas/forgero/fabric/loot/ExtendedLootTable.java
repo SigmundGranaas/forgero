@@ -5,6 +5,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -18,6 +19,12 @@ public class ExtendedLootTable {
             if (source.isBuiltin() && id.equals(EntityType.POLAR_BEAR.getLootTableId())) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .with(ItemEntry.builder(Registry.ITEM.get(new Identifier("forgero:polar_bear_pelt"))));
+                tableBuilder.pool(poolBuilder);
+            }
+            if (source.isBuiltin() && id.equals(EntityType.ENDER_DRAGON.getLootTableId())) {
+                LootPool.Builder poolBuilder = LootPool.builder()
+                        .rolls(ConstantLootNumberProvider.create(3))
+                        .with(ItemEntry.builder(Registry.ITEM.get(new Identifier("forgero:ender_dragon_scale"))));
                 tableBuilder.pool(poolBuilder);
             }
         });
