@@ -5,7 +5,8 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulEncoder;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulParser;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
@@ -15,6 +16,9 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.SOUL_IDENTIFIER;
 
 public class StateUpgradeRecipe extends SmithingRecipe {
     public StateUpgradeRecipe(SmithingRecipeGetters recipe) {
@@ -46,7 +50,8 @@ public class StateUpgradeRecipe extends SmithingRecipe {
             var upgraded = state.upgrade(upgradeOpt.get());
             var output = getOutput().copy();
             output.setNbt(inventory.getStack(0).getOrCreateNbt().copy());
-            output.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
+            output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
+            SoulParser.of(inventory.getStack(0)).ifPresent(soul -> output.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER).put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(soul)));
             return output;
         }
         return inventory.getStack(0);
