@@ -5,6 +5,10 @@
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
 
+## Changelog 0.10.6
+
+* Fixed shovel head gem placement
+
 ## Changelog 0.10.5
 
 * Fixed repair kits not working, and added a gametest to assert that it functions correctly
