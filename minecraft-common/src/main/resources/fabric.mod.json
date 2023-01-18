@@ -16,7 +16,7 @@
   ],
   "contact": {
     "homepage": "https://sigmundgranaas.com",
-    "repo": "https://github.com/sigmundgranaas/forgero",
+    "sources": "https://github.com/sigmundgranaas/forgero",
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
