@@ -63,6 +63,16 @@ public class AttributeWriter implements Writer {
         }
     }
 
+    public static float roundFloat(float number) {
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        try {
+            return Float.parseFloat(format.format(number));
+        } catch (NumberFormatException e) {
+            return 1f;
+        }
+    }
+
     public AttributeWriter addAttribute(AttributeType type) {
         this.attributes.add(type);
         return this;
@@ -98,16 +108,6 @@ public class AttributeWriter implements Writer {
             MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
-        }
-    }
-
-    private float roundFloat(float number) {
-        NumberFormat format = NumberFormat.getInstance();
-        format.setMaximumFractionDigits(2);
-        try {
-            return Float.parseFloat(format.format(number));
-        } catch (NumberFormatException e) {
-            return 1f;
         }
     }
 

@@ -5,8 +5,11 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static com.sigmundgranaas.forgero.minecraft.common.item.tooltip.AttributeWriter.roundFloat;
 
 public class SoulWriter implements Writer {
 
@@ -35,9 +38,11 @@ public class SoulWriter implements Writer {
     }
 
     private void writeXpBar(float percentage, List<Text> tooltip) {
-        String convertBarsToX = IntStream.range(0, 9).mapToObj(i -> percentage > (float) i / 10 ? "x" : "-").reduce("", String::concat);
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        String convertBarsToX = IntStream.range(0, 9).mapToObj(i -> percentage > (float) i / 10 ? "X" : "-").reduce("", String::concat);
         String xpBar = String.format("  xp: [%s]", convertBarsToX);
-        Text xpText = Text.literal(xpBar).formatted(Formatting.GRAY).append(Text.literal(" " + percentage + "%"));
+        Text xpText = Text.literal(xpBar).formatted(Formatting.GRAY).append(Text.literal(" " + roundFloat(percentage * 100) + "%"));
         tooltip.add(xpText);
     }
 }
