@@ -21,40 +21,41 @@ public class ForgeroSettings {
 
     public static Deserializer deserializer = new Deserializer();
     public static ForgeroSettings SETTINGS = SettingsLoader.load();
+
     @Builder.Default
     @NotNull
     @SerializedName("disabled_resources")
-    private List<String> disabledResources = new ArrayList<>(List.of("forgero:diamond-sacrificial_dagger_blade"));
+    public List<String> disabledResources = new ArrayList<>(List.of("forgero:diamond-sacrificial_dagger_blade"));
 
     @Builder.Default
     @NotNull
     @SerializedName("disabled_packs")
-    private List<String> disabledPacks = new ArrayList<>();
+    public List<String> disabledPacks = new ArrayList<>();
 
     @Builder.Default
     @NotNull
     @SerializedName("disable_vanilla_recipes")
-    private Boolean disableVanillaRecipes = false;
+    public Boolean disableVanillaRecipes = false;
 
     @Builder.Default
     @NotNull
     @SerializedName("convert_vanilla_recipes_to_forgero_tools")
-    private Boolean convertVanillaRecipesToForgeroTools = false;
+    public Boolean convertVanillaRecipesToForgeroTools = false;
 
     @Builder.Default
     @NotNull
     @SerializedName("enable_repair_kits")
-    private Boolean enableRepairKits = true;
+    public Boolean enableRepairKits = true;
 
     @Builder.Default
     @NotNull
     @SerializedName("resource_logging")
-    private Boolean resourceLogging = true;
+    public Boolean resourceLogging = true;
 
     @Builder.Default
     @NotNull
     @SerializedName("log_disabled_packages")
-    private Boolean logDisabledPackages = false;
+    public Boolean logDisabledPackages = false;
 
     public boolean filterResources(DataResource resource) {
         boolean filter = getDisabledResources().stream().noneMatch(disabled -> resource.identifier().equals(disabled));
