@@ -8,6 +8,7 @@
     "Sigmund Granaas Sandring"
   ],
   "contributors": [
+    "Aulluna",
     "Rad233",
     "identithree",
     "macaroni0423",
@@ -30,6 +31,9 @@
     ],
     "main": [
       "com.sigmundgranaas.forgero.fabric.ForgeroCompatInitializer"
+    ],
+    "modmenu": [
+      "com.sigmundgranaas.forgero.fabric.modmenu.ForgeroModMenuIntegration"
     ]
   },
   "mixins": [
