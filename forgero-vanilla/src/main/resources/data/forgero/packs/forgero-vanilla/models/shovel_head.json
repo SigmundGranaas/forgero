@@ -20,7 +20,11 @@
       "modelType": "GENERATE",
       "template": "axe_head_gem.png",
       "palette": "TRINKET",
-      "order": 90
+      "order": 90,
+      "offset": [
+        4,
+        -1
+      ]
     },
     {
       "target": [

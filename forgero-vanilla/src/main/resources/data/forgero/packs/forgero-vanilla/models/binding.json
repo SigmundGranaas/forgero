@@ -6,7 +6,7 @@
       "template": "binding.png",
       "type": "GENERATE",
       "palette": "MATERIAL",
-      "order": "60",
+      "order": 60,
       "variants": [
         {
           "target": [
@@ -43,7 +43,7 @@
       "template": "spiked_binding.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": "60",
+      "order": 60,
       "variants": [
         {
           "target": [
