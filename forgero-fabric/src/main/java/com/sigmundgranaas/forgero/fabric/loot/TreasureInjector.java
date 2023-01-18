@@ -538,7 +538,7 @@ public class TreasureInjector {
 
     private void smallForgingHouse() {
 
-        var id = new Identifier("forgero:chests/small_forging_house_plains");
+        var id = new Identifier("forgero:chests/treasure_loot");
         var partFilter = StateFilter.builder()
                 .lowerRarity(10)
                 .upperRarity(80)

@@ -7,6 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.6
 
+* Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
+* Added new ruined smithing house structure
 * Fixed shovel head gem placement
 
 ## Changelog 0.10.5
