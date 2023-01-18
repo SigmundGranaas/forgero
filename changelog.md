@@ -1,9 +1,14 @@
-# Forgero Beta release 0.10.5
+# Forgero Beta release 0.11
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.11
+
+* TBD
+
 
 ## Changelog 0.10.5
 
