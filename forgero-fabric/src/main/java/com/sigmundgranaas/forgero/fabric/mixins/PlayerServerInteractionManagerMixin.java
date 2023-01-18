@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PatternBreakingStrategy;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.VeinMiningStrategy;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
@@ -55,6 +56,7 @@ public abstract class PlayerServerInteractionManagerMixin {
                 for (var block : availableBlocks) {
                     if (!block.getRight().equals(pos)) {
                         this.finishMining(block.getRight(), sequence, "destroyed");
+                        SoulHandler.of(player.getMainHandStack()).ifPresent(SoulHandler::processBlockBreak);
                     }
                 }
             }

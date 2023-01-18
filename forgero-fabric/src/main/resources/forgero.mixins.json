@@ -10,6 +10,7 @@
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",
     "LivingEntityMagneticMixin",
+    "LivingEntityMixin",
     "LivingEntityReapingMixin",
     "LivingEntityUndyingMixin",
     "MiningToolItemMixin",

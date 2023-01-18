@@ -22,5 +22,8 @@ public class NbtConstants {
     public static String UPGRADES_IDENTIFIER = "UPGRADES";
 
     public static String LEVEL_IDENTIFIER = "LEVEL";
+    public static String XP_IDENTIFIER = "XP";
+
+    public static String SOUL_IDENTIFIER = "XP";
 
 }
