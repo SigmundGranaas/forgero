@@ -121,11 +121,25 @@ public class Construct implements Composite {
         return other;
     }
 
+    @Override
+    public Optional<State> has(String id) {
+        return components().stream().map(comp -> recursiveComponentHas(comp, id)).flatMap(Optional::stream).findFirst();
+    }
+
+    private Optional<State> recursiveComponentHas(State target, String id) {
+        if (target.identifier().contains(id)) {
+            return Optional.of(target);
+        } else if (target instanceof Construct construct) {
+            if (construct.has(id).isPresent()) {
+                return construct.has(id);
+            }
+        }
+        return Optional.empty();
+    }
+
     private boolean filterAttribute(Property property) {
         if (property instanceof Attribute attribute) {
-            if (Category.UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
-                return true;
-            }
+            return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory());
         }
         return false;
     }
@@ -203,23 +217,6 @@ public class Construct implements Composite {
         return this;
     }
 
-    public Optional<State> has(String id) {
-        if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
-            return upgrades().stream().filter(state -> state.identifier().contains(id)).findAny();
-        } else {
-            for (State ingredient : ingredientList) {
-                if (ingredient.identifier().contains(id)) {
-                    return Optional.of(ingredient);
-                } else if (ingredient instanceof Construct construct) {
-                    if (construct.has(id).isPresent()) {
-                        return construct.has(id);
-                    }
-
-                }
-            }
-        }
-        return Optional.empty();
-    }
 
     public List<State> components() {
         return Stream.of(ingredients(), upgrades()).flatMap(List::stream).filter(state -> !state.name().contains("schematic")).toList();

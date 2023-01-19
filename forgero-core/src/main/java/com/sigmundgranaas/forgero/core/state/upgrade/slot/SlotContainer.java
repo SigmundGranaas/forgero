@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
+import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.Context;
@@ -43,8 +44,8 @@ public class SlotContainer {
         return slots.get(index).fill(entry, slots.get(index).category());
     }
 
-    public List<State> entries() {
-        return slots.stream().map(Slot::get).flatMap(Optional::stream).toList();
+    public ImmutableList<State> entries() {
+        return slots.stream().map(Slot::get).flatMap(Optional::stream).collect(ImmutableList.toImmutableList());
     }
 
     public List<Slot> slots() {
