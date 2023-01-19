@@ -1,12 +1,12 @@
 {
-  "name": "forgero:small_forging_house_plains",
+  "name": "forgero:medium_forging_house_savanna",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "forgero:small_forging_house_plains",
+        "location": "forgero:oak_medium_forge",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
