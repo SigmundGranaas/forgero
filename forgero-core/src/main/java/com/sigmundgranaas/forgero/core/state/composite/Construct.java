@@ -265,14 +265,8 @@ public class Construct implements Composite, ConstructedState {
         return toBuilder().build();
     }
 
-    public static class ConstructBuilder {
-        private final List<State> ingredientList;
-        private final SlotContainer upgradeContainer;
-        private final NameCompositor compositor = new NameCompositor();
-        private Type type = Type.UNDEFINED;
-        private String name;
-        private String nameSpace = Forgero.NAMESPACE;
-
+    public static class ConstructBuilder extends BaseComposite.BaseCompositeBuilder<ConstructBuilder> {
+        
         public ConstructBuilder() {
             this.ingredientList = new ArrayList<>();
             this.upgradeContainer = SlotContainer.of(Collections.emptyList());
@@ -281,60 +275,6 @@ public class Construct implements Composite, ConstructedState {
         public ConstructBuilder(List<? extends Slot> upgradeSlots) {
             this.ingredientList = new ArrayList<>();
             this.upgradeContainer = SlotContainer.of(upgradeSlots);
-        }
-
-        public ConstructBuilder addIngredient(State ingredient) {
-            ingredientList.add(ingredient);
-            return this;
-        }
-
-        public ConstructBuilder addIngredients(List<State> ingredients) {
-            ingredientList.addAll(ingredients);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrade(State upgrade) {
-            upgradeContainer.set(upgrade);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrade(Slot upgrade) {
-            upgradeContainer.set(upgrade);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrades(List<? extends Slot> upgrades) {
-            upgrades.forEach(upgradeContainer::set);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrades(ImmutableList<State> upgrades) {
-            upgrades.forEach(upgradeContainer::set);
-            return this;
-        }
-
-        public ConstructBuilder type(Type type) {
-            this.type = type;
-            return this;
-        }
-
-        public ConstructBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public ConstructBuilder nameSpace(String nameSpace) {
-            this.nameSpace = nameSpace;
-            return this;
-        }
-
-        public ConstructBuilder id(String id) {
-            var elements = id.split(":");
-            if (elements.length == 2) {
-                this.nameSpace = elements[0];
-                this.name = elements[1];
-            }
-            return this;
         }
 
         public Construct build() {

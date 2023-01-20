@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
+import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.core.state.composite.Constructed;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
@@ -22,6 +24,14 @@ public class CompositeEncoder implements CompoundEncoder<State> {
         var compound = identifiableEncoder.encode(element);
         compound.putString(STATE_TYPE_IDENTIFIER, COMPOSITE_IDENTIFIER);
         compound.putString(TYPE_IDENTIFIER, element.type().typeName());
+        if (element instanceof SoulContainer soulContainer) {
+            compound.put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(soulContainer.getSoul()));
+        }
+
+        if (element instanceof ConstructedTool) {
+            compound.putString(COMPOSITE_TYPE, TOOL_IDENTIFIER);
+        }
+
         if (element instanceof Constructed constructed) {
             var ingredients = new NbtList();
             constructed.parts().stream().map(stateEncoder::encode).forEach(ingredients::add);

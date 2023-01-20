@@ -168,6 +168,11 @@ public abstract class BaseComposite implements Composite {
             return (B) this;
         }
 
+        public B addSlotContainer(SlotContainer container) {
+            this.upgradeContainer = container;
+            return (B) this;
+        }
+
         public B addUpgrades(List<? extends Slot> upgrades) {
             upgrades.forEach(upgradeContainer::set);
             return (B) this;
@@ -208,6 +213,6 @@ public abstract class BaseComposite implements Composite {
             }
         }
 
-        abstract BaseComposite build();
+        public abstract State build();
     }
 }

@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
@@ -10,7 +9,6 @@ import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -24,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.SOUL_IDENTIFIER;
 
 public class StateCraftingRecipe extends ShapedRecipe {
 
@@ -72,12 +68,9 @@ public class StateCraftingRecipe extends ShapedRecipe {
                     ingredients.add(craftingInventory.getStack(i));
                 }
             }
-
             ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).forEach(builder::addIngredient);
-
             var finalState = builder.build();
             var nbt = new CompositeEncoder().encode(finalState);
-            nbt.put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(new Soul(1, 0, "Zombie")));
             var output = getOutput().copy();
             output.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, nbt);
             return output;

@@ -31,5 +31,4 @@ public class StateParser implements CompoundParser<State> {
 
         return supplier.find(compound.getString(ID_IDENTIFIER));
     }
-
 }
