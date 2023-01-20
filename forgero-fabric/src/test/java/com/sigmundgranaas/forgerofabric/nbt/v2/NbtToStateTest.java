@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Ingredient;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateParser;
 import com.sigmundgranaas.forgerofabric.testutil.Materials;
@@ -66,7 +66,7 @@ public class NbtToStateTest {
 
     @Test
     void parseSimplePickaxeWithIngredients() {
-        List<State> ingredients = StateParser.STATE_PARSER.parse(PICKAXE_NBT).map(Construct.class::cast).map(Construct::ingredients).orElse(Collections.emptyList());
+        List<State> ingredients = StateParser.STATE_PARSER.parse(PICKAXE_NBT).map(ConstructedState.class::cast).map(ConstructedState::ingredients).orElse(Collections.emptyList());
         Assertions.assertEquals(2, ingredients.size());
         Assertions.assertEquals("oak-handle", ingredients.get(0).name());
         Assertions.assertEquals("iron-pickaxe_head", ingredients.get(1).name());

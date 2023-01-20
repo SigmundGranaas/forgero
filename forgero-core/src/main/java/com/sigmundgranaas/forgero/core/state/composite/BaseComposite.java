@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.*;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
@@ -10,8 +11,10 @@ import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
+import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,9 +85,9 @@ public abstract class BaseComposite implements Composite {
     private Optional<State> recursiveComponentHas(State target, String id) {
         if (target.identifier().contains(id)) {
             return Optional.of(target);
-        } else if (target instanceof Construct construct) {
-            if (construct.has(id).isPresent()) {
-                return construct.has(id);
+        } else if (target instanceof Composite comp) {
+            if (comp.has(id).isPresent()) {
+                return comp.has(id);
             }
         }
         return Optional.empty();
@@ -118,5 +121,83 @@ public abstract class BaseComposite implements Composite {
     @Override
     public List<Slot> slots() {
         return slotContainer.slots();
+    }
+
+    @Getter
+    public static abstract class BaseCompositeBuilder<T, R extends State> {
+        protected List<State> ingredientList;
+        protected SlotContainer upgradeContainer;
+        protected NameCompositor compositor = new NameCompositor();
+        protected Type type = Type.UNDEFINED;
+        protected String name;
+        protected String nameSpace = Forgero.NAMESPACE;
+
+        public BaseCompositeBuilder() {
+            this.ingredientList = new ArrayList<>();
+            this.upgradeContainer = SlotContainer.of(Collections.emptyList());
+        }
+
+        public BaseCompositeBuilder<T, R> addIngredient(State ingredient) {
+            ingredientList.add(ingredient);
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> addIngredients(List<State> ingredients) {
+            ingredientList.addAll(ingredients);
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> addUpgrade(State upgrade) {
+            upgradeContainer.set(upgrade);
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> addUpgrade(Slot upgrade) {
+            upgradeContainer.set(upgrade);
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> addUpgrades(List<? extends Slot> upgrades) {
+            upgrades.forEach(upgradeContainer::set);
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> addUpgrades(ImmutableList<State> upgrades) {
+            upgrades.forEach(upgradeContainer::set);
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> type(Type type) {
+            this.type = type;
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> nameSpace(String nameSpace) {
+            this.nameSpace = nameSpace;
+            return this;
+        }
+
+        public BaseCompositeBuilder<T, R> id(String id) {
+            var elements = id.split(":");
+            if (elements.length == 2) {
+                this.nameSpace = elements[0];
+                this.name = elements[1];
+            }
+            return this;
+        }
+
+        protected void compositeName() {
+            if (this.name == null && !ingredientList.isEmpty()) {
+                this.name = compositor.compositeName(ingredientList);
+            }
+        }
+
+        abstract R build();
+
     }
 }

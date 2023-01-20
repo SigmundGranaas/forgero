@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class Construct implements Composite {
+public class Construct implements Composite, ConstructedState {
     private final List<State> ingredientList;
     private final SlotContainer upgrades;
     private final String name;
@@ -129,9 +129,9 @@ public class Construct implements Composite {
     private Optional<State> recursiveComponentHas(State target, String id) {
         if (target.identifier().contains(id)) {
             return Optional.of(target);
-        } else if (target instanceof Construct construct) {
-            if (construct.has(id).isPresent()) {
-                return construct.has(id);
+        } else if (target instanceof Composite comp) {
+            if (comp.has(id).isPresent()) {
+                return comp.has(id);
             }
         }
         return Optional.empty();
@@ -253,6 +253,16 @@ public class Construct implements Composite {
 
     public boolean canUpgrade(State state) {
         return upgrades.canUpgrade(state);
+    }
+
+    @Override
+    public List<State> parts() {
+        return ingredientList;
+    }
+
+    @Override
+    public Composite copy() {
+        return toBuilder().build();
     }
 
     public static class ConstructBuilder {

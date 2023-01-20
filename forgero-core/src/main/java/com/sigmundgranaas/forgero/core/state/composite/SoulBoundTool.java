@@ -18,4 +18,40 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
     public Soul getSoul() {
         return soul;
     }
+
+    @Override
+    public SoulBoundToolBuilder toolBuilder() {
+        return toolBuilder()
+                .soul(getSoul());
+    }
+
+    public static class SoulBoundToolBuilder extends ToolBuilder {
+        private Soul soul;
+
+        public SoulBoundToolBuilder(State head, State handle, State material, Soul soul) {
+            super(head, handle, material);
+            this.soul = soul;
+        }
+
+        public static SoulBoundToolBuilder builder(State head, State handle, State material, Soul soul) {
+            return new SoulBoundToolBuilder(head, handle, material, soul);
+        }
+
+        public static SoulBoundToolBuilder of(ToolBuilder builder, Soul soul) {
+            var soulBuilder = new SoulBoundToolBuilder(builder.getHead(), builder.getHead(), builder.getHead(), soul);
+            soulBuilder.name(builder.getName());
+            soulBuilder.nameSpace(builder.getNameSpace());
+            return soulBuilder;
+        }
+
+        public SoulBoundToolBuilder soul(Soul soul) {
+            this.soul = soul;
+            return this;
+        }
+
+        public SoulBoundTool build() {
+            var id = new IdentifiableContainer(name, nameSpace, type);
+            return new SoulBoundTool(head, handle, primaryMaterial, upgradeContainer, id, soul);
+        }
+    }
 }

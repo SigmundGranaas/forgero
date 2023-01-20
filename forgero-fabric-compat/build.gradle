@@ -31,7 +31,7 @@ dependencies {
 
     //dynamiclights compat
     modImplementation "curse.maven:modmenu-308702:4145207"
-    modCompileOnly "curse.maven:lambdynamiclights-393442:3824820"
+    modImplementation "curse.maven:lambdynamiclights-393442:3824820"
     modImplementation("dev.lambdaurora:spruceui:4.1.0+1.19.2")
 
     //toolstats testing
