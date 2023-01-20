@@ -26,7 +26,9 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
     @Override
     public ConstructedComposite upgrade(State upgrade) {
-        return this;
+        return toBuilder()
+                .addUpgrade(upgrade)
+                .build();
     }
 
     @Override
@@ -39,7 +41,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
         return parts;
     }
 
-    public BaseCompositeBuilder<? extends ConstructBuilder, ? extends ConstructedState> toBuilder() {
+    public ConstructBuilder toBuilder() {
         return builder()
                 .addIngredients(parts())
                 .addUpgrades(slots())
@@ -48,11 +50,11 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
     }
 
     @Override
-    public ConstructedState copy() {
+    public ConstructedComposite copy() {
         return toBuilder().build();
     }
 
-    public static class ConstructBuilder extends BaseCompositeBuilder<ConstructBuilder, ConstructedState> {
+    public static class ConstructBuilder extends BaseCompositeBuilder<ConstructBuilder> {
         public ConstructBuilder() {
             this.ingredientList = new ArrayList<>();
             this.upgradeContainer = SlotContainer.of(Collections.emptyList());
@@ -62,8 +64,8 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
             return new ConstructBuilder();
         }
 
-
-        public ConstructedState build() {
+        @Override
+        public ConstructedComposite build() {
             compositeName();
             var id = new IdentifiableContainer(name, nameSpace, type);
             return new ConstructedComposite(upgradeContainer, id, ingredientList);

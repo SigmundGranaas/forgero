@@ -30,7 +30,7 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
 
     @Override
     public ConstructedTool upgrade(State upgrade) {
-        return this;
+        return toolBuilder().addUpgrade(upgrade).build();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
         return handle;
     }
 
-    public BaseCompositeBuilder<ToolBuilder, ConstructedTool> toolBuilder() {
+    public ToolBuilder toolBuilder() {
         return ToolBuilder.builder(getHead(), getHandle(), baseMaterial())
                 .addUpgrades(slots())
                 .type(type())
@@ -54,12 +54,12 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
     }
 
     @Override
-    public ConstructedState copy() {
-        return toBuilder().build();
+    public ConstructedTool copy() {
+        return toolBuilder().build();
     }
 
     @Getter
-    public static class ToolBuilder extends BaseCompositeBuilder<ToolBuilder, ConstructedTool> {
+    public static class ToolBuilder extends BaseCompositeBuilder<ToolBuilder> {
         protected State head;
         protected State handle;
         protected State primaryMaterial;

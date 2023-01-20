@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.*;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.Slot;
@@ -12,13 +13,12 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("ALL")
 public abstract class BaseComposite implements Composite {
     private final SlotContainer slotContainer;
 
@@ -28,6 +28,17 @@ public abstract class BaseComposite implements Composite {
     protected BaseComposite(SlotContainer slotContainer, IdentifiableContainer id) {
         this.slotContainer = slotContainer;
         this.id = id;
+    }
+
+    @Override
+    public @NotNull List<Property> applyProperty(Target target) {
+        var newTarget = target.combineTarget(new TypeTarget(Set.of(id.type().typeName())));
+        return compositeProperties(newTarget);
+    }
+
+    @Override
+    public @NotNull List<Property> getRootProperties() {
+        return compositeProperties(Target.EMPTY);
     }
 
     @Override
@@ -124,7 +135,7 @@ public abstract class BaseComposite implements Composite {
     }
 
     @Getter
-    public static abstract class BaseCompositeBuilder<T, R extends State> {
+    public static abstract class BaseCompositeBuilder<B extends BaseCompositeBuilder<B>> {
         protected List<State> ingredientList;
         protected SlotContainer upgradeContainer;
         protected NameCompositor compositor = new NameCompositor();
@@ -137,58 +148,58 @@ public abstract class BaseComposite implements Composite {
             this.upgradeContainer = SlotContainer.of(Collections.emptyList());
         }
 
-        public BaseCompositeBuilder<T, R> addIngredient(State ingredient) {
+        public B addIngredient(State ingredient) {
             ingredientList.add(ingredient);
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> addIngredients(List<State> ingredients) {
+        public B addIngredients(List<State> ingredients) {
             ingredientList.addAll(ingredients);
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> addUpgrade(State upgrade) {
+        public B addUpgrade(State upgrade) {
             upgradeContainer.set(upgrade);
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> addUpgrade(Slot upgrade) {
+        public B addUpgrade(Slot upgrade) {
             upgradeContainer.set(upgrade);
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> addUpgrades(List<? extends Slot> upgrades) {
+        public B addUpgrades(List<? extends Slot> upgrades) {
             upgrades.forEach(upgradeContainer::set);
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> addUpgrades(ImmutableList<State> upgrades) {
+        public B addUpgrades(ImmutableList<State> upgrades) {
             upgrades.forEach(upgradeContainer::set);
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> type(Type type) {
+        public B type(Type type) {
             this.type = type;
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> name(String name) {
+        public B name(String name) {
             this.name = name;
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> nameSpace(String nameSpace) {
+        public B nameSpace(String nameSpace) {
             this.nameSpace = nameSpace;
-            return this;
+            return (B) this;
         }
 
-        public BaseCompositeBuilder<T, R> id(String id) {
+        public B id(String id) {
             var elements = id.split(":");
             if (elements.length == 2) {
                 this.nameSpace = elements[0];
                 this.name = elements[1];
             }
-            return this;
+            return (B) this;
         }
 
         protected void compositeName() {
@@ -197,7 +208,6 @@ public abstract class BaseComposite implements Composite {
             }
         }
 
-        abstract R build();
-
+        abstract BaseComposite build();
     }
 }

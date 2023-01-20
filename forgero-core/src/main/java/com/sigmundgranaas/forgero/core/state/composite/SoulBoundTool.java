@@ -21,8 +21,7 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
 
     @Override
     public SoulBoundToolBuilder toolBuilder() {
-        return toolBuilder()
-                .soul(getSoul());
+        return SoulBoundToolBuilder.of(super.toolBuilder(), soul);
     }
 
     public static class SoulBoundToolBuilder extends ToolBuilder {
