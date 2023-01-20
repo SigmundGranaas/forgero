@@ -9,6 +9,8 @@ you have backed up your save.**
 
 * Added a new recipe type for Patchouli (State upgrade recipe)
 * Added patchouli entry for pommels
+* Renamed Pummel to Pommel
+* Fixed compat issue with EMI Loot
 * Fixed scabbard configuration for some sword blades
 * Fixed createstation command to fill up chests with proper items
 * Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
