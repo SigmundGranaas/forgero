@@ -18,9 +18,9 @@
     {
       "name": "hoe_head_trinket",
       "modelType": "GENERATE",
-      "template": "axe_head_gem.png",
+      "template": "diagonal_gem_high.png",
       "palette": "TRINKET",
-      "order": 90
+      "order": 65
     },
     {
       "target": [

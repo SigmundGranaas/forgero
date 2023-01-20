@@ -9,6 +9,17 @@ subprojects {
     archives_base_name = project.archives_base_name
 
     repositories {
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
+        }
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
@@ -23,6 +34,7 @@ subprojects {
                 includeGroup "curse.maven"
             }
         }
+
         repositories {
             maven { url 'https://maven.blamejared.com' }
         }
