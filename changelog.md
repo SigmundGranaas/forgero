@@ -7,6 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.6
 
+* Renamed Pummel to Pommel
+* Fixed compat issue with EMI Loot
 * Fixed createstation command to fill up chests with proper items
 * Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
 * Added new ruined smithing house structure
