@@ -7,6 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.6
 
+* Added a new recipe type for Patchouli (State upgrade recipe)
+* Added patchouli entry for pommels
 * Fixed scabbard configuration for some sword blades
 * Fixed createstation command to fill up chests with proper items
 * Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
