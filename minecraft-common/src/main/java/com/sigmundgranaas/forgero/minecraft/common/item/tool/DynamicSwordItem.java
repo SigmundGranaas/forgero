@@ -2,19 +2,25 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
+import com.sigmundgranaas.forgero.minecraft.common.soul.SoulHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -46,6 +52,15 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
+    }
+
+    @Override
+    public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+        var converted = StateConverter.of(stack);
+        if (converted.isPresent() && converted.get() instanceof ConstructedTool tool) {
+            user.setStackInHand(hand, StateConverter.of(SoulHelper.of(entity, tool)));
+        }
+        return super.useOnEntity(stack, user, entity, hand);
     }
 
     @Override

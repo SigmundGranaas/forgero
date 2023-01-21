@@ -26,13 +26,14 @@ public class SoulParser implements CompoundParser<Soul> {
             int level = element.getInt(LEVEL_IDENTIFIER);
             int xp = element.getInt(XP_IDENTIFIER);
             String name = element.getString(NAME_IDENTIFIER);
+            String id = element.getString(ID_IDENTIFIER);
             StatTracker tracker;
             if (element.contains(TRACKER_IDENTIFIER)) {
                 tracker = StatTrackerParser.PARSER.parse(element.getCompound(TRACKER_IDENTIFIER)).orElse(new StatTracker());
             } else {
                 tracker = new StatTracker();
             }
-            return Optional.of(new Soul(level, xp, new SoulSource("minecraft:zombie"), tracker));
+            return Optional.of(new Soul(level, xp, new SoulSource(id), tracker));
         }
         return Optional.empty();
     }

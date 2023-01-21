@@ -14,6 +14,7 @@ public class SoulEncoder implements CompoundEncoder<Soul> {
     public NbtCompound encode(Soul element) {
         NbtCompound compound = new NbtCompound();
         compound.putInt(LEVEL_IDENTIFIER, element.getLevel());
+        compound.putString(ID_IDENTIFIER, element.identifier());
         compound.putInt(XP_IDENTIFIER, element.getXp());
         compound.putString(NAME_IDENTIFIER, element.name());
         compound.put(TRACKER_IDENTIFIER, new NbtCompound());

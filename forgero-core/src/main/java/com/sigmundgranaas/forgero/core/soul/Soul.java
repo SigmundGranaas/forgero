@@ -22,12 +22,21 @@ public class Soul implements Identifiable, PropertyContainer {
         this.tracker = new StatTracker();
     }
 
+
     public Soul(int level, int xp, SoulSource source, StatTracker tracker) {
         this.soulSource = source;
         this.xp = xp;
         this.level = level;
         this.xpTarget = new LevelManager().getXpForLevel(level + 1);
         this.tracker = tracker;
+    }
+
+    public Soul(SoulSource source) {
+        this.soulSource = source;
+        this.xp = 0;
+        this.level = 1;
+        this.xpTarget = new LevelManager().getXpForLevel(level + 1);
+        this.tracker = new StatTracker();
     }
 
     @Override
