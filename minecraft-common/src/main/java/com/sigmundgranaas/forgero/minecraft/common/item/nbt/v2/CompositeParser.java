@@ -76,7 +76,7 @@ public class CompositeParser implements CompoundParser<State> {
             if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.STATE_IDENTIFIER)) {
                 return supplier.apply(compound.getString(NbtConstants.ID_IDENTIFIER));
             } else if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.COMPOSITE_IDENTIFIER)) {
-                return parse(compound);
+                return new CompositeParser(this.supplier).parse(compound);
             } else if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.LEVELED_IDENTIFIER)) {
                 return new StateParser(this.supplier).parse(compound);
             }

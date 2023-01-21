@@ -25,6 +25,7 @@ public class TextureService {
     }
 
     public Optional<Palette> getPalette(String name) {
+        
         if (paletteCache.containsKey(name)) {
             return Optional.of(paletteCache.get(name));
         }

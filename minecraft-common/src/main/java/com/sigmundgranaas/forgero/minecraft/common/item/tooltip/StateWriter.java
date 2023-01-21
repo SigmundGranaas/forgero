@@ -43,7 +43,7 @@ public class StateWriter implements Writer {
         }
         return CachedWriteHelper.of(state, writer);
     }
-    
+
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
         if (this.state instanceof Composite composite) {

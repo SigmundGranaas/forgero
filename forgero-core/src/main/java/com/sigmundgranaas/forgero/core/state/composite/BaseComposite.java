@@ -12,6 +12,9 @@ import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +26,6 @@ public abstract class BaseComposite implements Composite {
     private final SlotContainer slotContainer;
 
     private final IdentifiableContainer id;
-
 
     protected BaseComposite(SlotContainer slotContainer, IdentifiableContainer id) {
         this.slotContainer = slotContainer;
@@ -119,6 +121,21 @@ public abstract class BaseComposite implements Composite {
         return id.type();
     }
 
+    @Override
+    public boolean test(Matchable match, Context context) {
+        if (match instanceof Type typeMatch) {
+            if (this.type().test(typeMatch, context)) {
+                return true;
+            }
+
+        }
+        if (match instanceof NameMatch name) {
+            if (name.test(this, context)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public ImmutableList<State> upgrades() {

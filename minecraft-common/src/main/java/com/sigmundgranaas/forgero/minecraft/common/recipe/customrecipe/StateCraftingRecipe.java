@@ -4,7 +4,9 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.composite.BaseComposite;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
@@ -55,22 +57,37 @@ public class StateCraftingRecipe extends ShapedRecipe {
         return Optional.empty();
     }
 
+    private List<State> partsFromCraftingInventory(CraftingInventory craftingInventory) {
+        List<ItemStack> ingredients = new ArrayList<>();
+        for (int i = 0; i < craftingInventory.size(); i++) {
+            var stack = craftingInventory.getStack(i);
+            if (this.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).anyMatch(ingredient -> ingredient.test(stack))) {
+                ingredients.add(craftingInventory.getStack(i));
+            }
+        }
+        return ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).toList();
+    }
+
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
-        List<ItemStack> ingredients = new ArrayList<>();
         var target = StateConverter.of(this.getOutput());
         if (target.isPresent()) {
             var targetState = target.get();
-            var builder = Construct.builder().type(targetState.type()).name(targetState.name()).nameSpace(targetState.nameSpace());
-            for (int i = 0; i < craftingInventory.size(); i++) {
-                var stack = craftingInventory.getStack(i);
-                if (this.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).anyMatch(ingredient -> ingredient.test(stack))) {
-                    ingredients.add(craftingInventory.getStack(i));
-                }
+            var parts = partsFromCraftingInventory(craftingInventory);
+            var toolBuilderOpt = ConstructedTool.ToolBuilder.builder(parts);
+            BaseComposite.BaseCompositeBuilder<?> builder;
+            if (toolBuilderOpt.isPresent()) {
+                builder = toolBuilderOpt.get();
+            } else {
+                builder = Construct.builder();
+                parts.forEach(builder::addIngredient);
             }
-            ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).forEach(builder::addIngredient);
-            var finalState = builder.build();
-            var nbt = new CompositeEncoder().encode(finalState);
+
+            builder.type(targetState.type())
+                    .name(targetState.name())
+                    .nameSpace(targetState.nameSpace());
+
+            var nbt = new CompositeEncoder().encode(builder.build());
             var output = getOutput().copy();
             output.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, nbt);
             return output;

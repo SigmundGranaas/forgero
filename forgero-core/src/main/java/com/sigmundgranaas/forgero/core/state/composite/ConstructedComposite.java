@@ -3,6 +3,10 @@ package com.sigmundgranaas.forgero.core.state.composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
+import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +51,25 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
                 .addUpgrades(slots())
                 .type(type())
                 .id(identifier());
+    }
+
+    @Override
+    public boolean test(Matchable match, Context context) {
+        if (match instanceof Type typeMatch) {
+            if (this.type().test(typeMatch, context)) {
+                return true;
+            } else {
+                return parts().stream().anyMatch(ingredient -> ingredient.test(match, context));
+            }
+        }
+        if (match instanceof NameMatch name) {
+            if (name.test(this, context)) {
+                return true;
+            } else {
+                return parts().stream().anyMatch(ingredient -> ingredient.test(name, context));
+            }
+        }
+        return false;
     }
 
     @Override
