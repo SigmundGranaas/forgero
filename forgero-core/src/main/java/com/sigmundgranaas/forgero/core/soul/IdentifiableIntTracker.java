@@ -1,10 +1,21 @@
 package com.sigmundgranaas.forgero.core.soul;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class IdentifiableIntTracker {
-    private Map<String, Integer> idMap;
+    private final Map<String, Integer> idMap;
+
+    public IdentifiableIntTracker() {
+        this.idMap = new ConcurrentHashMap<>();
+    }
+
+    public IdentifiableIntTracker(Map<String, Integer> idMap) {
+        this.idMap = idMap;
+    }
 
     public int getTotal() {
         return idMap.values().stream().reduce(0, Integer::sum);
@@ -24,5 +35,9 @@ public class IdentifiableIntTracker {
 
     public int getValueFor(String id) {
         return idMap.getOrDefault(id, 0);
+    }
+
+    public Map<String, Integer> toMap() {
+        return ImmutableMap.copyOf(idMap);
     }
 }

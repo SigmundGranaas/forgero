@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PatternBreakingStrategy;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.VeinMiningStrategy;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -38,12 +39,14 @@ public abstract class PlayerInteractionManagerMixin {
     @Shadow
     public abstract boolean breakBlock(BlockPos pos);
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", shift = At.Shift.AFTER), method = "updateBlockBreakingProgress")
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", shift = At.Shift.BEFORE), method = "updateBlockBreakingProgress")
     public void calcBlockBreakingDelta(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
         if (this.currentBreakingProgress >= 1.0F) {
             if (this.client.player.getMainHandStack().getItem() instanceof StateItem stateItem && client.player != null) {
+                var player = this.client.player;
                 State tool = stateItem.dynamicState(client.player.getMainHandStack());
                 var activeProperties = Property.stream(tool.applyProperty(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
+                SoulHandler.of(player.getMainHandStack()).ifPresent(handler -> handler.processBlockBreak(client.world.getBlockState(pos), pos, client.world, player));
                 if (!activeProperties.isEmpty()) {
                     List<Pair<BlockState, BlockPos>> availableBlocks;
                     if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
@@ -54,6 +57,7 @@ public abstract class PlayerInteractionManagerMixin {
 
                     for (var block : availableBlocks) {
                         if (!block.getRight().equals(pos)) {
+                            SoulHandler.of(player.getMainHandStack()).ifPresent(handler -> handler.processBlockBreak(block.getLeft(), block.getRight(), this.client.world, player));
                             this.breakBlock(block.getRight());
                         }
                     }

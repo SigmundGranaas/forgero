@@ -4,7 +4,8 @@
   "package": "com.sigmundgranaas.forgero.minecraft.common.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ItemUUIDMixin"
+    "ItemUUIDMixin",
+    "OreBlockXp"
   ],
   "client": [
     "JsonUnbakedModelOverrideMixin"

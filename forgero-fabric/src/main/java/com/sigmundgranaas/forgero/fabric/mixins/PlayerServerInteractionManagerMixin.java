@@ -46,6 +46,7 @@ public abstract class PlayerServerInteractionManagerMixin {
         if (player.getMainHandStack().getItem() instanceof StateItem stateItem) {
             State toolState = stateItem.dynamicState(player.getMainHandStack());
             var activeProperties = Property.stream(toolState.applyProperty(new SingleTarget(TargetTypes.BLOCK, Collections.emptySet()))).getActiveProperties().toList();
+            SoulHandler.of(player.getMainHandStack()).ifPresent(handler -> handler.processBlockBreak(world.getBlockState(pos), pos, world, player));
             if (!activeProperties.isEmpty()) {
                 List<Pair<BlockState, BlockPos>> availableBlocks;
                 if (activeProperties.get(0).getActiveType() == ActivePropertyType.BLOCK_BREAKING_PATTERN) {
@@ -55,8 +56,9 @@ public abstract class PlayerServerInteractionManagerMixin {
                 }
                 for (var block : availableBlocks) {
                     if (!block.getRight().equals(pos)) {
+                        SoulHandler.of(player.getMainHandStack()).ifPresent(handler -> handler.processBlockBreak(block.getLeft(), block.getRight(), world, player));
                         this.finishMining(block.getRight(), sequence, "destroyed");
-                        SoulHandler.of(player.getMainHandStack()).ifPresent(SoulHandler::processBlockBreak);
+
                     }
                 }
             }

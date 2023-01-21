@@ -51,4 +51,10 @@ public class EmptySlot extends AbstractTypedSlot {
     public boolean test(Matchable match, Context context) {
         return super.test(match, context);
     }
+
+
+    @Override
+    public Slot copy() {
+        return new EmptySlot(index, type, description, categories);
+    }
 }

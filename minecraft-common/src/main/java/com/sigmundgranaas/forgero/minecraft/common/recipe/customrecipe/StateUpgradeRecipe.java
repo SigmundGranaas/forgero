@@ -2,11 +2,13 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulParser;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
@@ -18,7 +20,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.SOUL_IDENTIFIER;
 
 public class StateUpgradeRecipe extends SmithingRecipe {
     public StateUpgradeRecipe(SmithingRecipeGetters recipe) {
@@ -47,11 +48,15 @@ public class StateUpgradeRecipe extends SmithingRecipe {
         var originStateOpt = StateConverter.of(inventory.getStack(0));
         var upgradeOpt = StateConverter.of(inventory.getStack(1));
         if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite state) {
-            var upgraded = state.upgrade(upgradeOpt.get());
+            State upgraded = state.upgrade(upgradeOpt.get());
+            //TODO Remove this before merge
+            if (upgradeOpt.get().test(Type.BINDING) && upgraded instanceof ConstructedTool tool) {
+                Soul soul = new Soul();
+                upgraded = tool.bind(soul);
+            }
             var output = getOutput().copy();
             output.setNbt(inventory.getStack(0).getOrCreateNbt().copy());
             output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
-            SoulParser.of(inventory.getStack(0)).ifPresent(soul -> output.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER).put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(soul)));
             return output;
         }
         return inventory.getStack(0);

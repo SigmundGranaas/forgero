@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
 import com.sigmundgranaas.forgero.core.soul.Soul;
+import com.sigmundgranaas.forgero.core.soul.SoulBindable;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
@@ -13,17 +14,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ConstructedTool extends ConstructedComposite implements MaterialBased {
+public class ConstructedTool extends ConstructedComposite implements MaterialBased, SoulBindable {
     private final State head;
-
     private final State handle;
     private final State baseMaterial;
 
     public ConstructedTool(State head, State handle, State baseMaterial, SlotContainer slots, IdentifiableContainer id) {
         super(slots, id, List.of(head, handle));
         this.head = head;
-        this.baseMaterial = baseMaterial;
         this.handle = handle;
+        this.baseMaterial = baseMaterial;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
 
     public ToolBuilder toolBuilder() {
         return ToolBuilder.builder(getHead(), getHandle(), baseMaterial())
-                .addUpgrades(slots())
+                .addSlotContainer(slotContainer.copy())
                 .type(type())
                 .id(identifier());
     }
@@ -61,6 +61,11 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
         return toolBuilder().build();
     }
 
+    @Override
+    public State bind(Soul soul) {
+        return toolBuilder().soul(soul).build();
+    }
+
     @Getter
     public static class ToolBuilder extends BaseCompositeBuilder<ToolBuilder> {
         protected State head;
@@ -68,8 +73,8 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
         protected State primaryMaterial;
 
         public ToolBuilder(State head, State handle, State material) {
-            this.handle = handle;
             this.head = head;
+            this.handle = handle;
             this.primaryMaterial = material;
             this.upgradeContainer = SlotContainer.of(Collections.emptyList());
             this.ingredientList = List.of(head, handle);
@@ -115,10 +120,9 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
         }
 
         public ConstructedTool build() {
+            compositeName();
             var id = new IdentifiableContainer(name, nameSpace, type);
             return new ConstructedTool(head, handle, primaryMaterial, upgradeContainer, id);
         }
-
-
     }
 }

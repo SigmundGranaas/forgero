@@ -1,9 +1,8 @@
 package com.sigmundgranaas.forgero.core.soul;
 
-public class SoulSource {
-    private int tier;
+public record SoulSource(String id) {
 
-    private String id;
-
-    
+    public String name() {
+        return id.split(":")[1];
+    }
 }

@@ -10,7 +10,7 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
     private final Soul soul;
 
     public SoulBoundTool(State head, State handle, State baseMaterial, SlotContainer slots, IdentifiableContainer id, Soul soul) {
-        super(head, baseMaterial, handle, slots, id);
+        super(head, handle, baseMaterial, slots, id);
         this.soul = soul;
     }
 
@@ -37,9 +37,11 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
         }
 
         public static SoulBoundToolBuilder of(ToolBuilder builder, Soul soul) {
-            var soulBuilder = new SoulBoundToolBuilder(builder.getHead(), builder.getHead(), builder.getHead(), soul);
+            var soulBuilder = new SoulBoundToolBuilder(builder.getHead(), builder.getHandle(), builder.getPrimaryMaterial(), soul);
+            soulBuilder.type(builder.getType());
             soulBuilder.name(builder.getName());
             soulBuilder.nameSpace(builder.getNameSpace());
+            soulBuilder.addSlotContainer(builder.getUpgradeContainer());
             return soulBuilder;
         }
 
@@ -49,6 +51,7 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
         }
 
         public SoulBoundTool build() {
+            compositeName();
             var id = new IdentifiableContainer(name, nameSpace, type);
             return new SoulBoundTool(head, handle, primaryMaterial, upgradeContainer, id, soul);
         }

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public abstract class BaseComposite implements Composite {
-    private final SlotContainer slotContainer;
+    protected final SlotContainer slotContainer;
 
     private final IdentifiableContainer id;
 

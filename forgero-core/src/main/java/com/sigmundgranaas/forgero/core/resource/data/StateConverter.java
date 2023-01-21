@@ -5,10 +5,11 @@ import com.sigmundgranaas.forgero.core.resource.data.factory.PropertyBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConstructData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
-import com.sigmundgranaas.forgero.core.state.*;
+import com.sigmundgranaas.forgero.core.state.LeveledState;
+import com.sigmundgranaas.forgero.core.state.Slot;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
-import com.sigmundgranaas.forgero.core.state.composite.NameCompositor;
 import com.sigmundgranaas.forgero.core.state.composite.StaticComposite;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.EmptySlot;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
@@ -100,22 +101,15 @@ public class StateConverter implements DataConverter<State> {
                 .map(nameMapping::get)
                 .map(states::get)
                 .filter(Objects::nonNull).toList();
-        if (parts.size() == 2) {
-            var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE)).findFirst();
-            var handle = parts.stream().filter(part -> part.test(Type.HANDLE)).findFirst();
-            var compositor = new NameCompositor();
-            var id = new IdentifiableContainer(compositor.compositeName(parts), resource.nameSpace(), tree.type(resource.type()));
+        var builderOpt = ConstructedTool.ToolBuilder.builder(parts);
+        if (builderOpt.isPresent()) {
+            var builder = builderOpt.get();
             var slotContainer = new SlotContainer(createSlots(resource.construct().get()));
-            if (head.isPresent() && handle.isPresent()) {
-                if (head.get() instanceof MaterialBased based) {
-                    return Optional.of(new ConstructedTool(head.get(), handle.get(), based.baseMaterial(), slotContainer, id));
-                } else if (head.get() instanceof Composite composite) {
-                    return composite.components().stream()
-                            .filter(comp -> comp.test(Type.MATERIAL))
-                            .findFirst()
-                            .map(material -> new ConstructedTool(head.get(), handle.get(), material, slotContainer, id));
-                }
-            }
+            builder.addSlotContainer(slotContainer)
+                    .type(tree.type(resource.type()))
+                    .nameSpace(resource.nameSpace());
+            return Optional.of(builder.build());
+
         }
         return Optional.empty();
     }

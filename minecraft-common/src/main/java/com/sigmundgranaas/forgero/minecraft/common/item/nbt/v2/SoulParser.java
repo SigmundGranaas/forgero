@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
 import com.sigmundgranaas.forgero.core.soul.Soul;
+import com.sigmundgranaas.forgero.core.soul.SoulSource;
+import com.sigmundgranaas.forgero.core.soul.StatTracker;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 
@@ -24,7 +26,13 @@ public class SoulParser implements CompoundParser<Soul> {
             int level = element.getInt(LEVEL_IDENTIFIER);
             int xp = element.getInt(XP_IDENTIFIER);
             String name = element.getString(NAME_IDENTIFIER);
-            return Optional.of(new Soul(level, xp, name));
+            StatTracker tracker;
+            if (element.contains(TRACKER_IDENTIFIER)) {
+                tracker = StatTrackerParser.PARSER.parse(element.getCompound(TRACKER_IDENTIFIER)).orElse(new StatTracker());
+            } else {
+                tracker = new StatTracker();
+            }
+            return Optional.of(new Soul(level, xp, new SoulSource("minecraft:zombie"), tracker));
         }
         return Optional.empty();
     }

@@ -24,9 +24,7 @@ public class ConstructParser extends CompositeParser {
         if (compound.contains(NbtConstants.ID_IDENTIFIER)) {
             var id = compound.getString(NbtConstants.ID_IDENTIFIER);
             var stateOpt = supplier.find(id);
-
             if (stateOpt.isPresent() && stateOpt.get() instanceof Construct construct) {
-
                 builder = Construct.builder(construct.slots());
             } else if (ForgeroStateRegistry.CONTAINER_TO_STATE.containsKey(id)) {
                 return supplier.find(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));

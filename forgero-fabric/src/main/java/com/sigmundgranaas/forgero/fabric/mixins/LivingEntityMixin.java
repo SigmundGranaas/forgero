@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,8 +26,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "onDeath", at = @At("RETURN"))
     public void onDeathSoulHandler(DamageSource damageSource, CallbackInfo callbackInfo) {
         var source = damageSource.getSource();
-        if (source instanceof ServerPlayerEntity player && isDead()) {
-            SoulHandler.of(player.getMainHandStack()).ifPresent(SoulHandler::processMobKill);
+        if (source instanceof PlayerEntity player && isDead()) {
+            SoulHandler.of(player.getMainHandStack()).ifPresent(handler -> handler.processMobKill(this, getWorld(), player));
         }
     }
 }

@@ -31,6 +31,7 @@ public class ToolParser extends CompositeParser {
             var optBuilder = ConstructedTool.ToolBuilder.builder(parts);
             if (optBuilder.isPresent()) {
                 var builder = optBuilder.get();
+                builder.id(id);
                 if (stateOpt.isPresent() && stateOpt.get() instanceof Composite upgradeable) {
                     builder.addSlotContainer(new SlotContainer(upgradeable.slots()));
                 }
@@ -39,7 +40,7 @@ public class ToolParser extends CompositeParser {
                     builder.type(Type.of(compound.getString(TYPE_IDENTIFIER)));
                 }
                 if (compound.contains(SOUL_IDENTIFIER)) {
-                    var soul = SoulParser.PARSER.parse(compound);
+                    var soul = SoulParser.PARSER.parse(compound.getCompound(SOUL_IDENTIFIER));
                     if (soul.isPresent()) {
                         return Optional.of(builder.soul(soul.get()).build());
                     }

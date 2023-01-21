@@ -16,13 +16,11 @@ public abstract class PlayerEntityAttackMixin {
         if (((PlayerEntity) (Object) this).getMainHandStack().getItem() instanceof StateItem item) {
             var stack = ((PlayerEntity) (Object) this).getMainHandStack();
             var tool = item.dynamicState(stack);
-
             float initialAttackDamage = tool.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
             float attackDamageTarget = tool.stream().applyAttribute(new EntityTarget(target.getType()), AttributeType.ATTACK_DAMAGE);
             if (initialAttackDamage != attackDamageTarget) {
                 return x + attackDamageTarget - initialAttackDamage;
             }
-
         }
         return x;
     }

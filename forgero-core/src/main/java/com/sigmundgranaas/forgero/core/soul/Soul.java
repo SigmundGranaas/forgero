@@ -6,45 +6,33 @@ import com.sigmundgranaas.forgero.core.state.Identifiable;
 
 public class Soul implements Identifiable, PropertyContainer {
 
-    private final IdentifiableIntTracker blockTracker;
+    private final SoulSource soulSource;
 
-    private final IdentifiableIntTracker mobTracker;
-    private final String name;
-    private final int level;
-    private final int xpTarget;
+    private final StatTracker tracker;
+    private int level;
+    private int xpTarget;
     private int xp;
     private LevelManager levelInfo;
 
     public Soul() {
-        this.name = "unknown";
+        this.soulSource = new SoulSource("minecraft:zombie");
         this.xp = 0;
         this.level = 1;
         this.xpTarget = new LevelManager().getXpForLevel(level + 1);
-        this.blockTracker = new IdentifiableIntTracker();
-        this.mobTracker = new IdentifiableIntTracker();
+        this.tracker = new StatTracker();
     }
 
-    public Soul(int xp) {
-        this.name = "unknown";
-        this.xp = xp;
-        this.level = 1;
-        this.xpTarget = new LevelManager().getXpForLevel(level + 1);
-        this.blockTracker = new IdentifiableIntTracker();
-        this.mobTracker = new IdentifiableIntTracker();
-    }
-
-    public Soul(int level, int xp, String name) {
+    public Soul(int level, int xp, SoulSource source, StatTracker tracker) {
+        this.soulSource = source;
         this.xp = xp;
         this.level = level;
-        this.name = name;
         this.xpTarget = new LevelManager().getXpForLevel(level + 1);
-        this.blockTracker = new IdentifiableIntTracker();
-        this.mobTracker = new IdentifiableIntTracker();
+        this.tracker = tracker;
     }
 
     @Override
     public String name() {
-        return name;
+        return soulSource.name();
     }
 
     @Override
@@ -56,15 +44,38 @@ public class Soul implements Identifiable, PropertyContainer {
         return xp;
     }
 
-    public void addXp(int xp) {
+    public Soul addXp(int xp) {
         this.xp = this.xp + xp;
+        return tryLevelUp();
     }
 
     public int getLevel() {
         return level;
     }
 
+    public Soul tryLevelUp() {
+        if (xp >= xpTarget) {
+            int remainingXp = xp - xpTarget;
+            int level = this.level + 1;
+            Soul leveledUp = new Soul(level, remainingXp, soulSource, tracker);
+            return leveledUp.tryLevelUp();
+        }
+        return this;
+    }
+
     public int getXpTarget() {
         return xpTarget;
+    }
+
+    public void trackBlock(String id, int i) {
+        this.tracker.trackBlock(id, i);
+    }
+
+    public void trackMob(String id, int i) {
+        this.tracker.trackMob(id, i);
+    }
+
+    public StatTracker tracker() {
+        return tracker;
     }
 }

@@ -3,8 +3,6 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulParser;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.SoulWriter;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
 import net.minecraft.block.BlockState;
@@ -46,7 +44,6 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        SoulParser.of(itemStack).ifPresent(soul -> new SoulWriter(soul).write(tooltip, tooltipContext));
         StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
