@@ -1,9 +1,21 @@
-# Forgero Beta release 0.10.5
+# Forgero Beta release 0.10.6
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.6
+
+* Added a new recipe type for Patchouli (State upgrade recipe)
+* Added patchouli entry for pommels
+* Renamed Pummel to Pommel
+* Fixed compat issue with EMI Loot
+* Fixed scabbard configuration for some sword blades
+* Fixed createstation command to fill up chests with proper items
+* Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
+* Added new ruined smithing house structure
+* Fixed shovel head gem placement
 
 ## Changelog 0.10.5
 

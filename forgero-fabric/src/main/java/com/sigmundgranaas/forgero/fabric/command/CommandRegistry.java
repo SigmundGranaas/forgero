@@ -30,9 +30,9 @@ public class CommandRegistry {
                     .then(literal("createstation")
                             .requires(ctx -> ctx.hasPermissionLevel(2))
                             .executes(context -> {
-                                BlockPos pos = context.getSource().getPlayer().getBlockPos().add(1, -1, 0);
+                                BlockPos pos = context.getSource().getPlayer().getBlockPos().add(-12, -5, -10);
                                 BlockState initialState = context.getSource().getWorld().getBlockState(pos);
-                                Optional<Structure> station = context.getSource().getWorld().getStructureManager().getStructure(new Identifier("forgero:crafting_station"));
+                                Optional<Structure> station = context.getSource().getWorld().getStructureManager().getStructure(new Identifier("forgero:forging_house"));
                                 context.getSource().getWorld().setBlockState(pos, Blocks.STRUCTURE_BLOCK.getDefaultState());
                                 if (station.isPresent() && !context.getSource().getWorld().isClient) {
                                     var structureBlock = new StructureBlockBlockEntity(pos, context.getSource().getWorld().getBlockState(pos));

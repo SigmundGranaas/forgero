@@ -9,6 +9,8 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Optional;
+
 public class RepairKitTest {
 
 
@@ -17,7 +19,7 @@ public class RepairKitTest {
         var tool = new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe")));
         tool.setDamage(100);
         var test = RecipeTester.repairKit("diamond_repair_kit", tool, "forgero:diamond-pickaxe",context);
-        var result = test.craft();
+        Optional<ItemStack> result = test.craft();
         if(result.isEmpty()){
             throw new GameTestException("No matching recipe for repair kits");
         } else if(result.get().getDamage() != 0){
@@ -30,7 +32,7 @@ public class RepairKitTest {
     public void testRepairDiamondPickaxeWithFullDurability(TestContext context) {
         var tool = new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe")));
         var test = RecipeTester.repairKit("diamond_repair_kit", tool, "forgero:diamond-pickaxe",context);
-        var result = test.craft();
+        Optional<ItemStack> result = test.craft();
         if(result.isPresent()){
             throw new GameTestException("Should be able to repair tools with full durability");
         }
