@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
+import com.sigmundgranaas.forgero.core.type.Type;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.SOUL_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.TYPE_IDENTIFIER;
 
 
 public class ToolParser extends CompositeParser {
@@ -33,6 +35,9 @@ public class ToolParser extends CompositeParser {
                     builder.addSlotContainer(new SlotContainer(upgradeable.slots()));
                 }
                 parseUpgrades(builder::addUpgrade, compound);
+                if (compound.contains(TYPE_IDENTIFIER)) {
+                    builder.type(Type.of(compound.getString(TYPE_IDENTIFIER)));
+                }
                 if (compound.contains(SOUL_IDENTIFIER)) {
                     var soul = SoulParser.PARSER.parse(compound);
                     if (soul.isPresent()) {
