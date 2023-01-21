@@ -1,37 +1,37 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import com.google.common.collect.ImmutableSet;
-import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
-import com.sigmundgranaas.forgero.core.resource.data.v2.loading.PathWalker;
-import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
-import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
-import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
-import com.sigmundgranaas.forgero.core.util.loader.PathFinder;
+import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.NotNull;
 
-public interface ForgeroConfiguration {
-    ForgeroConfiguration DEFAULT = new DefaultConfiguration();
+import java.util.ArrayList;
+import java.util.List;
 
-    default InputStreamLoader streamLoader() {
-        return new ClassLoader();
-    }
+public class ForgeroConfiguration implements ForgeroConfigurationData {
+	@NotNull
+	@SerializedName("disabled_resources")
+	public List<String> disabledResources = List.of("forgero:diamond-sacrificial_dagger_blade");
 
-    default ResourceLocator locator() {
-        return PathWalker.builder()
-                .pathFinder(pathFinder())
-                .pathFinder(pathFinder())
-                .depth(10)
-                .build();
-    }
+	@NotNull
+	@SerializedName("disabled_packs")
+	public List<String> disabledPacks = new ArrayList<>();
 
-    default PathFinder pathFinder() {
-        return PathFinder::ClassFinder;
-    }
+	@NotNull
+	@SerializedName("disable_vanilla_recipes")
+	public Boolean disableVanillaRecipes = false;
 
-    default ForgeroSettings settings() {
-        return ForgeroSettings.SETTINGS;
-    }
+	@NotNull
+	@SerializedName("convert_vanilla_recipes_to_forgero_tools")
+	public Boolean convertVanillaRecipesToForgeroTools = false;
 
-    default ImmutableSet<String> availableDependencies() {
-        return ImmutableSet.<String>builder().add("forgero", "minecraft").build();
-    }
+	@NotNull
+	@SerializedName("enable_repair_kits")
+	public Boolean enableRepairKits = true;
+
+	@NotNull
+	@SerializedName("resource_logging")
+	public Boolean resourceLogging = true;
+
+	@NotNull
+	@SerializedName("log_disabled_packages")
+	public Boolean logDisabledPackages = false;
 }

@@ -8,12 +8,6 @@ plugins {
 version = rootProject.mod_version
 group = rootProject.maven_group
 
-repositories {
-    maven {
-        url "https://maven.terraformersmc.com/releases/"
-    }
-}
-
 dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
@@ -105,6 +99,7 @@ dependencies {
 
     // Mod Menu API
     modApi "com.terraformersmc:modmenu:${this.modmenu_version}"
+    modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 
 
@@ -171,6 +166,11 @@ loom {
             vmArg "-Dfabric-api.gametest"
             vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
             runDir "build/gametest"
+        }
+        clientExtendedCompat {
+            name "Client Extended Compat"
+
+            client()
         }
     }
 }

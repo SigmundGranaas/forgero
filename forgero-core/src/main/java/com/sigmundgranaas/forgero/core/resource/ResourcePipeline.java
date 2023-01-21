@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.resource;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.resource.data.DataBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.StateConverter;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
@@ -40,7 +41,7 @@ public class ResourcePipeline {
         this.tree = new TypeTree();
         this.idMapper = new HashMap<>();
         this.recipes = new ArrayList<>();
-        this.dependencies = new HashSet<>(configuration.availableDependencies());
+        this.dependencies = new HashSet<>(ForgeroConfigurationLoader.getAvailableDependencies());
         this.configuration = configuration;
     }
 
@@ -87,7 +88,7 @@ public class ResourcePipeline {
         packages.forEach(pack -> dependencies.add(pack.name()));
 
         var validatedResources = packages.stream().filter(this::filterPackages).toList();
-        if (configuration.settings().getResourceLogging()) {
+        if (configuration.resourceLogging) {
             Forgero.LOGGER.info("Registered and validated {} Forgero packages", validatedResources.size());
             Forgero.LOGGER.info("{}", validatedResources.stream().map(DataPackage::name).toList());
         }
@@ -95,11 +96,11 @@ public class ResourcePipeline {
     }
 
     private boolean filterPackages(DataPackage dataPackage) {
-        if (!configuration.settings().filterPacks(dataPackage)) {
+        if (!ForgeroConfigurationLoader.filterPacks(dataPackage)) {
             return false;
         }
         if (!dependencies.containsAll(dataPackage.dependencies())) {
-            if (configuration.settings().getLogDisabledPackages()) {
+            if (configuration.logDisabledPackages) {
                 var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
                 Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
             }
@@ -113,7 +114,7 @@ public class ResourcePipeline {
         return resources.parallelStream()
                 .map(DataPackage::loadData)
                 .flatMap(List::stream)
-                .filter(configuration.settings()::filterResources)
+                .filter(ForgeroConfigurationLoader::filterResources)
                 .toList();
     }
 }
