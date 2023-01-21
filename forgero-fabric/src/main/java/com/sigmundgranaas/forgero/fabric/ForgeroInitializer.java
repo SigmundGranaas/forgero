@@ -54,9 +54,6 @@ public class ForgeroInitializer implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
     public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
 
-    static {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
-    }
 
     @Override
     public void onInitialize() {
