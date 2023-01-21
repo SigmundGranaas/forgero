@@ -1,15 +1,9 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.gson.*;
-import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
-import com.sigmundgranaas.forgero.core.resource.data.v2.loading.PathWalker;
-import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
-import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
-import com.sigmundgranaas.forgero.core.util.loader.PathFinder;
 
 import java.lang.reflect.Type;
-import java.util.Set;
+import java.util.List;
 
 public interface ForgeroConfigurationData {
 	default void setByKey(String key, Object value) {
@@ -37,7 +31,22 @@ public interface ForgeroConfigurationData {
 
 			data.keySet().forEach(key ->
 			{
-				Object value = data.get(key);
+				JsonElement value = data.get(key);
+
+				if (value.getClass() == JsonArray.class) {
+					var valueAsList = new Gson().fromJson(value.toString(), List.class);
+
+					forgeroConfiguration.setByKey(key, valueAsList);
+					return;
+				}
+
+				if (forgeroConfiguration.getByKey(key).getClass() == Boolean.class) {
+					var valueAsBoolean = value.getAsBoolean();
+
+					forgeroConfiguration.setByKey(key, valueAsBoolean);
+					return;
+				}
+
 				forgeroConfiguration.setByKey(key, value);
 
 				// TODO: Iterate over nested objects

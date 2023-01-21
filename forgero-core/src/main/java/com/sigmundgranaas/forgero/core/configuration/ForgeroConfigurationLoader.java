@@ -1,18 +1,14 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.util.Set;
 
 public class ForgeroConfigurationLoader {
 	public static String configurationFileName = "forgero_settings.json";
@@ -25,6 +21,10 @@ public class ForgeroConfigurationLoader {
 	public static ForgeroConfiguration load() {
 		if (deserializer == null) deserializer = new ForgeroConfigurationData.Deserializer();
 
+		if (!Files.exists(configurationFilePath)) {
+			return createConfigurationFile();
+		}
+
 		try (InputStream stream = Files.newInputStream(configurationFilePath)) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(ForgeroConfiguration.class, deserializer);
@@ -33,40 +33,17 @@ public class ForgeroConfigurationLoader {
 			configuration = configurationGson.fromJson(new JsonReader(new BufferedReader(new InputStreamReader(stream))), ForgeroConfiguration.class);
 
 			if (configuration.resourceLogging) {
-				Forgero.LOGGER.info("Reading Forgero configuration from: {}", configurationFilePath);
+				Forgero.LOGGER.info("(Re)loading Forgero configuration, located at: {}", configurationFilePath);
 			}
 
 			// TODO: Set configuration's available dependencies
 
 			return configuration;
-		} catch (Exception e) {
-			Forgero.LOGGER.info("No Forgero configuration file detected in {}, creating a new configuration file...", configurationFilePath);
+		} catch (IOException e) {
+			Forgero.LOGGER.info("Unable to read Forgero configuration file, located at {}. See stack trace below", configurationFilePath);
+			e.printStackTrace();
 			return createConfigurationFile();
 		}
-	}
-
-	// TODO: Call this in the right place
-	public static boolean filterResources(DataResource resource) {
-		boolean filter = ForgeroConfigurationLoader.configuration.disabledResources.stream().noneMatch(disabled -> resource.identifier().equals(disabled));
-		if (!filter) {
-			Forgero.LOGGER.info("{} was disabled by user settings", resource.identifier());
-		}
-
-		return filter;
-	}
-
-	// TODO: Call this in the right place
-	public static boolean filterPacks(DataPackage dataPackage) {
-		boolean filter = ForgeroConfigurationLoader.configuration.disabledPacks.stream().noneMatch(disabled -> dataPackage.identifier().equals(disabled));
-		if (!filter) {
-			Forgero.LOGGER.info("{} was disabled by user settings", dataPackage.identifier());
-		}
-
-		return filter;
-	}
-
-	public static ImmutableSet<String> getAvailableDependencies() {
-		return ImmutableSet.<String>builder().add("forgero", "minecraft").build();
 	}
 
 	private static Gson createGson() {
@@ -81,6 +58,10 @@ public class ForgeroConfigurationLoader {
 			var forgeroConfiguration = new ForgeroConfiguration();
 			var json = createGson().toJson(forgeroConfiguration);
 			writer.write(json);
+
+			if (configuration.resourceLogging) {
+				Forgero.LOGGER.info("(Re)created Forgero configuration file located at {}", configurationFilePath);
+			}
 
 			return forgeroConfiguration;
 		} catch (IOException e) {
