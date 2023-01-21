@@ -48,14 +48,9 @@ public class ARRPGenerator {
 
 
     public void generateResources() {
-        generateTags();
         generateTagsFromStateTree();
         createMaterialToolTags();
         RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
-    }
-
-    public void generateTags() {
-
     }
 
     public void generateTagsFromStateTree() {

@@ -39,7 +39,7 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "MATERIAL",
+        "type": "TOOL_MATERIAL",
         "tier": 1
       },
       {
@@ -47,7 +47,7 @@
         "category": [
           "UTILITY"
         ],
-        "description": "sword_guard",
+        "description": "scabbard",
         "type": "SECONDARY_MATERIAL",
         "tier": 1
       },
@@ -57,7 +57,7 @@
           "OFFENSIVE"
         ],
         "description": "trinket",
-        "type": "TRINKET",
+        "type": "LEATHER",
         "tier": 1
       }
     ],

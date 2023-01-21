@@ -1,12 +1,12 @@
 {
-  "name": "forgero:small_forging_house_plains",
+  "name": "forgero:medium_smithing_house_deepslate",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "forgero:small_forging_house_plains",
+        "location": "forgero:smithing_house_stone_deepslate",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
