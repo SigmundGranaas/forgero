@@ -19,12 +19,7 @@ import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.*;
-import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import net.fabricmc.api.ModInitializer;
@@ -58,12 +53,13 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.
 
 public class ForgeroInitializer implements ModInitializer {
 
-    static {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
-    }
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
     public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+
+    static {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
+    }
 
     @Override
     public void onInitialize() {
