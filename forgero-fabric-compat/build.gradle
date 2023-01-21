@@ -172,6 +172,29 @@ loom {
 
             client()
         }
+        clientExtendedCompatOptimised {
+            name "Client Extended Compat Optimised"
+
+            repositories {
+                exclusiveContent {
+                    forRepository {
+                        maven {
+                            name = "Modrinth"
+                            url = "https://api.modrinth.com/maven"
+                        }
+                    }
+                    filter {
+                        includeGroup "maven.modrinth"
+                    }
+                }
+            }
+
+            dependencies {
+                modRuntimeOnly("maven.modrinth:lazydfu:4SHylIO9")
+            }
+
+            client()
+        }
     }
 }
 

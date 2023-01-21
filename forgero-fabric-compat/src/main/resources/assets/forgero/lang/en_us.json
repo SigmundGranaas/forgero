@@ -1,3 +1,7 @@
 {
-  "forgero.menu.options": "Forgero configuration"
+  "forgero.menu.options": "Forgero configuration",
+  "forgero.menu.options.reset": "Reset",
+  "forgero.menu.options.true": "True",
+  "forgero.menu.options.false": "False",
+  "forgero.menu.options.loading": "Loading..."
 }

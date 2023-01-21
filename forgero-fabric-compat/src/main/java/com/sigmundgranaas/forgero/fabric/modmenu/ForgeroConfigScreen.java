@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.modmenu;
 
-import com.sigmundgranaas.forgero.fabric.option.OptionConvertible;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.fabric.modmenu.gui.BooleanWidget;
+import com.sigmundgranaas.forgero.fabric.modmenu.gui.ResetButtonWidget;
+import com.sigmundgranaas.forgero.fabric.modmenu.gui.TextWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -9,14 +11,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 
 public class ForgeroConfigScreen extends GameOptionsScreen {
 	private Screen previous;
@@ -35,16 +31,11 @@ public class ForgeroConfigScreen extends GameOptionsScreen {
 	}
 
 	public void BuildConfigScreen() {
-		this.list = new ButtonListWidget(this.client, this.width, this.height, 32, this.height - 32, 25);
-		this.list.addAll(configurationAsOptions());
-		this.addSelectableChild(this.list);
-		this.addDrawableChild(
-				new ButtonWidget(10, 10, 10, 10, ScreenTexts.DONE, (button) -> {
-					// TODO: Save config
-//					ModMenuConfigManager.save();
-					this.client.setScreen(this.previous);
-				})
-		);
+		createBooleanWidgetWithReset(this.width / 2 - 105, this.height / 2, Text.translatable("forgero.menu.options.test"), button -> {
+			ForgeroConfigurationLoader.configuration.resourceLogging = !ForgeroConfigurationLoader.configuration.resourceLogging;
+		}, button -> {
+			ForgeroConfigurationLoader.configuration.resourceLogging = true;
+		});
 	}
 
 	@Override
@@ -68,17 +59,10 @@ public class ForgeroConfigScreen extends GameOptionsScreen {
 		this.client.setScreen(this.parent);
 	}
 
-	public SimpleOption<?>[] configurationAsOptions() {
-		ArrayList<SimpleOption<?>> options = new ArrayList<>();
-		for (Field field : ForgeroConfigurationLoader.configuration.getClass().getDeclaredFields()) {
-			if (!Modifier.isStatic(field.getModifiers()) && Modifier.isPublic(field.getModifiers()) && field.getType().equals(Boolean.class)) {
-				try {
-					options.add(((OptionConvertible) field.get(ForgeroConfigurationLoader.configuration)).asOption());
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return options.toArray(SimpleOption[]::new);
+	public void createBooleanWidgetWithReset(int x, int y, Text optionName, ButtonWidget.PressAction toggleAction, ButtonWidget.PressAction resetAction) {
+		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, button -> {
+		}, MinecraftClient.getInstance().textRenderer));
+		this.addDrawableChild(new BooleanWidget(x + 160, y, toggleAction));
+		this.addDrawableChild(new ResetButtonWidget(x + 215, y, resetAction));
 	}
 }
