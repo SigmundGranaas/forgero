@@ -24,7 +24,8 @@ public class ForgeroConfigurationLoader {
 		if (deserializer == null) deserializer = new ForgeroConfigurationData.Deserializer();
 
 		if (!Files.exists(configurationFilePath)) {
-			return createConfigurationFile();
+			configuration = createConfigurationFile();
+			return configuration;
 		}
 
 		try (InputStream stream = Files.newInputStream(configurationFilePath)) {
@@ -35,16 +36,17 @@ public class ForgeroConfigurationLoader {
 			configuration = configurationGson.fromJson(new JsonReader(new BufferedReader(new InputStreamReader(stream))), ForgeroConfiguration.class);
 
 			if (configuration.resourceLogging) {
-				Forgero.LOGGER.info("(Re)loading Forgero configuration, located at: {}", configurationFilePath);
+				Forgero.LOGGER.info("(Re)loaded Forgero configuration, located at: {}", configurationFilePath);
 			}
-
-			// TODO: Set configuration's available dependencies
 
 			return configuration;
 		} catch (IOException e) {
-			Forgero.LOGGER.info("Unable to read Forgero configuration file, located at {}. See stack trace below", configurationFilePath);
+			Forgero.LOGGER.warn("Unable to read Forgero configuration file, located at {}. Loading default configuration. Check if the formatting is correct. See stack trace below:", configurationFilePath);
 			e.printStackTrace();
-			return createConfigurationFile();
+
+			// Worst case scenario, return the default configuration
+			configuration = defaultConfiguration;
+			return defaultConfiguration;
 		}
 	}
 
@@ -56,19 +58,29 @@ public class ForgeroConfigurationLoader {
 	}
 
 	private static ForgeroConfiguration createConfigurationFile() {
+		if (!new File(configurationFolderName).exists()) {
+			Forgero.LOGGER.warn("Unable to create Forgero configuration file at {}. Configuration folder (/config) doesn't exist. Loading default configuration.", configurationFilePath);
+
+			// Worst case scenario, return the default configuration
+			return ForgeroConfigurationLoader.defaultConfiguration;
+		}
+
 		try (FileWriter writer = new FileWriter(configurationFilePath.toString())) {
 			var forgeroConfiguration = new ForgeroConfiguration();
 			var json = createGson().toJson(forgeroConfiguration);
 			writer.write(json);
 
 			if (configuration.resourceLogging) {
-				Forgero.LOGGER.info("(Re)created Forgero configuration file located at {}", configurationFilePath);
+				Forgero.LOGGER.info("(Re)created Forgero configuration file, located at {}", configurationFilePath);
 			}
 
 			return forgeroConfiguration;
 		} catch (IOException e) {
+			Forgero.LOGGER.info("Unable to create Forgero configuration file at {}. See stack trace below:", configurationFilePath);
 			e.printStackTrace();
-			return null;
+
+			// Worst case scenario, return the default configuration
+			return ForgeroConfigurationLoader.defaultConfiguration;
 		}
 	}
 }
