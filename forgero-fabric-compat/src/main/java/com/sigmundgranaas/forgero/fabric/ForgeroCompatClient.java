@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.fabric;
 
 import com.sigmundgranaas.forgero.fabric.patchouli.GemUpgradeRecipePage;
 import com.sigmundgranaas.forgero.fabric.patchouli.StateCraftingRecipe;
+import com.sigmundgranaas.forgero.fabric.patchouli.StateUpgradeRecipe;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -11,6 +12,7 @@ public class ForgeroCompatClient implements ClientModInitializer {
         if (FabricLoader.getInstance().isModLoaded("patchouli")) {
             GemUpgradeRecipePage.register();
             StateCraftingRecipe.register();
+            StateUpgradeRecipe.register();
         }
     }
 }

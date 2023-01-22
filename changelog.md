@@ -7,6 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.6
 
+* Added a new recipe type for Patchouli (State upgrade recipe)
+* Added patchouli entry for pommels
 * Renamed Pummel to Pommel
 * Fixed compat issue with EMI Loot
 * Fixed scabbard configuration for some sword blades
