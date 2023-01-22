@@ -6,6 +6,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 public class ForgeroModMenuIntegration implements ModMenuApi {
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return ForgeroConfigScreen::new;
+		return ForgeroConfigurationScreen::new;
 	}
 }

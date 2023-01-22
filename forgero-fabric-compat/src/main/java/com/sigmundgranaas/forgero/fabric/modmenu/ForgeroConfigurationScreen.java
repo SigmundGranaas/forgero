@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.modmenu;
 
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.BooleanWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ListWidget;
@@ -21,15 +20,17 @@ import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.List;
 
-public class ForgeroConfigScreen extends GameOptionsScreen {
-	public boolean changesQueued = false;
+public class ForgeroConfigurationScreen extends GameOptionsScreen {
+	public static ForgeroConfigurationScreen INSTANCE;
 
 	private Screen previous;
 	private ButtonListWidget list;
 
-	public ForgeroConfigScreen(Screen previous) {
+	public ForgeroConfigurationScreen(Screen previous) {
 		super(previous, MinecraftClient.getInstance().options, Text.translatable("forgero.menu.options"));
 		this.previous = previous;
+
+		INSTANCE = this;
 	}
 
 	@Override
@@ -62,8 +63,14 @@ public class ForgeroConfigScreen extends GameOptionsScreen {
 
 	@Override
 	public boolean shouldCloseOnEsc() {
-		// TODO: Implement changesQueued and read it here
+		// TODO: Save config
 		return super.shouldCloseOnEsc();
+	}
+
+	// FIXME: This is a hack that shouldn't be necessary if the widget creation functions are moved into their own class which can track the states
+	public void RebuildConfigScreen() {
+		clearChildren();
+		BuildConfigScreen();
 	}
 
 	public void BuildConfigScreen() {
@@ -74,8 +81,6 @@ public class ForgeroConfigScreen extends GameOptionsScreen {
 
 			for (Field field : ForgeroConfigurationLoader.configuration.getClass().getFields()) {
 				var value = field.get(ForgeroConfigurationLoader.configuration);
-
-				Forgero.LOGGER.info(field.getName());
 
 				if (value instanceof Boolean) {
 					createBooleanWidgetWithReset(
@@ -106,12 +111,14 @@ public class ForgeroConfigScreen extends GameOptionsScreen {
 		}));
 	}
 
+	// FIXME: Refactor this into its own class
 	public void createBooleanWidgetWithReset(int x, int y, Text optionName, Object object, Field field) {
 		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, MinecraftClient.getInstance().textRenderer));
 		this.addDrawableChild(new BooleanWidget(x + 320, y, 50, 20, object, field));
 		this.addDrawableChild(new ResetButtonWidget(x + 380, y, 50, 20, object, field));
 	}
 
+	// FIXME: Refactor this into its own class
 	public void createListWidgetWithReset(int x, int y, Text optionName, Object object, Field field) {
 		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, MinecraftClient.getInstance().textRenderer));
 		this.addDrawableChild(new ListWidget(x + 320, y, 50, 20, object, field));

@@ -11,6 +11,8 @@ import java.nio.file.Path;
 import java.text.MessageFormat;
 
 public class ForgeroConfigurationLoader {
+	public static final ForgeroConfiguration defaultConfiguration = new ForgeroConfiguration();
+
 	public static String configurationFileName = "forgero_settings.json";
 	public static String configurationFolderName = "config";
 	public static Path configurationFilePath = Path.of(MessageFormat.format("./{0}/{1}", configurationFolderName, configurationFileName));
