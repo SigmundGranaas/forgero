@@ -30,6 +30,7 @@ public interface PropertyContainer extends Comparable<Object> {
         return Property.stream(applyProperty(Target.EMPTY));
     }
 
+
     @NotNull
     default List<Property> getRootProperties() {
         return Collections.emptyList();

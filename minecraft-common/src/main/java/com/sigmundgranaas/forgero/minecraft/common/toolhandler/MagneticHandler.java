@@ -1,11 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.PropertyData;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -31,13 +35,30 @@ import java.util.function.Predicate;
  */
 
 
-public class MagneticHandler {
+public class MagneticHandler implements RunnableHandler {
+    public static String MAGNETIC_TYPE = "MAGNETIC";
     private final Entity rootEntity;
     private final Vec3d rootVec;
 
-    public MagneticHandler(Entity rootEntity) {
+    private final float power;
+
+    private final int distance;
+
+    public MagneticHandler(Entity rootEntity, float power, int level) {
         this.rootEntity = rootEntity;
         this.rootVec = rootEntity.getPos();
+        this.power = power;
+        this.distance = level;
+    }
+
+    public static Optional<MagneticHandler> of(PropertyContainer container, Entity rootEntity) {
+        var magnetic = container.stream().features().filter(prop -> prop.type().equals(MAGNETIC_TYPE)).toList();
+        if (magnetic.size() > 0) {
+            var value = magnetic.stream().map(PropertyData::getValue).reduce(0f, Float::sum);
+            var level = magnetic.stream().map(PropertyData::getLevel).reduce(Integer::sum);
+            return level.map(l -> new MagneticHandler(rootEntity, value, l + 3));
+        }
+        return Optional.empty();
     }
 
     public List<Entity> getNearbyEntities(int range, Predicate<Entity> predicate) {
@@ -46,7 +67,7 @@ public class MagneticHandler {
         return rootEntity.getWorld().getOtherEntities(rootEntity, new Box(pos1, pos2), predicate);
     }
 
-    public void pullEntities(int power, List<Entity> entities) {
+    public void pullEntities(List<Entity> entities) {
         for (Entity nearbyEntity : entities) {
             double dist = nearbyEntity.getPos().distanceTo(rootVec);
             if (dist < 1) {
@@ -56,5 +77,10 @@ public class MagneticHandler {
                 nearbyEntity.addVelocity(velocity.x, velocity.y, velocity.z);
             }
         }
+    }
+
+    @Override
+    public void run() {
+        pullEntities(getNearbyEntities(distance, entity -> entity instanceof ItemEntity));
     }
 }

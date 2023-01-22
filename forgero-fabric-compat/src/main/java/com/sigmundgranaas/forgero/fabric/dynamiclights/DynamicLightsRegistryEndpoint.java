@@ -21,7 +21,7 @@ public class DynamicLightsRegistryEndpoint implements DynamicLightsInitializer {
                             .stream().getPassiveProperties()
                             .filter(pas -> pas.getPassiveType() == PassivePropertyType.LEVELED)
                             .map(LeveledProperty.class::cast)
-                            .filter(pas -> pas.type() == LeveledPassiveType.EMISSIVE)
+                            .filter(pas -> pas.type().equals(LeveledPassiveType.EMISSIVE.toString()))
                             .findFirst();
                     if (luma.isPresent()) {
                         return 10;
