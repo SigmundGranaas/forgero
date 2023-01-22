@@ -8,6 +8,20 @@ plugins {
 version = rootProject.mod_version
 group = rootProject.maven_group
 
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
 dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
@@ -175,22 +189,8 @@ loom {
         clientExtendedCompatOptimised {
             name "Client Extended Compat Optimised"
 
-            repositories {
-                exclusiveContent {
-                    forRepository {
-                        maven {
-                            name = "Modrinth"
-                            url = "https://api.modrinth.com/maven"
-                        }
-                    }
-                    filter {
-                        includeGroup "maven.modrinth"
-                    }
-                }
-            }
-
             dependencies {
-                modRuntimeOnly("maven.modrinth:lazydfu:4SHylIO9")
+                modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
             }
 
             client()
