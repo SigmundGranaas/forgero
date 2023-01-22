@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.core.soul;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,6 +36,6 @@ public class IdentifiableIntTracker {
     }
 
     public Map<String, Integer> toMap() {
-        return ImmutableMap.copyOf(idMap);
+        return Map.copyOf(idMap);
     }
 }

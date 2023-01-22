@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulParser;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.OreBlockXp;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
@@ -36,12 +37,15 @@ public class SoulHandler {
     }
 
     public void processMobKill(Entity entity, World world, PlayerEntity player) {
-        var handledSoul = soul.addXp(100);
-        if (handledSoul.getLevel() > soul.getLevel()) {
-            handleLevelUp(handledSoul, world, player);
+        if (entity instanceof LivingEntity livingEntity) {
+            var handledSoul = soul.addXp(livingEntity.getXpToDrop() * 15);
+            if (handledSoul.getLevel() > soul.getLevel()) {
+                handleLevelUp(handledSoul, world, player);
+            }
+            handledSoul.trackMob(Registry.ENTITY_TYPE.getId(entity.getType()).toString(), 1);
+            stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER).put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(handledSoul));
         }
-        handledSoul.trackMob(Registry.ENTITY_TYPE.getId(entity.getType()).toString(), 1);
-        stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER).put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(handledSoul));
+
     }
 
 

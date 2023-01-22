@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
+import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
@@ -21,9 +22,12 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class DynamicSwordItem extends SwordItem implements StateItem {
@@ -61,6 +65,16 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
             user.setStackInHand(hand, StateConverter.of(SoulHelper.of(entity, tool)));
         }
         return super.useOnEntity(stack, user, entity, hand);
+    }
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if (!world.isClient && StateConverter.of(user.getStackInHand(hand)).orElse(this) instanceof SoulContainer container) {
+            Map<String, Integer> map = new HashMap<>(container.getSoul().tracker().blocks().toMap());
+            map.putAll(container.getSoul().tracker().mobs().toMap());
+            map.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEachOrdered((entry) -> user.sendMessage(Text.literal(String.format("%s: %s", entry.getKey(), entry.getValue()))));
+        }
+        return super.use(world, user, hand);
     }
 
     @Override
