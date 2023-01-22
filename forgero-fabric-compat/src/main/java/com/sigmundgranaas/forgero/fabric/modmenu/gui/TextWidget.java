@@ -6,8 +6,9 @@ import net.minecraft.client.sound.SoundManager;
 import net.minecraft.text.Text;
 
 public class TextWidget extends PressableTextWidget {
-	public TextWidget(int x, int y, int width, int height, Text text, PressAction onPress, TextRenderer textRenderer) {
-		super(x, y, width, height, text, onPress, textRenderer);
+	public TextWidget(int x, int y, int width, int height, Text text, TextRenderer textRenderer) {
+		super(x, y, width, height, text, button -> {
+		}, textRenderer);
 	}
 
 	@Override

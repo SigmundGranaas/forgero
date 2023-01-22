@@ -1,7 +1,14 @@
 {
   "forgero.menu.options": "Forgero configuration",
+  "forgero.menu.options.error": "Error...",
   "forgero.menu.options.reset": "Reset",
   "forgero.menu.options.true": "True",
   "forgero.menu.options.false": "False",
-  "forgero.menu.options.loading": "Loading..."
+  "forgero.menu.options.disabledResources": "Disabled resources",
+  "forgero.menu.options.disabledPacks": "Disabled packs",
+  "forgero.menu.options.disableVanillaRecipes": "Disable vanilla recipes",
+  "forgero.menu.options.convertVanillaRecipesToForgeroTools": "Convert vanilla recipes to Forgero tools",
+  "forgero.menu.options.enableRepairKits": "Enable repair kits",
+  "forgero.menu.options.resourceLogging": "Resource logging",
+  "forgero.menu.options.logDisabledPackages": "Log disabled packages"
 }

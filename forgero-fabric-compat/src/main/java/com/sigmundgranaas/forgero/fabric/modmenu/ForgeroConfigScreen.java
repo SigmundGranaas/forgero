@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.modmenu;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.BooleanWidget;
+import com.sigmundgranaas.forgero.fabric.modmenu.gui.ListWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ResetButtonWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.TextWidget;
 import net.minecraft.client.MinecraftClient;
@@ -12,9 +14,16 @@ import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
+import java.lang.reflect.Field;
+import java.text.MessageFormat;
+import java.util.List;
+
 public class ForgeroConfigScreen extends GameOptionsScreen {
+	public boolean changesQueued = false;
+
 	private Screen previous;
 	private ButtonListWidget list;
 
@@ -28,14 +37,6 @@ public class ForgeroConfigScreen extends GameOptionsScreen {
 		super.init();
 
 		BuildConfigScreen();
-	}
-
-	public void BuildConfigScreen() {
-		createBooleanWidgetWithReset(this.width / 2 - 105, this.height / 2, Text.translatable("forgero.menu.options.test"), button -> {
-			ForgeroConfigurationLoader.configuration.resourceLogging = !ForgeroConfigurationLoader.configuration.resourceLogging;
-		}, button -> {
-			ForgeroConfigurationLoader.configuration.resourceLogging = true;
-		});
 	}
 
 	@Override
@@ -59,10 +60,61 @@ public class ForgeroConfigScreen extends GameOptionsScreen {
 		this.client.setScreen(this.parent);
 	}
 
-	public void createBooleanWidgetWithReset(int x, int y, Text optionName, ButtonWidget.PressAction toggleAction, ButtonWidget.PressAction resetAction) {
-		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, button -> {
-		}, MinecraftClient.getInstance().textRenderer));
-		this.addDrawableChild(new BooleanWidget(x + 160, y, toggleAction));
-		this.addDrawableChild(new ResetButtonWidget(x + 215, y, resetAction));
+	@Override
+	public boolean shouldCloseOnEsc() {
+		// TODO: Implement changesQueued and read it here
+		return super.shouldCloseOnEsc();
+	}
+
+	public void BuildConfigScreen() {
+		try {
+			int y = this.height / 6;
+			int booleanWidgetWithResetHeight = 20;
+			int padding = 5;
+
+			for (Field field : ForgeroConfigurationLoader.configuration.getClass().getFields()) {
+				var value = field.get(ForgeroConfigurationLoader.configuration);
+
+				Forgero.LOGGER.info(field.getName());
+
+				if (value instanceof Boolean) {
+					createBooleanWidgetWithReset(
+							this.width / 2 - 200,
+							y,
+							Text.translatable(MessageFormat.format("forgero.menu.options.{0}", field.getName())),
+							ForgeroConfigurationLoader.configuration,
+							field
+					);
+				} else if (value instanceof List) {
+					createListWidgetWithReset(
+							this.width / 2 - 200,
+							y,
+							Text.translatable(MessageFormat.format("forgero.menu.options.{0}", field.getName())),
+							ForgeroConfigurationLoader.configuration,
+							field
+					);
+				}
+
+				y += booleanWidgetWithResetHeight + padding;
+			}
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+
+		this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height - 30, 150, 20, ScreenTexts.DONE, button -> {
+			close();
+		}));
+	}
+
+	public void createBooleanWidgetWithReset(int x, int y, Text optionName, Object object, Field field) {
+		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, MinecraftClient.getInstance().textRenderer));
+		this.addDrawableChild(new BooleanWidget(x + 320, y, 50, 20, object, field));
+		this.addDrawableChild(new ResetButtonWidget(x + 380, y, 50, 20, object, field));
+	}
+
+	public void createListWidgetWithReset(int x, int y, Text optionName, Object object, Field field) {
+		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, MinecraftClient.getInstance().textRenderer));
+		this.addDrawableChild(new ListWidget(x + 320, y, 50, 20, object, field));
+		this.addDrawableChild(new ResetButtonWidget(x + 380, y, 50, 20, object, field));
 	}
 }
