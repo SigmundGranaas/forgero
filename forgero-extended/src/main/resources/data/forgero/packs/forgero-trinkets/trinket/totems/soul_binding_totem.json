@@ -1,0 +1,28 @@
+{
+  "type": "TOTEM",
+  "name": "soul-totem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 55
+      }
+    ],
+    "passive": [
+      {
+        "type": "STATIC",
+        "tag": "SOUL_BINDING"
+      }
+    ]
+  },
+  "palette": {
+    "name": "soul-totem"
+  }
+}
