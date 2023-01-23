@@ -61,12 +61,4 @@ public abstract class PlayerInteractionManagerMixin {
             }
         }
     }
-
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;setBlockBreakingInfo(ILnet/minecraft/util/math/BlockPos;I)V"), method = "updateBlockBreakingProgress", cancellable = true)
-    public void updateSecondaryBlocks(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
-        if (this.client.player.getMainHandStack().getItem() instanceof StateItem tool) {
-            //this.client.world.setBlockBreakingInfo(this.client.player.getId(), new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), (int) (this.currentBreakingProgress * 10.0F) - 1);
-        }
-    }
 }
-
