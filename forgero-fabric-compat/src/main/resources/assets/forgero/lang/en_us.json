@@ -4,6 +4,7 @@
   "forgero.menu.options.reset": "Reset",
   "forgero.menu.options.true": "True",
   "forgero.menu.options.false": "False",
+  "forgero.menu.options.reload_config": "Reload config from disk",
   "forgero.menu.options.disabledResources": "Disabled resources",
   "forgero.menu.options.disabledPacks": "Disabled packs",
   "forgero.menu.options.disableVanillaRecipes": "Disable vanilla recipes",

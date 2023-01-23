@@ -61,18 +61,6 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 		this.client.setScreen(this.parent);
 	}
 
-	@Override
-	public boolean shouldCloseOnEsc() {
-		// TODO: Save config
-		return super.shouldCloseOnEsc();
-	}
-
-	// FIXME: This is a hack that shouldn't be necessary if the widget creation functions are moved into their own class which can track the states
-	public void RebuildConfigScreen() {
-		clearChildren();
-		BuildConfigScreen();
-	}
-
 	public void BuildConfigScreen() {
 		try {
 			int y = this.height / 6;
@@ -106,9 +94,18 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 			e.printStackTrace();
 		}
 
-		this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height - 30, 150, 20, ScreenTexts.DONE, button -> {
+		this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - 28, 150, 20, Text.translatable("forgero.menu.options.reload_config"), button -> {
+			ForgeroConfigurationLoader.load();
+			RebuildConfigScreen();
+		}));		this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 28, 150, 20, ScreenTexts.DONE, button -> {
 			close();
 		}));
+	}
+
+	// FIXME: This is a hack that shouldn't be necessary if the widget creation functions are moved into their own class which can track the states
+	public void RebuildConfigScreen() {
+		clearChildren();
+		BuildConfigScreen();
 	}
 
 	// FIXME: Refactor this into its own class

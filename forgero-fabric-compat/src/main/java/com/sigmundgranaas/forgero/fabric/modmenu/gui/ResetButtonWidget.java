@@ -25,6 +25,7 @@ public class ResetButtonWidget extends ButtonWidget {
 		super.onPress();
 
 		reset();
+		ForgeroConfigurationLoader.save();
 	}
 
 	private void reset() {

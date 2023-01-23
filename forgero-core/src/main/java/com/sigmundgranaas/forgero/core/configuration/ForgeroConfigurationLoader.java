@@ -45,6 +45,17 @@ public class ForgeroConfigurationLoader {
 		}
 	}
 
+	public static void save() {
+		try (FileWriter writer = new FileWriter(configurationFilePath.toString())) {
+			var gson = createGson();
+			var json = gson.toJson(configuration);
+			writer.write(json);
+		} catch (IOException e) {
+			Forgero.LOGGER.warn("Unable to save Forgero configuration file, located at {}. See stack trace below:", configurationFilePath);
+			e.printStackTrace();
+		}
+	}
+
 	private static @NotNull Gson createGson() {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		return gsonBuilder.setPrettyPrinting().create();
