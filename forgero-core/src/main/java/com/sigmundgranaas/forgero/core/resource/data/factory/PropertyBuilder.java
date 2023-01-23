@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyBuilder;
-import com.sigmundgranaas.forgero.core.property.v2.PropertyDataBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyDataBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
 import java.util.ArrayList;

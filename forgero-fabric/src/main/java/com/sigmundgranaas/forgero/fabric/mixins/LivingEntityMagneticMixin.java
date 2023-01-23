@@ -29,7 +29,7 @@ public abstract class LivingEntityMagneticMixin extends Entity {
     public void magneticTickInject(CallbackInfo callbackInfo) {
         if (this.getMainHandStack().getItem() instanceof StateItem stateItem) {
             State state = stateItem.dynamicState(getMainHandStack());
-            MagneticHandler.of(state, this).ifPresent(MagneticHandler::run);
+            MagneticHandler.of(state, this).ifPresent(Runnable::run);
         }
     }
 }

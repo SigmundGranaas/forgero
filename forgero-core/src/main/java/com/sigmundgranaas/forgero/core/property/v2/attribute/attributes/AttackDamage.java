@@ -4,8 +4,8 @@ import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
-import com.sigmundgranaas.forgero.core.property.v2.ContainerTargetPair;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.AttributeCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 
 public class AttackDamage implements Attribute {
 

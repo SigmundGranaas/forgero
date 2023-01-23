@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.v2;
+package com.sigmundgranaas.forgero.core.property.v2.cache;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;

@@ -28,7 +28,7 @@ public abstract class ItemEntityMagneticMixin extends Entity {
     public void magneticTickInject(CallbackInfo callbackInfo) {
         if (this.getStack().getItem() instanceof StateItem stateItem) {
             State state = stateItem.dynamicState(getStack());
-            MagneticHandler.of(state, this).ifPresent(MagneticHandler::run);
+            MagneticHandler.of(state, this).ifPresent(Runnable::run);
         }
     }
 }

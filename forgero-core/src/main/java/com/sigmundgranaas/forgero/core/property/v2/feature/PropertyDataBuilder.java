@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.v2;
+package com.sigmundgranaas.forgero.core.property.v2.feature;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;

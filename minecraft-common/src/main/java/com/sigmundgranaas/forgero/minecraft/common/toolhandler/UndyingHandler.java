@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.RunnableHandler;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import net.minecraft.item.ItemStack;
@@ -35,5 +36,10 @@ public class UndyingHandler implements RunnableHandler {
     @Override
     public void run() {
         handle();
+    }
+
+    @Override
+    public String type() {
+        return UNDYING_TYPE;
     }
 }

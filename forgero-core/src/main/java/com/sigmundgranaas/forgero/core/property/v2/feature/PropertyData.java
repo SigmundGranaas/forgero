@@ -1,9 +1,10 @@
-package com.sigmundgranaas.forgero.core.property.v2;
+package com.sigmundgranaas.forgero.core.property.v2.feature;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,7 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder
 @Getter
+@ToString
 public class PropertyData implements Property {
     @Builder.Default
     private int priority = 0;

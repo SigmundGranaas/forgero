@@ -1,7 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.PropertyData;
+import com.sigmundgranaas.forgero.core.property.v2.RunnableHandler;
+import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
+import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+import com.sigmundgranaas.forgero.core.property.v2.cache.RunnableHandlerCache;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.util.math.BlockPos;
@@ -51,15 +56,22 @@ public class MagneticHandler implements RunnableHandler {
         this.distance = level;
     }
 
-    public static Optional<MagneticHandler> of(PropertyContainer container, Entity rootEntity) {
-        var magnetic = container.stream().features().filter(prop -> prop.type().equals(MAGNETIC_TYPE)).toList();
-        if (magnetic.size() > 0) {
-            var value = magnetic.stream().map(PropertyData::getValue).reduce(0f, Float::sum);
-            var level = magnetic.stream().map(PropertyData::getLevel).reduce(Integer::sum);
-            return level.map(l -> new MagneticHandler(rootEntity, value, l + 3));
+    public static Optional<RunnableHandler> of(PropertyContainer container, Entity rootEntity) {
+        var key = new PropertyTargetCacheKey(ContainerTargetPair.of(container), MAGNETIC_TYPE);
+        boolean hasMagnetic = ContainsFeatureCache.containsFeatureCache.getUnchecked(key);
+        if (hasMagnetic) {
+            return Optional.of(RunnableHandlerCache.computeIfAbsent(key, () -> createMagneticHandler(container, rootEntity)));
         }
         return Optional.empty();
     }
+
+    public static RunnableHandler createMagneticHandler(PropertyContainer container, Entity rootEntity) {
+        var magnetic = container.stream().features().filter(prop -> prop.type().equals(MAGNETIC_TYPE)).toList();
+        var value = magnetic.stream().map(PropertyData::getValue).reduce(0f, Float::sum);
+        Optional<Integer> level = magnetic.stream().map(PropertyData::getLevel).reduce(Integer::sum);
+        return level.map(l -> (RunnableHandler) new MagneticHandler(rootEntity, value, l + 3)).orElse(RunnableHandler.EMPTY);
+    }
+
 
     public List<Entity> getNearbyEntities(int range, Predicate<Entity> predicate) {
         BlockPos pos1 = new BlockPos(rootVec.x + range, rootVec.y + range, rootVec.z + range);
@@ -82,5 +94,10 @@ public class MagneticHandler implements RunnableHandler {
     @Override
     public void run() {
         pullEntities(getNearbyEntities(distance, entity -> entity instanceof ItemEntity));
+    }
+
+    @Override
+    public String type() {
+        return MAGNETIC_TYPE;
     }
 }
