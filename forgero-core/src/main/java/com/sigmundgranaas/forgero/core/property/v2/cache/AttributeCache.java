@@ -29,4 +29,12 @@ public class AttributeCache {
             return new FloatBasedAttribute(1f, "UNDEFINED");
         }
     }
+
+    public static Attribute computeIfAbsent(PropertyTargetCacheKey key, Callable<Attribute> compute) {
+        try {
+            return attributeCache.get(key, compute);
+        } catch (Exception e) {
+            return new FloatBasedAttribute(1f, "UNDEFINED");
+        }
+    }
 }
