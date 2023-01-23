@@ -101,6 +101,10 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
+
+    // Mod Menu API
+    modApi "com.terraformersmc:modmenu:${this.modmenu_version}"
+    modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 
 
@@ -167,6 +171,20 @@ loom {
             vmArg "-Dfabric-api.gametest"
             vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
             runDir "build/gametest"
+        }
+        clientExtendedCompat {
+            name "Client Extended Compat"
+
+            client()
+        }
+        clientExtendedCompatOptimised {
+            name "Client Extended Compat Optimised"
+
+            dependencies {
+                modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+            }
+
+            client()
         }
     }
 }

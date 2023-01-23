@@ -50,6 +50,13 @@ subprojects {
             name 'Gegy'
             url 'https://maven.gegy.dev'
         }
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
     }
 }
 
