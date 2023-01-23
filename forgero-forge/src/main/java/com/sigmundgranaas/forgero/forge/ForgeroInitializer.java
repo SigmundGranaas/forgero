@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.forge;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
@@ -10,16 +9,12 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.forge.pack.ForgePackFinder;
 import net.minecraft.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
@@ -34,8 +29,8 @@ public class ForgeroInitializer {
 
 		var pipeline = PipelineBuilder
 				.builder()
-				.register(this::createConfig)
-				.register(new ForgePackFinder(createConfig()))
+				.register(ForgeroConfigurationLoader::load)
+				.register(new ForgePackFinder())
 				.state(ForgeroStateRegistry.stateListener())
 				.state(ForgeroStateRegistry.compositeListener())
 				.createStates(ForgeroStateRegistry.createStateListener())
@@ -47,12 +42,6 @@ public class ForgeroInitializer {
 		pipeline.execute();
 
 		ITEM_REGISTRY.register(MOD_BUS);
-	}
-
-	private ForgeroConfiguration createConfig() {
-		Set<String> dependencies = ModList.get().getMods().stream().map(IModInfo::getModId).collect(Collectors.toSet());
-
-		return ForgeroConfigurationLoader.load();
 	}
 
 	private int getOrderingFromState(Map<String, Integer> map, State state) {
