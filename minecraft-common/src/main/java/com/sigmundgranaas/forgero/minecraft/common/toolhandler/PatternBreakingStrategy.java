@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
+import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Pair;
@@ -20,6 +21,10 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
 
     public PatternBreakingStrategy(PatternBreaking breakingPattern) {
         this.breakingPattern = breakingPattern;
+    }
+
+    public PatternBreakingStrategy(PropertyData data) {
+        this.breakingPattern = new PatternBreaking(data.getPattern(), data.getDirection());
     }
 
     @Override

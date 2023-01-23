@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import net.minecraft.item.ItemStack;
 
 public interface StateItem extends DynamicAttributeItem, State {
@@ -45,6 +45,4 @@ public interface StateItem extends DynamicAttributeItem, State {
     default boolean test(Matchable match, Context context) {
         return defaultState().test(match, context);
     }
-
-
 }
