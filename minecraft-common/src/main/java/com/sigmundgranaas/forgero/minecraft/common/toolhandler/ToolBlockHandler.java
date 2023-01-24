@@ -37,7 +37,7 @@ public class ToolBlockHandler {
     public static Optional<ToolBlockHandler> of(PropertyContainer container, BlockView world, BlockPos pos, PlayerEntity player) {
         boolean has = ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, BLOCK_BREAKING_PATTERN_KEY)) || ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, VEIN_MINING_KEY));
         if (has) {
-            var key = new BlockHandlerCache.BlockStateCacheKey(new BlockInfo(pos, world.getBlockState(pos)), container, Direction.getEntityFacingOrder(player)[0]);
+            var key = new BlockHandlerCache.BlockStateCacheKey(new BlockInfo(pos, world.getBlockState(pos)), container, Direction.getEntityFacingOrder(player));
             var handler = BlockHandlerCache.computeIfAbsent(key, () -> createHandler(container, world, pos, player));
             return Optional.of(handler);
         }

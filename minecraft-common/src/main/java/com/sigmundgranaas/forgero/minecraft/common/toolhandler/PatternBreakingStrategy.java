@@ -35,7 +35,7 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
 
     @Override
     public List<Pair<BlockState, BlockPos>> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
-        Direction dir = Direction.getEntityFacingOrder(player)[0];
+        Direction[] dir = Direction.getEntityFacingOrder(player);
         var list = new ArrayList<Pair<BlockState, BlockPos>>();
         if (breakingPattern.getPattern().length == 0 || breakingPattern.getPattern()[0].length() % 2 == 0) {
             return Collections.emptyList();
@@ -57,18 +57,25 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
                 if (breakingPattern.getPattern()[i].charAt(j) == 'x' || breakingPattern.getPattern()[i].charAt(j) == 'X') {
                     BlockPos newPos;
                     if (breakingPattern.getDirection() == BreakingDirection.ANY) {
-                        if (dir == Direction.EAST || dir == Direction.WEST) {
+                        Direction primary = dir[0];
+                        if (primary == Direction.EAST || primary == Direction.WEST) {
                             newPos = new BlockPos(rootPos.getX(), rootPos.getY() + i - centerY, rootPos.getZ() + j - centerX);
 
-                        } else if (dir == Direction.NORTH || dir == Direction.SOUTH) {
+                        } else if (primary == Direction.NORTH || primary == Direction.SOUTH) {
                             newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY() + i - centerY, rootPos.getZ());
 
                         } else {
-                            newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ() + i - centerY);
-
+                            Direction secondary = dir[1];
+                            if (secondary == Direction.EAST || secondary == Direction.WEST) {
+                                newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ());
+                            } else if (secondary == Direction.NORTH || secondary == Direction.SOUTH) {
+                                newPos = new BlockPos(rootPos.getX(), rootPos.getY(), rootPos.getZ() + i - centerY);
+                            } else {
+                                newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ() + i - centerY);
+                            }
                         }
                     } else {
-                        newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ() + i - centerY);
+                        newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ() + j - centerX);
                     }
 
                     BlockState newState = world.getBlockState(newPos);

@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Set;
 import java.util.SortedSet;
 
 @Mixin(WorldRenderer.class)
@@ -40,6 +39,9 @@ public abstract class WorldRenderBlockBreakingMixin {
     @Nullable
     private ClientWorld world;
 
+
+    @Shadow
+    private int ticks;
     @Shadow
     @Final
     private Long2ObjectMap<SortedSet<BlockBreakingInfo>> blockBreakingProgressions;
@@ -77,14 +79,17 @@ public abstract class WorldRenderBlockBreakingMixin {
         if (this.client.world == null) {
             return;
         }
+
         PropertyHelper.ofPlayerHands(this.client.player)
                 .flatMap(container -> ToolBlockHandler.of(container, world, pos, this.client.player))
                 .ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
                     BlockBreakingInfo info = new BlockBreakingInfo(entityId, blockInfo.pos());
                     info.setStage(stage);
-                    this.blockBreakingInfos.put(entityId, info);
+                    info.setLastUpdateTick(this.ticks);
+                    //this.blockBreakingInfos.put(entityId, info);
                     this.blockBreakingProgressions.computeIfAbsent(blockInfo.pos().asLong(), (l) -> Sets.newTreeSet()).add(info);
                 }));
+
     }
 
     @Inject(at = @At(value = "HEAD"), method = "removeBlockBreakingInfo")
@@ -95,10 +100,7 @@ public abstract class WorldRenderBlockBreakingMixin {
         PropertyHelper.ofPlayerHands(this.client.player)
                 .flatMap(container -> ToolBlockHandler.of(container, world, info.getPos(), this.client.player))
                 .ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
-                    Set<?> set = this.blockBreakingProgressions.get(blockInfo.pos().asLong());
-                    if (set != null) {
-                        this.blockBreakingProgressions.remove(blockInfo.pos().asLong());
-                    }
+                    this.blockBreakingProgressions.remove(blockInfo.pos().asLong());
                 }));
     }
 }

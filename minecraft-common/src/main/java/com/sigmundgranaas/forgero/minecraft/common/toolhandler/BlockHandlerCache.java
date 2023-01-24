@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class BlockHandlerCache {
@@ -32,11 +33,11 @@ public class BlockHandlerCache {
     }
 
     public record BlockStateCacheKey(CacheAbleKey blockState, PropertyContainer container,
-                                     Direction direction) implements CacheAbleKey {
+                                     Direction[] directions) implements CacheAbleKey {
 
         @Override
         public String key() {
-            return blockState.key() + container.hashCode() + direction;
+            return blockState.key() + container.hashCode() + Arrays.toString(directions);
         }
     }
 }
