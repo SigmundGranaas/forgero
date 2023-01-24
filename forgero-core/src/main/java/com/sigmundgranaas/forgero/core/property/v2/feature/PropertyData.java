@@ -30,7 +30,7 @@ public class PropertyData implements Property {
     @Builder.Default
     private List<String> tags = Collections.emptyList();
     @Builder.Default
-    private BreakingDirection direction = null;
+    private BreakingDirection direction = BreakingDirection.ANY;
     @Builder.Default
     private String[] pattern = {};
     @Builder.Default

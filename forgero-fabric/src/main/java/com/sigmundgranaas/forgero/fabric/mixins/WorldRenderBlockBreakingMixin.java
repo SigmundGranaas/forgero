@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Set;
 import java.util.SortedSet;
 
 @Mixin(WorldRenderer.class)
@@ -83,6 +84,21 @@ public abstract class WorldRenderBlockBreakingMixin {
                     info.setStage(stage);
                     this.blockBreakingInfos.put(entityId, info);
                     this.blockBreakingProgressions.computeIfAbsent(blockInfo.pos().asLong(), (l) -> Sets.newTreeSet()).add(info);
+                }));
+    }
+
+    @Inject(at = @At(value = "HEAD"), method = "removeBlockBreakingInfo")
+    private void removeBlockBreaking(BlockBreakingInfo info, CallbackInfo ci) {
+        if (this.client.world == null) {
+            return;
+        }
+        PropertyHelper.ofPlayerHands(this.client.player)
+                .flatMap(container -> ToolBlockHandler.of(container, world, info.getPos(), this.client.player))
+                .ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
+                    Set<?> set = this.blockBreakingProgressions.get(blockInfo.pos().asLong());
+                    if (set != null) {
+                        this.blockBreakingProgressions.remove(blockInfo.pos().asLong());
+                    }
                 }));
     }
 }
