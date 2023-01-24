@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.minecraft.common.utils.ItemUtils;
 import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.apache.http.MethodNotSupportedException;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -21,8 +20,8 @@ public interface StateConverter {
             .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
             .build(new CacheLoader<>() {
                 @Override
-                public @NotNull Optional<State> load(@NotNull ItemStack key) throws Exception {
-                    throw new MethodNotSupportedException("Don't use the load method directly");
+                public @NotNull Optional<State> load(@NotNull ItemStack key) {
+                    return Optional.empty();
                 }
             });
 

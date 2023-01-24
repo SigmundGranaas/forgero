@@ -11,5 +11,4 @@ public class EmptyTest {
     public void testRuns(TestContext context) {
         context.complete();
     }
-
 }

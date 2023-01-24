@@ -20,7 +20,7 @@ public class StackToItemConverter implements Converter<ItemStack, Optional<State
             .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
             .build(new CacheLoader<>() {
                 @Override
-                public @NotNull Optional<State> load(@NotNull NbtCompound key) throws Exception {
+                public @NotNull Optional<State> load(@NotNull NbtCompound key) {
                     return CompoundParser.STATE_PARSER.parse(key);
                 }
             });
