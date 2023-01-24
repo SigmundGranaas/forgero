@@ -2,10 +2,9 @@ package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
-import com.sigmundgranaas.forgero.core.state.Identifiable;
-import com.sigmundgranaas.forgero.core.util.Identifiers;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.core.resource.data.SchemaVersion;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,12 +88,12 @@ public class DataResource implements Identifiable {
         } else return Objects.requireNonNullElse(attribute1, attribute2);
     }
 
-    public static  List<PropertyPojo.Attribute> mergeAttributes(List<PropertyPojo.Attribute> attribute1, List<PropertyPojo.Attribute> attribute2) {
+    public static List<PropertyPojo.Attribute> mergeAttributes(List<PropertyPojo.Attribute> attribute1, List<PropertyPojo.Attribute> attribute2) {
         if (attribute1 == null && attribute2 == null)
             return Collections.emptyList();
         else if (attribute1 != null && attribute2 != null) {
             var filteredMergedAttributes = attribute2.stream().filter(attr -> !attr.id.equals(EMPTY_IDENTIFIER) && attribute1.stream().noneMatch(attribute -> attribute.id.equals(attr.id))).toList();
-            return Stream.of(attribute1,filteredMergedAttributes).flatMap(List::stream).toList();
+            return Stream.of(attribute1, filteredMergedAttributes).flatMap(List::stream).toList();
         } else return Objects.requireNonNullElse(attribute1, attribute2);
     }
 
@@ -189,8 +188,7 @@ public class DataResource implements Identifiable {
         newProps.active = mergeProperty(mergeProperties.active, properties.active).stream().distinct().toList();
         newProps.passiveProperties = mergeProperty(mergeProperties.passiveProperties, properties.passiveProperties).stream().distinct().toList();
         newProps.attributes = mergeAttributes(properties.attributes, mergeProperties.attributes).stream().distinct().toList();
-
-
+        newProps.features = mergeProperty(mergeProperties.features, properties.features).stream().distinct().toList();
 
         return builder.property(newProps).build();
     }

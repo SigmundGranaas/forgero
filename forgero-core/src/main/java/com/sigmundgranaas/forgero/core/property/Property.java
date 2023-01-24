@@ -20,7 +20,7 @@ public interface Property {
         return new PropertyPojo();
     }
 
-    PropertyTypes getType();
+    String type();
 
     default float applyAttribute(Target target, float currentAttribute) {
         return currentAttribute;

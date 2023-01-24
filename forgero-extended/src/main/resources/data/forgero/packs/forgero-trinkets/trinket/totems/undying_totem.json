@@ -15,10 +15,10 @@
         "value": 60
       }
     ],
-    "passive": [
+    "features": [
       {
-        "type": "STATIC",
-        "tag": "UNDYING"
+        "type": "UNDYING_REVIVAL",
+        "value": 1
       }
     ]
   },

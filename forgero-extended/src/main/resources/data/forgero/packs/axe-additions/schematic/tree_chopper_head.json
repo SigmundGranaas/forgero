@@ -85,11 +85,13 @@
         "value": -3.4
       }
     ],
-    "active": [
+    "features": [
       {
-        "type": "VEIN_MINING_PATTERN",
-        "depth": 12,
-        "tag": "minecraft:logs"
+        "type": "VEIN_MINING",
+        "value": 12,
+        "tags": [
+          "minecraft:logs"
+        ]
       }
     ]
   },

@@ -17,8 +17,11 @@ public class PropertyPojo {
     public List<PropertyPojo.Attribute> attributes;
     @SerializedName(value = "passiveProperties", alternate = {"passive", "passive_properties"})
     public List<PropertyPojo.Passive> passiveProperties;
+    
     @SerializedName(value = "active")
     public List<PropertyPojo.Active> active;
+    @SerializedName(value = "features")
+    public List<PropertyPojo.Feature> features;
 
     public static class Active {
         public ActivePropertyType type;
@@ -38,6 +41,19 @@ public class PropertyPojo {
         public float value;
         public PropertyPojo.Condition condition;
         public Category category;
+    }
+
+    public static class Feature {
+        public int priority = 0;
+        public String id = Identifiers.EMPTY_IDENTIFIER;
+        public String type;
+        public String name;
+        public float value;
+        public int level;
+        public List<String> tags;
+        public BreakingDirection direction;
+        public String[] pattern;
+        public String description;
     }
 
     public static class Passive {
