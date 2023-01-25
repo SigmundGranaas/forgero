@@ -18,6 +18,8 @@ public class ModelRegistry {
     private final HashMap<String, ModelMatcher> modelMap;
     private final Map<String, PaletteTemplateModel> textures;
 
+    private final Map<String, String> paletteRemapper;
+
     private final HashMap<String, ArrayList<ModelData>> delayedModels;
 
     private final HashMap<String, ModelData> generationModels;
@@ -26,6 +28,7 @@ public class ModelRegistry {
     public ModelRegistry(TypeTree tree) {
         this.tree = tree;
         this.modelMap = new HashMap<>();
+        this.paletteRemapper = new HashMap<>();
         this.textures = new HashMap<>();
         this.delayedModels = new HashMap<>();
         this.generationModels = new HashMap<>();
@@ -36,6 +39,7 @@ public class ModelRegistry {
         this.modelMap = new HashMap<>();
         this.textures = new HashMap<>();
         this.delayedModels = new HashMap<>();
+        this.paletteRemapper = new HashMap<>();
         this.generationModels = new HashMap<>();
     }
 
@@ -48,8 +52,18 @@ public class ModelRegistry {
 
     public ResourceListener<List<DataResource>> paletteListener() {
         return (resources, tree, idMapper) -> {
-            resources.stream().filter(res -> res.palette().isPresent()).forEach(res -> tree.find(res.type()).ifPresent(node -> node.addResource(res.palette().get(), PaletteData.class)));
+            resources.stream().filter(res -> res.palette().isPresent()).forEach(res -> paletteHandler(res, tree));
         };
+    }
+
+    private void paletteHandler(DataResource resource, TypeTree tree) {
+        var paletteData = resource.palette();
+        if (paletteData.isPresent()) {
+            tree.find(resource.type()).ifPresent(node -> node.addResource(paletteData.get(), PaletteData.class));
+            if (!paletteData.get().getName().equals(resource.name())) {
+                paletteRemapper.put(resource.name(), paletteData.get().getName());
+            }
+        }
     }
 
     public void setTree(TypeTree tree) {
@@ -86,5 +100,9 @@ public class ModelRegistry {
 
     public Map<String, PaletteTemplateModel> getTextures() {
         return textures;
+    }
+
+    public Map<String, String> getPaletteRemapper() {
+        return paletteRemapper;
     }
 }

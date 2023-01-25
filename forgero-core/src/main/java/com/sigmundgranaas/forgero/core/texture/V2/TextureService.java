@@ -12,19 +12,24 @@ public class TextureService {
     public static String TEMPLATE_PATH = "assets/forgero/templates/textures/";
     private final TextureLoader loader;
     private Map<String, Palette> paletteCache;
+
+    private Map<String, String> paletteRemap;
     private Map<String, TemplateTexture> templateCache;
-    private Map<String, Palette> previousPaletteCache;
     private Map<String, TemplateTexture> previousTemplateCache;
 
-    public TextureService(FileLoader loader) {
+    public TextureService(FileLoader loader, Map<String, String> paletteRemap) {
         this.paletteCache = new HashMap<>();
+        this.paletteRemap = paletteRemap;
         this.templateCache = new HashMap<>();
-        this.previousPaletteCache = new HashMap<>();
         this.previousTemplateCache = new HashMap<>();
         this.loader = new TextureLoader(loader);
     }
 
     public Optional<Palette> getPalette(String name) {
+        var remapped = Optional.ofNullable(paletteRemap.get(name)).flatMap(this::getPalette);
+        if (remapped.isPresent()) {
+            return remapped;
+        }
         if (paletteCache.containsKey(name)) {
             return Optional.of(paletteCache.get(name));
         }
@@ -34,7 +39,6 @@ public class TextureService {
     }
 
     public void clear() {
-        previousPaletteCache = paletteCache;
         previousTemplateCache = templateCache;
 
         templateCache = new ConcurrentHashMap<>();

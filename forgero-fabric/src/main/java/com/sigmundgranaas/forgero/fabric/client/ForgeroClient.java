@@ -40,6 +40,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
     public static Map<String, PaletteTemplateModel> TEXTURES = new HashMap<>();
+    public static Map<String, String> PALETTE_REMAP = new HashMap<>();
 
     @Override
     public void onInitializeClient() {
@@ -73,6 +74,7 @@ public class ForgeroClient implements ClientModInitializer {
             ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null));
         }
 
+        PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
         TEXTURES.putAll(modelRegistry.getTextures());
         TEXTURES.values().forEach(texture -> {
             ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""))));
@@ -85,7 +87,7 @@ public class ForgeroClient implements ClientModInitializer {
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
-                TextureGenerator.getInstance(new FileService()).clear();
+                TextureGenerator.getInstance(new FileService(), PALETTE_REMAP).clear();
             }
 
             @Override
