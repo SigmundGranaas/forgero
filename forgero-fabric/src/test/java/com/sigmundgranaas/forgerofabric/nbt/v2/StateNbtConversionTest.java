@@ -56,8 +56,8 @@ public class StateNbtConversionTest {
         NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE);
         var pickaxe = parser.parse(compound).map(ConstructedState.class::cast).orElseThrow();
         Assertions.assertEquals(2, pickaxe.parts().size());
-        Assertions.assertEquals("oak-handle", pickaxe.parts().get(0).name());
-        Assertions.assertEquals("iron-pickaxe_head", pickaxe.parts().get(1).name());
+        Assertions.assertEquals("oak-handle", pickaxe.parts().get(1).name());
+        Assertions.assertEquals("iron-pickaxe_head", pickaxe.parts().get(0).name());
     }
 
     @Test
