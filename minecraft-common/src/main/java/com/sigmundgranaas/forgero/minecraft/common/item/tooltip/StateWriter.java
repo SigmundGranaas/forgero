@@ -10,8 +10,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.sigmundgranaas.forgero.core.type.Type.*;
 
@@ -27,23 +25,25 @@ public class StateWriter implements Writer {
         if (state.test(AXE)) {
             writer = new AxeWriter(state);
         } else if (state.test(TOOL)) {
-            writer =  new ToolWriter(state);
+            writer = new ToolWriter(state);
         } else if (state.test(SWORD_BLADE)) {
-            writer =  new SwordBladeWriter(state);
+            writer = new SwordBladeWriter(state);
         } else if (state.test(AXE_HEAD)) {
-            writer =  new SwordBladeWriter(state);
+            writer = new SwordBladeWriter(state);
         } else if (state.test(TOOL_PART_HEAD)) {
-            writer =  new AxeHeadWriter(state);
+            writer = new AxeHeadWriter(state);
+        } else if (state.test(SWORD_GUARD)) {
+            writer = new SwordGuardWriter((state));
         } else if (state.test(PART)) {
-            writer =  new PartWriter((state));
+            writer = new PartWriter((state));
         } else if (state.test(SCHEMATIC)) {
-            writer =  new SchematicWriter(state);
+            writer = new SchematicWriter(state);
         } else if (state.test(GEM) && state instanceof LeveledState leveledState) {
-            writer =  new GemWriter(leveledState);
-        }else {
-            writer =  new StateWriter(state);
+            writer = new GemWriter(leveledState);
+        } else {
+            writer = new StateWriter(state);
         }
-    return CachedWriteHelper.of(state, writer);
+        return CachedWriteHelper.of(state, writer);
     }
 
 

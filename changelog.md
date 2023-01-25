@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added armor property
 * Added The max health addition property
 * Added luck property
 * Added critical chance property

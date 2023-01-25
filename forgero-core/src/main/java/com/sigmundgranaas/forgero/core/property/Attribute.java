@@ -31,7 +31,7 @@ public interface Attribute extends Property, Comparable<Attribute> {
         return order;
     }
 
-    AttributeType getAttributeType();
+    String getAttributeType();
 
     default Function<Float, Float> getCalculation() {
         return DEFAULT_ATTRIBUTE_CALCULATION;

@@ -32,6 +32,7 @@
   "item.forgero.mining_level": "Mining level",
   "item.forgero.rarity": "Rarity",
   "item.forgero.mining_speed": "Mining speed",
+  "item.forgero.armor": "Armor",
   "item.forgero.slots": "Slots",
   "item.forgero.material_count": " Materials: %s",
   "item.forgero.attributes": "Attributes",
