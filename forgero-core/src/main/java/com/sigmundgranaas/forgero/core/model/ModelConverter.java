@@ -113,10 +113,9 @@ public class ModelConverter {
     }
 
     private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria, Offset offset) {
-        var model = new PaletteTemplateModel(palette.getName(), template, order, offset);
+        var model = new PaletteTemplateModel(palette.getTarget(), template, order, offset);
         textures.put(model.identifier(), model);
         criteria.add(model.palette());
         return new ModelMatchPairing(new ModelMatch(criteria, ""), model);
     }
-
 }

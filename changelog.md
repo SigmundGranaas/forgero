@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Fixed palette names being directly tied to resource
 * Added armor property
 * Added The max health addition property
 * Added luck property
