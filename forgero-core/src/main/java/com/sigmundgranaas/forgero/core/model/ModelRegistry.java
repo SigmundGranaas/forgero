@@ -51,17 +51,15 @@ public class ModelRegistry {
     }
 
     public ResourceListener<List<DataResource>> paletteListener() {
-        return (resources, tree, idMapper) -> {
-            resources.stream().filter(res -> res.palette().isPresent()).forEach(res -> paletteHandler(res, tree));
-        };
+        return (resources, tree, idMapper) -> resources.stream().filter(res -> res.palette().isPresent()).forEach(res -> paletteHandler(res, tree));
     }
 
     private void paletteHandler(DataResource resource, TypeTree tree) {
         var paletteData = resource.palette();
         if (paletteData.isPresent()) {
-            tree.find(resource.type()).ifPresent(node -> node.addResource(paletteData.get(), PaletteData.class));
+            tree.find(resource.type()).ifPresent(node -> node.addResource(paletteData.get().toBuilder().target(resource.name()).build(), PaletteData.class));
             if (!paletteData.get().getName().equals(resource.name())) {
-                paletteRemapper.put(resource.name(), paletteData.get().getName());
+                paletteRemapper.put(resource.name() + ".png", paletteData.get().getName() + ".png");
             }
         }
     }

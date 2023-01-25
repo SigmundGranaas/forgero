@@ -47,6 +47,11 @@ public record PaletteTemplateModel(String palette,
 
 
     @Override
+    public String toString() {
+        return name();
+    }
+
+    @Override
     public int compareTo(@NotNull ModelMatcher o) {
         if (o instanceof ModelTemplate templateO) {
             return order() - templateO.order();
