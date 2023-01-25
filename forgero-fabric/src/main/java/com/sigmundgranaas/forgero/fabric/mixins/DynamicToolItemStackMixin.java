@@ -1,11 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
@@ -14,7 +10,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -23,7 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.function.Function;
 
 import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE;
 import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_SPEED;
@@ -59,7 +52,8 @@ public abstract class DynamicToolItemStackMixin {
     @Shadow
     public abstract int getDamage();
 
-    @Shadow public abstract int getMaxDamage();
+    @Shadow
+    public abstract int getMaxDamage();
 
     @Inject(at = @At("RETURN"), method = "isSuitableFor", cancellable = true)
     public void isEffectiveOn(BlockState state, CallbackInfoReturnable<Boolean> info) {
