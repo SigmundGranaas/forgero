@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.BuildableConfiguration;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
@@ -54,12 +54,12 @@ public class ForgeroClient implements ClientModInitializer {
 
         PipelineBuilder
                 .builder()
-                .register(() -> BuildableConfiguration.builder().availableDependencies(ImmutableSet.copyOf(availableDependencies)).build())
                 .register(FabricPackFinder.supplier())
                 .data(modelRegistry.paletteListener())
                 .data(modelRegistry.modelListener())
                 .build()
                 .execute();
+        // TODO: Set configuration's available dependencies
         assetReloader();
         registerToolPartTextures(modelRegistry);
         var modelProvider = new ForgeroModelVariantProvider(modelRegistry);

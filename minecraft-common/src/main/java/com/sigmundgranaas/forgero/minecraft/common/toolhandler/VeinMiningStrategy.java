@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +21,10 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 
     public VeinMiningStrategy(VeinBreaking handler) {
         this.handler = handler;
+    }
+
+    public VeinMiningStrategy(PropertyData data) {
+        this.handler = new VeinBreaking((int) data.getValue(), data.getTags().get(0), data.getDescription());
     }
 
     @Override

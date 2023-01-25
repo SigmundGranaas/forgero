@@ -47,7 +47,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
     //sync this empty inventory with the inventory on the server.
     public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
-
     }
 
     //This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container

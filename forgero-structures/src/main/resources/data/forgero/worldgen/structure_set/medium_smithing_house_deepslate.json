@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "forgero:medium_smithing_house_deepslate",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 60,
+    "separation": 20,
+    "salt": 1646207470
+  }
+}

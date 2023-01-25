@@ -85,10 +85,12 @@
         "value": -3.4
       }
     ],
-    "active": [
+    "features": [
       {
-        "type": "TAGGED_BLOCK_BREAKING_PATTERN",
-        "tag": "minecraft:logs",
+        "type": "BLOCK_BREAKING_PATTERN",
+        "tags": [
+          "minecraft:logs"
+        ],
         "pattern": [
           " x ",
           " x ",

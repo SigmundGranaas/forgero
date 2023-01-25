@@ -20,6 +20,10 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "sword_blade_guard.png",
+      "offset": [
+        -2,
+        -2
+      ],
       "order": 55
     },
     {

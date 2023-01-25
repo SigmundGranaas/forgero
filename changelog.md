@@ -1,12 +1,31 @@
-# Forgero Beta release 0.10.5
+# Forgero Beta release 0.10.7
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
 
+## Changelog 0.10.7
+
+* Added The max health addition property
+* Added luck property
+* Added critical chance property
+* Fixed simple sword guard recipe to not conflict with wooden bowl
+* Added a ModMenu implementation (Steveplays)
+* Reworked the configuration system (Steveplays)
+* Added multi block highlight and multi block breaking textures, depending on your tool
+* Implemented a new property system for handling special properties (Now called features)
+
 ## Changelog 0.10.6
 
+* Added a new recipe type for Patchouli (State upgrade recipe)
+* Added patchouli entry for pommels
+* Renamed Pummel to Pommel
+* Fixed compat issue with EMI Loot
+* Fixed scabbard configuration for some sword blades
+* Fixed createstation command to fill up chests with proper items
+* Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
+* Added new ruined smithing house structure
 * Fixed shovel head gem placement
 
 ## Changelog 0.10.5

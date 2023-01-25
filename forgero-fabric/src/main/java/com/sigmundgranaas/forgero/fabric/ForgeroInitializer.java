@@ -2,12 +2,11 @@ package com.sigmundgranaas.forgero.fabric;
 
 import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.BuildableConfiguration;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
@@ -64,10 +63,7 @@ public class ForgeroInitializer implements ModInitializer {
 
         dataReloader(availableDependencies);
 
-        var configuration = BuildableConfiguration.builder()
-                .settings(ForgeroSettings.SETTINGS)
-                .availableDependencies(ImmutableSet.copyOf(availableDependencies))
-                .build();
+        var configuration = ForgeroConfigurationLoader.load();
 
         PipelineBuilder
                 .builder()
@@ -100,7 +96,7 @@ public class ForgeroInitializer implements ModInitializer {
     }
 
     private void registerAARPRecipes() {
-        ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
+        ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration));
         ARRPGenerator.register(PartToSchematicGenerator::new);
         ARRPGenerator.register(MaterialPartTagGenerator::new);
         ARRPGenerator.register(SchematicPartTagGenerator::new);
@@ -112,9 +108,7 @@ public class ForgeroInitializer implements ModInitializer {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
-                var config = BuildableConfiguration.builder()
-                        .availableDependencies(ImmutableSet.copyOf(dependencies))
-                        .build();
+                var config = ForgeroConfigurationLoader.load();
 
                 PipelineBuilder
                         .builder()

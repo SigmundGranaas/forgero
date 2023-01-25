@@ -40,16 +40,16 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "MATERIAL",
+        "type": "TOOL_MATERIAL",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
         "description": "scabbard",
-        "type": "SECONDARY_MATERIAL",
+        "type": "LEATHER",
         "tier": 1
       }
     ],
@@ -97,7 +97,11 @@
         "value": -2.8
       }
     ],
-    "passive": [
+    "features": [
+      {
+        "type": "HEALTH_ADDITION",
+        "value": 5
+      }
     ]
   },
   "custom_data": {
