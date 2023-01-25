@@ -9,9 +9,10 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.*;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -19,11 +20,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,26 +77,6 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         return MiningLevel.apply(defaultProperties());
     }
 
-    default boolean isCorrectMiningLevel(BlockState state) {
-        int level = this.getMiningLevel();
-
-        for (int i = 1; i < 10; i++) {
-            TagKey<Block> key = TagKey.of(Registry.BLOCK_KEY, new Identifier(String.format("fabric:needs_tool_level_%s", i)));
-            if (state.isIn(key) && level < i) {
-                return false;
-            }
-        }
-
-        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) && level < 3) {
-            return false;
-        } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL) && level < 2) {
-            return false;
-        } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL) && level < 1) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     @Override
     default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
@@ -163,14 +140,19 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     @Override
     default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
-        if (stack.getItem() instanceof PropertyContainer dynamic && isEffectiveOn(state)) {
+        if (stack.getItem() instanceof State dynamic && isEffectiveOn(state, stack)) {
             try {
-                return miningSpeedCache.get(stack, () -> mingSpeedCalculation(dynamic, state));
+                return miningSpeedCache.get(stack, () -> mingSpeedCalculation(StateConverter.of(stack).orElse(dynamic), state));
             } catch (ExecutionException e) {
                 return 1f;
             }
         }
         return 1f;
+    }
+
+    @Override
+    default boolean isEffectiveOn(BlockState state, ItemStack stack) {
+        return isEffective(state, stack) && isCorrectMiningLevel(state, getMiningLevel(stack));
     }
 
     private float mingSpeedCalculation(PropertyContainer dynamic, BlockState state) {

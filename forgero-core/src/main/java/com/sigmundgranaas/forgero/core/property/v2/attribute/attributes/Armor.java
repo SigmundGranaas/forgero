@@ -5,6 +5,10 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
+import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+
+import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_KEY;
 
 public class Armor implements Attribute {
 
@@ -17,6 +21,9 @@ public class Armor implements Attribute {
 
     public static Attribute of(PropertyContainer container) {
         var pair = ContainerTargetPair.of(container);
+        if (ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, BROKEN_TYPE_KEY))) {
+            return Attribute.of(0f, KEY);
+        }
         return AttributeCache.computeIfAbsent(pair, () -> new Armor(pair), KEY);
     }
 
@@ -30,6 +37,9 @@ public class Armor implements Attribute {
 
     public static Attribute of(PropertyContainer container, Target target) {
         var pair = new ContainerTargetPair(container, target);
+        if (ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, BROKEN_TYPE_KEY))) {
+            return Attribute.of(0f, KEY);
+        }
         return AttributeCache.computeIfAbsent(pair, () -> new Armor(pair), KEY);
     }
 

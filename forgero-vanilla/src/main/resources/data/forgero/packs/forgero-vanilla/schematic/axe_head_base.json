@@ -1,0 +1,15 @@
+{
+  "name": "axe_head_base",
+  "parent": "tool_part_head_schematic",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "features": [
+      {
+        "type": "EFFECTIVE_BLOCKS",
+        "tags": [
+          "minecraft:mineable/axe"
+        ]
+      }
+    ]
+  }
+}

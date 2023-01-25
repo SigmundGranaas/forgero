@@ -9,6 +9,7 @@
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",
+    "ItemStackUnbreakableMixin",
     "LivingEntityMagneticMixin",
     "LivingEntityMixin",
     "LivingEntityReapingMixin",
