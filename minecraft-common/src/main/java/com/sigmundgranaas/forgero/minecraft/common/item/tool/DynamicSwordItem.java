@@ -5,8 +5,6 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -76,11 +74,6 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isEffectiveOn(BlockState state) {
-        return state.isOf(Blocks.COBWEB) && isCorrectMiningLevel(state);
     }
 }
 

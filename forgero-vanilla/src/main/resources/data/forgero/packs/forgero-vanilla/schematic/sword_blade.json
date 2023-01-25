@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "sword_blade-schematic",
+  "parent": "sword_blade_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -99,8 +100,7 @@
     ],
     "features": [
       {
-        "type": "HEALTH_ADDITION",
-        "value": 5
+        "type": "UNBREAKABLE"
       }
     ]
   },

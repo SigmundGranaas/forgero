@@ -5,12 +5,10 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -23,12 +21,6 @@ public class DynamicAxeItem extends AxeItem implements StateItem {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
     }
-
-    @Override
-    public boolean isEffectiveOn(BlockState state) {
-        return state.isIn(BlockTags.AXE_MINEABLE) && isCorrectMiningLevel(state);
-    }
-
 
     @Override
     public int getItemBarStep(ItemStack stack) {

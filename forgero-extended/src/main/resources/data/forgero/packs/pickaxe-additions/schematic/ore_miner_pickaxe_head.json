@@ -1,7 +1,7 @@
 {
   "type": "PICKAXE_HEAD_SCHEMATIC",
   "name": "ore_miner_pickaxe_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "pickaxe_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"

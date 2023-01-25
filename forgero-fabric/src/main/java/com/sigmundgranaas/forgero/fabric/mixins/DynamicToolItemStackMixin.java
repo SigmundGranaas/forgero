@@ -54,7 +54,7 @@ public abstract class DynamicToolItemStackMixin {
     @Inject(at = @At("RETURN"), method = "isSuitableFor", cancellable = true)
     public void isEffectiveOn(BlockState state, CallbackInfoReturnable<Boolean> info) {
         if (this.getItem() instanceof DynamicEffectiveNess holder) {
-            info.setReturnValue(holder.isEffectiveOn(state));
+            info.setReturnValue(holder.isEffective(state, (ItemStack) (Object) this));
         }
     }
 
@@ -62,11 +62,8 @@ public abstract class DynamicToolItemStackMixin {
     public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
         if (this.getItem() instanceof DynamicMiningSpeed holder) {
             float customSpeed = holder.getMiningSpeedMultiplier(state, (ItemStack) (Object) this);
-            if (info.getReturnValueF() <= customSpeed) {
-                info.setReturnValue(customSpeed);
-            }
+            info.setReturnValue(customSpeed);
         }
-
     }
 
     // This inject stores context about the player viewing an ItemStack's tooltip before attributes are calculated.
