@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-public interface Slot extends PropertyContainer, Matchable {
+public interface Slot extends PropertyContainer, Matchable, CopyAble<Slot> {
     int index();
 
     boolean filled();

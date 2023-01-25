@@ -86,4 +86,10 @@ public class FilledSlot extends AbstractTypedSlot {
             return upgrade.test(match, context);
         }
     }
+
+
+    @Override
+    public Slot copy() {
+        return new FilledSlot(index, type, upgrade, description, categories);
+    }
 }

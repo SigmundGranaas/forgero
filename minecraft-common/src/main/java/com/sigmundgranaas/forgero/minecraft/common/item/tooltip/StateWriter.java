@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
+import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -46,9 +47,12 @@ public class StateWriter implements Writer {
         return CachedWriteHelper.of(state, writer);
     }
 
-
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
+        if (this.state instanceof SoulContainer container) {
+            new SoulWriter(container.getSoul()).write(tooltip, context);
+        }
+
         if (this.state instanceof Composite composite) {
             new CompositeWriter(composite).write(tooltip, context);
         }
@@ -56,7 +60,6 @@ public class StateWriter implements Writer {
         var passive = state.stream().getPassiveProperties().toList();
 
         if (active.size() > 0 || passive.size() > 0) {
-
             MutableText attributes = Text.literal(" ").append(Text.translatable(Writer.toTranslationKey("properties"))).append(": ").formatted(Formatting.GRAY);
             tooltip.add(attributes);
 

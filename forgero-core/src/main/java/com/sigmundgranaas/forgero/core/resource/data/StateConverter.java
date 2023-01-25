@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.state.composite.StaticComposite;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.EmptySlot;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
@@ -61,7 +62,8 @@ public class StateConverter implements DataConverter<State> {
         if (resource.construct().isPresent()) {
             State state;
             if (resource.construct().get().components().size() > 0) {
-                state = buildConstruct(resource);
+                var tool = buildTool(resource);
+                state = tool.orElseGet(() -> buildConstruct(resource));
             } else {
                 state = buildStaticComposite(resource);
             }
@@ -88,6 +90,28 @@ public class StateConverter implements DataConverter<State> {
 
         ingredients.forEach(builder::addIngredient);
         return builder.build();
+    }
+
+    private Optional<State> buildTool(DataResource resource) {
+        var parts = resource.construct()
+                .map(ConstructData::components)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(IngredientData::id)
+                .map(nameMapping::get)
+                .map(states::get)
+                .filter(Objects::nonNull).toList();
+        var builderOpt = ConstructedTool.ToolBuilder.builder(parts);
+        if (builderOpt.isPresent()) {
+            var builder = builderOpt.get();
+            var slotContainer = new SlotContainer(createSlots(resource.construct().get()));
+            builder.addSlotContainer(slotContainer)
+                    .type(tree.type(resource.type()))
+                    .nameSpace(resource.nameSpace());
+            return Optional.of(builder.build());
+
+        }
+        return Optional.empty();
     }
 
     private State buildStaticComposite(DataResource resource) {

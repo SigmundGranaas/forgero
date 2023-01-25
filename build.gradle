@@ -1,9 +1,13 @@
-version = project.mod_version
+version = "${project.forgero_version}-BETA-${project.mc_target}"
 group = project.maven_group
 archives_base_name = project.archives_base_name
 
 
 subprojects {
+    version = "${project.forgero_version}-BETA-${project.mc_target}"
+    group = project.maven_group
+    archives_base_name = project.archives_base_name
+
     repositories {
         exclusiveContent {
             forRepository {

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PropertyHelper;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -25,11 +26,15 @@ public abstract class PlayerInteractionManagerMixin {
     public abstract boolean breakBlock(BlockPos pos);
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", shift = At.Shift.AFTER), method = "updateBlockBreakingProgress")
-    public void breakBlocksIfAvailable(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
-        if (this.currentBreakingProgress >= 1.0F) {
+    public void calcBlockBreakingDelta(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+        if (this.currentBreakingProgress >= 1.0F && client.player != null) {
+            var soulHandler = SoulHandler.of(client.player.getMainHandStack());
             PropertyHelper.ofPlayerHands(client.player)
                     .flatMap(container -> ToolBlockHandler.of(container, client.world, pos, client.player))
-                    .ifPresent(handler -> handler.handleExceptOrigin(info -> this.breakBlock(info.pos())));
+                    .ifPresent(handler -> handler.handleExceptOrigin(info -> {
+                        soulHandler.ifPresent(soul -> soul.processBlockBreak(info.state(), info.pos(), client.world, client.player));
+                        this.breakBlock(info.pos());
+                    }));
         }
     }
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class Construct implements Composite {
+public class Construct implements Composite, ConstructedState {
     private final List<State> ingredientList;
     private final SlotContainer upgrades;
     private final String name;
@@ -121,11 +121,25 @@ public class Construct implements Composite {
         return other;
     }
 
+    @Override
+    public Optional<State> has(String id) {
+        return components().stream().map(comp -> recursiveComponentHas(comp, id)).flatMap(Optional::stream).findFirst();
+    }
+
+    private Optional<State> recursiveComponentHas(State target, String id) {
+        if (target.identifier().contains(id)) {
+            return Optional.of(target);
+        } else if (target instanceof Composite comp) {
+            if (comp.has(id).isPresent()) {
+                return comp.has(id);
+            }
+        }
+        return Optional.empty();
+    }
+
     private boolean filterAttribute(Property property) {
         if (property instanceof Attribute attribute) {
-            if (Category.UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
-                return true;
-            }
+            return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory());
         }
         return false;
     }
@@ -203,23 +217,6 @@ public class Construct implements Composite {
         return this;
     }
 
-    public Optional<State> has(String id) {
-        if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
-            return upgrades().stream().filter(state -> state.identifier().contains(id)).findAny();
-        } else {
-            for (State ingredient : ingredientList) {
-                if (ingredient.identifier().contains(id)) {
-                    return Optional.of(ingredient);
-                } else if (ingredient instanceof Construct construct) {
-                    if (construct.has(id).isPresent()) {
-                        return construct.has(id);
-                    }
-
-                }
-            }
-        }
-        return Optional.empty();
-    }
 
     public List<State> components() {
         return Stream.of(ingredients(), upgrades()).flatMap(List::stream).filter(state -> !state.name().contains("schematic")).toList();
@@ -258,14 +255,18 @@ public class Construct implements Composite {
         return upgrades.canUpgrade(state);
     }
 
-    public static class ConstructBuilder {
-        private final List<State> ingredientList;
-        private final SlotContainer upgradeContainer;
-        private final NameCompositor compositor = new NameCompositor();
-        private Type type = Type.UNDEFINED;
-        private String name;
-        private String nameSpace = Forgero.NAMESPACE;
+    @Override
+    public List<State> parts() {
+        return ingredientList;
+    }
 
+    @Override
+    public Composite copy() {
+        return toBuilder().build();
+    }
+
+    public static class ConstructBuilder extends BaseComposite.BaseCompositeBuilder<ConstructBuilder> {
+        
         public ConstructBuilder() {
             this.ingredientList = new ArrayList<>();
             this.upgradeContainer = SlotContainer.of(Collections.emptyList());
@@ -274,60 +275,6 @@ public class Construct implements Composite {
         public ConstructBuilder(List<? extends Slot> upgradeSlots) {
             this.ingredientList = new ArrayList<>();
             this.upgradeContainer = SlotContainer.of(upgradeSlots);
-        }
-
-        public ConstructBuilder addIngredient(State ingredient) {
-            ingredientList.add(ingredient);
-            return this;
-        }
-
-        public ConstructBuilder addIngredients(List<State> ingredients) {
-            ingredientList.addAll(ingredients);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrade(State upgrade) {
-            upgradeContainer.set(upgrade);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrade(Slot upgrade) {
-            upgradeContainer.set(upgrade);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrades(List<? extends Slot> upgrades) {
-            upgrades.forEach(upgradeContainer::set);
-            return this;
-        }
-
-        public ConstructBuilder addUpgrades(ImmutableList<State> upgrades) {
-            upgrades.forEach(upgradeContainer::set);
-            return this;
-        }
-
-        public ConstructBuilder type(Type type) {
-            this.type = type;
-            return this;
-        }
-
-        public ConstructBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public ConstructBuilder nameSpace(String nameSpace) {
-            this.nameSpace = nameSpace;
-            return this;
-        }
-
-        public ConstructBuilder id(String id) {
-            var elements = id.split(":");
-            if (elements.length == 2) {
-                this.nameSpace = elements[0];
-                this.name = elements[1];
-            }
-            return this;
         }
 
         public Construct build() {

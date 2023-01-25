@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.model;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -28,10 +28,7 @@ public class CompositeModelEntry implements ModelMatcher {
 
     @Override
     public boolean match(Matchable state, Context context) {
-        if (state instanceof Composite) {
-            return true;
-        }
-        return false;
+        return state instanceof Composite;
     }
 
     @Override
@@ -44,8 +41,8 @@ public class CompositeModelEntry implements ModelMatcher {
                     .map(slot -> findUpgradeModel(slot, composite, context, provider))
                     .flatMap(Optional::stream)
                     .forEach(compositeModelTemplate::add);
-            if (composite instanceof Construct construct) {
-                construct.ingredients().stream()
+            if (composite instanceof Constructed construct) {
+                construct.parts().stream()
                         .map(stateEntry -> convert(stateEntry, provider, compositeContext))
                         .flatMap(Optional::stream)
                         .forEach(compositeModelTemplate::add);

@@ -123,4 +123,9 @@ public class StaticComposite implements Composite {
     public List<Slot> slots() {
         return upgrades.slots();
     }
+
+    @Override
+    public Composite copy() {
+        return this;
+    }
 }
