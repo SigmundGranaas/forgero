@@ -93,11 +93,13 @@
         "value": -2.9
       }
     ],
-    "active": [
+    "features": [
       {
-        "type": "VEIN_MINING_PATTERN",
-        "tag": "forgero:vein_mining_ores",
-        "depth": 8
+        "type": "VEIN_MINING",
+        "tags": [
+          "forgero:vein_mining_ores"
+        ],
+        "value": 8
       }
     ]
   },

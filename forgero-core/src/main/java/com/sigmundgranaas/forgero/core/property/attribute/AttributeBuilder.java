@@ -14,7 +14,7 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
  * Use this to modify or create custom attributes.
  */
 public class AttributeBuilder {
-    private final AttributeType type;
+    private final String type;
     private Category category;
     private CalculationOrder order = CalculationOrder.BASE;
     private Predicate<Target> condition = Attribute.DEFAULT_CONDITION;
@@ -25,8 +25,13 @@ public class AttributeBuilder {
     private String id = EMPTY_IDENTIFIER;
     private int priority = 0;
 
-    public AttributeBuilder(AttributeType type) {
+    public AttributeBuilder(String type) {
         this.type = type;
+        this.category = Category.UNDEFINED;
+    }
+
+    public AttributeBuilder(AttributeType type) {
+        this.type = type.toString();
         this.category = Category.UNDEFINED;
     }
 

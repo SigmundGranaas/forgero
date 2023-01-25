@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 public class TextureGenerator {
@@ -15,13 +16,13 @@ public class TextureGenerator {
 
     private final TextureService service;
 
-    public TextureGenerator(FileLoader loader) {
-        this.service = new TextureService(loader);
+    public TextureGenerator(FileLoader loader, Map<String, String> paletteRemap) {
+        this.service = new TextureService(loader, paletteRemap);
     }
 
-    public static TextureGenerator getInstance(FileLoader loader) {
+    public static TextureGenerator getInstance(FileLoader loader, Map<String, String> paletteRemap) {
         if (INSTANCE == null) {
-            INSTANCE = new TextureGenerator(loader);
+            INSTANCE = new TextureGenerator(loader, paletteRemap);
         }
         return INSTANCE;
     }

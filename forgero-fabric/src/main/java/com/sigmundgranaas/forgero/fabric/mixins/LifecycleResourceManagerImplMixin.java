@@ -24,7 +24,7 @@ public abstract class LifecycleResourceManagerImplMixin {
             if (ForgeroClient.TEXTURES.containsKey(textureId)) {
 
                 FileLoader loader = new FileService();
-                var texture = TextureGenerator.getInstance(loader).getTexture(ForgeroClient.TEXTURES.get(textureId));
+                var texture = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getTexture(ForgeroClient.TEXTURES.get(textureId));
                 if (texture.isPresent()) {
                     Resource resource = new Resource(id.getNamespace(), texture.get()::getStream);
 

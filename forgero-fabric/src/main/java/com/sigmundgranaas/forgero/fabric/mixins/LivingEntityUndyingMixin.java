@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.core.property.passive.StaticPassiveType;
-import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.UndyingHandler;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -20,10 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityUndyingMixin {
 
@@ -39,41 +33,38 @@ public abstract class LivingEntityUndyingMixin {
     @Shadow
     public abstract boolean addStatusEffect(StatusEffectInstance effect);
 
+    @Shadow
+    public abstract boolean shouldDisplaySoulSpeedEffects();
+
     @Inject(method = "tryUseTotem", at = @At("HEAD"), cancellable = true)
     public void undyingStateItem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         if (!source.isOutOfWorld()) {
             Hand[] hands = Hand.values();
-            Optional<Composite> undyingState = Optional.empty();
-            ItemStack handItem = ItemStack.EMPTY;
             for (Hand hand : hands) {
-                handItem = this.getStackInHand(hand);
-                var stateOpt = StateConverter.of(handItem);
-                if (stateOpt.isPresent() && stateOpt.get() instanceof Composite construct) {
-                    if (construct.stream().getStaticPassiveProperties().anyMatch(prop -> prop.getStaticType() == StaticPassiveType.UNDYING)) {
-                        undyingState = Optional.of(construct);
-                        var newComposite = construct.removeUpgrade("undying-totem");
-                        handItem.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(newComposite));
-                        break;
-                    }
+                ItemStack stack = this.getStackInHand(hand);
+                var handler = StateConverter.of(stack).flatMap(container -> UndyingHandler.of(container, stack));
+                if (handler.isPresent()) {
+                    executeUndyingEffect(stack);
+                    handler.get().handle();
+                    cir.setReturnValue(true);
+                    break;
                 }
-            }
-
-            if (undyingState.isPresent()) {
-                LivingEntity entity = ((LivingEntity) (Object) this);
-
-                if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
-                    serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(Items.TOTEM_OF_UNDYING));
-                    Criteria.USED_TOTEM.trigger(serverPlayerEntity, handItem);
-                }
-                handItem.setDamage(handItem.getMaxDamage() / 2);
-                this.setHealth(1.0F);
-                this.clearStatusEffects();
-                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 900, 1));
-                this.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
-                this.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0));
-                entity.world.sendEntityStatus(entity, (byte) 35);
-                cir.setReturnValue(true);
             }
         }
+    }
+
+    private void executeUndyingEffect(ItemStack stack) {
+        LivingEntity entity = ((LivingEntity) (Object) this);
+        if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+            serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(Items.TOTEM_OF_UNDYING));
+            Criteria.USED_TOTEM.trigger(serverPlayerEntity, stack);
+        }
+        stack.setDamage(stack.getMaxDamage() / 2);
+        this.setHealth(1.0F);
+        this.clearStatusEffects();
+        this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 900, 1));
+        this.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
+        this.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0));
+        entity.world.sendEntityStatus(entity, (byte) 35);
     }
 }

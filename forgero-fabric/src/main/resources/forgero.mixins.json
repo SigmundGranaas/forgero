@@ -15,6 +15,7 @@
     "LivingEntityUndyingMixin",
     "MiningToolItemMixin",
     "PiglinBrainMixin",
+    "PlayerCritChanceMixin",
     "PlayerEntityAttackMixin",
     "PlayerServerInteractionManagerMixin",
     "RecipeManagerMixin",
@@ -25,7 +26,8 @@
     "ItemRenderContextMixin",
     "ItemRenderMixin",
     "LifecycleResourceManagerImplMixin",
-    "PlayerInteractionManagerMixin"
+    "PlayerInteractionManagerMixin",
+    "WorldRenderBlockBreakingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -97,7 +97,11 @@
         "value": -2.8
       }
     ],
-    "passive": [
+    "features": [
+      {
+        "type": "HEALTH_ADDITION",
+        "value": 5
+      }
     ]
   },
   "custom_data": {

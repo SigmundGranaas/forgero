@@ -33,6 +33,8 @@ public class StateWriter implements Writer {
             writer = new SwordBladeWriter(state);
         } else if (state.test(TOOL_PART_HEAD)) {
             writer = new AxeHeadWriter(state);
+        } else if (state.test(SWORD_GUARD)) {
+            writer = new SwordGuardWriter((state));
         } else if (state.test(PART)) {
             writer = new PartWriter((state));
         } else if (state.test(SCHEMATIC)) {

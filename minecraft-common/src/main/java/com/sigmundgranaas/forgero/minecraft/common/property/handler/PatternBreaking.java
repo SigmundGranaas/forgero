@@ -23,6 +23,11 @@ public class PatternBreaking implements ActiveProperty {
     }
 
     @Override
+    public String type() {
+        return "PATTERN_MINING";
+    }
+
+    @Override
     public float applyAttribute(Target target, float currentAttribute) {
         return currentAttribute;
     }

@@ -33,6 +33,13 @@
         "value": 2
       },
       {
+        "id": "wood-armor-base",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.5
+      },
+      {
         "id": "wood-attack-damage-composite-base",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",

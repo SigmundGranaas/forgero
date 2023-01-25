@@ -1,9 +1,22 @@
-# Forgero Beta release 0.10.6
+# Forgero Beta release 0.10.7
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.7
+
+* Fixed palette names being directly tied to resource
+* Added armor property
+* Added The max health addition property
+* Added luck property
+* Added critical chance property
+* Fixed simple sword guard recipe to not conflict with wooden bowl
+* Added a ModMenu implementation (Steveplays)
+* Reworked the configuration system (Steveplays)
+* Added multi block highlight and multi block breaking textures, depending on your tool
+* Implemented a new property system for handling special properties (Now called features)
 
 ## Changelog 0.10.6
 

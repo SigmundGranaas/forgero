@@ -78,11 +78,13 @@
         "value": -2.5
       }
     ],
-    "active": [
+    "features": [
       {
-        "type": "VEIN_MINING_PATTERN",
+        "type": "VEIN_MINING",
         "depth": 10,
-        "tag": "forgero:plants"
+        "tags": [
+          "forgero:plants"
+        ]
       }
     ]
   },

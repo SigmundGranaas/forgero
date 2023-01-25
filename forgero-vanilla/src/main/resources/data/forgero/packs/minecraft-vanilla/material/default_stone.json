@@ -73,6 +73,13 @@
         }
       },
       {
+        "id": "default_stone_armor",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
         "id": "default_stone_rarity_upgrade",
         "type": "RARITY",
         "order": "BASE",

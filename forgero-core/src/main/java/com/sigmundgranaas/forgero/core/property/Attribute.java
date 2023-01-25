@@ -14,12 +14,6 @@ public interface Attribute extends Property, Comparable<Attribute> {
     Predicate<Target> DEFAULT_CONDITION = (target) -> true;
     Function<Float, Float> DEFAULT_ATTRIBUTE_CALCULATION = (currentFloat) -> currentFloat;
 
-    @Override
-    default PropertyTypes getType() {
-        return PropertyTypes.ATTRIBUTES;
-
-    }
-
     default CalculationOrder getOrder() {
         return CalculationOrder.BASE;
     }
@@ -37,7 +31,7 @@ public interface Attribute extends Property, Comparable<Attribute> {
         return order;
     }
 
-    AttributeType getAttributeType();
+    String getAttributeType();
 
     default Function<Float, Float> getCalculation() {
         return DEFAULT_ATTRIBUTE_CALCULATION;

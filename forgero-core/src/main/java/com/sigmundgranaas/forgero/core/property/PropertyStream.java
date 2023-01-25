@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.Static;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 
@@ -33,6 +34,11 @@ public record PropertyStream(
     }
 
     public float applyAttribute(Target target, AttributeType attributeType) {
+        return getAttributeOfType(attributeType.toString())
+                .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
+    }
+
+    public float applyAttribute(Target target, String attributeType) {
         return getAttributeOfType(attributeType)
                 .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
     }
@@ -41,9 +47,9 @@ public record PropertyStream(
         return applyAttribute(Target.createEmptyTarget(), attributeType);
     }
 
-    public Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
+    public Stream<Attribute> getAttributeOfType(String attributeType) {
         var rootAttributes = getAttributes()
-                .filter(attribute -> attributeType == attribute.getAttributeType()).toList();
+                .filter(attribute -> attributeType.equals(attribute.getAttributeType())).toList();
 
         Map<String, Attribute> idMap = rootAttributes
                 .stream()
@@ -74,6 +80,11 @@ public record PropertyStream(
     public Stream<PassiveProperty> getPassiveProperties() {
         return stream.filter(property -> property instanceof PassiveProperty)
                 .map(PassiveProperty.class::cast);
+    }
+
+    public Stream<PropertyData> features() {
+        return stream.filter(property -> property instanceof PropertyData)
+                .map(PropertyData.class::cast);
     }
 
     public Stream<Static> getStaticPassiveProperties() {

@@ -60,6 +60,12 @@
         "value": 0.43
       },
       {
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.6
+      },
+      {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "category": "UTILITY",

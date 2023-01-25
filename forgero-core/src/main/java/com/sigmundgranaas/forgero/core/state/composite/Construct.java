@@ -106,10 +106,10 @@ public class Construct implements Composite, ConstructedState {
 
         var newValues = new ArrayList<Property>();
         for (AttributeType type : AttributeType.values()) {
-            var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
+            var newBaseAttribute = new AttributeBuilder(type.toString()).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
             newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
             var attribute = newBaseAttribute.build();
-            if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType() == type).toList().size() > 1) {
+            if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1) {
                 newValues.add(newBaseAttribute.build());
             }
         }
