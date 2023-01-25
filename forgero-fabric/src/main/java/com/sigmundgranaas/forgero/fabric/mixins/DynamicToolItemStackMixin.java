@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.MultiMapMergeHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -28,9 +27,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-
-import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE;
-import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_SPEED;
 
 /**
  * Mixin originally used by The Fabric APIs dynamic attribute module, but has since been deprecated.
@@ -91,36 +87,7 @@ public abstract class DynamicToolItemStackMixin {
     @ModifyVariable(method = "getAttributeModifiers", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
     public Multimap<EntityAttribute, EntityAttributeModifier> modifyAttributeModifiersMap(Multimap<EntityAttribute, EntityAttributeModifier> multimap, EquipmentSlot slot) {
         ItemStack stack = (ItemStack) (Object) this;
-
-        if (stack.getItem() instanceof DynamicAttributeTool holder) {
-            // creating a dummy map for our old attributes
-            LinkedListMultimap<EntityAttribute, EntityAttributeModifier> oldAttributes = LinkedListMultimap.create();
-            oldAttributes.putAll(multimap);
-            // Check if the root attributes have changed and remove them
-            var newMap = holder.getDynamicModifiers(slot, stack, contextEntity);
-            for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_DAMAGE)) {
-                var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
-                if (newValue.isPresent()) {
-                    oldAttributes.remove(GENERIC_ATTACK_DAMAGE, attribute);
-                }
-            }
-
-            for (EntityAttributeModifier attribute : oldAttributes.get(GENERIC_ATTACK_SPEED)) {
-                var newValue = newMap.values().stream().filter(newAttribute -> newAttribute.getId() == attribute.getId()).findAny();
-                if (newValue.isPresent()) {
-                    oldAttributes.remove(GENERIC_ATTACK_SPEED, attribute);
-                }
-            }
-
-
-            LinkedListMultimap<EntityAttribute, EntityAttributeModifier> orderedAttributes = LinkedListMultimap.create();
-            //Place new Forgero root attributes at the start
-            orderedAttributes.putAll(newMap);
-            //Place old attributes last
-            orderedAttributes.putAll(oldAttributes);
-            return orderedAttributes;
-        }
-        return multimap;
+        return new MultiMapMergeHandler().modifyAttributeModifiersMap(multimap, slot, stack, contextEntity);
     }
 
     @Inject(method = "getMaxDamage", at = @At("HEAD"), cancellable = true)

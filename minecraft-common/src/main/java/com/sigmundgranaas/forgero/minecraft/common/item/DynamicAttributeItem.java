@@ -56,6 +56,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
     UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
 
+    UUID ADDITION_HEALTH_MODIFIER_ID = UUID.randomUUID();
+
     UUID ADDITION_LUCK_MODIFIER_ID = UUID.fromString("CC3F55D5-755C-4F38-A497-9C13A33DB5CF");
 
     PropertyContainer dynamicProperties(ItemStack stack);
@@ -123,6 +125,10 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
         int luck = LuckHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
         builder.put(EntityAttributes.GENERIC_LUCK, new EntityAttributeModifier(ADDITION_LUCK_MODIFIER_ID, "Luck addition", luck, EntityAttributeModifier.Operation.ADDITION));
+
+        //Additional health
+        int additionalHealth = AdditionalHealthHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
+        builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(ADDITION_HEALTH_MODIFIER_ID, "Health addition", additionalHealth, EntityAttributeModifier.Operation.ADDITION));
 
         //Attack speed
         float baseAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
