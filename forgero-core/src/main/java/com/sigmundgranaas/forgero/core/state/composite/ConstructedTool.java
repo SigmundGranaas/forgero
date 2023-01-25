@@ -2,9 +2,7 @@ package com.sigmundgranaas.forgero.core.state.composite;
 
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulBindable;
-import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
-import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -14,21 +12,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ConstructedTool extends ConstructedComposite implements MaterialBased, SoulBindable {
+public class ConstructedTool extends ConstructedComposite implements SoulBindable {
     private final State head;
     private final State handle;
-    private final State baseMaterial;
 
-    public ConstructedTool(State head, State handle, State baseMaterial, SlotContainer slots, IdentifiableContainer id) {
+
+    public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id) {
         super(slots, id, List.of(head, handle));
         this.head = head;
         this.handle = handle;
-        this.baseMaterial = baseMaterial;
-    }
 
-    @Override
-    public State baseMaterial() {
-        return baseMaterial;
     }
 
     @Override
@@ -50,7 +43,7 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
     }
 
     public ToolBuilder toolBuilder() {
-        return ToolBuilder.builder(getHead(), getHandle(), baseMaterial())
+        return ToolBuilder.builder(getHead(), getHandle())
                 .addSlotContainer(slotContainer.copy())
                 .type(type())
                 .id(identifier());
@@ -70,32 +63,23 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
     public static class ToolBuilder extends BaseCompositeBuilder<ToolBuilder> {
         protected State head;
         protected State handle;
-        protected State primaryMaterial;
 
-        public ToolBuilder(State head, State handle, State material) {
+        public ToolBuilder(State head, State handle) {
             this.head = head;
             this.handle = handle;
-            this.primaryMaterial = material;
             this.upgradeContainer = SlotContainer.of(Collections.emptyList());
             this.ingredientList = List.of(head, handle);
         }
 
-        public static ToolBuilder builder(State head, State handle, State material) {
-            return new ToolBuilder(head, handle, material);
+        public static ToolBuilder builder(State head, State handle) {
+            return new ToolBuilder(head, handle);
         }
 
         public static Optional<ToolBuilder> builder(List<State> parts) {
             var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE)).findFirst();
             var handle = parts.stream().filter(part -> part.test(Type.HANDLE)).findFirst();
             if (head.isPresent() && handle.isPresent()) {
-                if (head.get() instanceof MaterialBased based) {
-                    return Optional.of(builder(head.get(), handle.get(), based.baseMaterial()));
-                } else if (head.get() instanceof Composite composite) {
-                    var material = composite.components().stream()
-                            .filter(comp -> comp.test(Type.MATERIAL))
-                            .findFirst();
-                    return material.map(mat -> builder(head.get(), handle.get(), mat));
-                }
+                return Optional.of(builder(head.get(), handle.get()));
             }
             return Optional.empty();
         }
@@ -110,10 +94,6 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
             return this;
         }
 
-        public ToolBuilder material(State primaryMaterial) {
-            this.primaryMaterial = primaryMaterial;
-            return this;
-        }
 
         public SoulBoundTool.SoulBoundToolBuilder soul(Soul soul) {
             return SoulBoundTool.SoulBoundToolBuilder.of(this, soul);
@@ -122,7 +102,7 @@ public class ConstructedTool extends ConstructedComposite implements MaterialBas
         public ConstructedTool build() {
             compositeName();
             var id = new IdentifiableContainer(name, nameSpace, type);
-            return new ConstructedTool(head, handle, primaryMaterial, upgradeContainer, id);
+            return new ConstructedTool(head, handle, upgradeContainer, id);
         }
     }
 }

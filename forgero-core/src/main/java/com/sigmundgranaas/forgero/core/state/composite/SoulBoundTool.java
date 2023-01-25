@@ -9,8 +9,8 @@ import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 public class SoulBoundTool extends ConstructedTool implements SoulContainer {
     private final Soul soul;
 
-    public SoulBoundTool(State head, State handle, State baseMaterial, SlotContainer slots, IdentifiableContainer id, Soul soul) {
-        super(head, handle, baseMaterial, slots, id);
+    public SoulBoundTool(State head, State handle, SlotContainer slots, IdentifiableContainer id, Soul soul) {
+        super(head, handle, slots, id);
         this.soul = soul;
     }
 
@@ -27,17 +27,17 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
     public static class SoulBoundToolBuilder extends ToolBuilder {
         private Soul soul;
 
-        public SoulBoundToolBuilder(State head, State handle, State material, Soul soul) {
-            super(head, handle, material);
+        public SoulBoundToolBuilder(State head, State handle, Soul soul) {
+            super(head, handle);
             this.soul = soul;
         }
 
-        public static SoulBoundToolBuilder builder(State head, State handle, State material, Soul soul) {
-            return new SoulBoundToolBuilder(head, handle, material, soul);
+        public static SoulBoundToolBuilder builder(State head, State handle, Soul soul) {
+            return new SoulBoundToolBuilder(head, handle, soul);
         }
 
         public static SoulBoundToolBuilder of(ToolBuilder builder, Soul soul) {
-            var soulBuilder = new SoulBoundToolBuilder(builder.getHead(), builder.getHandle(), builder.getPrimaryMaterial(), soul);
+            var soulBuilder = new SoulBoundToolBuilder(builder.getHead(), builder.getHandle(), soul);
             soulBuilder.type(builder.getType());
             soulBuilder.name(builder.getName());
             soulBuilder.nameSpace(builder.getNameSpace());
@@ -53,7 +53,7 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
         public SoulBoundTool build() {
             compositeName();
             var id = new IdentifiableContainer(name, nameSpace, type);
-            return new SoulBoundTool(head, handle, primaryMaterial, upgradeContainer, id, soul);
+            return new SoulBoundTool(head, handle, upgradeContainer, id, soul);
         }
     }
 }
