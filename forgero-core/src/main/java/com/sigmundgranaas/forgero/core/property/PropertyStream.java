@@ -34,6 +34,11 @@ public record PropertyStream(
     }
 
     public float applyAttribute(Target target, AttributeType attributeType) {
+        return getAttributeOfType(attributeType.toString())
+                .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
+    }
+
+    public float applyAttribute(Target target, String attributeType) {
         return getAttributeOfType(attributeType)
                 .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
     }
@@ -42,9 +47,9 @@ public record PropertyStream(
         return applyAttribute(Target.createEmptyTarget(), attributeType);
     }
 
-    public Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
+    public Stream<Attribute> getAttributeOfType(String attributeType) {
         var rootAttributes = getAttributes()
-                .filter(attribute -> attributeType == attribute.getAttributeType()).toList();
+                .filter(attribute -> attributeType.equals(attribute.getAttributeType())).toList();
 
         Map<String, Attribute> idMap = rootAttributes
                 .stream()

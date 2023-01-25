@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.type;
 
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.core.util.TypeMatcher;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 
 import java.util.Optional;
 
@@ -18,13 +18,13 @@ public interface Type extends Matchable {
     Type SWORD = new SimpleType("SWORD", Optional.of(WEAPON), new TypeMatcher());
 
     Type PART = new SimpleType("PART", Optional.empty(), new TypeMatcher());
+    Type SWORD_GUARD = new SimpleType("SWORD_GUARD", Optional.of(PART), new TypeMatcher());
     Type TOOL_PART_HEAD = new SimpleType("TOOL_PART_HEAD", Optional.of(PART), new TypeMatcher());
     Type AXE_HEAD = new SimpleType("AXE_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
     Type HANDLE = new SimpleType("HANDLE", Optional.empty(), new TypeMatcher());
 
     Type BLADE = new SimpleType("BLADE", Optional.empty(), new TypeMatcher());
     Type SWORD_BLADE = new SimpleType("SWORD_BLADE", Optional.of(BLADE), new TypeMatcher());
-
 
     Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
 
