@@ -28,7 +28,7 @@ public class CompositeEncoder implements CompoundEncoder<State> {
             compound.put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(soulContainer.getSoul()));
         }
 
-        if (element instanceof ConstructedTool) {
+        if (element instanceof ConstructedTool || element instanceof Constructed constructed && ConstructedTool.ToolBuilder.builder(constructed.parts()).isPresent()) {
             compound.putString(COMPOSITE_TYPE, TOOL_IDENTIFIER);
         }
 
