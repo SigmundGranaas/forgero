@@ -2,12 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "   ",
-    "x x",
+    "i i",
     " x "
   ],
   "key": {
     "x": {
       "item": "minecraft:oak_planks"
+    },
+    "i": {
+      "item": "minecraft:oak_slab"
     }
   },
   "result": {
