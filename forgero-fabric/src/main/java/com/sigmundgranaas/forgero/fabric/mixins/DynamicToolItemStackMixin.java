@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
@@ -28,6 +30,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
+import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE;
+import static net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_SPEED;
+
 /**
  * Mixin originally used by The Fabric APIs dynamic attribute module, but has since been deprecated.
  * This class is almost an identical copy of the mixin developed by the Fabric project.
@@ -53,6 +58,8 @@ public abstract class DynamicToolItemStackMixin {
 
     @Shadow
     public abstract ItemStack split(int amount);
+    @Shadow
+    public abstract int getMaxDamage();
 
     @Inject(at = @At("RETURN"), method = "isSuitableFor", cancellable = true)
     public void isEffectiveOn(BlockState state, CallbackInfoReturnable<Boolean> info) {

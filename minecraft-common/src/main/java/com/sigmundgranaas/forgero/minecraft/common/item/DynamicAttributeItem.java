@@ -58,6 +58,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
     UUID ADDITION_HEALTH_MODIFIER_ID = UUID.randomUUID();
 
+    UUID ADDITION_LUCK_MODIFIER_ID = UUID.fromString("CC3F55D5-755C-4F38-A497-9C13A33DB5CF");
+
     PropertyContainer dynamicProperties(ItemStack stack);
 
     PropertyContainer defaultProperties();
@@ -120,6 +122,9 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
         //Attack damage addition
         builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
+
+        int luck = LuckHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
+        builder.put(EntityAttributes.GENERIC_LUCK, new EntityAttributeModifier(ADDITION_LUCK_MODIFIER_ID, "Luck addition", luck, EntityAttributeModifier.Operation.ADDITION));
 
         //Additional health
         int additionalHealth = AdditionalHealthHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
