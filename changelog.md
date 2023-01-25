@@ -7,6 +7,9 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Fixed simple sword guard recipe to not conflict with wooden bowl
+* Added a ModMenu implementation (Steveplays)
+* Reworked the configuration system (Steveplays)
 * Added multi block highlight and multi block breaking textures, depending on your tool
 * Implemented a new property system for handling special properties (Now called features)
 
