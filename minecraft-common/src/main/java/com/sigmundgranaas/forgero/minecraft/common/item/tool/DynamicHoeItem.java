@@ -6,12 +6,10 @@ import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -23,11 +21,6 @@ public class DynamicHoeItem extends HoeItem implements DynamicAttributeItem, Sta
     public DynamicHoeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
-    }
-
-    @Override
-    public boolean isEffectiveOn(BlockState state) {
-        return state.isIn(BlockTags.HOE_MINEABLE) && isCorrectMiningLevel(state);
     }
 
     @Override

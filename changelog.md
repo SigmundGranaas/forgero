@@ -7,6 +7,10 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added dynamic effectiveness property
+* Added dynamic conditions to tools
+* Added the Broken conditions property
+* Added the unbreakable property
 * Implemented the new Souls system into tools
 * Implemented new classes for Composites (parts and tools)
 * Fixed palette names being directly tied to resource

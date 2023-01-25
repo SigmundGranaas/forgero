@@ -19,7 +19,7 @@ public abstract class ItemStackDropGemOnBreakMixin {
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"), method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V")
     public <T extends LivingEntity> void dropGemOnForgeroToolBreak(int amount, T entity, Consumer<T> breakCallback, CallbackInfo ci) {
-        //TODO
+
     }
 }
 

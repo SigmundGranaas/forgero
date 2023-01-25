@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.Static;
@@ -70,11 +69,6 @@ public record PropertyStream(
     public Stream<Attribute> getAttributes() {
         return stream.filter(property -> property instanceof Attribute)
                 .map(Attribute.class::cast);
-    }
-
-    public Stream<ActiveProperty> getActiveProperties() {
-        return stream.filter(property -> property instanceof ActiveProperty)
-                .map(ActiveProperty.class::cast);
     }
 
     public Stream<PassiveProperty> getPassiveProperties() {

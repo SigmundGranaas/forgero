@@ -1,0 +1,14 @@
+{
+  "name": "sword_blade_base",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "features": [
+      {
+        "type": "EFFECTIVE_BLOCKS",
+        "tags": [
+          "minecraft:mineable/sword"
+        ]
+      }
+    ]
+  }
+}

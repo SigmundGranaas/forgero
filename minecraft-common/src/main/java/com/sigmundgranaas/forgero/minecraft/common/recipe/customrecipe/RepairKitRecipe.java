@@ -2,8 +2,11 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.condition.Conditions;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -15,6 +18,8 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 import java.util.stream.IntStream;
+
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class RepairKitRecipe extends ShapelessRecipe {
 
@@ -41,11 +46,11 @@ public class RepairKitRecipe extends ShapelessRecipe {
                 .mapToObj(craftingInventory::getStack)
                 .filter(stack -> StateConverter.of(stack).isPresent())
                 .findFirst();
-        if (state.isPresent() && originalStack.isPresent()) {
-            int durability = (int) state.get().stream().applyAttribute(AttributeType.DURABILITY);
-
+        if (state.isPresent() && originalStack.isPresent() && state.get() instanceof ConstructedTool tool) {
+            var unbrokenState = tool.removeCondition(Conditions.BROKEN.name());
+            int durability = Durability.of(unbrokenState).asInt();
             var stack = originalStack.get();
-
+            stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompositeEncoder.ENCODER.encode(unbrokenState));
             var newDamage = stack.getDamage() - (durability / 3);
             var newStack = stack.copy();
             newStack.setDamage(Math.max(newDamage, 0));

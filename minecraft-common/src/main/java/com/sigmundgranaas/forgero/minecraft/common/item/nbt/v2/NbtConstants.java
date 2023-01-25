@@ -25,6 +25,8 @@ public class NbtConstants {
     public static String XP_IDENTIFIER = "XP";
 
     public static String SOUL_IDENTIFIER = "SOUL";
+
+    public static String CONDITIONS_IDENTIFIER = "CONDITIONS";
     public static String COMPOSITE_TYPE = "COMPOSITE_TYPE";
     public static String TOOL_IDENTIFIER = "TOOL";
 
