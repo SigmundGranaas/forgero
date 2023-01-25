@@ -10,9 +10,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.COMPOSITE_TYPE;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.TOOL_IDENTIFIER;
-
 
 public class CompositeParser implements CompoundParser<State> {
     protected final StateFinder supplier;
@@ -26,8 +23,9 @@ public class CompositeParser implements CompoundParser<State> {
         if (!compound.contains(NbtConstants.STATE_TYPE_IDENTIFIER)) {
             return Optional.empty();
         }
-        if (compound.contains(COMPOSITE_TYPE) && compound.getString(COMPOSITE_TYPE).equals(TOOL_IDENTIFIER)) {
-            return new ToolParser(supplier).parse(compound);
+        var tool = new ToolParser(supplier).parse(compound);
+        if (tool.isPresent()) {
+            return tool;
         }
         return new ConstructParser(supplier).parse(compound);
     }
