@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added critical chance property
 * Fixed simple sword guard recipe to not conflict with wooden bowl
 * Added a ModMenu implementation (Steveplays)
 * Reworked the configuration system (Steveplays)
