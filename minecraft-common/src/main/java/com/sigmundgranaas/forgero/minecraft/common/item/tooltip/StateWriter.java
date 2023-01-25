@@ -69,14 +69,14 @@ public class StateWriter implements Writer {
 
             writePassives(tooltip, context);
             writeActive(tooltip, context);
+        }
 
-            if (UnbreakableHandler.isUnbreakable(state)) {
-                tooltip.add(Text.translatable("forgero.item.unbreakable"));
-            }
-            var key = PropertyTargetCacheKey.of(state, BROKEN_TYPE_KEY);
-            if (ContainsFeatureCache.check(key)) {
-                tooltip.add(Text.translatable("forgero.item.broken"));
-            }
+        if (UnbreakableHandler.isUnbreakable(state)) {
+            tooltip.add(Text.literal(" ").append(Text.translatable("item.forgero.unbreakable")));
+        }
+        var key = PropertyTargetCacheKey.of(state, BROKEN_TYPE_KEY);
+        if (ContainsFeatureCache.check(key)) {
+            tooltip.add(Text.literal(" ").append(Text.translatable("item.forgero.broken")));
         }
     }
 
