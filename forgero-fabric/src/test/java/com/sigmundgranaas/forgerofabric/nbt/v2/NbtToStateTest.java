@@ -66,7 +66,7 @@ public class NbtToStateTest {
 
     @Test
     void parseSimplePickaxeWithIngredients() {
-        List<State> ingredients = StateParser.STATE_PARSER.parse(PICKAXE_NBT).map(ConstructedState.class::cast).map(ConstructedState::ingredients).orElse(Collections.emptyList());
+        List<State> ingredients = StateParser.STATE_PARSER.parse(PICKAXE_NBT).map(ConstructedState.class::cast).map(ConstructedState::parts).orElse(Collections.emptyList());
         Assertions.assertEquals(2, ingredients.size());
         Assertions.assertEquals("oak-handle", ingredients.get(0).name());
         Assertions.assertEquals("iron-pickaxe_head", ingredients.get(1).name());
