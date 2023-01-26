@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
-import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
@@ -48,8 +47,8 @@ public class DefaultStateItem extends Item implements StateItem, State {
         State state = StateConverter.of(stack).orElse(defaultState());
         if (state instanceof Conditional<?> conditional) {
             var named = conditional.namedConditions();
-            if (named.stream().anyMatch(condition -> condition == Conditions.RARE)) {
-                return Text.translatable(Writer.toTranslationKey("rare")).append(" ").append(getName());
+            if (named.size() > 0) {
+                return Text.translatable(Writer.toTranslationKey(named.get(0).name())).append(" ").append(getName());
             }
         }
         return getName();

@@ -63,7 +63,7 @@ public class ToolParser extends CompositeParser {
         list.stream()
                 .filter(element -> element.getType() == NbtElement.STRING_TYPE)
                 .map(NbtElement::asString)
-                .map(Conditions::of)
+                .map(Conditions.INSTANCE::of)
                 .flatMap(Optional::stream)
                 .forEach(conditions::add);
         return conditions;

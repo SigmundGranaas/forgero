@@ -34,7 +34,7 @@ public interface Conditional<T extends PropertyContainer> {
     @NotNull
     default List<NamedCondition> namedConditions() {
         return conditions().stream()
-                .filter(NamedCondition.class::isInstance)
+                .filter(condition -> condition instanceof NamedCondition)
                 .map(NamedCondition.class::cast)
                 .toList();
 

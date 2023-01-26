@@ -1,0 +1,31 @@
+{
+  "id": "forgero:unbreakable",
+  "priority": 3,
+  "target": {
+    "types": [
+      "PART",
+      "MATERIAL",
+      "TOOL",
+      "WEAPON"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.4,
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "END",
+        "operation": "ADDITION",
+        "value": 50
+      }
+    ],
+    "features": [
+      {
+        "type": "UNBREAKABLE"
+      }
+    ]
+  }
+}

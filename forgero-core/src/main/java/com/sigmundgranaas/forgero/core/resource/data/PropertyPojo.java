@@ -44,6 +44,8 @@ public class PropertyPojo {
         public float value;
         public PropertyPojo.Condition condition;
         public Category category;
+        public float max;
+        public float min;
     }
 
     public static class Feature {

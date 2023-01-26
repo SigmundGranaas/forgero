@@ -59,10 +59,8 @@ public class CompositeEncoder implements CompoundEncoder<State> {
 
     private NbtList encodeConditions(Conditional<?> conditional) {
         NbtList list = new NbtList();
-        conditional.conditions().stream()
-                .filter(NamedCondition.class::isInstance)
-                .map(NamedCondition.class::cast)
-                .map(NamedCondition::name)
+        conditional.namedConditions().stream()
+                .map(NamedCondition::identifier)
                 .map(NbtString::of)
                 .forEach(list::add);
         return list;

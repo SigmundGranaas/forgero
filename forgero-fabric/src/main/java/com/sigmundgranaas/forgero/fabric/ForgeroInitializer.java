@@ -1,11 +1,17 @@
 package com.sigmundgranaas.forgero.fabric;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.condition.Conditions;
+import com.sigmundgranaas.forgero.core.condition.LootCondition;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConditionData;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
@@ -22,9 +28,7 @@ import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatter
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -33,11 +37,11 @@ import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
@@ -56,9 +60,10 @@ public class ForgeroInitializer implements ModInitializer {
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
 
-        var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
+        //var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
-        dataReloader(availableDependencies);
+        dataReloader();
+        lootConditionReloader();
 
         var configuration = ForgeroConfigurationLoader.load();
 
@@ -101,7 +106,7 @@ public class ForgeroInitializer implements ModInitializer {
         ARRPGenerator.generate();
     }
 
-    private void dataReloader(Set<String> dependencies) {
+    private void dataReloader() {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
@@ -119,6 +124,29 @@ public class ForgeroInitializer implements ModInitializer {
             @Override
             public Identifier getFabricId() {
                 return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "data");
+            }
+        });
+    }
+
+    private void lootConditionReloader() {
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public void reload(ResourceManager manager) {
+                Conditions.INSTANCE.refresh();
+                Gson gson = new Gson();
+                for (Resource res : manager.findResources("conditions", path -> path.getPath().endsWith(".json")).values()) {
+                    try (InputStream stream = res.getInputStream()) {
+                        ConditionData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), ConditionData.class);
+                        LootCondition.of(data).ifPresent(Conditions.INSTANCE::register);
+                    } catch (Exception e) {
+                        Forgero.LOGGER.error(e);
+                    }
+                }
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "loot_condition");
             }
         });
     }

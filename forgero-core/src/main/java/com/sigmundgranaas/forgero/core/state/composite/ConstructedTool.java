@@ -65,7 +65,6 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
                 .id(identifier());
     }
 
-
     @Override
     public @NotNull List<Property> applyProperty(Target target) {
         return Stream.of(super.applyProperty(target), conditionProperties()).flatMap(List::stream).toList();
