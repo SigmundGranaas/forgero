@@ -17,7 +17,7 @@ public class AttackDamage implements Attribute {
     private final float value;
 
     public AttackDamage(ContainerTargetPair pair) {
-        this.value = pair.container().stream().applyAttribute(pair.target(), AttributeType.ATTACK_DAMAGE);
+        this.value = pair.container().stream(pair.target()).applyAttribute(pair.target(), AttributeType.ATTACK_DAMAGE);
     }
 
     public static Attribute of(PropertyContainer container) {

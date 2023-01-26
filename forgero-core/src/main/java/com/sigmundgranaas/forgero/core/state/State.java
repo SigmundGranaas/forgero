@@ -10,11 +10,12 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object> {
+public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object>, Typed {
     static State of(Construct construct) {
         return new CompositeIngredient(construct);
     }
@@ -30,8 +31,6 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
     static Ingredient of(String name, String nameSpace, Type type, List<Property> properties, Map<String, String> custom) {
         return new SimpleState(name, nameSpace, type, properties, custom);
     }
-
-    Type type();
 
     default boolean equals(State s) {
         return false;
@@ -69,6 +68,10 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
     }
 
     default Optional<CustomValue> getCustomValue(String identifier) {
-        return Optional.empty();
+        return Optional.ofNullable(customValues().get(identifier));
+    }
+
+    default Map<String, CustomValue> customValues() {
+        return Collections.emptyMap();
     }
 }

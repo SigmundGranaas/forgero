@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.registry.StateFinder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedSchematicPart;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 import net.minecraft.nbt.NbtCompound;
@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.*;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.TYPE_IDENTIFIER;
 
 
-public class ToolParser extends CompositeParser {
-    public ToolParser(StateFinder supplier) {
+public class SchematicPartParser extends CompositeParser {
+    public SchematicPartParser(StateFinder supplier) {
         super(supplier);
     }
 
@@ -31,7 +32,7 @@ public class ToolParser extends CompositeParser {
         var id = compound.getString(NbtConstants.ID_IDENTIFIER);
         var stateOpt = supplier.find(id);
         if (parts.size() == 2) {
-            var optBuilder = ConstructedTool.ToolBuilder.builder(parts);
+            var optBuilder = ConstructedSchematicPart.SchematicPartBuilder.builder(parts);
             if (optBuilder.isPresent()) {
                 var builder = optBuilder.get();
                 builder.id(id);
@@ -41,12 +42,6 @@ public class ToolParser extends CompositeParser {
                 parseUpgrades(builder::addUpgrade, compound);
                 if (compound.contains(TYPE_IDENTIFIER)) {
                     builder.type(Type.of(compound.getString(TYPE_IDENTIFIER)));
-                }
-                if (compound.contains(SOUL_IDENTIFIER)) {
-                    var soul = SoulParser.PARSER.parse(compound.getCompound(SOUL_IDENTIFIER));
-                    if (soul.isPresent()) {
-                        return Optional.of(builder.soul(soul.get()).build());
-                    }
                 }
                 if (compound.contains(CONDITIONS_IDENTIFIER)) {
                     parseConditions(compound.getList(CONDITIONS_IDENTIFIER, NbtElement.STRING_TYPE))

@@ -30,6 +30,8 @@ public class NbtConstants {
     public static String COMPOSITE_TYPE = "COMPOSITE_TYPE";
     public static String TOOL_IDENTIFIER = "TOOL";
 
+    public static String SCHEMATIC_PART_IDENTIFIER = "SCHEMATIC_PART";
+
     public static String TRACKER_IDENTIFIER = "TRACKER";
     public static String MOB_TRACKER_IDENTIFIER = "MOB_TRACKER";
     public static String BLOCK_TRACKER_IDENTIFIER = "BLOCK_TRACKER";

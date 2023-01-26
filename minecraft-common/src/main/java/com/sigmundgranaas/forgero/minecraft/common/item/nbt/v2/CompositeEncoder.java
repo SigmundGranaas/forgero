@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.core.state.composite.Constructed;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedSchematicPart;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -35,7 +36,11 @@ public class CompositeEncoder implements CompoundEncoder<State> {
             compound.putString(COMPOSITE_TYPE, TOOL_IDENTIFIER);
         }
 
-        if (element instanceof Conditional conditional) {
+        if (element instanceof ConstructedSchematicPart || element instanceof Constructed constructed && ConstructedSchematicPart.SchematicPartBuilder.builder(constructed.parts()).isPresent()) {
+            compound.putString(COMPOSITE_TYPE, SCHEMATIC_PART_IDENTIFIER);
+        }
+
+        if (element instanceof Conditional<?> conditional) {
             compound.put(CONDITIONS_IDENTIFIER, encodeConditions(conditional));
         }
 
@@ -52,12 +57,10 @@ public class CompositeEncoder implements CompoundEncoder<State> {
         return compound;
     }
 
-    private NbtList encodeConditions(Conditional conditional) {
+    private NbtList encodeConditions(Conditional<?> conditional) {
         NbtList list = new NbtList();
-        conditional.conditions().stream()
-                .filter(NamedCondition.class::isInstance)
-                .map(NamedCondition.class::cast)
-                .map(NamedCondition::name)
+        conditional.namedConditions().stream()
+                .map(NamedCondition::identifier)
                 .map(NbtString::of)
                 .forEach(list::add);
         return list;

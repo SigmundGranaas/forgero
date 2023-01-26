@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ConstructedTool extends ConstructedComposite implements SoulBindable, Conditional {
+public class ConstructedTool extends ConstructedComposite implements SoulBindable, Conditional<ConstructedTool> {
     private final State head;
     private final State handle;
 
