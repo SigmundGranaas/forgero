@@ -16,7 +16,7 @@ public class Armor implements Attribute {
     private final float value;
 
     public Armor(ContainerTargetPair pair) {
-        this.value = pair.container().stream().applyAttribute(pair.target(), KEY);
+        this.value = pair.container().stream(pair.target()).applyAttribute(pair.target(), KEY);
     }
 
     public static Attribute of(PropertyContainer container) {
