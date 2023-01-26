@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.client;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
@@ -15,10 +13,12 @@ import com.sigmundgranaas.forgero.fabric.client.model.ForgeroModelVariantProvide
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
+import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -64,6 +64,7 @@ public class ForgeroClient implements ClientModInitializer {
         registerToolPartTextures(modelRegistry);
         var modelProvider = new ForgeroModelVariantProvider(modelRegistry);
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
+        EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
     }
 
     private void registerToolPartTextures(ModelRegistry modelRegistry) {

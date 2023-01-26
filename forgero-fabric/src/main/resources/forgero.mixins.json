@@ -6,6 +6,7 @@
   "mixins": [
     "AbstractBlockMixin",
     "DynamicToolItemStackMixin",
+    "GlassBottleUseOnEntity",
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",

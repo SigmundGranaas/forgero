@@ -9,8 +9,8 @@ public class Soul implements Identifiable, PropertyContainer {
     private final SoulSource soulSource;
 
     private final StatTracker tracker;
-    private int level;
-    private int xpTarget;
+    private final int level;
+    private final int xpTarget;
     private int xp;
     private LevelManager levelInfo;
 
