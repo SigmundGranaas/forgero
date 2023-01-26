@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric;
 
-import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
@@ -12,7 +11,6 @@ import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
 import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
-import com.sigmundgranaas.forgero.fabric.loot.function.GemLevelFunction;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
@@ -27,7 +25,6 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -51,7 +48,7 @@ public class ForgeroInitializer implements ModInitializer {
 
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
-    public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+
 
     @Override
     public void onInitialize() {

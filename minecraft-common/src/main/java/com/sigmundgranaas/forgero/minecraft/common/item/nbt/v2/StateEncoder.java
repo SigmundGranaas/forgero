@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -26,5 +27,14 @@ public class StateEncoder implements CompoundEncoder<State> {
 
         compound.putString(STATE_TYPE_IDENTIFIER, STATE_IDENTIFIER);
         return compound;
+    }
+
+    public NbtCompound encode(PropertyContainer element) {
+        if (element instanceof Composite composite) {
+            return new CompositeEncoder().encode(composite);
+        } else if (element instanceof LeveledState state) {
+            return new LeveledEncoder().encode(state);
+        }
+        return new NbtCompound();
     }
 }

@@ -1,13 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
+import com.sigmundgranaas.forgero.core.condition.Conditional;
+import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,6 +45,13 @@ public class DefaultStateItem extends Item implements StateItem, State {
 
     @Override
     public Text getName(ItemStack stack) {
+        State state = StateConverter.of(stack).orElse(defaultState());
+        if (state instanceof Conditional<?> conditional) {
+            var named = conditional.namedConditions();
+            if (named.stream().anyMatch(condition -> condition == Conditions.RARE)) {
+                return Text.translatable(Writer.toTranslationKey("rare")).append(" ").append(getName());
+            }
+        }
         return getName();
     }
 

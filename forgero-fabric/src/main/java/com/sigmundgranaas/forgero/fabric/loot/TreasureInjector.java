@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.loot;
 
+import com.sigmundgranaas.forgero.minecraft.common.loot.LootEntry;
+import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
+import com.sigmundgranaas.forgero.minecraft.common.loot.StateFilter;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootTables;

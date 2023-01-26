@@ -6,7 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface Conditional {
+public interface Conditional<T extends PropertyContainer> {
+    ConditionContainer EMPTY = new ConditionContainer();
+
     static List<PropertyContainer> removeConditions(List<PropertyContainer> conditions, String name) {
         return conditions.stream().filter(condition -> filterAwayCondition(condition, name)).toList();
     }
@@ -20,12 +22,21 @@ public interface Conditional {
 
     List<PropertyContainer> conditions();
 
-    PropertyContainer applyCondition(PropertyContainer container);
+    T applyCondition(PropertyContainer container);
 
-    PropertyContainer removeCondition(String identifier);
-    
+    T removeCondition(String identifier);
+
     @NotNull
     default List<Property> conditionProperties() {
         return conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList();
+    }
+
+    @NotNull
+    default List<NamedCondition> namedConditions() {
+        return conditions().stream()
+                .filter(NamedCondition.class::isInstance)
+                .map(NamedCondition.class::cast)
+                .toList();
+
     }
 }

@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot;
 
+import com.sigmundgranaas.forgero.minecraft.common.loot.function.ConditionFunction;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.GemLevelFunction;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +25,11 @@ public class SingleLootEntry implements LootEntry {
     @Builder.Default
     private float chance = 1f;
 
-
     @Override
     public void apply(LootTable.Builder builder) {
         var pool = LootPool.builder()
                 .rolls(BinomialLootNumberProvider.create(rolls, chance));
-        filter.get().forEach(item -> pool.with(ItemEntry.builder(item).apply(new GemLevelFunction.Builder()).weight(1)));
+        filter.get().forEach(item -> pool.with(ItemEntry.builder(item).apply(new GemLevelFunction.Builder()).apply(new ConditionFunction.Builder()).weight(1)));
         builder.pool(pool);
     }
 

@@ -1,27 +1,26 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.condition.Conditional;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.customvalue.CustomValue;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.type.Type;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class SimpleState implements Ingredient {
+public class SimpleState implements Ingredient, Conditional<State> {
     private final String name;
     private final String nameSpace;
     private final Type type;
     private final List<Property> properties;
-
-    private final Map<String, String> customData;
+    private final Map<String, CustomValue> customData;
 
     public SimpleState(String name, Type type, List<Property> properties) {
         this.name = name;
@@ -44,7 +43,7 @@ public class SimpleState implements Ingredient {
         this.nameSpace = nameSpace;
         this.type = type;
         this.properties = properties;
-        this.customData = custom;
+        this.customData = custom.entrySet().stream().collect(Collectors.toMap((Map.Entry::getKey), (keyPair -> CustomValue.of(keyPair.getKey(), keyPair.getValue()))));
     }
 
     @Override
@@ -78,8 +77,28 @@ public class SimpleState implements Ingredient {
     @Override
     public Optional<CustomValue> getCustomValue(String identifier) {
         if (customData.containsKey(identifier)) {
-            return Optional.of(CustomValue.of(identifier, customData.get(identifier)));
+            return Optional.of(customData.get(identifier));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Map<String, CustomValue> customValues() {
+        return Ingredient.super.customValues();
+    }
+
+    @Override
+    public List<PropertyContainer> conditions() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public State applyCondition(PropertyContainer container) {
+        return ConditonedState.of(this).applyCondition(container);
+    }
+
+    @Override
+    public State removeCondition(String identifier) {
+        return this;
     }
 }
