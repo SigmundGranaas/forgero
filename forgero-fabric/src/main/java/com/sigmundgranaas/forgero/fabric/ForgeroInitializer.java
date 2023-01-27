@@ -22,10 +22,13 @@ import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.*;
+import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.Resource;
@@ -46,9 +49,11 @@ import java.util.function.Supplier;
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 
 
 public class ForgeroInitializer implements ModInitializer {
+
 
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
@@ -64,7 +69,8 @@ public class ForgeroInitializer implements ModInitializer {
 
         dataReloader();
         lootConditionReloader();
-
+        Entities.register();
+        FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
         var configuration = ForgeroConfigurationLoader.load();
 
         PipelineBuilder
@@ -86,6 +92,7 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerStates);
         handler.accept(this::registerRecipes);
         handler.accept(DynamicItems::registerDynamicItems);
+        handler.accept(this::registerItems);
         handler.accept(this::registerTreasure);
         handler.accept(this::registerCommands);
         handler.run();
@@ -95,6 +102,10 @@ public class ForgeroInitializer implements ModInitializer {
         Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
         Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
         Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+    }
+
+    private void registerItems() {
+
     }
 
     private void registerAARPRecipes() {
