@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added the bottled soul item, which can be obtained by using a bottle on a soul
 * Implemented a datapack based system to add conditions which can be added to lootable drops
 * Added dynamic effectiveness property
 * Added dynamic conditions to tools

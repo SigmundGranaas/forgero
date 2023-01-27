@@ -31,7 +31,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -71,7 +70,7 @@ public class ForgeroInitializer implements ModInitializer {
         dataReloader();
         lootConditionReloader();
         Entities.register();
-        FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE));
+        FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
         var configuration = ForgeroConfigurationLoader.load();
 
         PipelineBuilder
