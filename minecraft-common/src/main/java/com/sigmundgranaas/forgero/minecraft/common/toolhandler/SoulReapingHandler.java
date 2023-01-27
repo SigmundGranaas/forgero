@@ -46,7 +46,8 @@ public class SoulReapingHandler implements RunnableHandler {
                 SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
                 soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
                 targetEntity.getWorld().spawnEntity(soulEntity);
-
+                soulEntity.playSoulSound();
+                soulEntity.createSoulParticles();
             } else if (ContainsFeatureCache.check(new PropertyTargetCacheKey(ContainerTargetPair.of(construct), "SOUL_BINDING"))) {
                 State state = construct;
                 if (construct instanceof SoulBindable bindable) {
