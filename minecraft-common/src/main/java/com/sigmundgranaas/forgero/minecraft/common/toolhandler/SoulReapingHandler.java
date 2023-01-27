@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
+import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -45,9 +46,8 @@ public class SoulReapingHandler implements RunnableHandler {
             if (ContainsFeatureCache.check(new PropertyTargetCacheKey(ContainerTargetPair.of(construct), "SOUL_REAPING"))) {
                 SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
                 soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
-                targetEntity.getWorld().spawnEntity(soulEntity);
-                soulEntity.playSoulSound();
-                soulEntity.createSoulParticles();
+                entity.world.spawnEntity(soulEntity);
+                soulEntity.world.sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
             } else if (ContainsFeatureCache.check(new PropertyTargetCacheKey(ContainerTargetPair.of(construct), "SOUL_BINDING"))) {
                 State state = construct;
                 if (construct instanceof SoulBindable bindable) {
