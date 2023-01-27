@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SlotContainer implements CopyAble<SlotContainer> {
     private final List<Slot> slots;
@@ -65,5 +66,14 @@ public class SlotContainer implements CopyAble<SlotContainer> {
     @Override
     public SlotContainer copy() {
         return new SlotContainer(slots());
+    }
+
+    public SlotContainer remove(String id) {
+        var originalSlots = slots().stream().filter(slot -> !slot.filled() || (slot.get().isPresent() && !slot.get().get().identifier().contains(id))).toList();
+        var emptySlots = slots().stream().filter(slot -> (slot.get().isPresent() && slot.get().get().identifier().contains(id))).map(Slot::empty).toList();
+        if (emptySlots.isEmpty()) {
+            return this;
+        }
+        return new SlotContainer(Stream.of(originalSlots, emptySlots).flatMap(List::stream).toList());
     }
 }

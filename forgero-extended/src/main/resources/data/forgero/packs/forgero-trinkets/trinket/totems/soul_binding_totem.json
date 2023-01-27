@@ -15,10 +15,9 @@
         "value": 55
       }
     ],
-    "passive": [
+    "features": [
       {
-        "type": "STATIC",
-        "tag": "SOUL_BINDING"
+        "type": "SOUL_BINDING"
       }
     ]
   },

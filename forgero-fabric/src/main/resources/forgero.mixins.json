@@ -23,6 +23,7 @@
     "SmithingRecipeMixin"
   ],
   "client": [
+    "ClientPlayNetworkGetTotemMixin",
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",

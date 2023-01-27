@@ -54,8 +54,10 @@ public class SoulReapingHandler implements RunnableHandler {
                     state = bindable.bind(soul);
                 }
                 if (state instanceof Composite comp) {
-                    if (comp.has("forgero:soul_totem").isPresent()) {
-                        state = comp.removeUpgrade("forgero:soul_totem");
+                    if (comp.has("forgero:soul-totem").isPresent()) {
+                        entity.world.sendEntityStatus(entity, EntityStatuses.USE_TOTEM_OF_UNDYING);
+                        state = comp.removeUpgrade("forgero:soul-totem");
+
                     }
                 }
                 entity.getInventory().setStack(entity.getInventory().selectedSlot, StateConverter.of(state));

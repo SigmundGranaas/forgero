@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulBindable;
+import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
@@ -46,6 +47,41 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 
     @Override
     public ConstructedTool removeUpgrade(String id) {
+        if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
+            return toolBuilder()
+                    .addSlotContainer(slotContainer.remove(id))
+                    .build();
+        } else {
+            for (int i = 0; i < parts().size(); i++) {
+                if (parts().get(i) instanceof Composite construct) {
+                    var compositeRemoved = construct.removeUpgrade(id);
+                    if (construct != compositeRemoved) {
+                        var ingredients = new ArrayList<>(parts());
+                        ingredients.set(i, compositeRemoved);
+                        var optBuilder = ToolBuilder.builder(ingredients).map(builder -> builder.addSlotContainer(slotContainer.copy())
+                                .conditions(conditions)
+                                .type(type())
+                                .id(identifier()));
+                        if (optBuilder.isPresent()) {
+                            return optBuilder.get().build();
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < upgrades().size(); i++) {
+                if (upgrades().get(i) instanceof Composite construct) {
+                    var compositeRemoved = construct.removeUpgrade(id);
+                    if (construct != compositeRemoved) {
+                        var slot = slots().get(i);
+                        var slots = new ArrayList<>(slots());
+                        slots.set(i, slot.empty().fill(compositeRemoved, slot.category()).orElse(slot.empty()));
+                        return toolBuilder()
+                                .addSlotContainer(SlotContainer.of(slots))
+                                .build();
+                    }
+                }
+            }
+        }
         return this;
     }
 

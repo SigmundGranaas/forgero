@@ -62,7 +62,12 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 
     @Override
     public ConstructedSchematicPart removeUpgrade(String id) {
-        return partBuilder().build();
+        if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
+            return partBuilder()
+                    .addSlotContainer(slotContainer.remove(id))
+                    .build();
+        }
+        return this;
     }
 
     @Override
