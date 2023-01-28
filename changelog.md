@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.11
 
+* Added the Soul tower
 * Added flint material
 * Added bone material
 * Added Obsidian material
