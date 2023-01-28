@@ -1,9 +1,9 @@
 {
   "type": "MINERAL",
-  "name": "diamond",
+  "name": "quartz",
   "container": {
     "type": "HOST",
-    "id": "minecraft:diamond"
+    "id": "minecraft:quartz"
   },
   "properties": {
     "attributes": [
@@ -11,32 +11,32 @@
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3.0
+        "value": 2.0
       },
       {
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 80
+        "value": 45
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 1500
+        "value": 204
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3.5
+        "value": 3.2
       },
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 8
+        "value": 7
       },
       {
         "type": "DURABILITY",
@@ -56,7 +56,7 @@
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -1.5,
+        "value": -1.3,
         "condition": {
           "target": "TYPE",
           "tag": [
@@ -69,39 +69,39 @@
         "order": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 40
+        "value": 23
       },
       {
         "type": "MINING_SPEED",
         "order": "BASE",
         "operation": "MULTIPLICATION",
         "category": "OFFENSIVE",
-        "value": 1.2
+        "value": 1.1
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "OFFENSIVE",
-        "value": 1.5
+        "value": 1.1
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "OFFENSIVE",
-        "value": 600
+        "value": 40
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
-        "value": 300
+        "value": 10
       }
     ]
   },
   "palette": {
-    "name": "diamond"
+    "name": "quartz"
   }
 }
