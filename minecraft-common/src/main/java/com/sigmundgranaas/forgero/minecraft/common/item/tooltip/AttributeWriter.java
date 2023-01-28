@@ -63,6 +63,16 @@ public class AttributeWriter implements Writer {
         }
     }
 
+    public static float roundFloat(float number) {
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        try {
+            return Float.parseFloat(format.format(number));
+        } catch (NumberFormatException e) {
+            return 1f;
+        }
+    }
+
     public AttributeWriter addAttribute(AttributeType type) {
         this.attributes.add(type);
         return this;
@@ -76,13 +86,14 @@ public class AttributeWriter implements Writer {
             case RARITY -> intAttribute(RARITY, tooltip);
             case DURABILITY -> intAttribute(DURABILITY, tooltip);
             case MINING_LEVEL -> intAttribute(MINING_LEVEL, tooltip);
+            case ARMOR -> floatAttribute(ARMOR, tooltip);
         }
     }
 
     private void intAttribute(AttributeType type, List<Text> tooltip) {
         int result = (int) helper.attribute(type);
         if (result != 0) {
-            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
+            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString().toLowerCase()))).append(": ").formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
@@ -95,19 +106,9 @@ public class AttributeWriter implements Writer {
         }
         result = roundFloat(result);
         if (result != 0f) {
-            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString()))).append(": ").formatted(Formatting.GRAY);
+            MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString().toLowerCase()))).append(": ").formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
-        }
-    }
-
-    private float roundFloat(float number) {
-        NumberFormat format = NumberFormat.getInstance();
-        format.setMaximumFractionDigits(2);
-        try {
-            return Float.parseFloat(format.format(number));
-        } catch (NumberFormatException e) {
-            return 1f;
         }
     }
 

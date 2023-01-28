@@ -1,19 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -54,11 +50,6 @@ public class DynamicSwordItem extends SwordItem implements StateItem {
     @Override
     public Text getName(ItemStack stack) {
         return getName();
-    }
-
-    @Override
-    public boolean isEffectiveOn(BlockState state) {
-        return  state.isOf(Blocks.COBWEB) && isCorrectMiningLevel(state);
     }
 }
 

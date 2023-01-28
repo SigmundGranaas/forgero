@@ -9,10 +9,11 @@ public enum AttributeType {
     MINING_SPEED,
     MINING_LEVEL,
     RARITY,
+    ARMOR,
     DURABILITY;
 
     @Override
     public String toString() {
-        return super.toString().toLowerCase();
+        return super.toString();
     }
 }

@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -51,14 +52,14 @@ public class CompositeWriter implements Writer {
             });
         }
 
-        if (composite instanceof Construct construct && construct.ingredients().size() > 0) {
+        if (composite instanceof Constructed construct && construct.parts().size() > 0) {
             MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append(":").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
-            construct.ingredients().forEach(ingredient -> {
+            construct.parts().forEach(ingredient -> {
                 Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
                 MutableText mutableText = Text.literal(stringIndent.toString()).append(Writer.nameToTranslatableText(ingredient)).formatted(rarity.formatting);
                 tooltip.add(mutableText);
-                if (context.isAdvanced() && ingredient instanceof Construct constructSlot) {
+                if (context.isAdvanced() && ingredient instanceof Composite constructSlot) {
                     write(constructSlot, tooltip, context, indent + 2);
                 }
             });
@@ -92,14 +93,14 @@ public class CompositeWriter implements Writer {
             });
         }
 
-        if (composite instanceof Construct construct && construct.ingredients().size() > 0) {
+        if (composite instanceof Constructed construct && construct.parts().size() > 0) {
             MutableText ingredients = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("ingredients"))).append(":").formatted(Formatting.GRAY);
             tooltip.add(ingredients);
-            construct.ingredients().forEach(ingredient -> {
+            construct.parts().forEach(ingredient -> {
                 Rarity rarity = getRarityFromInt(AttributeHelper.of(ingredient).rarity());
                 MutableText mutableText = Text.literal(stringIndent + " ").append(Writer.nameToTranslatableText(ingredient)).formatted(rarity.formatting);
                 tooltip.add(mutableText);
-                if (context.isAdvanced() && ingredient instanceof Construct constructSlot) {
+                if (context.isAdvanced() && ingredient instanceof Composite constructSlot) {
                     write(constructSlot, tooltip, context, indent + 2);
                 }
             });

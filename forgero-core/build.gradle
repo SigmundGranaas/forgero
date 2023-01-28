@@ -2,9 +2,6 @@ plugins {
     id 'java'
 }
 
-version = rootProject.mod_version
-group = rootProject.maven_group
-
 repositories {
     mavenCentral()
 }

@@ -3,8 +3,6 @@ plugins {
     id "fabric-loom" version "1.0.12" apply true
 }
 
-version = rootProject.mod_version
-group = rootProject.maven_group
 
 configurations {
     dev {

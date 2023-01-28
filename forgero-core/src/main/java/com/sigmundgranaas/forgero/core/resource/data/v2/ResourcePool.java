@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.core.resource.data.v2.factory.TypeFactory;
 import com.sigmundgranaas.forgero.core.state.Ingredient;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import com.sigmundgranaas.forgero.core.type.ResolvedTypeTree;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
@@ -19,9 +20,9 @@ import java.util.stream.Stream;
 public class ResourcePool {
     private final ImmutableList<DataResource> resources;
     private final TypeTree tree;
-    private List<DataResource> resolvedConstructs;
-    private List<DataResource> unresolvedConstructs;
-    private List<Construct> constructs;
+    private final List<DataResource> resolvedConstructs;
+    private final List<DataResource> unresolvedConstructs;
+    private final List<Constructed> constructs;
 
     public ResourcePool(ImmutableList<DataResource> resources) {
         this.resources = resources;

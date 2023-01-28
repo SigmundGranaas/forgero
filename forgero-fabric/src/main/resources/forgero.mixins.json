@@ -9,22 +9,27 @@
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackDropGemOnBreakMixin",
+    "ItemStackUnbreakableMixin",
     "LivingEntityMagneticMixin",
+    "LivingEntityMixin",
     "LivingEntityReapingMixin",
     "LivingEntityUndyingMixin",
     "MiningToolItemMixin",
     "PiglinBrainMixin",
+    "PlayerCritChanceMixin",
     "PlayerEntityAttackMixin",
     "PlayerServerInteractionManagerMixin",
     "RecipeManagerMixin",
     "SmithingRecipeMixin"
   ],
   "client": [
+    "ClientPlayNetworkGetTotemMixin",
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
     "LifecycleResourceManagerImplMixin",
-    "PlayerInteractionManagerMixin"
+    "PlayerInteractionManagerMixin",
+    "WorldRenderBlockBreakingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

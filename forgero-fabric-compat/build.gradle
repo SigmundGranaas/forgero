@@ -5,8 +5,6 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-version = rootProject.mod_version
-group = rootProject.maven_group
 
 dependencies {
     implementation project(':forgero-core')
@@ -27,14 +25,19 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    modCompileOnly "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
+    modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 
     modImplementation("net.devtech:arrp:0.6.2")
 
     //dynamiclights compat
     modImplementation "curse.maven:modmenu-308702:4145207"
-    modCompileOnly "curse.maven:lambdynamiclights-393442:3824820"
+    modImplementation "curse.maven:lambdynamiclights-393442:3824820"
     modImplementation("dev.lambdaurora:spruceui:4.1.0+1.19.2")
+
+    //emi
+    //modCompileOnly "dev.emi:emi:${emi_version}:api"
+    //modLocalRuntime "dev.emi:emi:${emi_version}"
+    //modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
     //toolstats testing
     //modImplementation "curse.maven:tool-stats-377109:3944167"
@@ -96,6 +99,10 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
+
+    // Mod Menu API
+    modApi "com.terraformersmc:modmenu:${this.modmenu_version}"
+    modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 
 
@@ -162,6 +169,20 @@ loom {
             vmArg "-Dfabric-api.gametest"
             vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
             runDir "build/gametest"
+        }
+        clientExtendedCompat {
+            name "Client Extended Compat"
+
+            client()
+        }
+        clientExtendedCompatOptimised {
+            name "Client Extended Compat Optimised"
+
+            dependencies {
+                modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+            }
+
+            client()
         }
     }
 }

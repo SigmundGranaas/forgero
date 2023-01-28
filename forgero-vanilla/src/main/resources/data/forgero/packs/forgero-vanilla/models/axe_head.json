@@ -13,14 +13,14 @@
       "modelType": "GENERATE",
       "template": "axe_head_gem.png",
       "palette": "TRINKET",
-      "order": 90
+      "order": 50
     },
     {
       "name": "axe_head_material",
       "type": "GENERATE",
       "template": "axe_head_tip_reinforcement.png",
       "palette": "MATERIAL",
-      "order": 55
+      "order": 30
     },
     {
       "target": [

@@ -13,9 +13,9 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 public abstract class AbstractTypedSlot implements Slot {
     protected final Set<Category> categories;
-    private final Type type;
-    private final int index;
-    private final String description;
+    protected final Type type;
+    protected final int index;
+    protected final String description;
 
     public AbstractTypedSlot(int index, Type type, String description, Set<Category> categories) {
         this.index = index;
@@ -62,5 +62,6 @@ public abstract class AbstractTypedSlot implements Slot {
     public String typeName() {
         return type.typeName();
     }
+
 
 }

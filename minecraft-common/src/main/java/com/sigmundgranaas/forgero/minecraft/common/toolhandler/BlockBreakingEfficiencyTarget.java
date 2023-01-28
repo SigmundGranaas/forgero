@@ -32,4 +32,11 @@ public record BlockBreakingEfficiencyTarget(BlockState state) implements Target 
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return getTags().hashCode()
+                + getTypes().hashCode()
+                + state.toString().hashCode();
+    }
 }
