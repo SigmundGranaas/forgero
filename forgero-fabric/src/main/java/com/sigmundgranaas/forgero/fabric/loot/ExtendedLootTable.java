@@ -4,7 +4,9 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTables;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.provider.number.BinomialLootNumberProvider;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -25,6 +27,12 @@ public class ExtendedLootTable {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(3))
                         .with(ItemEntry.builder(Registry.ITEM.get(new Identifier("forgero:ender_dragon_scale"))));
+                tableBuilder.pool(poolBuilder);
+            }
+            if (source.isBuiltin() && id.equals(LootTables.WOODLAND_MANSION_CHEST)) {
+                LootPool.Builder poolBuilder = LootPool.builder()
+                        .rolls(BinomialLootNumberProvider.create(1, 0.3f))
+                        .with(ItemEntry.builder(Registry.ITEM.get(new Identifier("forgero:soul-totem"))));
                 tableBuilder.pool(poolBuilder);
             }
         });

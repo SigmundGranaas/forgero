@@ -5,6 +5,15 @@
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
 
+## Changelog 0.11
+
+* Added flint material
+* Added bone material
+* Added Obsidian material
+* Added Quartz material
+* Added Ender dragon scale material
+* Added Soul totem to Woodland mansion chest loot table
+
 ## Changelog 0.10.7
 
 * Added soul totem with the soul binding effects
