@@ -8,6 +8,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class PaletteData {
     private String name;
+
+    private String target;
     private String type;
     @Builder.Default
     private List<String> include = new ArrayList<>();
@@ -16,6 +18,10 @@ public class PaletteData {
 
     public String getName() {
         return name;
+    }
+
+    public String getTarget() {
+        return target;
     }
 
     public String getType() {

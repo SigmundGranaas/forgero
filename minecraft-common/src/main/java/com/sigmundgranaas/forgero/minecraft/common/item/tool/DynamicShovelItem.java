@@ -1,18 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import net.minecraft.block.BlockState;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,11 +21,6 @@ public class DynamicShovelItem extends ShovelItem implements StateItem {
     public DynamicShovelItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.DEFAULT = defaultState;
-    }
-
-    @Override
-    public boolean isEffectiveOn(BlockState state) {
-        return state.isIn(BlockTags.SHOVEL_MINEABLE) && isCorrectMiningLevel(state);
     }
 
     @Override

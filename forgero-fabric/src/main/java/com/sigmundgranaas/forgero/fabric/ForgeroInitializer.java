@@ -1,37 +1,37 @@
 package com.sigmundgranaas.forgero.fabric;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.BuildableConfiguration;
+import com.sigmundgranaas.forgero.core.condition.Conditions;
+import com.sigmundgranaas.forgero.core.condition.LootCondition;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConditionData;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
 import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
-import com.sigmundgranaas.forgero.fabric.loot.function.GemLevelFunction;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.fabric.resources.dynamic.*;
+import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -40,22 +40,24 @@ import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 
 
 public class ForgeroInitializer implements ModInitializer {
 
+
     public static final String MOD_NAMESPACE = "forgero";
     public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
-    public static LootFunctionType GEM_LOOT_FUNCTION_TYPE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
+
 
     @Override
     public void onInitialize() {
@@ -63,14 +65,13 @@ public class ForgeroInitializer implements ModInitializer {
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
 
-        var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
+        //var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
-        dataReloader(availableDependencies);
-
-        var configuration = BuildableConfiguration.builder()
-                .settings(ForgeroSettings.SETTINGS)
-                .availableDependencies(ImmutableSet.copyOf(availableDependencies))
-                .build();
+        dataReloader();
+        lootConditionReloader();
+        Entities.register();
+        FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
+        var configuration = ForgeroConfigurationLoader.load();
 
         PipelineBuilder
                 .builder()
@@ -91,6 +92,7 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerStates);
         handler.accept(this::registerRecipes);
         handler.accept(DynamicItems::registerDynamicItems);
+        handler.accept(this::registerItems);
         handler.accept(this::registerTreasure);
         handler.accept(this::registerCommands);
         handler.run();
@@ -102,21 +104,24 @@ public class ForgeroInitializer implements ModInitializer {
         Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
     }
 
+    private void registerItems() {
+
+    }
+
     private void registerAARPRecipes() {
-        ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroSettings.SETTINGS));
+        ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration));
         ARRPGenerator.register(PartToSchematicGenerator::new);
         ARRPGenerator.register(MaterialPartTagGenerator::new);
         ARRPGenerator.register(SchematicPartTagGenerator::new);
+        ARRPGenerator.register(PartTypeTagGenerator::new);
         ARRPGenerator.generate();
     }
 
-    private void dataReloader(Set<String> dependencies) {
+    private void dataReloader() {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
-                var config = BuildableConfiguration.builder()
-                        .availableDependencies(ImmutableSet.copyOf(dependencies))
-                        .build();
+                var config = ForgeroConfigurationLoader.load();
 
                 PipelineBuilder
                         .builder()
@@ -130,6 +135,29 @@ public class ForgeroInitializer implements ModInitializer {
             @Override
             public Identifier getFabricId() {
                 return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "data");
+            }
+        });
+    }
+
+    private void lootConditionReloader() {
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public void reload(ResourceManager manager) {
+                Conditions.INSTANCE.refresh();
+                Gson gson = new Gson();
+                for (Resource res : manager.findResources("conditions", path -> path.getPath().endsWith(".json")).values()) {
+                    try (InputStream stream = res.getInputStream()) {
+                        ConditionData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), ConditionData.class);
+                        LootCondition.of(data).ifPresent(Conditions.INSTANCE::register);
+                    } catch (Exception e) {
+                        Forgero.LOGGER.error(e);
+                    }
+                }
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "loot_condition");
             }
         });
     }

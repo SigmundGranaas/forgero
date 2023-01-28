@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.client;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.BuildableConfiguration;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
@@ -15,10 +13,13 @@ import com.sigmundgranaas.forgero.fabric.client.model.ForgeroModelVariantProvide
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
+import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -35,11 +36,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.sigmundgranaas.forgero.fabric.client.SoulEntityModel.SOUL_ENTITY_MODEL_LAYER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
     public static Map<String, PaletteTemplateModel> TEXTURES = new HashMap<>();
+    public static Map<String, String> PALETTE_REMAP = new HashMap<>();
 
     @Override
     public void onInitializeClient() {
@@ -53,16 +56,18 @@ public class ForgeroClient implements ClientModInitializer {
 
         PipelineBuilder
                 .builder()
-                .register(() -> BuildableConfiguration.builder().availableDependencies(ImmutableSet.copyOf(availableDependencies)).build())
                 .register(FabricPackFinder.supplier())
                 .data(modelRegistry.paletteListener())
                 .data(modelRegistry.modelListener())
                 .build()
                 .execute();
+        // TODO: Set configuration's available dependencies
         assetReloader();
         registerToolPartTextures(modelRegistry);
         var modelProvider = new ForgeroModelVariantProvider(modelRegistry);
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
+        EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(SOUL_ENTITY_MODEL_LAYER, SoulEntityModel::getTexturedModelData);
     }
 
     private void registerToolPartTextures(ModelRegistry modelRegistry) {
@@ -73,6 +78,7 @@ public class ForgeroClient implements ClientModInitializer {
             ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null));
         }
 
+        PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
         TEXTURES.putAll(modelRegistry.getTextures());
         TEXTURES.values().forEach(texture -> {
             ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""))));
@@ -85,7 +91,7 @@ public class ForgeroClient implements ClientModInitializer {
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public void reload(ResourceManager manager) {
-                TextureGenerator.getInstance(new FileService()).clear();
+                TextureGenerator.getInstance(new FileService(), PALETTE_REMAP).clear();
             }
 
             @Override

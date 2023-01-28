@@ -12,7 +12,7 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
  * Base attribute class. This class is opinionated when it comes to how some attributes should be calculated, like MINING level.
  * Special attribute classes will likely deal with special scenarios like MINING level.
  */
-public record BaseAttribute(AttributeType attribute,
+public record BaseAttribute(String attribute,
                             NumericOperation operation,
                             float value,
                             Predicate<Target> condition,
@@ -25,13 +25,13 @@ public record BaseAttribute(AttributeType attribute,
     }
 
     @Override
-    public AttributeType getAttributeType() {
+    public String getAttributeType() {
         return this.attribute;
     }
 
     @Override
     public Function<Float, Float> getCalculation() {
-        if (attribute == AttributeType.MINING_LEVEL) {
+        if (attribute.equals(AttributeType.MINING_LEVEL.toString())) {
             return (current) -> {
                 if (current > value) {
                     return current;
@@ -82,6 +82,11 @@ public record BaseAttribute(AttributeType attribute,
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String type() {
+        return getAttributeType();
     }
 
     @Override

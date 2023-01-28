@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.model;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.FilledSlot;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
@@ -22,9 +22,9 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
             var compositeMatch = context.add(composite.type());
             if (matchType.equals("UPGRADE")) {
                 return composite.slots().stream().allMatch(slot -> criteria.stream().anyMatch(criteria -> upgradeTest(slot, criteria, compositeMatch)));
-            } else if (match instanceof Construct construct && criteria.size() == construct.ingredients().size()) {
+            } else if (match instanceof Constructed construct && criteria.size() == construct.parts().size()) {
                 List<String> matches = new ArrayList<>();
-                for (State ingredient : construct.ingredients()) {
+                for (State ingredient : construct.parts()) {
                     for (String criteria : criteria) {
                         if (ingredientTest(ingredient, criteria, context)) {
                             if (!matches.contains(criteria)) {
@@ -37,8 +37,8 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
             } else if (criteria.size() == 1) {
                 if (ingredientTest(composite, criteria.get(0), context)) {
                     return true;
-                } else if (match instanceof Construct construct) {
-                    return construct.ingredients().stream().anyMatch(ingredient -> ingredientTest(ingredient, criteria.get(0), compositeMatch));
+                } else if (match instanceof Constructed construct) {
+                    return construct.parts().stream().anyMatch(ingredient -> ingredientTest(ingredient, criteria.get(0), compositeMatch));
                 }
             }
         } else if (match instanceof State state) {

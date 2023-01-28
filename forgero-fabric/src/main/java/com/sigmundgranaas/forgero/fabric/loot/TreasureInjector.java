@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.loot;
 
+import com.sigmundgranaas.forgero.minecraft.common.loot.LootEntry;
+import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
+import com.sigmundgranaas.forgero.minecraft.common.loot.StateFilter;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootTables;
@@ -470,8 +473,8 @@ public class TreasureInjector {
 
     private void zombie() {
         var partFilter = StateFilter.builder()
-                .lowerRarity(1)
-                .upperRarity(50)
+                .lowerRarity(30)
+                .upperRarity(40)
                 .types(List.of("PART"));
         var partEntry = SingleLootEntry.builder()
                 .filter(partFilter.build()::filter)
@@ -481,7 +484,7 @@ public class TreasureInjector {
                 .build();
 
         var schematicFilter = StateFilter.builder()
-                .lowerRarity(1)
+                .lowerRarity(5)
                 .upperRarity(40)
                 .types(List.of("SCHEMATIC"));
         var schematicEntry = SingleLootEntry.builder()
@@ -497,7 +500,7 @@ public class TreasureInjector {
 
     private void pillager() {
         var partFilter = StateFilter.builder()
-                .lowerRarity(1)
+                .lowerRarity(40)
                 .upperRarity(50)
                 .types(List.of("PART"));
         var partEntry = SingleLootEntry.builder()
@@ -538,7 +541,7 @@ public class TreasureInjector {
 
     private void smallForgingHouse() {
 
-        var id = new Identifier("forgero:chests/small_forging_house_plains");
+        var id = new Identifier("forgero:chests/treasure_loot");
         var partFilter = StateFilter.builder()
                 .lowerRarity(10)
                 .upperRarity(80)

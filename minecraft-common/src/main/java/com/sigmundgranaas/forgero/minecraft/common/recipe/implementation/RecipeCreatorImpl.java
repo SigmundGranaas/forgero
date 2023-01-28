@@ -47,7 +47,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
         generators.addAll(repairKitToolRecipeGenerators());
         generators.addAll(constructUpgradeRecipes());
 
-        return generators.parallelStream()
+        return generators.stream()
                 .filter(RecipeGenerator::isValid)
                 .map(RecipeGenerator::generate)
                 .toList();
@@ -76,7 +76,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
                 .map(mapper).collect(Collectors.toList());
         var optimized = optimiser.process(recipes);
 
-        return optimized.stream()
+        return optimized.parallelStream()
                 .map(this::dataToGenerator)
                 .flatMap(Optional::stream)
                 .toList();

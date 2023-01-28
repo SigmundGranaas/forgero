@@ -1,7 +1,7 @@
 {
   "type": "SHOVEL_HEAD_SCHEMATIC",
   "name": "path_digger_shovel_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "shovel_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -86,7 +86,7 @@
         "value": -2.7
       }
     ],
-    "active": [
+    "features": [
       {
         "type": "BLOCK_BREAKING_PATTERN",
         "pattern": [

@@ -20,7 +20,7 @@ public class PipelineBuilder {
     private final List<ResourceListener<Map<String, State>>> stateListener = new ArrayList<>();
     private final List<ResourceListener<List<RecipeData>>> recipeListener = new ArrayList<>();
     private final List<ResourceListener<List<String>>> createStateListener = new ArrayList<>();
-    private Supplier<ForgeroConfiguration> configProvider = () -> ForgeroConfiguration.DEFAULT;
+    private Supplier<ForgeroConfiguration> configProvider = ForgeroConfiguration::new;
 
     public static PipelineBuilder builder() {
         return new PipelineBuilder();

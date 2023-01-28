@@ -3,10 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.loot.function;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
@@ -14,6 +12,9 @@ import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder.ENCODER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions.GEM_LOOT_FUNCTION_TYPE;
 import static java.lang.Math.exp;
 
 public class GemLevelFunction extends ConditionalLootFunction {
@@ -37,8 +38,8 @@ public class GemLevelFunction extends ConditionalLootFunction {
 
             var leveled = levelAble.setLevel((int) number);
             var newStack = stack.copy();
-            var nbt = CompoundEncoder.ENCODER.encode(leveled);
-            newStack.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, nbt);
+            var nbt = ENCODER.encode(leveled);
+            newStack.getOrCreateNbt().put(FORGERO_IDENTIFIER, nbt);
             newStack.getOrCreateNbt().putInt("CustomModelData", leveled.level());
             return newStack;
         }
@@ -47,7 +48,7 @@ public class GemLevelFunction extends ConditionalLootFunction {
 
     @Override
     public LootFunctionType getType() {
-        return new LootFunctionType(new GemLevelFunction.Serializer());
+        return GEM_LOOT_FUNCTION_TYPE;
     }
 
     public static class Builder extends ConditionalLootFunction.Builder<GemLevelFunction.Builder> {

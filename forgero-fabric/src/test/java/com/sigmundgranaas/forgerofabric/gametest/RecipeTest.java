@@ -51,7 +51,7 @@ public class RecipeTest {
         context.complete();
     }
 
-    private void assertTrue(Supplier<Boolean> test, String errorMessage) {
+    public static void assertTrue(Supplier<Boolean> test, String errorMessage) {
         if (!test.get()) {
             throw new GameTestException(errorMessage);
         }

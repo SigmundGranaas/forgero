@@ -1,9 +1,54 @@
-# Forgero Beta release 0.10.4
+# Forgero Beta release 0.10.7
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.7
+
+* Added soul totem with the soul binding effects
+* Added the bottled soul item, which can be obtained by using a bottle on a soul
+* Implemented a datapack based system to add conditions which can be added to lootable drops
+* Added dynamic effectiveness property
+* Added dynamic conditions to tools
+* Added the Broken conditions property
+* Added the unbreakable property
+* Implemented the new Souls system into tools
+* Implemented new classes for Composites (parts and tools)
+* Fixed palette names being directly tied to resource
+* Added armor property
+* Added The max health addition property
+* Added luck property
+* Added critical chance property
+* Fixed simple sword guard recipe to not conflict with wooden bowl
+* Added a ModMenu implementation (Steveplays)
+* Reworked the configuration system (Steveplays)
+* Added multi block highlight and multi block breaking textures, depending on your tool
+* Implemented a new property system for handling special properties (Now called features)
+
+## Changelog 0.10.6
+
+* Added a new recipe type for Patchouli (State upgrade recipe)
+* Added patchouli entry for pommels
+* Renamed Pummel to Pommel
+* Fixed compat issue with EMI Loot
+* Fixed scabbard configuration for some sword blades
+* Fixed createstation command to fill up chests with proper items
+* Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
+* Added new ruined smithing house structure
+* Fixed shovel head gem placement
+
+## Changelog 0.10.5
+
+* Fixed repair kits not working, and added a gametest to assert that it functions correctly
+* Added a toggle to convert all vanilla tool recipes to Forgero variants
+* Added a toggle to disable vanilla tool recipes
+* Fixed assembly station being able to deconstruct damaged items
+* New chinese translations by Rad233
+* Simplified schematic conversion recipes
+* Fixed Texture registry being called when not initialized causing a hard crash
+* Added tags for all schematic part types
 
 ## Changelog 0.10.4.1
 

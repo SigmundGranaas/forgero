@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeUtils;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
@@ -27,17 +27,17 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
                 .forEach(recipe -> pack.addData(generateId(recipe), recipe.toString().getBytes()));
     }
 
-    private List<Construct> parts() {
+    private List<ConstructedState> parts() {
         return ForgeroStateRegistry.STATES.all().stream()
                 .map(Supplier::get)
-                .filter(Construct.class::isInstance)
-                .map(Construct.class::cast)
-                .filter(comp -> comp.ingredients().stream().anyMatch(ingredient -> ingredient.name().contains("schematic")))
+                .filter(ConstructedState.class::isInstance)
+                .map(ConstructedState.class::cast)
+                .filter(comp -> comp.parts().stream().anyMatch(ingredient -> ingredient.name().contains("schematic")))
                 .toList();
     }
 
-    private Optional<RecipeData> createRecipe(Construct construct) {
-        var schematic = construct.ingredients().stream().filter(ingredient -> ingredient.name().contains("schematic")).findFirst();
+    private Optional<RecipeData> createRecipe(ConstructedState construct) {
+        var schematic = construct.parts().stream().filter(ingredient -> ingredient.name().contains("schematic")).findFirst();
         if (schematic.isPresent()) {
             var paper = IngredientData.builder().id("minecraft:paper").build();
             var constructIngredient = IngredientData.builder().id(construct.identifier()).build();
