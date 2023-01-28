@@ -1,9 +1,9 @@
 {
-  "type": "MINERAL",
-  "name": "diamond",
+  "type": "STONE",
+  "name": "flint",
   "container": {
     "type": "HOST",
-    "id": "minecraft:diamond"
+    "id": "minecraft:flint"
   },
   "properties": {
     "attributes": [
@@ -11,97 +11,95 @@
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3.0
+        "value": 1.0
       },
       {
+        "id": "default_stone_rarity",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 80
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1500
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.5
+        "value": 10
       },
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 8
+        "value": 6
       },
       {
         "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "OFFENSIVE",
-        "value": 300
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 40.0
       },
       {
-        "id": "diamond-attack-speed-base",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.2
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.8,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      },
+      {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 0
       },
       {
-        "id": "diamond-attack-speed-base",
-        "type": "ATTACK_SPEED",
+        "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -1.5,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "HANDLE"
-          ]
-        }
+        "value": 1
       },
       {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 40
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 1.2
+        "value": 3
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "OFFENSIVE",
-        "value": 1.5
+        "value": 0.5
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 1
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "OFFENSIVE",
-        "value": 600
+        "value": -10
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
-        "value": 300
+        "value": -10
       }
     ]
   },
   "palette": {
-    "name": "diamond"
+    "name": "flint"
   }
 }

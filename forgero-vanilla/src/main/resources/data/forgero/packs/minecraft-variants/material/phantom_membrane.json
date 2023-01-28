@@ -32,14 +32,14 @@
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
-        "value": 0.4
+        "value": 0.3
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.2
+        "category": "UTILITY",
+        "value": 1.1
       }
     ]
   },

@@ -1,9 +1,9 @@
 {
-  "type": "MINERAL",
-  "name": "diamond",
+  "type": "STONE",
+  "name": "obsidian",
   "container": {
     "type": "HOST",
-    "id": "minecraft:diamond"
+    "id": "minecraft:obsidian"
   },
   "properties": {
     "attributes": [
@@ -11,52 +11,56 @@
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3.0
+        "value": 2.0
       },
       {
+        "id": "default_stone_rarity",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 80
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1500
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.5
+        "value": 45
       },
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 8
+        "value": 6
       },
       {
         "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "OFFENSIVE",
-        "value": 300
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1356.0
       },
       {
-        "id": "diamond-attack-speed-base",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.0
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.5,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      },
+      {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 0
       },
       {
-        "id": "diamond-attack-speed-base",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -1.5,
+        "value": -2.2,
         "condition": {
           "target": "TYPE",
           "tag": [
@@ -65,43 +69,63 @@
         }
       },
       {
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 40
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 1.2
+        "value": 15
       },
       {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "OFFENSIVE",
-        "value": 1.5
+        "value": 0.1
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": -1
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "OFFENSIVE",
-        "value": 600
+        "value": 250
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
-        "value": 300
+        "value": 250
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": -0.2
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": -0.2
       }
     ]
   },
   "palette": {
-    "name": "diamond"
+    "name": "obsidian"
   }
 }
