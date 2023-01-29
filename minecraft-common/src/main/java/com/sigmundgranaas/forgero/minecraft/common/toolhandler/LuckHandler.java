@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class LuckHandler {
         return container.stream()
                 .features()
                 .filter(feature -> feature.type().equals(LUCK_TYPE))
-                .map(PropertyData::getValue)
+                .map(data -> data.getValue() * data.getLevel())
                 .reduce(0f, Float::sum)
                 .intValue();
     }

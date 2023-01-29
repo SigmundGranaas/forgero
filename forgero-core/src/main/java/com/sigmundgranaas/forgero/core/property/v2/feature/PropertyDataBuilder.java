@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.core.property.v2.feature;
 
-import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
 import java.util.Collections;
 
 public class PropertyDataBuilder {
-    public static Property buildFromPojo(PropertyPojo.Feature pojo) {
+    public static PropertyData buildFromPojo(PropertyPojo.Feature pojo) {
         return PropertyData.builder()
                 .level(pojo.level)
                 .priority(pojo.priority)

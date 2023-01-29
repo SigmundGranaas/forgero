@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.property.v2.RunnableHandler;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulBindable;
 import com.sigmundgranaas.forgero.core.soul.SoulSource;
@@ -12,6 +13,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import net.minecraft.entity.EntityStatuses;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -21,7 +23,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.TotemEffectHandler.ENTITY_STATUS_TOTEM;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityStatuses.ENTITY_STATUS_TOTEM;
 
 public class SoulReapingHandler implements RunnableHandler {
 
@@ -48,8 +50,9 @@ public class SoulReapingHandler implements RunnableHandler {
         ItemStack stack = entity.getMainHandStack();
         var converted = StateConverter.of(stack);
         if (converted.isPresent() && converted.get() instanceof Composite construct) {
-            SoulSource soulSource = new SoulSource(targetEntity.getType().toString());
-            Soul soul = new Soul(soulSource);
+            String name = targetEntity.hasCustomName() && targetEntity.getCustomName() != null ? targetEntity.getCustomName().getString() : targetEntity.getName().getString();
+            SoulSource soulSource = new SoulSource(EntityType.getId(targetEntity.getType()).toString(), name);
+            Soul soul = new Soul(soulSource, SoulLevelPropertyRegistry.handler());
             if (ContainsFeatureCache.check(PropertyTargetCacheKey.of(construct, "SOUL_REAPING"))) {
                 SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
                 soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());

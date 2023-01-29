@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
+import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulSource;
 import com.sigmundgranaas.forgero.core.soul.StatTracker;
@@ -33,7 +34,7 @@ public class SoulParser implements CompoundParser<Soul> {
             } else {
                 tracker = new StatTracker();
             }
-            return Optional.of(new Soul(level, xp, new SoulSource(id), tracker));
+            return Optional.of(new Soul(level, xp, new SoulSource(id, name), tracker, SoulLevelPropertyRegistry.handler()));
         }
         return Optional.empty();
     }
