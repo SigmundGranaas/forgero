@@ -31,5 +31,22 @@
   "item.forgero.rabbit_hide": "Rabbit hide",
   "item.forgero.phantom_membrane": "Phantom membrane",
   "item.forgero.diamond": "Diamond",
-  "item.forgero.netherite": "Netherite"
+  "item.forgero.netherite": "Netherite",
+  "item.forgero.carved": "Carved",
+  "item.forgero.durable": "Durable",
+  "item.forgero.hardened": "Hardened",
+  "item.forgero.honed": "Honed",
+  "item.forgero.light": "Light",
+  "item.forgero.lucky": "Lucky",
+  "item.forgero.mighty": "Mighty",
+  "item.forgero.nimble": "nimble",
+  "item.forgero.protective": "Protective",
+  "item.forgero.quick": "Quick",
+  "item.forgero.rapid": "Rapid",
+  "item.forgero.sharp": "Sharp",
+  "item.forgero.sturdy": "Sturdy",
+  "item.forgero.swift": "Swift",
+  "item.forgero.tempered": "Tempered",
+  "item.forgero.tough": "Tough",
+  "item.forgero.trimmed": "Trimmed"
 }

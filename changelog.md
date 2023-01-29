@@ -17,6 +17,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added 17 new Conditions that can spawn on looted parts, tools and schematics
 * Added a data-pack based system for defining properties added by souls when leveled up
 * Added Property multiplier for blocks mined and entities killed. (blocks: 1000 = +1%, mobs: 100 = +1%)
 * Added soul totem with the soul binding effects

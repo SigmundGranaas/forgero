@@ -39,7 +39,8 @@ public class StateCraftingRecipe extends ShapedRecipe {
                         .mapToObj(craftingInventory::getStack)
                         .map(this::convertHead)
                         .flatMap(Optional::stream)
-                        .map(State::name)
+                        .map(State::identifier)
+                        .map(id -> id.split(":")[1])
                         .anyMatch(name -> name.split("-")[0].equals(result.name().split("-")[0]));
 
                 return isSameMaterial;

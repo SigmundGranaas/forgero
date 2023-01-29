@@ -1,10 +1,9 @@
 {
-  "id": "forgero:unbreakable",
-  "priority": 3,
+  "id": "forgero:honed",
+  "priority": 5,
   "target": {
     "types": [
       "PART",
-      "MATERIAL",
       "TOOL",
       "WEAPON"
     ],
@@ -12,20 +11,23 @@
     "incompatibilities": [
     ]
   },
-  "chance": 0.006,
+  "chance": 0.03,
   "properties": {
     "attributes": [
       {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "value": 1.1
+      },
+      {
         "type": "RARITY",
-        "order": "END",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 50
+        "value": 20
       }
     ],
     "features": [
-      {
-        "type": "UNBREAKABLE"
-      }
     ]
   }
 }

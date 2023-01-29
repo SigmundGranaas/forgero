@@ -23,6 +23,15 @@ public class CompositeEncoder implements CompoundEncoder<State> {
         this.identifiableEncoder = new IdentifiableEncoder();
     }
 
+    public static NbtList encodeConditions(Conditional<?> conditional) {
+        NbtList list = new NbtList();
+        conditional.namedConditions().stream()
+                .map(NamedCondition::identifier)
+                .map(NbtString::of)
+                .forEach(list::add);
+        return list;
+    }
+
     @Override
     public NbtCompound encode(State element) {
         var compound = identifiableEncoder.encode(element);
@@ -55,14 +64,5 @@ public class CompositeEncoder implements CompoundEncoder<State> {
             compound.put(UPGRADES_IDENTIFIER, upgrades);
         }
         return compound;
-    }
-
-    private NbtList encodeConditions(Conditional<?> conditional) {
-        NbtList list = new NbtList();
-        conditional.namedConditions().stream()
-                .map(NamedCondition::identifier)
-                .map(NbtString::of)
-                .forEach(list::add);
-        return list;
     }
 }
