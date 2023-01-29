@@ -1,8 +1,12 @@
 package com.sigmundgranaas.forgero.core.soul;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class Soul implements Identifiable, PropertyContainer {
 
@@ -86,5 +90,10 @@ public class Soul implements Identifiable, PropertyContainer {
 
     public StatTracker tracker() {
         return tracker;
+    }
+
+    @Override
+    public @NotNull List<Property> getRootProperties() {
+        return new SoulStatToAttributes(tracker).getRootProperties();
     }
 }

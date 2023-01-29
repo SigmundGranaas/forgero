@@ -1,13 +1,16 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class SoulBoundTool extends ConstructedTool implements SoulContainer {
     private final Soul soul;
@@ -20,6 +23,13 @@ public class SoulBoundTool extends ConstructedTool implements SoulContainer {
     public SoulBoundTool(State head, State handle, SlotContainer slots, IdentifiableContainer id, Soul soul, List<PropertyContainer> conditions) {
         super(head, handle, slots, id, conditions);
         this.soul = soul;
+    }
+
+    @Override
+    public @NotNull List<Property> getRootProperties() {
+        var props = super.getRootProperties();
+        var soulProps = getSoul().getRootProperties();
+        return Stream.of(props, soulProps).flatMap(List::stream).toList();
     }
 
     @Override
