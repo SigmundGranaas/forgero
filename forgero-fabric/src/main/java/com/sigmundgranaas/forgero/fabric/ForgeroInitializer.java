@@ -29,6 +29,7 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.*;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
+import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import net.fabricmc.api.ModInitializer;
@@ -101,6 +102,7 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerTreasure);
         handler.accept(this::registerCommands);
         handler.accept(this::registerLevelPropertiesDefaults);
+        handler.accept(LootFunctions::register);
         handler.run();
     }
 
