@@ -9,15 +9,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.Optional;
-import java.util.Random;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.SOUL_IDENTIFIER;
@@ -50,7 +47,7 @@ public class SoulHandler {
 
 
     public void processBlockBreak(BlockState state, BlockPos pos, World world, PlayerEntity player) {
-        int xp = (int) (state.getHardness(world, pos) * 1);
+        float xp = (state.getHardness(world, pos) * 1);
         if (state.getBlock() instanceof OreBlockXp ore) {
             xp = ore.getExperienceDropped().get(net.minecraft.util.math.random.Random.create()) * 15;
         }
@@ -63,10 +60,9 @@ public class SoulHandler {
     }
 
     private void handleLevelUp(Soul soul, World world, PlayerEntity player) {
-        Random rand = new Random();
-        for (int i = 0; i < 10; i++) {
-            world.addParticle(ParticleTypes.FIREWORK, rand.nextDouble(), rand.nextDouble(), rand.nextDouble(), 0, 0, 0);
+        if (!world.isClient()) {
+            player.sendMessage(Text.literal(String.format("%s leveled to level %s", soul.name(), soul.getLevel())));
         }
-        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
+        world.sendEntityStatus(player, EntityStatuses.ENTITY_STATUS_SOUL_LEVEL_UP);
     }
 }

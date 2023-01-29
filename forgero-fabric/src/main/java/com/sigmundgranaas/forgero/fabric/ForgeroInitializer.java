@@ -10,13 +10,17 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConditionData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
+import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
 import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
+import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
@@ -69,6 +73,7 @@ public class ForgeroInitializer implements ModInitializer {
 
         dataReloader();
         lootConditionReloader();
+        soulLevelPropertyReloader();
         Entities.register();
         FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
         var configuration = ForgeroConfigurationLoader.load();
@@ -95,7 +100,12 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerItems);
         handler.accept(this::registerTreasure);
         handler.accept(this::registerCommands);
+        handler.accept(this::registerLevelPropertiesDefaults);
         handler.run();
+    }
+
+    private void registerLevelPropertiesDefaults() {
+        DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);
     }
 
     private void registerBlocks() {
@@ -158,6 +168,29 @@ public class ForgeroInitializer implements ModInitializer {
             @Override
             public Identifier getFabricId() {
                 return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "loot_condition");
+            }
+        });
+    }
+
+    private void soulLevelPropertyReloader() {
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public void reload(ResourceManager manager) {
+                SoulLevelPropertyRegistry.refresh();
+                Gson gson = new Gson();
+                for (Resource res : manager.findResources("leveled_soul_properties", path -> path.getPath().endsWith(".json")).values()) {
+                    try (InputStream stream = res.getInputStream()) {
+                        SoulLevelPropertyData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), SoulLevelPropertyData.class);
+                        SoulLevelPropertyRegistry.register(data.getId(), new SoulLevelPropertyDataProcessor(data));
+                    } catch (Exception e) {
+                        Forgero.LOGGER.error(e);
+                    }
+                }
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "soul_level_property");
             }
         });
     }

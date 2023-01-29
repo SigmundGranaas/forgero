@@ -1,31 +1,44 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.core.state.Composite;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulLevelUpHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.TotemEffectHandler;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.network.NetworkThreadUtils;
+import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityStatuses.ENTITY_STATUS_SOUL_LEVEL_UP;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityStatuses.ENTITY_STATUS_TOTEM;
+
 
 @Mixin(ClientPlayNetworkHandler.class)
-public class ClientPlayNetworkGetTotemMixin {
-    @Inject(at = @At("HEAD"), method = "getActiveTotemOfUndying", cancellable = true)
-    private static void getTotem(PlayerEntity entity, CallbackInfoReturnable<ItemStack> cir) {
-        for (Hand hand : Hand.values()) {
-            ItemStack itemStack = entity.getStackInHand(hand);
-            if (StateConverter.of(itemStack).filter(state -> state instanceof Composite composite && composite.has("forgero:soul-totem").isPresent()).isPresent()) {
-                Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
-                itemStack = new ItemStack(totem);
-                if (!itemStack.isEmpty()) {
-                    cir.setReturnValue(itemStack);
-                }
+public abstract class ClientPlayNetworkGetTotemMixin {
+
+    @Shadow
+    private ClientWorld world;
+
+    @Shadow
+    @Final
+    private MinecraftClient client;
+
+    @Inject(at = @At("HEAD"), method = "onEntityStatus")
+    private void getTotem(EntityStatusS2CPacket packet, CallbackInfo indo) {
+        NetworkThreadUtils.forceMainThread(packet, (ClientPlayNetworkHandler) (Object) this, client);
+        Entity entity = packet.getEntity(world);
+        if (entity instanceof PlayerEntity player) {
+            if (packet.getStatus() == ENTITY_STATUS_TOTEM) {
+                TotemEffectHandler.of(client, player, world).run();
+            } else if (packet.getStatus() == ENTITY_STATUS_SOUL_LEVEL_UP) {
+                SoulLevelUpHandler.of(client, player, world).run();
             }
         }
     }

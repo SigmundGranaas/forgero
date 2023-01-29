@@ -15,7 +15,7 @@ public class SoulEncoder implements CompoundEncoder<Soul> {
         NbtCompound compound = new NbtCompound();
         compound.putInt(LEVEL_IDENTIFIER, element.getLevel());
         compound.putString(ID_IDENTIFIER, element.identifier());
-        compound.putInt(XP_IDENTIFIER, element.getXp());
+        compound.putFloat(XP_IDENTIFIER, element.getXp());
         compound.putString(NAME_IDENTIFIER, element.name());
         compound.put(TRACKER_IDENTIFIER, new NbtCompound());
         compound.getCompound(TRACKER_IDENTIFIER).put(MOB_TRACKER_IDENTIFIER, encodeTracker(element.tracker().mobs()));
