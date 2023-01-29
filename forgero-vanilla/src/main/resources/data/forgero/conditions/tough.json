@@ -1,0 +1,32 @@
+{
+  "id": "forgero:tough",
+  "priority": 5,
+  "target": {
+    "types": [
+      "SWORD_GUARD",
+      "SWORD_GUARD_SCHEMATIC"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.05,
+  "properties": {
+    "attributes": [
+      {
+        "type": "ARMOR",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 10
+      }
+    ],
+    "features": [
+    ]
+  }
+}

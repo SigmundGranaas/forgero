@@ -1,0 +1,33 @@
+{
+  "id": "forgero:honed",
+  "priority": 5,
+  "target": {
+    "types": [
+      "PART",
+      "TOOL",
+      "WEAPON"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.01,
+  "properties": {
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "value": 1.1
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 20
+      }
+    ],
+    "features": [
+    ]
+  }
+}
