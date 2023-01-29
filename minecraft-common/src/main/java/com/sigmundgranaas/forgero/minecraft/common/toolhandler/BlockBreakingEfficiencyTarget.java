@@ -27,6 +27,8 @@ public record BlockBreakingEfficiencyTarget(BlockState state) implements Target 
             for (String stringTag : tag) {
                 if (state.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(stringTag)))) {
                     return true;
+                } else if (Registry.BLOCK.getId(state.getBlock()).toString().equals(stringTag)) {
+                    return true;
                 }
             }
         }

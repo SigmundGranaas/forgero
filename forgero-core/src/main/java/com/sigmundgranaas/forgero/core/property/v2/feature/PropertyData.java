@@ -11,7 +11,7 @@ import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @ToString
 public class PropertyData implements Property {

@@ -30,11 +30,12 @@ public abstract class PlayerServerInteractionManagerMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;ILjava/lang/String;)V"), method = "processBlockBreakingAction")
     public void processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, CallbackInfo ci) {
         var soulHandler = SoulHandler.of(player.getMainHandStack());
+        soulHandler.ifPresent(soul -> soul.processBlockBreak(world.getBlockState(pos), pos, world, player));
         PropertyHelper.ofPlayerHands(player)
                 .flatMap(container -> ToolBlockHandler.of(container, world, pos, player))
                 .ifPresent(handler -> handler.handleExceptOrigin(info -> {
-                    this.finishMining(info.pos(), sequence, "destroyed");
                     soulHandler.ifPresent(soul -> soul.processBlockBreak(info.state(), info.pos(), world, player));
+                    this.finishMining(info.pos(), sequence, "destroyed");
                 }));
     }
 }

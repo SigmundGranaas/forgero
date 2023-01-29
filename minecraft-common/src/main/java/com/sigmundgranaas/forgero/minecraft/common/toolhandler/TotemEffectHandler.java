@@ -17,7 +17,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class TotemEffectHandler implements RunnableHandler {
-    public static byte ENTITY_STATUS_TOTEM = (byte) 355;
+
     private final MinecraftClient client;
 
     private final PlayerEntity entity;
@@ -65,7 +65,7 @@ public class TotemEffectHandler implements RunnableHandler {
         return new ItemStack(Items.TOTEM_OF_UNDYING);
     }
 
-    private DefaultParticleType getTotemParticle() {
+    public DefaultParticleType getTotemParticle() {
         return ParticleTypes.TOTEM_OF_UNDYING;
     }
 }

@@ -36,6 +36,10 @@ public class AttributeBuilder {
     }
 
     public static Attribute createAttributeFromPojo(PropertyPojo.Attribute attributePOJO) {
+        return createAttributeBuilder(attributePOJO).build();
+    }
+
+    public static AttributeBuilder createAttributeBuilder(PropertyPojo.Attribute attributePOJO) {
         AttributeBuilder builder = new AttributeBuilder(attributePOJO.type)
                 .applyOrder(attributePOJO.order);
 
@@ -83,7 +87,7 @@ public class AttributeBuilder {
             builder.applyPriority(1);
         }
 
-        return builder.build();
+        return builder;
     }
 
     public static AttributeBuilder createAttributeBuilderFromAttribute(Attribute attribute) {

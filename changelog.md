@@ -7,9 +7,11 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added a data-pack based system for defining properties added by souls when leveled up
+* Added Property multiplier for blocks mined and entities killed. (blocks: 1000 = +1%, mobs: 100 = +1%)
 * Added soul totem with the soul binding effects
 * Added the bottled soul item, which can be obtained by using a bottle on a soul
-* Implemented a datapack based system to add conditions which can be added to lootable drops
+* Implemented a data-pack based system to add conditions which can be added to lootable drops
 * Added dynamic effectiveness property
 * Added dynamic conditions to tools
 * Added the Broken conditions property

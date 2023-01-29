@@ -23,7 +23,7 @@ public class SoulWriter implements Writer {
     public void write(List<Text> tooltip, TooltipContext context) {
         String name = soul.name();
         int level = soul.getLevel();
-        int currentXp = soul.getXp();
+        float currentXp = soul.getXp();
         int xpTarget = soul.getXpTarget();
         float percentage = (float) currentXp / xpTarget;
         writeSoulInfo(name, level, tooltip);
