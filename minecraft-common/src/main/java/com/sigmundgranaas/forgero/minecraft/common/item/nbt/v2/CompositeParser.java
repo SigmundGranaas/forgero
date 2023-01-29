@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
+
 
 public class CompositeParser implements CompoundParser<State> {
     protected final StateFinder supplier;
@@ -75,12 +77,14 @@ public class CompositeParser implements CompoundParser<State> {
 
     private Optional<State> parseCompound(NbtCompound compound, Function<String, Optional<State>> supplier) {
         if (compound.contains(NbtConstants.STATE_TYPE_IDENTIFIER)) {
-            if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.STATE_IDENTIFIER)) {
+            if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.STATE_IDENTIFIER) && !compound.contains(CONDITIONS_IDENTIFIER)) {
                 return supplier.apply(compound.getString(NbtConstants.ID_IDENTIFIER));
             } else if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.COMPOSITE_IDENTIFIER)) {
                 return new CompositeParser(this.supplier).parse(compound);
             } else if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.LEVELED_IDENTIFIER)) {
                 return new StateParser(this.supplier).parse(compound);
+            } else if (compound.contains(CONDITIONS_IDENTIFIER)) {
+                return StateParser.STATE_PARSER.parse(compound);
             }
         }
         return parse(compound);

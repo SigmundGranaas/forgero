@@ -10,7 +10,7 @@
     "incompatibilities": [
     ]
   },
-  "chance": 0.05,
+  "chance": 0.1,
   "properties": {
     "attributes": [
       {

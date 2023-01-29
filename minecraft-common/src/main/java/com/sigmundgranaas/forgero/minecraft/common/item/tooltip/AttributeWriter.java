@@ -32,7 +32,7 @@ public class AttributeWriter implements Writer {
     }
 
     public static void write(State state, List<Text> tooltip, TooltipContext context) {
-        var attributes = state.getProperties();
+        var attributes = state.getRootProperties();
 
         MutableText slots = Text.literal(" Attributes: ").formatted(Formatting.GRAY);
         tooltip.add(slots);

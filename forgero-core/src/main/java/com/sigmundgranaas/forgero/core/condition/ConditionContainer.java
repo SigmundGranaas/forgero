@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.core.condition;
 
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +34,10 @@ public class ConditionContainer implements Conditional<ConditionContainer>, Prop
     public ConditionContainer removeCondition(String identifier) {
         var copy = Conditional.removeConditions(conditions, identifier);
         return new ConditionContainer(copy);
+    }
+
+    @Override
+    public @NotNull List<Property> getProperties() {
+        return conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList();
     }
 }

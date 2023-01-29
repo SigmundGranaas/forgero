@@ -84,7 +84,7 @@ public class SimpleState implements Ingredient, Conditional<State> {
 
     @Override
     public Map<String, CustomValue> customValues() {
-        return Ingredient.super.customValues();
+        return this.customData;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class SimpleState implements Ingredient, Conditional<State> {
 
     @Override
     public State applyCondition(PropertyContainer container) {
-        return ConditonedState.of(this).applyCondition(container);
+        return ConditionedState.of(this).applyCondition(container);
     }
 
     @Override

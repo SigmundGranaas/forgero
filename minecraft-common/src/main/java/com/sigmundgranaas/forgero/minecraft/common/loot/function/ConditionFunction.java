@@ -36,14 +36,14 @@ public class ConditionFunction extends ConditionalLootFunction {
         if (converted.isPresent() && converted.get() instanceof Conditional<?> conditional) {
             var conditions = Conditions.INSTANCE.all().stream()
                     .filter(condition -> condition.isApplicable(conditional))
-                    .filter(condition -> context.getRandom().nextDouble() < condition.getChance())
+                    .filter(condition -> context.getRandom().nextDouble() < condition.getChance() + context.getLuck())
                     .sorted(Comparator.comparing(com.sigmundgranaas.forgero.core.condition.LootCondition::getPriority))
                     .toList();
             Conditional<?> conditioned = conditional;
             for (NamedCondition container : conditions) {
                 conditioned = (Conditional<?>) conditioned.applyCondition(container);
             }
-            if (conditioned instanceof PropertyContainer container) {
+            if (conditioned instanceof PropertyContainer container && conditions.size() > 0) {
                 stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(container));
             }
         }
