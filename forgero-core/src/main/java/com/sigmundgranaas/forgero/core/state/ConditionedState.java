@@ -11,11 +11,11 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
-public class ConditonedState implements State, Conditional<ConditonedState> {
+public class ConditionedState implements State, Conditional<ConditionedState> {
     private final IdentifiableContainer id;
     private final ConditionContainer conditions;
 
@@ -23,23 +23,16 @@ public class ConditonedState implements State, Conditional<ConditonedState> {
 
     private final Map<String, CustomValue> customData;
 
-    public ConditonedState(IdentifiableContainer id, ConditionContainer conditions, List<Property> properties, Map<String, CustomValue> customData) {
+    public ConditionedState(IdentifiableContainer id, ConditionContainer conditions, List<Property> properties, Map<String, CustomValue> customData) {
         this.id = id;
         this.conditions = conditions;
         this.properties = properties;
         this.customData = customData;
     }
 
-    public ConditonedState(IdentifiableContainer id, List<Property> properties) {
-        this.id = id;
-        this.conditions = Conditional.EMPTY;
-        this.properties = properties;
-        this.customData = Collections.emptyMap();
-    }
-
-    public static ConditonedState of(State state) {
+    public static ConditionedState of(State state) {
         IdentifiableContainer id = new IdentifiableContainer(state.name(), state.nameSpace(), state.type());
-        return new ConditonedState(id, Conditional.EMPTY, state.getRootProperties(), state.customValues());
+        return new ConditionedState(id, Conditional.EMPTY, state.getRootProperties(), state.customValues());
     }
 
     @Override
@@ -48,22 +41,32 @@ public class ConditonedState implements State, Conditional<ConditonedState> {
     }
 
     @Override
-    public ConditonedState applyCondition(PropertyContainer container) {
-        return new ConditonedState(id, conditions.applyCondition(container), properties, customData);
+    public ConditionedState applyCondition(PropertyContainer container) {
+        return new ConditionedState(id, conditions.applyCondition(container), properties, customData);
     }
 
     @Override
-    public ConditonedState removeCondition(String identifier) {
-        return new ConditonedState(id, conditions.removeCondition(identifier), properties, customData);
+    public ConditionedState removeCondition(String identifier) {
+        return new ConditionedState(id, conditions.removeCondition(identifier), properties, customData);
+    }
+
+
+    @Override
+    public String identifier() {
+        return id.identifier();
     }
 
     @Override
     public @NotNull List<Property> getRootProperties() {
-        return properties;
+        return Stream.of(properties.stream().toList(), conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList()).flatMap(List::stream).toList();
     }
 
     @Override
     public String name() {
+        var conditions = namedConditions();
+        if (conditions.size() > 0) {
+            return String.format("%s-%s", conditions.get(0).name(), id.name());
+        }
         return id.name();
     }
 

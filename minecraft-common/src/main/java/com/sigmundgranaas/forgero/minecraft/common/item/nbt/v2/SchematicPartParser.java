@@ -25,6 +25,17 @@ public class SchematicPartParser extends CompositeParser {
         super(supplier);
     }
 
+    public static List<PropertyContainer> parseConditions(NbtList list) {
+        List<PropertyContainer> conditions = new ArrayList<>();
+        list.stream()
+                .filter(element -> element.getType() == NbtElement.STRING_TYPE)
+                .map(NbtElement::asString)
+                .map(Conditions.INSTANCE::of)
+                .flatMap(Optional::stream)
+                .forEach(conditions::add);
+        return conditions;
+    }
+
     @Override
     public Optional<State> parse(NbtCompound compound) {
         List<State> parts = new ArrayList<>();
@@ -51,16 +62,5 @@ public class SchematicPartParser extends CompositeParser {
             }
         }
         return Optional.empty();
-    }
-
-    private List<PropertyContainer> parseConditions(NbtList list) {
-        List<PropertyContainer> conditions = new ArrayList<>();
-        list.stream()
-                .filter(element -> element.getType() == NbtElement.STRING_TYPE)
-                .map(NbtElement::asString)
-                .map(Conditions.INSTANCE::of)
-                .flatMap(Optional::stream)
-                .forEach(conditions::add);
-        return conditions;
     }
 }

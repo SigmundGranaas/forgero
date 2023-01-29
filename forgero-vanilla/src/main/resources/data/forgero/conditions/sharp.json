@@ -1,31 +1,34 @@
 {
-  "id": "forgero:unbreakable",
-  "priority": 3,
+  "id": "forgero:sharp",
+  "priority": 5,
   "target": {
     "types": [
       "PART",
-      "MATERIAL",
       "TOOL",
-      "WEAPON"
+      "WEAPON",
+      "SCHEMATIC"
     ],
     "ids": [],
     "incompatibilities": [
     ]
   },
-  "chance": 0.006,
+  "chance": 0.04,
   "properties": {
     "attributes": [
       {
-        "type": "RARITY",
-        "order": "END",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 50
+        "value": 3
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 17
       }
     ],
     "features": [
-      {
-        "type": "UNBREAKABLE"
-      }
     ]
   }
 }

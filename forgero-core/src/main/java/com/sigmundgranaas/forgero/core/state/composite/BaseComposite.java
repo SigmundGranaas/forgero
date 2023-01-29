@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public abstract class BaseComposite implements Composite {
     protected final SlotContainer slotContainer;
 
-    private final IdentifiableContainer id;
+    protected final IdentifiableContainer id;
 
     protected BaseComposite(SlotContainer slotContainer, IdentifiableContainer id) {
         this.slotContainer = slotContainer;
@@ -109,6 +109,11 @@ public abstract class BaseComposite implements Composite {
     @Override
     public String name() {
         return id.name();
+    }
+
+    @Override
+    public String identifier() {
+        return id.identifier();
     }
 
     @Override
