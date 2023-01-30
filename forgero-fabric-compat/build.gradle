@@ -13,6 +13,7 @@ dependencies {
     implementation project(':forgero-compat')
     implementation project(':forgero-structures')
     implementation project(path: ':forgero-fabric', configuration: 'dev')
+    implementation project(path: ':forgero-fabric', configuration: 'dev')
     implementation project(path: ':minecraft-common', configuration: 'dev')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
