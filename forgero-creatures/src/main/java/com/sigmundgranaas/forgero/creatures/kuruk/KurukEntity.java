@@ -24,7 +24,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class KurukEntity extends AnimalEntity implements IAnimatable {
     public static final Identifier KURUK_ID = new Identifier("forgero:kuruk");
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public KurukEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
