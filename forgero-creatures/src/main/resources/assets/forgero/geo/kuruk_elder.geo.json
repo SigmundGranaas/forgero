@@ -29,7 +29,7 @@
 				{
 					"name": "left_foot",
 					"parent": "body",
-					"pivot": [0, 0, 0],
+					"pivot": [5, 11.5, 0.5],
 					"cubes": [
 						{"origin": [3, 0, -2], "size": [4, 13, 5], "uv": [0, 62]}
 					]
@@ -45,7 +45,7 @@
 				{
 					"name": "right_arm",
 					"parent": "body",
-					"pivot": [0, 0, 0],
+					"pivot": [-6, 28.5, 0],
 					"cubes": [
 						{"origin": [-8, 17, -2], "size": [3, 13, 4], "uv": [55, 47]}
 					]
@@ -53,7 +53,7 @@
 				{
 					"name": "right_foot",
 					"parent": "body",
-					"pivot": [0, 0, 0],
+					"pivot": [-4, 12, 0],
 					"cubes": [
 						{"origin": [-7, 0, -2], "size": [4, 13, 5], "uv": [18, 62]}
 					]
