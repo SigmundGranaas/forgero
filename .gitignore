@@ -147,3 +147,6 @@ output/
 /run/
 /forgero-forge/run/
 /dest/
+/forgero-creatures/run/
+/forgero-creatures/logs/
+/forgero-creatures/build/
