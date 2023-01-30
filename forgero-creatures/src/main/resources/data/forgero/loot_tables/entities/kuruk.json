@@ -11,7 +11,7 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2.0,
+                "max": 1.0,
                 "min": 0.0
               },
               "function": "minecraft:set_count"
@@ -25,10 +25,10 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "minecraft:leather"
+          "name": "forgero:kuruk_pelt"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
       "bonus_rolls": 0.0,

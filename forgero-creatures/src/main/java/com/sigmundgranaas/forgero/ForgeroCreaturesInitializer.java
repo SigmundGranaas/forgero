@@ -19,9 +19,11 @@ import static net.minecraft.util.registry.Registry.ITEM;
 
 public class ForgeroCreaturesInitializer implements ModInitializer {
     public static Item KURUK_HEART;
+    public static Item KURUK_PELT;
 
     static {
         KURUK_HEART = Registry.register(ITEM, new Identifier("forgero:kuruk_heart"), new Item(new Item.Settings().rarity(Rarity.RARE).group(ItemGroup.MISC)));
+        KURUK_PELT = Registry.register(ITEM, new Identifier("forgero:kuruk_pelt"), new Item(new Item.Settings().rarity(Rarity.RARE).group(ItemGroup.MISC)));
     }
 
     @Override
