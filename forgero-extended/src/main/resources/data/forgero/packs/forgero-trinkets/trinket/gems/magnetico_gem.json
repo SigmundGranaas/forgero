@@ -15,10 +15,10 @@
         "value": 65
       }
     ],
-    "passive": [
+    "features": [
       {
-        "type": "LEVELED",
-        "tag": "MAGNETIC"
+        "type": "MAGNETIC",
+        "value": 1
       }
     ]
   },

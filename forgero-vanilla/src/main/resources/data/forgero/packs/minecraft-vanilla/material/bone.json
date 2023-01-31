@@ -1,0 +1,105 @@
+{
+  "type": "MINERAL",
+  "name": "bone",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:bone"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.0
+      },
+      {
+        "id": "default_stone_rarity",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 8
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 80.0
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.7,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
+      },
+      {
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 2
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 0.1
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 0.2
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 30
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 30
+      }
+    ]
+  },
+  "palette": {
+    "name": "bone"
+  }
+}

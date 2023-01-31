@@ -5,9 +5,6 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-version = rootProject.mod_version
-group = rootProject.maven_group
-
 configurations {
     dev {
         canBeResolved = false
@@ -22,9 +19,10 @@ dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
     implementation project(':forgero-extended')
+    implementation project(path: ':forgero-fabric', configuration: 'dev')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
-    //implementation project(':common')
+    implementation project(path: ':minecraft-common', configuration: 'dev')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -41,6 +39,7 @@ dependencies {
 
     include "net.devtech:arrp:0.6.2"
     include project(':forgero-core')
+    include project(':minecraft-common')
 }
 
 task assembleComplete(type: Jar) {
@@ -51,6 +50,7 @@ task assembleComplete(type: Jar) {
             defaultRefmapName = "forgero-fabric-refmap.json"
         }
     }
+
     remapJar {
         if (gradle.startParameter.taskNames.stream().anyMatch("assembleComplete"::equals)) {
             dependencies {
@@ -144,14 +144,6 @@ sourceSets {
     forgero {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
-    }
-
-    main {
-        resources {
-            srcDirs += [
-                    'src/main/generated'
-            ]
-        }
     }
 
     test {

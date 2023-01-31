@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-sword_guard-schematic_recipe"
+      "recipe": "forgero:sword_guard-schematic_recipe"
     }
   ]
 }

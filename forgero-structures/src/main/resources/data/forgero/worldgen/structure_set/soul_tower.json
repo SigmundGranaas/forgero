@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "forgero:soul_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 60,
+    "separation": 20,
+    "salt": 3457673
+  }
+}

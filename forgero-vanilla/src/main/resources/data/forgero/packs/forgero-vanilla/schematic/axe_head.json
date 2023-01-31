@@ -1,7 +1,7 @@
 {
   "type": "AXE_HEAD_SCHEMATIC",
   "name": "axe_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "axe_head_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -77,7 +77,7 @@
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
+        "operation": "MULTIPLICATION",
         "value": 1.0
       },
       {

@@ -1,7 +1,6 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
   "name": "sword_guard-schematic",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -74,6 +73,12 @@
         "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.4
+      },
+      {
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.5
       },
       {
         "type": "ATTACK_SPEED",

@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "slanted_sword_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -39,7 +40,16 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "MATERIAL",
+        "type": "TOOL_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "scabbard",
+        "type": "LEATHER",
         "tier": 1
       },
       {

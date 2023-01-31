@@ -1,7 +1,7 @@
 {
   "type": "HOE_HEAD_SCHEMATIC",
   "name": "reaper_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "hoe_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -78,11 +78,13 @@
         "value": -2.5
       }
     ],
-    "active": [
+    "features": [
       {
-        "type": "VEIN_MINING_PATTERN",
+        "type": "VEIN_MINING",
         "depth": 10,
-        "tag": "forgero:plants"
+        "tags": [
+          "forgero:plants"
+        ]
       }
     ]
   },

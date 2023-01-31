@@ -9,8 +9,8 @@
       "text": "Tools are crafted by combining the appropriate parts in the crafting table. Most tools consist of a handle and a head/blade. Most tools can also be upgraded with a binding after they have been crafted to provide further enhancements to your tools"
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "forgero:iron-pickaxe"
+      "type": "forgero:state_crafting_recipe",
+      "recipe": "forgero:iron-pickaxe_head-handle"
     }
   ]
 }

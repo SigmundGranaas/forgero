@@ -1,0 +1,11 @@
+{
+  "type": "forgero:tool_part_secondary_material_upgrade",
+  "base": {
+    "item": "BASE_ITEM"
+  },
+  "addition": {
+  },
+  "result": {
+    "item": "UPGRADED_BASE_TOOL_PART"
+  }
+}

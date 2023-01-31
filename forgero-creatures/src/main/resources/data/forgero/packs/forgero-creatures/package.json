@@ -1,0 +1,11 @@
+{
+  "name": "forgero-creatures",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "forgero",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "forgero-vanilla"
+  ]
+}

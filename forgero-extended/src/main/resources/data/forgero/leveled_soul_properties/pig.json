@@ -1,0 +1,13 @@
+{
+  "id": "minecraft:pig",
+  "properties": {
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "LUCK",
+        "value": 1
+      }
+    ]
+  }
+}

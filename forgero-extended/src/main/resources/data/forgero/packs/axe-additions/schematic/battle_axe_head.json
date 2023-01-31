@@ -1,7 +1,7 @@
 {
   "type": "AXE_HEAD_SCHEMATIC",
   "name": "battle_axe_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "axe_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -19,7 +19,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 3
+            "amount": 4
           }
         ]
       }

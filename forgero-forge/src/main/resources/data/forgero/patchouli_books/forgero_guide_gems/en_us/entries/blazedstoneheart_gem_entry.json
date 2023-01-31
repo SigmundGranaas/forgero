@@ -1,0 +1,16 @@
+{
+  "name": "Blazed Stoneheart Gem",
+  "icon": "forgero:blazed_stone_heart-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This gem increases mining speed against rocks in the nether."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a blazed stoneheart gem",
+      "recipe": "forgero:blazed_stoneheart_gem"
+    }
+  ]
+}

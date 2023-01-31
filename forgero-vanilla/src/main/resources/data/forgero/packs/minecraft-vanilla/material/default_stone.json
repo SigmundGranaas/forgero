@@ -9,7 +9,7 @@
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.0
+        "value": 1.0
       },
       {
         "id": "default_stone_rarity",
@@ -37,14 +37,14 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.5
+        "value": 2.4
       },
       {
         "id": "default_stone_attack_damage",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3.0,
+        "value": 2.7,
         "condition": {
           "target": "TYPE",
           "tag": [
@@ -71,6 +71,13 @@
             "HANDLE"
           ]
         }
+      },
+      {
+        "id": "default_stone_armor",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
       },
       {
         "id": "default_stone_rarity_upgrade",

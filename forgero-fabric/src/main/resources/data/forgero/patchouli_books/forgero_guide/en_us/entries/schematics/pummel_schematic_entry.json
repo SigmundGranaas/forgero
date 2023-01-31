@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-pummel-schematic_recipe"
+      "recipe": "forgero:pummel-schematic_recipe"
     }
   ]
 }

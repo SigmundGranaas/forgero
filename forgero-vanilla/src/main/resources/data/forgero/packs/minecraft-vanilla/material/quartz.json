@@ -1,0 +1,107 @@
+{
+  "type": "MINERAL",
+  "name": "quartz",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:quartz"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 45
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 204
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.2
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 7
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "OFFENSIVE",
+        "value": 300
+      },
+      {
+        "id": "diamond-attack-speed-base",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
+      },
+      {
+        "id": "diamond-attack-speed-base",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -1.3,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "HANDLE"
+          ]
+        }
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 23
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 1.1
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 1.1
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 40
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 10
+      }
+    ]
+  },
+  "palette": {
+    "name": "quartz"
+  }
+}

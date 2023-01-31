@@ -1,10 +1,25 @@
-version = project.mod_version
+version = "${project.forgero_version}-BETA-${project.mc_target}"
 group = project.maven_group
 archives_base_name = project.archives_base_name
 
 
 subprojects {
+    version = "${project.forgero_version}-BETA-${project.mc_target}"
+    group = project.maven_group
+    archives_base_name = project.archives_base_name
+
     repositories {
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
+        }
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
@@ -19,6 +34,7 @@ subprojects {
                 includeGroup "curse.maven"
             }
         }
+
         repositories {
             maven { url 'https://maven.blamejared.com' }
         }
@@ -38,6 +54,14 @@ subprojects {
             name 'Gegy'
             url 'https://maven.gegy.dev'
         }
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
+        maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     }
 }
 
@@ -45,15 +69,9 @@ configure(subprojects) {
     apply plugin: 'java-library'
 }
 
-task buildSubProjects {
-    group = 'build'
-    dependsOn getTasksByName('build', true)
-}
-
 task copyJars(type: Copy) {
     group = 'build'
     from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
     exclude "**/*-dev.jar"
     into "$buildDir/libs"
-    dependsOn(buildSubProjects)
 }

@@ -8,8 +8,9 @@
       "text": "Pickaxes can be used to mine underground, and are an essential tools for breaking stones to create mines. Pickaxes can be crafted with a pickaxe head and a handle. Although pickaxes are an essential tool for every adventurer, it bears little merit as an offensive weapon."
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "forgero:iron-pickaxe"
+      "type": "forgero:state_crafting_recipe",
+      "recipe": "forgero:iron-pickaxe_head-handle",
+      "recipe2": "forgero:gold-pickaxe_head-handle"
     }
   ]
 }
