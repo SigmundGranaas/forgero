@@ -13,7 +13,7 @@ dependencies {
     implementation project(':forgero-compat')
     implementation project(':forgero-structures')
     implementation project(path: ':forgero-fabric', configuration: 'dev')
-    implementation project(path: ':forgero-fabric', configuration: 'dev')
+    implementation project(path: ':forgero-creatures', configuration: 'dev')
     implementation project(path: ':minecraft-common', configuration: 'dev')
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -25,7 +25,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
+    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.19:3.1.38'
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 
     modImplementation("net.devtech:arrp:0.6.2")
