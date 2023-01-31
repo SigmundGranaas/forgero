@@ -1,0 +1,56 @@
+{
+  "type": "LEATHER",
+  "name": "kuruk_pelt",
+  "container": {
+    "type": "HOST",
+    "id": "forgero:kuruk_pelt"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 58
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 58
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 400
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 0.4
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 1.0
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.9
+      }
+    ]
+  },
+  "palette": {
+    "name": "polar_bear_pelt"
+  }
+}

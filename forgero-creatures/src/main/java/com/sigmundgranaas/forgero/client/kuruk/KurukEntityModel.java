@@ -7,7 +7,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class KurukEntityModel extends AnimatedGeoModel<KurukEntity> {
     private static final Identifier modelResource = new Identifier("forgero", "geo/kuruk_elder.geo.json");
     private static final Identifier textureResource = new Identifier("forgero", "textures/entity/kuruk_elder.png");
-    private static final Identifier animationResource = new Identifier("forgero", "animations/kuruk_elder.animation.json");
+    private static final Identifier animationResource = new Identifier("forgero", "animations/kuruk_walking.animation.json");
 
     @Override
     public Identifier getModelResource(KurukEntity object) {
