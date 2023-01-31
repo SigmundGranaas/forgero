@@ -47,7 +47,7 @@ public class KurukEntity extends AnimalEntity implements IAnimatable, Angerable 
     public static final Identifier KURUK_ID = new Identifier("forgero:kuruk");
     private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private EatLeavesGoal eatLeavesGoal;
+    private EatBarkGoal eatLeavesGoal;
 
     private int eatLeavesTimer;
     private int angerTime;
@@ -69,18 +69,20 @@ public class KurukEntity extends AnimalEntity implements IAnimatable, Angerable 
             this.playSound(SoundEvents.ENTITY_GOAT_SCREAMING_RAM_IMPACT, 1.0f, 1.0f);
         } else if (status == 10) {
             this.eatLeavesTimer = 40;
+        } else if (status == 112) {
+            this.playSound(SoundEvents.ITEM_AXE_STRIP, 1.0F, 1.0F);
         } else {
             super.handleStatus(status);
         }
     }
 
     protected void initGoals() {
-        this.eatLeavesGoal = new EatLeavesGoal(this);
+        this.eatLeavesGoal = new EatBarkGoal(this);
         this.goalSelector.add(0, new SwimGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this));
         this.goalSelector.add(1, new MeleeAttackGoal(this, 1.0, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-        this.targetSelector.add(2, new ActiveTargetGoal<MobEntity>(this, MobEntity.class, 5, false, false, entity -> entity instanceof Monster && !(entity instanceof CreeperEntity)));
+        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
+        this.targetSelector.add(2, new ActiveTargetGoal<>(this, MobEntity.class, 5, false, false, entity -> entity instanceof Monster && !(entity instanceof CreeperEntity)));
         this.goalSelector.add(3, new AnimalMateGoal(this, 1.0));
         this.targetSelector.add(4, new UniversalAngerGoal<KurukEntity>(this, false));
         this.goalSelector.add(4, new TemptGoal(this, 1.1, Ingredient.ofItems(Items.WHEAT), false));
@@ -101,10 +103,12 @@ public class KurukEntity extends AnimalEntity implements IAnimatable, Angerable 
         var velocity = this.getVelocity();
         if (attackTicksLeft > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("attack.kuruk", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-        } else if (attackTicksLeft == 0 && (velocity.x != 0f || velocity.z != 0f)) {
+        } else if (eatLeavesTimer > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("eating.kuruk", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        } else if (velocity.x != 0f || velocity.z != 0f) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("walking.kuruk", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
-            return PlayState.STOP;
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("still.kuruk", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;
     }
@@ -114,11 +118,19 @@ public class KurukEntity extends AnimalEntity implements IAnimatable, Angerable 
         return PlayState.CONTINUE;
     }
 
+    private <E extends IAnimatable> PlayState earPredicate(AnimationEvent<E> event) {
+        if (this.getRandom().nextFloat() > 0.9 || (this.eatLeavesTimer < 5 && this.eatLeavesTimer > 0)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("ear_shake.kuruk", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        }
+
+        return PlayState.CONTINUE;
+    }
+
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "main_controller", 0, this::predicate));
         data.addAnimationController(new AnimationController<>(this, "tail_controller", 0, this::tailPredicate));
-
+        data.addAnimationController(new AnimationController<>(this, "ear_controller", 0, this::earPredicate));
     }
 
     @Override
@@ -128,6 +140,10 @@ public class KurukEntity extends AnimalEntity implements IAnimatable, Angerable 
 
     @Override
     public void tickMovement() {
+        if (this.world.isClient) {
+            this.eatLeavesTimer = Math.max(0, this.eatLeavesTimer - 1);
+        }
+
         int k;
         int j;
         int i;
@@ -143,7 +159,6 @@ public class KurukEntity extends AnimalEntity implements IAnimatable, Angerable 
             this.tickAngerLogic((ServerWorld) this.world, true);
         }
     }
-
 
     public int getAttackTicksLeft() {
         return this.attackTicksLeft;
