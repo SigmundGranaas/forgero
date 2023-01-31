@@ -19,7 +19,7 @@ dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
     implementation project(':forgero-extended')
-    implementation project(path: ':forgero-fabric', configuration: 'dev')
+    implementation project(path: ':forgero-creatures', configuration: 'dev')
     //implementation project(':forgero-structures')
     implementation project(':forgero-compat')
     implementation project(path: ':minecraft-common', configuration: 'dev')
