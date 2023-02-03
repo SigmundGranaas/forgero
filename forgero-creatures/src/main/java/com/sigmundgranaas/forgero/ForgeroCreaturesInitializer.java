@@ -36,7 +36,6 @@ public class ForgeroCreaturesInitializer implements ModInitializer {
 
     @Override
     public void onInitialize() {
-
         if (FabricLoader.getInstance().isModLoaded("geckolib3")) {
             KURUK = Registry.register(ENTITY_TYPE, KURUK_ID, EntityType.Builder.create(KurukEntity::new, SpawnGroup.CREATURE).setDimensions(0.7F, 2.4F).maxTrackingRange(8).trackingTickInterval(2).build(KURUK_ID.toString()));
             FabricDefaultAttributeRegistry.register(KURUK, KurukEntity.createKurukEntityAttributes());
