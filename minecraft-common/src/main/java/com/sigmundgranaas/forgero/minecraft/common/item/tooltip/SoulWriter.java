@@ -31,7 +31,7 @@ public class SoulWriter implements Writer {
     }
 
     private void writeSoulInfo(String name, int level, List<Text> tooltip) {
-        Text header = Text.literal(" Soul").formatted(Formatting.GRAY);
+        Text header = Text.literal(" ").append(Text.translatable("item.forgero.soul").formatted(Formatting.GRAY));
         Text info = Text.literal(String.format("  %s, Level %s", name, level));
         tooltip.add(header);
         tooltip.add(info);

@@ -95,10 +95,6 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 
     @Override
     public String name() {
-        var conditions = namedConditions();
-        if (conditions.size() > 0) {
-            return String.format("%s-%s", conditions.get(0).name(), id.name());
-        }
         return id.name();
     }
 

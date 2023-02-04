@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
 
+import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
 import com.sigmundgranaas.forgero.core.soul.SoulContainer;
@@ -59,6 +60,10 @@ public class StateWriter implements Writer {
 
         if (this.state instanceof Composite composite) {
             new CompositeWriter(composite).write(tooltip, context);
+        }
+
+        if (this.state instanceof Conditional<?> conditional) {
+            new ConditionWriter(conditional).write(tooltip, context);
         }
 
         var passive = state.stream().getPassiveProperties().toList();
