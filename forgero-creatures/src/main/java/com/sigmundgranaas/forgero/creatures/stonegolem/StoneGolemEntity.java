@@ -32,7 +32,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -44,6 +43,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -58,6 +59,8 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
     private int eatingTicks;
 
     private int lastEatingTicks;
+
+    private EatOre eatingOreGoal;
     private int angerTime;
     @Nullable
     private UUID angryAt;
@@ -90,12 +93,13 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
 
 
     protected void initGoals() {
+        this.eatingOreGoal = new EatOre();
         this.targetSelector.add(1, new RevengeGoal(this));
         this.goalSelector.add(1, new MeleeAttackGoal(this, 1.0, true));
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, MobEntity.class, 5, false, false, entity -> entity instanceof Monster && !(entity instanceof CreeperEntity)));
         this.targetSelector.add(4, new UniversalAngerGoal<>(this, false));
-        this.goalSelector.add(3, new EatOre());
+        this.goalSelector.add(3, eatingOreGoal);
         this.goalSelector.add(4, new TemptGoal(this, 1.1, Ingredient.ofItems(Items.IRON_ORE), false));
         this.goalSelector.add(5, new NavigateToEatableOre());
         this.goalSelector.add(6, new WanderAroundFarGoal(this, 1.0));
@@ -116,14 +120,30 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
         return PlayState.CONTINUE;
     }
 
+    private <E extends IAnimatable> PlayState headPredicate(AnimationEvent<E> event) {
+        if (this.random.nextDouble() > 0.99) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.stone_golem.shake_nose", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        }
+        return PlayState.CONTINUE;
+    }
+
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "main_controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "head_controller", 0, this::headPredicate));
     }
 
     @Override
     public AnimationFactory getFactory() {
         return factory;
+    }
+
+    @Override
+    public void tick() {
+        if (this.eatingOreGoal != null && this.eatingOreGoal.eatingTicks != 0) {
+            this.eatingTicks = this.eatingOreGoal.eatingTicks;
+        }
+        super.tick();
     }
 
     @Override
@@ -153,17 +173,12 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
         }
     }
 
-
     @Override
     public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand) {
         if (hitPos.y > 0.85 && 1.0 > hitPos.y) {
             world.spawnEntity(new ItemEntity(world, getX() + hitPos.getX(), getY() + hitPos.getY(), getZ() + hitPos.getZ(), new ItemStack(Items.DIAMOND)));
         }
         return super.interactAt(player, hitPos, hand);
-    }
-
-    public int getAttackTicksLeft() {
-        return this.attackTicksLeft;
     }
 
     @Override
@@ -234,27 +249,41 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
     private Optional<BlockPos> findState(Predicate<BlockState> predicate, double searchDistance) {
         BlockPos blockPos = getBlockPos();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-
+        ArrayList<BlockPos> availableDirections = new ArrayList<>();
         for (int i = 0; (double) i <= searchDistance; i = i > 0 ? -i : 1 - i) {
             for (int j = 0; (double) j < searchDistance; ++j) {
                 for (int k = 0; k <= j; k = k > 0 ? -k : 1 - k) {
                     for (int l = k < j && k > -j ? j : 0; l <= j; l = l > 0 ? -l : 1 - l) {
                         mutable.set(blockPos, k, i - 1, l);
                         if (blockPos.isWithinDistance(mutable, searchDistance) && predicate.test(world.getBlockState(mutable))) {
-                            var directions = Direction.values();
-                            ArrayUtils.reverse(Direction.values());
-                            for (Direction dir : directions) {
-                                if (world.getBlockState(mutable.offset(dir)).isAir()) {
-                                    return Optional.of(mutable);
-                                }
-                            }
+                            availableDirections.add(mutable.toImmutable());
                         }
                     }
                 }
             }
         }
+        availableDirections.sort(Comparator.comparingDouble(this::distanceTo));
+        return availableDirections.stream().findFirst();
+    }
 
-        return Optional.empty();
+    private BlockPos findPosAroundTarget(BlockPos pos) {
+        var directions = Direction.stream().sorted(Comparator.comparingInt((direction) ->
+                1 - direction.getId()
+        )).toList();
+        ArrayList<BlockPos> availableDirections = new ArrayList<>();
+        for (Direction dir : directions) {
+            var newPos = pos.offset(dir);
+            if (!world.getBlockState(newPos).isSolidBlock(world, newPos)) {
+                availableDirections.add(newPos);
+            }
+        }
+        availableDirections.sort(Comparator.comparingDouble(this::distanceTo));
+        availableDirections.add(pos);
+        return availableDirections.get(0);
+    }
+
+    private double distanceTo(BlockPos pos) {
+        return new Vec3d(pos.getX(), pos.getY(), pos.getZ()).distanceTo(this.getPos());
     }
 
     private class NavigateToEatableOre extends Goal {
@@ -274,15 +303,17 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
 
         public void tick() {
             ++this.ticks;
-            if (this.ticks > 600 || orePos == null) {
+            if (this.ticks > 600 || orePos == null || StoneGolemEntity.this.world.getBlockState(orePos).isAir()) {
                 stop();
             } else {
-                Vec3d vec3d = Vec3d.ofBottomCenter(orePos).add(0.0, 2.6, 0.0);
-                if (vec3d.distanceTo(StoneGolemEntity.this.getPos()) < 2) {
+                Vec3d vec3d = Vec3d.ofBottomCenter(orePos);
+                vec3d = new Vec3d(vec3d.getX(), StoneGolemEntity.this.getPos().getY(), vec3d.getZ());
+                var distance = vec3d.distanceTo(StoneGolemEntity.this.getPos());
+                StoneGolemEntity.this.getMoveControl().moveTo(vec3d.getX(), orePos.getY(), vec3d.getZ(), 1);
+                if (distance < 1 || StoneGolemEntity.this.eatingTicks != 0) {
                     stop();
                 } else {
-                    StoneGolemEntity.this.getLookControl().lookAt(orePos.getX(), orePos.getY(), orePos.getZ());
-
+                    StoneGolemEntity.this.getLookControl().lookAt(vec3d.getX(), vec3d.getY(), vec3d.getZ());
                 }
             }
         }
@@ -294,14 +325,18 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
 
         @Override
         public boolean canStart() {
-            Optional<BlockPos> optional = StoneGolemEntity.this.findState(isEatableOre, 10);
-            if (optional.isPresent()) {
-                orePos = optional.get();
-                StoneGolemEntity.this.navigation.startMovingTo((double) orePos.getX() + 0.5, (double) orePos.getY() + 0.5, (double) orePos.getZ() + 0.5, 1);
-                return true;
-            } else {
-                return false;
+            Optional<BlockPos> optional = StoneGolemEntity.this.findState(isEatableOre, 15);
+            if (optional.isPresent() && StoneGolemEntity.this.eatingTicks == 0) {
+                this.orePos = optional.get();
+                Vec3d vec3d = Vec3d.ofBottomCenter(orePos);
+                vec3d = new Vec3d(vec3d.getX(), StoneGolemEntity.this.getPos().getY(), vec3d.getZ());
+                if (!(vec3d.distanceTo(StoneGolemEntity.this.getPos()) < 1.5)) {
+                    BlockPos walkToPos = orePos;
+                    StoneGolemEntity.this.navigation.startMovingTo(walkToPos.getX(), walkToPos.getY(), walkToPos.getZ(), 0.7);
+                    return true;
+                }
             }
+            return false;
         }
     }
 
@@ -338,6 +373,7 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
                 finishEating();
             }
             if (this.orePos != null) {
+                StoneGolemEntity.this.getNavigation().stop();
                 StoneGolemEntity.this.getLookControl().lookAt(orePos.getX(), orePos.getY(), orePos.getZ());
             }
             if (eatingTicks > this.lastEatingTicks + 80) {
@@ -354,9 +390,6 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
         @Override
         public boolean shouldContinue() {
             if (orePos != null) {
-                if (StoneGolemEntity.this.getX() - orePos.getX() > 2.5 || StoneGolemEntity.this.getZ() - orePos.getZ() > 2.5) {
-                    return false;
-                }
                 return !StoneGolemEntity.this.world.getBlockState(orePos).isAir();
             }
             return false;
@@ -370,13 +403,15 @@ public class StoneGolemEntity extends GolemEntity implements IAnimatable, Angera
 
         @Override
         public boolean canStart() {
-            Optional<BlockPos> optional = StoneGolemEntity.this.findState(isEatableOre, 2);
-            if (optional.isPresent()) {
+            Optional<BlockPos> optional = StoneGolemEntity.this.findState(isEatableOre, 3);
+            if (optional.isPresent() && StoneGolemEntity.this.eatingTicks == 0) {
                 orePos = optional.get();
-                return true;
-            } else {
-                return false;
+                Vec3d vec3d = Vec3d.ofBottomCenter(orePos);
+                vec3d = new Vec3d(vec3d.getX(), StoneGolemEntity.this.getPos().getY(), vec3d.getZ());
+                var distance = vec3d.distanceTo(StoneGolemEntity.this.getPos());
+                return distance < 1.5;
             }
+            return false;
         }
     }
 }

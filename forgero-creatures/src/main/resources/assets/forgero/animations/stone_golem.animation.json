@@ -87,7 +87,7 @@
 			"loop": true
 		},
 		"animation.stone_golem.shake_nose": {
-			"animation_length": 2.45833,
+			"animation_length": 2.66667,
 			"bones": {
 				"jaw": {
 					"rotation": {
@@ -208,7 +208,7 @@
 							"vector": [0, 0, 20],
 							"easing": "easeInOutSine"
 						},
-						"2.4583": {
+						"2.625": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}

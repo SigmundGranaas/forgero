@@ -44,7 +44,7 @@ public class ForgeroCreaturesInitializer implements ModInitializer {
 
             STONE_GOLEM = Registry.register(ENTITY_TYPE, STONE_GOLEM_ID, EntityType.Builder.create(StoneGolemEntity::new, SpawnGroup.CREATURE).setDimensions(1.4f, 2.7f).maxTrackingRange(10).build(STONE_GOLEM_ID.toString()));
             FabricDefaultAttributeRegistry.register(STONE_GOLEM, StoneGolemEntity.createStoneGolemEntityAttributes());
-            BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(), SpawnGroup.MONSTER, STONE_GOLEM, 3, 1, 1);
+            BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(), SpawnGroup.MONSTER, STONE_GOLEM, 100, 1, 1);
             SpawnRestriction.register(STONE_GOLEM, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, StoneGolemEntity::isValidSpawn);
         }
     }
