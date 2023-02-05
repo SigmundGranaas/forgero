@@ -1,8 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.conversion;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
+import com.sigmundgranaas.forgero.core.state.SimpleState;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -23,8 +24,6 @@ public class StateToStackConverter implements Converter<State, ItemStack> {
 
     @Override
     public ItemStack convert(State state) {
-        NbtCompound compound = new NbtCompound();
-        compound.put(NbtConstants.FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(state));
         Optional<Item> convertedStackItem = Optional.of(state.identifier())
                 .map(Identifier::new)
                 .flatMap(itemFinder)
@@ -32,7 +31,11 @@ public class StateToStackConverter implements Converter<State, ItemStack> {
 
         if (convertedStackItem.isPresent()) {
             var stack = new ItemStack(convertedStackItem.get());
-            stack.setNbt(compound);
+            if (!(state instanceof SimpleState)) {
+                NbtCompound compound = new NbtCompound();
+                compound.put(NbtConstants.FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(state));
+                stack.setNbt(compound);
+            }
             return stack;
         }
         return ItemStack.EMPTY;

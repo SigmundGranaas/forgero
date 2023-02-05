@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Disassembled materials and other parts that has no modifications will no longer have nbt's
 * Assembly station can now be placed next to non-solid blocks
 * Added basic recipes for all wooden types
 * Added new conditions section to tooltip
