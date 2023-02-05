@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Fixed redstone gem achievement having the same title as the gem achievement
 * Added basic stone upgrade recipe for all parts
 * Configuration will now automatically update with new values
 * Added new setting to toggle conversion from vanilla tools to forgero tools in loot
