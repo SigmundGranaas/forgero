@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractBlockMixin",
+    "DisableVanillaToolsLootTableGeneration",
     "DynamicToolItemStackMixin",
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
