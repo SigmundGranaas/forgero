@@ -7,7 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
-
+* Added basic stone upgrade recipe for all parts
 * Configuration will now automatically update with new values
 * Added new setting to toggle conversion from vanilla tools to forgero tools in loot
 * Added toggle to disable vanilla tools from recipes and loot
