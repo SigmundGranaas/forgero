@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added a new unbreakable tool config option
 * Tool specific Better Combat integration
 * Disassembled materials and other parts that has no modifications will no longer have nbt's
 * Fixed redstone gem achievement having the same title as the gem achievement

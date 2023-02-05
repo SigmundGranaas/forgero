@@ -15,7 +15,10 @@ public class Conditions implements ResourceRegistry<LootCondition> {
 
     public static final Conditions INSTANCE = new Conditions(new HashMap<>());
     public static String BROKEN_TYPE_KEY = "BROKEN";
+    public static String UNBREAKABLE_TYPE_KEY = "UNBREAKABLE";
+
     public static NamedCondition BROKEN = new NamedCondition("broken", Forgero.NAMESPACE, List.of(PropertyData.builder().type(BROKEN_TYPE_KEY).build()));
+    public static NamedCondition UNBREAKABLE = new NamedCondition("unbreakable", Forgero.NAMESPACE, List.of(PropertyData.builder().type(UNBREAKABLE_TYPE_KEY).build()));
     private final Map<String, LootCondition> conditionMap;
 
     public Conditions(Map<String, LootCondition> conditionMap) {
