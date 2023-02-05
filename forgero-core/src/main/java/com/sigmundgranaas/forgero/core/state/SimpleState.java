@@ -22,6 +22,7 @@ public class SimpleState implements Ingredient, Conditional<State> {
     private final List<Property> properties;
     private final Map<String, CustomValue> customData;
 
+
     public SimpleState(String name, Type type, List<Property> properties) {
         this.name = name;
         this.type = type;
