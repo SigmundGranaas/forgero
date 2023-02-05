@@ -4,6 +4,7 @@
   "package": "com.sigmundgranaas.forgero.fabric.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BetterCombatWeaponRegistryMixin"
   ],
   "client": [
     "ModMenuInitMixin"
