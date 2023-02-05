@@ -35,9 +35,9 @@ dependencies {
     modImplementation("dev.lambdaurora:spruceui:4.1.0+1.19.2")
 
     //better combat
-    //modImplementation "maven.modrinth:better-combat:1.5.5+1.19-fabric"
-    //modImplementation "maven.modrinth:cloth-config:8.2.88+fabric"
-    //modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
+    modCompileOnly "maven.modrinth:better-combat:1.5.5+1.19-fabric"
+    modCompileOnly "maven.modrinth:cloth-config:8.2.88+fabric"
+    modCompileOnly("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
 
     //emi
     //modCompileOnly "dev.emi:emi:${emi_version}:api"
