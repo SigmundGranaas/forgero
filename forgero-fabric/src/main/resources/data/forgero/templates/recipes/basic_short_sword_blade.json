@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  x",
+    " x ",
+    "x  "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:oak_slab"
+    }
+  },
+  "result": {
+    "item": "forgero:oak-short_sword_blade"
+  }
+}

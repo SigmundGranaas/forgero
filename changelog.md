@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added basic recipes for all wooden types
 * Added new conditions section to tooltip
 * Added 17 new Conditions that can spawn on looted parts, tools and schematics
 * Added a data-pack based system for defining properties added by souls when leveled up

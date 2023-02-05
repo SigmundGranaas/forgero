@@ -4,9 +4,9 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.util.Utils;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.core.util.Utils;
 
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -37,6 +37,14 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             recipes.put(RecipeTypes.STATE_CRAFTING_RECIPE, stateCraftingRecipe);
             recipes.put(RecipeTypes.STATE_UPGRADE_RECIPE, stateUpgradeRecipe);
             recipes.put(RecipeTypes.SCHEMATIC_PART_CRAFTING, schematicPartRecipe);
+            recipes.put(RecipeTypes.BASIC_SWORD_BLADE, getRecipeAsJson(recipeFolderPath + "/basic_sword_blade.json"));
+            recipes.put(RecipeTypes.BASIC_PICKAXE_HEAD, getRecipeAsJson(recipeFolderPath + "/basic_pickaxe_head.json"));
+            recipes.put(RecipeTypes.BASIC_AXE_HEAD, getRecipeAsJson(recipeFolderPath + "/basic_axe_head.json"));
+            recipes.put(RecipeTypes.BASIC_HANDLE, getRecipeAsJson(recipeFolderPath + "/basic_handle.json"));
+            recipes.put(RecipeTypes.BASIC_HOE_HEAD, getRecipeAsJson(recipeFolderPath + "/basic_hoe_head.json"));
+            recipes.put(RecipeTypes.BASIC_SHOVEL_HEAD, getRecipeAsJson(recipeFolderPath + "/basic_shovel_head.json"));
+            recipes.put(RecipeTypes.BASIC_SWORD_GUARD, getRecipeAsJson(recipeFolderPath + "/basic_sword_guard.json"));
+            recipes.put(RecipeTypes.BASIC_SHORT_SWORD_BLADE, getRecipeAsJson(recipeFolderPath + "/basic_short_sword_blade.json"));
             return recipes;
         } catch (NullPointerException | JsonIOException e) {
             Forgero.LOGGER.error("Unable to read recipes from: {}", recipeFolderPath);

@@ -25,7 +25,7 @@ public class SoulWriter implements Writer {
         int level = soul.getLevel();
         float currentXp = soul.getXp();
         int xpTarget = soul.getXpTarget();
-        float percentage = (float) currentXp / xpTarget;
+        float percentage = currentXp / xpTarget;
         writeSoulInfo(name, level, tooltip);
         writeXpBar(percentage, tooltip);
     }
