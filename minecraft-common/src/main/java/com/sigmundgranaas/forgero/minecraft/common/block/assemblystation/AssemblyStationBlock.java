@@ -2,14 +2,12 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.BedPart;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
@@ -24,7 +22,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,6 +116,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
         super.onPlaced(world, pos, state, placer, itemStack);
         if (!world.isClient) {
             BlockPos blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+            world.breakBlock(blockPos, true, placer, 1);
             world.setBlockState(blockPos, state.with(PART, AssemblyStationPart.RIGHT), 3);
             world.updateNeighbors(pos, Blocks.AIR);
             state.updateNeighbors(world, pos, 3);
@@ -146,7 +144,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         if (super.canPlaceAt(state, world, pos)) {
             BlockPos blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
-            return world.getBlockState(blockPos).isAir();
+            return !world.getBlockState(blockPos).isSolidBlock(world, blockPos);
         } else {
             return false;
         }

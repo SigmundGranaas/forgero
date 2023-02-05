@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Assembly station can now be placed next to non-solid blocks
 * Added basic recipes for all wooden types
 * Added new conditions section to tooltip
 * Added 17 new Conditions that can spawn on looted parts, tools and schematics
