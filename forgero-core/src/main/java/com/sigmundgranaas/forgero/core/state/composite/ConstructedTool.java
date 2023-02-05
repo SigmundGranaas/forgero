@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
+import com.sigmundgranaas.forgero.core.condition.Conditions;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -112,6 +114,11 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
     }
 
     @Override
+    public @NotNull List<Property> conditionProperties() {
+        return Conditional.super.conditionProperties();
+    }
+
+    @Override
     public ConstructedTool copy() {
         return toolBuilder().build();
     }
@@ -123,9 +130,13 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 
     @Override
     public List<PropertyContainer> conditions() {
-        return conditions;
+        List<PropertyContainer> customConditions = new ArrayList<>();
+        if (ForgeroConfigurationLoader.configuration.enableUnbreakableTools) {
+            customConditions.add(Conditions.UNBREAKABLE);
+        }
+        return Stream.of(conditions, customConditions).flatMap(List::stream).toList();
     }
-
+    
     @Override
     public ConstructedTool applyCondition(PropertyContainer container) {
         return toolBuilder().condition(container).build();

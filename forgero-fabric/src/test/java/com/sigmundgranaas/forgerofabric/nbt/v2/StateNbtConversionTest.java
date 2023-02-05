@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgerofabric.nbt.v2;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
@@ -31,6 +32,7 @@ public class StateNbtConversionTest {
 
     @BeforeEach
     void genData() {
+        ForgeroConfigurationLoader.load();
         PipelineBuilder
                 .builder()
                 .register(FabricPackFinder.supplier())

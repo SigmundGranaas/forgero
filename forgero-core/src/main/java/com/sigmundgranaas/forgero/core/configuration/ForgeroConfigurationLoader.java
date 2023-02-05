@@ -18,7 +18,7 @@ public class ForgeroConfigurationLoader {
     public static String configurationFolderName = "config";
     public static Path configurationFilePath = Path.of(MessageFormat.format("./{0}/{1}", configurationFolderName, configurationFileName));
 
-    public static ForgeroConfiguration configuration;
+    public static ForgeroConfiguration configuration = defaultConfiguration;
 
     public static ForgeroConfiguration load() {
         if (!Files.exists(configurationFilePath)) {

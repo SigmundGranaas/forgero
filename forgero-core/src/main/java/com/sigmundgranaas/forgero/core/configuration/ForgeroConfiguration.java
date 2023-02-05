@@ -28,6 +28,9 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
     public Boolean convertVanillaToolLoot = false;
 
     @NotNull
+    public Boolean enableUnbreakableTools = false;
+
+    @NotNull
     public Boolean enableRepairKits = true;
 
     @NotNull
