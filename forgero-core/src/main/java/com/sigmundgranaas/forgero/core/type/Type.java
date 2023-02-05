@@ -38,6 +38,7 @@ public interface Type extends Matchable {
     Type TOOL_MATERIAL = new SimpleType("TOOL_MATERIAL", Optional.of(MATERIAL), new TypeMatcher());
     Type WOOD = new SimpleType("WOOD", Optional.of(TOOL_MATERIAL), new TypeMatcher());
     Type OAK = new SimpleType("OAK", Optional.of(WOOD), new TypeMatcher());
+    Type STONE = new SimpleType("STONE", Optional.of(TOOL_MATERIAL), new TypeMatcher());
 
     static Type of(String name) {
         if (ForgeroStateRegistry.TREE != null) {

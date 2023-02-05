@@ -45,6 +45,7 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
             recipes.put(RecipeTypes.BASIC_SHOVEL_HEAD, getRecipeAsJson(recipeFolderPath + "/basic_shovel_head.json"));
             recipes.put(RecipeTypes.BASIC_SWORD_GUARD, getRecipeAsJson(recipeFolderPath + "/basic_sword_guard.json"));
             recipes.put(RecipeTypes.BASIC_SHORT_SWORD_BLADE, getRecipeAsJson(recipeFolderPath + "/basic_short_sword_blade.json"));
+            recipes.put(RecipeTypes.ANY_PART_TO_STONE, getRecipeAsJson(recipeFolderPath + "/wood_to_stone_upgrade.json"));
             return recipes;
         } catch (NullPointerException | JsonIOException e) {
             Forgero.LOGGER.error("Unable to read recipes from: {}", recipeFolderPath);

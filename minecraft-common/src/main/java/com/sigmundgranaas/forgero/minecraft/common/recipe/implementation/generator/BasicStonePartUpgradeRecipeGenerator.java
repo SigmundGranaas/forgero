@@ -11,7 +11,9 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeW
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class BasicWoodenToolRecipeGenerator implements RecipeGenerator {
+import java.util.Optional;
+
+public class BasicStonePartUpgradeRecipeGenerator implements RecipeGenerator {
 
     private final State material;
 
@@ -20,7 +22,7 @@ public class BasicWoodenToolRecipeGenerator implements RecipeGenerator {
 
     private final TemplateGenerator generator;
 
-    public BasicWoodenToolRecipeGenerator(State material, String partName, RecipeTypes template, TemplateGenerator generator) {
+    public BasicStonePartUpgradeRecipeGenerator(State material, String partName, RecipeTypes template, TemplateGenerator generator) {
         this.material = material;
         this.partName = partName;
         this.template = template;
@@ -41,17 +43,15 @@ public class BasicWoodenToolRecipeGenerator implements RecipeGenerator {
 
         String resultName = material.name() + "-" + partName;
         template.getAsJsonObject("result").addProperty("item", "forgero:" + resultName);
-        replaceKeyWithMaterialName("x", template);
-        replaceKeyWithMaterialName("i", template);
-        Identifier id = new Identifier(Forgero.NAMESPACE, resultName + "-basic_recipe");
+        replaceKeyWithMaterialName("x", "tag", String.format("forgero:%s", partName), template);
+        replaceKeyWithMaterialName("i", "item", Optional.ofNullable(ForgeroStateRegistry.STATE_TO_CONTAINER.get(material.identifier())).orElse(material.identifier()), template);
+        Identifier id = new Identifier(Forgero.NAMESPACE, resultName + "-stone_upgrade_recipe");
         return new RecipeWrapperImpl(id, template, this.template);
     }
 
-    private void replaceKeyWithMaterialName(String key, JsonObject template) {
+    private void replaceKeyWithMaterialName(String key, String itemOrTag, String value, JsonObject template) {
         if (template.getAsJsonObject("key").has(key)) {
-            String ingredient = template.getAsJsonObject("key").getAsJsonObject(key).get("item").getAsString();
-            ingredient = ingredient.replace("oak", material.name());
-            template.getAsJsonObject("key").getAsJsonObject(key).addProperty("item", ingredient);
+            template.getAsJsonObject("key").getAsJsonObject(key).addProperty(itemOrTag, value);
         }
     }
 }
