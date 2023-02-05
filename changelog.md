@@ -7,9 +7,11 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+
 * Configuration will now automatically update with new values
 * Added new setting to toggle conversion from vanilla tools to forgero tools in loot
 * Added toggle to disable vanilla tools from recipes and loot
+* Assembly station can now be placed next to non-solid blocks
 * Added basic recipes for all wooden types
 * Added new conditions section to tooltip
 * Added 17 new Conditions that can spawn on looted parts, tools and schematics

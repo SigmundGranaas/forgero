@@ -16,7 +16,16 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
     public Boolean disableVanillaRecipes = false;
 
     @NotNull
+    public Boolean disableVanillaLoot = false;
+
+    @NotNull
+    public Boolean disableVanillaTools = false;
+
+    @NotNull
     public Boolean convertVanillaRecipesToForgeroTools = false;
+
+    @NotNull
+    public Boolean convertVanillaToolLoot = false;
 
     @NotNull
     public Boolean enableRepairKits = true;
@@ -29,4 +38,5 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
     @NotNull
     public Integer baseSoulLevelRequirement = 1000;
+
 }
