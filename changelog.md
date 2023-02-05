@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Added basic stone upgrade recipe for all parts
 * Added basic recipes for all wooden types
 * Added new conditions section to tooltip
 * Added 17 new Conditions that can spawn on looted parts, tools and schematics
