@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class SimpleState implements Ingredient, Conditional<State> {
+public final class SimpleState implements Ingredient, Conditional<State> {
     private final String name;
     private final String nameSpace;
     private final Type type;
