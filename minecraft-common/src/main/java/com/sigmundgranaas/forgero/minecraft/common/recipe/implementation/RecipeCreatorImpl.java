@@ -46,7 +46,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
         generators.addAll(compositeRecipeGenerators());
         generators.addAll(repairKitToolRecipeGenerators());
         generators.addAll(constructUpgradeRecipes());
-
+        generators.addAll(basicWoodenPartRecipes());
         return generators.stream()
                 .filter(RecipeGenerator::isValid)
                 .map(RecipeGenerator::generate)
@@ -90,6 +90,24 @@ public class RecipeCreatorImpl implements RecipeCreator {
         var recipes = new ArrayList<RecipeGenerator>();
         for (State material : materials) {
             recipes.add(new RepairKitRecipeGenerator(material, templateGenerator));
+        }
+        return recipes;
+    }
+
+    private List<RecipeGenerator> basicWoodenPartRecipes() {
+        var materials = ForgeroStateRegistry.TREE.find(Type.WOOD)
+                .map(node -> node.getResources(State.class))
+                .orElse(ImmutableList.<State>builder().build());
+        var recipes = new ArrayList<RecipeGenerator>();
+        for (State material : materials) {
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "pickaxe_head", RecipeTypes.BASIC_PICKAXE_HEAD, templateGenerator));
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "axe_head", RecipeTypes.BASIC_AXE_HEAD, templateGenerator));
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "shovel_head", RecipeTypes.BASIC_SHOVEL_HEAD, templateGenerator));
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "hoe_head", RecipeTypes.BASIC_HOE_HEAD, templateGenerator));
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "handle", RecipeTypes.BASIC_HANDLE, templateGenerator));
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "sword_blade", RecipeTypes.BASIC_SWORD_BLADE, templateGenerator));
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "sword_guard", RecipeTypes.BASIC_SWORD_GUARD, templateGenerator));
+            recipes.add(new BasicWoodenToolRecipeGenerator(material, "short_sword_blade", RecipeTypes.BASIC_SHORT_SWORD_BLADE, templateGenerator));
         }
         return recipes;
     }

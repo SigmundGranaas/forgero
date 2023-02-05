@@ -9,6 +9,12 @@ import net.minecraft.test.TestContext;
 import java.util.function.Supplier;
 
 public class RecipeTest {
+    public static void assertTrue(Supplier<Boolean> test, String errorMessage) {
+        if (!test.get()) {
+            throw new GameTestException(errorMessage);
+        }
+    }
+
     @GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
     public void testCraftIronPickaxe(TestContext context) {
         var test = RecipeTester.ofTool("iron-pickaxe_head", "oak-handle", "forgero:iron-pickaxe", context);
@@ -49,11 +55,5 @@ public class RecipeTest {
         var test = RecipeTester.ofPart("handle-schematic", "minecraft:diamond", 2, "diamond-handle", context);
         assertTrue(test, "Unable to craft diamond handle");
         context.complete();
-    }
-
-    public static void assertTrue(Supplier<Boolean> test, String errorMessage) {
-        if (!test.get()) {
-            throw new GameTestException(errorMessage);
-        }
     }
 }
