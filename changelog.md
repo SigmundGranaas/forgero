@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Configuration will now automatically update with new values
 * Added new setting to toggle conversion from vanilla tools to forgero tools in loot
 * Added toggle to disable vanilla tools from recipes and loot
 * Added basic recipes for all wooden types
