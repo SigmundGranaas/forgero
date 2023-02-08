@@ -35,7 +35,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("net.devtech:arrp:0.6.2")
 
-
+    modImplementation(files('libs/fabric-example-mod-1.0.0.jar'))
     include "net.devtech:arrp:0.6.2"
     include project(':forgero-core')
     include project(':minecraft-common')

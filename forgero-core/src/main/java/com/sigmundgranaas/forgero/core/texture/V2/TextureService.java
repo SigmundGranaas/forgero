@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TextureService {
-    public static String PALETTE_PATH = "assets/forgero/templates/materials/";
-    public static String TEMPLATE_PATH = "assets/forgero/templates/textures/";
+    public static String PALETTE_PATH = "/assets/forgero/templates/materials/";
+    public static String TEMPLATE_PATH = "/assets/forgero/templates/textures/";
     private final TextureLoader loader;
     private final Map<String, String> paletteRemap;
     private Map<String, Palette> paletteCache;
