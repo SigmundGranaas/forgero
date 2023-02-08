@@ -32,11 +32,7 @@ public record ModContainerService() {
     }
 
     private Stream<ModContainer> getForgeroResourceMods() {
-        return getContainers().stream()
-                .filter(container -> container
-                        .getMetadata().getName().equals("Minecraft")
-                        || (container.getMetadata().containsCustomValue(FORGERO_RESOURCE_IDENTIFIER)
-                        && container.getMetadata().getCustomValue(FORGERO_RESOURCE_IDENTIFIER).getAsBoolean()));
+        return getContainers().stream();
     }
 
     public Set<String> getForgeroResourceNamespaces() {
