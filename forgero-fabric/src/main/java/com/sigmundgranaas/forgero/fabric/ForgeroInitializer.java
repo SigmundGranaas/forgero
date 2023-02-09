@@ -36,6 +36,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -49,7 +52,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
@@ -70,14 +75,12 @@ public class ForgeroInitializer implements ModInitializer {
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
         ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
 
-        //var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
+        Set<String> availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
-        dataReloader();
-        lootConditionReloader();
+        var configuration = ForgeroConfigurationLoader.load();
         soulLevelPropertyReloader();
         Entities.register();
         FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
-        var configuration = ForgeroConfigurationLoader.load();
 
         PipelineBuilder
                 .builder()
@@ -89,6 +92,7 @@ public class ForgeroInitializer implements ModInitializer {
                 .inflated(ForgeroStateRegistry.constructListener())
                 .inflated(ForgeroStateRegistry.containerListener())
                 .recipes(ForgeroStateRegistry.recipeListener())
+                .register(availableDependencies)
                 .build()
                 .execute();
 
@@ -104,6 +108,8 @@ public class ForgeroInitializer implements ModInitializer {
         handler.accept(this::registerLevelPropertiesDefaults);
         handler.accept(LootFunctions::register);
         handler.run();
+        dataReloader();
+        lootConditionReloader();
     }
 
     private void registerLevelPropertiesDefaults() {
@@ -134,12 +140,13 @@ public class ForgeroInitializer implements ModInitializer {
             @Override
             public void reload(ResourceManager manager) {
                 var config = ForgeroConfigurationLoader.load();
-
+                Set<String> availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
                 PipelineBuilder
                         .builder()
                         .register(() -> config)
                         .register(FabricPackFinder.supplier())
                         .state(ForgeroStateRegistry.stateListener())
+                        .register(availableDependencies)
                         .build()
                         .execute();
             }

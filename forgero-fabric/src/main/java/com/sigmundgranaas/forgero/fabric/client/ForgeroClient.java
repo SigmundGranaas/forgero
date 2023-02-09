@@ -59,6 +59,7 @@ public class ForgeroClient implements ClientModInitializer {
                 .register(FabricPackFinder.supplier())
                 .data(modelRegistry.paletteListener())
                 .data(modelRegistry.modelListener())
+                .register(availableDependencies)
                 .build()
                 .execute();
         // TODO: Set configuration's available dependencies

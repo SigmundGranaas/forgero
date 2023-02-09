@@ -10,16 +10,9 @@ import java.util.Collections;
 import java.util.List;
 
 public interface DynamicEffectiveNess {
-    default boolean isEffective(BlockState state) {
-        return effectiveBlocks().stream().anyMatch(state::isIn);
-    }
 
     default boolean isEffective(BlockState state, ItemStack stack) {
         return effectiveBlocks(stack).stream().anyMatch(state::isIn);
-    }
-
-    default List<TagKey<Block>> effectiveBlocks() {
-        return Collections.emptyList();
     }
 
     default List<TagKey<Block>> effectiveBlocks(ItemStack stack) {

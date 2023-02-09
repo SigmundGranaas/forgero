@@ -6,11 +6,11 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.ForgeroMaterial;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ToolMaterials;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -31,15 +31,15 @@ public class StateToItemConverter {
         int attack_damage = (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
         float attack_speed = state.stream().applyAttribute(AttributeType.ATTACK_SPEED);
         if (state.type().test(Type.of("SWORD"), context)) {
-            return new DynamicSwordItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+            return new DynamicSwordItem((new ForgeroMaterial(provider)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.of("PICKAXE"), context)) {
-            return new DynamicPickaxeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+            return new DynamicPickaxeItem(new ForgeroMaterial(provider), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.of("AXE"), context)) {
-            return new DynamicAxeItem(ToolMaterials.WOOD, attack_damage, attack_speed, getItemSettings(state), () -> state);
+            return new DynamicAxeItem((new ForgeroMaterial(provider)), attack_damage, attack_speed, getItemSettings(state), () -> state);
         } else if (state.type().test(Type.of("HOE"), context)) {
-            return new DynamicHoeItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+            return new DynamicHoeItem((new ForgeroMaterial(provider)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.of("SHOVEL"), context)) {
-            return new DynamicShovelItem(ToolMaterials.WOOD, (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+            return new DynamicShovelItem((new ForgeroMaterial(provider)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
         } else if (state.type().test(Type.GEM)) {
             return new GemItem(getItemSettings(state), state);
         }
