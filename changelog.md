@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Fixed tool repair in anvil
 * Fixed pack dependencies being broken
 * Fixed tool material not reflecting the tool
 * Added a new unbreakable tool config option
