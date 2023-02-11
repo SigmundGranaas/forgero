@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -19,8 +18,8 @@ import net.minecraft.world.World;
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class StateUpgradeRecipe extends SmithingRecipe {
-    public StateUpgradeRecipe(SmithingRecipeGetters recipe) {
-        super(recipe.getId(), recipe.getBase(), recipe.getAddition(), recipe.getResult().copy());
+    public StateUpgradeRecipe(SmithingRecipe recipe) {
+        super(recipe.getId(), recipe.base, recipe.addition, recipe.getOutput().copy());
     }
 
     @Override
@@ -64,12 +63,12 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 
         @Override
         public SmithingRecipe read(Identifier identifier, JsonObject jsonObject) {
-            return new StateUpgradeRecipe((SmithingRecipeGetters) super.read(identifier, jsonObject));
+            return new StateUpgradeRecipe(super.read(identifier, jsonObject));
         }
 
         @Override
         public SmithingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-            return new StateUpgradeRecipe((SmithingRecipeGetters) super.read(identifier, packetByteBuf));
+            return new StateUpgradeRecipe(super.read(identifier, packetByteBuf));
         }
 
         @Override

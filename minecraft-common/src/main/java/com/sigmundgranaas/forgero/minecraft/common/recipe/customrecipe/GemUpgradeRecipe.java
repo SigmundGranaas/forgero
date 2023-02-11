@@ -2,12 +2,11 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
-import com.sigmundgranaas.forgero.core.state.LeveledState;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -19,8 +18,8 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public class GemUpgradeRecipe extends SmithingRecipe {
-    public GemUpgradeRecipe(SmithingRecipeGetters recipe) {
-        super(recipe.getId(), recipe.getBase(), recipe.getAddition(), recipe.getResult().copy());
+    public GemUpgradeRecipe(SmithingRecipe recipe) {
+        super(recipe.getId(), recipe.base, recipe.addition, recipe.getOutput().copy());
     }
 
     @Override
@@ -70,12 +69,12 @@ public class GemUpgradeRecipe extends SmithingRecipe {
 
         @Override
         public SmithingRecipe read(Identifier identifier, JsonObject jsonObject) {
-            return new GemUpgradeRecipe((SmithingRecipeGetters) super.read(identifier, jsonObject));
+            return new GemUpgradeRecipe(super.read(identifier, jsonObject));
         }
 
         @Override
         public SmithingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-            return new GemUpgradeRecipe((SmithingRecipeGetters) super.read(identifier, packetByteBuf));
+            return new GemUpgradeRecipe(super.read(identifier, packetByteBuf));
         }
 
         @Override

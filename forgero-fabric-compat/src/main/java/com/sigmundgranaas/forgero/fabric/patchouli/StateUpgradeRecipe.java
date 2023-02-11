@@ -3,16 +3,13 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
 import vazkii.patchouli.client.book.ClientBookRegistry;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.page.abstr.PageDoubleRecipeRegistry;
@@ -54,14 +51,13 @@ public class StateUpgradeRecipe extends PageDoubleRecipeRegistry<SmithingRecipe>
         if (parent == null) {
             return inventory;
         }
-        DefaultedList<Ingredient> ingredients = recipe.getIngredients();
 
-        ItemStack[] original = ((SmithingRecipeGetters) recipe).getBase().getMatchingStacks();
+        ItemStack[] original = recipe.base.getMatchingStacks();
         if (original.length > 0) {
             inventory.setStack(0, original[(parent.getTicksInBook() / 20) % original.length]);
         }
 
-        ItemStack[] upgrade = ((SmithingRecipeGetters) recipe).getAddition().getMatchingStacks();
+        ItemStack[] upgrade = recipe.addition.getMatchingStacks();
         if (upgrade.length > 0) {
             inventory.setStack(1, upgrade[(parent.getTicksInBook() / 20) % upgrade.length]);
         }
