@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.SmithingRecipeGetters;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.CraftingInventory;

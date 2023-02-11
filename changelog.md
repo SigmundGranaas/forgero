@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Removed SmithingRecipeGettersMixin in favour of access widener
 * Added template and material resource overrides
 * Fixed crimson and warped wood not having attack damage
 * Fixed all basic recipes being changed to use the minecraft namespace for wood variants
