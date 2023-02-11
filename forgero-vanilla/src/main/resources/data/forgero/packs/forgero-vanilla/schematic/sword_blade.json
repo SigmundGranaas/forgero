@@ -53,9 +53,6 @@
         "type": "LEATHER",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -97,8 +94,6 @@
         "operation": "ADDITION",
         "value": -2.8
       }
-    ],
-    "features": [
     ]
   },
   "custom_data": {
