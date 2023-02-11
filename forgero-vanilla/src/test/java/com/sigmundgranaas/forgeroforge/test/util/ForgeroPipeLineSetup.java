@@ -1,8 +1,7 @@
 package com.sigmundgranaas.forgeroforge.test.util;
 
-import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.BuildableConfiguration;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.packages.FilePackageLoader;
 
@@ -16,13 +15,9 @@ public class ForgeroPipeLineSetup {
 
     public static void setup() {
         if (ForgeroStateRegistry.COMPOSITES == null) {
-            var config = BuildableConfiguration.builder()
-                    .availableDependencies(ImmutableSet.of("minecraft", "forgero", "forgero-vanilla"))
-                    .build();
-
+            ForgeroConfigurationLoader.load();
             PipelineBuilder
                     .builder()
-                    .register(() -> config)
                     .register(() -> List.of(new FilePackageLoader(MINECRAFT_PACKAGE).get(), new FilePackageLoader(VANILLA_PACKAGE).get()))
                     .state(stateListener())
                     .state(compositeListener())

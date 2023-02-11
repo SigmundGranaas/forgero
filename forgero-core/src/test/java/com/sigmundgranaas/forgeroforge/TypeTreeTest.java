@@ -43,7 +43,9 @@ class TypeTreeTest {
         var material = new TypeData("MATERIAL", Optional.empty(), Collections.emptyList());
         var wood = new TypeData("WOOD", Optional.of(material.name()), Collections.emptyList());
         var oak = new TypeData("OAK", Optional.of("WOOD"), Collections.emptyList());
-        return List.of(wood, pickaxeSchematic, shovelSchematic, swordSchematic, saberSchematic, material, schematic, oak, part, toolpart, handle);
+        var metal = new TypeData("METAL", Optional.of(material.name()), Collections.emptyList());
+        var iron = new TypeData("IRON", Optional.of("METAL"), Collections.emptyList());
+        return List.of(wood, pickaxeSchematic, shovelSchematic, swordSchematic, saberSchematic, material, schematic, oak, part, toolpart, handle, metal, iron);
     }
 
     @Test
