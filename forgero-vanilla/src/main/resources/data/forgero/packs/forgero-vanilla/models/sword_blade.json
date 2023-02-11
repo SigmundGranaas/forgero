@@ -16,17 +16,6 @@
       "order": 56
     },
     {
-      "name": "sword_blade_guard",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "sword_blade_guard.png",
-      "offset": [
-        -2,
-        -2
-      ],
-      "order": 55
-    },
-    {
       "name": "sword_blade_trinket",
       "type": "GENERATE",
       "palette": "TRINKET",
@@ -52,14 +41,6 @@
       ],
       "modelType": "UPGRADE",
       "template": "sword_blade_material"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "sword_blade_guard"
     },
     {
       "target": [
