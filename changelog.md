@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Parts of wood can now be used as fuel
 * Implemented part smelting
 * Removed SmithingRecipeGettersMixin in favour of access widener
 * Added template and material resource overrides
