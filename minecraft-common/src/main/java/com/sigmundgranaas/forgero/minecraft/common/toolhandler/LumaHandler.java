@@ -22,11 +22,12 @@ public class LumaHandler {
     }
 
     public static int computeLuma(PropertyContainer container) {
-        return container.stream()
+        int value = container.stream()
                 .features()
                 .filter(feature -> feature.type().equals(EMISSIVE_TYPE))
                 .map(PropertyData::getValue)
                 .reduce(0f, Float::sum)
                 .intValue();
+        return Math.min(value, 16);
     }
 }
