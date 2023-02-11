@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.texture.V2.recolor;
 
-import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 import com.sigmundgranaas.forgero.core.texture.V2.Palette;
 import com.sigmundgranaas.forgero.core.texture.V2.TemplateTexture;
 import com.sigmundgranaas.forgero.core.texture.template.PixelInformation;
+import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -59,9 +59,9 @@ public class DefaultRecolorStrategy implements RecolorStrategy {
                 newIndex--;
             }
 
-            if (newIndex == 0 || i == 0) {
+            if ((newIndex == 0 || i == 0) && palette.getColourValues().size() > 0) {
                 colourList.add(0, palette.getColourValues().get(0));
-            } else {
+            } else if (newIndex > 0 && palette.getColourValues().size() > newIndex) {
                 colourList.add(i, palette.getColourValues().get(newIndex));
             }
         }
