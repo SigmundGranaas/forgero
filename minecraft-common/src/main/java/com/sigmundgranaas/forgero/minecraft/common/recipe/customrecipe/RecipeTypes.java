@@ -22,6 +22,8 @@ public enum RecipeTypes {
     STATE_CRAFTING_RECIPE,
     STATE_UPGRADE_RECIPE,
     SCHEMATIC_PART_CRAFTING,
+    PART_SMELTING_RECIPE,
+    PART_BLASTING_RECIPE,
     TOOLPART_SCHEMATIC_RECIPE;
 
     public static RecipeTypes of(String type) {

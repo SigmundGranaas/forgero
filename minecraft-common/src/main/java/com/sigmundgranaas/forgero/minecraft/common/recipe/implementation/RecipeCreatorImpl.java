@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
@@ -48,6 +49,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
         generators.addAll(constructUpgradeRecipes());
         generators.addAll(basicWoodenPartRecipes());
         generators.addAll(basicStonePartUpgrade());
+        generators.addAll(smeltingMetalPartRecipeGenerators());
         return generators.stream()
                 .filter(RecipeGenerator::isValid)
                 .map(RecipeGenerator::generate)
@@ -91,6 +93,23 @@ public class RecipeCreatorImpl implements RecipeCreator {
         var recipes = new ArrayList<RecipeGenerator>();
         for (State material : materials) {
             recipes.add(new RepairKitRecipeGenerator(material, templateGenerator));
+        }
+        return recipes;
+    }
+
+    private List<RecipeGenerator> smeltingMetalPartRecipeGenerators() {
+        var parts = ForgeroStateRegistry.TREE.find(Type.PART)
+                .map(node -> node.getResources(State.class))
+                .orElse(ImmutableList.<State>builder().build())
+                .stream()
+                .filter(state -> state instanceof MaterialBased based && based.baseMaterial().test(Type.METAL))
+                .toList();
+        var recipes = new ArrayList<RecipeGenerator>();
+        for (State part : parts) {
+            if (part instanceof MaterialBased based) {
+                recipes.add(new PartSmeltingRecipeGenerator(based.baseMaterial(), part, RecipeTypes.PART_BLASTING_RECIPE, templateGenerator));
+                recipes.add(new PartSmeltingRecipeGenerator(based.baseMaterial(), part, RecipeTypes.PART_SMELTING_RECIPE, templateGenerator));
+            }
         }
         return recipes;
     }
