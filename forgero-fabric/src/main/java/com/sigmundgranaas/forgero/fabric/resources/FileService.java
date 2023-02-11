@@ -40,6 +40,10 @@ public class FileService implements FileLoader {
     }
 
     public Optional<InputStream> getStream(String location) {
+        return new FabricModFileLoader().loadFileFromMods(location);
+    }
+
+    public Optional<InputStream> getStreamLogged(String location) {
         var inputStream = new FabricModFileLoader().loadFileFromMods(location);
         if (inputStream.isEmpty()) {
             Forgero.LOGGER.error("file not found: {} ", location);
