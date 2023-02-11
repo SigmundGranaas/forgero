@@ -8,6 +8,8 @@ you have backed up your save.**
 ## Changelog 0.10.7
 
 * Fixed sword guard models that were causing some combinations to turn invisible
+* Parts of wood can now be used as fuel
+* Implemented part smelting
 * Removed SmithingRecipeGettersMixin in favour of access widener
 * Added template and material resource overrides
 * Fixed crimson and warped wood not having attack damage
