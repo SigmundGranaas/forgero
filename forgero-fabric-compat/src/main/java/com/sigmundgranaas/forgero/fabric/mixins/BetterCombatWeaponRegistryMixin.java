@@ -20,10 +20,10 @@ import java.util.Map;
 @Mixin(WeaponRegistry.class)
 public abstract class BetterCombatWeaponRegistryMixin {
     private static final String BETTER_COMPAT_ATTRIBUTE_IDENTIFIER = "better_compat_attribute_container";
-    @Shadow(remap = false)
+    @Shadow
     static Map<Identifier, AttributesContainer> containers;
 
-    @Inject(method = "getAttributes(Lnet/minecraft/item/ItemStack;)Lnet/bettercombat/api/WeaponAttributes;", at = @At(value = "TAIL"), remap = false, cancellable = true)
+    @Inject(method = "getAttributes(Lnet/minecraft/item/ItemStack;)Lnet/bettercombat/api/WeaponAttributes;", at = @At(value = "TAIL"), cancellable = true)
     private static void injectCustomForgeroAttributes(ItemStack stack, CallbackInfoReturnable<WeaponAttributes> cir) {
         var state = StateConverter.of(stack);
         if (state.isPresent() && state.get() instanceof ConstructedTool tool) {
