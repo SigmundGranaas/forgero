@@ -7,6 +7,7 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Fixed all basic recipes being changed to use the minecraft namespace for wood variants
 * Fixed tool repair in anvil
 * Fixed pack dependencies being broken
 * Fixed tool material not reflecting the tool

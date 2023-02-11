@@ -51,6 +51,7 @@ public class BasicWoodenToolRecipeGenerator implements RecipeGenerator {
         if (template.getAsJsonObject("key").has(key)) {
             String ingredient = template.getAsJsonObject("key").getAsJsonObject(key).get("item").getAsString();
             ingredient = ingredient.replace("oak", material.name());
+            ingredient = ingredient.replace("minecraft", material.nameSpace());
             template.getAsJsonObject("key").getAsJsonObject(key).addProperty("item", ingredient);
         }
     }
