@@ -7,6 +7,10 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Fixed all basic recipes being changed to use the minecraft namespace for wood variants
+* Fixed tool repair in anvil
+* Fixed pack dependencies being broken
+* Fixed tool material not reflecting the tool
 * Added a new unbreakable tool config option
 * Tool specific Better Combat integration
 * Disassembled materials and other parts that has no modifications will no longer have nbt's

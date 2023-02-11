@@ -27,7 +27,7 @@ dependencies {
 
     modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 
-    modImplementation("net.devtech:arrp:0.6.2")
+    modImplementation "curse.maven:arrp-463113:3901211"
 
     //dynamiclights compat
     modImplementation "curse.maven:modmenu-308702:4145207"

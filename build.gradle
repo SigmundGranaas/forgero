@@ -49,7 +49,9 @@ subprojects {
         maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }
         maven { url = "https://api.modrinth.com/maven/" }
         maven { url = 'https://maven.blamejared.com' }
-        maven { url = "https://storage.googleapis.com/devan-maven/" }
+        maven {
+            url = uri("https://storage.googleapis.com/devan-maven/")
+        }
         maven {
             name 'Gegy'
             url 'https://maven.gegy.dev'
@@ -62,6 +64,7 @@ subprojects {
             }
         }
         maven { url 'https://maven.kosmx.dev/' }
+        maven { url 'https://jitpack.io' }
     }
 }
 

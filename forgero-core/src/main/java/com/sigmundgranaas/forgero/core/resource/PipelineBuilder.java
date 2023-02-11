@@ -7,14 +7,14 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.state.State;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class PipelineBuilder {
 
     private final List<DataPackage> packages = new ArrayList<>();
+
+    private final Set<String> dependencies = new HashSet<>();
     private final List<ResourceListener<List<DataResource>>> dataListeners = new ArrayList<>();
     private final List<ResourceListener<List<DataResource>>> inflatedDataListener = new ArrayList<>();
     private final List<ResourceListener<Map<String, State>>> stateListener = new ArrayList<>();
@@ -67,7 +67,12 @@ public class PipelineBuilder {
         return this;
     }
 
+    public PipelineBuilder register(Set<String> dependencies) {
+        this.dependencies.addAll(dependencies);
+        return this;
+    }
+
     public ResourcePipeline build() {
-        return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, createStateListener, configProvider.get());
+        return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, createStateListener, configProvider.get(), dependencies);
     }
 }
