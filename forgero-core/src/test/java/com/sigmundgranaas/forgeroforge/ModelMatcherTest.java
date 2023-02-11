@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgeroforge;
 
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
@@ -23,7 +22,6 @@ public class ModelMatcherTest {
         var tree = new TypeTree();
         createDataList().forEach(tree::addNode);
         tree.resolve();
-        ForgeroStateRegistry.TREE = tree;
         return tree;
     }
 
