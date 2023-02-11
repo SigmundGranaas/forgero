@@ -8,15 +8,16 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSp
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public class ForgeroMaterial implements ToolMaterial, DynamicAttributeItem {
     private final StateProvider DEFAULT;
+    private final Ingredient ingredient;
 
-    public ForgeroMaterial(StateProvider aDefault) {
+    public ForgeroMaterial(StateProvider aDefault, Ingredient ingredient) {
         DEFAULT = aDefault;
+        this.ingredient = ingredient;
     }
 
     @Override
@@ -56,6 +57,6 @@ public class ForgeroMaterial implements ToolMaterial, DynamicAttributeItem {
 
     @Override
     public Ingredient getRepairIngredient() {
-        return Ingredient.ofItems(Items.OAK_PLANKS);
+        return ingredient;
     }
 }
