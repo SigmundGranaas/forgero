@@ -159,6 +159,7 @@ sourceSets {
 }
 
 loom {
+    accessWidenerPath = file("src/main/resources/forgero-fabric-compat.accesswidener")
     runs {
         testmodServer {
             server()
