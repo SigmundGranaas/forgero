@@ -90,7 +90,7 @@
         "type": "VEIN_MINING",
         "value": 12,
         "tags": [
-          "minecraft:logs"
+          "forgero:vein_mining_logs"
         ]
       }
     ]

@@ -89,7 +89,7 @@
       {
         "type": "BLOCK_BREAKING_PATTERN",
         "tags": [
-          "minecraft:logs"
+          "forgero:vein_mining_logs"
         ],
         "pattern": [
           " x ",
