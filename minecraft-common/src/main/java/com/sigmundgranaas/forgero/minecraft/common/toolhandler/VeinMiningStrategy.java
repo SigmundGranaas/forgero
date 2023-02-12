@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicAxeItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,10 +13,12 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class VeinMiningStrategy implements BlockBreakingStrategy {
 	private final VeinBreaking handler;
@@ -70,7 +74,8 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 			BlockPos newBlock = pos.offset(direction, 1);
 
 			if (!blockSet.contains(newBlock)) {
-				if (world.getBlockState(newBlock).getBlock() == rootBlock) {
+				// Axes are an exception here, because they should mine blocks of other types included in their tag as well in one go
+				if (world.getBlockState(newBlock).getBlock() == rootBlock || (canBeMinedByAxe(rootBlock.getDefaultState()) && canBeMinedByAxe(world.getBlockState(newBlock)))) {
 					depth -= 1;
 					blockSet.add(newBlock);
 					queue.add(newBlock);
@@ -78,7 +83,7 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 
 				for (Direction direction2 : directions) {
 					BlockPos newBlock2 = newBlock.offset(direction2, 1);
-					if (world.getBlockState(newBlock2).getBlock() == rootBlock && !blockSet.contains(newBlock2)) {
+					if (world.getBlockState(newBlock2).getBlock() == rootBlock || (canBeMinedByAxe(rootBlock.getDefaultState()) && canBeMinedByAxe(world.getBlockState(newBlock2))) && !blockSet.contains(newBlock2)) {
 						depth -= 1;
 						blockSet.add(newBlock2);
 						queue.add(newBlock2);
@@ -92,4 +97,7 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 		calculateNextBlocks(blockSet, queue, depth, rootBlock, world, player);
 	}
 
+	private boolean canBeMinedByAxe(BlockState blockState) {
+		return blockState.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier("forgero", "vein_mining_logs")));
+	}
 }
