@@ -91,7 +91,7 @@
         "type": "VEIN_MINING",
         "value": 10,
         "tags": [
-          "forgero:vein_mining_sand"
+          "forgero:vein_mining_dirt"
         ]
       }
     ]
