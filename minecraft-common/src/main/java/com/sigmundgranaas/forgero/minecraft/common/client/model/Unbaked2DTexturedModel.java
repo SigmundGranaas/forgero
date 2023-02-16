@@ -17,7 +17,10 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
@@ -93,8 +96,19 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
             }
         }
         for (ModelElementFace face : element.faces.values()) {
-            element.from.add(0, 0, 0.0001f * this.indexMap.getOrDefault(face.textureId, 1));
-            element.to.add(0, 0, 0.0001f * this.indexMap.getOrDefault(face.textureId, 1));
+            int index = this.indexMap.getOrDefault(face.textureId, 1);
+            if (element.faces.containsKey(Direction.SOUTH) || element.faces.containsKey(Direction.NORTH)) {
+                element.from.add(0, 0, -0.001f * index);
+                element.to.add(0, 0, 0.001f * index);
+            }
+            if (element.faces.containsKey(Direction.WEST) || element.faces.containsKey(Direction.EAST)) {
+                element.from.add(index * 0.001f, 0, 0);
+                element.to.add(index * -0.001f, 0, 0);
+            }
+            if (element.faces.containsKey(Direction.DOWN) || element.faces.containsKey(Direction.UP)) {
+                element.from.add(0, index * -0.001f, 0);
+                element.to.add(0, index * 0.001f, 0);
+            }
         }
     }
 
@@ -111,26 +125,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 
         var elements = generated_model.getElements();
         for (ModelElement element : elements) {
-            if (element.faces.containsKey(Direction.WEST)) {
-                float rand = new Random().nextFloat();
-                element.from.add(rand * -0.01f, 0, 0);
-                element.to.add(rand * -0.01f, 0, 0);
-            }
-            if (element.faces.containsKey(Direction.EAST)) {
-                float rand = new Random().nextFloat();
-                element.from.add(rand * 0.01f, 0, 0);
-                element.to.add(rand * 0.01f, 0, 0);
-            }
-            if (element.faces.containsKey(Direction.UP)) {
-                float rand = new Random().nextFloat();
-                element.from.add(0, rand * -0.01f, 0);
-                element.to.add(0, rand * -0.01f, 0);
-            }
-            if (element.faces.containsKey(Direction.DOWN)) {
-                float rand = new Random().nextFloat();
-                element.from.add(0, rand * 0.01f, 0);
-                element.to.add(0, rand * 0.01f, 0);
-            }
+
         }
 
         if (parentModel instanceof JsonUnbakedModel parent) {
