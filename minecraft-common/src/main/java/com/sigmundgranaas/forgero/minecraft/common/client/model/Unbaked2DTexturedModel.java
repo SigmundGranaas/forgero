@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.minecraft.common.mixins.JsonUnbakedModelOverrideMixin;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
+import com.sigmundgranaas.forgero.minecraft.common.mixins.JsonUnbakedModelOverrideMixin;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
@@ -27,6 +27,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
     private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
     private final List<PaletteTemplateModel> textures;
     private final Map<String, Offset> offsetMap;
+    private final Map<String, Integer> indexMap;
     private final String id;
     private final ModelLoader loader;
     private final Function<SpriteIdentifier, Sprite> textureGetter;
@@ -37,6 +38,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
         this.textures = textures;
         this.id = id;
         this.offsetMap = new HashMap<>();
+        this.indexMap = new HashMap<>();
         this.textures.sort(Comparator.comparing(PaletteTemplateModel::order));
     }
 
@@ -63,6 +65,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
                 var texture = textureName(this.textures.get(i));
                 var layer = "layer" + i;
                 this.offsetMap.put(layer, textures.get(i).getOffset().orElse(new Offset(0, 0)));
+                this.indexMap.put(layer, i + 1);
                 jsonTextures.addProperty(layer, getTextureBasePath() + texture);
             }
         } else {
@@ -84,10 +87,14 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
         for (ModelElementFace face : element.faces.values()) {
             var offset = offsetMap.getOrDefault(face.textureId, new Offset(0, 0));
             if (offset.x() != 0 || offset.y() != 0) {
-                element.from.add(offset.x(), offset.y(), 0.001f);
-                element.to.add(offset.x(), offset.y(), 0.001f);
+                element.from.add(offset.x(), offset.y(), 0);
+                element.to.add(offset.x(), offset.y(), 0);
+                break;
             }
-            break;
+        }
+        for (ModelElementFace face : element.faces.values()) {
+            element.from.add(0, 0, 0.0001f * this.indexMap.getOrDefault(face.textureId, 1));
+            element.to.add(0, 0, 0.0001f * this.indexMap.getOrDefault(face.textureId, 1));
         }
     }
 
@@ -101,6 +108,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
         for (ModelElement element : generated_model.getElements()) {
             applyOffset(element);
         }
+
         var elements = generated_model.getElements();
         for (ModelElement element : elements) {
             if (element.faces.containsKey(Direction.WEST)) {
