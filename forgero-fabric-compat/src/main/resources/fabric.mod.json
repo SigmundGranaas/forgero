@@ -22,6 +22,7 @@
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
   "environment": "*",
+  "accessWidener" : "forgero-fabric-compat.accesswidener",
   "entrypoints": {
     "dynamiclights": [
       "com.sigmundgranaas.forgero.fabric.dynamiclights.DynamicLightsRegistryEndpoint"
