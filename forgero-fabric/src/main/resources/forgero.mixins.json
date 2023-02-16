@@ -25,6 +25,7 @@
   ],
   "client": [
     "ClientPlayNetworkGetTotemMixin",
+    "ItemDescriptionInjector",
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",
