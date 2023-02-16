@@ -7,6 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Fixed material upgrades not showing up on some parts
+* Fixed texture stacking on parts that had z-fighting problems
 * Beautified lang files (Holmraven)
 * Fixed sword guard models that were causing some combinations to turn invisible
 * Parts of wood can now be used as fuel

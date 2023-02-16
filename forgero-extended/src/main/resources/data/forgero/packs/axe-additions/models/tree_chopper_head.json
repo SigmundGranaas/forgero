@@ -17,7 +17,7 @@
       "type": "GENERATE",
       "template": "clumpy_axe_head.png",
       "palette": "TOOL_MATERIAL",
-      "order": 40
+      "order": 20
     },
     {
       "target": [

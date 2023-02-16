@@ -9,6 +9,17 @@
       "order": 40
     },
     {
+      "name": "sword_blade_material_scabbard",
+      "variants": [
+        {
+          "target": [
+            "model:scimitar_blade.png"
+          ],
+          "template": "saber_blade_grip.png"
+        }
+      ]
+    },
+    {
       "name": "sword_blade_material",
       "variants": [
         {
