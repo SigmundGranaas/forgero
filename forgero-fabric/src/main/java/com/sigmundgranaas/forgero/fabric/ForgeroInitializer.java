@@ -141,8 +141,7 @@ public class ForgeroInitializer implements ModInitializer {
             public void reload(ResourceManager manager) {
                 var config = ForgeroConfigurationLoader.load();
                 Set<String> availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
-                PipelineBuilder
-                        .builder()
+                PipelineBuilder.builder()
                         .register(() -> config)
                         .register(FabricPackFinder.supplier())
                         .state(ForgeroStateRegistry.stateListener())
