@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.AttributeWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ public class ItemDescriptionInjector {
             ForgeroStateRegistry.STATES
                     .find(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id))
                     .map(Supplier::get)
-                    .ifPresent(state -> AttributeWriter.write(state, tooltip, context));
+                    .ifPresent(state -> new DefaultWriter(state).write(tooltip, context));
         }
     }
 }

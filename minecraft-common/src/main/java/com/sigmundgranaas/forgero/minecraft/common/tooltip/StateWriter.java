@@ -1,11 +1,11 @@
-package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
+package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.writer.*;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.writer.*;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

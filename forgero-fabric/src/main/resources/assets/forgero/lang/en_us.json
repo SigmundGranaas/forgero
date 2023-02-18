@@ -111,5 +111,21 @@
   "item.forgero.axehead": "Axehead",
   "item.forgero.schematic": "Schematic",
   "item.forgero.dense": "Dense",
-  "item.forgero.reinforced": "Reinforced"
+  "item.forgero.reinforced": "Reinforced",
+  "tooltip.forgero.section.attributes": "Attributes",
+  "tooltip.forgero.section.base_attributes": "Base attributes",
+  "tooltip.forgero.section.upgrade_attributes": "Upgrade attributes",
+  "tooltip.forgero.section.all": "All",
+  "tooltip.forgero.section.utility": "Utility",
+  "tooltip.forgero.section.offensive": "Offensive",
+  "tooltip.forgero.section.defensive": "Defensive",
+  "tooltip.forgero.section.section_separator": ":",
+  "tooltip.forgero.attribute.multiplier": "x",
+  "tooltip.forgero.attribute.attack_damage": "Attack Damage",
+  "tooltip.forgero.attribute.durability": "Durability",
+  "tooltip.forgero.attribute.mining_level": "Mining level",
+  "tooltip.forgero.attribute.rarity": "Rarity",
+  "tooltip.forgero.attribute.mining_speed": "Mining speed",
+  "tooltip.forgero.attribute.attack_speed": "Attack speed",
+  "tooltip.forgero.attribute.armor": "Armor"
 }

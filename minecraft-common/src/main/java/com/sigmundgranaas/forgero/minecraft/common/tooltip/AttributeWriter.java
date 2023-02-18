@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
+package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
 import com.sigmundgranaas.forgero.core.property.*;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
@@ -101,7 +101,7 @@ public class AttributeWriter implements Writer {
         try {
             return Float.parseFloat(format.format(number));
         } catch (NumberFormatException e) {
-            return 1f;
+            return number;
         }
     }
 
