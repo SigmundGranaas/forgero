@@ -7,6 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* New tooltip to better show stats on resources like materials and schematics
+* Added tooltips for items that are not from Forgero as well
 * Fixed material upgrades not showing up on some parts
 * Fixed texture stacking on parts that had z-fighting problems
 * Beautified lang files (Holmraven)
