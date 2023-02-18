@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.writer;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.AttributeWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -26,11 +24,6 @@ public class SchematicWriter extends StateWriter {
 
         }
         super.write(tooltip, context);
-        var writer = AttributeWriter.of(AttributeHelper.of(state));
-        for (AttributeType type : AttributeType.values()) {
-            writer.addAttribute(type);
-        }
-
-        writer.write(tooltip, context);
+        new DefaultWriter(state).write(tooltip, context);
     }
 }
