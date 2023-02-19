@@ -109,7 +109,7 @@ public class AttributeWriterHelper extends BaseWriter {
     }
 
     public MutableText writeAttributeType(Attribute attribute) {
-        return indented(3).append(writeAttributeType(attribute.type())).append(sectionSeparator());
+        return indented(3).append(writeAttributeType(attribute.type())).append(sectionSeparator()).formatted(neutral());
     }
 
     public Text writeAttributeType(String type) {

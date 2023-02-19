@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 
 import java.util.List;
@@ -38,7 +37,7 @@ public class SlotSectionWriter extends SectionWriter {
 
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
-        MutableText slots = indented(1).append(Text.translatable(Writer.toTranslationKey("slots")).append(Text.literal(":")).formatted(Formatting.GRAY));
+        MutableText slots = indented(1).append(Text.translatable(Writer.toTranslationKey("slots")).append(Text.literal(":")).formatted(base()));
         tooltip.add(slots);
         tooltip.addAll(entries());
     }
@@ -54,17 +53,17 @@ public class SlotSectionWriter extends SectionWriter {
     }
 
     private List<Text> writeSlot(Slot slot) {
-        MutableText mutableText = indented(2).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(Formatting.GRAY));
+        MutableText mutableText = indented(2).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(base()));
         if (slot.filled()) {
             Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
             mutableText.append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
         } else {
             if (slot.identifier().equals(slot.typeName().toLowerCase())) {
-                mutableText.append(Text.literal("- ")).formatted(Formatting.GRAY);
+                mutableText.append(Text.literal("- ")).formatted(base());
             } else {
-                mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).append(Text.literal(" - ")).formatted(Formatting.GRAY);
+                mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).append(Text.literal(" - ")).formatted(base());
             }
-            mutableText.append(Text.translatable(String.format("tooltip.forgero.section.%s", slot.category().stream().findFirst().get().toString().toLowerCase())).formatted(Formatting.GRAY));
+            mutableText.append(Text.translatable(String.format("tooltip.forgero.section.%s", slot.category().stream().findFirst().get().toString().toLowerCase())).formatted(base()));
         }
         return List.of(mutableText);
     }
