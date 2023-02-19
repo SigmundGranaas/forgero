@@ -8,6 +8,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.EightWayDirection;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 
@@ -93,11 +94,19 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 
 	private HashSet<BlockPos> getBlocksAroundBlock(BlockPos blockPos) {
 		var directions = Direction.values();
+		var eightWayDirections = EightWayDirection.values();
 		var offsetBlockPositions = new HashSet<BlockPos>();
 
 		for (Direction direction : directions) {
 			BlockPos offsetBlockPos = blockPos.offset(direction, 1);
 			offsetBlockPositions.add(offsetBlockPos);
+		}
+
+		for (EightWayDirection eightWayDirection : eightWayDirections) {
+			BlockPos offsetBlockPos = blockPos.add(eightWayDirection.getOffsetX(), 1, eightWayDirection.getOffsetZ());
+			BlockPos offsetBlockPos2 = blockPos.add(eightWayDirection.getOffsetX(), -1, eightWayDirection.getOffsetZ());
+			offsetBlockPositions.add(offsetBlockPos);
+			offsetBlockPositions.add(offsetBlockPos2);
 		}
 
 		return offsetBlockPositions;
