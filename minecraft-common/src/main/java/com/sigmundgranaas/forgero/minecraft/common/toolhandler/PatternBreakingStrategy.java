@@ -6,15 +6,12 @@ import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreak
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingHandler.isBreakableBlock;
 
@@ -35,11 +32,12 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
 	}
 
 	@Override
-	public List<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
-		Direction[] dir = Direction.getEntityFacingOrder(player);
-		var list = new TreeMap<BlockPos, BlockState>();
+	public Set<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
+		Direction[] directions = Direction.getEntityFacingOrder(player);
+		var availableBlocks = new HashSet<BlockPos>();
+
 		if (breakingPattern.getPattern().length == 0 || breakingPattern.getPattern()[0].length() % 2 == 0) {
-			return Collections.emptyList();
+			return new HashSet<>();
 		}
 
 		int centerY = (breakingPattern.getPattern().length - 1) / 2;
@@ -59,14 +57,17 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
 			for (int j = 0; j < breakingPattern.getPattern()[i].length(); j++) {
 				if (breakingPattern.getPattern()[i].charAt(j) == 'x' || breakingPattern.getPattern()[i].charAt(j) == 'X') {
 					BlockPos newPos;
+
 					if (breakingPattern.getDirection() == BreakingDirection.ANY) {
-						Direction primary = dir[0];
+						Direction primary = directions[0];
+
 						if (primary == Direction.EAST || primary == Direction.WEST) {
 							newPos = new BlockPos(rootPos.getX(), rootPos.getY() + i - centerY, rootPos.getZ() + j - centerX);
 						} else if (primary == Direction.NORTH || primary == Direction.SOUTH) {
 							newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY() + i - centerY, rootPos.getZ());
 						} else {
-							Direction secondary = dir[1];
+							Direction secondary = directions[1];
+
 							if (secondary == Direction.EAST || secondary == Direction.WEST) {
 								newPos = new BlockPos(rootPos.getX() + j - centerX, rootPos.getY(), rootPos.getZ());
 							} else if (secondary == Direction.NORTH || secondary == Direction.SOUTH) {
@@ -81,12 +82,12 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
 
 					BlockState newState = world.getBlockState(newPos);
 					if (isBreakableBlock(world, newPos, player) && (breakingPattern.checkBlock(newState) || newPos.equals(rootPos))) {
-						list.put(newPos, newState);
+						availableBlocks.add(newPos);
 					}
 				}
 			}
 		}
 
-		return list.keySet().stream().toList();
+		return availableBlocks;
 	}
 }

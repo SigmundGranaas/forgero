@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
-import java.util.List;
+import java.util.Set;
 
 public record BlockBreakingHandler(BlockBreakingStrategy strategy) implements BlockBreakingStrategy {
 	public static boolean isBreakableBlock(BlockView world, BlockPos pos, PlayerEntity player) {
@@ -44,7 +44,7 @@ public record BlockBreakingHandler(BlockBreakingStrategy strategy) implements Bl
 	}
 
 	@Override
-	public List<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
+	public Set<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
 		return strategy.getAvailableBlocks(world, rootPos, player);
 	}
 }

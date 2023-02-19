@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import net.minecraft.block.BlockState;
@@ -12,7 +11,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class VeinMiningStrategy implements BlockBreakingStrategy {
 	private final VeinBreaking handler;
@@ -28,7 +29,7 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 	}
 
 	@Override
-	public List<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
+	public Set<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
 		BlockState rootState = world.getBlockState(rootPos);
 		this.currentDepth = handler.depth();
 
@@ -36,10 +37,10 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 			return getVeinMineableBlocksAtPosition(rootPos, world);
 		}
 
-		return Collections.emptyList();
+		return Collections.emptySet();
 	}
 
-	private List<BlockPos> getVeinMineableBlocksAtPosition(BlockPos rootBlockPos, BlockView world) {
+	private HashSet<BlockPos> getVeinMineableBlocksAtPosition(BlockPos rootBlockPos, BlockView world) {
 		var rootBlockState = world.getBlockState(rootBlockPos);
 
 		// Take a block
@@ -48,10 +49,10 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 		// Continue until depth <= 0
 		// Then reset depth to handler.depth() and go to 2 (the next direction)
 
-		HashSet<BlockPos> veinMineableBlocks = new HashSet<>();
+		var veinMineableBlocks = new HashSet<BlockPos>();
 		veinMineableBlocks.add(rootBlockPos);
-		HashSet<BlockPos> blocksToScan = new HashSet<>();
-		HashSet<BlockPos> scannedBlocks = new HashSet<>();
+		var blocksToScan = new HashSet<BlockPos>();
+		var scannedBlocks = new HashSet<BlockPos>();
 
 		var blocksAroundRootBlock = getBlocksAroundBlock(rootBlockPos);
 		blocksAroundRootBlock.forEach(blockPos -> {
@@ -87,12 +88,12 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 			blocksToScan.addAll(newBlocksToScan);
 		}
 
-		return veinMineableBlocks.stream().toList();
+		return veinMineableBlocks;
 	}
 
 	private HashSet<BlockPos> getBlocksAroundBlock(BlockPos blockPos) {
 		var directions = Direction.values();
-		HashSet<BlockPos> offsetBlockPositions = new HashSet<>();
+		var offsetBlockPositions = new HashSet<BlockPos>();
 
 		for (Direction direction : directions) {
 			BlockPos offsetBlockPos = blockPos.offset(direction, 1);
