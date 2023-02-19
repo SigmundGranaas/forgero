@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import net.minecraft.block.BlockState;
@@ -11,7 +12,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class VeinMiningStrategy implements BlockBreakingStrategy {
 	private final VeinBreaking handler;
@@ -30,16 +34,16 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 	public List<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
 		BlockState rootState = world.getBlockState(rootPos);
 		this.currentDepth = handler.depth();
-		var availableBlocks = new TreeMap<BlockPos, BlockState>();
+		var availableBlocks = new ArrayList<BlockPos>();
 
 		if (BlockBreakingHandler.isBreakableBlock(world, rootPos, player) && rootState.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(handler.tag())))) {
-			availableBlocks.putAll(getVeinMineableBlocksAtPosition(rootPos, world));
+			availableBlocks.addAll(getVeinMineableBlocksAtPosition(rootPos, world));
 		}
 
-		return availableBlocks.keySet().stream().toList();
+		return availableBlocks;
 	}
 
-	private SortedMap<BlockPos, BlockState> getVeinMineableBlocksAtPosition(BlockPos rootBlockPos, BlockView world) {
+	private List<BlockPos> getVeinMineableBlocksAtPosition(BlockPos rootBlockPos, BlockView world) {
 		var rootBlockState = world.getBlockState(rootBlockPos);
 		var directions = Arrays.asList(Direction.values());
 
@@ -55,6 +59,9 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 		ArrayList<BlockPos> veinMineableBlocks = new ArrayList<>();
 		veinMineableBlocks.add(rootBlockPos);
 		ArrayList<BlockPos> blocksToScan = new ArrayList<>();
+		ArrayList<BlockPos> scannedBlocks = new ArrayList<>();
+
+		var debugCounter = 0;
 
 		var blocksAroundRootBlock = getBlocksAroundBlock(rootBlockPos);
 		blocksAroundRootBlock.forEach(blockPos -> {
@@ -62,7 +69,7 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 				veinMineableBlocks.add(blockPos);
 			}
 
-			if (!blocksToScan.contains(blockPos)) {
+			if (!blocksToScan.contains(blockPos) && !scannedBlocks.contains(blockPos)) {
 				blocksToScan.add(blockPos);
 			}
 		});
@@ -71,6 +78,10 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 			ArrayList<BlockPos> newBlocksToScan = new ArrayList<>();
 
 			for (BlockPos blockToScanPos : blocksToScan) {
+				if (scannedBlocks.contains(blockToScanPos)) {
+					continue;
+				}
+
 				var blocksAroundScannedBlock = getBlocksAroundBlock(blockToScanPos);
 				blocksAroundScannedBlock.forEach(blockPos -> {
 					if (canBeMined(rootBlockState, world.getBlockState(blockPos)) && !world.getBlockState(blockToScanPos).isAir()) {
@@ -78,18 +89,18 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 						newBlocksToScan.add(blockPos);
 					}
 				});
+
+				scannedBlocks.add(blockToScanPos);
+
+				debugCounter++;
+				Forgero.LOGGER.info(debugCounter);
 			}
 
 			blocksToScan.clear();
 			blocksToScan.addAll(newBlocksToScan);
 		}
 
-		TreeMap<BlockPos, BlockState> veinMineableBlocksMap = new TreeMap<>();
-		veinMineableBlocks.forEach(blockPos -> {
-			veinMineableBlocksMap.put(blockPos, world.getBlockState(blockPos));
-		});
-
-		return veinMineableBlocksMap;
+		return veinMineableBlocks;
 	}
 
 	private ArrayList<BlockPos> getBlocksAroundBlock(BlockPos blockPos) {
