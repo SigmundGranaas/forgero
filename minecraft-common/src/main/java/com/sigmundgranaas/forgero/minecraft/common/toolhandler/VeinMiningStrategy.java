@@ -16,6 +16,8 @@ import java.util.*;
 public class VeinMiningStrategy implements BlockBreakingStrategy {
 	private final VeinBreaking handler;
 
+	private int currentDepth;
+
 	public VeinMiningStrategy(VeinBreaking handler) {
 		this.handler = handler;
 	}
@@ -27,68 +29,83 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 	@Override
 	public List<BlockPos> getAvailableBlocks(BlockView world, BlockPos rootPos, PlayerEntity player) {
 		BlockState rootState = world.getBlockState(rootPos);
-		int depth = handler.depth();
+		this.currentDepth = handler.depth();
 		var availableBlocks = new TreeMap<BlockPos, BlockState>();
-//		var queue = new PriorityQueue<BlockPos>();
 
 		if (BlockBreakingHandler.isBreakableBlock(world, rootPos, player) && rootState.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(handler.tag())))) {
-			availableBlocks.put(rootPos, world.getBlockState(rootPos));
-//			queue.add(rootPos);
-
-			calculateNextBlocks(availableBlocks, depth, world);
+			availableBlocks.putAll(getVeinMineableBlocksAtPosition(rootPos, world));
 		}
 
 		return availableBlocks.keySet().stream().toList();
 	}
 
-	private SortedMap<BlockPos, BlockState> calculateNextBlocks(SortedMap<BlockPos, BlockState> currentBlocks, int depth, BlockView world) {
-		if (depth <= 0) {
-			return Collections.emptySortedMap();
-		}
-
-		BlockPos currentBlockPos = currentBlocks.lastKey();
-		if (currentBlockPos == null) {
-			return Collections.emptySortedMap();
-		}
-
-		var rootBlockState = currentBlocks.get(currentBlocks.firstKey());
-		var rootBlock = currentBlocks.get(currentBlocks.firstKey()).getBlock();
+	private SortedMap<BlockPos, BlockState> getVeinMineableBlocksAtPosition(BlockPos rootBlockPos, BlockView world) {
+		var rootBlockState = world.getBlockState(rootBlockPos);
 		var directions = Arrays.asList(Direction.values());
 
-//		queue.remove();
 		// Reversing the direction to make the algorithm prioritize blocks in other direction than up and down
 		Collections.reverse(directions);
 
-		for (Direction direction : directions) {
-			BlockPos newBlock = currentBlockPos.offset(direction, 1);
+		// Take a block
+		// Check around it in every direction
+		// For each direction also check around it in every direction
+		// Continue until depth <= 0
+		// Then reset depth to handler.depth() and go to 2 (the next direction)
 
-			if (!currentBlocks.containsKey(newBlock)) {
-				// Axes are an exception here, because they should mine blocks of other types included in their tag as well in one go
-				if (currentBlocks.get(newBlock).getBlock() == rootBlock || (canBeMinedByAxe(rootBlockState) && canBeMinedByAxe(world.getBlockState(newBlock)))) {
-					currentBlocks.put(newBlock, world.getBlockState(newBlock));
-//					queue.add(newBlock);
+		ArrayList<BlockPos> veinMineableBlocks = new ArrayList<>();
+		veinMineableBlocks.add(rootBlockPos);
+		ArrayList<BlockPos> blocksToScan = new ArrayList<>();
 
-					depth -= 1;
-				}
-
-				for (Direction direction2 : directions) {
-					BlockPos newBlock2 = newBlock.offset(direction2, 1);
-					if (world.getBlockState(newBlock2).getBlock() == rootBlock || (canBeMinedByAxe(rootBlock.getDefaultState()) && canBeMinedByAxe(world.getBlockState(newBlock2))) && !currentBlocks.containsKey(newBlock2)) {
-						currentBlocks.put(newBlock2, world.getBlockState(newBlock2));
-//						queue.add(newBlock2);
-
-						depth -= 1;
-					}
-				}
-				if (depth < 1) {
-					return Collections.emptySortedMap();
-				}
+		var blocksAroundRootBlock = getBlocksAroundBlock(rootBlockPos);
+		blocksAroundRootBlock.forEach(blockPos -> {
+			if (!veinMineableBlocks.contains(blockPos) && canBeMined(rootBlockState, world.getBlockState(blockPos))) {
+				veinMineableBlocks.add(blockPos);
 			}
+
+			if (!blocksToScan.contains(blockPos)) {
+				blocksToScan.add(blockPos);
+			}
+		});
+
+		for (int i = this.currentDepth; i > 0; i--) {
+			ArrayList<BlockPos> newBlocksToScan = new ArrayList<>();
+
+			for (BlockPos blockToScanPos : blocksToScan) {
+				var blocksAroundScannedBlock = getBlocksAroundBlock(blockToScanPos);
+				blocksAroundScannedBlock.forEach(blockPos -> {
+					if (canBeMined(rootBlockState, world.getBlockState(blockPos)) && !world.getBlockState(blockToScanPos).isAir()) {
+						veinMineableBlocks.add(blockPos);
+						newBlocksToScan.add(blockPos);
+					}
+				});
+			}
+
+			blocksToScan.clear();
+			blocksToScan.addAll(newBlocksToScan);
 		}
 
-		currentBlocks.putAll(calculateNextBlocks(currentBlocks, depth, world));
+		TreeMap<BlockPos, BlockState> veinMineableBlocksMap = new TreeMap<>();
+		veinMineableBlocks.forEach(blockPos -> {
+			veinMineableBlocksMap.put(blockPos, world.getBlockState(blockPos));
+		});
 
-		return Collections.emptySortedMap();
+		return veinMineableBlocksMap;
+	}
+
+	private ArrayList<BlockPos> getBlocksAroundBlock(BlockPos blockPos) {
+		var directions = Direction.values();
+		ArrayList<BlockPos> offsetBlockPositions = new ArrayList<>();
+
+		for (Direction direction : directions) {
+			BlockPos offsetBlockPos = blockPos.offset(direction, 1);
+			offsetBlockPositions.add(offsetBlockPos);
+		}
+
+		return offsetBlockPositions;
+	}
+
+	private boolean canBeMined(BlockState rootBlockState, BlockState blockState) {
+		return blockState.getBlock() == rootBlockState.getBlock() || (canBeMinedByAxe(rootBlockState) && canBeMinedByAxe(blockState));
 	}
 
 	private boolean canBeMinedByAxe(BlockState blockState) {
