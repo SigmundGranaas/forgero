@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "title": "Basic wooden heads",
+      "title": "Basic wooden sheads",
       "recipe": "forgero:basic_wood_axe_head",
       "recipe2": "forgero:basic_wood_pickaxe_head"
     },
