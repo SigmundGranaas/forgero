@@ -24,37 +24,37 @@ public class AttributeWriterHelper extends BaseWriter {
     }
 
 
-    public Text writePercentageAttribute(Attribute attribute) {
+    public MutableText writePercentageAttribute(Attribute attribute) {
         return writeAttributeType(attribute)
                 .append(indented(1))
                 .append(percentageNumberText(attribute));
     }
 
-    public Text writeBaseNumber(Attribute attribute) {
+    public MutableText writeBaseNumber(Attribute attribute) {
         return writeAttributeType(attribute)
                 .append(indented(1))
                 .append(number(attribute.leveledValue()));
     }
 
-    public Text writeMultiplicativeAttribute(Attribute attribute) {
+    public MutableText writeMultiplicativeAttribute(Attribute attribute) {
         return writeAttributeType(attribute)
                 .append(indented(1))
                 .append(multiplicativeNumberText(attribute));
     }
 
-    public Text writeAdditionAttribute(Attribute attribute) {
+    public MutableText writeAdditionAttribute(Attribute attribute) {
         return writeAttributeType(attribute)
                 .append(indented(1))
                 .append(additionSign(attribute.leveledValue()))
                 .append(number(attribute.leveledValue()));
     }
 
-    public Text multiplicativeNumberText(Attribute attribute) {
+    public MutableText multiplicativeNumberText(Attribute attribute) {
         float value = attribute.leveledValue();
         return Text.literal(String.valueOf((int) value == value ? (int) value : value)).append(translatableMultiplier());
     }
 
-    public Text percentageNumberText(Attribute attribute) {
+    public MutableText percentageNumberText(Attribute attribute) {
         String percentage = number(roundFloat(attribute.leveledValue() * 100) - 100);
         return multiplicativeSign(attribute.leveledValue())
                 .append(Text.literal(percentage + "%"));
@@ -78,7 +78,7 @@ public class AttributeWriterHelper extends BaseWriter {
         }
     }
 
-    public Optional<Text> writeTarget(Attribute attribute) {
+    public Optional<MutableText> writeTarget(Attribute attribute) {
         if (attribute.applyCondition(Target.EMPTY) || attribute.targets().isEmpty()) {
             return Optional.empty();
         } else {
@@ -109,10 +109,10 @@ public class AttributeWriterHelper extends BaseWriter {
     }
 
     public MutableText writeAttributeType(Attribute attribute) {
-        return indented(3).append(writeAttributeType(attribute.type())).append(sectionSeparator()).formatted(neutral());
+        return indented(3).append(writeAttributeType(attribute.type()).formatted(neutral())).append(sectionSeparator().formatted(neutral()));
     }
 
-    public Text writeAttributeType(String type) {
+    public MutableText writeAttributeType(String type) {
         return Text.translatable(String.format("tooltip.forgero.attribute.%s", type.toLowerCase()));
     }
 
@@ -125,7 +125,7 @@ public class AttributeWriterHelper extends BaseWriter {
 
     }
 
-    private Text sectionSeparator() {
+    private MutableText sectionSeparator() {
         return Text.translatable("tooltip.forgero.section.section_separator");
     }
 

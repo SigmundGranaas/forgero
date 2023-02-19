@@ -131,7 +131,7 @@
   "tooltip.forgero.attribute.mining_speed": "Mining speed",
   "tooltip.forgero.attribute.attack_speed": "Attack speed",
   "tooltip.forgero.attribute.armor": "Armor",
-  "tooltip.forgero.against": " against: ",
+  "tooltip.forgero.against": "Against: ",
   "tooltip.forgero.tag.minecraft.base_stone_nether": "Nether Blocks",
   "tooltip.forgero.tag.minecraft.base_stone_overworld": "Stone Blocks"
 }
