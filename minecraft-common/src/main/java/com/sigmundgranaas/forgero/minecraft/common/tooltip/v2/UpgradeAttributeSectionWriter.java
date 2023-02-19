@@ -16,8 +16,8 @@ import java.util.Set;
 import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.WRITABLE_ATTRIBUTES;
 
 public class UpgradeAttributeSectionWriter extends SectionWriter {
+    public static final Set<Category> UPGRADE_CATEGORIES = Set.of(Category.UTILITY, Category.DEFENSIVE, Category.OFFENSIVE, Category.ALL);
     private static final String sectionTranslationKey = "upgrade_attributes";
-    private static final Set<Category> upgradeCategories = Set.of(Category.UTILITY, Category.DEFENSIVE, Category.OFFENSIVE, Category.ALL);
     private final AttributeWriterHelper helper;
     private final PropertyContainer container;
 
@@ -46,7 +46,7 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
         return container.stream()
                 .getAttributes()
                 .map(Attribute::getCategory)
-                .anyMatch(upgradeCategories::contains);
+                .anyMatch(UPGRADE_CATEGORIES::contains);
     }
 
     @Override
@@ -56,30 +56,38 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 
     @Override
     public List<Text> entries() {
-        return upgradeCategories.stream().map(this::category).flatMap(List::stream).toList();
+        return UPGRADE_CATEGORIES.stream().map(this::category).flatMap(List::stream).toList();
     }
 
     protected List<Text> category(Category category) {
-        List<Text> entries = WRITABLE_ATTRIBUTES.stream().map(attribute -> entry(attribute, category)).flatMap(Optional::stream).toList();
+        List<Text> entries = WRITABLE_ATTRIBUTES.stream().map(attribute -> entry(attribute, category)).flatMap(List::stream).toList();
         if (entries.size() > 0) {
+            var builder = ImmutableList.<Text>builder();
             Text section = indented(1).append(createSection(category.toString().toLowerCase()));
-            return ImmutableList.<Text>builder().add(section).addAll(entries).build();
+            if (category != Category.ALL) {
+                builder.add(section);
+            }
+            return builder.addAll(entries).build();
         }
         return Collections.emptyList();
     }
 
-
-    protected Optional<Text> entry(String attributeType, Category category) {
+    protected List<Text> entry(String attributeType, Category category) {
         Optional<Attribute> attributeOpt = helper.attributesOfType(attributeType).filter(attribute -> category.equals(attribute.getCategory())).findFirst();
         if (attributeOpt.isPresent()) {
             Attribute attribute = attributeOpt.get();
             if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
-                return Optional.of(helper.writePercentageAttribute(attribute));
+                var builder = ImmutableList.<Text>builder();
+                builder.add(helper.writePercentageAttribute(attribute));
+                helper.writeTarget(attribute).ifPresent(builder::add);
+                return builder.build();
             } else {
-                return Optional.of(helper.writeAdditionAttribute(attribute));
+                var builder = ImmutableList.<Text>builder();
+                builder.add(helper.writeAdditionAttribute(attribute));
+                helper.writeTarget(attribute).ifPresent(builder::add);
+                return builder.build();
             }
         }
-        return Optional.empty();
+        return Collections.emptyList();
     }
-
 }

@@ -34,9 +34,9 @@ public class ItemDescriptionInjector {
                         .map(Supplier::get)
                         .ifPresent(state -> new DefaultWriter(state).write(tooltip, context));
             } else {
-                tooltip.add(Text.translatable("tooltip.forgero.hold").formatted(Formatting.GRAY)
+                tooltip.add(Text.translatable("tooltip.forgero.hold").formatted(Formatting.DARK_GRAY)
                         .append(Text.translatable("tooltip.forgero.shift").formatted(Formatting.WHITE))
-                        .append(Text.translatable("tooltip.forgero.to_show_attributes").formatted(Formatting.GRAY))
+                        .append(Text.translatable("tooltip.forgero.to_show_attributes").formatted(Formatting.DARK_GRAY))
                 );
             }
         }

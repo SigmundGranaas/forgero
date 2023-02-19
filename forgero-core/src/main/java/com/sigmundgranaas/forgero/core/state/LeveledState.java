@@ -1,15 +1,16 @@
 package com.sigmundgranaas.forgero.core.state;
 
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.type.Type;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Builder(toBuilder = true)
@@ -42,9 +43,13 @@ public class LeveledState implements State {
     }
 
     @Override
-    public @NotNull List<Property> applyProperty(Target target) {
-        var otherProperties = properties.stream().filter(property -> !(property instanceof Attribute)).toList();
-        var attributes = properties
+    public @NotNull List<Property> getRootProperties() {
+        return leveledProperties(properties);
+    }
+
+    private List<Property> leveledProperties(List<Property> props) {
+        List<Property> otherProperties = props.stream().filter(property -> !(property instanceof Attribute)).toList();
+        List<Attribute> attributes = props
                 .stream().filter(property -> property instanceof Attribute)
                 .map(Attribute.class::cast)
                 .map(attribute -> AttributeBuilder
@@ -52,12 +57,13 @@ public class LeveledState implements State {
                         .applyLevel(level())
                         .build())
                 .toList();
+        return Stream.of(otherProperties, attributes).flatMap(List::stream).collect(Collectors.toList());
+    }
 
-
-        return Stream.of(otherProperties, attributes)
-                .flatMap(List::stream)
+    @Override
+    public @NotNull List<Property> applyProperty(Target target) {
+        return leveledProperties(properties).stream()
                 .filter(prop -> prop.applyCondition(target))
-                .map(Property.class::cast)
                 .toList();
     }
 

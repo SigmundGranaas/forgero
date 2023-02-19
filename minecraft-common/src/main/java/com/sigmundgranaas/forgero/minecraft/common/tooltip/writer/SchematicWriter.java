@@ -21,9 +21,9 @@ public class SchematicWriter extends StateWriter {
         if (materials.isPresent()) {
             MutableText materialText = Text.translatable("item.forgero.material_count", materials.get().presentableValue()).formatted(Formatting.GRAY);
             tooltip.add(materialText);
-
         }
-        super.write(tooltip, context);
+
         new DefaultWriter(state).write(tooltip, context);
+        super.write(tooltip, context);
     }
 }

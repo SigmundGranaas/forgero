@@ -115,9 +115,9 @@
   "tooltip.forgero.section.attributes": "Attributes",
   "tooltip.forgero.section.base_attributes": "Base attributes",
   "tooltip.forgero.section.upgrade_attributes": "Upgrade attributes",
-  "tooltip.forgero.hold": "Hold ",
+  "tooltip.forgero.hold": "Hold [",
   "tooltip.forgero.shift": "Shift",
-  "tooltip.forgero.to_show_attributes": " to show attributes",
+  "tooltip.forgero.to_show_attributes": "] to show attributes",
   "tooltip.forgero.section.all": "All",
   "tooltip.forgero.section.utility": "Utility",
   "tooltip.forgero.section.offensive": "Offensive",
@@ -130,5 +130,8 @@
   "tooltip.forgero.attribute.rarity": "Rarity",
   "tooltip.forgero.attribute.mining_speed": "Mining speed",
   "tooltip.forgero.attribute.attack_speed": "Attack speed",
-  "tooltip.forgero.attribute.armor": "Armor"
+  "tooltip.forgero.attribute.armor": "Armor",
+  "tooltip.forgero.against": " against: ",
+  "tooltip.forgero.tag.minecraft.base_stone_nether": "Nether Blocks",
+  "tooltip.forgero.tag.minecraft.base_stone_overworld": "Stone Blocks"
 }

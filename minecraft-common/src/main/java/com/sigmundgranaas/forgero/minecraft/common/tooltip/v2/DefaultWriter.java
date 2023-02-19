@@ -16,6 +16,7 @@ public class DefaultWriter implements Writer {
 
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
+        AttributeSectionWriter.of(state).ifPresent(sectionWriter -> sectionWriter.write(tooltip, context));
         BaseAttributeSectionWriter.of(state).ifPresent(writer -> writer.write(tooltip, context));
         UpgradeAttributeSectionWriter.of(state).ifPresent(writer -> writer.write(tooltip, context));
     }
