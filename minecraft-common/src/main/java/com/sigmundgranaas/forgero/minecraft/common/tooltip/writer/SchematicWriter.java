@@ -1,14 +1,19 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.writer;
 
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.state.SchematicBased;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.SlotSectionWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class SchematicWriter extends StateWriter {
     public SchematicWriter(State state) {
@@ -22,6 +27,15 @@ public class SchematicWriter extends StateWriter {
             MutableText materialText = Text.translatable("item.forgero.material_count", materials.get().presentableValue()).formatted(Formatting.GRAY);
             tooltip.add(materialText);
         }
+
+        ForgeroStateRegistry.STATES.all()
+                .stream()
+                .map(Supplier::get)
+                .filter(parts -> parts instanceof SchematicBased based && based.schematic().identifier().equals(state.identifier()))
+                .findAny()
+                .map(Upgradeable.class::cast)
+                .flatMap(SlotSectionWriter::of)
+                .ifPresent(writer -> writer.write(tooltip, context));
 
         new DefaultWriter(state).write(tooltip, context);
         super.write(tooltip, context);
