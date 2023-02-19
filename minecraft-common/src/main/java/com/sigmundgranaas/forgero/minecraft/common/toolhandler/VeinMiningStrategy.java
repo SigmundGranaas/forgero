@@ -53,18 +53,8 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 		var veinMineableBlocks = new HashSet<BlockPos>();
 		veinMineableBlocks.add(rootBlockPos);
 		var blocksToScan = new HashSet<BlockPos>();
+		blocksToScan.add(rootBlockPos);
 		var scannedBlocks = new HashSet<BlockPos>();
-
-		var blocksAroundRootBlock = getBlocksAroundBlock(rootBlockPos);
-		blocksAroundRootBlock.forEach(blockPos -> {
-			if (!veinMineableBlocks.contains(blockPos) && canBeMined(rootBlockState, world.getBlockState(blockPos))) {
-				veinMineableBlocks.add(blockPos);
-			}
-
-			if (!blocksToScan.contains(blockPos) && !scannedBlocks.contains(blockPos)) {
-				blocksToScan.add(blockPos);
-			}
-		});
 
 		for (int i = this.currentDepth; i > 0 && !blocksToScan.isEmpty(); i--) {
 			HashSet<BlockPos> newBlocksToScan = new HashSet<>();
