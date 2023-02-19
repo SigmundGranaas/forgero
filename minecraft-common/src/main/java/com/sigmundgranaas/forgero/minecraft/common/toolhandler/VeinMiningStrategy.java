@@ -65,7 +65,7 @@ public class VeinMiningStrategy implements BlockBreakingStrategy {
 			}
 		});
 
-		for (int i = this.currentDepth; i > 0; i--) {
+		for (int i = this.currentDepth; i > 0 && !blocksToScan.isEmpty(); i--) {
 			HashSet<BlockPos> newBlocksToScan = new HashSet<>();
 
 			for (BlockPos blockToScanPos : blocksToScan) {
