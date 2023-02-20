@@ -12,7 +12,7 @@
           "target": [
             "type:HOE"
           ],
-          "template": "hoe_handle.png"
+          "template": "pickaxe_handle.png"
         },
         {
           "target": [
@@ -56,18 +56,6 @@
         {
           "target": [
             "model:medium_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:axe_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:hoe_handle.png"
           ],
           "template": "medium_handle_grip.png"
         }

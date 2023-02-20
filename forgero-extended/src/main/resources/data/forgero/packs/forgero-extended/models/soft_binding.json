@@ -1,0 +1,119 @@
+{
+  "type": "TOOL_BINDING",
+  "models": [
+    {
+      "name": "soft_binding",
+      "template": "soft_binding.png",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "order": 40,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ],
+          "template": "axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "type": "GENERATE",
+      "palette": "TRINKET",
+      "template": "square_gem_center.png",
+      "order": 90,
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ]
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        },
+        {
+          "target": [
+            "model:soft_binding.png"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "type:SOFT_BINDING_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "soft_binding"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "id:soft_binding-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "soft_binding"
+    },
+    {
+      "target": [
+        "type:GEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
+    },
+    {
+      "target": [
+        "type:TOTEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
+    }
+  ]
+}
