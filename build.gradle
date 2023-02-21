@@ -72,13 +72,12 @@ subprojects {
 
 configure(subprojects) {
     apply plugin: 'java-library'
-
     dependencies {
-        implementation "org.ow2.asm:asm:${project.asm_version}"
-        implementation "org.ow2.asm:asm-analysis:${project.asm_version}"
-        implementation "org.ow2.asm:asm-commons:${project.asm_version}"
-        implementation "org.ow2.asm:asm-tree:${project.asm_version}"
-        implementation "org.ow2.asm:asm-util:${project.asm_version}"
+        annotationProcessor "org.ow2.asm:asm:${project.asm_version}"
+        annotationProcessor "org.ow2.asm:asm-analysis:${project.asm_version}"
+        annotationProcessor "org.ow2.asm:asm-commons:${project.asm_version}"
+        annotationProcessor "org.ow2.asm:asm-tree:${project.asm_version}"
+        annotationProcessor "org.ow2.asm:asm-util:${project.asm_version}"
     }
 }
 
