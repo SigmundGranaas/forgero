@@ -139,6 +139,10 @@ sourceSets {
 }
 
 loom {
+    mixin {
+        useLegacyMixinAp = true
+    }
+
     accessWidenerPath = file("src/main/resources/forgero-fabric-compat.accesswidener")
     runs {
         testmodServer {
