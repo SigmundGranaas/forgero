@@ -66,6 +66,8 @@ subprojects {
         maven { url 'https://maven.kosmx.dev/' }
         maven { url 'https://jitpack.io' }
     }
+
+
 }
 
 configure(subprojects) {
