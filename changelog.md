@@ -7,6 +7,10 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Cleaned up plenty of duplicated resources (JorisDeBeer)
+* AE2 support (Holmraven)
+* Fixed Mixin warnings from missing mixin targets (Holmraven)
+* Fixed missing accesswidener causing crash for new worlds (Holmraven)
 * Fixed material upgrades not showing up on some parts
 * Fixed texture stacking on parts that had z-fighting problems
 * Beautified lang files (Holmraven)
