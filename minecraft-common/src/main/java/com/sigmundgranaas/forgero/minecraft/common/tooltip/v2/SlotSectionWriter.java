@@ -53,17 +53,17 @@ public class SlotSectionWriter extends SectionWriter {
     }
 
     private List<Text> writeSlot(Slot slot) {
-        MutableText mutableText = indented(2).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(base()));
+        MutableText mutableText = indented(2).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(neutral()));
         if (slot.filled()) {
             Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
             mutableText.append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
         } else {
             if (slot.identifier().equals(slot.typeName().toLowerCase())) {
-                mutableText.append(Text.literal("- ")).formatted(base());
+                mutableText.append(Text.literal("- ")).formatted(neutral());
             } else {
-                mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).append(Text.literal(" - ")).formatted(base());
+                mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).append(Text.literal(" - ")).formatted(neutral());
             }
-            mutableText.append(Text.translatable(String.format("tooltip.forgero.section.%s", slot.category().stream().findFirst().get().toString().toLowerCase())).formatted(base()));
+            mutableText.append(Text.translatable(String.format("tooltip.forgero.section.%s", slot.category().stream().findFirst().get().toString().toLowerCase())).formatted(neutral()));
         }
         return List.of(mutableText);
     }

@@ -23,6 +23,22 @@ public class AttributeWriterHelper extends BaseWriter {
 
     }
 
+    public static String number(float attribute) {
+        if (Math.round(attribute) == attribute) {
+            return String.valueOf(Math.round(attribute));
+        }
+        return String.valueOf(attribute);
+    }
+
+    public static float roundFloat(float number) {
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        try {
+            return Float.parseFloat(format.format(number));
+        } catch (NumberFormatException e) {
+            return 1f;
+        }
+    }
 
     public MutableText writePercentageAttribute(Attribute attribute) {
         return writeAttributeType(attribute)
@@ -58,24 +74,6 @@ public class AttributeWriterHelper extends BaseWriter {
         String percentage = number(roundFloat(attribute.leveledValue() * 100) - 100);
         return multiplicativeSign(attribute.leveledValue())
                 .append(Text.literal(percentage + "%"));
-    }
-
-    private String number(float attribute) {
-        if (Math.round(attribute) == attribute) {
-            return String.valueOf(Math.round(attribute));
-        }
-        return String.valueOf(attribute);
-    }
-
-
-    public float roundFloat(float number) {
-        NumberFormat format = NumberFormat.getInstance();
-        format.setMaximumFractionDigits(2);
-        try {
-            return Float.parseFloat(format.format(number));
-        } catch (NumberFormatException e) {
-            return 1f;
-        }
     }
 
     public Optional<MutableText> writeTarget(Attribute attribute) {

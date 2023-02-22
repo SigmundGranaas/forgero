@@ -19,7 +19,7 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
     }
 
     public Text translatedSection(String sectionName) {
-        return Text.translatable(translatableSectionElement(sectionName));
+        return Text.translatable(translatableSectionElement(sectionName)).formatted(base());
     }
 
     public Formatting sectionFormatting() {
