@@ -148,11 +148,6 @@ sourceSets {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
     }
-
-    test {
-        compileClasspath += test.compileClasspath
-        runtimeClasspath += test.runtimeClasspath
-    }
 }
 
 loom {
@@ -205,11 +200,4 @@ loom {
             //vmArg "-Dfabric.autoTest"
         }
     }
-}
-
-test {
-    useJUnitPlatform()
-    maxParallelForks = 32
-    testLogging.events("failed")
-    testLogging.info.events = ["failed", "skipped"]
 }
