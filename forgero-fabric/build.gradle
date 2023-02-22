@@ -151,6 +151,9 @@ sourceSets {
 }
 
 loom {
+    mixin {
+        useLegacyMixinAp = true
+    }
     runs {
         clientExtended {
             dependencies {

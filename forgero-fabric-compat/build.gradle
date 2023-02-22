@@ -139,6 +139,7 @@ sourceSets {
 }
 
 loom {
+
     mixin {
         useLegacyMixinAp = true
     }
