@@ -88,9 +88,9 @@
     "features": [
       {
         "type": "VEIN_MINING",
-        "value": 12,
+        "value": 24,
         "tags": [
-          "minecraft:logs"
+          "forgero:vein_mining_logs"
         ]
       }
     ]
