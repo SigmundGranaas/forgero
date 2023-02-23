@@ -3,10 +3,9 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.writer;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.state.SchematicBased;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.SlotSectionWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.SlotSectionWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -33,7 +32,6 @@ public class SchematicWriter extends StateWriter {
                 .map(Supplier::get)
                 .filter(parts -> parts instanceof SchematicBased based && based.schematic().identifier().equals(state.identifier()))
                 .findAny()
-                .map(Upgradeable.class::cast)
                 .flatMap(SlotSectionWriter::of)
                 .ifPresent(writer -> writer.write(tooltip, context));
 

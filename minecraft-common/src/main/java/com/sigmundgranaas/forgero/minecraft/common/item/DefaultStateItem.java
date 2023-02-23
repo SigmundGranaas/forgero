@@ -36,7 +36,7 @@ public class DefaultStateItem extends Item implements StateItem, State {
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
+        StateWriter.of(dynamicState(itemStack)).write(tooltip, tooltipContext);
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 

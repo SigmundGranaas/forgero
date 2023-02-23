@@ -8,7 +8,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.function.Supplier;
+
+import static com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer.writeModifierSection;
 
 @Mixin(Item.class)
 public class ItemDescriptionInjector {
@@ -34,9 +35,7 @@ public class ItemDescriptionInjector {
                         .map(Supplier::get)
                         .ifPresent(state -> new DefaultWriter(state).write(tooltip, context));
             } else {
-                tooltip.add(Text.translatable("tooltip.forgero.hold").formatted(Formatting.DARK_GRAY)
-                        .append(Text.translatable("tooltip.forgero.shift").formatted(Formatting.WHITE))
-                        .append(Text.translatable("tooltip.forgero.to_show_attributes").formatted(Formatting.DARK_GRAY))
+                tooltip.add(writeModifierSection("shift", "to_show_attributes")
                 );
             }
         }

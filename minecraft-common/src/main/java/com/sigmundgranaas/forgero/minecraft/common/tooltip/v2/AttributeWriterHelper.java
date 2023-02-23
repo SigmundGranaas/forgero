@@ -17,17 +17,20 @@ import java.util.stream.Stream;
 public class AttributeWriterHelper extends BaseWriter {
     public static final List<String> WRITABLE_ATTRIBUTES = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY);
     private final PropertyContainer container;
+    private final AttributeHelper helper;
+    private final TooltipConfiguration configuration;
 
-    public AttributeWriterHelper(PropertyContainer container) {
+    public AttributeWriterHelper(PropertyContainer container, TooltipConfiguration configuration) {
         this.container = container;
-
+        this.helper = new AttributeHelper(container);
+        this.configuration = configuration;
     }
 
     public static String number(float attribute) {
         if (Math.round(attribute) == attribute) {
             return String.valueOf(Math.round(attribute));
         }
-        return String.valueOf(attribute);
+        return String.valueOf(roundFloat(attribute));
     }
 
     public static float roundFloat(float number) {
@@ -41,25 +44,31 @@ public class AttributeWriterHelper extends BaseWriter {
     }
 
     public MutableText writePercentageAttribute(Attribute attribute) {
-        return writeAttributeType(attribute)
+        return writeAttributeType(attribute.type())
                 .append(indented(1))
                 .append(percentageNumberText(attribute));
     }
 
     public MutableText writeBaseNumber(Attribute attribute) {
-        return writeAttributeType(attribute)
+        return writeAttributeType(attribute.type())
                 .append(indented(1))
                 .append(number(attribute.leveledValue()));
     }
 
+    public MutableText writeBaseNumber(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute) {
+        return writeAttributeType(attribute.key())
+                .append(indented(1))
+                .append(number(attribute.asFloat()));
+    }
+
     public MutableText writeMultiplicativeAttribute(Attribute attribute) {
-        return writeAttributeType(attribute)
+        return writeAttributeType(attribute.type())
                 .append(indented(1))
                 .append(multiplicativeNumberText(attribute));
     }
 
     public MutableText writeAdditionAttribute(Attribute attribute) {
-        return writeAttributeType(attribute)
+        return writeAttributeType(attribute.type())
                 .append(indented(1))
                 .append(additionSign(attribute.leveledValue()))
                 .append(number(attribute.leveledValue()));
@@ -80,7 +89,7 @@ public class AttributeWriterHelper extends BaseWriter {
         if (attribute.applyCondition(Target.EMPTY) || attribute.targets().isEmpty()) {
             return Optional.empty();
         } else {
-            MutableText against = indented(4).append(Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY));
+            MutableText against = indented(configuration.baseIndent() + 2).append(Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY));
             attribute.targets().stream().map(target -> Text.translatable(String.format("tooltip.forgero.tag.%s", target.replace(":", "."))).append(indented(1))).forEach(against::append);
             return Optional.of(against);
         }
@@ -106,16 +115,20 @@ public class AttributeWriterHelper extends BaseWriter {
         return Text.translatable("tooltip.forgero.attribute.multiplier");
     }
 
-    public MutableText writeAttributeType(Attribute attribute) {
-        return indented(3).append(writeAttributeType(attribute.type()).formatted(neutral())).append(sectionSeparator().formatted(neutral()));
+    public MutableText writeAttributeType(String attribute) {
+        return indented(configuration.baseIndent() + 1).append(writeTranslatableAttributeType(attribute).formatted(neutral())).append(sectionSeparator().formatted(neutral()));
     }
 
-    public MutableText writeAttributeType(String type) {
+    public MutableText writeTranslatableAttributeType(String type) {
         return Text.translatable(String.format("tooltip.forgero.attribute.%s", type.toLowerCase()));
     }
 
     public Stream<Attribute> attributesOfType(String type) {
         return container.stream().getAttributes().filter(attribute -> attribute.type().equals(type));
+    }
+
+    public com.sigmundgranaas.forgero.core.property.v2.Attribute attributeOfType(String type) {
+        return helper.apply(type);
     }
 
     @Override

@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.writer;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.AttributeWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 
@@ -17,10 +15,6 @@ public class PartWriter extends StateWriter {
 
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
-        super.write(tooltip, context);
-        AttributeWriter.of(AttributeHelper.of(state))
-                .addAttribute(AttributeType.DURABILITY)
-                .addAttribute(AttributeType.RARITY)
-                .write(tooltip, context);
+        new DefaultWriter(state).write(tooltip, context);
     }
 }

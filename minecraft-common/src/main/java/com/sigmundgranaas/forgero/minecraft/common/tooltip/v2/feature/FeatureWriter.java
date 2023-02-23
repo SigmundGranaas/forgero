@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.BaseWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -13,15 +14,22 @@ import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWr
 
 public class FeatureWriter extends BaseWriter {
     protected final PropertyData data;
+    protected TooltipConfiguration config = TooltipConfiguration.builder().build();
 
     public FeatureWriter(PropertyData data) {
         super();
         this.data = data;
     }
 
+    public FeatureWriter setConfig(TooltipConfiguration configuration) {
+        this.config = configuration;
+        return this;
+    }
+
+
     @Override
     public void write(List<Text> tooltip, TooltipContext context) {
-        var extendedData = writeExtendedData().stream().map(entry -> indented(3).append(entry)).toList();
+        var extendedData = writeExtendedData().stream().map(entry -> indented(config.baseIndent() + 1).append(entry)).toList();
         MutableText header = writeDataHeader();
         if (extendedData.size() > 0) {
             header.append(separator());
@@ -35,7 +43,7 @@ public class FeatureWriter extends BaseWriter {
     }
 
     protected MutableText writeDataHeader() {
-        return indented(2).append(Text.translatable(String.format("tooltip.forgero.feature.%s", data.type().toLowerCase()))).formatted(neutral());
+        return indented(config.baseIndent()).append(Text.translatable(String.format("tooltip.forgero.feature.%s", data.type().toLowerCase()))).formatted(neutral());
     }
 
     private MutableText separator() {

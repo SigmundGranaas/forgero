@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,6 @@ public class FeatureWriterSelector {
 
     public FeatureWriterSelector() {
         this.writerFactory = new HashMap<>();
-
     }
 
     public static FeatureWriterSelector defaultSelector() {
@@ -28,10 +28,15 @@ public class FeatureWriterSelector {
         return this;
     }
 
-    public FeatureWriter writer(PropertyData data) {
-        if (writerFactory.containsKey(data.type())) {
-            return writerFactory.get(data.type()).apply(data);
+    public FeatureWriter writer(PropertyData data, TooltipConfiguration configuration) {
+        var FeatureConfig = configuration.toBuilder();
+        if (!configuration.hideSectionTitle()) {
+            FeatureConfig.baseIndent(configuration.baseIndent() + 1);
         }
-        return new FeatureWriter(data);
+
+        if (writerFactory.containsKey(data.type())) {
+            return writerFactory.get(data.type()).apply(data).setConfig(FeatureConfig.build());
+        }
+        return new FeatureWriter(data).setConfig(FeatureConfig.build());
     }
 }

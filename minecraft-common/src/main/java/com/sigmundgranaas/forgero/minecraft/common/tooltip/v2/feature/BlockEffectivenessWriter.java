@@ -10,6 +10,6 @@ public class BlockEffectivenessWriter extends FeatureWriter {
 
     @Override
     protected MutableText writeDataHeader() {
-        return indented(2).append(writeTextWithInfo("feature.effective_blocks", "tag." + data.getTags().get(0).replace(":", ".").replace("/", ".")));
+        return indented(config.baseIndent()).append(writeTextWithInfo("feature.effective_blocks", "tag." + data.getTags().get(0).replace(":", ".").replace("/", ".")));
     }
 }

@@ -4,8 +4,8 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.ToolWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
@@ -34,7 +34,7 @@ public class DynamicHoeItem extends HoeItem implements DynamicAttributeItem, Sta
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
+        new ToolWriter(dynamicState(itemStack)).write(tooltip, tooltipContext);
 
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }

@@ -1,10 +1,12 @@
-package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
+package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 
@@ -13,8 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.WRITABLE_ATTRIBUTES;
-
 public class UpgradeAttributeSectionWriter extends SectionWriter {
     public static final Set<Category> UPGRADE_CATEGORIES = Set.of(Category.UTILITY, Category.DEFENSIVE, Category.OFFENSIVE, Category.ALL);
     private static final String sectionTranslationKey = "upgrade_attributes";
@@ -22,7 +22,8 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
     private final PropertyContainer container;
 
     public UpgradeAttributeSectionWriter(PropertyContainer container) {
-        this.helper = new AttributeWriterHelper(container);
+        super(TooltipConfiguration.builder().build());
+        this.helper = new AttributeWriterHelper(container, configuration.toBuilder().baseIndent(configuration.baseIndent() + 1).build());
         this.container = container;
     }
 
@@ -38,6 +39,8 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
     public void write(List<Text> tooltip, TooltipContext context) {
         tooltip.add(createSection(sectionTranslationKey));
         tooltip.addAll(entries());
+
+        super.write(tooltip, context);
     }
 
 
@@ -56,11 +59,11 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 
     @Override
     public List<Text> entries() {
-        return UPGRADE_CATEGORIES.stream().map(this::category).flatMap(List::stream).toList();
+        return configuration.upgradeCategories().stream().map(this::category).flatMap(List::stream).toList();
     }
 
     protected List<Text> category(Category category) {
-        List<Text> entries = WRITABLE_ATTRIBUTES.stream().map(attribute -> entry(attribute, category)).flatMap(List::stream).toList();
+        List<Text> entries = configuration.writableAttributes().stream().map(attribute -> entry(attribute, category)).flatMap(List::stream).toList();
         if (entries.size() > 0) {
             var builder = ImmutableList.<Text>builder();
             Text section = indented(1).append(createSection(category.toString().toLowerCase()));
@@ -76,17 +79,18 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
         Optional<Attribute> attributeOpt = helper.attributesOfType(attributeType).filter(attribute -> category.equals(attribute.getCategory())).findFirst();
         if (attributeOpt.isPresent()) {
             Attribute attribute = attributeOpt.get();
+            if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.getValue() == 0) {
+                return Collections.emptyList();
+            }
+            var builder = ImmutableList.<Text>builder();
             if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
-                var builder = ImmutableList.<Text>builder();
                 builder.add(helper.writePercentageAttribute(attribute));
                 helper.writeTarget(attribute).ifPresent(builder::add);
-                return builder.build();
             } else {
-                var builder = ImmutableList.<Text>builder();
                 builder.add(helper.writeAdditionAttribute(attribute));
                 helper.writeTarget(attribute).ifPresent(builder::add);
-                return builder.build();
             }
+            return builder.build();
         }
         return Collections.emptyList();
     }

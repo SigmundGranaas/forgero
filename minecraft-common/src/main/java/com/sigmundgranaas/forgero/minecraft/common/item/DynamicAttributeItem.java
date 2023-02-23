@@ -29,6 +29,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.Attributes.*;
+
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
     LoadingCache<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = CacheBuilder.newBuilder()
             .maximumSize(600)
@@ -54,10 +56,9 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
     UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
 
     UUID ADDITION_HEALTH_MODIFIER_ID = UUID.randomUUID();
-
     UUID ADDITION_LUCK_MODIFIER_ID = UUID.fromString("CC3F55D5-755C-4F38-A497-9C13A33DB5CF");
-
     UUID ADDITION_ARMOR_MODIFIER_ID = UUID.fromString("AC3F55D5-755C-4F38-A497-9C13A63DB5CF");
+
 
     PropertyContainer dynamicProperties(ItemStack stack);
 
@@ -97,14 +98,29 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         float currentToolDamage = AttackDamage.apply(dynamicProperties(stack), target);
         float baseToolDamage = AttackDamage.apply(defaultProperties());
         //Base attack damage
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ItemUUIDMixin.getAttackDamageModifierID(), "Tool modifier", baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ItemUUIDMixin.getAttackDamageModifierID(), "Tool modifier", currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
         //Attack damage addition
-        builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
+        //builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
-        //Additional armor
+        //Additional luck
         int luck = LuckHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
         builder.put(EntityAttributes.GENERIC_LUCK, new EntityAttributeModifier(ADDITION_LUCK_MODIFIER_ID, "Luck addition", luck, EntityAttributeModifier.Operation.ADDITION));
+
+        // Mining speed
+        float miningSpeed = MiningSpeed.apply(dynamicProperties(stack));
+        builder.put(MINING_SPEED, new EntityAttributeModifier(BASE_MINING_SPEED_ID, "Tool modifier", miningSpeed, EntityAttributeModifier.Operation.ADDITION));
+
+        // Mining speed
+        int durability = Durability.apply(dynamicProperties(stack));
+        builder.put(DURABILITY, new EntityAttributeModifier(BASE_DURABILITY_ID, "Tool modifier", durability, EntityAttributeModifier.Operation.ADDITION));
+
+        // Mining speed
+        int miningLevel = MiningLevel.apply(dynamicProperties(stack));
+        if (miningLevel != 0) {
+            builder.put(MINING_LEVEL, new EntityAttributeModifier(BASE_MINING_LEVEL_ID, "Tool modifier", miningLevel, EntityAttributeModifier.Operation.ADDITION));
+
+        }
 
         //Additional armor
         float armor = Armor.of(dynamicProperties(stack)).asFloat();
@@ -117,8 +133,9 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         //Attack speed
         float baseAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
         float currentAttackSpeed = AttackSpeed.apply(defaultProperties());
+        builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
         if (currentAttackSpeed != baseAttackSpeed) {
-            builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
+            //builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
         }
         return builder.build();
     }
