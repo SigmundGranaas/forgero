@@ -23,7 +23,7 @@ public class SchematicWriter extends StateWriter {
     public void write(List<Text> tooltip, TooltipContext context) {
         var materials = state.getCustomValue("ingredient_count");
         if (materials.isPresent()) {
-            MutableText materialText = Text.translatable("item.forgero.material_count", materials.get().presentableValue()).formatted(Formatting.GRAY);
+            MutableText materialText = Text.translatable("tooltip.forgero.material_count", materials.get().presentableValue()).formatted(Formatting.GRAY);
             tooltip.add(materialText);
         }
 
@@ -36,6 +36,5 @@ public class SchematicWriter extends StateWriter {
                 .ifPresent(writer -> writer.write(tooltip, context));
 
         new DefaultWriter(state).write(tooltip, context);
-        super.write(tooltip, context);
     }
 }
