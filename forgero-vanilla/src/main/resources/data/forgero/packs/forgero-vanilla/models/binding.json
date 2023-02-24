@@ -107,6 +107,15 @@
             2,
             2
           ]
+        },
+        {
+          "target": [
+            "model:binding.png"
+          ],
+          "offset": [
+            -1,
+            -1
+          ]
         }
       ]
     },
