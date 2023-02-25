@@ -190,6 +190,18 @@ loom {
 
             dependencies {
                 modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+                modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
+            }
+
+            client()
+        }
+        clientExtendedCompatOptimisedJustLoad {
+            name "Client Extended Compat Optimised Just Load"
+
+            dependencies {
+                modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+                modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
+                modRuntimeOnly "maven.modrinth:just-load:ob5o9Cf5"
             }
 
             client()

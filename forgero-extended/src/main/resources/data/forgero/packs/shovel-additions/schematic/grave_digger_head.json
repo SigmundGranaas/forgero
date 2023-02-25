@@ -89,9 +89,9 @@
     "features": [
       {
         "type": "VEIN_MINING",
-        "value": 10,
+        "value": 1,
         "tags": [
-          "forgero:vein_mining_sand"
+          "forgero:vein_mining_dirt"
         ]
       }
     ]
