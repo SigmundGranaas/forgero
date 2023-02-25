@@ -46,7 +46,7 @@ public class FeatureWriter extends BaseWriter {
         return indented(config.baseIndent()).append(Text.translatable(String.format("tooltip.forgero.feature.%s", data.type().toLowerCase()))).formatted(neutral());
     }
 
-    private MutableText separator() {
+    protected MutableText separator() {
         return Text.translatable("tooltip.forgero.separator");
     }
 

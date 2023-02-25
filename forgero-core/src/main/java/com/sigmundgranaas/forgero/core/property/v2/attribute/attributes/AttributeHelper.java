@@ -24,7 +24,6 @@ public class AttributeHelper {
         map.put(AttackSpeed.KEY, AttackSpeed::of);
         map.put(MiningSpeed.KEY, MiningSpeed::of);
         map.put(MiningLevel.KEY, MiningLevel::of);
-
         return map;
     }
 

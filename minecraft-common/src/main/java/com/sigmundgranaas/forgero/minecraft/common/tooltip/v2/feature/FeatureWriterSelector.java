@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler.BLOCK_BREAKING_PATTERN_KEY;
 import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler.VEIN_MINING_KEY;
 
 public class FeatureWriterSelector {
@@ -20,6 +21,7 @@ public class FeatureWriterSelector {
         var selector = new FeatureWriterSelector();
         selector.add(VEIN_MINING_KEY, VeinMiningWriter::new);
         selector.add("EFFECTIVE_BLOCKS", BlockEffectivenessWriter::new);
+        selector.add(BLOCK_BREAKING_PATTERN_KEY, PatternMiningWriter::new);
         return selector;
     }
 
