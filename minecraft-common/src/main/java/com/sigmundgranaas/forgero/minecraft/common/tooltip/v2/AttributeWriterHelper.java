@@ -76,11 +76,11 @@ public class AttributeWriterHelper extends BaseWriter {
 
     public MutableText multiplicativeNumberText(Attribute attribute) {
         float value = attribute.leveledValue();
-        return Text.literal(String.valueOf((int) value == value ? (int) value : value)).append(translatableMultiplier());
+        return Text.literal(number(value)).append(translatableMultiplier());
     }
 
     public MutableText percentageNumberText(Attribute attribute) {
-        String percentage = number(roundFloat(attribute.leveledValue() * 100) - 100);
+        String percentage = number(attribute.leveledValue() * 100 - 100);
         return multiplicativeSign(attribute.leveledValue())
                 .append(Text.literal(percentage + "%"));
     }
@@ -99,7 +99,7 @@ public class AttributeWriterHelper extends BaseWriter {
         if (value >= 1) {
             return Text.literal("+");
         } else {
-            return Text.literal("-");
+            return Text.literal("");
         }
     }
 

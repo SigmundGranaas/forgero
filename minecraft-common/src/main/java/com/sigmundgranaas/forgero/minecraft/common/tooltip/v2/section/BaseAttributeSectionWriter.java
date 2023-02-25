@@ -52,7 +52,7 @@ public class BaseAttributeSectionWriter extends SectionWriter {
     public boolean shouldWrite() {
         return container.stream()
                 .getAttributes()
-                .anyMatch(attr -> attr.getOrder() == CalculationOrder.COMPOSITE && attr.getOperation() == NumericOperation.ADDITION) && !(container instanceof Constructed);
+                .anyMatch(attr -> attr.getOrder() == CalculationOrder.COMPOSITE) && !(container instanceof Constructed);
     }
 
     @Override

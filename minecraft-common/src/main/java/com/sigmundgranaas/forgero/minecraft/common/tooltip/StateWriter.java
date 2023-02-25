@@ -37,7 +37,7 @@ public class StateWriter implements Writer {
         } else {
             writer = new StateWriter(state);
         }
-        return CachedWriteHelper.of(state, writer);
+        return writer;
     }
 
     @Override
