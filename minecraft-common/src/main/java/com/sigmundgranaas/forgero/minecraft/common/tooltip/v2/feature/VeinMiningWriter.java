@@ -15,6 +15,7 @@ public class VeinMiningWriter extends FeatureWriter {
     protected List<Text> writeExtendedData() {
         List<Text> entries = new ArrayList<>();
         entries.add(writeTextWithValue("depth", super.data.getValue()));
+        entries.addAll(super.writeExtendedData());
         return entries;
     }
 }

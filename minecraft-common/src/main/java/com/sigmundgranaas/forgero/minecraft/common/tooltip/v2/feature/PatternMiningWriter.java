@@ -4,6 +4,9 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class PatternMiningWriter extends FeatureWriter {
     public PatternMiningWriter(PropertyData data) {
@@ -11,7 +14,10 @@ public class PatternMiningWriter extends FeatureWriter {
     }
 
     @Override
-    protected MutableText writeDataHeader() {
-        return super.writeDataHeader().append(separator()).append(Text.literal(String.format(" %sx%s", data.getPattern().length, data.getPattern()[0].length()).formatted(highlighted())));
+    protected List<Text> writeExtendedData() {
+        List<Text> entries = new ArrayList<>();
+        entries.add(writeTextWithValue("area", String.format("%sx%s", data.getPattern().length, data.getPattern()[0].length())));
+        entries.addAll(super.writeExtendedData());
+        return entries;
     }
 }

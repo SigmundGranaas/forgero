@@ -2,10 +2,12 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.BaseWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TagWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +41,10 @@ public class FeatureWriter extends BaseWriter {
     }
 
     protected List<Text> writeExtendedData() {
+        if(data.getTags().size() > 0){
+            MutableText against = Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY);
+            return List.of(against.append(TagWriter.writeTagList(data.getTags())));
+        }
         return Collections.emptyList();
     }
 
@@ -51,12 +57,15 @@ public class FeatureWriter extends BaseWriter {
     }
 
     public Text writeTextWithValue(String text, float value) {
+        return writeTextWithValue(text, number(value));
+    }
+
+    public Text writeTextWithValue(String text, String value) {
         return Text.translatable(String.format("tooltip.forgero.%s", text)).formatted(neutral())
                 .append(separator()).formatted(neutral())
                 .append(indented(1).formatted())
-                .append(Text.literal(number(value)).formatted(highlighted()));
+                .append(Text.literal(value).formatted(highlighted()));
     }
-
     public Text writeTextWithInfo(String text, String info) {
         return Text.translatable(String.format("tooltip.forgero.%s", text)).formatted(neutral())
                 .append(Text.translatable("tooltip.forgero.separator")).formatted(neutral())

@@ -90,7 +90,7 @@ public class AttributeWriterHelper extends BaseWriter {
             return Optional.empty();
         } else {
             MutableText against = indented(configuration.baseIndent() + 2).append(Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY));
-            attribute.targets().stream().map(target -> Text.translatable(String.format("tooltip.forgero.tag.%s", target.replace(":", "."))).append(indented(1))).forEach(against::append);
+            against.append(TagWriter.writeTagList(attribute.targets()));
             return Optional.of(against);
         }
     }
