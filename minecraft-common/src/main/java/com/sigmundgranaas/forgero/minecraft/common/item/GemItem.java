@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,7 +37,7 @@ public class GemItem extends Item implements StateItem, State {
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
+        new DefaultWriter(dynamicState(itemStack)).write(tooltip, tooltipContext);
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 

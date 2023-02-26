@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
@@ -33,7 +33,7 @@ public class DynamicAxeItem extends AxeItem implements StateItem {
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        StateWriter.of(state(itemStack)).write(tooltip, tooltipContext);
+        StateWriter.of(dynamicState(itemStack)).write(tooltip, tooltipContext);
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 

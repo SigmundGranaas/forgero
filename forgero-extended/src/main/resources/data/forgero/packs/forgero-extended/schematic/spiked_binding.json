@@ -49,9 +49,6 @@
         "type": "TRINKET",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -85,7 +82,6 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "category": "ALL",
         "value": 0.2
       }
     ]

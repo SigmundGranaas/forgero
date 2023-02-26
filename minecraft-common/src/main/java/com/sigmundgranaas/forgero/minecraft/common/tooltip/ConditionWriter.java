@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
+package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;

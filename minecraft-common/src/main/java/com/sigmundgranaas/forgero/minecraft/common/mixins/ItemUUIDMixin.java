@@ -12,4 +12,9 @@ public interface ItemUUIDMixin {
     static UUID getAttackDamageModifierID() {
         throw new AssertionError();
     }
+
+    @Accessor("ATTACK_SPEED_MODIFIER_ID")
+    static UUID getAttackSpeedModifierID() {
+        throw new AssertionError();
+    }
 }

@@ -1,11 +1,13 @@
-package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
+package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.Composite;
-import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.writer.*;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.ToolWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.writer.PartWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.writer.SchematicWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -24,26 +26,14 @@ public class StateWriter implements Writer {
 
     public static Writer of(State state) {
         Writer writer;
-        if (state.test(AXE)) {
-            writer = new AxeWriter(state);
-        } else if (state.test(TOOL)) {
+        if (state.test(TOOL)) {
             writer = new ToolWriter(state);
-        } else if (state.test(SWORD_BLADE)) {
-            writer = new SwordBladeWriter(state);
-        } else if (state.test(AXE_HEAD)) {
-            writer = new SwordBladeWriter(state);
-        } else if (state.test(TOOL_PART_HEAD)) {
-            writer = new AxeHeadWriter(state);
-        } else if (state.test(SWORD_GUARD)) {
-            writer = new SwordGuardWriter((state));
         } else if (state.test(PART)) {
             writer = new PartWriter((state));
         } else if (state.test(SCHEMATIC)) {
             writer = new SchematicWriter(state);
-        } else if (state.test(GEM) && state instanceof LeveledState leveledState) {
-            writer = new GemWriter(leveledState);
         } else {
-            writer = new StateWriter(state);
+            writer = new DefaultWriter(state);
         }
         return CachedWriteHelper.of(state, writer);
     }

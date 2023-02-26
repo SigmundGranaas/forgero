@@ -1,10 +1,11 @@
-package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
+package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.List;
 
@@ -35,6 +36,12 @@ public interface Writer {
             return elements[0];
         }
         return state.name();
+    }
+
+    static Text writeModifierSection(String modifier, String action) {
+        return Text.translatable("tooltip.forgero.hold").formatted(Formatting.DARK_GRAY)
+                .append(Text.translatable(String.format("tooltip.forgero.%s", modifier)).formatted(Formatting.WHITE))
+                .append(Text.translatable(String.format("tooltip.forgero.%s", action)).formatted(Formatting.DARK_GRAY));
     }
 
     void write(List<Text> tooltip, TooltipContext context);
