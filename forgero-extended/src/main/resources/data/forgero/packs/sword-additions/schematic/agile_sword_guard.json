@@ -69,7 +69,6 @@
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
-        "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.3
       },

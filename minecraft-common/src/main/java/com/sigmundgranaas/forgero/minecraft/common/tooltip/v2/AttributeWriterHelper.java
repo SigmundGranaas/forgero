@@ -50,15 +50,25 @@ public class AttributeWriterHelper extends BaseWriter {
     }
 
     public MutableText writeBaseNumber(Attribute attribute) {
+        float value = attribute.leveledValue();
+        if (attribute.getAttributeType().equals(AttackSpeed.KEY)) {
+            value = 4 + value;
+        }
+        
         return writeAttributeType(attribute.type())
                 .append(indented(1))
-                .append(number(attribute.leveledValue()));
+                .append(number(value));
     }
 
     public MutableText writeBaseNumber(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute) {
+        float value = attribute.asFloat();
+        if (attribute.key().equals(AttackSpeed.KEY)) {
+            value = 4 + value;
+        }
+
         return writeAttributeType(attribute.key())
                 .append(indented(1))
-                .append(number(attribute.asFloat()));
+                .append(number(value));
     }
 
     public MutableText writeMultiplicativeAttribute(Attribute attribute) {
@@ -68,9 +78,13 @@ public class AttributeWriterHelper extends BaseWriter {
     }
 
     public MutableText writeAdditionAttribute(Attribute attribute) {
+        float value = attribute.leveledValue();
+        if (attribute.getAttributeType().equals(AttackSpeed.KEY)) {
+            value = 4 + value;
+        }
         return writeAttributeType(attribute.type())
                 .append(indented(1))
-                .append(additionSign(attribute.leveledValue()))
+                .append(additionSign(value))
                 .append(number(attribute.leveledValue()));
     }
 
