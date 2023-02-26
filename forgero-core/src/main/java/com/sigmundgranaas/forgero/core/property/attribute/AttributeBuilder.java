@@ -3,7 +3,9 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 import com.sigmundgranaas.forgero.core.property.*;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -22,6 +24,9 @@ public class AttributeBuilder {
     private float value = 1;
     private int level = 1;
 
+    private List<String> targets = Collections.emptyList();
+
+    private String targetType = EMPTY_IDENTIFIER;
     private String id = EMPTY_IDENTIFIER;
     private int priority = 0;
 
@@ -45,6 +50,8 @@ public class AttributeBuilder {
 
         if (attributePOJO.condition != null) {
             Predicate<Target> condition;
+            builder.targetType = attributePOJO.condition.target.toString();
+            builder.targets = attributePOJO.condition.tag;
             if (attributePOJO.condition.target == TargetTypes.TOOL_PART_TYPE) {
                 condition = (target) -> {
                     if (!target.getTypes().contains(TargetTypes.TOOL_PART_TYPE)) {
@@ -93,6 +100,8 @@ public class AttributeBuilder {
     public static AttributeBuilder createAttributeBuilderFromAttribute(Attribute attribute) {
         AttributeBuilder builder = new AttributeBuilder(attribute.getAttributeType())
                 .applyOrder(attribute.getOrder());
+        builder.applyTargets(attribute.targets());
+        builder.applyTargetType(attribute.targetType());
         builder.applyCondition(attribute.getCondition());
         builder.applyValue(attribute.getValue());
         builder.applyOperation(attribute.getOperation());
@@ -146,7 +155,21 @@ public class AttributeBuilder {
         return this;
     }
 
+
+    @SuppressWarnings("UnusedReturnValue")
+    public AttributeBuilder applyTargets(List<String> targets) {
+        this.targets = targets;
+        return this;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public AttributeBuilder applyTargetType(String targetType) {
+        this.targetType = targetType;
+        return this;
+    }
+
+
     public Attribute build() {
-        return new BaseAttribute(type, operation, value, condition, order, level, category, id, priority);
+        return new BaseAttribute(type, operation, value, condition, order, level, category, id, targets, targetType, priority);
     }
 }

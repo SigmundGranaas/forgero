@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 
 import com.sigmundgranaas.forgero.core.property.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -17,6 +18,8 @@ public record BaseAttribute(String attribute,
                             float value,
                             Predicate<Target> condition,
                             CalculationOrder order, int level, Category category, String id,
+                            List<String> targets,
+                            String targetType,
                             int priority) implements Attribute {
 
     @Override
@@ -42,9 +45,9 @@ public record BaseAttribute(String attribute,
         }
 
         if (operation == NumericOperation.ADDITION) {
-            return (current) -> current + (value * level);
+            return (current) -> current + leveledValue();
         } else if (operation == NumericOperation.MULTIPLICATION) {
-            return (current) -> current * (value * level);
+            return (current) -> current * leveledValue();
         }
         return (current) -> current;
     }
@@ -62,6 +65,18 @@ public record BaseAttribute(String attribute,
     @Override
     public float getValue() {
         return value;
+    }
+
+    @Override
+    public float leveledValue() {
+        if (getOperation() == NumericOperation.MULTIPLICATION) {
+            if (getValue() >= 1) {
+                return ((getValue() - 1) * getLevel()) + 1;
+            } else if (getValue() < 1) {
+                return 1 - (1 - getValue()) * getLevel();
+            }
+        }
+        return value * level;
     }
 
     @Override

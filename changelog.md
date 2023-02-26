@@ -7,6 +7,9 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* New Attribute types
+* New tooltip to better show stats on resources like materials and schematics
+* Added tooltips for items that are not from Forgero as well
 * Cleaned up plenty of duplicated resources (JorisDeBeer)
 * AE2 support (Holmraven)
 * Fixed Mixin warnings from missing mixin targets (Holmraven)

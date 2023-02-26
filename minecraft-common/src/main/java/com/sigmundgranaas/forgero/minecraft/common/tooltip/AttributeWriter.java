@@ -1,8 +1,6 @@
-package com.sigmundgranaas.forgero.minecraft.common.item.tooltip;
+package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.*;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.State;
 import net.minecraft.client.item.TooltipContext;
@@ -52,6 +50,16 @@ public class AttributeWriter implements Writer {
             miningLevel.append(Text.translatable(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
         }
+        var props = Property.stream(attributes).getAttributes().filter(attr -> attr.type().equals(type.toString())).toList();
+        props.stream()
+                .filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+                .filter(attribute -> attribute.getOperation() == NumericOperation.MULTIPLICATION)
+                .forEach(attribute -> writeBaseMultiplication(attribute, tooltip, title));
+
+        props.stream()
+                .filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+                .filter(attribute -> attribute.getOperation() == NumericOperation.ADDITION)
+                .forEach(attribute -> writeBaseAttribute(attribute, tooltip, title));
     }
 
     private static void addAttributeInt(List<Property> attributes, AttributeType type, String title, List<Text> tooltip) {
@@ -60,7 +68,31 @@ public class AttributeWriter implements Writer {
             MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(title))).append(" : ").formatted(Formatting.GRAY);
             miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
             tooltip.add(miningLevel);
+            return;
         }
+
+        var props = Property.stream(attributes).getAttributes().filter(attr -> attr.type().equals(type.toString())).toList();
+        props.stream()
+                .filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+                .filter(attribute -> attribute.getOperation() == NumericOperation.MULTIPLICATION)
+                .forEach(attribute -> writeBaseMultiplication(attribute, tooltip, title));
+
+        props.stream()
+                .filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+                .filter(attribute -> attribute.getOperation() == NumericOperation.ADDITION)
+                .forEach(attribute -> writeBaseAttribute(attribute, tooltip, title));
+    }
+
+    private static void writeBaseMultiplication(Attribute attribute, List<Text> tooltip, String title) {
+        MutableText miningLevel = Text.translatable(String.format("  %s: ", title)).formatted(Formatting.GRAY);
+        miningLevel.append(Text.literal(String.format(" multiplier %sx", attribute.getValue())).formatted(Formatting.WHITE));
+        tooltip.add(miningLevel);
+    }
+
+    private static void writeBaseAttribute(Attribute attribute, List<Text> tooltip, String title) {
+        MutableText miningLevel = Text.translatable(String.format("  %s: ", title)).formatted(Formatting.GRAY);
+        miningLevel.append(Text.literal(String.format(" base %s", attribute.getValue())).formatted(Formatting.WHITE));
+        tooltip.add(miningLevel);
     }
 
     public static float roundFloat(float number) {
@@ -69,7 +101,7 @@ public class AttributeWriter implements Writer {
         try {
             return Float.parseFloat(format.format(number));
         } catch (NumberFormatException e) {
-            return 1f;
+            return number;
         }
     }
 
