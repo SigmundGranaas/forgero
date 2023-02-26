@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;

@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
@@ -107,21 +108,6 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         int luck = LuckHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
         builder.put(EntityAttributes.GENERIC_LUCK, new EntityAttributeModifier(ADDITION_LUCK_MODIFIER_ID, "Luck addition", luck, EntityAttributeModifier.Operation.ADDITION));
 
-        // Mining speed
-        float miningSpeed = MiningSpeed.apply(dynamicProperties(stack));
-        builder.put(MINING_SPEED, new EntityAttributeModifier(BASE_MINING_SPEED_ID, "Tool modifier", miningSpeed, EntityAttributeModifier.Operation.ADDITION));
-
-        // Mining speed
-        int durability = Durability.apply(dynamicProperties(stack));
-        builder.put(DURABILITY, new EntityAttributeModifier(BASE_DURABILITY_ID, "Tool modifier", durability, EntityAttributeModifier.Operation.ADDITION));
-
-        // Mining speed
-        int miningLevel = MiningLevel.apply(dynamicProperties(stack));
-        if (miningLevel != 0) {
-            builder.put(MINING_LEVEL, new EntityAttributeModifier(BASE_MINING_LEVEL_ID, "Tool modifier", miningLevel, EntityAttributeModifier.Operation.ADDITION));
-
-        }
-
         //Additional armor
         float armor = Armor.of(dynamicProperties(stack)).asFloat();
         builder.put(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(ADDITION_ARMOR_MODIFIER_ID, "Armor addition", armor, EntityAttributeModifier.Operation.ADDITION));
@@ -136,6 +122,23 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
         builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
         if (currentAttackSpeed != baseAttackSpeed) {
             //builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
+        }
+
+        if (ForgeroConfigurationLoader.configuration.useEntityAttributes) {
+            // Mining speed
+            float miningSpeed = MiningSpeed.apply(dynamicProperties(stack));
+            builder.put(MINING_SPEED, new EntityAttributeModifier(BASE_MINING_SPEED_ID, "Tool modifier", miningSpeed, EntityAttributeModifier.Operation.ADDITION));
+
+            // Durability
+            int durability = Durability.apply(dynamicProperties(stack));
+            builder.put(DURABILITY, new EntityAttributeModifier(BASE_DURABILITY_ID, "Tool modifier", durability, EntityAttributeModifier.Operation.ADDITION));
+
+            // Mining Level
+            int miningLevel = MiningLevel.apply(dynamicProperties(stack));
+            if (miningLevel != 0) {
+                builder.put(MINING_LEVEL, new EntityAttributeModifier(BASE_MINING_LEVEL_ID, "Tool modifier", miningLevel, EntityAttributeModifier.Operation.ADDITION));
+
+            }
         }
         return builder.build();
     }

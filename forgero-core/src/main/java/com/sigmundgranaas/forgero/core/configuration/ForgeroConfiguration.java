@@ -42,4 +42,6 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
     @NotNull
     public Integer baseSoulLevelRequirement = 1000;
 
+    @NotNull
+    public Boolean useEntityAttributes = true;
 }
