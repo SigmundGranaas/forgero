@@ -4,8 +4,8 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.ToolWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
@@ -35,8 +35,7 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        new ToolWriter(dynamicState(itemStack)).write(tooltip, tooltipContext);
-
+        StateWriter.of(dynamicState(itemStack)).write(tooltip, tooltipContext);
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 
