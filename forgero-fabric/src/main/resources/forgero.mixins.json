@@ -10,6 +10,7 @@
     "DynamicToolItemStackMixin",
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
+    "ItemStackAttributeDescriptionMixin",
     "ItemStackDropGemOnBreakMixin",
     "ItemStackUnbreakableMixin",
     "LivingEntityMagneticMixin",
@@ -25,6 +26,7 @@
   ],
   "client": [
     "ClientPlayNetworkGetTotemMixin",
+    "ItemDescriptionInjector",
     "ItemModelGeneratorMixin",
     "ItemRenderContextMixin",
     "ItemRenderMixin",

@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulParser;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.SoulWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.SoulWriter;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

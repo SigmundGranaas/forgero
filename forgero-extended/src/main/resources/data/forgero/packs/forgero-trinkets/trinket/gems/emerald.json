@@ -17,6 +17,7 @@
       {
         "type": "DURABILITY",
         "order": "BASE",
+        "category": "ALL",
         "operation": "ADDITION",
         "value": 300.0
       }

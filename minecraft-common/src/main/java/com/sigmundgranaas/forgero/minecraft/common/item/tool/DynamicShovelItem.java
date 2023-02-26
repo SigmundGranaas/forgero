@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.item.tooltip.Writer;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
@@ -33,10 +33,9 @@ public class DynamicShovelItem extends ShovelItem implements StateItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        StateWriter.of(state(stack)).write(tooltip, context);
-
-        super.appendTooltip(stack, world, tooltip, context);
+    public void appendTooltip(ItemStack itemStack, @Nullable World world, List<Text> tooltip, TooltipContext tooltipContext) {
+        StateWriter.of(dynamicState(itemStack)).write(tooltip, tooltipContext);
+        super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 
     @Override

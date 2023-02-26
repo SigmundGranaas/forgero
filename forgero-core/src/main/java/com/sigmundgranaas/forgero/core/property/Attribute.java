@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.property;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -49,10 +50,16 @@ public interface Attribute extends Property, Comparable<Attribute> {
 
     int getLevel();
 
+    List<String> targets();
+
+    String targetType();
 
     int getPriority();
 
     String getId();
+
+
+    float leveledValue();
 
 
     default float applyAttribute(Target target, float currentAttribute) {
@@ -66,6 +73,5 @@ public interface Attribute extends Property, Comparable<Attribute> {
     default boolean applyCondition(Target target) {
         return this.getCondition().test(target);
     }
-
 
 }
