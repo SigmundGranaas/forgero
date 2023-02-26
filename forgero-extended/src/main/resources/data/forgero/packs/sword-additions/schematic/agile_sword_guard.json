@@ -63,7 +63,6 @@
       {
         "type": "RARITY",
         "order": "COMPOSITE",
-        "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.4
       },
@@ -83,7 +82,6 @@
       {
         "type": "ATTACK_SPEED",
         "order": "BASE",
-        "category": "UTILITY",
         "operation": "ADDITION",
         "value": 0.2
       }
