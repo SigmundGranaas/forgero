@@ -1,6 +1,6 @@
 plugins {
     id "idea"
-    id "fabric-loom" version "1.0.12" apply true
+    id 'fabric-loom' apply true
     id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
