@@ -2,8 +2,9 @@ package com.sigmundgranaas.forgero.core.state.composite;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.property.*;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -19,7 +20,6 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public abstract class BaseComposite implements Composite {
@@ -45,47 +45,18 @@ public abstract class BaseComposite implements Composite {
 
     @Override
     public List<Property> compositeProperties(Target target) {
-        var props = components().stream()
-                .map(prop -> prop.applyProperty(target))
-                .flatMap(List::stream)
-                .filter(prop -> !(prop instanceof Attribute attribute && attribute.getCategory() == Category.LOCAL))
-                .collect(Collectors.toList());
-
-        var upgradeProps = components().stream()
+        var upgradeProps = slots().stream()
                 .map(state -> state.applyProperty(target))
                 .flatMap(List::stream)
                 .filter(this::filterAttribute)
                 .toList();
 
-        var compositeAttributes = Property.stream(props)
-                .getAttributes()
-                .collect(Collectors.toMap(Attribute::toString, attribute -> attribute, (attribute1, attribute2) -> attribute1.getPriority() > attribute2.getPriority() ? attribute1 : attribute2))
-                .values()
-                .stream()
-                .filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
-                .map(Property.class::cast)
-                .toList();
-
-        var newValues = new ArrayList<Property>();
-        for (AttributeType type : AttributeType.values()) {
-            var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
-            newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
-            var attribute = newBaseAttribute.build();
-            if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1) {
-                newValues.add(newBaseAttribute.build());
-            }
-        }
-
-        var other = new ArrayList<>(props);
-        compositeAttributes.forEach(other::remove);
-        upgradeProps.forEach(other::remove);
-        other.addAll(newValues);
-        return other;
+        return upgradeProps;
     }
 
-    private boolean filterAttribute(Property property) {
+    protected boolean filterAttribute(Property property) {
         if (property instanceof Attribute attribute) {
-            return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory());
+            return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory()) || attribute.getCategory() == Category.PASS;
         }
         return false;
     }
