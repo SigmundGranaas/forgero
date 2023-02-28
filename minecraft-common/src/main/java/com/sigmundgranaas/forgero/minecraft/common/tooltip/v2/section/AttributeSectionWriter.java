@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 import net.minecraft.client.item.TooltipContext;
@@ -44,7 +44,7 @@ public class AttributeSectionWriter extends SectionWriter {
 
     @Override
     public boolean shouldWrite() {
-        return container instanceof Constructed && configuration.writableAttributes().size() > 0;
+        return entries().size() > 0 && container.stream().getAttributes().noneMatch(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE);
     }
 
     @Override
