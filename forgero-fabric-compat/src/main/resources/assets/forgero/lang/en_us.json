@@ -10,10 +10,11 @@
   "forgero.menu.options.disableVanillaRecipes": "Disable vanilla recipes",
   "forgero.menu.options.disableVanillaLoot": "Disable vanilla loot",
   "forgero.menu.options.disableVanillaTools": "Disable vanilla tools",
-  "forgero.menu.options.convertVanillaRecipesToForgeroTools": "Convert vanilla recipes to Forgero tools",
+  "forgero.menu.options.convertVanillaRecipesToForgeroTools": "Vanilla recipes to Forgero tools",
   "forgero.menu.options.convertVanillaToolLoot": "Convert vanilla tool loot",
   "forgero.menu.options.enableUnbreakableTools": "Enable unbreakable tools",
   "forgero.menu.options.enableRepairKits": "Enable repair kits",
   "forgero.menu.options.resourceLogging": "Resource logging",
-  "forgero.menu.options.logDisabledPackages": "Log disabled packages"
+  "forgero.menu.options.logDisabledPackages": "Log disabled packages",
+  "forgero.menu.options.useEntityAttributes": "Entity attributes"
 }

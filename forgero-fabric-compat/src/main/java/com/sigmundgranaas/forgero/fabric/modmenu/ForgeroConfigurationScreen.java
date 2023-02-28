@@ -1,124 +1,91 @@
 package com.sigmundgranaas.forgero.fabric.modmenu;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-import com.sigmundgranaas.forgero.fabric.modmenu.gui.BooleanWidget;
-import com.sigmundgranaas.forgero.fabric.modmenu.gui.ListWidget;
-import com.sigmundgranaas.forgero.fabric.modmenu.gui.ResetButtonWidget;
-import com.sigmundgranaas.forgero.fabric.modmenu.gui.TextWidget;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
+import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationEntry;
+import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationListWidget;
+import com.sigmundgranaas.forgero.fabric.modmenu.gui.OptionEntryFactory;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
-import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.Field;
-import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class ForgeroConfigurationScreen extends GameOptionsScreen {
-	public static ForgeroConfigurationScreen INSTANCE;
+    public static ForgeroConfigurationScreen INSTANCE;
 
-	private Screen previous;
-	private ButtonListWidget list;
+    private ConfigurationListWidget controlsList;
 
-	public ForgeroConfigurationScreen(Screen previous) {
-		super(previous, MinecraftClient.getInstance().options, Text.translatable("forgero.menu.options"));
-		this.previous = previous;
+    public ForgeroConfigurationScreen(Screen previous, GameOptions gameOptions) {
+        super(previous, gameOptions, Text.translatable("forgero.menu.options"));
 
-		INSTANCE = this;
-	}
+        INSTANCE = this;
+    }
 
-	@Override
-	protected void init() {
-		super.init();
+    @Override
+    protected void init() {
+        super.init();
+        List<ConfigurationEntry> entries = buildConfigScreen();
+        this.controlsList = new ConfigurationListWidget(this, this.client, entries);
+        this.addSelectableChild(this.controlsList);
+    }
 
-		BuildConfigScreen();
-	}
+    @Override
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        // Render background texture with vOffset -100 to match Mod Menu's vOffset
+        this.renderBackground(matrices);
+        this.controlsList.render(matrices, mouseX, mouseY, delta);
 
-	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		// Render background texture with vOffset -100 to match Mod Menu's vOffset
-		this.renderBackgroundTexture(-100);
+        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
 
-		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 5, 0xffffff);
+        super.render(matrices, mouseX, mouseY, delta);
+    }
 
-		for (Element element : children()) {
-			if (element instanceof Drawable drawable) {
-				drawable.render(matrices, mouseX, mouseY, delta);
-			}
-		}
 
-		super.render(matrices, mouseX, mouseY, delta);
-	}
+    @Override
+    public void close() {
+        this.client.setScreen(this.parent);
+    }
 
-	@Override
-	public void close() {
-		this.client.setScreen(this.parent);
-	}
+    public List<ConfigurationEntry> buildConfigScreen() {
+        var list = new ArrayList<ConfigurationEntry>();
+        try {
+            int y = this.height / 6;
+            int booleanWidgetWithResetHeight = 20;
+            int padding = 5;
 
-	public void BuildConfigScreen() {
-		try {
-			int y = this.height / 6;
-			int booleanWidgetWithResetHeight = 20;
-			int padding = 5;
+            var entryFactory = new OptionEntryFactory();
+            for (Field field : ForgeroConfigurationLoader.configuration.getClass().getFields()) {
+                var value = field.get(ForgeroConfigurationLoader.configuration);
+                entryFactory.convertToEntry(field, value, 0, y).ifPresent(list::add);
 
-			for (Field field : ForgeroConfigurationLoader.configuration.getClass().getFields()) {
-				var value = field.get(ForgeroConfigurationLoader.configuration);
+                y += booleanWidgetWithResetHeight + padding;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
-				if (value instanceof Boolean) {
-					createBooleanWidgetWithReset(
-							this.width / 2 - 200,
-							y,
-							Text.translatable(MessageFormat.format("forgero.menu.options.{0}", field.getName())),
-							ForgeroConfigurationLoader.configuration,
-							field
-					);
-				} else if (value instanceof List) {
-					createListWidgetWithReset(
-							this.width / 2 - 200,
-							y,
-							Text.translatable(MessageFormat.format("forgero.menu.options.{0}", field.getName())),
-							ForgeroConfigurationLoader.configuration,
-							field
-					);
-				}
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - 28, 150, 20, Text.translatable("forgero.menu.options.reload_config"), button -> {
+            ForgeroConfigurationLoader.load();
+            RebuildConfigScreen();
+        }));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 28, 150, 20, ScreenTexts.DONE, button -> {
+            close();
+        }));
+        return list;
+    }
 
-				y += booleanWidgetWithResetHeight + padding;
-			}
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-		this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - 28, 150, 20, Text.translatable("forgero.menu.options.reload_config"), button -> {
-			ForgeroConfigurationLoader.load();
-			RebuildConfigScreen();
-		}));		this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 28, 150, 20, ScreenTexts.DONE, button -> {
-			close();
-		}));
-	}
-
-	// FIXME: This is a hack that shouldn't be necessary if the widget creation functions are moved into their own class which can track the states
-	public void RebuildConfigScreen() {
-		clearChildren();
-		BuildConfigScreen();
-	}
-
-	// FIXME: Refactor this into its own class
-	public void createBooleanWidgetWithReset(int x, int y, Text optionName, Object object, Field field) {
-		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, MinecraftClient.getInstance().textRenderer));
-		this.addDrawableChild(new BooleanWidget(x + 320, y, 50, 20, object, field));
-		this.addDrawableChild(new ResetButtonWidget(x + 380, y, 50, 20, object, field));
-	}
-
-	// FIXME: Refactor this into its own class
-	public void createListWidgetWithReset(int x, int y, Text optionName, Object object, Field field) {
-		this.addDrawableChild(new TextWidget(x, y - 5, 300, 20, optionName, MinecraftClient.getInstance().textRenderer));
-		this.addDrawableChild(new ListWidget(x + 320, y, 50, 20, object, field));
-		this.addDrawableChild(new ResetButtonWidget(x + 380, y, 50, 20, object, field));
-	}
+    // FIXME: This is a hack that shouldn't be necessary if the widget creation functions are moved into their own class which can track the states
+    public void RebuildConfigScreen() {
+        clearChildren();
+        buildConfigScreen();
+    }
 }
