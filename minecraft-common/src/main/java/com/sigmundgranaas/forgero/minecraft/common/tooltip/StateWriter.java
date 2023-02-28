@@ -26,7 +26,7 @@ public class StateWriter implements Writer {
 
     public static Writer of(State state) {
         Writer writer;
-        if (state.test(TOOL)) {
+        if (state.test(TOOL) || state.test(SWORD)) {
             writer = new ToolWriter(state);
         } else if (state.test(PART)) {
             writer = new PartWriter((state));
