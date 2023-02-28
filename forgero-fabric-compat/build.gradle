@@ -1,10 +1,9 @@
 plugins {
     id "idea"
-    id "fabric-loom" version "1.0.12" apply true
+    id 'fabric-loom' apply true
     id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
-
 
 dependencies {
     implementation project(':forgero-core')
@@ -114,7 +113,6 @@ dependencies {
     modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 
-
 processResources {
     inputs.property "version", rootProject.version
 
@@ -140,7 +138,6 @@ jar {
 publishing {
 
 }
-
 
 sourceSets {
     forgero {
@@ -184,6 +181,7 @@ loom {
             name "Client Extended Compat"
 
             client()
+            ideConfigGenerated(true)
         }
         clientExtendedCompatOptimised {
             name "Client Extended Compat Optimised"
@@ -194,6 +192,7 @@ loom {
             }
 
             client()
+            ideConfigGenerated(true)
         }
         clientExtendedCompatOptimisedJustLoad {
             name "Client Extended Compat Optimised Just Load"
@@ -205,6 +204,7 @@ loom {
             }
 
             client()
+            ideConfigGenerated(true)
         }
     }
 }
