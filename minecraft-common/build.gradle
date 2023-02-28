@@ -1,8 +1,7 @@
 plugins {
     id "idea"
-    id "fabric-loom" version "1.0.12" apply true
+    id 'fabric-loom' apply true
 }
-
 
 configurations {
     dev {

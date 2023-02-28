@@ -1,6 +1,6 @@
 plugins {
     id "idea"
-    id "fabric-loom" version "1.0.12" apply true
+    id 'fabric-loom' apply true
     id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
@@ -11,6 +11,7 @@ configurations {
         canBeConsumed = true
     }
 }
+
 artifacts {
     dev jar
 }
@@ -110,7 +111,6 @@ publishing {
     }
 }
 
-
 curseforge {
     apiKey = System.getenv("CurseForgeApiKey") ?: ""
     project {
@@ -159,12 +159,14 @@ loom {
                 implementation project(':forgero-compat')
             }
             client()
+            ideConfigGenerated(true)
         }
         clientVanilla {
             dependencies {
                 implementation project(':forgero-vanilla')
             }
             client()
+            ideConfigGenerated(true)
         }
 
         testmodServer {
