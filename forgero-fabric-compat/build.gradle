@@ -38,10 +38,19 @@ dependencies {
     modCompileOnly "maven.modrinth:cloth-config:8.2.88+fabric"
     modCompileOnly("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
 
+    //betterend&betternether
+   // modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
+   // modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
+   // modImplementation "maven.modrinth:MpzVLzy5:InVK1xFf"
+
+
     //emi
     //modCompileOnly "dev.emi:emi:${emi_version}:api"
     //modLocalRuntime "dev.emi:emi:${emi_version}"
     //modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
+
+
+
 
     //toolstats testing
     //modImplementation "curse.maven:tool-stats-377109:3944167"
