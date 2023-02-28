@@ -3,7 +3,6 @@ plugins {
     id 'fabric-loom' apply true
 }
 
-
 configurations {
     dev {
         canBeResolved = false

@@ -5,7 +5,6 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-
 dependencies {
     implementation project(':forgero-core')
     implementation project(':forgero-vanilla')
@@ -114,7 +113,6 @@ dependencies {
     modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 
-
 processResources {
     inputs.property "version", rootProject.version
 
@@ -140,7 +138,6 @@ jar {
 publishing {
 
 }
-
 
 sourceSets {
     forgero {
@@ -184,6 +181,7 @@ loom {
             name "Client Extended Compat"
 
             client()
+            ideConfigGenerated(true)
         }
         clientExtendedCompatOptimised {
             name "Client Extended Compat Optimised"
@@ -194,6 +192,7 @@ loom {
             }
 
             client()
+            ideConfigGenerated(true)
         }
         clientExtendedCompatOptimisedJustLoad {
             name "Client Extended Compat Optimised Just Load"
@@ -205,6 +204,7 @@ loom {
             }
 
             client()
+            ideConfigGenerated(true)
         }
     }
 }
