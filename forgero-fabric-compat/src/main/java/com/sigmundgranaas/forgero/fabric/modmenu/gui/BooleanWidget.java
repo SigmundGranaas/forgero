@@ -22,7 +22,6 @@ public class BooleanWidget extends ButtonWidget {
 	@Override
 	public void onPress() {
 		super.onPress();
-
 		toggle();
 		ForgeroConfigurationLoader.save();
 	}
@@ -39,7 +38,6 @@ public class BooleanWidget extends ButtonWidget {
 	private void toggle() {
 		try {
 			this.field.set(this.object, !(Boolean) this.field.get(this.object));
-
 			setMessage(getText());
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
