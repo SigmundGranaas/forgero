@@ -16,5 +16,6 @@
   "forgero.menu.options.enableRepairKits": "Enable repair kits",
   "forgero.menu.options.resourceLogging": "Resource logging",
   "forgero.menu.options.logDisabledPackages": "Log disabled packages",
-  "forgero.menu.options.useEntityAttributes": "Entity attributes"
+  "forgero.menu.options.useEntityAttributes": "Entity attributes",
+  "forgero.menu.options.baseSoulLevelRequirement": "Base soul level"
 }
