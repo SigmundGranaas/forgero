@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe;
 
 public interface RecipeGenerator {
-    default boolean isValid() {
-        return true;
-    }
+	default boolean isValid() {
+		return true;
+	}
 
-    RecipeWrapper generate();
+	RecipeWrapper generate();
 }

@@ -15,29 +15,29 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 @Getter
 @ToString
 public class PropertyData implements Property {
-    @Builder.Default
-    private int priority = 0;
-    @Builder.Default
-    private String id = EMPTY_IDENTIFIER;
-    @Builder.Default
-    private String type = EMPTY_IDENTIFIER;
-    @Builder.Default
-    private String name = EMPTY_IDENTIFIER;
-    @Builder.Default
-    private float value = 0f;
-    @Builder.Default
-    private int level = 0;
-    @Builder.Default
-    private List<String> tags = Collections.emptyList();
-    @Builder.Default
-    private BreakingDirection direction = BreakingDirection.ANY;
-    @Builder.Default
-    private String[] pattern = {};
-    @Builder.Default
-    private String description = EMPTY_IDENTIFIER;
+	@Builder.Default
+	private int priority = 0;
+	@Builder.Default
+	private String id = EMPTY_IDENTIFIER;
+	@Builder.Default
+	private String type = EMPTY_IDENTIFIER;
+	@Builder.Default
+	private String name = EMPTY_IDENTIFIER;
+	@Builder.Default
+	private float value = 0f;
+	@Builder.Default
+	private int level = 0;
+	@Builder.Default
+	private List<String> tags = Collections.emptyList();
+	@Builder.Default
+	private BreakingDirection direction = BreakingDirection.ANY;
+	@Builder.Default
+	private String[] pattern = {};
+	@Builder.Default
+	private String description = EMPTY_IDENTIFIER;
 
-    @Override
-    public String type() {
-        return type;
-    }
+	@Override
+	public String type() {
+		return type;
+	}
 }

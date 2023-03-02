@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.ForgeroConfigurationScreen;
+
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;

@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdenti
  * How textures are fetched might rely on a running instance of Minecraft, and therefore can't be expressed in the core package
  */
 public interface TextureLoader {
-    Texture getResource(TextureIdentifier id);
+	Texture getResource(TextureIdentifier id);
 
-    Texture getResource(PaletteIdentifier id);
+	Texture getResource(PaletteIdentifier id);
 }

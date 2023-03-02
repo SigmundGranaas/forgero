@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 

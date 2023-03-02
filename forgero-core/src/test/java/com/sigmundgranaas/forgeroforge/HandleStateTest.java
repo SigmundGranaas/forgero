@@ -10,39 +10,39 @@ import static com.sigmundgranaas.forgeroforge.testutil.Upgrades.REDSTONE_GEM;
 
 public class HandleStateTest {
 
-    @Test
-    void testCreateHandleState() {
-        var handle = HANDLE;
-        Assertions.assertEquals("oak-handle", handle.name());
-    }
+	@Test
+	void testCreateHandleState() {
+		var handle = HANDLE;
+		Assertions.assertEquals("oak-handle", handle.name());
+	}
 
-    @Test
-    void testHandleProperties() {
-        var handle = HANDLE;
-        Assertions.assertTrue(handle.getProperties().size() > 0);
-    }
+	@Test
+	void testHandleProperties() {
+		var handle = HANDLE;
+		Assertions.assertTrue(handle.getProperties().size() > 0);
+	}
 
-    @Test
-    void testHandleType() {
-        var handle = HANDLE;
-        Assertions.assertTrue(handle.test(Types.HANDLE));
-    }
+	@Test
+	void testHandleType() {
+		var handle = HANDLE;
+		Assertions.assertTrue(handle.test(Types.HANDLE));
+	}
 
-    @Test
-    void testHandleTypeMaterial() {
-        var handle = HANDLE;
-        Assertions.assertTrue(handle.test(Types.MATERIAL));
-    }
+	@Test
+	void testHandleTypeMaterial() {
+		var handle = HANDLE;
+		Assertions.assertTrue(handle.test(Types.MATERIAL));
+	}
 
-    @Test
-    void testHandleUpgradeIsNotMutated() {
-        var handle = HANDLE;
-        Assertions.assertNotEquals(handle, handle.upgrade(REDSTONE_GEM));
-    }
+	@Test
+	void testHandleUpgradeIsNotMutated() {
+		var handle = HANDLE;
+		Assertions.assertNotEquals(handle, handle.upgrade(REDSTONE_GEM));
+	}
 
-    @Test
-    void testHandleUpgradeAppliesProperty() {
-        var handle = HANDLE.upgrade(REDSTONE_GEM);
-        Assertions.assertEquals(11, handle.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
-    }
+	@Test
+	void testHandleUpgradeAppliesProperty() {
+		var handle = HANDLE.upgrade(REDSTONE_GEM);
+		Assertions.assertEquals(11, handle.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
+	}
 }

@@ -4,8 +4,10 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationEntry;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationListWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.OptionEntryFactory;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;

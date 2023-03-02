@@ -12,46 +12,46 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class CompatMixinPlugin implements IMixinConfigPlugin {
-    private static final Supplier<Boolean> TRUE = () -> true;
+	private static final Supplier<Boolean> TRUE = () -> true;
 
-    private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
-            "com.sigmundgranaas.forgero.fabric.mixins.BetterCombatWeaponRegistryMixin", () -> ForgeroCompatInitializer.bettercombat,
-            "com.sigmundgranaas.forgero.fabric.mixins.ModMenuInitMixin", () -> ForgeroCompatInitializer.modmenu
-    );
+	private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
+			"com.sigmundgranaas.forgero.fabric.mixins.BetterCombatWeaponRegistryMixin", () -> ForgeroCompatInitializer.bettercombat,
+			"com.sigmundgranaas.forgero.fabric.mixins.ModMenuInitMixin", () -> ForgeroCompatInitializer.modmenu
+	);
 
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return CONDITIONS.getOrDefault(mixinClassName, TRUE).get();
-    }
+	@Override
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		return CONDITIONS.getOrDefault(mixinClassName, TRUE).get();
+	}
 
-    //Boilerplate
-    @Override
-    public void onLoad(String mixinPackage) {
+	//Boilerplate
+	@Override
+	public void onLoad(String mixinPackage) {
 
-    }
+	}
 
-    @Override
-    public String getRefMapperConfig() {
-        return null;
-    }
+	@Override
+	public String getRefMapperConfig() {
+		return null;
+	}
 
-    @Override
-    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
+	@Override
+	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
 
-    }
+	}
 
-    @Override
-    public List<String> getMixins() {
-        return null;
-    }
+	@Override
+	public List<String> getMixins() {
+		return null;
+	}
 
-    @Override
-    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+	@Override
+	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 
-    }
+	}
 
-    @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+	@Override
+	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 
-    }
+	}
 }

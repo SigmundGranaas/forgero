@@ -5,5 +5,5 @@ import java.util.List;
 
 @FunctionalInterface
 public interface PackageSupplier {
-    List<DataPackage> supply();
+	List<DataPackage> supply();
 }

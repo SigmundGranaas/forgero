@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface RecipeLoader {
 
-    RecipeLoader INSTANCE = RecipeLoaderImpl.getInstance();
+	RecipeLoader INSTANCE = RecipeLoaderImpl.getInstance();
 
-    Map<RecipeTypes, JsonObject> loadRecipeTemplates();
+	Map<RecipeTypes, JsonObject> loadRecipeTemplates();
 }

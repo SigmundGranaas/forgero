@@ -8,17 +8,17 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ActivePropertyRegistry {
-    private static final List<PropertyEntry> entries = new ArrayList<>();
+	private static final List<PropertyEntry> entries = new ArrayList<>();
 
-    public static void register(PropertyEntry entry) {
-        entries.add(entry);
-    }
+	public static void register(PropertyEntry entry) {
+		entries.add(entry);
+	}
 
-    public static List<PropertyEntry> getEntries() {
-        return entries;
-    }
+	public static List<PropertyEntry> getEntries() {
+		return entries;
+	}
 
-    public record PropertyEntry(Predicate<PropertyPojo.Active> predicate,
-                                Function<PropertyPojo.Active, ActiveProperty> factory) {
-    }
+	public record PropertyEntry(Predicate<PropertyPojo.Active> predicate,
+	                            Function<PropertyPojo.Active, ActiveProperty> factory) {
+	}
 }

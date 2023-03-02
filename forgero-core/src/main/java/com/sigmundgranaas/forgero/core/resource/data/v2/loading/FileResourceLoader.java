@@ -16,69 +16,69 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class FileResourceLoader implements ResourceLoader {
-    private final String folder;
-    private final ResourceLocator walker;
-    private final ResourceCollectionMapper mapper;
+	private final String folder;
+	private final ResourceLocator walker;
+	private final ResourceCollectionMapper mapper;
 
-    private final InputStreamLoader streamLoader;
+	private final InputStreamLoader streamLoader;
 
-    public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper, InputStreamLoader loader) {
-        this.folder = folderPath;
-        this.walker = walker;
-        this.mapper = mapper;
-        this.streamLoader = loader;
-    }
+	public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper, InputStreamLoader loader) {
+		this.folder = folderPath;
+		this.walker = walker;
+		this.mapper = mapper;
+		this.streamLoader = loader;
+	}
 
-    public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper) {
-        this.folder = folderPath;
-        this.walker = walker;
-        this.mapper = mapper;
-        this.streamLoader = new ClassLoader();
-    }
+	public FileResourceLoader(String folderPath, ResourceLocator walker, ResourceCollectionMapper mapper) {
+		this.folder = folderPath;
+		this.walker = walker;
+		this.mapper = mapper;
+		this.streamLoader = new ClassLoader();
+	}
 
-    public static FileResourceLoader of(String folderPath, ResourceLocator walker, List<ResourceCollectionMapper> mappers) {
-        var mapper = mappers.stream().reduce(ResourceCollectionMapper.DEFAULT, (mapper1, mapper2) -> mapper1.andThen(mapper2));
+	public static FileResourceLoader of(String folderPath, ResourceLocator walker, List<ResourceCollectionMapper> mappers) {
+		var mapper = mappers.stream().reduce(ResourceCollectionMapper.DEFAULT, (mapper1, mapper2) -> mapper1.andThen(mapper2));
 
-        return new FileResourceLoader(folderPath, walker, mapper, new ClassLoader());
-    }
+		return new FileResourceLoader(folderPath, walker, mapper, new ClassLoader());
+	}
 
-    @Override
-    public List<DataResource> load() {
-        List<Path> paths = walker.locate(folder);
-        var rawResources = rawResources(paths);
-        return mapper.apply(rawResources);
-    }
+	@Override
+	public List<DataResource> load() {
+		List<Path> paths = walker.locate(folder);
+		var rawResources = rawResources(paths);
+		return mapper.apply(rawResources);
+	}
 
-    @Override
-    public Optional<DataResource> loadResource(String path) {
-        return fileProvider(path).get();
-    }
+	@Override
+	public Optional<DataResource> loadResource(String path) {
+		return fileProvider(path).get();
+	}
 
-    private List<DataResource> rawResources(List<Path> paths) {
-        var resources = paths.stream()
-                .map(this::getFilePath)
-                .flatMap(Optional::stream)
-                .map(this::fileProvider)
-                .map(CompletableFuture::supplyAsync)
-                .toList();
+	private List<DataResource> rawResources(List<Path> paths) {
+		var resources = paths.stream()
+				.map(this::getFilePath)
+				.flatMap(Optional::stream)
+				.map(this::fileProvider)
+				.map(CompletableFuture::supplyAsync)
+				.toList();
 
-        var completedResources = resources.stream()
-                .map(CompletableFuture::join)
-                .flatMap(Optional::stream)
-                .toList();
-        return completedResources;
-    }
+		var completedResources = resources.stream()
+				.map(CompletableFuture::join)
+				.flatMap(Optional::stream)
+				.toList();
+		return completedResources;
+	}
 
-    private FileResourceProvider fileProvider(String path) {
-        return new FileResourceProvider(path, streamLoader);
-    }
+	private FileResourceProvider fileProvider(String path) {
+		return new FileResourceProvider(path, streamLoader);
+	}
 
-    private Optional<String> getFilePath(Path path) {
-        String[] elements = path.toString().split("data");
-        if (elements.length == 2) {
-            return Optional.of("/" + "data" + elements[1]);
-        }
-        Forgero.LOGGER.error("Unable to resolve path {}, as it could not be split using default split operator {}", path.toString(), File.separator);
-        return Optional.empty();
-    }
+	private Optional<String> getFilePath(Path path) {
+		String[] elements = path.toString().split("data");
+		if (elements.length == 2) {
+			return Optional.of("/" + "data" + elements[1]);
+		}
+		Forgero.LOGGER.error("Unable to resolve path {}, as it could not be split using default split operator {}", path.toString(), File.separator);
+		return Optional.empty();
+	}
 }

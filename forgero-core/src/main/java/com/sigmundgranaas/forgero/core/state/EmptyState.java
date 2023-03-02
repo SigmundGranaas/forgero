@@ -5,20 +5,20 @@ import com.sigmundgranaas.forgero.core.type.Type;
 
 public class EmptyState implements State {
 
-    public static State EMPTY_STATE = new EmptyState();
+	public static State EMPTY_STATE = new EmptyState();
 
-    @Override
-    public String name() {
-        return "empty";
-    }
+	@Override
+	public String name() {
+		return "empty";
+	}
 
-    @Override
-    public String nameSpace() {
-        return Forgero.NAMESPACE;
-    }
+	@Override
+	public String nameSpace() {
+		return Forgero.NAMESPACE;
+	}
 
-    @Override
-    public Type type() {
-        return Type.UNDEFINED;
-    }
+	@Override
+	public Type type() {
+		return Type.UNDEFINED;
+	}
 }

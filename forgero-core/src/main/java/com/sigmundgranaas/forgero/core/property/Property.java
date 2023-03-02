@@ -12,22 +12,22 @@ import java.util.List;
  */
 
 public interface Property {
-    static PropertyStream stream(List<Property> properties) {
-        return new PropertyStream(properties.stream());
-    }
+	static PropertyStream stream(List<Property> properties) {
+		return new PropertyStream(properties.stream());
+	}
 
-    static PropertyPojo pojo(List<Property> properties) {
-        return new PropertyPojo();
-    }
+	static PropertyPojo pojo(List<Property> properties) {
+		return new PropertyPojo();
+	}
 
-    String type();
+	String type();
 
-    default float applyAttribute(Target target, float currentAttribute) {
-        return currentAttribute;
-    }
+	default float applyAttribute(Target target, float currentAttribute) {
+		return currentAttribute;
+	}
 
-    default boolean applyCondition(Target target) {
-        return true;
-    }
+	default boolean applyCondition(Target target) {
+		return true;
+	}
 
 }

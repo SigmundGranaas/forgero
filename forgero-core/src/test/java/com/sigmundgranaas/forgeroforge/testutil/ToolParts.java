@@ -10,29 +10,29 @@ import static com.sigmundgranaas.forgeroforge.testutil.Materials.IRON;
 import static com.sigmundgranaas.forgeroforge.testutil.Materials.OAK;
 
 public class ToolParts {
-    public static Construct HANDLE = Construct.builder()
-            .addIngredient(OAK)
-            .addIngredient(Schematics.HANDLE_SCHEMATIC)
-            .addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM), Collections.emptySet()))
-            .type(Types.HANDLE)
-            .build();
+	public static Construct HANDLE = Construct.builder()
+			.addIngredient(OAK)
+			.addIngredient(Schematics.HANDLE_SCHEMATIC)
+			.addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM), Collections.emptySet()))
+			.type(Types.HANDLE)
+			.build();
 
-    public static Construct REINFORCED_HANDLE = Construct.builder()
-            .addIngredient(OAK)
-            .addIngredient(Schematics.REINFORCED_HANDLE_SCHEMATIC)
-            .addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM, Types.MATERIAL), Collections.emptySet()))
-            .type(Types.HANDLE)
-            .build();
+	public static Construct REINFORCED_HANDLE = Construct.builder()
+			.addIngredient(OAK)
+			.addIngredient(Schematics.REINFORCED_HANDLE_SCHEMATIC)
+			.addUpgrades(EmptySlot.of(List.of(Types.MATERIAL, Types.GEM, Types.MATERIAL), Collections.emptySet()))
+			.type(Types.HANDLE)
+			.build();
 
-    public static Construct PICKAXE_HEAD = Construct.builder()
-            .addIngredient(IRON)
-            .addIngredient(Schematics.PICKAXE_HEAD_SCHEMATIC)
-            .type(Types.TOOL_PART_HEAD)
-            .build();
+	public static Construct PICKAXE_HEAD = Construct.builder()
+			.addIngredient(IRON)
+			.addIngredient(Schematics.PICKAXE_HEAD_SCHEMATIC)
+			.type(Types.TOOL_PART_HEAD)
+			.build();
 
-    public static Construct OAK_BINDING = Construct.builder()
-            .addIngredient(OAK)
-            .addIngredient(Schematics.BINDING_SCHEMATIC)
-            .type(Types.TOOL_BINDING)
-            .build();
+	public static Construct OAK_BINDING = Construct.builder()
+			.addIngredient(OAK)
+			.addIngredient(Schematics.BINDING_SCHEMATIC)
+			.type(Types.TOOL_BINDING)
+			.build();
 }

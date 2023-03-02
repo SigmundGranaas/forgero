@@ -16,58 +16,58 @@ import java.util.List;
  * POJO used for parsing all properties from JSON files.
  */
 public class PropertyPojo {
-    @SerializedName("attributes")
-    public List<PropertyPojo.Attribute> attributes;
-    @SerializedName(value = "passiveProperties", alternate = {"passive", "passive_properties"})
-    public List<PropertyPojo.Passive> passiveProperties;
+	@SerializedName("attributes")
+	public List<PropertyPojo.Attribute> attributes;
+	@SerializedName(value = "passiveProperties", alternate = {"passive", "passive_properties"})
+	public List<PropertyPojo.Passive> passiveProperties;
 
-    @SerializedName(value = "active")
-    public List<PropertyPojo.Active> active;
-    @SerializedName(value = "features")
-    public List<PropertyPojo.Feature> features;
+	@SerializedName(value = "active")
+	public List<PropertyPojo.Active> active;
+	@SerializedName(value = "features")
+	public List<PropertyPojo.Feature> features;
 
-    public static class Active {
-        public ActivePropertyType type;
-        public int depth;
-        public String tag;
-        public String description;
-        public BreakingDirection direction;
-        public String[] pattern;
-    }
+	public static class Active {
+		public ActivePropertyType type;
+		public int depth;
+		public String tag;
+		public String description;
+		public BreakingDirection direction;
+		public String[] pattern;
+	}
 
-    public static class Attribute {
-        public int priority = 0;
-        public String id = Identifiers.EMPTY_IDENTIFIER;
-        public String type;
-        public CalculationOrder order;
-        public NumericOperation operation;
-        public float value;
-        public PropertyPojo.Condition condition;
-        public Category category;
-        public float max;
-        public float min;
-    }
+	public static class Attribute {
+		public int priority = 0;
+		public String id = Identifiers.EMPTY_IDENTIFIER;
+		public String type;
+		public CalculationOrder order;
+		public NumericOperation operation;
+		public float value;
+		public PropertyPojo.Condition condition;
+		public Category category;
+		public float max;
+		public float min;
+	}
 
-    public static class Feature {
-        public int priority = 0;
-        public String id = Identifiers.EMPTY_IDENTIFIER;
-        public String type;
-        public String name;
-        public float value;
-        public int level;
-        public List<String> tags;
-        public BreakingDirection direction;
-        public String[] pattern;
-        public String description;
-    }
+	public static class Feature {
+		public int priority = 0;
+		public String id = Identifiers.EMPTY_IDENTIFIER;
+		public String type;
+		public String name;
+		public float value;
+		public int level;
+		public List<String> tags;
+		public BreakingDirection direction;
+		public String[] pattern;
+		public String description;
+	}
 
-    public static class Passive {
-        public PassivePropertyType type;
-        public String tag;
-    }
+	public static class Passive {
+		public PassivePropertyType type;
+		public String tag;
+	}
 
-    public static class Condition {
-        public TargetTypes target;
-        public List<String> tag;
-    }
+	public static class Condition {
+		public TargetTypes target;
+		public List<String> tag;
+	}
 }

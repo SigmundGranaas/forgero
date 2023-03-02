@@ -10,13 +10,13 @@ import java.util.Set;
  * This class is primarily used for filtering attributes which belong to a specific tool part when fetching all available attributes.
  */
 public record ToolPartTarget(Set<String> targets) implements Target {
-    @Override
-    public Set<TargetTypes> getTypes() {
-        return Set.of(TargetTypes.TOOL_PART_TYPE);
-    }
+	@Override
+	public Set<TargetTypes> getTypes() {
+		return Set.of(TargetTypes.TOOL_PART_TYPE);
+	}
 
-    @Override
-    public Set<String> getTags() {
-        return targets;
-    }
+	@Override
+	public Set<String> getTags() {
+		return targets;
+	}
 }

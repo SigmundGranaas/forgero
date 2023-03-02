@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 public class EntityStatuses {
-    public static byte ENTITY_STATUS_TOTEM = (byte) 355;
-    public static byte ENTITY_STATUS_SOUL_LEVEL_UP = (byte) 356;
+	public static byte ENTITY_STATUS_TOTEM = (byte) 355;
+	public static byte ENTITY_STATUS_SOUL_LEVEL_UP = (byte) 356;
 }

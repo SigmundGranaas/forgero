@@ -5,10 +5,10 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeC
 import java.util.List;
 
 public interface RecipeCollection {
-    RecipeCollection INSTANCE = RecipeCollectionImpl.getInstance();
+	RecipeCollection INSTANCE = RecipeCollectionImpl.getInstance();
 
-    List<RecipeWrapper> getRecipes();
+	List<RecipeWrapper> getRecipes();
 
-    List<ForgeroRecipeSerializer> getRecipeTypes();
+	List<ForgeroRecipeSerializer> getRecipeTypes();
 }
 

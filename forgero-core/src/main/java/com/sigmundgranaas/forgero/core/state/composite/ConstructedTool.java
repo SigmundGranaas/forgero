@@ -24,185 +24,188 @@ import java.util.stream.Stream;
 import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
 
 public class ConstructedTool extends ConstructedComposite implements SoulBindable, Conditional<ConstructedTool> {
-    private final State head;
-    private final State handle;
+	private final State head;
+	private final State handle;
 
-    private final List<PropertyContainer> conditions;
+	private final List<PropertyContainer> conditions;
 
-    public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id) {
-        super(slots, id, List.of(head, handle));
-        this.conditions = Collections.emptyList();
-        this.head = head;
-        this.handle = handle;
-    }
+	public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id) {
+		super(slots, id, List.of(head, handle));
+		this.conditions = Collections.emptyList();
+		this.head = head;
+		this.handle = handle;
+	}
 
-    public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id, List<PropertyContainer> conditions) {
-        super(slots, id, List.of(head, handle));
-        this.conditions = conditions;
-        this.head = head;
-        this.handle = handle;
-    }
+	public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id, List<PropertyContainer> conditions) {
+		super(slots, id, List.of(head, handle));
+		this.conditions = conditions;
+		this.head = head;
+		this.handle = handle;
+	}
 
-    @Override
-    public ConstructedTool upgrade(State upgrade) {
-        return toolBuilder().addUpgrade(upgrade).build();
-    }
+	@Override
+	public ConstructedTool upgrade(State upgrade) {
+		return toolBuilder().addUpgrade(upgrade).build();
+	}
 
-    @Override
-    public ConstructedTool removeUpgrade(String id) {
-        if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
-            return toolBuilder()
-                    .addSlotContainer(slotContainer.remove(id))
-                    .build();
-        } else {
-            for (int i = 0; i < parts().size(); i++) {
-                if (parts().get(i) instanceof Composite construct) {
-                    var compositeRemoved = construct.removeUpgrade(id);
-                    if (construct != compositeRemoved) {
-                        var ingredients = new ArrayList<>(parts());
-                        ingredients.set(i, compositeRemoved);
-                        var optBuilder = ToolBuilder.builder(ingredients).map(builder -> builder.addSlotContainer(slotContainer.copy())
-                                .conditions(conditions)
-                                .type(type())
-                                .id(identifier()));
-                        if (optBuilder.isPresent()) {
-                            return optBuilder.get().build();
-                        }
-                    }
-                }
-            }
-            for (int i = 0; i < upgrades().size(); i++) {
-                if (upgrades().get(i) instanceof Composite construct) {
-                    var compositeRemoved = construct.removeUpgrade(id);
-                    if (construct != compositeRemoved) {
-                        var slot = slots().get(i);
-                        var slots = new ArrayList<>(slots());
-                        slots.set(i, slot.empty().fill(compositeRemoved, slot.category()).orElse(slot.empty()));
-                        return toolBuilder()
-                                .addSlotContainer(SlotContainer.of(slots))
-                                .build();
-                    }
-                }
-            }
-        }
-        return this;
-    }
+	@Override
+	public ConstructedTool removeUpgrade(String id) {
+		if (upgrades().stream().anyMatch(state -> state.identifier().contains(id))) {
+			return toolBuilder()
+					.addSlotContainer(slotContainer.remove(id))
+					.build();
+		} else {
+			for (int i = 0; i < parts().size(); i++) {
+				if (parts().get(i) instanceof Composite construct) {
+					var compositeRemoved = construct.removeUpgrade(id);
+					if (construct != compositeRemoved) {
+						var ingredients = new ArrayList<>(parts());
+						ingredients.set(i, compositeRemoved);
+						var optBuilder = ToolBuilder.builder(ingredients).map(builder -> builder.addSlotContainer(slotContainer.copy())
+								.conditions(conditions)
+								.type(type())
+								.id(identifier()));
+						if (optBuilder.isPresent()) {
+							return optBuilder.get().build();
+						}
+					}
+				}
+			}
+			for (int i = 0; i < upgrades().size(); i++) {
+				if (upgrades().get(i) instanceof Composite construct) {
+					var compositeRemoved = construct.removeUpgrade(id);
+					if (construct != compositeRemoved) {
+						var slot = slots().get(i);
+						var slots = new ArrayList<>(slots());
+						slots.set(i, slot.empty().fill(compositeRemoved, slot.category()).orElse(slot.empty()));
+						return toolBuilder()
+								.addSlotContainer(SlotContainer.of(slots))
+								.build();
+					}
+				}
+			}
+		}
+		return this;
+	}
 
-    public State getHead() {
-        return head;
-    }
+	public State getHead() {
+		return head;
+	}
 
-    public State getHandle() {
-        return handle;
-    }
+	public State getHandle() {
+		return handle;
+	}
 
-    public ToolBuilder toolBuilder() {
-        return ToolBuilder.builder(getHead(), getHandle())
-                .addSlotContainer(slotContainer.copy())
-                .conditions(conditions)
-                .type(type())
-                .id(identifier());
-    }
+	public ToolBuilder toolBuilder() {
+		return ToolBuilder.builder(getHead(), getHandle())
+				.addSlotContainer(slotContainer.copy())
+				.conditions(conditions)
+				.type(type())
+				.id(identifier());
+	}
 
-    @Override
-    public @NotNull List<Property> applyProperty(Target target) {
-        return Stream.of(super.applyProperty(target), conditionProperties()).flatMap(List::stream).toList();
-    }
+	@Override
+	public @NotNull
+	List<Property> applyProperty(Target target) {
+		return Stream.of(super.applyProperty(target), conditionProperties()).flatMap(List::stream).toList();
+	}
 
-    @Override
-    public @NotNull List<Property> getRootProperties() {
-        return Stream.of(super.getRootProperties(), conditionProperties()).flatMap(List::stream).toList();
-    }
+	@Override
+	public @NotNull
+	List<Property> getRootProperties() {
+		return Stream.of(super.getRootProperties(), conditionProperties()).flatMap(List::stream).toList();
+	}
 
-    @Override
-    public @NotNull List<Property> conditionProperties() {
-        return Conditional.super.conditionProperties();
-    }
+	@Override
+	public @NotNull
+	List<Property> conditionProperties() {
+		return Conditional.super.conditionProperties();
+	}
 
-    @Override
-    public ConstructedTool copy() {
-        return toolBuilder().build();
-    }
+	@Override
+	public ConstructedTool copy() {
+		return toolBuilder().build();
+	}
 
-    @Override
-    public State bind(Soul soul) {
-        return toolBuilder().soul(soul).build();
-    }
+	@Override
+	public State bind(Soul soul) {
+		return toolBuilder().soul(soul).build();
+	}
 
-    @Override
-    public List<PropertyContainer> conditions() {
-        List<PropertyContainer> customConditions = new ArrayList<>();
-        if (ForgeroConfigurationLoader.configuration.enableUnbreakableTools && conditions.stream().noneMatch(condition -> condition == UNBREAKABLE)) {
-            customConditions.add(UNBREAKABLE);
-        }
-        return Stream.of(conditions, customConditions).flatMap(List::stream).toList();
-    }
+	@Override
+	public List<PropertyContainer> conditions() {
+		List<PropertyContainer> customConditions = new ArrayList<>();
+		if (ForgeroConfigurationLoader.configuration.enableUnbreakableTools && conditions.stream().noneMatch(condition -> condition == UNBREAKABLE)) {
+			customConditions.add(UNBREAKABLE);
+		}
+		return Stream.of(conditions, customConditions).flatMap(List::stream).toList();
+	}
 
-    @Override
-    public ConstructedTool applyCondition(PropertyContainer container) {
-        return toolBuilder().condition(container).build();
-    }
+	@Override
+	public ConstructedTool applyCondition(PropertyContainer container) {
+		return toolBuilder().condition(container).build();
+	}
 
-    @Override
-    public ConstructedTool removeCondition(String identifier) {
-        return toolBuilder().conditions(Conditional.removeConditions(conditions, identifier)).build();
-    }
+	@Override
+	public ConstructedTool removeCondition(String identifier) {
+		return toolBuilder().conditions(Conditional.removeConditions(conditions, identifier)).build();
+	}
 
-    @Getter
-    public static class ToolBuilder extends BaseCompositeBuilder<ToolBuilder> {
-        protected State head;
-        protected State handle;
-        protected List<PropertyContainer> conditions;
+	@Getter
+	public static class ToolBuilder extends BaseCompositeBuilder<ToolBuilder> {
+		protected State head;
+		protected State handle;
+		protected List<PropertyContainer> conditions;
 
-        public ToolBuilder(State head, State handle) {
-            this.head = head;
-            this.handle = handle;
-            this.upgradeContainer = SlotContainer.of(Collections.emptyList());
-            this.ingredientList = List.of(head, handle);
-            this.conditions = new ArrayList<>();
-        }
+		public ToolBuilder(State head, State handle) {
+			this.head = head;
+			this.handle = handle;
+			this.upgradeContainer = SlotContainer.of(Collections.emptyList());
+			this.ingredientList = List.of(head, handle);
+			this.conditions = new ArrayList<>();
+		}
 
-        public static ToolBuilder builder(State head, State handle) {
-            return new ToolBuilder(head, handle);
-        }
+		public static ToolBuilder builder(State head, State handle) {
+			return new ToolBuilder(head, handle);
+		}
 
-        public static Optional<ToolBuilder> builder(List<State> parts) {
-            var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE)).findFirst();
-            var handle = parts.stream().filter(part -> part.test(Type.HANDLE)).findFirst();
-            if (head.isPresent() && handle.isPresent()) {
-                return Optional.of(builder(head.get(), handle.get()));
-            }
-            return Optional.empty();
-        }
+		public static Optional<ToolBuilder> builder(List<State> parts) {
+			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE)).findFirst();
+			var handle = parts.stream().filter(part -> part.test(Type.HANDLE)).findFirst();
+			if (head.isPresent() && handle.isPresent()) {
+				return Optional.of(builder(head.get(), handle.get()));
+			}
+			return Optional.empty();
+		}
 
-        public ToolBuilder head(State head) {
-            this.head = head;
-            return this;
-        }
+		public ToolBuilder head(State head) {
+			this.head = head;
+			return this;
+		}
 
-        public ToolBuilder handle(State handle) {
-            this.handle = handle;
-            return this;
-        }
+		public ToolBuilder handle(State handle) {
+			this.handle = handle;
+			return this;
+		}
 
-        public ToolBuilder condition(PropertyContainer condition) {
-            this.conditions.add(condition);
-            return this;
-        }
+		public ToolBuilder condition(PropertyContainer condition) {
+			this.conditions.add(condition);
+			return this;
+		}
 
-        public ToolBuilder conditions(List<PropertyContainer> conditions) {
-            this.conditions = conditions;
-            return this;
-        }
+		public ToolBuilder conditions(List<PropertyContainer> conditions) {
+			this.conditions = conditions;
+			return this;
+		}
 
-        public SoulBoundTool.SoulBoundToolBuilder soul(Soul soul) {
-            return SoulBoundTool.SoulBoundToolBuilder.of(this, soul);
-        }
+		public SoulBoundTool.SoulBoundToolBuilder soul(Soul soul) {
+			return SoulBoundTool.SoulBoundToolBuilder.of(this, soul);
+		}
 
-        public ConstructedTool build() {
-            compositeName();
-            var id = new IdentifiableContainer(name, nameSpace, type);
-            return new ConstructedTool(head, handle, upgradeContainer, id, conditions);
-        }
-    }
+		public ConstructedTool build() {
+			compositeName();
+			var id = new IdentifiableContainer(name, nameSpace, type);
+			return new ConstructedTool(head, handle, upgradeContainer, id, conditions);
+		}
+	}
 }
