@@ -7,6 +7,9 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
+* Reworked vein mining algorithm to improve performance
+* Reworked vanilla template textures and material palette (JorisDeBeer)
+* Added a scrollable settings menu
 * New Attribute types
 * New tooltip to better show stats on resources like materials and schematics
 * Added tooltips for items that are not from Forgero as well
