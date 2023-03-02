@@ -6,11 +6,11 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generat
 import java.util.List;
 
 public interface RecipeCreator {
-    RecipeCreator INSTANCE = RecipeCreatorImpl.getInstance();
+	RecipeCreator INSTANCE = RecipeCreatorImpl.getInstance();
 
-    List<RecipeWrapper> createRecipes();
+	List<RecipeWrapper> createRecipes();
 
-    void registerGenerator(List<RecipeGenerator> generators);
+	void registerGenerator(List<RecipeGenerator> generators);
 
-    TemplateGenerator templates();
+	TemplateGenerator templates();
 }

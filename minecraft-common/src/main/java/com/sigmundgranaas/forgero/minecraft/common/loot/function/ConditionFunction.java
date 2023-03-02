@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
@@ -22,64 +23,64 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstan
 import static com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions.CONDITION_LOOT_FUNCTION_TYPE;
 
 public class ConditionFunction extends ConditionalLootFunction {
-    protected ConditionFunction(LootCondition[] conditions) {
-        super(conditions);
-    }
+	protected ConditionFunction(LootCondition[] conditions) {
+		super(conditions);
+	}
 
-    public static ConditionFunction of(LootCondition[] conditions) {
-        return new ConditionFunction(conditions);
-    }
+	public static ConditionFunction of(LootCondition[] conditions) {
+		return new ConditionFunction(conditions);
+	}
 
-    @Override
-    protected ItemStack process(ItemStack stack, LootContext context) {
-        var converted = StateConverter.of(stack);
-        if (converted.isPresent() && converted.get() instanceof Conditional<?> conditional) {
-            var conditions = Conditions.INSTANCE.all().stream()
-                    .filter(condition -> condition.isApplicable(conditional))
-                    .filter(condition -> context.getRandom().nextDouble() < condition.getChance() + context.getLuck())
-                    .sorted(Comparator.comparing(com.sigmundgranaas.forgero.core.condition.LootCondition::getPriority))
-                    .toList();
-            Conditional<?> conditioned = conditional;
-            for (NamedCondition container : conditions) {
-                conditioned = (Conditional<?>) conditioned.applyCondition(container);
-            }
-            if (conditioned instanceof PropertyContainer container && conditions.size() > 0) {
-                stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(container));
-            }
-        }
-        return stack;
-    }
+	@Override
+	protected ItemStack process(ItemStack stack, LootContext context) {
+		var converted = StateConverter.of(stack);
+		if (converted.isPresent() && converted.get() instanceof Conditional<?> conditional) {
+			var conditions = Conditions.INSTANCE.all().stream()
+					.filter(condition -> condition.isApplicable(conditional))
+					.filter(condition -> context.getRandom().nextDouble() < condition.getChance() + context.getLuck())
+					.sorted(Comparator.comparing(com.sigmundgranaas.forgero.core.condition.LootCondition::getPriority))
+					.toList();
+			Conditional<?> conditioned = conditional;
+			for (NamedCondition container : conditions) {
+				conditioned = (Conditional<?>) conditioned.applyCondition(container);
+			}
+			if (conditioned instanceof PropertyContainer container && conditions.size() > 0) {
+				stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(container));
+			}
+		}
+		return stack;
+	}
 
-    @Override
-    public LootFunctionType getType() {
-        return CONDITION_LOOT_FUNCTION_TYPE;
-    }
+	@Override
+	public LootFunctionType getType() {
+		return CONDITION_LOOT_FUNCTION_TYPE;
+	}
 
-    public static class Builder extends ConditionalLootFunction.Builder<ConditionFunction.Builder> {
+	public static class Builder extends ConditionalLootFunction.Builder<ConditionFunction.Builder> {
 
 
-        public Builder() {
-        }
+		public Builder() {
+		}
 
-        protected ConditionFunction.Builder getThisBuilder() {
-            return this;
-        }
+		protected ConditionFunction.Builder getThisBuilder() {
+			return this;
+		}
 
-        public LootFunction build() {
-            return new ConditionFunction(this.getConditions());
-        }
-    }
+		public LootFunction build() {
+			return new ConditionFunction(this.getConditions());
+		}
+	}
 
-    public static class Serializer extends ConditionalLootFunction.Serializer<ConditionFunction> {
-        public Serializer() {
-        }
+	public static class Serializer extends ConditionalLootFunction.Serializer<ConditionFunction> {
+		public Serializer() {
+		}
 
-        public void toJson(JsonObject jsonObject, ConditionFunction function, JsonSerializationContext jsonSerializationContext) {
-            super.toJson(jsonObject, function, jsonSerializationContext);
-        }
+		public void toJson(JsonObject jsonObject, ConditionFunction function, JsonSerializationContext jsonSerializationContext) {
+			super.toJson(jsonObject, function, jsonSerializationContext);
+		}
 
-        public ConditionFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {
-            return new ConditionFunction(lootConditions);
-        }
-    }
+		public ConditionFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {
+			return new ConditionFunction(lootConditions);
+		}
+	}
 }

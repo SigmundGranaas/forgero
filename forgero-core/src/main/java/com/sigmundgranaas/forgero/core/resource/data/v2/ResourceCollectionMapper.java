@@ -8,10 +8,10 @@ import java.util.function.Function;
 
 
 public interface ResourceCollectionMapper extends Function<List<DataResource>, List<DataResource>> {
-    ResourceCollectionMapper DEFAULT = (list) -> list;
+	ResourceCollectionMapper DEFAULT = (list) -> list;
 
-    default ResourceCollectionMapper andThen(ResourceCollectionMapper after) {
-        Objects.requireNonNull(after);
-        return (List<DataResource> t) -> after.apply(apply(t));
-    }
+	default ResourceCollectionMapper andThen(ResourceCollectionMapper after) {
+		Objects.requireNonNull(after);
+		return (List<DataResource> t) -> after.apply(apply(t));
+	}
 }

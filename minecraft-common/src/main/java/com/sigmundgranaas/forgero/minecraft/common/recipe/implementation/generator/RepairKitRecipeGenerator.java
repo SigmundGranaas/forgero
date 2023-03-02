@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
+
 import net.minecraft.util.Identifier;
 
 public class RepairKitRecipeGenerator implements RecipeGenerator {

@@ -8,27 +8,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class NamedCondition implements PropertyContainer, Identifiable {
-    private final String name;
-    private final String nameSpace;
-    private final List<Property> propertyList;
+	private final String name;
+	private final String nameSpace;
+	private final List<Property> propertyList;
 
-    public NamedCondition(String name, String nameSpace, List<Property> propertyList) {
-        this.name = name;
-        this.nameSpace = nameSpace;
-        this.propertyList = propertyList;
-    }
+	public NamedCondition(String name, String nameSpace, List<Property> propertyList) {
+		this.name = name;
+		this.nameSpace = nameSpace;
+		this.propertyList = propertyList;
+	}
 
-    public String name() {
-        return this.name;
-    }
+	public String name() {
+		return this.name;
+	}
 
-    @Override
-    public String nameSpace() {
-        return nameSpace;
-    }
+	@Override
+	public String nameSpace() {
+		return nameSpace;
+	}
 
-    @Override
-    public @NotNull List<Property> getRootProperties() {
-        return propertyList;
-    }
+	@Override
+	public @NotNull
+	List<Property> getRootProperties() {
+		return propertyList;
+	}
 }

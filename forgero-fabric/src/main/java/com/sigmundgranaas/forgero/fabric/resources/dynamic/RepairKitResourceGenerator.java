@@ -14,6 +14,7 @@ import net.devtech.arrp.json.recipe.JIngredient;
 import net.devtech.arrp.json.recipe.JIngredients;
 import net.devtech.arrp.json.recipe.JResult;
 import net.devtech.arrp.json.recipe.JShapelessRecipe;
+
 import net.minecraft.util.Identifier;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.Items.EMPTY_REPAIR_KIT;

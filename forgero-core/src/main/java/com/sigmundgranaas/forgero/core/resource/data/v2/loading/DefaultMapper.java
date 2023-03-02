@@ -12,61 +12,61 @@ import java.util.List;
 import java.util.Optional;
 
 public class DefaultMapper implements ResourceCollectionMapper {
-    private List<DataResource> defaults;
+	private List<DataResource> defaults;
 
-    public DefaultMapper() {
-        this.defaults = new ArrayList<>();
-    }
+	public DefaultMapper() {
+		this.defaults = new ArrayList<>();
+	}
 
-    @Override
-    public List<DataResource> apply(List<DataResource> resources) {
-        defaults = extractDefaults(resources);
+	@Override
+	public List<DataResource> apply(List<DataResource> resources) {
+		defaults = extractDefaults(resources);
 
-        return resources.stream()
-                .filter(this::notDefault)
-                .map(this::applyDefaults)
-                .toList();
-    }
+		return resources.stream()
+				.filter(this::notDefault)
+				.map(this::applyDefaults)
+				.toList();
+	}
 
-    private List<DataResource> extractDefaults(List<DataResource> resources) {
-        return resources.stream()
-                .filter(this::defaultResource)
-                .toList();
-    }
+	private List<DataResource> extractDefaults(List<DataResource> resources) {
+		return resources.stream()
+				.filter(this::defaultResource)
+				.toList();
+	}
 
-    private DataResource applyDefaults(DataResource resource) {
-        var resourcePath = resource.context().map(ContextData::path);
-        if (resourcePath.isPresent()) {
-            var defaultResources = defaults.stream()
-                    .filter(defaultResource -> hasOverlappingPath(resourcePath.get(), defaultResource))
-                    .toList();
-            Optional<DataResource> linkedDefault = linkDefaults(defaultResources);
-            return linkedDefault.map(linked -> DefaultResourcePair.applyDefaults(resource, linked)).orElse(resource);
-        }
+	private DataResource applyDefaults(DataResource resource) {
+		var resourcePath = resource.context().map(ContextData::path);
+		if (resourcePath.isPresent()) {
+			var defaultResources = defaults.stream()
+					.filter(defaultResource -> hasOverlappingPath(resourcePath.get(), defaultResource))
+					.toList();
+			Optional<DataResource> linkedDefault = linkDefaults(defaultResources);
+			return linkedDefault.map(linked -> DefaultResourcePair.applyDefaults(resource, linked)).orElse(resource);
+		}
 
-        return resource;
-    }
+		return resource;
+	}
 
-    public Optional<DataResource> linkDefaults(List<DataResource> defaults) {
-        return defaults.stream()
-                .filter(res -> res.context().isPresent())
-                .sorted(Comparator.comparingInt(aDefault -> aDefault.context().get().path().split("\\" + File.separator).length))
-                .reduce(DefaultResourcePair::applyDefaults);
-    }
+	public Optional<DataResource> linkDefaults(List<DataResource> defaults) {
+		return defaults.stream()
+				.filter(res -> res.context().isPresent())
+				.sorted(Comparator.comparingInt(aDefault -> aDefault.context().get().path().split("\\" + File.separator).length))
+				.reduce(DefaultResourcePair::applyDefaults);
+	}
 
-    private boolean hasOverlappingPath(String resourcePath, DataResource defaultResource) {
-        return defaultResource.context()
-                .map(ContextData::path)
-                .filter(resourcePath::contains)
-                .isPresent();
-    }
+	private boolean hasOverlappingPath(String resourcePath, DataResource defaultResource) {
+		return defaultResource.context()
+				.map(ContextData::path)
+				.filter(resourcePath::contains)
+				.isPresent();
+	}
 
-    private boolean defaultResource(DataResource resource) {
-        return resource.context().map(context -> context.fileName().equals("default.json")).orElse(false);
-    }
+	private boolean defaultResource(DataResource resource) {
+		return resource.context().map(context -> context.fileName().equals("default.json")).orElse(false);
+	}
 
-    private boolean notDefault(DataResource resource) {
-        return !defaultResource(resource);
-    }
+	private boolean notDefault(DataResource resource) {
+		return !defaultResource(resource);
+	}
 
 }

@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
+
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -23,70 +24,70 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstan
 
 public class RepairKitRecipe extends ShapelessRecipe {
 
-    public RepairKitRecipe(ShapelessRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
-    }
+	public RepairKitRecipe(ShapelessRecipe recipe) {
+		super(recipe.getId(), recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
+	}
 
-    @Override
-    public boolean matches(CraftingInventory craftingInventory, World world) {
-        return super.matches(craftingInventory, world) && IntStream.range(0, 8)
-                .mapToObj(craftingInventory::getStack)
-                .filter(stack -> StateConverter.of(stack).isPresent())
-                .anyMatch(stack -> stack.getDamage() > 0);
-    }
+	@Override
+	public boolean matches(CraftingInventory craftingInventory, World world) {
+		return super.matches(craftingInventory, world) && IntStream.range(0, 8)
+				.mapToObj(craftingInventory::getStack)
+				.filter(stack -> StateConverter.of(stack).isPresent())
+				.anyMatch(stack -> stack.getDamage() > 0);
+	}
 
-    @Override
-    public ItemStack craft(CraftingInventory craftingInventory) {
-        var state = IntStream.range(0, 8)
-                .mapToObj(craftingInventory::getStack)
-                .map(StateConverter::of)
-                .flatMap(Optional::stream)
-                .findFirst();
-        var originalStack = IntStream.range(0, 8)
-                .mapToObj(craftingInventory::getStack)
-                .filter(stack -> StateConverter.of(stack).isPresent())
-                .findFirst();
-        if (state.isPresent() && originalStack.isPresent() && state.get() instanceof ConstructedTool tool) {
-            var unbrokenState = tool.removeCondition(Conditions.BROKEN.name());
-            int durability = Durability.of(unbrokenState).asInt();
-            var stack = originalStack.get();
-            stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompositeEncoder.ENCODER.encode(unbrokenState));
-            var newDamage = stack.getDamage() - (durability / 3);
-            var newStack = stack.copy();
-            newStack.setDamage(Math.max(newDamage, 0));
-            return newStack;
-        }
+	@Override
+	public ItemStack craft(CraftingInventory craftingInventory) {
+		var state = IntStream.range(0, 8)
+				.mapToObj(craftingInventory::getStack)
+				.map(StateConverter::of)
+				.flatMap(Optional::stream)
+				.findFirst();
+		var originalStack = IntStream.range(0, 8)
+				.mapToObj(craftingInventory::getStack)
+				.filter(stack -> StateConverter.of(stack).isPresent())
+				.findFirst();
+		if (state.isPresent() && originalStack.isPresent() && state.get() instanceof ConstructedTool tool) {
+			var unbrokenState = tool.removeCondition(Conditions.BROKEN.name());
+			int durability = Durability.of(unbrokenState).asInt();
+			var stack = originalStack.get();
+			stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompositeEncoder.ENCODER.encode(unbrokenState));
+			var newDamage = stack.getDamage() - (durability / 3);
+			var newStack = stack.copy();
+			newStack.setDamage(Math.max(newDamage, 0));
+			return newStack;
+		}
 
-        return getOutput().copy();
-    }
+		return getOutput().copy();
+	}
 
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return RepairKitRecipeSerializer.INSTANCE;
-    }
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return RepairKitRecipeSerializer.INSTANCE;
+	}
 
-    public static class RepairKitRecipeSerializer extends Serializer implements ForgeroRecipeSerializer {
-        public static final RepairKitRecipeSerializer INSTANCE = new RepairKitRecipeSerializer();
+	public static class RepairKitRecipeSerializer extends Serializer implements ForgeroRecipeSerializer {
+		public static final RepairKitRecipeSerializer INSTANCE = new RepairKitRecipeSerializer();
 
-        @Override
-        public RecipeSerializer<?> getSerializer() {
-            return INSTANCE;
-        }
+		@Override
+		public RecipeSerializer<?> getSerializer() {
+			return INSTANCE;
+		}
 
-        @Override
-        public RepairKitRecipe read(Identifier identifier, JsonObject jsonObject) {
-            return new RepairKitRecipe(super.read(identifier, jsonObject));
-        }
+		@Override
+		public RepairKitRecipe read(Identifier identifier, JsonObject jsonObject) {
+			return new RepairKitRecipe(super.read(identifier, jsonObject));
+		}
 
-        @Override
-        public RepairKitRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-            return new RepairKitRecipe(super.read(identifier, packetByteBuf));
-        }
+		@Override
+		public RepairKitRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+			return new RepairKitRecipe(super.read(identifier, packetByteBuf));
+		}
 
-        @Override
-        public Identifier getIdentifier() {
-            return new Identifier(Forgero.NAMESPACE, RecipeTypes.REPAIR_KIT_RECIPE.getName());
-        }
-    }
+		@Override
+		public Identifier getIdentifier() {
+			return new Identifier(Forgero.NAMESPACE, RecipeTypes.REPAIR_KIT_RECIPE.getName());
+		}
+	}
 }

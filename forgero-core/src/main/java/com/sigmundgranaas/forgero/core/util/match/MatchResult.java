@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.util.match;
 
 public interface MatchResult {
-    boolean match();
+	boolean match();
 
-    boolean fail();
+	boolean fail();
 
-    public int matchGrade();
+	public int matchGrade();
 }

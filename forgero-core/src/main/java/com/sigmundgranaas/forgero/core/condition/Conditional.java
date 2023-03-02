@@ -7,36 +7,36 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface Conditional<T extends PropertyContainer> {
-    ConditionContainer EMPTY = new ConditionContainer();
+	ConditionContainer EMPTY = new ConditionContainer();
 
-    static List<PropertyContainer> removeConditions(List<PropertyContainer> conditions, String name) {
-        return conditions.stream().filter(condition -> filterAwayCondition(condition, name)).toList();
-    }
+	static List<PropertyContainer> removeConditions(List<PropertyContainer> conditions, String name) {
+		return conditions.stream().filter(condition -> filterAwayCondition(condition, name)).toList();
+	}
 
-    static boolean filterAwayCondition(PropertyContainer condition, String name) {
-        if (condition instanceof NamedCondition namedCondition) {
-            return !name.equals(namedCondition.name());
-        }
-        return true;
-    }
+	static boolean filterAwayCondition(PropertyContainer condition, String name) {
+		if (condition instanceof NamedCondition namedCondition) {
+			return !name.equals(namedCondition.name());
+		}
+		return true;
+	}
 
-    List<PropertyContainer> conditions();
+	List<PropertyContainer> conditions();
 
-    T applyCondition(PropertyContainer container);
+	T applyCondition(PropertyContainer container);
 
-    T removeCondition(String identifier);
+	T removeCondition(String identifier);
 
-    @NotNull
-    default List<Property> conditionProperties() {
-        return conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList();
-    }
+	@NotNull
+	default List<Property> conditionProperties() {
+		return conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList();
+	}
 
-    @NotNull
-    default List<NamedCondition> namedConditions() {
-        return conditions().stream()
-                .filter(condition -> condition instanceof NamedCondition)
-                .map(NamedCondition.class::cast)
-                .toList();
+	@NotNull
+	default List<NamedCondition> namedConditions() {
+		return conditions().stream()
+				.filter(condition -> condition instanceof NamedCondition)
+				.map(NamedCondition.class::cast)
+				.toList();
 
-    }
+	}
 }

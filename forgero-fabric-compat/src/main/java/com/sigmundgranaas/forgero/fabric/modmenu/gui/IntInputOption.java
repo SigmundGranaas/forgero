@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.EditBoxWidget;
 import net.minecraft.text.Text;
