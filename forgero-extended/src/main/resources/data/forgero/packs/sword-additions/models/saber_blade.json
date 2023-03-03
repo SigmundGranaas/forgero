@@ -20,6 +20,17 @@
       ]
     },
     {
+      "name": "sword_blade_material_scabbard",
+      "variants": [
+        {
+          "target": [
+            "model:saber_blade.png"
+          ],
+          "template": "saber_blade_grip.png"
+        }
+      ]
+    },
+    {
       "name": "sword_blade_guard",
       "variants": [
         {

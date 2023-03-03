@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "knife_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -86,6 +87,7 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "1"
+    "ingredient_count": "1",
+    "better_compat_attribute_container": "bettercombat:dagger"
   }
 }

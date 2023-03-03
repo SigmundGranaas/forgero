@@ -55,21 +55,24 @@
       {
         "type": "RARITY",
         "order": "COMPOSITE",
-        "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.43
       },
       {
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.6
+      },
+      {
         "type": "DURABILITY",
         "order": "COMPOSITE",
-        "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.4
       },
       {
         "type": "ATTACK_SPEED",
         "order": "BASE",
-        "category": "UTILITY",
         "operation": "ADDITION",
         "value": 0.1
       }

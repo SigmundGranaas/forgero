@@ -10,30 +10,30 @@ import java.util.Collections;
 
 class MutableStateProviderTest {
 
-    @Test
-    void updateStateWithValidUpgradeSucceeds() {
-        var defaultState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
-        var updateState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
-        var mutableProvider = new MutableStateProvider(defaultState);
+	@Test
+	void updateStateWithValidUpgradeSucceeds() {
+		var defaultState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
+		var updateState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
+		var mutableProvider = new MutableStateProvider(defaultState);
 
-        Assertions.assertEquals(mutableProvider.update(updateState).get(), updateState);
-    }
+		Assertions.assertEquals(mutableProvider.update(updateState).get(), updateState);
+	}
 
-    @Test
-    void updateStateWithInvalidUpgradeFails() {
-        var defaultState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
-        var updateState = State.of("wrongstate", Type.UNDEFINED, Collections.emptyList());
-        var mutableProvider = new MutableStateProvider(defaultState);
+	@Test
+	void updateStateWithInvalidUpgradeFails() {
+		var defaultState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
+		var updateState = State.of("wrongstate", Type.UNDEFINED, Collections.emptyList());
+		var mutableProvider = new MutableStateProvider(defaultState);
 
-        Assertions.assertNotEquals(mutableProvider.update(updateState).get(), updateState);
-    }
+		Assertions.assertNotEquals(mutableProvider.update(updateState).get(), updateState);
+	}
 
-    @Test
-    void canUpdate() {
-        var defaultState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
-        var updateState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
-        var mutableProvider = new MutableStateProvider(defaultState);
+	@Test
+	void canUpdate() {
+		var defaultState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
+		var updateState = State.of("teststate", Type.UNDEFINED, Collections.emptyList());
+		var mutableProvider = new MutableStateProvider(defaultState);
 
-        Assertions.assertTrue(mutableProvider.canUpdate(updateState));
-    }
+		Assertions.assertTrue(mutableProvider.canUpdate(updateState));
+	}
 }

@@ -1,9 +1,68 @@
-# Forgero Beta release 0.10.6
+# Forgero Beta release 0.10.7
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.7
+
+* Reworked vein mining algorithm to improve performance
+* Reworked vanilla template textures and material palette (JorisDeBeer)
+* Added a scrollable settings menu
+* New Attribute types
+* New tooltip to better show stats on resources like materials and schematics
+* Added tooltips for items that are not from Forgero as well
+* Cleaned up plenty of duplicated resources (JorisDeBeer)
+* AE2 support (Holmraven)
+* Fixed Mixin warnings from missing mixin targets (Holmraven)
+* Fixed missing accesswidener causing crash for new worlds (Holmraven)
+* Fixed material upgrades not showing up on some parts
+* Fixed texture stacking on parts that had z-fighting problems
+* Beautified lang files (Holmraven)
+* Fixed sword guard models that were causing some combinations to turn invisible
+* Parts of wood can now be used as fuel
+* Implemented part smelting
+* Removed SmithingRecipeGettersMixin in favour of access widener
+* Added template and material resource overrides
+* Fixed crimson and warped wood not having attack damage
+* Fixed all basic recipes being changed to use the minecraft namespace for wood variants
+* Fixed tool repair in anvil
+* Fixed pack dependencies being broken
+* Fixed tool material not reflecting the tool
+* Added a new unbreakable tool config option
+* Tool specific Better Combat integration
+* Disassembled materials and other parts that has no modifications will no longer have nbt's
+* Fixed redstone gem achievement having the same title as the gem achievement
+* Added basic stone upgrade recipe for all parts
+* Configuration will now automatically update with new values
+* Added new setting to toggle conversion from vanilla tools to forgero tools in loot
+* Added toggle to disable vanilla tools from recipes and loot
+* Assembly station can now be placed next to non-solid blocks
+* Added basic recipes for all wooden types
+* Added new conditions section to tooltip
+* Added 17 new Conditions that can spawn on looted parts, tools and schematics
+* Added a data-pack based system for defining properties added by souls when leveled up
+* Added Property multiplier for blocks mined and entities killed. (blocks: 1000 = +1%, mobs: 100 = +1%)
+* Added soul totem with the soul binding effects
+* Added the bottled soul item, which can be obtained by using a bottle on a soul
+* Implemented a data-pack based system to add conditions which can be added to lootable drops
+* Added dynamic effectiveness property
+* Added dynamic conditions to tools
+* Added the Broken conditions property
+* Added the unbreakable property
+* Implemented the new Souls system into tools
+* Implemented new classes for Composites (parts and tools)
+* Fixed palette names being directly tied to resource
+* Added armor property
+* Added The max health addition property
+* Added luck property
+* Added critical chance property
+* Fixed simple sword guard recipe to not conflict with wooden bowl
+* Added a ModMenu implementation by Steveplays
+* Reworked the configuration system by Steveplays
+* Added multi block highlight and multi block breaking textures, depending on your tool
+* Implemented a new property system for handling special properties (Now called features)
 
 ## Changelog 0.10.6
 

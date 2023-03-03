@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "sword_blade-schematic",
+  "parent": "sword_blade_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -52,9 +53,6 @@
         "type": "LEATHER",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -96,8 +94,6 @@
         "operation": "ADDITION",
         "value": -2.8
       }
-    ],
-    "passive": [
     ]
   },
   "custom_data": {

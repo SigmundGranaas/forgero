@@ -4,24 +4,37 @@ import java.util.Locale;
 
 public enum RecipeTypes {
 
-    MISC_SHAPELESS,
+	MISC_SHAPELESS,
+	BASIC_AXE_HEAD,
+	BASIC_SWORD_BLADE,
+	BASIC_SHORT_SWORD_BLADE,
 
-    REPAIR_KIT_RECIPE,
-    GEM_UPGRADE_RECIPE,
-    STATE_CRAFTING_RECIPE,
-    STATE_UPGRADE_RECIPE,
-    SCHEMATIC_PART_CRAFTING,
-    TOOLPART_SCHEMATIC_RECIPE;
+	BASIC_SWORD_GUARD,
+	BASIC_PICKAXE_HEAD,
+	BASIC_HOE_HEAD,
+	BASIC_SHOVEL_HEAD,
+	BASIC_HANDLE,
 
-    public static RecipeTypes of(String type) {
-        try {
-            return RecipeTypes.valueOf(type.toUpperCase());
-        } catch (Exception e) {
-            return RecipeTypes.MISC_SHAPELESS;
-        }
-    }
+	ANY_PART_TO_STONE,
 
-    public String getName() {
-        return this.name().toLowerCase(Locale.ROOT);
-    }
+	REPAIR_KIT_RECIPE,
+	GEM_UPGRADE_RECIPE,
+	STATE_CRAFTING_RECIPE,
+	STATE_UPGRADE_RECIPE,
+	SCHEMATIC_PART_CRAFTING,
+	PART_SMELTING_RECIPE,
+	PART_BLASTING_RECIPE,
+	TOOLPART_SCHEMATIC_RECIPE;
+
+	public static RecipeTypes of(String type) {
+		try {
+			return RecipeTypes.valueOf(type.toUpperCase());
+		} catch (Exception e) {
+			return RecipeTypes.MISC_SHAPELESS;
+		}
+	}
+
+	public String getName() {
+		return this.name().toLowerCase(Locale.ROOT);
+	}
 }

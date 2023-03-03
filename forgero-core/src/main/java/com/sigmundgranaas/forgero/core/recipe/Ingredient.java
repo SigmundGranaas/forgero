@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.recipe;
 
 public interface Ingredient {
-    IngredientType ingredientType();
+	IngredientType ingredientType();
 
-    String ingredient();
+	String ingredient();
 
-    int amount();
+	int amount();
 }

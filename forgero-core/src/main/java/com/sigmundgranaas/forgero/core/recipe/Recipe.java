@@ -5,17 +5,17 @@ import com.sigmundgranaas.forgero.core.state.Identifiable;
 
 
 public interface Recipe {
-    RecipeType type();
+	RecipeType type();
 
-    default int amount() {
-        return 1;
-    }
+	default int amount() {
+		return 1;
+	}
 
-    default int tier() {
-        return 1;
-    }
+	default int tier() {
+		return 1;
+	}
 
-    Identifiable target();
+	Identifiable target();
 
-    ImmutableList<Ingredient> ingredients();
+	ImmutableList<Ingredient> ingredients();
 }

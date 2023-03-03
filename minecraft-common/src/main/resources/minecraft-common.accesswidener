@@ -3,3 +3,5 @@ accessible	class	net/minecraft/screen/ScreenHandlerType$Factory
 accessible	method	net/minecraft/screen/ScreenHandlerType	<init>	(Lnet/minecraft/screen/ScreenHandlerType$Factory;)V
 extendable	method	net/minecraft/screen/ScreenHandlerType	<init>	(Lnet/minecraft/screen/ScreenHandlerType$Factory;)V
 accessible	class	net/minecraft/client/gui/screen/ingame/HandledScreens$Provider
+accessible field net/minecraft/recipe/SmithingRecipe base Lnet/minecraft/recipe/Ingredient;
+accessible field net/minecraft/recipe/SmithingRecipe addition Lnet/minecraft/recipe/Ingredient;

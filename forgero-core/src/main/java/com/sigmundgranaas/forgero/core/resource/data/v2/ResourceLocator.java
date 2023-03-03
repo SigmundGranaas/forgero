@@ -5,5 +5,5 @@ import java.util.List;
 
 @FunctionalInterface
 public interface ResourceLocator {
-    List<Path> locate(String path);
+	List<Path> locate(String path);
 }

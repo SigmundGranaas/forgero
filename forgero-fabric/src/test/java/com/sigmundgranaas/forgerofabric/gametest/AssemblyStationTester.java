@@ -3,7 +3,9 @@ package com.sigmundgranaas.forgerofabric.gametest;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
@@ -21,14 +23,14 @@ public class AssemblyStationTester {
         var tool = StateConverter.of(state.get());
         tool.getOrCreateNbt().putInt("Damage", 1);
 
-        var screenHandler = new AssemblyStationScreenHandler(1, player.getInventory());
-        if (screenHandler.getSlot(0).canInsert(tool)) {
-            throw new GameTestException("Can dissasemble damaged tools!");
-        }
-        if (!screenHandler.getSlot(1).canInsert(tool)) {
-            throw new GameTestException("Cannot add tool to assembly inventory");
-        }
-        context.complete();
-    }
+		var screenHandler = new AssemblyStationScreenHandler(1, player.getInventory());
+		if (screenHandler.getSlot(0).canInsert(tool)) {
+			throw new GameTestException("Can dissasemble damaged tools!");
+		}
+		if (!screenHandler.getSlot(1).canInsert(tool)) {
+			throw new GameTestException("Cannot add tool to assembly inventory");
+		}
+		context.complete();
+	}
 
 }

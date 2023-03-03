@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgerofabric.gametest;
 
 import com.sigmundgranaas.forgerofabric.testutil.RecipeTester;
+
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.test.GameTest;

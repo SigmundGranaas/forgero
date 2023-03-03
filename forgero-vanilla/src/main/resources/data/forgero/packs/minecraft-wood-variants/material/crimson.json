@@ -27,6 +27,13 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "id": "wood-attack-damage-composite-base",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
         "value": 3.2,
         "condition": {
           "target": "TYPE",

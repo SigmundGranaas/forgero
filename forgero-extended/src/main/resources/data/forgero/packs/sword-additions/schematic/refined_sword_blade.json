@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "refined_sword_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -104,8 +105,6 @@
         "operation": "ADDITION",
         "value": -2.8
       }
-    ],
-    "passive": [
     ]
   },
   "custom_data": {

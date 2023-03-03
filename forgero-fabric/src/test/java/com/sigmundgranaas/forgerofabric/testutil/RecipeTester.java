@@ -22,29 +22,29 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.
 
 public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements Supplier<Boolean> {
 
-    private final TestContext context;
+	private final TestContext context;
 
-    private final T inventory;
+	private final T inventory;
 
-    private final RecipeType<R> type;
+	private final RecipeType<R> type;
 
-    private final Item expectedResult;
+	private final Item expectedResult;
 
-    public RecipeTester(TestContext context, T inventory, Item expectedResult, RecipeType<R> type) {
-        this.context = context;
-        this.inventory = inventory;
-        this.expectedResult = expectedResult;
-        this.type = type;
-    }
+	public RecipeTester(TestContext context, T inventory, Item expectedResult, RecipeType<R> type) {
+		this.context = context;
+		this.inventory = inventory;
+		this.expectedResult = expectedResult;
+		this.type = type;
+	}
 
-    public static RecipeTester<CraftingInventory, CraftingRecipe> ofTool(String head, String handle, String outCome, TestContext context) {
-        CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
-        inventory.setStack(1, new ItemStack(itemFromString(head)));
-        inventory.setStack(3, new ItemStack(itemFromString(handle)));
-        Item outcome = itemFromString(outCome);
+	public static RecipeTester<CraftingInventory, CraftingRecipe> ofTool(String head, String handle, String outCome, TestContext context) {
+		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+		inventory.setStack(1, new ItemStack(itemFromString(head)));
+		inventory.setStack(3, new ItemStack(itemFromString(handle)));
+		Item outcome = itemFromString(outCome);
 
-        return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
-    }
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
+	}
 
     private static Item itemFromString(String identifier) {
         Item item = Registries.ITEM.get(new Identifier(identifier));
@@ -54,45 +54,45 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
         return item;
     }
 
-    public static RecipeTester<CraftingInventory, CraftingRecipe> ofPart(String schematic, String material, int count, String result, TestContext context) {
-        CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
-        inventory.setStack(0, new ItemStack(itemFromString(schematic)));
-        IntStream.range(0, count).forEach(index -> inventory.setStack(index + 1, new ItemStack(itemFromString(material))));
-        Item outcome = itemFromString(result);
+	public static RecipeTester<CraftingInventory, CraftingRecipe> ofPart(String schematic, String material, int count, String result, TestContext context) {
+		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+		inventory.setStack(0, new ItemStack(itemFromString(schematic)));
+		IntStream.range(0, count).forEach(index -> inventory.setStack(index + 1, new ItemStack(itemFromString(material))));
+		Item outcome = itemFromString(result);
 
-        return new RecipeTester<>(context, inventory, outcome,  RecipeType.CRAFTING);
-    }
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
+	}
 
-    public static RecipeTester<CraftingInventory, CraftingRecipe> repairKit(String kit, ItemStack tool, String result, TestContext context) {
-        CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
-        inventory.setStack(0, new ItemStack(itemFromString(kit)));
-        inventory.setStack(1,tool);
+	public static RecipeTester<CraftingInventory, CraftingRecipe> repairKit(String kit, ItemStack tool, String result, TestContext context) {
+		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+		inventory.setStack(0, new ItemStack(itemFromString(kit)));
+		inventory.setStack(1, tool);
 
-        Item outcome = itemFromString(result);
-        return new RecipeTester<>(context, inventory, outcome,  RecipeType.CRAFTING);
-    }
+		Item outcome = itemFromString(result);
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
+	}
 
-    public static RecipeTester<Inventory, SmithingRecipe> smithingUpgrade(String target, String upgrade, TestContext context) {
-        SimpleInventory inventory = new SimpleInventory(2);
-        inventory.setStack(0, new ItemStack(itemFromString(target)));
-        inventory.setStack(1, new ItemStack(itemFromString(upgrade)));
+	public static RecipeTester<Inventory, SmithingRecipe> smithingUpgrade(String target, String upgrade, TestContext context) {
+		SimpleInventory inventory = new SimpleInventory(2);
+		inventory.setStack(0, new ItemStack(itemFromString(target)));
+		inventory.setStack(1, new ItemStack(itemFromString(upgrade)));
 
-        Item outcome = itemFromString(target);
-        return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
-    }
+		Item outcome = itemFromString(target);
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
+	}
 
-    public Optional<ItemStack> craft() {
-        return context.getWorld()
-                .getRecipeManager()
-                .getFirstMatch(type, inventory, context.getWorld())
-                .map(recipe -> recipe.craft(inventory))
-                .filter(stack -> stack.isOf(expectedResult))
-                .stream()
-                .findAny();
-    }
+	public Optional<ItemStack> craft() {
+		return context.getWorld()
+				.getRecipeManager()
+				.getFirstMatch(type, inventory, context.getWorld())
+				.map(recipe -> recipe.craft(inventory))
+				.filter(stack -> stack.isOf(expectedResult))
+				.stream()
+				.findAny();
+	}
 
-    public Boolean get() {
-        return craft()
-                .isPresent();
-    }
+	public Boolean get() {
+		return craft()
+				.isPresent();
+	}
 }

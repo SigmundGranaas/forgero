@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -11,15 +12,15 @@ import java.util.Collections;
 import java.util.Set;
 
 public record BlockBreakingEfficiencyTarget(BlockState state) implements Target {
-    @Override
-    public Set<TargetTypes> getTypes() {
-        return Set.of(TargetTypes.BLOCK);
-    }
+	@Override
+	public Set<TargetTypes> getTypes() {
+		return Set.of(TargetTypes.BLOCK);
+	}
 
-    @Override
-    public Set<String> getTags() {
-        return Collections.emptySet();
-    }
+	@Override
+	public Set<String> getTags() {
+		return Collections.emptySet();
+	}
 
     @Override
     public boolean isApplicable(Set<String> tag, TargetTypes type) {
@@ -32,4 +33,10 @@ public record BlockBreakingEfficiencyTarget(BlockState state) implements Target 
         }
         return false;
     }
+	@Override
+	public int hashCode() {
+		return getTags().hashCode()
+				+ getTypes().hashCode()
+				+ state.toString().hashCode();
+	}
 }

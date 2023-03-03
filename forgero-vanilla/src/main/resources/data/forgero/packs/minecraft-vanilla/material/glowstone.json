@@ -42,10 +42,10 @@
         "value": 0.9
       }
     ],
-    "passive": [
+    "features": [
       {
-        "type": "LEVELED",
-        "tag": "EMISSIVE"
+        "type": "EMISSIVE",
+        "value": 4
       }
     ]
   },

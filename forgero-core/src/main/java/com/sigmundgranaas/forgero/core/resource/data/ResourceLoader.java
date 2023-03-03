@@ -7,7 +7,7 @@ import java.util.Optional;
 
 
 public interface ResourceLoader {
-    List<DataResource> load();
+	List<DataResource> load();
 
-    Optional<DataResource> loadResource(String path);
+	Optional<DataResource> loadResource(String path);
 }

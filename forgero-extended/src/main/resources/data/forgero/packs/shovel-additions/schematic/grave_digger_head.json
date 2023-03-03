@@ -1,7 +1,7 @@
 {
   "type": "SHOVEL_HEAD_SCHEMATIC",
   "name": "grave_digger_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "shovel_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -86,11 +86,13 @@
         "value": -2.7
       }
     ],
-    "active": [
+    "features": [
       {
-        "type": "VEIN_MINING_PATTERN",
-        "depth": 10,
-        "tag": "forgero:vein_mining_sand"
+        "type": "VEIN_MINING",
+        "value": 1,
+        "tags": [
+          "forgero:vein_mining_dirt"
+        ]
       }
     ]
   },

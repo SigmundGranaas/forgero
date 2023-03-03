@@ -13,36 +13,41 @@ import java.util.Set;
  * Attributes with no condition will ignore targets.
  */
 public interface Target {
-    Target EMPTY = createEmptyTarget();
+	Target EMPTY = createEmptyTarget();
 
-    static Target createEmptyTarget() {
-        return new Target() {
-            @Override
-            public boolean isApplicable(Set<String> tag, TargetTypes type) {
-                return false;
-            }
+	static Target createEmptyTarget() {
+		return new Target() {
+			@Override
+			public boolean isApplicable(Set<String> tag, TargetTypes type) {
+				return false;
+			}
 
-            @Override
-            public Set<TargetTypes> getTypes() {
-                return Collections.emptySet();
-            }
+			@Override
+			public Set<TargetTypes> getTypes() {
+				return Collections.emptySet();
+			}
 
-            @Override
-            public Set<String> getTags() {
-                return Collections.emptySet();
-            }
-        };
-    }
+			@Override
+			public Set<String> getTags() {
+				return Collections.emptySet();
+			}
 
-    default boolean isApplicable(Set<String> tag, TargetTypes type) {
-        return getTypes().contains(type) && getTags().stream().anyMatch(tag::contains);
-    }
+			@Override
+			public int hashCode() {
+				return 0;
+			}
+		};
+	}
 
-    Set<TargetTypes> getTypes();
+	default boolean isApplicable(Set<String> tag, TargetTypes type) {
+		return getTypes().contains(type) && getTags().stream().anyMatch(tag::contains);
+	}
 
-    Set<String> getTags();
+	Set<TargetTypes> getTypes();
 
-    default Target combineTarget(Target target) {
-        return new CompoundTarget(List.of(this, target));
-    }
+	Set<String> getTags();
+
+	default Target combineTarget(Target target) {
+		return new CompoundTarget(List.of(this, target));
+	}
 }

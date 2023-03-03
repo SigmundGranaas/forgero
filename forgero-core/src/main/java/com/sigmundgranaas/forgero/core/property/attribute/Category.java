@@ -3,14 +3,14 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 import java.util.EnumSet;
 
 public enum Category {
-    OFFENSIVE,
-    UTILITY,
-    DEFENSIVE,
-    ALL,
-    COMPOSITE,
-    LOCAL,
-    PASS,
-    UNDEFINED;
+	OFFENSIVE,
+	UTILITY,
+	DEFENSIVE,
+	ALL,
+	COMPOSITE,
+	LOCAL,
+	PASS,
+	UNDEFINED;
 
-    public static final EnumSet<Category> UPGRADE_CATEGORIES = EnumSet.of(OFFENSIVE, UTILITY, DEFENSIVE, ALL);
+	public static final EnumSet<Category> UPGRADE_CATEGORIES = EnumSet.of(OFFENSIVE, UTILITY, DEFENSIVE, ALL);
 }

@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "serrated_sword_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -100,6 +101,7 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "3"
+    "ingredient_count": "3",
+    "better_compat_attribute_container": "bettercombat:claymore"
   }
 }

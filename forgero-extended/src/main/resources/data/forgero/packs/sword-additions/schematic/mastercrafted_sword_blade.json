@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "mastercrafted_sword_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -60,9 +61,6 @@
         "type": "LEATHER",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -104,8 +102,6 @@
         "operation": "ADDITION",
         "value": -2.7
       }
-    ],
-    "passive": [
     ]
   },
   "custom_data": {

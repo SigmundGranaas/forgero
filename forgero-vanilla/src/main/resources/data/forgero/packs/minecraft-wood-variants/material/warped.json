@@ -23,6 +23,13 @@
         "value": 0.2
       },
       {
+        "id": "wood-attack-damage-composite-base",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "category": "OFFENSIVE",
