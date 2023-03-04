@@ -14,20 +14,20 @@ import static com.sigmundgranaas.forgero.vanilla.ForgeroVanilla.VANILLA_SUPPLIER
 
 public class ForgeroPipeLineSetup {
 
-    public static PackageSupplier EXTENDED_SUPPLIER = () -> List.of(new FilePackageLoader(EXTENDED_PACKAGE).get(), new FilePackageLoader(TRINKETS_PACKAGE).get(), new FilePackageLoader(SWORD_ADDITIONS_PACKAGE).get(), new FilePackageLoader(MINECRAFT_EXTENDED_PACKAGE).get());
+	public static PackageSupplier EXTENDED_SUPPLIER = () -> List.of(new FilePackageLoader(EXTENDED_PACKAGE).get(), new FilePackageLoader(TRINKETS_PACKAGE).get(), new FilePackageLoader(SWORD_ADDITIONS_PACKAGE).get(), new FilePackageLoader(MINECRAFT_EXTENDED_PACKAGE).get());
 
-    public static void setup() {
-        if (ForgeroStateRegistry.COMPOSITES == null) {
-            ForgeroConfigurationLoader.load();
-            PipelineBuilder
-                    .builder()
-                    .register(VANILLA_SUPPLIER)
-                    .register(EXTENDED_SUPPLIER)
-                    .state(stateListener())
-                    .state(compositeListener())
-                    .inflated(containerListener())
-                    .build()
-                    .execute();
-        }
-    }
+	public static void setup() {
+		if (ForgeroStateRegistry.COMPOSITES == null) {
+			ForgeroConfigurationLoader.load();
+			PipelineBuilder
+					.builder()
+					.register(VANILLA_SUPPLIER)
+					.register(EXTENDED_SUPPLIER)
+					.state(stateListener())
+					.state(compositeListener())
+					.inflated(containerListener())
+					.build()
+					.execute();
+		}
+	}
 }

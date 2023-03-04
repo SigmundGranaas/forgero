@@ -6,5 +6,5 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface ModelProvider {
-    Optional<ModelMatcher> find(Identifiable id);
+	Optional<ModelMatcher> find(Identifiable id);
 }

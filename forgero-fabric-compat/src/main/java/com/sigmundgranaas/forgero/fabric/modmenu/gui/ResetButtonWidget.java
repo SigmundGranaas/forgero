@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.ForgeroConfigurationScreen;
+
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -23,7 +24,6 @@ public class ResetButtonWidget extends ButtonWidget {
 	@Override
 	public void onPress() {
 		super.onPress();
-
 		reset();
 		ForgeroConfigurationLoader.save();
 	}
@@ -41,4 +41,5 @@ public class ResetButtonWidget extends ButtonWidget {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		super.render(matrices, mouseX, mouseY, delta);
 	}
+
 }

@@ -4,5 +4,5 @@ import java.io.InputStream;
 import java.util.Optional;
 
 public interface FileLoader {
-    Optional<InputStream> getStream(String location);
+	Optional<InputStream> getStream(String location);
 }

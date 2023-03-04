@@ -6,7 +6,8 @@
     {
       "type": "patchouli:text",
       "text": "Oak is the most common wood available. It is easy to use, and fairly sturdy. It is one of the heavier tree variants."
-    },{
+    },
+    {
       "type": "patchouli:spotlight",
       "title": "Oak",
       "item": "minecraft:oak_log",

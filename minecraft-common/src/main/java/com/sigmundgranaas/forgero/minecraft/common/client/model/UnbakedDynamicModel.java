@@ -4,7 +4,7 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 
 public interface UnbakedDynamicModel {
-    BakedModel bake();
+	BakedModel bake();
 
-    ModelIdentifier getId();
+	ModelIdentifier getId();
 }

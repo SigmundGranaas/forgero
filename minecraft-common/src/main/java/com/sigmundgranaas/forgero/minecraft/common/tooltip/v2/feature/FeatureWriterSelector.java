@@ -11,34 +11,34 @@ import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockH
 import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler.VEIN_MINING_KEY;
 
 public class FeatureWriterSelector {
-    private final Map<String, Function<PropertyData, FeatureWriter>> writerFactory;
+	private final Map<String, Function<PropertyData, FeatureWriter>> writerFactory;
 
-    public FeatureWriterSelector() {
-        this.writerFactory = new HashMap<>();
-    }
+	public FeatureWriterSelector() {
+		this.writerFactory = new HashMap<>();
+	}
 
-    public static FeatureWriterSelector defaultSelector() {
-        var selector = new FeatureWriterSelector();
-        selector.add(VEIN_MINING_KEY, VeinMiningWriter::new);
-        selector.add("EFFECTIVE_BLOCKS", BlockEffectivenessWriter::new);
-        selector.add(BLOCK_BREAKING_PATTERN_KEY, PatternMiningWriter::new);
-        return selector;
-    }
+	public static FeatureWriterSelector defaultSelector() {
+		var selector = new FeatureWriterSelector();
+		selector.add(VEIN_MINING_KEY, VeinMiningWriter::new);
+		selector.add("EFFECTIVE_BLOCKS", BlockEffectivenessWriter::new);
+		selector.add(BLOCK_BREAKING_PATTERN_KEY, PatternMiningWriter::new);
+		return selector;
+	}
 
-    public FeatureWriterSelector add(String type, Function<PropertyData, FeatureWriter> factory) {
-        writerFactory.put(type, factory);
-        return this;
-    }
+	public FeatureWriterSelector add(String type, Function<PropertyData, FeatureWriter> factory) {
+		writerFactory.put(type, factory);
+		return this;
+	}
 
-    public FeatureWriter writer(PropertyData data, TooltipConfiguration configuration) {
-        var FeatureConfig = configuration.toBuilder();
-        if (!configuration.hideSectionTitle()) {
-            FeatureConfig.baseIndent(configuration.baseIndent() + 1);
-        }
+	public FeatureWriter writer(PropertyData data, TooltipConfiguration configuration) {
+		var FeatureConfig = configuration.toBuilder();
+		if (!configuration.hideSectionTitle()) {
+			FeatureConfig.baseIndent(configuration.baseIndent() + 1);
+		}
 
-        if (writerFactory.containsKey(data.type())) {
-            return writerFactory.get(data.type()).apply(data).setConfig(FeatureConfig.build());
-        }
-        return new FeatureWriter(data).setConfig(FeatureConfig.build());
-    }
+		if (writerFactory.containsKey(data.type())) {
+			return writerFactory.get(data.type()).apply(data).setConfig(FeatureConfig.build());
+		}
+		return new FeatureWriter(data).setConfig(FeatureConfig.build());
+	}
 }

@@ -6,15 +6,15 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public interface IdentifiableRegistry<T extends Identifiable> extends Registry<T> {
-    default Optional<? extends Supplier<T>> find(Identifiable id) {
-        return find(id.identifier());
-    }
+	default Optional<? extends Supplier<T>> find(Identifiable id) {
+		return find(id.identifier());
+	}
 
-    Optional<? extends Supplier<T>> find(String id);
+	Optional<? extends Supplier<T>> find(String id);
 
-    boolean contains(String id);
+	boolean contains(String id);
 
-    default boolean contains(Identifiable id) {
-        return contains(id.identifier());
-    }
+	default boolean contains(Identifiable id) {
+		return contains(id.identifier());
+	}
 }

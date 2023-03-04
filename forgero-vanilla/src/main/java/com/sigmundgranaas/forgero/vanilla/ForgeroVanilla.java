@@ -9,6 +9,6 @@ import static com.sigmundgranaas.forgero.core.resource.data.Constant.MINECRAFT_P
 import static com.sigmundgranaas.forgero.core.resource.data.Constant.VANILLA_PACKAGE;
 
 public class ForgeroVanilla {
-    public static PackageSupplier VANILLA_SUPPLIER = () -> List.of(new FilePackageLoader(MINECRAFT_PACKAGE).get(), new FilePackageLoader(VANILLA_PACKAGE).get());
+	public static PackageSupplier VANILLA_SUPPLIER = () -> List.of(new FilePackageLoader(MINECRAFT_PACKAGE).get(), new FilePackageLoader(VANILLA_PACKAGE).get());
 
 }

@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 
 import javax.imageio.ImageIO;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -12,51 +13,51 @@ import java.util.Optional;
 
 public class TextureGenerator {
 
-    public static TextureGenerator INSTANCE;
+	public static TextureGenerator INSTANCE;
 
-    private final TextureService service;
+	private final TextureService service;
 
-    public TextureGenerator(FileLoader loader, Map<String, String> paletteRemap) {
-        this.service = new TextureService(loader, paletteRemap);
-    }
+	public TextureGenerator(FileLoader loader, Map<String, String> paletteRemap) {
+		this.service = new TextureService(loader, paletteRemap);
+	}
 
-    public static TextureGenerator getInstance(FileLoader loader, Map<String, String> paletteRemap) {
-        if (INSTANCE == null) {
-            INSTANCE = new TextureGenerator(loader, paletteRemap);
-        }
-        return INSTANCE;
-    }
+	public static TextureGenerator getInstance(FileLoader loader, Map<String, String> paletteRemap) {
+		if (INSTANCE == null) {
+			INSTANCE = new TextureGenerator(loader, paletteRemap);
+		}
+		return INSTANCE;
+	}
 
-    public Optional<Texture> getTexture(PaletteTemplateModel templateModel) {
-        var palette = service.getPalette(templateModel.palette() + ".png");
-        var template = service.getTemplate(templateModel.template());
-        if (palette.isPresent() && template.isPresent()) {
-            var texture = new RawTexture(template.get().apply(palette.get()).getImage());
-            //saveImage(texture, templateModel.name());
-            return Optional.of(texture);
-        }
+	public Optional<Texture> getTexture(PaletteTemplateModel templateModel) {
+		var palette = service.getPalette(templateModel.palette() + ".png");
+		var template = service.getTemplate(templateModel.template());
+		if (palette.isPresent() && template.isPresent()) {
+			var texture = new RawTexture(template.get().apply(palette.get()).getImage());
+			//saveImage(texture, templateModel.name());
+			return Optional.of(texture);
+		}
 
-        return Optional.empty();
-    }
+		return Optional.empty();
+	}
 
-    public void clear() {
+	public void clear() {
 
-        service.clear();
+		service.clear();
 
-    }
+	}
 
-    private void saveImage(RawTexture texture, String name) {
-        var outputPath = "./export/generated_textures/";
-        File outputFile = new File(outputPath + name);
-        if (!outputFile.exists()) {
-            outputFile.mkdirs();
-        }
-        try {
-            ImageIO.write(texture.image(), "png", outputFile);
-            Forgero.LOGGER.info("exported: {}", outputFile.toString());
-        } catch (IOException e) {
-            Forgero.LOGGER.error(e);
-        }
+	private void saveImage(RawTexture texture, String name) {
+		var outputPath = "./export/generated_textures/";
+		File outputFile = new File(outputPath + name);
+		if (!outputFile.exists()) {
+			outputFile.mkdirs();
+		}
+		try {
+			ImageIO.write(texture.image(), "png", outputFile);
+			Forgero.LOGGER.info("exported: {}", outputFile.toString());
+		} catch (IOException e) {
+			Forgero.LOGGER.error(e);
+		}
 
-    }
+	}
 }

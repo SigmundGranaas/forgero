@@ -5,5 +5,5 @@ import com.sigmundgranaas.forgero.core.state.State;
 import java.util.List;
 
 public interface Constructed {
-    List<State> parts();
+	List<State> parts();
 }

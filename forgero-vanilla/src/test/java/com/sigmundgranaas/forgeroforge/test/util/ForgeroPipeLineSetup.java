@@ -13,17 +13,17 @@ import static com.sigmundgranaas.forgero.core.resource.data.Constant.VANILLA_PAC
 
 public class ForgeroPipeLineSetup {
 
-    public static void setup() {
-        if (ForgeroStateRegistry.COMPOSITES == null) {
-            ForgeroConfigurationLoader.load();
-            PipelineBuilder
-                    .builder()
-                    .register(() -> List.of(new FilePackageLoader(MINECRAFT_PACKAGE).get(), new FilePackageLoader(VANILLA_PACKAGE).get()))
-                    .state(stateListener())
-                    .state(compositeListener())
-                    .inflated(containerListener())
-                    .build()
-                    .execute();
-        }
-    }
+	public static void setup() {
+		if (ForgeroStateRegistry.COMPOSITES == null) {
+			ForgeroConfigurationLoader.load();
+			PipelineBuilder
+					.builder()
+					.register(() -> List.of(new FilePackageLoader(MINECRAFT_PACKAGE).get(), new FilePackageLoader(VANILLA_PACKAGE).get()))
+					.state(stateListener())
+					.state(compositeListener())
+					.inflated(containerListener())
+					.build()
+					.execute();
+		}
+	}
 }
