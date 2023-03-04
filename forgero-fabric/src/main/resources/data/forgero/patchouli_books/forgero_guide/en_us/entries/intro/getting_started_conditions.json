@@ -1,0 +1,35 @@
+{
+  "name": "Conditions",
+  "icon": "forgero:gold-path_digger_shovel_head",
+  "category": "forgero:getting_started_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Conditions are used to apply attributes and effects to tools when something happens to them. The most common use for conditions is for applying unique bonuses to loot found in different chests. There are currently 17 unique conditions available."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Assembly station",
+      "item": "forgero:mangrove-mastercrafted_hoe_head{FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:['forgero:quick'],ID:'forgero:mangrove-mastercrafted_hoe_head',INGREDIENTS:[{ID:'forgero:mastercrafted_hoe_head-schematic',NAME:'mastercrafted_hoe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:mangrove',NAME:'mangrove',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'mangrove-mastercrafted_hoe_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'HOE_HEAD',UPGRADES:[]}}",
+      "text": "Conditions are tailored to only spawn on specific types of parts. This makes it possible for some parts to also have unique conditions that can only spawn on them."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Assembly station",
+      "item": "forgero:refined_pickaxe_head-schematic{FORGERO:{CONDITIONS:['forgero:sturdy'],ID:'forgero:refined_pickaxe_head-schematic',NAME:'refined_pickaxe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'}}",
+      "text": "All loot from treasure chests has a chance of having conditions. The 17 available conditions are spread between parts and schematics"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Assembly station",
+      "item": "forgero:jungle-lightweight_pickaxe_head{FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:['forgero:swift','forgero:light'],ID:'forgero:jungle-lightweight_pickaxe_head',INGREDIENTS:[{ID:'forgero:lightweight_pickaxe_head-schematic',NAME:'lightweight_pickaxe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:jungle',NAME:'jungle',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'jungle-lightweight_pickaxe_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'PICKAXE_HEAD',UPGRADES:[]}}",
+      "text": "Conditions can be combined, so if you're lucky, you might find loot with several conditions!"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Assembly station",
+      "item": "forgero:gold-path_digger_shovel_head{FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:['forgero:durable','forgero:mighty'],ID:'forgero:gold-path_digger_shovel_head',INGREDIENTS:[{ID:'forgero:path_digger_shovel_head-schematic',NAME:'path_digger_shovel_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:gold',NAME:'gold',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'gold-path_digger_shovel_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'SHOVEL_HEAD',UPGRADES:[]}}",
+      "text": "Conditions are split into different tiers, which makes better conditions harder to come by. Some conditions are super rare and will be extremely hard to find."
+    }
+  ]
+}
