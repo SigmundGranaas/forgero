@@ -17,12 +17,13 @@
       {
         "type": "MINING_SPEED",
         "order": "BASE",
+        "category": "ALL",
         "operation": "ADDITION",
         "value": 2.0
       }
     ]
   },
   "palette": {
-    "name": "lapis-gem"
+    "name": "lapis_gem"
   }
 }

@@ -1,7 +1,6 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
   "name": "sword_guard-schematic",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -64,16 +63,32 @@
       {
         "type": "RARITY",
         "order": "COMPOSITE",
-        "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.2
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
-        "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 0.4
+      },
+      {
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.5
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "value": 0.95
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "value": 0.95
       }
     ]
   },

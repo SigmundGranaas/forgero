@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "saber_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -60,7 +61,7 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 32
+        "value": 42
       },
       {
         "type": "ATTACK_DAMAGE",
@@ -78,7 +79,7 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 1.1
       },
       {
         "type": "ATTACK_SPEED",
@@ -95,6 +96,7 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "3"
+    "ingredient_count": "3",
+    "better_compat_attribute_container": "bettercombat:cutlass"
   }
 }

@@ -1,0 +1,46 @@
+plugins {
+	id "idea"
+	id 'fabric-loom' apply true
+}
+
+configurations {
+	dev {
+		canBeResolved = false
+		canBeConsumed = true
+	}
+}
+artifacts {
+	dev jar
+}
+
+dependencies {
+	implementation project(':forgero-core')
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+	implementation 'org.jetbrains:annotations:23.0.0'
+	implementation 'org.projectlombok:lombok:1.18.24'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+}
+
+processResources {
+	inputs.property "version", rootProject.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": rootProject.version
+	}
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${rootProject.archivesBaseName}" }
+	}
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
+}

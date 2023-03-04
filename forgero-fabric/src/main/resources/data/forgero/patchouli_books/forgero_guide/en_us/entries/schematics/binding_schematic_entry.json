@@ -1,0 +1,19 @@
+{
+  "name": "Binding Schematic",
+  "icon": "forgero:shovel_head-schematic",
+  "category": "forgero:schematic_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "To increase to viability of a tool, you might decide to upgrade it with a binding. The binding provides mostly durability bonuses, but some variants might also provide offensive attributes, as well as more slots for upgrades."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:netherite-binding"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:spiked_binding-schematic_recipe"
+    }
+  ]
+}

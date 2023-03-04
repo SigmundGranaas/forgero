@@ -1,0 +1,63 @@
+{
+  "type": "METAL",
+  "name": "quadrillum",
+  "container": {
+    "type": "HOST",
+    "id": "mythicmetals:quadrillum_ingot"
+  },
+  "palette": {
+    "name": "quadrillum"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-base-mining_level",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "id": "metal-base-mining_speed",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 24
+      },
+      {
+        "id": "metal-base-durability",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 321.0
+      },
+      {
+        "id": "metal-base-attack",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.3
+      },
+      {
+        "id": "metal-base-attack",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      }
+    ]
+  }
+}

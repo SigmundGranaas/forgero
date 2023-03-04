@@ -1,7 +1,6 @@
 {
   "type": "BINDING_SCHEMATIC",
   "name": "spiked_binding-schematic",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -50,9 +49,6 @@
         "type": "TRINKET",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -74,7 +70,7 @@
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 0.2
       },
       {
         "type": "ATTACK_SPEED",
@@ -86,7 +82,6 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "category": "ALL",
         "value": 0.2
       }
     ]

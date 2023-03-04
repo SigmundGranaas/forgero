@@ -16,6 +16,13 @@
       {
         "type": "RARITY",
         "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 40
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
         "value": 40
@@ -51,6 +58,6 @@
     ]
   },
   "palette": {
-    "name": "polar_bear_pelt"
+    "name": "polar_bear_pelt_palette"
   }
 }

@@ -14,9 +14,15 @@
         "operation": "ADDITION",
         "value": 65
       }
+    ],
+    "features": [
+      {
+        "type": "MAGNETIC",
+        "value": 1
+      }
     ]
   },
   "palette": {
-    "name": "magnetico-gem"
+    "name": "magnetico_gem"
   }
 }

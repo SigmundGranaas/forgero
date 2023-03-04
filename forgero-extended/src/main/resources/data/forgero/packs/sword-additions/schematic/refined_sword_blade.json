@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "refined_sword_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -39,7 +40,16 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "MATERIAL",
+        "type": "TOOL_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "scabbard",
+        "type": "LEATHER",
         "tier": 1
       },
       {
@@ -95,8 +105,6 @@
         "operation": "ADDITION",
         "value": -2.8
       }
-    ],
-    "passive": [
     ]
   },
   "custom_data": {

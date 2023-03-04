@@ -14,7 +14,7 @@
     },
     {
       "name": "tree_chopper_head",
-      "modelType": "GENERATE",
+      "type": "GENERATE",
       "template": "clumpy_axe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
@@ -22,7 +22,7 @@
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:tree_copper_head-schematic"
+        "id:tree_chopper_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "tree_chopper_head"

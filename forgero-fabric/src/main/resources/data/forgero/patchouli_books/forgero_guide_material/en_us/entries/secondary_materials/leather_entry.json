@@ -1,0 +1,17 @@
+{
+  "name": "Leather",
+  "icon": "minecraft:leather",
+  "category": "forgero:secondary_materials_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Leather is an extremely useful utility material, suitable for increasing the handling of tools and weapons. Will provide decent upgraded when used to wrap handles, or providing a scabbard for your blade"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Leather",
+      "item": "minecraft:leather",
+      "text": ""
+    }
+  ]
+}

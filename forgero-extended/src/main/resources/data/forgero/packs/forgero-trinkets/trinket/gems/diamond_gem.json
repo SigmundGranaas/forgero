@@ -17,6 +17,7 @@
       {
         "type": "DURABILITY",
         "order": "BASE",
+        "category": "ALL",
         "operation": "ADDITION",
         "value": 200.0
       },
@@ -25,17 +26,11 @@
         "order": "END",
         "category": "ALL",
         "operation": "MULTIPLICATION",
-        "value": 1.2,
-        "condition": {
-          "target": "BLOCK",
-          "tag": [
-            "minecraft:base_stone_overworld"
-          ]
-        }
+        "value": 1.05
       }
     ]
   },
   "palette": {
-    "name": "diamond-gem"
+    "name": "diamond_gem_stone"
   }
 }

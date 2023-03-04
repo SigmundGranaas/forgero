@@ -1,0 +1,38 @@
+{
+  "id": "forgero:trimmed",
+  "priority": 5,
+  "target": {
+    "types": [
+      "PART",
+      "SCHEMATIC"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.07,
+  "properties": {
+    "attributes": [
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 0.3
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 22
+      },
+      {
+        "type": "DURABILITY",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 0.9
+      }
+    ],
+    "features": [
+    ]
+  }
+}

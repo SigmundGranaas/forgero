@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "knife_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -57,19 +58,19 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.8
+        "value": 1.6
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.6
+        "value": 0.5
       },
       {
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.0
+        "value": 0.8
       },
       {
         "type": "ATTACK_SPEED",
@@ -86,6 +87,7 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "1"
+    "ingredient_count": "1",
+    "better_compat_attribute_container": "bettercombat:dagger"
   }
 }

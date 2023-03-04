@@ -8,24 +8,14 @@
   "properties": {
     "attributes": [
       {
+        "id": "metal-base-mining_level",
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.0
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -0.2,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "HANDLE"
-          ]
-        }
-      },
-      {
+        "id": "metal-base-mining_speed",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -38,6 +28,7 @@
         "value": 60
       },
       {
+        "id": "metal-base-durability",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -45,28 +36,36 @@
         "value": 25
       },
       {
+        "id": "metal-base-attack",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2
       },
       {
+        "id": "metal-attack-speed-base",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 0
       },
       {
+        "id": "metal-attack-speed-base",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -3,
+        "value": -2,
         "condition": {
           "target": "TYPE",
           "tag": [
             "HANDLE"
           ]
         }
+      }
+    ],
+    "features": [
+      {
+        "type": "GOLDEN"
       }
     ]
   },

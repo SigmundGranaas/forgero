@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "mastercrafted_sword_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -39,15 +40,15 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "MATERIAL",
+        "type": "TOOL_MATERIAL",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "description": "sword_guard",
+        "description": "scabbard",
         "type": "SECONDARY_MATERIAL",
         "tier": 1
       },
@@ -57,12 +58,9 @@
           "OFFENSIVE"
         ],
         "description": "trinket",
-        "type": "TRINKET",
+        "type": "LEATHER",
         "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -104,8 +102,6 @@
         "operation": "ADDITION",
         "value": -2.7
       }
-    ],
-    "passive": [
     ]
   },
   "custom_data": {

@@ -1,0 +1,10 @@
+{
+  "name": "minecraft-wood-variants",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "minecraft",
+  "dependencies": [
+    "minecraft",
+    "forgero"
+  ]
+}

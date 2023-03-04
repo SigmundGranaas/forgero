@@ -1,0 +1,37 @@
+{
+  "type": "STONE",
+  "name": "calcite",
+  "parent": "default_stone",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:calcite"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "default_stone_rarity",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 18
+      },
+      {
+        "id": "default_stone_durability",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 180.0
+      },
+      {
+        "id": "default_stone_mining_speed",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      }
+    ]
+  },
+  "palette": {
+    "name": "calcite"
+  }
+}

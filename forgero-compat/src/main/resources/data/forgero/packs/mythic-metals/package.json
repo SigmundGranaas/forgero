@@ -1,0 +1,12 @@
+{
+  "name": "mythicmetals-materials",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "mythicmetals",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "mythicmetals"
+  ]
+}

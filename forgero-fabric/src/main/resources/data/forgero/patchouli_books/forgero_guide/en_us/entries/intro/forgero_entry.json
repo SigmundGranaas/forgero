@@ -1,0 +1,20 @@
+{
+  "name": "About Forgero",
+  "icon": "forgero:copper-sword",
+  "category": "forgero:getting_started_category",
+  "priority": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Forgero makes it possible to craft completely unique tools based on most materials available in the game. This is done by creating parts which can be combined in different ways to create tools and weapons. In addition to this, most tools and parts have slots, which allows them te upgraded further using a variety of materials and other parts."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Exploration is the primary way of obtaining new tools, parts and schematics. There are many different parts which can be found, as well as tiered variants of common tools. Better loot will be found in rarer chests and structures."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Forgero lets you craft parts using almost any material available in Minecraft, and will also work with materials added by other mods. Forgero is driven 100% by data files, so new configurations, materials, schematics and tools can be dynamically added to the mod, so the available tools, parts and material might vary depending on which Forgero packs you have added/enabled."
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "katana_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -63,7 +64,7 @@
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 0.9
       },
       {
         "type": "RARITY",
@@ -86,6 +87,7 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "2"
+    "ingredient_count": "2",
+    "better_compat_attribute_container": "bettercombat:katana"
   }
 }

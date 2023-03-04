@@ -1,15 +1,15 @@
 pluginManagement {
-    repositories {
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        gradlePluginPortal()
-    }
+	repositories {
+		maven { url 'https://maven.fabricmc.net/' }
+		maven { url "https://maven.architectury.dev/" }
+		maven { url "https://files.minecraftforge.net/maven/" }
+		mavenCentral()
+		gradlePluginPortal()
+	}
 }
 
-
 rootProject.name = 'forgero'
-include 'common', 'forgero-fabric', 'forge', 'forgero-extended', 'forgero-vanilla', 'core'
-include 'core'
+include 'forgero-fabric', 'forgero-extended', 'forgero-vanilla', 'forgero-core', 'forgero-fabric-compat', 'forgero-compat', 'forgero-structures', 'minecraft-common'
 
+//disabling forge for now
+//include 'forgero-forge'

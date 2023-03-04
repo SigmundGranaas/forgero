@@ -9,12 +9,7 @@
   "properties": {
     "attributes": [
       {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2.0
-      },
-      {
+        "id": "metal-base-mining_speed",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -27,6 +22,7 @@
         "value": 30
       },
       {
+        "id": "metal-base-durability",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",

@@ -40,6 +40,13 @@
         "operation": "MULTIPLICATION",
         "category": "OFFENSIVE",
         "value": 0.4
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "MIDDLE",
+        "operation": "MULTIPLICATION",
+        "category": "UTILITY",
+        "value": 1.05
       }
     ]
   },

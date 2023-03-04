@@ -16,25 +16,14 @@
       "order": 56
     },
     {
-      "name": "sword_blade_guard",
+      "name": "sword_blade_material_scabbard",
       "type": "GENERATE",
-      "palette": "MATERIAL",
+      "palette": "LEATHER",
       "template": "sword_blade_guard.png",
-      "order": 55,
+      "order": 42,
       "offset": [
-        -4,
-        -4
-      ],
-      "variants": [
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            -2,
-            -2
-          ]
-        }
+        -2,
+        -2
       ]
     },
     {
@@ -70,7 +59,7 @@
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "sword_blade_guard"
+      "template": "sword_blade_material_scabbard"
     },
     {
       "target": [

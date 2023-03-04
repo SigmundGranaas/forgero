@@ -2,27 +2,32 @@
   "schemaVersion": 1,
   "id": "forgero",
   "version": "${version}",
-  "name": "Forgero",
+  "name": "Forgero for Fabric",
   "description": "Equipment crafting expansion mod for Fabric!",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
+  "contributors": [
+    "Aulluna",
+    "Rad233",
+    "identithree",
+    "macaroni0423",
+    "Steveplays28"
+  ],
   "contact": {
-    "website": "https://sigmundgranaas.com",
-    "repo": "https://github.com/sigmundgranaas/forgero"
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.sigmundgranaas.forgero.client.ForgeroClient"
+      "com.sigmundgranaas.forgero.fabric.client.ForgeroClient"
     ],
     "main": [
-      "com.sigmundgranaas.forgero.ForgeroInitializer"
-    ],
-    "fabric-datagen": [
-      "com.sigmundgranaas.forgero.datagen.ForgeroDataGeneration"
+      "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"
     ]
   },
   "mixins": [
@@ -35,6 +40,11 @@
     "java": ">=17"
   },
   "custom": {
-    "forgeroResource": true
+    "forgeroResource": true,
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      }
+    }
   }
 }

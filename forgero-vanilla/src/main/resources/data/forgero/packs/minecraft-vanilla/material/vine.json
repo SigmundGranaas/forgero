@@ -35,6 +35,13 @@
         "value": 0.2
       },
       {
+        "type": "MINING_SPEED",
+        "order": "MIDDLE",
+        "operation": "MULTIPLICATION",
+        "category": "UTILITY",
+        "value": 1.02
+      },
+      {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "MULTIPLICATION",
@@ -44,6 +51,6 @@
     ]
   },
   "palette": {
-    "name": "string"
+    "name": "vines"
   }
 }

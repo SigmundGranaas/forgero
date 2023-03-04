@@ -1,0 +1,15 @@
+{
+  "name": "Sword guard Schematic",
+  "icon": "forgero:shovel_head-schematic",
+  "category": "forgero:schematic_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When crafted, most swords lack a certain feature, namely, the the guard! Sword guard schematics will let you craft different variants of sword guards with unique looks and attributes"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:sword_guard-schematic_recipe"
+    }
+  ]
+}

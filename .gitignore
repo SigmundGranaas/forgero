@@ -131,9 +131,19 @@ output/
 /forgero-extended/run/
 /forgero-extended/build/
 
+/forgero-fabric-compat/logs/
+/forgero-fabric-compat/run/
+/forgero-fabric-compat/build/
+
+/minecraft-common/logs/
+/minecraft-common/run/
+/minecraft-common/build/
+
 /core/logs/
 /core/run/
 /core/build/
 
 /logs/
 /run/
+/forgero-forge/run/
+/dest/

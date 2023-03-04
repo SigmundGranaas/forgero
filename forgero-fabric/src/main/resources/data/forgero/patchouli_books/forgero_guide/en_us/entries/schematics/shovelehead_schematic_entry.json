@@ -1,0 +1,15 @@
+{
+  "name": "Shovel head Schematic",
+  "icon": "forgero:shovel_head-schematic",
+  "category": "forgero:schematic_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The default shovelhead schematic creates a basic shovelhead. When combined with a handle, it will create a shovel almost identical to the vanilla shovel, with some additional slots for upgrades"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:shovel_head-schematic_recipe"
+    }
+  ]
+}

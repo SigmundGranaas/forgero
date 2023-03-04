@@ -1,0 +1,61 @@
+{
+  "type": "WOOD",
+  "name": "spruce",
+  "parent": "wood",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:spruce_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite-base",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 7
+      },
+      {
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "category": "OFFENSIVE",
+        "operation": "ADDITION",
+        "value": 0.4
+      },
+      {
+        "id": "wood-durability-composite-base",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 50.0
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "category": "OFFENSIVE",
+        "operation": "ADDITION",
+        "value": 0.1
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "category": "UTILITY",
+        "operation": "ADDITION",
+        "value": 0.2
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "category": "UTILITY",
+        "operation": "MULTIPLICATION",
+        "value": 1.1
+      }
+    ],
+    "passive": [],
+    "active": []
+  },
+  "palette": {
+    "name": "spruce"
+  }
+}
