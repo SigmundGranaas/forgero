@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.core.type;
 
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.core.util.TypeMatcher;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-
-import java.util.Optional;
 
 public interface Type extends Matchable {
 	Type HOLDABLE = new SimpleType("HOLDABLE", Optional.empty(), new TypeMatcher());
@@ -40,6 +40,8 @@ public interface Type extends Matchable {
 	Type OAK = new SimpleType("OAK", Optional.of(WOOD), new TypeMatcher());
 	Type METAL = new SimpleType("METAL", Optional.of(TOOL_MATERIAL), new TypeMatcher());
 	Type STONE = new SimpleType("STONE", Optional.of(TOOL_MATERIAL), new TypeMatcher());
+
+	Type BOW_LIMB = new SimpleType("BOW_LIMB", Optional.of(PART), new TypeMatcher());
 
 	static Type of(String name) {
 		if (ForgeroStateRegistry.TREE != null) {

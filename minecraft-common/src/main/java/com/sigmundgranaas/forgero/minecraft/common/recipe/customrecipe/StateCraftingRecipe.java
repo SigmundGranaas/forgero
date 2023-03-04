@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -20,11 +25,6 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 public class StateCraftingRecipe extends ShapedRecipe {
 
@@ -53,7 +53,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	private Optional<State> convertHead(ItemStack stack) {
 		var converted = StateConverter.of(stack);
-		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))) {
+		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD) || converted.get().test(Type.BOW_LIMB))) {
 			return converted;
 		}
 		return Optional.empty();

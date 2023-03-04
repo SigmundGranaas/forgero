@@ -1,6 +1,6 @@
 {
   "type": "FEATHER",
-  "name": "chicken_feather",
+  "name": "feather",
   "container": {
     "type": "HOST",
     "id": "minecraft:feather"
