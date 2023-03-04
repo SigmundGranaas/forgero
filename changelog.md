@@ -7,7 +7,8 @@ you have backed up your save.**
 
 ## Changelog 0.10.7
 
-* Reworked vein mining algorithm to improve performance
+* Added patchouli entry for conditions
+* Reworked vein mining algorithm to improve performance (Steveplays)
 * Reworked vanilla template textures and material palette (JorisDeBeer)
 * Added a scrollable settings menu
 * New Attribute types
