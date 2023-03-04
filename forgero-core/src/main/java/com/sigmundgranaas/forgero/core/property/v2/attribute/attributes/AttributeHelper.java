@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.core.property.v2.attribute.attributes;
 
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 
 public class AttributeHelper {
 	private final PropertyContainer container;
@@ -24,6 +24,7 @@ public class AttributeHelper {
 		map.put(AttackSpeed.KEY, AttackSpeed::of);
 		map.put(MiningSpeed.KEY, MiningSpeed::of);
 		map.put(MiningLevel.KEY, MiningLevel::of);
+		map.put(Weight.KEY, Weight::of);
 		return map;
 	}
 

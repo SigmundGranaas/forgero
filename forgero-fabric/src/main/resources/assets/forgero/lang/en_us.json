@@ -149,6 +149,7 @@
   "tooltip.forgero.attribute.mining_speed": "Mining Speed",
   "tooltip.forgero.attribute.attack_speed": "Attack Speed",
   "tooltip.forgero.attribute.armor": "Armor",
+  "tooltip.forgero.attribute.weight": "Weight",
   "tooltip.forgero.against": "Against: ",
   "tooltip.forgero.list_separator": "Against: ",
   "tooltip.forgero.tag.minecraft.mineable.pickaxe": "Pickaxe",

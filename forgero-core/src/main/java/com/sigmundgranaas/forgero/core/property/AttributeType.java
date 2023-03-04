@@ -10,6 +10,7 @@ public enum AttributeType {
 	MINING_LEVEL,
 	RARITY,
 	ARMOR,
+	WEIGHT,
 	DURABILITY;
 
 	@Override

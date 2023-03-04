@@ -7,31 +7,32 @@ import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 
-public class AttackSpeed implements Attribute {
-	public static String KEY = "ATTACK_SPEED";
 
+public class Weight implements Attribute {
+
+	public static final String KEY = "WEIGHT";
 	private final float value;
 
-	public AttackSpeed(ContainerTargetPair pair) {
-		this.value = pair.container().stream().applyAttribute(pair.target(), AttributeType.ATTACK_SPEED);
+	public Weight(ContainerTargetPair pair) {
+		this.value = pair.container().stream().applyAttribute(pair.target(), AttributeType.WEIGHT);
 	}
 
-	public static Attribute of(PropertyContainer container) {
+	public static Weight of(PropertyContainer container) {
 		var pair = ContainerTargetPair.of(container);
-		return AttributeCache.computeIfAbsent(pair, () -> new AttackSpeed(pair), KEY);
+		return (Weight) AttributeCache.computeIfAbsent(pair, () -> new Weight(pair), KEY);
 	}
 
 	public static Float apply(PropertyContainer container) {
-		return Weight.of(container).reduceAttackSpeed(of(container).asFloat());
+		return of(container).asFloat();
 	}
 
 	public static Float apply(PropertyContainer container, Target target) {
-		return Weight.of(container).reduceAttackSpeed(of(container, target).asFloat());
+		return of(container, target).asFloat();
 	}
 
-	public static Attribute of(PropertyContainer container, Target target) {
+	public static Weight of(PropertyContainer container, Target target) {
 		var pair = new ContainerTargetPair(container, target);
-		return AttributeCache.computeIfAbsent(pair, () -> new AttackSpeed(pair), KEY);
+		return (Weight) AttributeCache.computeIfAbsent(pair, () -> new Weight(pair), KEY);
 	}
 
 	@Override
@@ -41,6 +42,12 @@ public class AttackSpeed implements Attribute {
 
 	@Override
 	public Float asFloat() {
-		return Math.max(value, -3.5f);
+		return value;
+	}
+
+	public float reduceAttackSpeed(float speed) {
+		long negatedValue = Math.abs((int) this.value - 100);
+		var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
+		return (percentage * (speed + 4)) - 4;
 	}
 }
