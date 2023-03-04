@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -9,8 +11,6 @@ import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public class CompositeModelEntry implements ModelMatcher {
 	public static Optional<ModelTemplate> findUpgradeModel(Slot upgradeSlot, Composite construct, Context context, ModelProvider provider) {
@@ -36,17 +36,29 @@ public class CompositeModelEntry implements ModelMatcher {
 		if (state instanceof Composite composite) {
 			var compositeModelTemplate = new CompositeModelTemplate();
 			var compositeContext = context.add(composite.type()).add(new NameMatch(composite.name()));
-
-			composite.slots().stream()
-					.map(slot -> findUpgradeModel(slot, composite, context, provider))
-					.flatMap(Optional::stream)
-					.forEach(compositeModelTemplate::add);
+			var filledContext = compositeContext;
 			if (composite instanceof Constructed construct) {
 				construct.parts().stream()
 						.map(stateEntry -> convert(stateEntry, provider, compositeContext))
 						.flatMap(Optional::stream)
 						.forEach(compositeModelTemplate::add);
+
+				var models = compositeModelTemplate.getModels().stream()
+						.filter(PaletteTemplateModel.class::isInstance)
+						.map(PaletteTemplateModel.class::cast)
+						.toList();
+
+				for (PaletteTemplateModel model : models) {
+					filledContext = filledContext.add(new ModelMatchEntry(model.template()));
+				}
 			}
+
+			Context finalFilledContext = filledContext;
+			composite.slots().stream()
+					.map(slot -> findUpgradeModel(slot, composite, finalFilledContext, provider))
+					.flatMap(Optional::stream)
+					.forEach(compositeModelTemplate::add);
+
 			return Optional.of(compositeModelTemplate);
 		}
 		return Optional.empty();

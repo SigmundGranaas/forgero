@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.DynamicResourceGenerator;
 import lombok.Synchronized;
@@ -48,10 +49,26 @@ public class ARRPGenerator {
 
 
 	public void generateResources() {
+		generateTagsFromStateTree();
 		createMaterialToolTags();
 		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
 	}
 
+	public void generateTagsFromStateTree() {
+		ForgeroStateRegistry.TREE.nodes().forEach(this::createTagFromType);
+	}
+
+	private void createTagFromType(MutableTypeNode node) {
+		JTag typeTag = new JTag();
+		var states = node.getResources(State.class);
+		if (states.size() > 0) {
+			states.stream()
+					.filter(state -> ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(state.identifier()))
+					.map(state -> new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier())))
+					.forEach(typeTag::add);
+			RESOURCE_PACK.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase()), typeTag);
+		}
+	}
 
 	private void createMaterialToolTags() {
 		var tools = ForgeroStateRegistry.STATES.find(Type.HOLDABLE);
