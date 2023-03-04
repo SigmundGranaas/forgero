@@ -17,7 +17,12 @@
       "modelType": "GENERATE",
       "template": "reaper_head.png",
       "palette": "TOOL_MATERIAL",
-      "order": 20
+      "order": 20,
+      "offset": [
+        0,
+        0
+      ]
+
     },
     {
       "target": [
