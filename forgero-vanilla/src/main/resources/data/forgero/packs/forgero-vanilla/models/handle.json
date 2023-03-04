@@ -10,6 +10,12 @@
       "variants": [
         {
           "target": [
+            "type:BOW"
+          ],
+          "template": "bow_handle.png"
+        },
+        {
+          "target": [
             "type:HOE"
           ],
           "template": "hoe_handle.png"
