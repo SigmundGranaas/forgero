@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot;
 
+import java.util.List;
+import java.util.function.Supplier;
+
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.LootEntryData;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.ConditionFunction;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.GemLevelFunction;
 import lombok.Builder;
@@ -12,9 +16,6 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.BinomialLootNumberProvider;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-import java.util.function.Supplier;
-
 @Data
 @Builder
 public class SingleLootEntry implements LootEntry {
@@ -25,6 +26,22 @@ public class SingleLootEntry implements LootEntry {
 	private int rolls = 1;
 	@Builder.Default
 	private float chance = 1f;
+
+	public static LootEntry of(LootEntryData data) {
+		StateFilter filter = StateFilter.builder()
+				.include(data.types())
+				.lowerRarity(data.lower_rarity_limit())
+				.upperRarity(data.upper_rarity_limit())
+				.build();
+
+		return SingleLootEntry.builder()
+				.chance(data.chance())
+				.rolls(data.rolls())
+				.filter(filter::filter)
+				.target(data.targets().stream().map(Identifier::new).toList())
+				.weight(1)
+				.build();
+	}
 
 	@Override
 	public void apply(LootTable.Builder builder) {
