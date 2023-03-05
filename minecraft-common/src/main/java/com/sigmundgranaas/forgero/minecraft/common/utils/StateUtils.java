@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.utils;
 
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.registry.StateFinder;
 import com.sigmundgranaas.forgero.core.state.State;
 
 import net.minecraft.util.Identifier;
-
-import java.util.Optional;
 
 public class StateUtils {
 	public static StateFinder finder = ForgeroStateRegistry.stateFinder();
@@ -22,6 +22,10 @@ public class StateUtils {
 
 	public static Optional<Identifier> containerMapper(String id) {
 		return Optional.ofNullable(ForgeroStateRegistry.STATE_TO_CONTAINER.get(id)).map(Identifier::new);
+	}
+
+	public static Identifier defaultedContainerMapper(State state) {
+		return containerMapper(state.identifier()).orElse(new Identifier(state.identifier()));
 	}
 
 	public static Optional<String> containerToStateMapper(String id) {
