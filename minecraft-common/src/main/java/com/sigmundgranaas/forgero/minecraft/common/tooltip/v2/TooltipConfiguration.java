@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
 import static com.sigmundgranaas.forgero.core.property.attribute.Category.UPGRADE_CATEGORIES;
-import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.WRITABLE_ATTRIBUTES;
 
 import java.util.List;
 import java.util.Set;
@@ -9,6 +8,13 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,6 +24,8 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 public class TooltipConfiguration {
+	public static final List<String> WRITABLE_ATTRIBUTES = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY);
+
 	@Builder.Default
 	private boolean hideSectionTitle = false;
 	@Builder.Default
