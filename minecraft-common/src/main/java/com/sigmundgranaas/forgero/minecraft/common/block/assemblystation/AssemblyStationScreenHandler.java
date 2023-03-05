@@ -26,7 +26,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
-
 	public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
 		@Override
 		public ItemStack transferSlot(PlayerEntity player, int index) {
@@ -311,6 +310,4 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	}
 
 	public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
-
-
 }

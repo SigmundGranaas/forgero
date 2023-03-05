@@ -63,6 +63,8 @@ import java.util.stream.Collectors;
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.makeshift.MakeshiftAssemblyStationBlock.*;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.makeshift.MakeshiftAssemblyStationScreenHandler.MAKESHIFT_ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 
 
@@ -122,6 +124,10 @@ public class ForgeroInitializer implements ModInitializer {
 	}
 
 	private void registerBlocks() {
+		Registry.register(Registry.BLOCK, MAKESHIFT_ASSEMBLY_STATION, MAKESHIFT_ASSEMBLY_STATION_BLOCK);
+		Registry.register(Registry.ITEM, MAKESHIFT_ASSEMBLY_STATION, MAKESHIFT_ASSEMBLY_STATION_ITEM);
+		Registry.register(Registry.SCREEN_HANDLER, MAKESHIFT_ASSEMBLY_STATION, MAKESHIFT_ASSEMBLY_STATION_SCREEN_HANDLER);
+
 		Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
 		Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
 		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);

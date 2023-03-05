@@ -30,15 +30,13 @@ import org.jetbrains.annotations.Nullable;
 import static net.minecraft.block.Blocks.DEEPSLATE;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock {
-
 	public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
 	public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
 	public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
-	// a public identifier for multiple parts of our bigger chest
+	// A public identifier for multiple parts of our bigger chest
 	public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
 
 	private static final VoxelShape SHAPE_LEFT;
-
 	private static final VoxelShape SHAPE_RIGHT;
 
 	static {
@@ -137,7 +135,6 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 			world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
 			world.updateNeighbors(pos, Blocks.AIR);
 			state.updateNeighbors(world, pos, 3);
-
 		}
 		super.onBreak(world, pos, state, player);
 	}
@@ -178,8 +175,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 	}
 
 	public enum AssemblyStationPart implements StringIdentifiable {
-		RIGHT("right"),
-		LEFT("left");
+		RIGHT("right"), LEFT("left");
 
 		private final String name;
 
