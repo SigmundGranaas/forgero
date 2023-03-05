@@ -1,15 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
-import lombok.Builder;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import static com.sigmundgranaas.forgero.core.property.attribute.Category.UPGRADE_CATEGORIES;
+import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.WRITABLE_ATTRIBUTES;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.sigmundgranaas.forgero.core.property.attribute.Category.UPGRADE_CATEGORIES;
-import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.WRITABLE_ATTRIBUTES;
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 @Data()
@@ -32,10 +34,16 @@ public class TooltipConfiguration {
 	private List<String> writableAttributes = WRITABLE_ATTRIBUTES;
 	@Builder.Default
 	private Set<Category> upgradeCategories = UPGRADE_CATEGORIES;
-
 	@Builder.Default
 	private Set<String> hiddenFeatureTypes = Set.of("EFFECTIVE_BLOCKS");
-
 	@Builder.Default
 	private boolean padded = false;
+
+	public List<String> writableAttributes() {
+		if (ForgeroConfigurationLoader.configuration.hideRarity) {
+			return writableAttributes;
+		} else {
+			return ImmutableList.<String>builder().addAll(writableAttributes).add("RARITY").build();
+		}
+	}
 }
