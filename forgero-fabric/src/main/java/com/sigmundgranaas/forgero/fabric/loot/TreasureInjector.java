@@ -34,7 +34,6 @@ public class TreasureInjector {
 
 	private void registerEntries() {
 		this.entries.clear();
-		//mineshaft();
 		stronghold();
 		ancientCity();
 		pyramid();
@@ -77,33 +76,6 @@ public class TreasureInjector {
 		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, table, setter) -> {
 			entryMap.values().stream().filter(entry -> entry.matches(id)).forEach(entry -> entry.apply(table));
 		});
-	}
-
-	private void mineshaft() {
-		var partFilter = StateFilter.builder()
-				.lowerRarity(10)
-				.upperRarity(50)
-				.types(List.of("PICKAXE_HEAD", "TOOL_BINDING", "HANDLE"));
-		var partEntry = SingleLootEntry.builder()
-				.filter(partFilter.build()::filter)
-				.target(List.of(LootTables.ABANDONED_MINESHAFT_CHEST))
-				.chance(0.3f)
-				.rolls(2)
-				.build();
-
-		var schematicFilter = StateFilter.builder()
-				.lowerRarity(10)
-				.upperRarity(40)
-				.types(List.of("PICKAXE_HEAD_SCHEMATIC", "HANDLE_SCHEMATIC"));
-		var schematicEntry = SingleLootEntry.builder()
-				.filter(schematicFilter.build()::filter)
-				.target(List.of(LootTables.ABANDONED_MINESHAFT_CHEST))
-				.chance(0.3f)
-				.rolls(1)
-				.build();
-
-		registerEntry(partEntry);
-		registerEntry(schematicEntry);
 	}
 
 	private void stronghold() {

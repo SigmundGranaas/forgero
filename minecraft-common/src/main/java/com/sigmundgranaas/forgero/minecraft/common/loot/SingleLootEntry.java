@@ -29,7 +29,7 @@ public class SingleLootEntry implements LootEntry {
 
 	public static LootEntry of(LootEntryData data) {
 		StateFilter filter = StateFilter.builder()
-				.include(data.types())
+				.types(data.types())
 				.lowerRarity(data.lower_rarity_limit())
 				.upperRarity(data.upper_rarity_limit())
 				.build();
