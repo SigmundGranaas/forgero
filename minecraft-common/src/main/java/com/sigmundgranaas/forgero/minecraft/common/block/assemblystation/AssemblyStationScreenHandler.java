@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 
@@ -20,10 +24,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
@@ -100,7 +100,11 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	@Override
 	protected void dropInventory(PlayerEntity player, Inventory inventory) {
-		super.dropInventory(player, inventory);
+		if (compositeSlot.isEmpty()) {
+			super.dropInventory(player, inventory);
+		} else {
+			super.dropInventory(player, new SimpleInventory(compositeSlot.getStack()));
+		}
 	}
 
 	@Override
