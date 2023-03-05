@@ -1,5 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
@@ -13,10 +21,16 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.BasicStonePartUpgradeRecipeGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.BasicWoodenToolRecipeGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.MaterialRepairToolGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.PartSmeltingRecipeGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.RepairKitRecipeGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.SchematicPartGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.SlotUpgradeGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.TemplateGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.ToolRecipeCreator;
 
 public class RecipeCreatorImpl implements RecipeCreator {
 
@@ -50,6 +64,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
 		generators.addAll(basicWoodenPartRecipes());
 		generators.addAll(basicStonePartUpgrade());
 		generators.addAll(smeltingMetalPartRecipeGenerators());
+		generators.addAll(woodAndStoneRepairRecipeGenerator());
 		return generators.stream()
 				.filter(RecipeGenerator::isValid)
 				.map(RecipeGenerator::generate)
@@ -93,6 +108,22 @@ public class RecipeCreatorImpl implements RecipeCreator {
 		var recipes = new ArrayList<RecipeGenerator>();
 		for (State material : materials) {
 			recipes.add(new RepairKitRecipeGenerator(material, templateGenerator));
+		}
+		return recipes;
+	}
+
+	private List<RecipeGenerator> woodAndStoneRepairRecipeGenerator() {
+		var wood = ForgeroStateRegistry.TREE.find(Type.WOOD)
+				.map(node -> node.getResources(State.class))
+				.orElse(ImmutableList.<State>builder().build());
+
+		var stone = ForgeroStateRegistry.TREE.find(Type.STONE)
+				.map(node -> node.getResources(State.class))
+				.orElse(ImmutableList.<State>builder().build());
+
+		var recipes = new ArrayList<RecipeGenerator>();
+		for (State material : Stream.of(wood, stone).flatMap(List::stream).toList()) {
+			recipes.add(new MaterialRepairToolGenerator(material, templateGenerator));
 		}
 		return recipes;
 	}
