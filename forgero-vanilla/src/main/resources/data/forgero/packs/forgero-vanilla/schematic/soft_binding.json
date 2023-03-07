@@ -1,6 +1,6 @@
 {
   "type": "BINDING_SCHEMATIC",
-  "name": "binding-schematic",
+  "name": "soft_binding-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -16,7 +16,7 @@
             "id": "this"
           },
           {
-            "type": "TOOL_MATERIAL",
+            "type": "SECONDARY_MATERIAL",
             "unique": true,
             "amount": 2
           }
@@ -28,7 +28,7 @@
         "id": "this"
       },
       {
-        "type": "TOOL_MATERIAL",
+        "type": "SECONDARY_MATERIAL",
         "unique": true
       }
     ],
