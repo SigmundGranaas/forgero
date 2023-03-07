@@ -1,18 +1,20 @@
 package com.sigmundgranaas.forgero.fabric.resources.dynamic;
 
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.state.State;
-import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.tags.JTag;
-
-import net.minecraft.util.Identifier;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
+import net.devtech.arrp.api.RuntimeResourcePack;
+import net.devtech.arrp.json.tags.JTag;
+
+import net.minecraft.util.Identifier;
 
 public class PartTypeTagGenerator implements DynamicResourceGenerator {
 	private final Map<String, List<String>> idTagEntries = new HashMap<>();
@@ -33,9 +35,13 @@ public class PartTypeTagGenerator implements DynamicResourceGenerator {
 	private void mapTags(State construct) {
 		var type = construct.type().typeName().toLowerCase();
 		if (idTagEntries.containsKey(type)) {
-			idTagEntries.get(type).add(construct.identifier());
+			convertId(construct).ifPresent(id -> idTagEntries.get(type).add(id));
 		} else {
-			idTagEntries.put(type, new ArrayList<>(List.of(construct.identifier())));
+			convertId(construct).ifPresent(id -> idTagEntries.put(type, new ArrayList<>(List.of(id))));
 		}
+	}
+
+	private Optional<String> convertId(State state) {
+		return StateUtils.containerMapper(state.identifier()).map(Identifier::toString);
 	}
 }
