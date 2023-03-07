@@ -85,6 +85,12 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": -2.5
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.05
       }
     ]
   },
