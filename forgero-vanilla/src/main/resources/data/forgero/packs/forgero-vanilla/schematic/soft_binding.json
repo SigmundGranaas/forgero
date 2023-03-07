@@ -38,14 +38,6 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
         "type": "TRINKET",
         "tier": 1
       }
