@@ -24,7 +24,6 @@ public class PartTypeTagGenerator implements DynamicResourceGenerator {
 		ForgeroStateRegistry.STATES.all().stream()
 				.map(Supplier::get)
 				.forEach(this::mapTags);
-
 		for (Map.Entry<String, List<String>> entry : idTagEntries.entrySet()) {
 			var tag = new JTag();
 			entry.getValue().stream().map(Identifier::new).forEach(tag::add);
