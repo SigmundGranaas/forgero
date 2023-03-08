@@ -17,7 +17,7 @@ import net.minecraft.util.math.Direction;
 public class BlockHandlerCache {
 	public static final LoadingCache<String, ToolBlockHandler> blockHandlerLoadingCache = CacheBuilder.newBuilder()
 			.maximumSize(600)
-			.expireAfterAccess(Duration.of(5, ChronoUnit.MINUTES))
+			.expireAfterAccess(Duration.of(2, ChronoUnit.SECONDS))
 			.build(new CacheLoader<>() {
 				@Override
 				public @NotNull
@@ -35,7 +35,7 @@ public class BlockHandlerCache {
 	}
 
 	public static void remove(CacheAbleKey key) {
-		blockHandlerLoadingCache.invalidate(key.key());
+		blockHandlerLoadingCache.invalidateAll();
 	}
 
 	public record BlockStateCacheKey(CacheAbleKey blockState, PropertyContainer container,

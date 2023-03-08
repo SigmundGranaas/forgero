@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import java.util.Set;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-
-import java.util.Set;
 
 public record BlockBreakingHandler(BlockBreakingStrategy strategy) implements BlockBreakingStrategy {
 	public static boolean isBreakableBlock(BlockView world, BlockPos pos, PlayerEntity player) {
@@ -16,7 +16,7 @@ public record BlockBreakingHandler(BlockBreakingStrategy strategy) implements Bl
 		} else if (player.canHarvest(state)) {
 			return true;
 		} else {
-			return true;
+			return false;
 		}
 	}
 
