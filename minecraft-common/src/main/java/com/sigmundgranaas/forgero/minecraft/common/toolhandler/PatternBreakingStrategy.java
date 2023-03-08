@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingHandler.isBreakableBlock;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
@@ -10,11 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingHandler.isBreakableBlock;
 
 public class PatternBreakingStrategy implements BlockBreakingStrategy {
 	private final PatternBreaking breakingPattern;
@@ -37,8 +37,12 @@ public class PatternBreakingStrategy implements BlockBreakingStrategy {
 		Direction[] directions = Direction.getEntityFacingOrder(player);
 		var availableBlocks = new HashSet<BlockPos>();
 
+		if (!player.canHarvest(world.getBlockState(rootPos))) {
+			return Set.of(rootPos);
+		}
+
 		if (breakingPattern.getPattern().length == 0 || breakingPattern.getPattern()[0].length() % 2 == 0) {
-			return new HashSet<>();
+			return Set.of(rootPos);
 		}
 
 		int centerY = (breakingPattern.getPattern().length - 1) / 2;
