@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.tags.JTag;
@@ -23,6 +24,7 @@ public class PartTypeTagGenerator implements DynamicResourceGenerator {
 	public void generate(RuntimeResourcePack pack) {
 		ForgeroStateRegistry.STATES.all().stream()
 				.map(Supplier::get)
+				.filter(state -> state.test(Type.PART))
 				.forEach(this::mapTags);
 
 		for (Map.Entry<String, List<String>> entry : idTagEntries.entrySet()) {
