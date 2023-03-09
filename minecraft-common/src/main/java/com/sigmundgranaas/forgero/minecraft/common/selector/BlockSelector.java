@@ -15,6 +15,12 @@ import net.minecraft.util.math.BlockPos;
  * Can be used bot for selecting blocks as well as filtering them
  */
 public interface BlockSelector {
+
+	/**
+	 * @param rootPos the root position of the selection
+	 * @return a set of all the blocks that are valid and in the radius around the root position.
+	 * Will return an empty set if the root block is not valid
+	 */
 	@NotNull
 	Set<BlockPos> select(BlockPos rootPos);
 }

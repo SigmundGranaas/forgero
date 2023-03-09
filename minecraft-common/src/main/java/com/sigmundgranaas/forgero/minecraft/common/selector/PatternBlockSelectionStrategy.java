@@ -20,14 +20,14 @@ import net.minecraft.util.math.Direction;
  * The pattern is rotated based on the player's facing direction.
  * The pattern is applied horizontally or vertically based on the player's facing direction.
  */
-public class PatternBlockSelector implements BlockSelector {
+public class PatternBlockSelectionStrategy implements BlockSelector {
 	private final List<String> pattern;
-	private final Direction facing;
+	private final Direction facingHorizontal;
 	private final Direction[] primaryFacing;
 
-	public PatternBlockSelector(List<String> pattern, Direction[] primaryFacing, Direction facing) {
+	public PatternBlockSelectionStrategy(List<String> pattern, Direction[] primaryFacing, Direction facing) {
 		this.pattern = pattern;
-		this.facing = facing;
+		this.facingHorizontal = facing;
 		this.primaryFacing = primaryFacing;
 	}
 
@@ -82,14 +82,14 @@ public class PatternBlockSelector implements BlockSelector {
 	private int rotation() {
 		int rotate = 0;
 		if (isVertical()) {
-			switch (facing) {
+			switch (facingHorizontal) {
 				case EAST -> rotate = 3;
 				case SOUTH -> rotate = 2;
 				case WEST -> rotate = 1;
 				case NORTH -> rotate = 0;
 			}
 		} else {
-			switch (facing) {
+			switch (facingHorizontal) {
 				case EAST -> rotate = 0;
 				case SOUTH -> rotate = 3;
 				case WEST -> rotate = 2;

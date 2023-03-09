@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
 /**
- * Class for filtering a block selector based on a blockstate predicate
+ * Class for filtering a block selector based on a block state predicate
  * <p>
  * Can be used to filter blocks based on if a player can harvest the block, or if the block is in a specific tag
  */
