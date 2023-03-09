@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PropertyHelper;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulHandler;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

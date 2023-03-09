@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.selector;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
 import static net.minecraft.util.registry.Registry.BLOCK_KEY;
 
@@ -22,11 +22,11 @@ import net.minecraft.world.WorldView;
  * <p>
  * Can be used to filter blocks based on if a player can harvest the block, or if the block is in a specific tag
  */
-public class FilterSelector implements BlockSelector {
+public class FilteredSelector implements BlockSelector {
 	private final BlockSelector blockFinder;
 	private final Predicate<BlockPos> blockFilter;
 
-	public FilterSelector(BlockSelector blockFinder, Predicate<BlockPos> blockFilter) {
+	public FilteredSelector(BlockSelector blockFinder, Predicate<BlockPos> blockFilter) {
 		this.blockFinder = blockFinder;
 		this.blockFilter = blockFilter;
 	}
@@ -36,7 +36,7 @@ public class FilterSelector implements BlockSelector {
 	 */
 	@NotNull
 	public static BlockSelector canPlayerHarvest(WorldView world, PlayerEntity player, BlockSelector blockFinder) {
-		return new FilterSelector(blockFinder, pos -> player.canHarvest(world.getBlockState(pos)));
+		return new FilteredSelector(blockFinder, pos -> player.canHarvest(world.getBlockState(pos)));
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class FilterSelector implements BlockSelector {
 	 */
 	@NotNull
 	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, WorldView view, TagKey<Block> tag) {
-		return new FilterSelector(blockFinder, pos -> view.getBlockState(pos).isIn(tag));
+		return new FilteredSelector(blockFinder, pos -> view.getBlockState(pos).isIn(tag));
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class FilterSelector implements BlockSelector {
 			return isTaggedBlock(blockFinder, view, tagKey);
 		} catch (InvalidIdentifierException e) {
 			Forgero.LOGGER.error("Invalid tag identifier used to create a block selector filter: " + tag);
-			return new FilterSelector(blockFinder, pos -> true);
+			return new FilteredSelector(blockFinder, pos -> true);
 		}
 	}
 

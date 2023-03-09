@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.minecraft.common.selector;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
-import static com.sigmundgranaas.forgero.minecraft.common.selector.BlockSelectionUtils.around;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.around;
 
 import java.util.HashSet;
 import java.util.Set;

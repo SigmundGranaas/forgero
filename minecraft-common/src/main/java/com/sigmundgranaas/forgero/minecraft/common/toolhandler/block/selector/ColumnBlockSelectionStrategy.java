@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.selector;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,12 +16,12 @@ import net.minecraft.util.math.Direction;
 /**
  * Block selector that selects block in a straight column.
  */
-public class ColumnBlockSelector implements BlockSelector {
+public class ColumnBlockSelectionStrategy implements BlockSelector {
 	private final int depth;
 	private final int maxHeight;
 	private final Predicate<BlockPos> isBlockValid;
 
-	public ColumnBlockSelector(int depth, int maxHeight, Predicate<BlockPos> isBlockValid) {
+	public ColumnBlockSelectionStrategy(int depth, int maxHeight, Predicate<BlockPos> isBlockValid) {
 		this.depth = depth;
 		this.maxHeight = maxHeight;
 		this.isBlockValid = isBlockValid;

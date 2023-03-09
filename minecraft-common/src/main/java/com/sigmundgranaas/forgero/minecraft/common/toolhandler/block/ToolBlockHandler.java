@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.VeinMiningStrategy;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

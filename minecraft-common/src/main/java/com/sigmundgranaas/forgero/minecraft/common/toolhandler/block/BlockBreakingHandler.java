@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
 import java.util.Set;
 
@@ -13,11 +13,7 @@ public record BlockBreakingHandler(BlockBreakingStrategy strategy) implements Bl
 
 		if (state.isAir() || state.getHardness(world, pos) < 0) {
 			return false;
-		} else if (player.canHarvest(state)) {
-			return true;
-		} else {
-			return false;
-		}
+		} else return player.canHarvest(state);
 	}
 
 	public float getHardness(BlockState rootState, BlockPos rootPos, BlockView world, PlayerEntity player) {

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.selector;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
 import java.util.HashSet;
 import java.util.Set;

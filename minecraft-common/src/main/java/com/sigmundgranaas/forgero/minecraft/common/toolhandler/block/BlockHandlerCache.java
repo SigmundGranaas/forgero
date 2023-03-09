@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

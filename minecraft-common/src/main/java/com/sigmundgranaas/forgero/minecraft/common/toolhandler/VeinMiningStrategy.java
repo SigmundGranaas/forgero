@@ -1,7 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockBreakingHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockBreakingStrategy;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,10 +18,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.EightWayDirection;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class VeinMiningStrategy implements BlockBreakingStrategy {
 	private final VeinBreaking handler;
