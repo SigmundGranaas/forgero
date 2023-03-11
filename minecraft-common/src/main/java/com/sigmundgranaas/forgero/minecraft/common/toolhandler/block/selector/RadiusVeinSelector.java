@@ -17,14 +17,14 @@ import net.minecraft.util.math.BlockPos;
  *
  * @author StevePlays
  */
-public class RadiusVeinMiningBlockSelectionStrategy implements BlockSelector {
+public class RadiusVeinSelector implements BlockSelector {
 	private final int depth;
 	private final Predicate<BlockPos> isBlockValid;
 
 	private Set<BlockPos> selectedBlocks = new HashSet<>();
 	private Set<BlockPos> newBlocksToScan = new HashSet<>();
 
-	public RadiusVeinMiningBlockSelectionStrategy(int depth, Predicate<BlockPos> isBlockValid) {
+	public RadiusVeinSelector(int depth, Predicate<BlockPos> isBlockValid) {
 		this.depth = depth;
 		this.isBlockValid = isBlockValid;
 	}

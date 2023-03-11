@@ -27,13 +27,13 @@ public interface BlockSelector {
 	BlockSelector EMPTY = rootPos -> Set.of();
 
 	static BlockSelector of(List<String> pattern, PlayerEntity player) {
-		var patternBlockSelector = new PatternBlockSelectionStrategy(pattern, Direction.getEntityFacingOrder(player), player.getHorizontalFacing());
+		var patternBlockSelector = new PatternSelector(pattern, Direction.getEntityFacingOrder(player), player.getHorizontalFacing());
 		return CachedSelector.of(patternBlockSelector);
 	}
 
 	static BlockSelector of(List<String> pattern, PlayerEntity player, List<String> tags) {
 		Predicate<BlockPos> filter = isInTags(player.world, tags);
-		var selector = new PatternBlockSelectionStrategy(pattern, Direction.getEntityFacingOrder(player), player.getHorizontalFacing());
+		var selector = new PatternSelector(pattern, Direction.getEntityFacingOrder(player), player.getHorizontalFacing());
 		var filteredSelector = new FilteredSelector(selector, filter);
 		return CachedSelector.of(filteredSelector);
 	}
@@ -42,7 +42,7 @@ public interface BlockSelector {
 		Predicate<BlockPos> filter = isBreakableBlock(view)
 				.and(canHarvest(view, player))
 				.and(isInTags(view, tags));
-		var selector = new RadiusVeinMiningBlockSelectionStrategy(depth, filter);
+		var selector = new RadiusVeinSelector(depth, filter);
 		return CachedSelector.of(selector);
 	}
 
@@ -50,7 +50,7 @@ public interface BlockSelector {
 		Predicate<BlockPos> filter = isBreakableBlock(view)
 				.and(canHarvest(view, player))
 				.and(isInTags(view, tags));
-		var selector = new ColumnBlockSelectionStrategy(depth, maxHeight, filter);
+		var selector = new ColumnSelector(depth, maxHeight, filter);
 		return CachedSelector.of(selector);
 	}
 
