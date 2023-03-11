@@ -42,7 +42,7 @@ public interface BlockSelector {
 		Predicate<BlockPos> filter = isBreakableBlock(view)
 				.and(canHarvest(view, player))
 				.and(isInTags(view, tags));
-		var selector = new RadiusVeinSelector(depth, filter);
+		var selector = new RadiusVeinSelector(depth, filter, woodToPlankPropagationPredicate(view));
 		return CachedSelector.of(selector);
 	}
 

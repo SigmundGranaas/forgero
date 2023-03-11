@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 import static net.minecraft.util.registry.Registry.BLOCK_KEY;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -74,4 +75,8 @@ public class BlockUtils {
 		return pos -> tags.stream().anyMatch(tag -> isInTag(view, tag).test(pos));
 	}
 
+	public static Function<BlockPos, Predicate<BlockPos>> woodToPlankPropagationPredicate(BlockView view) {
+		return (rootPos) -> (pos) ->
+				isInTag(view, "minecraft:logs").test(rootPos) && isInTag(view, "minecraft:planks").test(pos);
+	}
 }

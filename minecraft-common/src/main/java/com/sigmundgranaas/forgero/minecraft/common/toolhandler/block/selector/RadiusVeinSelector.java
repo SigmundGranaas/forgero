@@ -4,6 +4,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.sele
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +16,12 @@ import net.minecraft.util.math.BlockPos;
  * <p>
  * Will exclude blocks that are not valid, and try to find valid diagonal blocks.
  *
- * @author StevePlays28
+ * @author Steveplays28
  */
 public class RadiusVeinSelector implements BlockSelector {
 	private final int depth;
-	private final Predicate<BlockPos> isBlockValid;
+	private Predicate<BlockPos> isBlockValid;
+	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
 	private Set<BlockPos> selectedBlocks = new HashSet<>();
 	private Set<BlockPos> newBlocksToScan = new HashSet<>();
@@ -27,6 +29,12 @@ public class RadiusVeinSelector implements BlockSelector {
 	public RadiusVeinSelector(int depth, Predicate<BlockPos> isBlockValid) {
 		this.depth = depth;
 		this.isBlockValid = isBlockValid;
+	}
+
+	public RadiusVeinSelector(int depth, Predicate<BlockPos> isBlockValid, Function<BlockPos, Predicate<BlockPos>> rootPosValidator) {
+		this.depth = depth;
+		this.isBlockValid = isBlockValid;
+		this.rootPosValidator = rootPosValidator;
 	}
 
 	/**
@@ -43,6 +51,9 @@ public class RadiusVeinSelector implements BlockSelector {
 		if (!isBlockValid.test(rootPos)) {
 			return new HashSet<>();
 		}
+
+		//Some validators require the root pos to be valid as well
+		this.isBlockValid = this.isBlockValid.or(rootPosValidator.apply(rootPos));
 
 		selectedBlocks = new HashSet<>();
 		selectedBlocks.add(rootPos);
