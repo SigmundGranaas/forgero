@@ -62,7 +62,7 @@ public class BlockHandlerFactory {
 		PropertyData data = data();
 		BlockSelector selector = selector(data);
 		HardnessProvider hardness = HardnessProvider.of(view, player, selector);
-		return new ToolBlockHandler(pos, selector.select(pos), hardness.hardness(pos), key);
+		return new ToolBlockHandler(pos, selector.select(pos), hardness.getHardnessAt(pos), key);
 	}
 
 	private PropertyData data() {
@@ -78,15 +78,15 @@ public class BlockHandlerFactory {
 	 */
 	private BlockSelector selector(PropertyData data) {
 		BlockSelector selector = BlockSelector.EMPTY;
-		if (data.getPattern() != null && data.is(BLOCK_BREAKING_PATTERN_KEY)) {
+		if (data.getPattern() != null && data.isOfType(BLOCK_BREAKING_PATTERN_KEY)) {
 			var patternSelector = BlockSelector.of(Arrays.asList(data.getPattern()), player);
 			selector = patternSelector.filter(canHarvest(view, player));
 			if (!data.getTags().isEmpty()) {
 				selector = selector.filter(isInTags(view, data.getTags()));
 			}
-		} else if (data.is(VEIN_MINING_KEY) && data.getTags() != null) {
+		} else if (data.isOfType(VEIN_MINING_KEY) && data.getTags() != null) {
 			selector = BlockSelector.of((int) data.getValue(), view, player, data.getTags());
-		} else if (data.is(COLUMN_MINING_KEY)) {
+		} else if (data.isOfType(COLUMN_MINING_KEY)) {
 			selector = BlockSelector.of((int) data.getValue(), data.getLevel(), view, player, data.getTags());
 		}
 

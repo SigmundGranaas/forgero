@@ -41,7 +41,7 @@ public class PropertyData implements Property {
 		return type;
 	}
 
-	public boolean is(String type) {
+	public boolean isOfType(String type) {
 		return this.type.equals(type);
 	}
 }

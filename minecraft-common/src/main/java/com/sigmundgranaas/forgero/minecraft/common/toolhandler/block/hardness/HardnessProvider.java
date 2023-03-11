@@ -23,5 +23,5 @@ public interface HardnessProvider {
 	 * @param pos the root position of the block to calculate the hardness of. Can be used to calculate the hardness of a selection of blocks.
 	 * @return The hardness of the block/blocks at the given position. Returns -1 if the block is not valid.
 	 */
-	float hardness(BlockPos pos);
+	float getHardnessAt(BlockPos pos);
 }

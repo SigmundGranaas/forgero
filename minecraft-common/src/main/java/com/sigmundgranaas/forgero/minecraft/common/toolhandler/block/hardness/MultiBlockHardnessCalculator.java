@@ -27,8 +27,8 @@ public class MultiBlockHardnessCalculator implements HardnessProvider {
 
 
 	@Override
-	public float hardness(BlockPos rootPos) {
-		var singleBlockHardness = HardnessProvider.of(view).hardness(rootPos);
+	public float getHardnessAt(BlockPos rootPos) {
+		var singleBlockHardness = HardnessProvider.of(view).getHardnessAt(rootPos);
 		if (singleBlockHardness == -1.0f) {
 			return singleBlockHardness;
 		}

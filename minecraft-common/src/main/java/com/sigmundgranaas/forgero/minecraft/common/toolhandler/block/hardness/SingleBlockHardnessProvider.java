@@ -18,7 +18,7 @@ public class SingleBlockHardnessProvider implements HardnessProvider {
 	}
 
 	@Override
-	public float hardness(BlockPos pos) {
+	public float getHardnessAt(BlockPos pos) {
 		return view.getBlockState(pos).getHardness(view, pos);
 	}
 }

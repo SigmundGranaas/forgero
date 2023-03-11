@@ -19,7 +19,7 @@ public class BlockSelectionUtils {
 	 * @param blockPos the root position to find blocks around
 	 * @return A set of all the blocks around the given block position
 	 */
-	public static Set<BlockPos> around(BlockPos blockPos) {
+	public static Set<BlockPos> getBlockPositionsAround(BlockPos blockPos) {
 		var directions = Direction.values();
 		var eightWayDirections = EightWayDirection.values();
 		var offsetBlockPositions = new HashSet<BlockPos>();
@@ -46,7 +46,7 @@ public class BlockSelectionUtils {
 	 * @return A predicate that returns false if the pos is a common invalid block
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	public static Predicate<BlockPos> commonInvalidBlocks(BlockPos pos, WorldView view) {
+	public static Predicate<BlockPos> getCommonInvalidBlocks(BlockPos pos, WorldView view) {
 		return (blockPos) -> {
 			BlockState blockState = view.getBlockState(blockPos);
 			if (blockState.isAir()) {

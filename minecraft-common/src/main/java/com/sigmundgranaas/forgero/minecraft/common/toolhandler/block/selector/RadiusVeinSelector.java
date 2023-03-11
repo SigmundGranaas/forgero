@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.around;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.getBlockPositionsAround;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
  * <p>
  * Will exclude blocks that are not valid, and try to find valid diagonal blocks.
  *
- * @author StevePlays
+ * @author StevePlays28
  */
 public class RadiusVeinSelector implements BlockSelector {
 	private final int depth;
@@ -63,7 +63,7 @@ public class RadiusVeinSelector implements BlockSelector {
 					continue;
 				}
 				//Check all blocks around the block to scan and add to selection if valid
-				Set<BlockPos> blocksAroundScannedBlock = around(blockToScanPos);
+				Set<BlockPos> blocksAroundScannedBlock = getBlockPositionsAround(blockToScanPos);
 				blocksAroundScannedBlock.forEach(this::handleScannedBlock);
 
 				scannedBlocks.add(blockToScanPos);
