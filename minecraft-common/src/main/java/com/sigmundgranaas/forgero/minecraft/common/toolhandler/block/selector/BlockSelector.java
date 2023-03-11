@@ -4,6 +4,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.Bloc
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,14 @@ public interface BlockSelector {
 		return CachedSelector.of(selector);
 	}
 
+	static BlockSelector of(int depth, int maxHeight, BlockView view, PlayerEntity player, List<String> tags) {
+		Predicate<BlockPos> filter = isBreakableBlock(view)
+				.and(canHarvest(view, player))
+				.and(isInTags(view, tags));
+		var selector = new ColumnBlockSelectionStrategy(depth, maxHeight, filter);
+		return CachedSelector.of(selector);
+	}
+
 
 	/**
 	 * @param rootPos the root position of the selection
@@ -53,4 +62,13 @@ public interface BlockSelector {
 	 */
 	@NotNull
 	Set<BlockPos> select(BlockPos rootPos);
+
+	default BlockSelector filter(Predicate<BlockPos> filter) {
+		return new FilteredSelector(this, filter);
+	}
+
+	default BlockSelector filter(Function<BlockSelector, FilteredSelector> selectorFactory) {
+		return selectorFactory.apply(this);
+	}
+
 }

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
@@ -8,23 +7,26 @@ import java.util.function.Consumer;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
-import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
-import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.hardness.HardnessProvider;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelector;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.FilteredSelector;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 
+/**
+ * A handler for a block that is being mined.
+ * Will handle multiple blocks if the tool has the correct properties.
+ * Prefer cached handlers from {@link BlockHandlerCache} over creating new ones.
+ * Calculating the blocks to mine is expensive, and should only be done once per block unless it is invalidated.
+ * Caching is extremely short term, and should only be for actions that calls the handler multiple times in a row, like when calculating brok breaking deltas.
+ * See {@link BlockHandlerFactory} for creating handlers from tools.
+ */
 public class ToolBlockHandler {
-
 	public static ToolBlockHandler EMPTY = new ToolBlockHandler(new BlockPos(0, 0, 0), Collections.emptySet(), 0f, CacheAbleKey.EMPTY);
 	public static String BLOCK_BREAKING_PATTERN_KEY = "BLOCK_BREAKING_PATTERN";
 	public static String VEIN_MINING_KEY = "VEIN_MINING";
 	public static String COLUMN_MINING_KEY = "COLUMN_MINING";
+
+	public static Set<String> BLOCK_BREAKING_KEYS = Set.of(BLOCK_BREAKING_PATTERN_KEY, VEIN_MINING_KEY, COLUMN_MINING_KEY);
 
 	private final Set<BlockPos> availableBlocks;
 	private final BlockPos originPos;
@@ -39,47 +41,40 @@ public class ToolBlockHandler {
 	}
 
 	public static Optional<ToolBlockHandler> of(PropertyContainer container, BlockView world, BlockPos pos, PlayerEntity player) {
-		boolean has = ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, BLOCK_BREAKING_PATTERN_KEY)) || ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, VEIN_MINING_KEY));
-		if (has) {
-			var key = new BlockHandlerCache.BlockStateCacheKey(new BlockInfo(pos), container, Direction.getEntityFacingOrder(player));
-			var handler = BlockHandlerCache.computeIfAbsent(key, () -> createHandler(container, world, pos, player, key));
-			return Optional.of(handler);
-		}
-		return Optional.empty();
-	}
-
-	public static ToolBlockHandler createHandler(PropertyContainer container, BlockView world, BlockPos pos, PlayerEntity player, CacheAbleKey key) {
-		var blockMiningData = container.stream().features().filter(data -> data.type().equals(BLOCK_BREAKING_PATTERN_KEY) || data.type().equals(VEIN_MINING_KEY)).toList();
-		var data = blockMiningData.get(0);
-		BlockSelector selector;
-		if (data.getPattern() != null) {
-			var patternSelector = BlockSelector.of(Arrays.asList(data.getPattern()), player);
-			selector = FilteredSelector.canPlayerHarvest(world, player, patternSelector);
-			if (!data.getTags().isEmpty()) {
-				selector = FilteredSelector.isTaggedBlock(selector, world, data.getTags());
-			}
-		} else {
-			selector = BlockSelector.of((int) data.getValue(), world, player, data.getTags());
-		}
-
-		HardnessProvider hardnessProvider = HardnessProvider.of(world, player, selector);
-		return new ToolBlockHandler(pos, selector.select(pos), hardnessProvider.hardness(pos), key);
+		return BlockHandlerFactory.create(container, world, pos, player);
 	}
 
 	public float getHardness() {
 		return hardness;
 	}
 
+	/**
+	 * Runs an action for every block in the handler.
+	 *
+	 * @param consumer the action to run. Can be a call to break a block. Or a call for custom xp handlers.
+	 * @return the handler for chaining.
+	 */
 	public ToolBlockHandler handle(Consumer<BlockPos> consumer) {
 		availableBlocks.forEach(consumer);
 		return this;
 	}
 
+	/**
+	 * Runs an action for every block in the handler except the origin block.
+	 * This is useful when you want to break the origin block last, or if the origin block is handled by another system.
+	 *
+	 * @param consumer the action to run. Can be a call to break a block. Or a call for custom xp handlers.
+	 * @return the handler for chaining.
+	 */
 	public ToolBlockHandler handleExceptOrigin(Consumer<BlockPos> consumer) {
 		availableBlocks.stream().filter(info -> !info.equals(originPos)).forEach(consumer);
 		return this;
 	}
 
+	/**
+	 * Cleans up the handler after it has been used.
+	 * This will remove the handled selection from the cache, preventing invalid selections results.
+	 */
 	public void cleanUp() {
 		BlockHandlerCache.remove(key);
 	}
