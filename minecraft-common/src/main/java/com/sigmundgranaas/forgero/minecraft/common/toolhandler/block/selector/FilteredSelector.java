@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.canHarvest;
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isInTag;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -14,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldView;
 
 /**
  * Class for filtering a block selector based on a block state predicate
@@ -43,7 +42,7 @@ public class FilteredSelector implements BlockSelector {
 	 * @return BlockSelector that filters out blocks that are not in the tag
 	 */
 	@NotNull
-	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, WorldView view, TagKey<Block> tag) {
+	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, BlockView view, TagKey<Block> tag) {
 		return new FilteredSelector(blockFinder, isInTag(view, tag));
 	}
 
@@ -52,8 +51,17 @@ public class FilteredSelector implements BlockSelector {
 	 * Defaults to remove blocks if the tag is not found
 	 */
 	@NotNull
-	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, WorldView view, String tag) {
+	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, BlockView view, String tag) {
 		return new FilteredSelector(blockFinder, isInTag(view, tag));
+	}
+
+	/**
+	 * @return BlockSelector that filters out blocks that are not in the tag
+	 * Defaults to remove blocks if the tag is not found
+	 */
+	@NotNull
+	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, BlockView view, List<String> tags) {
+		return new FilteredSelector(blockFinder, isInTags(view, tags));
 	}
 
 	/**

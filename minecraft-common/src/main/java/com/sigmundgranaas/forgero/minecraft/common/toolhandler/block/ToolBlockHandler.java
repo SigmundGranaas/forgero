@@ -55,6 +55,9 @@ public class ToolBlockHandler {
 		if (data.getPattern() != null) {
 			var patternSelector = BlockSelector.of(Arrays.asList(data.getPattern()), player);
 			selector = FilteredSelector.canPlayerHarvest(world, player, patternSelector);
+			if (!data.getTags().isEmpty()) {
+				selector = FilteredSelector.isTaggedBlock(selector, world, data.getTags());
+			}
 		} else {
 			selector = BlockSelector.of((int) data.getValue(), world, player, data.getTags());
 		}

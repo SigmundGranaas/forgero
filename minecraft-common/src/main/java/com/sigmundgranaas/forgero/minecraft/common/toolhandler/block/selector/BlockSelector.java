@@ -14,7 +14,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 
 /**
- * An interface for selecting specific block based on a root position.
+ * An interface for selecting specific blocks based on a root position.
  * <p>
  * Useful for selecting blocks in a pattern, or selecting blocks in a radius.
  * Used by the Pattern breaking features as well as the Vein mining feature.
