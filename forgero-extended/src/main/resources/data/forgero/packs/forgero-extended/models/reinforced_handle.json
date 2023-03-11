@@ -1,0 +1,128 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "reinforced_handle",
+      "template": "reinforced_handle.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 10,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_handle.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_handle.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "axe_handle.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "medium_handle.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "short_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "handle_grip.png",
+      "order": 11,
+      "variants": [
+        {
+          "target": [
+            "model:reinforced_handle.png"
+          ],
+          "template": "mastercrafted_handle_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_reinforcement",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "handle_reinforcement.png",
+      "order": 15,
+      "offset": [
+        6,
+        6
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            5,
+            5
+          ]
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "offset": [
+            3,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:reinforced_handle-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "reinforced_handle"
+    },
+    {
+      "target": [
+        "type:HANDLE"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "reinforced_handle"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "grip"
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "handle_reinforcement"
+    },
+    {
+      "target": [
+        "type:PUMMEL",
+        "slot:1"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}
