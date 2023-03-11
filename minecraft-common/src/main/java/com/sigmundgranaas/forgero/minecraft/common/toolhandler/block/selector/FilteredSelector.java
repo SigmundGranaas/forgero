@@ -1,20 +1,19 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
-import static net.minecraft.util.registry.Registry.BLOCK_KEY;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.canHarvest;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isInTag;
 
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.sigmundgranaas.forgero.core.Forgero;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldView;
 
 /**
@@ -35,32 +34,26 @@ public class FilteredSelector implements BlockSelector {
 	 * @return BlockSelector that filters out blocks that the player cannot harvest
 	 */
 	@NotNull
-	public static BlockSelector canPlayerHarvest(WorldView world, PlayerEntity player, BlockSelector blockFinder) {
-		return new FilteredSelector(blockFinder, pos -> player.canHarvest(world.getBlockState(pos)));
+	public static BlockSelector canPlayerHarvest(BlockView world, PlayerEntity player, BlockSelector blockFinder) {
+		return new FilteredSelector(blockFinder, canHarvest(world, player));
 	}
+
 
 	/**
 	 * @return BlockSelector that filters out blocks that are not in the tag
 	 */
 	@NotNull
 	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, WorldView view, TagKey<Block> tag) {
-		return new FilteredSelector(blockFinder, pos -> view.getBlockState(pos).isIn(tag));
+		return new FilteredSelector(blockFinder, isInTag(view, tag));
 	}
 
 	/**
 	 * @return BlockSelector that filters out blocks that are not in the tag
-	 * Defaults to accept all blocks if the tag is not found
+	 * Defaults to remove blocks if the tag is not found
 	 */
 	@NotNull
 	public static BlockSelector isTaggedBlock(BlockSelector blockFinder, WorldView view, String tag) {
-		try {
-			Identifier tagId = new Identifier(tag);
-			TagKey<Block> tagKey = TagKey.of(BLOCK_KEY, tagId);
-			return isTaggedBlock(blockFinder, view, tagKey);
-		} catch (InvalidIdentifierException e) {
-			Forgero.LOGGER.error("Invalid tag identifier used to create a block selector filter: " + tag);
-			return new FilteredSelector(blockFinder, pos -> true);
-		}
+		return new FilteredSelector(blockFinder, isInTag(view, tag));
 	}
 
 	/**

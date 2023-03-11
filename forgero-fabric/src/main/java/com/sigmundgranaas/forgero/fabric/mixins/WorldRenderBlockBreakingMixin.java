@@ -66,10 +66,10 @@ public abstract class WorldRenderBlockBreakingMixin {
 				.flatMap(container -> ToolBlockHandler.of(container, world, pos, this.client.player))
 				.ifPresent(handler -> handler.handleExceptOrigin(info -> drawCuboidShapeOutline(matrices,
 						vertexConsumer,
-						info.state().getOutlineShape(this.world, info.pos(), ShapeContext.of(entity)),
-						(double) info.pos().getX() - cameraX,
-						(double) info.pos().getY() - cameraY,
-						(double) info.pos().getZ() - cameraZ,
+						world.getBlockState(info).getOutlineShape(this.world, info, ShapeContext.of(entity)),
+						(double) info.getX() - cameraX,
+						(double) info.getY() - cameraY,
+						(double) info.getZ() - cameraZ,
 						0.0F,
 						0.0F,
 						0.0F,
@@ -85,11 +85,11 @@ public abstract class WorldRenderBlockBreakingMixin {
 		PropertyHelper.ofPlayerHands(this.client.player)
 				.flatMap(container -> ToolBlockHandler.of(container, world, pos, this.client.player))
 				.ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
-					BlockBreakingInfo info = new BlockBreakingInfo(entityId, blockInfo.pos());
+					BlockBreakingInfo info = new BlockBreakingInfo(entityId, blockInfo);
 					info.setStage(stage);
 					info.setLastUpdateTick(this.ticks);
 					//this.blockBreakingInfos.put(entityId, info);
-					this.blockBreakingProgressions.computeIfAbsent(blockInfo.pos().asLong(), (l) -> Sets.newTreeSet()).add(info);
+					this.blockBreakingProgressions.computeIfAbsent(blockInfo.asLong(), (l) -> Sets.newTreeSet()).add(info);
 				}));
 
 	}
@@ -102,7 +102,7 @@ public abstract class WorldRenderBlockBreakingMixin {
 		PropertyHelper.ofPlayerHands(this.client.player)
 				.flatMap(container -> ToolBlockHandler.of(container, world, info.getPos(), this.client.player))
 				.ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
-					this.blockBreakingProgressions.remove(blockInfo.pos().asLong());
+					this.blockBreakingProgressions.remove(blockInfo.asLong());
 				}));
 	}
 }

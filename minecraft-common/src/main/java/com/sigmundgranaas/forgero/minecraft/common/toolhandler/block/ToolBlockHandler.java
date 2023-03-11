@@ -1,19 +1,19 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.VeinMiningStrategy;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.hardness.HardnessProvider;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelector;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.FilteredSelector;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -21,22 +21,19 @@ import net.minecraft.world.BlockView;
 
 public class ToolBlockHandler {
 
-	public static ToolBlockHandler EMPTY = new ToolBlockHandler(new TreeMap<>(), new BlockPos(0, 0, 0), 0f, CacheAbleKey.EMPTY);
+	public static ToolBlockHandler EMPTY = new ToolBlockHandler(new BlockPos(0, 0, 0), Collections.emptySet(), 0f, CacheAbleKey.EMPTY);
 	public static String BLOCK_BREAKING_PATTERN_KEY = "BLOCK_BREAKING_PATTERN";
 	public static String VEIN_MINING_KEY = "VEIN_MINING";
+	public static String COLUMN_MINING_KEY = "COLUMN_MINING";
 
-	private final List<BlockInfo> availableBlocks;
+	private final Set<BlockPos> availableBlocks;
 	private final BlockPos originPos;
 	private final float hardness;
 	private final CacheAbleKey key;
 
-	public ToolBlockHandler(SortedMap<BlockPos, BlockState> availableBlocks, BlockPos originPos, float hardness, CacheAbleKey key) {
+	public ToolBlockHandler(BlockPos originPos, Set<BlockPos> blocks, float hardness, CacheAbleKey key) {
 		this.key = key;
-		this.availableBlocks = new ArrayList<>();
-		availableBlocks.forEach((blockPos, blockState) -> {
-			this.availableBlocks.add(new BlockInfo(blockPos, blockState));
-		});
-
+		this.availableBlocks = blocks;
 		this.originPos = originPos;
 		this.hardness = hardness;
 	}
@@ -44,7 +41,7 @@ public class ToolBlockHandler {
 	public static Optional<ToolBlockHandler> of(PropertyContainer container, BlockView world, BlockPos pos, PlayerEntity player) {
 		boolean has = ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, BLOCK_BREAKING_PATTERN_KEY)) || ContainsFeatureCache.check(PropertyTargetCacheKey.of(container, VEIN_MINING_KEY));
 		if (has) {
-			var key = new BlockHandlerCache.BlockStateCacheKey(new BlockInfo(pos, world.getBlockState(pos)), container, Direction.getEntityFacingOrder(player));
+			var key = new BlockHandlerCache.BlockStateCacheKey(new BlockInfo(pos), container, Direction.getEntityFacingOrder(player));
 			var handler = BlockHandlerCache.computeIfAbsent(key, () -> createHandler(container, world, pos, player, key));
 			return Optional.of(handler);
 		}
@@ -53,36 +50,30 @@ public class ToolBlockHandler {
 
 	public static ToolBlockHandler createHandler(PropertyContainer container, BlockView world, BlockPos pos, PlayerEntity player, CacheAbleKey key) {
 		var blockMiningData = container.stream().features().filter(data -> data.type().equals(BLOCK_BREAKING_PATTERN_KEY) || data.type().equals(VEIN_MINING_KEY)).toList();
-		BlockBreakingHandler handler;
 		var data = blockMiningData.get(0);
-
-		if (data.type().equals(BLOCK_BREAKING_PATTERN_KEY)) {
-			handler = new BlockBreakingHandler(new PatternBreakingStrategy(data));
+		BlockSelector selector;
+		if (data.getPattern() != null) {
+			var patternSelector = BlockSelector.of(Arrays.asList(data.getPattern()), player);
+			selector = FilteredSelector.canPlayerHarvest(world, player, patternSelector);
 		} else {
-			handler = new BlockBreakingHandler(new VeinMiningStrategy(data));
+			selector = BlockSelector.of((int) data.getValue(), world, player, data.getTags());
 		}
 
-		var availableBlocks = handler.getAvailableBlocks(world, pos, player);
-		var availableBlocksStates = new TreeMap<BlockPos, BlockState>();
-
-		availableBlocks.forEach(blockPos -> {
-			availableBlocksStates.put(blockPos, world.getBlockState(blockPos));
-		});
-
-		return new ToolBlockHandler(availableBlocksStates, pos, handler.getHardness(world.getBlockState(pos), pos, world, player), key);
+		HardnessProvider hardnessProvider = HardnessProvider.of(world, player, selector);
+		return new ToolBlockHandler(pos, selector.select(pos), hardnessProvider.hardness(pos), key);
 	}
 
 	public float getHardness() {
 		return hardness;
 	}
 
-	public ToolBlockHandler handle(Consumer<BlockInfo> consumer) {
+	public ToolBlockHandler handle(Consumer<BlockPos> consumer) {
 		availableBlocks.forEach(consumer);
 		return this;
 	}
 
-	public ToolBlockHandler handleExceptOrigin(Consumer<BlockInfo> consumer) {
-		availableBlocks.stream().filter(info -> !info.pos.equals(originPos)).forEach(consumer);
+	public ToolBlockHandler handleExceptOrigin(Consumer<BlockPos> consumer) {
+		availableBlocks.stream().filter(info -> !info.equals(originPos)).forEach(consumer);
 		return this;
 	}
 
@@ -90,10 +81,10 @@ public class ToolBlockHandler {
 		BlockHandlerCache.remove(key);
 	}
 
-	public record BlockInfo(BlockPos pos, BlockState state) implements CacheAbleKey {
+	public record BlockInfo(BlockPos pos) implements CacheAbleKey {
 		@Override
 		public String key() {
-			return pos.asLong() + state.toString();
+			return pos.asLong() + "";
 		}
 	}
 }

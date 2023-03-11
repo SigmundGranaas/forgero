@@ -40,34 +40,38 @@ public class ColumnBlockSelectionStrategy implements BlockSelector {
 		if (!isBlockValid.test(rootPos)) {
 			return new HashSet<>();
 		}
+
+		//Collections used to keep track of which blocks have been tested and which blocks are to be tested next
 		Set<BlockPos> testedRoots = new HashSet<>();
 		Predicate<BlockPos> notTested = (pos) -> !testedRoots.contains(pos);
 		Set<BlockPos> rootsToTest = new HashSet<>();
 		List<BlockPos> columnRoots = new ArrayList<>();
 		rootsToTest.add(rootPos);
 
+		//Iterates through the blocks to test and adds the blocks that are valid to the column roots
 		for (int i = 0; i < depth; i++) {
 			Set<BlockPos> nextRoots = new HashSet<>();
 			if (columnRoots.size() > depth) {
 				break;
 			}
+			//Iterates through the blocks to test and adds the blocks that are valid to the column roots
 			for (BlockPos root : rootsToTest) {
 				if (testedRoots.contains(root)) {
 					continue;
-				}
-				testedRoots.add(root);
-				if (columnRoots.size() < depth) {
-					if (isBlockValid.test(root)) {
-						columnRoots.add(root);
-						horizontals(root)
-								.filter(notTested)
-								.forEach(nextRoots::add);
-					}
-
-				} else {
+				} else if (columnRoots.size() > depth) {
 					break;
 				}
+
+				testedRoots.add(root);
+				if (isBlockValid.test(root)) {
+					columnRoots.add(root);
+					//Find all the horizontal blocks from a valid root and add them to the blocks to test
+					horizontals(root)
+							.filter(notTested)
+							.forEach(nextRoots::add);
+				}
 			}
+			//Reset the blocks to test to the blocks that were found in the last iteration
 			rootsToTest = nextRoots;
 		}
 

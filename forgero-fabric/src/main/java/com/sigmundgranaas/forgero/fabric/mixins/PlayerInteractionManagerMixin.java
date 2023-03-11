@@ -27,15 +27,15 @@ public abstract class PlayerInteractionManagerMixin {
 	public abstract boolean breakBlock(BlockPos pos);
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V", shift = At.Shift.AFTER), method = "updateBlockBreakingProgress")
-	public void calcBlockBreakingDelta(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+	public void forgero$calcBlockBreakingDelta(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
 		if (this.currentBreakingProgress >= 1.0F && client.player != null && client.world != null) {
 			var soulHandler = SoulHandler.of(client.player.getMainHandStack());
-			soulHandler.ifPresent(soul -> soul.processBlockBreak(client.world.getBlockState(pos), pos, client.world, client.player));
+			soulHandler.ifPresent(soul -> soul.processBlockBreak(pos, client.world, client.player));
 			PropertyHelper.ofPlayerHands(client.player)
 					.flatMap(container -> ToolBlockHandler.of(container, client.world, pos, client.player))
 					.ifPresent(handler -> handler.handle(info -> {
-						soulHandler.ifPresent(soul -> soul.processBlockBreak(info.state(), info.pos(), client.world, client.player));
-						this.breakBlock(info.pos());
+						soulHandler.ifPresent(soul -> soul.processBlockBreak(info, client.world, client.player));
+						this.breakBlock(info);
 					}).cleanUp());
 		}
 	}
