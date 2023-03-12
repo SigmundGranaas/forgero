@@ -23,16 +23,9 @@
       {
         "type": "DURABILITY",
         "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 150
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 0.2
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.9
       },
       {
         "type": "MINING_SPEED",
@@ -44,9 +37,16 @@
       {
         "type": "DURABILITY",
         "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.9
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 150
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 0.2
       }
     ]
   },
