@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.SOUL_IDENTIFIER;
+
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.SoulParser;
@@ -14,11 +19,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.SOUL_IDENTIFIER;
 
 public class SoulHandler {
 	private final ItemStack stack;
@@ -47,7 +47,8 @@ public class SoulHandler {
 	}
 
 
-	public void processBlockBreak(BlockState state, BlockPos pos, World world, PlayerEntity player) {
+	public void processBlockBreak(BlockPos pos, World world, PlayerEntity player) {
+		BlockState state = world.getBlockState(pos);
 		float xp = (state.getHardness(world, pos) * 1);
 		if (state.getBlock() instanceof OreBlockXp ore) {
 			xp = ore.getExperienceDropped().get(net.minecraft.util.math.random.Random.create()) * 15;

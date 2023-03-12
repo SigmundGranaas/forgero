@@ -1,18 +1,17 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PropertyHelper;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractBlock.class)
 public class AbstractBlockMixin {
