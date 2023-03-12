@@ -56,19 +56,6 @@
   "properties": {
     "attributes": [
       {
-        "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
-      },
-      {
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
         "type": "MINING_LEVEL",
         "order": "COMPOSITE",
         "operation": "ADDITION",

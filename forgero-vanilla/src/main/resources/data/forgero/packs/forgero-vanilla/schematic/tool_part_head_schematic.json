@@ -4,17 +4,26 @@
   "properties": {
     "attributes": [
       {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 0
+        "value": 10
       },
       {
-        "id": "schematic_base_rarity_multiplication",
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
+      },
+      {
+        "id": "schematic-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
       }
     ]
   }

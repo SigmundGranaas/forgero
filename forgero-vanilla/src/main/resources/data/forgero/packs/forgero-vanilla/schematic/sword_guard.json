@@ -54,13 +54,15 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "operation": "ADDITION",
         "category": "LOCAL",
+        "operation": "ADDITION",
         "value": 10
       },
       {
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
@@ -73,22 +75,16 @@
         "value": 0.4
       },
       {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "type": "MINING_SPEED",
+        "order": "BASE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.95
       },
       {
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.5
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "value": 0.95
       },
       {
         "type": "WEIGHT",
