@@ -26,13 +26,13 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.AdditionalHealthHandler;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingEfficiencyTarget;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningLevel;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LuckHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockBreakingEfficiencyTarget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +44,16 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+
+import static com.sigmundgranaas.forgero.minecraft.common.item.Attributes.*;
 
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
 	LoadingCache<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = CacheBuilder.newBuilder()

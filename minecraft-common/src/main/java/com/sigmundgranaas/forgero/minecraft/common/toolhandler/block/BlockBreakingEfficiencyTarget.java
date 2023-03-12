@@ -1,4 +1,7 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
+
+import java.util.Collections;
+import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.TargetTypes;
@@ -7,9 +10,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import java.util.Collections;
-import java.util.Set;
 
 public record BlockBreakingEfficiencyTarget(BlockState state) implements Target {
 	@Override

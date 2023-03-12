@@ -1,12 +1,14 @@
 package com.sigmundgranaas.forgero.core.property.v2.cache;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.Set;
+import java.util.function.Function;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.jetbrains.annotations.NotNull;
-
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 
 public class ContainsFeatureCache {
 	public static final LoadingCache<PropertyTargetCacheKey, Boolean> containsFeatureCache = CacheBuilder.newBuilder()
@@ -22,5 +24,9 @@ public class ContainsFeatureCache {
 
 	public static boolean check(PropertyTargetCacheKey key) {
 		return containsFeatureCache.getUnchecked(key);
+	}
+
+	public static boolean check(Set<String> keys, Function<String, PropertyTargetCacheKey> keyMapper) {
+		return keys.stream().map(keyMapper).anyMatch(ContainsFeatureCache::check);
 	}
 }
