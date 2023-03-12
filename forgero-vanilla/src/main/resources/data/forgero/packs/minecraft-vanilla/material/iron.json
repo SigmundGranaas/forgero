@@ -9,18 +9,11 @@
   "properties": {
     "attributes": [
       {
+        "id": "metal-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 40
-      },
-      {
-        "id": "metal-base-durability",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "category": "ALL",
-        "value": 250
       }
     ]
   },

@@ -5,42 +5,42 @@
   "properties": {
     "attributes": [
       {
-        "id": "default_stone_mining_level",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.0
-      },
-      {
-        "id": "default_stone_rarity",
+        "id": "stone-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 10
       },
       {
-        "id": "default_stone_mining_speed",
+        "id": "stone-mining-level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.0
+      },
+      {
+        "id": "stone-mining-speed-composite",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 4
       },
       {
-        "id": "default_stone_durability",
+        "id": "stone-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 100.0
       },
       {
-        "id": "default_stone_attack_damage",
+        "id": "stone-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.4
       },
       {
-        "id": "default_stone_attack_damage",
+        "id": "stone-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -53,34 +53,28 @@
         }
       },
       {
-        "id": "stone_attack_speed",
-        "type": "ATTACK_SPEED",
+        "id": "stone-weight-composite",
+        "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 0
+        "value": 20
       },
       {
-        "id": "default_stone_attack_speed_handle",
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -1.8,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "HANDLE"
-          ]
-        }
-      },
-      {
-        "id": "default_stone_armor",
+        "id": "stone-armor-composite",
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 3
       },
       {
-        "id": "default_stone_rarity_upgrade",
+        "id": "stone-attack_speed-composite",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0
+      },
+      {
+        "id": "stone-rarity-upgrade",
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
@@ -88,7 +82,15 @@
         "value": 2
       },
       {
-        "id": "default_stone_attack_offensive_upgrade",
+        "id": "stone-weight-upgrade",
+        "type": "WEIGHT",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 3
+      },
+      {
+        "id": "stone-attack_damage-offensive-upgrade",
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
@@ -96,7 +98,7 @@
         "value": 0.3
       },
       {
-        "id": "default_stone_mining_speed_offensive_upgrade",
+        "id": "stone_mining_speed-offensive-upgrade",
         "type": "MINING_SPEED",
         "order": "BASE",
         "operation": "ADDITION",
@@ -104,7 +106,7 @@
         "value": 0.5
       },
       {
-        "id": "default_stone_durability_offensive_upgrade",
+        "id": "stone-durability-offensive-upgrade",
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
@@ -112,20 +114,12 @@
         "value": 30
       },
       {
-        "id": "default_stone_durability_utility_upgrade",
+        "id": "stone-durability-utility-upgrade",
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
         "value": 10
-      },
-      {
-        "id": "default_stone_attack_speed_utility_upgrade",
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 0.1
       }
     ]
   }

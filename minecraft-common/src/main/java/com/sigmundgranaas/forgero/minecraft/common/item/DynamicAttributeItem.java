@@ -1,5 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.Attributes.*;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -9,11 +16,25 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.*;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.*;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.AdditionalHealthHandler;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingEfficiencyTarget;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningLevel;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LuckHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -23,16 +44,6 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.Attributes.*;
 
 public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurability, DynamicEffectiveNess, DynamicMiningLevel, DynamicMiningSpeed {
 	LoadingCache<ItemStack, ImmutableMultimap<EntityAttribute, EntityAttributeModifier>> multiMapCache = CacheBuilder.newBuilder()
@@ -121,8 +132,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(ADDITION_HEALTH_MODIFIER_ID, "Health addition", additionalHealth, EntityAttributeModifier.Operation.ADDITION));
 
 		//Attack speed
-		float baseAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
-		float currentAttackSpeed = AttackSpeed.apply(defaultProperties());
+		float currentAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
+		float baseAttackSpeed = AttackSpeed.apply(defaultProperties());
 		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
 		if (currentAttackSpeed != baseAttackSpeed) {
 			//builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
