@@ -73,16 +73,16 @@
         "value": 0.4
       },
       {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      },
+      {
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.5
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "value": 0.95
       },
       {
         "type": "MINING_SPEED",
