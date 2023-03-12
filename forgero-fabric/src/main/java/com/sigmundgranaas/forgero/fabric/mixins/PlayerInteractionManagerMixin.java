@@ -33,7 +33,7 @@ public abstract class PlayerInteractionManagerMixin {
 			soulHandler.ifPresent(soul -> soul.processBlockBreak(pos, client.world, client.player));
 			PropertyHelper.ofPlayerHands(client.player)
 					.flatMap(container -> ToolBlockHandler.of(container, client.world, pos, client.player))
-					.ifPresent(handler -> handler.handle(info -> {
+					.ifPresent(handler -> handler.handleExceptOrigin(info -> {
 						soulHandler.ifPresent(soul -> soul.processBlockBreak(info, client.world, client.player));
 						this.breakBlock(info);
 					}).cleanUp());

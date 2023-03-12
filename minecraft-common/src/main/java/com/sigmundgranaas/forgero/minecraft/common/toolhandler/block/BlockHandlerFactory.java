@@ -46,6 +46,9 @@ public class BlockHandlerFactory {
 		if (!ContainsFeatureCache.check(BLOCK_BREAKING_KEYS, (key) -> PropertyTargetCacheKey.of(container, key))) {
 			return Optional.empty();
 		}
+		if (!player.canHarvest(view.getBlockState(pos))) {
+			return Optional.empty();
+		}
 		var key = new BlockHandlerCache.BlockStateCacheKey(new ToolBlockHandler.BlockInfo(pos), container, Direction.getEntityFacingOrder(player));
 		var handler = BlockHandlerCache.computeIfAbsent(key, () -> new BlockHandlerFactory(container, view, player).createHandler(pos, key));
 		return Optional.of(handler);

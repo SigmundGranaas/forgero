@@ -34,21 +34,22 @@ public class MultiBlockHardnessCalculator implements HardnessProvider {
 		}
 
 		float breakingSpeed = 0.0f;
-		float hardness = 0.0f;
+		float totalHardness = 0.0f;
 		var availableBlocks = selector.select(rootPos);
 		if (availableBlocks.size() < 2) {
 			return singleBlockHardness;
 		}
 
+
 		for (BlockPos pos : availableBlocks) {
 			var state = view.getBlockState(pos);
-
+			var hardness = state.getHardness(view, pos);
 			float harvestable = player.canHarvest(state) ? 30 : 100;
-			hardness += state.getHardness(view, pos) * harvestable;
+			totalHardness += hardness * harvestable;
 			breakingSpeed += player.getBlockBreakingSpeed(state);
 		}
 
 		breakingSpeed = breakingSpeed / availableBlocks.size();
-		return breakingSpeed / hardness;
+		return breakingSpeed / totalHardness;
 	}
 }
