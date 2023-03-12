@@ -132,7 +132,7 @@
     },
     {
       "target": [
-        "type:HANDLE"
+        "id:oak-simple_handle"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
