@@ -12,7 +12,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 20
+        "value": 40
       },
       {
         "type": "ATTACK_DAMAGE",

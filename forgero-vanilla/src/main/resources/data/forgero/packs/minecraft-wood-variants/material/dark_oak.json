@@ -13,7 +13,7 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 20
+        "value": 15
       },
       {
         "id": "wood-mining_speed-composite",

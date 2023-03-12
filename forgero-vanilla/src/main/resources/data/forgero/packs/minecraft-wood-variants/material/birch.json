@@ -13,7 +13,7 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 6
+        "value": 5
       },
       {
         "id": "wood-durability-composite",
@@ -21,14 +21,14 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 45.0
+        "value": 35
       },
       {
         "id": "wood-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 0.1
+        "value": 0.2
       }
     ]
   },
