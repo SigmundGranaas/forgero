@@ -1,0 +1,17 @@
+{
+  "name": "Pattern mining",
+  "icon": "forgero:iron-path_digger_shovel_head",
+  "category": "forgero:property_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Emissive materials can be useful to light up the world around you. When these are applied to your parts, they will light up!"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Pattern mining",
+      "item": "forgero:iron-path_digger_shovel_head",
+      "text": ""
+    }
+  ]
+}

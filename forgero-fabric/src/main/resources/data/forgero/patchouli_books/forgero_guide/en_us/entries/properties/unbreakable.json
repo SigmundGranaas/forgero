@@ -1,0 +1,11 @@
+{
+  "name": "Unbreakable",
+  "icon": "minecraft:diamond",
+  "category": "forgero:property_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Emissive materials can be useful to light up the world around you. When these are applied to your parts, they will light up!"
+    }
+  ]
+}
