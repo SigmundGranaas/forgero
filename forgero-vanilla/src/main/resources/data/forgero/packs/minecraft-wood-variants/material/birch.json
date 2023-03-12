@@ -9,14 +9,14 @@
   "properties": {
     "attributes": [
       {
-        "id": "wood-rarity-composite-base",
+        "id": "wood-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 6
       },
       {
-        "id": "wood-durability-composite-base",
+        "id": "wood-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -24,43 +24,13 @@
         "value": 45.0
       },
       {
-        "id": "wood-attack-speed-composite-base",
+        "id": "wood-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 0.1
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "category": "OFFENSIVE",
-        "operation": "ADDITION",
-        "value": 0.3
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "category": "OFFENSIVE",
-        "operation": "ADDITION",
-        "value": 0.2
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "ADDITION",
-        "value": 0.3
-      },
-      {
-        "type": "DURABILITY",
-        "order": "MIDDLE",
-        "category": "UTILITY",
-        "operation": "MULTIPLICATION",
-        "value": 1.02
       }
-    ],
-    "passive": [],
-    "active": []
+    ]
   },
   "palette": {
     "name": "birch"

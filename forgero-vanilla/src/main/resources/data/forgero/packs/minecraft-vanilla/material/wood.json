@@ -44,7 +44,7 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2,
+        "value": 2.4,
         "condition": {
           "target": "TYPE",
           "tag": [
