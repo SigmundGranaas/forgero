@@ -12,25 +12,25 @@
           "target": [
             "type:HOE"
           ],
-          "template": "hoe_handle.png"
+          "template": "mastercrafted_tool_handle.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "mastercrafted_pickaxe_handle.png"
+          "template": "mastercrafted_tool_handle.png"
         },
         {
           "target": [
             "type:AXE"
           ],
-          "template": "axe_handle.png"
+          "template": "mastercrafted_tool_handle.png"
         },
         {
           "target": [
             "type:SHOVEL"
           ],
-          "template": "medium_handle.png"
+          "template": "mastercrafted_tool_handle.png"
         },
         {
           "target": [
@@ -50,6 +50,12 @@
         {
           "target": [
             "model:mastercrafted_handle.png"
+          ],
+          "template": "mastercrafted_handle_grip.png"
+        },
+        {
+          "target": [
+            "model:mastercrafted_tool_handle.png"
           ],
           "template": "mastercrafted_handle_grip.png"
         }
