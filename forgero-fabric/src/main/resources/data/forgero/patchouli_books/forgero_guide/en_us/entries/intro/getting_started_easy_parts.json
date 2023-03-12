@@ -10,25 +10,25 @@
     {
       "type": "patchouli:crafting",
       "title": "Basic wooden heads",
-      "recipe": "forgero:basic_wood_axe_head",
-      "recipe2": "forgero:basic_wood_pickaxe_head"
+      "recipe": "forgero:oak-axe_head-basic_recipe",
+      "recipe2": "forgero:birch-pickaxe_head-basic_recipe"
     },
     {
       "type": "patchouli:crafting",
       "title": "Basic wooden heads",
-      "recipe": "forgero:basic_wood_hoe_head",
-      "recipe2": "forgero:basic_wood_shovel_head"
+      "recipe": "forgero:spruce-hoe_head-basic_recipe",
+      "recipe2": "forgero:acacia-shovel_head-basic_recipe"
     },
     {
       "type": "patchouli:crafting",
       "title": "Basic blade and a guard",
-      "recipe": "forgero:basic_wood_sword_blade",
-      "recipe2": "forgero:basic_wood_sword_guard"
+      "recipe": "forgero:oak-sword_guard-basic_recipe",
+      "recipe2": "forgero:dark_oak-sword_guard-basic_recipe"
     },
     {
       "type": "patchouli:crafting",
       "title": "Basic handle",
-      "recipe": "forgero:basic_wood_handle"
+      "recipe": "forgero:birch-handle-basic_recipe"
     },
     {
       "type": "patchouli:crafting",

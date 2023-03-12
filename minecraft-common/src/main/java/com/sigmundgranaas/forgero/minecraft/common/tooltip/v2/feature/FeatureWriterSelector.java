@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler.BLOCK_BREAKING_PATTERN_KEY;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler.VEIN_MINING_KEY;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler.BLOCK_BREAKING_PATTERN_KEY;
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.ToolBlockHandler.VEIN_MINING_KEY;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 
 public class FeatureWriterSelector {
 	private final Map<String, Function<PropertyData, FeatureWriter>> writerFactory;

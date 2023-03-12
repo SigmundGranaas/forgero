@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero.core.property.v2.feature;
 
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
+import java.util.Collections;
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.Collections;
-import java.util.List;
-
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder(toBuilder = true)
 @Getter
@@ -39,5 +39,9 @@ public class PropertyData implements Property {
 	@Override
 	public String type() {
 		return type;
+	}
+
+	public boolean isOfType(String type) {
+		return this.type.equals(type);
 	}
 }

@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgerofabric.gametest;
 
-import com.sigmundgranaas.forgerofabric.testutil.RecipeTester;
+import static com.sigmundgranaas.forgerofabric.gametest.RecipeTest.assertTrue;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import com.sigmundgranaas.forgerofabric.testutil.RecipeTester;
 
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
-import static com.sigmundgranaas.forgerofabric.gametest.RecipeTest.assertTrue;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 public class UpgradeTest {
 
@@ -58,6 +58,13 @@ public class UpgradeTest {
 	public void testUpgradeWithScrappyBinding(TestContext context) {
 		var test = RecipeTester.smithingUpgrade("diamond-pickaxe", "leather-scrappy_binding", context);
 		assertTrue(test, "Unable to upgrade pickaxe with scrappy binding");
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test")
+	public void testUpgradeWithGem(TestContext context) {
+		var test = RecipeTester.smithingUpgrade("oak-binding", "redstone-gem", context);
+		assertTrue(test, "Unable to oak binding with redstone gem");
 		context.complete();
 	}
 }
