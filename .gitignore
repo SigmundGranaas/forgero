@@ -134,6 +134,7 @@ output/
 /forgero-fabric-compat/logs/
 /forgero-fabric-compat/run/
 /forgero-fabric-compat/build/
+/forgero-fabric-compat/run/usercache.json
 
 /minecraft-common/logs/
 /minecraft-common/run/
