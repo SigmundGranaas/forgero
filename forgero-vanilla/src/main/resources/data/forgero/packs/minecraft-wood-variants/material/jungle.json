@@ -40,14 +40,6 @@
         "value": -0.1
       },
       {
-        "id": "wood-attack_speed-utility-upgrade",
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "ADDITION",
-        "value": -0.1
-      },
-      {
         "id": "wood-durability-utility-upgrade",
         "type": "DURABILITY",
         "order": "BASE",

@@ -71,8 +71,8 @@
         "type": "DURABILITY",
         "order": "BASE",
         "category": "UTILITY",
-        "operation": "ADDITION",
-        "value": 40
+        "operation": "MULTIPLICATION",
+        "value": 1.04
       }
     ],
     "passive": [],

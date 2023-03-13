@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "gold",
+  "parent": "metal",
   "container": {
     "type": "HOST",
     "id": "minecraft:gold_ingot"
@@ -47,7 +48,7 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.5,
+        "value": 2.6,
         "condition": {
           "target": "TYPE",
           "tag": [
@@ -67,7 +68,7 @@
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 60
+        "value": 50
       },
       {
         "id": "metal-rarity-upgrade",

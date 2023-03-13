@@ -87,7 +87,7 @@
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.6
+        "value": -2.3
       },
       {
         "type": "WEIGHT",
