@@ -34,7 +34,6 @@
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
         "value": 200
       },
       {

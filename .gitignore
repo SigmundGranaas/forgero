@@ -122,6 +122,7 @@ output/
 /forgero-fabric/run/
 /forgero-fabric/build/
 /forgero-fabric/.gradle/
+/forgero-fabric/run/usercache.json
 
 /forgero-vanilla/logs/
 /forgero-vanilla/run/

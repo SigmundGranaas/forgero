@@ -65,7 +65,7 @@
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.7
+        "value": 0.4
       },
       {
         "type": "DURABILITY",
@@ -83,7 +83,7 @@
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -3.4
+        "value": -3.5
       },
       {
         "type": "WEIGHT",
