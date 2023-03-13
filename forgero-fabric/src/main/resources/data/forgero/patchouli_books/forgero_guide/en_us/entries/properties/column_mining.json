@@ -6,6 +6,12 @@
     {
       "type": "patchouli:text",
       "text": "Column mining allows tools to mine blocks in a vertical column"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Pattern mining",
+      "item": "forgero:iron-tree_chopper_head",
+      "text": "The Tree feller axe excels at mining tree's as it can mine entire trees at once."
     }
   ]
 }

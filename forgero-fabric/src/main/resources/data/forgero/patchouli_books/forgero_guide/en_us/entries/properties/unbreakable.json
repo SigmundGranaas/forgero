@@ -5,7 +5,13 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Emissive materials can be useful to light up the world around you. When these are applied to your parts, they will light up!"
+      "text": "The unbreakable property keeps tools from vanishing when their durability reaches zero. They will however become useless unless repaired to restore their durability."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Unbreakable",
+      "item": "forgero:oak-pickaxe:{Damage:0,FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:['forgero:unbreakable'],ID:'forgero:oak-pickaxe',INGREDIENTS:[{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:[],ID:'forgero:oak-refined_pickaxe_head',INGREDIENTS:[{ID:'forgero:refined_pickaxe_head-schematic',NAME:'refined_pickaxe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:oak',NAME:'oak',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'oak-refined_pickaxe_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'PICKAXE_HEAD',UPGRADES:[{ID:'minecraft:gold',NAME:'gold',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}]},{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:[],ID:'forgero:oak-mastercrafted_handle',INGREDIENTS:[{ID:'forgero:mastercrafted_handle-schematic',NAME:'mastercrafted_handle-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:oak',NAME:'oak',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'oak-mastercrafted_handle',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'HANDLE',UPGRADES:[{ID:'minecraft:diamond',NAME:'diamond',NAMESPACE:'minecraft',STATE_TYPE:'STATE'},{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:[],ID:'forgero:netherite-pummel',INGREDIENTS:[{ID:'forgero:pummel-schematic',NAME:'pummel-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:netherite',NAME:'netherite',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'netherite-pummel',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'PUMMEL',UPGRADES:[]},{ID:'minecraft:diamond',NAME:'diamond',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}]}],NAME:'oak-pickaxe',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'PICKAXE',UPGRADES:[{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:[],ID:'forgero:jungle-binding',INGREDIENTS:[{ID:'forgero:binding-schematic',NAME:'binding-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:jungle',NAME:'jungle',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'jungle-binding',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'TOOL_BINDING',UPGRADES:[]}]}}",
+      "text": "Unbreakable can be found on tools looted from chests, but be aware, this property is extremely rare!"
     }
   ]
 }
