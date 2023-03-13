@@ -54,6 +54,7 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
         "category": "LOCAL",
@@ -61,16 +62,11 @@
         "value": 31
       },
       {
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.32
-      },
-      {
-        "type": "ARMOR",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.4
       },
       {
         "type": "DURABILITY",
@@ -82,6 +78,18 @@
         "type": "ATTACK_SPEED",
         "order": "BASE",
         "operation": "ADDITION",
+        "value": 0.1
+      },
+      {
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.4
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
         "value": 0.1
       }
     ]

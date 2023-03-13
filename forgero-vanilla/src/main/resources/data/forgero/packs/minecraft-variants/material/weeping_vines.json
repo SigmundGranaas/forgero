@@ -24,6 +24,13 @@
       {
         "type": "DURABILITY",
         "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.4
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
         "value": 70
@@ -41,13 +48,6 @@
         "operation": "MULTIPLICATION",
         "category": "UTILITY",
         "value": 1.02
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.4
       }
     ]
   },

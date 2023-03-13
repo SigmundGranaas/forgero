@@ -9,28 +9,21 @@
   "properties": {
     "attributes": [
       {
-        "id": "wood-rarity-composite-base",
+        "id": "wood-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 10
       },
       {
-        "id": "wood-mining-speed-composite-base",
+        "id": "wood-mining_speed-composite",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.3
       },
       {
-        "id": "wood-attack-damage-composite-base",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.8
-      },
-      {
-        "id": "wood-durability-composite-base",
+        "id": "wood-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -38,36 +31,26 @@
         "value": 60.0
       },
       {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "category": "OFFENSIVE",
-        "operation": "ADDITION",
-        "value": 0.2
-      },
-      {
+        "id": "wood-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "category": "OFFENSIVE",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 0.2
+        "value": 1.8
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "category": "UTILITY",
+        "id": "wood-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 0.2
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "MULTIPLICATION",
-        "value": 1.05
+        "value": 2,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
       }
-    ],
-    "passive": [],
-    "active": []
+    ]
   },
   "palette": {
     "name": "acacia"

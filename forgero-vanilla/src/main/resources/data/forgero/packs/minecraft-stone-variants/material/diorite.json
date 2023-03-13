@@ -9,14 +9,14 @@
   "properties": {
     "attributes": [
       {
-        "id": "default_stone_rarity",
+        "id": "stone-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 14
       },
       {
-        "id": "default_stone_durability",
+        "id": "stone-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",

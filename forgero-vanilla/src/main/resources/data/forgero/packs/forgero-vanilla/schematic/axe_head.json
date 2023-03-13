@@ -56,17 +56,10 @@
   "properties": {
     "attributes": [
       {
-        "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
-      },
-      {
-        "type": "ATTACK_DAMAGE",
+        "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.4
+        "value": 1.0
       },
       {
         "type": "DURABILITY",
@@ -75,16 +68,22 @@
         "value": 1
       },
       {
-        "type": "MINING_SPEED",
+        "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.0
+        "value": 2.4
       },
       {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": -3.0
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.3
       }
     ]
   },

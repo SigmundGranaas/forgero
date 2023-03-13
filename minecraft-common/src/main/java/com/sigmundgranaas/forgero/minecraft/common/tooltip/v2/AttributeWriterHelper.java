@@ -28,7 +28,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public static String number(float attribute) {
-		if (Math.round(attribute) == attribute) {
+		if (Math.round(attribute) == attribute || roundFloat(attribute) == Math.round(attribute)) {
 			return String.valueOf(Math.round(attribute));
 		}
 		return String.valueOf(roundFloat(attribute));
