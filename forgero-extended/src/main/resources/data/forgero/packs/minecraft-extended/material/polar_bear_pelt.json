@@ -9,14 +9,14 @@
     "attributes": [
       {
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "order": "BASE",
+        "category": "LOCAL",
         "operation": "ADDITION",
         "value": 40
       },
       {
         "type": "RARITY",
-        "order": "BASE",
-        "category": "LOCAL",
+        "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 40
       },
@@ -26,6 +26,20 @@
         "operation": "ADDITION",
         "category": "ALL",
         "value": 40
+      },
+      {
+        "type": "WEIGHT",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 3
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.9
       },
       {
         "type": "DURABILITY",
@@ -47,13 +61,6 @@
         "operation": "ADDITION",
         "category": "UTILITY",
         "value": 0.5
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.9
       }
     ]
   },

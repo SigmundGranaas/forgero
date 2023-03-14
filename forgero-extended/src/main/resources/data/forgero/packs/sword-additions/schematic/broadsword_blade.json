@@ -48,6 +48,7 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
         "category": "LOCAL",
@@ -55,10 +56,11 @@
         "value": 33
       },
       {
-        "type": "ATTACK_DAMAGE",
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.4
+        "value": 1.12
       },
       {
         "type": "DURABILITY",
@@ -67,22 +69,22 @@
         "value": 1.3
       },
       {
-        "type": "RARITY",
+        "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.2
+        "value": 2.4
       },
       {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -3.1
+        "value": -3.0
       },
       {
-        "type": "MINING_SPEED",
+        "type": "WEIGHT",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1
+        "operation": "MULTIPLICATION",
+        "value": 0.5
       }
     ]
   },

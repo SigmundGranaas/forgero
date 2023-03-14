@@ -9,35 +9,42 @@
   "properties": {
     "attributes": [
       {
-        "id": "metal-base-mining_speed",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
+        "id": "metal-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 30
       },
       {
-        "id": "metal-base-durability",
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "id": "metal-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
         "value": 200
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.7
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",

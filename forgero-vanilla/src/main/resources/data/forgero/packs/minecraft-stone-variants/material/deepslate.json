@@ -9,41 +9,28 @@
   "properties": {
     "attributes": [
       {
-        "id": "default_stone_rarity",
+        "id": "stone-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 18
       },
       {
-        "id": "default_stone_durability",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 220.0
-      },
-      {
-        "id": "default_stone_mining_speed",
+        "id": "stone-mining-speed-composite",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 4.4
       },
       {
-        "id": "default_stone_attack_speed_handle",
-        "type": "ATTACK_SPEED",
+        "id": "stone-durability-composite",
+        "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "HANDLE"
-          ]
-        }
+        "value": 220.0
       },
       {
-        "id": "default_stone_rarity_upgrade",
+        "id": "stone-rarity-upgrade",
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
@@ -51,7 +38,7 @@
         "value": 5
       },
       {
-        "id": "default_stone_attack_offensive_upgrade",
+        "id": "stone-attack_damage-offensive-upgrade",
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",

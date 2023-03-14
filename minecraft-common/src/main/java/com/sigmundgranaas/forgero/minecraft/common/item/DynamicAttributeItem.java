@@ -68,9 +68,6 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 				}
 			});
 
-	UUID TEST_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A34DB5CF");
-	UUID ADDITION_ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
-
 	UUID ADDITION_HEALTH_MODIFIER_ID = UUID.randomUUID();
 	UUID ADDITION_LUCK_MODIFIER_ID = UUID.fromString("CC3F55D5-755C-4F38-A497-9C13A33DB5CF");
 	UUID ADDITION_ARMOR_MODIFIER_ID = UUID.fromString("AC3F55D5-755C-4F38-A497-9C13A63DB5CF");
@@ -111,8 +108,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack) {
 		Target target = Target.createEmptyTarget();
 		ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-		float currentToolDamage = AttackDamage.apply(dynamicProperties(stack), target);
-		float baseToolDamage = AttackDamage.apply(defaultProperties());
+		//Doing -1 to match vanilla
+		float currentToolDamage = AttackDamage.apply(dynamicProperties(stack), target) - 1;
 		//Base attack damage
 		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ItemUUIDMixin.getAttackDamageModifierID(), "Tool modifier", currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
@@ -132,8 +129,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(ADDITION_HEALTH_MODIFIER_ID, "Health addition", additionalHealth, EntityAttributeModifier.Operation.ADDITION));
 
 		//Attack speed
-		float baseAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
-		float currentAttackSpeed = AttackSpeed.apply(defaultProperties());
+		float currentAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
+		float baseAttackSpeed = AttackSpeed.apply(defaultProperties());
 		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
 		if (currentAttackSpeed != baseAttackSpeed) {
 			//builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));

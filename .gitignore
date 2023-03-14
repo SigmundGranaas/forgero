@@ -122,6 +122,7 @@ output/
 /forgero-fabric/run/
 /forgero-fabric/build/
 /forgero-fabric/.gradle/
+/forgero-fabric/run/usercache.json
 
 /forgero-vanilla/logs/
 /forgero-vanilla/run/
@@ -134,6 +135,7 @@ output/
 /forgero-fabric-compat/logs/
 /forgero-fabric-compat/run/
 /forgero-fabric-compat/build/
+/forgero-fabric-compat/run/usercache.json
 
 /minecraft-common/logs/
 /minecraft-common/run/
