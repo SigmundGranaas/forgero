@@ -47,6 +47,7 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
         "category": "LOCAL",
@@ -54,19 +55,7 @@
         "value": 30
       },
       {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 2.7
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.1
-      },
-      {
-        "id": "schematic_base_rarity_multiplication",
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
@@ -79,61 +68,37 @@
         "value": 0.7
       },
       {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.1
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2.7
+      },
+      {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": -3.4
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.3
       }
     ],
     "features": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
+        "type": "COLUMN_MINING",
+        "value": 1,
+        "level": 20,
         "tags": [
           "forgero:vein_mining_logs"
-        ],
-        "pattern": [
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x ",
-          " x "
         ]
       }
     ]

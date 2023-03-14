@@ -1,24 +1,23 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
-
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
-
-import net.minecraft.util.math.Direction;
-
-import org.jetbrains.annotations.NotNull;
+package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.util.math.Direction;
+
 public class BlockHandlerCache {
 	public static final LoadingCache<String, ToolBlockHandler> blockHandlerLoadingCache = CacheBuilder.newBuilder()
 			.maximumSize(600)
-			.expireAfterAccess(Duration.of(5, ChronoUnit.MINUTES))
+			.expireAfterAccess(Duration.of(2, ChronoUnit.SECONDS))
 			.build(new CacheLoader<>() {
 				@Override
 				public @NotNull
@@ -33,6 +32,10 @@ public class BlockHandlerCache {
 		} catch (Exception e) {
 			return ToolBlockHandler.EMPTY;
 		}
+	}
+
+	public static void remove(CacheAbleKey key) {
+		blockHandlerLoadingCache.invalidateAll();
 	}
 
 	public record BlockStateCacheKey(CacheAbleKey blockState, PropertyContainer container,

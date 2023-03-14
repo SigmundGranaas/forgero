@@ -47,7 +47,8 @@ public class SoulHandler {
 	}
 
 
-	public void processBlockBreak(BlockState state, BlockPos pos, World world, PlayerEntity player) {
+	public void processBlockBreak(BlockPos pos, World world, PlayerEntity player) {
+		BlockState state = world.getBlockState(pos);
 		float xp = (state.getHardness(world, pos) * 1);
 		if (state.getBlock() instanceof OreBlockXp ore) {
 			xp = ore.getExperienceDropped().get(net.minecraft.util.math.random.Random.create()) * 15;

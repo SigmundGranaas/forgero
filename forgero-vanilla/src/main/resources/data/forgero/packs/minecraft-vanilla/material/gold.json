@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "gold",
+  "parent": "metal",
   "container": {
     "type": "HOST",
     "id": "minecraft:gold_ingot"
@@ -8,59 +9,114 @@
   "properties": {
     "attributes": [
       {
-        "id": "metal-base-mining_level",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2.0
-      },
-      {
-        "id": "metal-base-mining_speed",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 12
-      },
-      {
+        "id": "metal-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 60
       },
       {
-        "id": "metal-base-durability",
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 12
+      },
+      {
+        "id": "metal-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
         "value": 25
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2
       },
       {
-        "id": "metal-attack-speed-base",
-        "type": "ATTACK_SPEED",
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "id": "metal-attack-speed-base",
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2,
+        "value": 2.6,
         "condition": {
           "target": "TYPE",
           "tag": [
-            "HANDLE"
+            "AXE_HEAD"
           ]
         }
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 50
+      },
+      {
+        "id": "metal-rarity-upgrade",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 30
+      },
+      {
+        "id": "metal-weight-upgrade",
+        "type": "WEIGHT",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 10
+      },
+      {
+        "id": "metal-attack_damage-offensive-upgrade",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": -1
+      },
+      {
+        "id": "metal-mining_speed-offensive-upgrade",
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": -1
+      },
+      {
+        "id": "metal-durability-offensive-upgrade",
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.8
+      },
+      {
+        "id": "metal-durability-utility-upgrade",
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 100
       }
     ],
     "features": [

@@ -1,27 +1,39 @@
 package com.sigmundgranaas.forgero.fabric.loot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.sigmundgranaas.forgero.minecraft.common.loot.LootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.StateFilter;
-
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootTables;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 
 public class TreasureInjector {
+	private static TreasureInjector INSTANCE;
+	private final Map<String, LootEntry> entryMap;
 	private final List<LootEntry> entries;
 
 	public TreasureInjector() {
+		this.entryMap = new HashMap<>();
 		this.entries = new ArrayList<>();
 	}
 
+	public static TreasureInjector getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new TreasureInjector();
+		}
+		return INSTANCE;
+	}
+
 	private void registerEntries() {
-		mineshaft();
+		this.entries.clear();
 		stronghold();
 		ancientCity();
 		pyramid();
@@ -39,10 +51,15 @@ public class TreasureInjector {
 		pillager();
 
 		smallForgingHouse();
+
 	}
 
 	private void registerEntry(LootEntry entry) {
 		this.entries.add(entry);
+	}
+
+	public void registerEntry(String id, LootEntry entry) {
+		this.entryMap.put(id, entry);
 	}
 
 	public void registerLoot() {
@@ -55,31 +72,10 @@ public class TreasureInjector {
 		});
 	}
 
-	private void mineshaft() {
-		var partFilter = StateFilter.builder()
-				.lowerRarity(10)
-				.upperRarity(50)
-				.types(List.of("PICKAXE_HEAD", "TOOL_BINDING", "HANDLE"));
-		var partEntry = SingleLootEntry.builder()
-				.filter(partFilter.build()::filter)
-				.target(List.of(LootTables.ABANDONED_MINESHAFT_CHEST))
-				.chance(0.3f)
-				.rolls(2)
-				.build();
-
-		var schematicFilter = StateFilter.builder()
-				.lowerRarity(10)
-				.upperRarity(40)
-				.types(List.of("PICKAXE_HEAD_SCHEMATIC", "HANDLE_SCHEMATIC"));
-		var schematicEntry = SingleLootEntry.builder()
-				.filter(schematicFilter.build()::filter)
-				.target(List.of(LootTables.ABANDONED_MINESHAFT_CHEST))
-				.chance(0.3f)
-				.rolls(1)
-				.build();
-
-		registerEntry(partEntry);
-		registerEntry(schematicEntry);
+	public void registerDynamicLoot() {
+		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, table, setter) -> {
+			entryMap.values().stream().filter(entry -> entry.matches(id)).forEach(entry -> entry.apply(table));
+		});
 	}
 
 	private void stronghold() {

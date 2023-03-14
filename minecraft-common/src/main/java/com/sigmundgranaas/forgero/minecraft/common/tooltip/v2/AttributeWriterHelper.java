@@ -1,22 +1,22 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.*;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 public class AttributeWriterHelper extends BaseWriter {
-	public static final List<String> WRITABLE_ATTRIBUTES = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY);
 	private final PropertyContainer container;
 	private final AttributeHelper helper;
 	private final TooltipConfiguration configuration;
@@ -28,7 +28,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public static String number(float attribute) {
-		if (Math.round(attribute) == attribute) {
+		if (Math.round(attribute) == attribute || roundFloat(attribute) == Math.round(attribute)) {
 			return String.valueOf(Math.round(attribute));
 		}
 		return String.valueOf(roundFloat(attribute));

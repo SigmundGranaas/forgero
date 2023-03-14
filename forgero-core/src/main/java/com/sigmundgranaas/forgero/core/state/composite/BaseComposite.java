@@ -1,5 +1,12 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Attribute;
@@ -18,8 +25,6 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 @SuppressWarnings("ALL")
 public abstract class BaseComposite implements Composite {
@@ -47,11 +52,13 @@ public abstract class BaseComposite implements Composite {
 
 	@Override
 	public List<Property> compositeProperties(Target target) {
-		var upgradeProps = slots().stream()
+		List<Property> upgradeProps = slots().stream()
 				.map(state -> state.applyProperty(target))
 				.flatMap(List::stream)
 				.filter(this::filterAttribute)
-				.toList();
+				.collect(Collectors.toList());
+
+		upgradeProps.addAll(slots().stream().map(slot -> slot.stream().features().toList()).flatMap(List::stream).toList());
 
 		return upgradeProps;
 	}

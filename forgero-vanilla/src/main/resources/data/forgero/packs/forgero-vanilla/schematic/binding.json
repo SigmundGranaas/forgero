@@ -57,13 +57,15 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "operation": "ADDITION",
         "category": "LOCAL",
+        "operation": "ADDITION",
         "value": 10
       },
       {
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
@@ -86,6 +88,12 @@
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": -0.1
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.1
       }
     ]
   },

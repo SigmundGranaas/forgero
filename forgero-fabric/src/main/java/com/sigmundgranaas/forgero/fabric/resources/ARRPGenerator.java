@@ -1,6 +1,15 @@
 package com.sigmundgranaas.forgero.fabric.resources;
 
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
@@ -15,19 +24,11 @@ import net.devtech.arrp.json.tags.JTag;
 
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
-
 
 public class ARRPGenerator {
 
-	public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:dynamic");
+	public static final RuntimeResourcePack RESOURCE_PACK_BUILTIN = RuntimeResourcePack.create("forgero:builtin_generator");
+	public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:dynamic_generator");
 	private static final List<DynamicResourceGenerator> generators = new ArrayList<>();
 
 	@Synchronized
@@ -45,13 +46,14 @@ public class ARRPGenerator {
 		generators.stream()
 				.filter(DynamicResourceGenerator::enabled)
 				.forEach(generator -> generator.generate(RESOURCE_PACK));
+		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
 	}
 
 
 	public void generateResources() {
 		generateTagsFromStateTree();
 		createMaterialToolTags();
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
+		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK_BUILTIN));
 	}
 
 	public void generateTagsFromStateTree() {
@@ -66,7 +68,7 @@ public class ARRPGenerator {
 					.filter(state -> ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(state.identifier()))
 					.map(state -> new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier())))
 					.forEach(typeTag::add);
-			RESOURCE_PACK.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase()), typeTag);
+			RESOURCE_PACK_BUILTIN.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase()), typeTag);
 		}
 	}
 
@@ -90,7 +92,7 @@ public class ARRPGenerator {
 						.map(State::identifier)
 						.map(Identifier::new)
 						.forEach(materialToolTag::add);
-				RESOURCE_PACK.addTag(new Identifier(Forgero.NAMESPACE, "items/" + key + "_tool"), materialToolTag);
+				RESOURCE_PACK_BUILTIN.addTag(new Identifier(Forgero.NAMESPACE, "items/" + key + "_tool"), materialToolTag);
 			}
 		}
 

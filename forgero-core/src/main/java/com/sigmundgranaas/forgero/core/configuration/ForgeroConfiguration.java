@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
@@ -44,4 +44,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean useEntityAttributes = true;
+
+	@NotNull
+	public Boolean hideRarity = true;
 }

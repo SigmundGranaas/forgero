@@ -26,12 +26,6 @@
       "template": "sword_guard_reinforcement.png",
       "order": 62,
       "variants": [
-        {
-          "target": [
-            "model:broadsword_blade.png"
-          ],
-          "template": "pickaxe_head.png"
-        }
       ]
     },
     {

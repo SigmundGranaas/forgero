@@ -14,6 +14,13 @@
         "value": 10
       },
       {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.7
+      },
+      {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
@@ -26,13 +33,6 @@
         "operation": "ADDITION",
         "category": "UTILITY",
         "value": 50
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.7
       }
     ]
   },

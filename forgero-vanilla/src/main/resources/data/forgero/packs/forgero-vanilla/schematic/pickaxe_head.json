@@ -49,20 +49,7 @@
   "properties": {
     "attributes": [
       {
-        "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
-      },
-      {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "type": "RARITY",
+        "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
@@ -80,19 +67,17 @@
         "value": 1.5
       },
       {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.6
+        "value": -2.7
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.3
       }
-    ],
-    "features": [
     ]
   },
   "custom_data": {
