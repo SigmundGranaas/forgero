@@ -13,7 +13,6 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
@@ -26,16 +25,6 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSp
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.AdditionalHealthHandler;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.BlockBreakingEfficiencyTarget;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningLevel;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LuckHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.AdditionalHealthHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
@@ -120,11 +109,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 			return false;
 		} else if (state.isIn(BlockTags.NEEDS_IRON_TOOL) && level < 2) {
 			return false;
-		} else if (state.isIn(BlockTags.NEEDS_STONE_TOOL) && level < 1) {
-			return false;
-		} else {
-			return true;
-		}
+		} else return !state.isIn(BlockTags.NEEDS_STONE_TOOL) || level >= 1;
 	}
 
 	@Override
@@ -148,9 +133,6 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		//Base attack damage
 		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ItemUUIDMixin.getAttackDamageModifierID(), "Tool modifier", currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
-		//Attack damage addition
-		//builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
-
 		//Additional luck
 		int luck = LuckHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
 		builder.put(EntityAttributes.GENERIC_LUCK, new EntityAttributeModifier(ADDITION_LUCK_MODIFIER_ID, "Luck addition", luck, EntityAttributeModifier.Operation.ADDITION));
@@ -165,11 +147,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
 		//Attack speed
 		float currentAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
-		float baseAttackSpeed = AttackSpeed.apply(defaultProperties());
 		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
-		if (currentAttackSpeed != baseAttackSpeed) {
-			//builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
-		}
 
 		if (ForgeroConfigurationLoader.configuration.useEntityAttributes) {
 			// Mining speed

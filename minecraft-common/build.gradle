@@ -1,6 +1,7 @@
 plugins {
 	id "idea"
 	id 'fabric-loom' apply true
+	id "io.freefair.lombok" version "8.0.0-rc2"
 }
 
 configurations {
@@ -15,10 +16,13 @@ artifacts {
 
 dependencies {
 	implementation project(':forgero-core')
-	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+	compileOnly 'org.projectlombok:lombok:1.18.26'
+	annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.26'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 
 	implementation 'org.jetbrains:annotations:23.0.0'
-	implementation 'org.projectlombok:lombok:1.18.24'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 
 	// To change the versions see the gradle.properties file
