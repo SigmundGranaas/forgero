@@ -7,10 +7,10 @@
         "id:pummel-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "pummel"
+      "template": "handle_pummel"
     },
     {
-      "name": "pummel",
+      "name": "handle_pummel",
       "template": "pummel.png",
       "type": "GENERATE",
       "palette": "METAL",
@@ -27,6 +27,11 @@
           "offset": [
             -1,
             -1
+          ]
+        },
+        {
+          "target": [
+            "type:HANDLE"
           ]
         }
       ]

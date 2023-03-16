@@ -74,24 +74,6 @@
       ]
     },
     {
-      "name": "handle_pummel",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "pummel.png",
-      "order": 12,
-      "variants": [
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            -1,
-            -1
-          ]
-        }
-      ]
-    },
-    {
       "name": "handle_reinforcement",
       "type": "GENERATE",
       "palette": "MATERIAL",
@@ -158,7 +140,8 @@
         "type:PUMMEL",
         "slot:1"
       ],
-      "modelType": "COMPOSITE"
+      "modelType": "UPGRADE",
+      "template": "handle_pummel"
     }
   ]
 }
