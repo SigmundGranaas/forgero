@@ -42,10 +42,6 @@
     },
     {
       "name": "grip",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "handle_grip.png",
-      "order": 11,
       "variants": [
         {
           "target": [
@@ -58,24 +54,6 @@
             "model:mastercrafted_tool_handle.png"
           ],
           "template": "mastercrafted_handle_grip.png"
-        }
-      ]
-    },
-    {
-      "name": "handle_pummel",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "pummel.png",
-      "order": 12,
-      "variants": [
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            -1,
-            -1
-          ]
         }
       ]
     },
@@ -120,33 +98,11 @@
     },
     {
       "target": [
-        "type:HANDLE"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "mastercrafted_handle"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "grip"
-    },
-    {
-      "target": [
         "type:TOOL_MATERIAL",
         "slot:2"
       ],
       "modelType": "UPGRADE",
       "template": "handle_reinforcement"
-    },
-    {
-      "target": [
-        "type:PUMMEL",
-        "slot:1"
-      ],
-      "modelType": "COMPOSITE"
     }
   ]
 }
