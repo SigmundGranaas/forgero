@@ -8,6 +8,13 @@ dependencies {
 	include "curse.maven:arrp-463113:3901211"
 }
 
+sourceSets {
+	test {
+		compileClasspath += test.compileClasspath
+		runtimeClasspath += test.runtimeClasspath
+	}
+}
+
 loom {
 	runs {
 		runClient {
@@ -33,6 +40,7 @@ loom {
 				runtimeOnly project(':content:forgero-compat')
 				runtimeOnly project(':content:forgero-structures')
 			}
+			source sourceSets.test
 		}
 
 		gametest {

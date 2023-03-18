@@ -1,6 +1,5 @@
-version = "${project.forgero_version}+${project.mc_target}"
+version = "${project.forgero_version}+${project.minecraft_version}"
 group = project.maven_group
-
 
 
 subprojects {
@@ -9,7 +8,7 @@ subprojects {
 		mavenLocal()
 	}
 
-	version = "${project.forgero_version}+${project.mc_target}"
+	version = "${project.forgero_version}+${project.minecraft_version}"
 	group = project.maven_group
 
 }

@@ -33,7 +33,7 @@ dependencies {
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
-	
+
 	modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 
 	modImplementation "curse.maven:arrp-463113:3901211"
@@ -128,6 +128,13 @@ dependencies {
 	// Mod Menu API
 	modApi "com.terraformersmc:modmenu:${this.modmenu_version}"
 	modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
+}
+
+sourceSets {
+	test {
+		compileClasspath += test.compileClasspath
+		runtimeClasspath += test.runtimeClasspath
+	}
 }
 
 loom {
