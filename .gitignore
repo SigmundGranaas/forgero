@@ -118,34 +118,36 @@ output/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-/forgero-fabric/logs/
-/forgero-fabric/run/
-/forgero-fabric/build/
-/forgero-fabric/.gradle/
-/forgero-fabric/run/usercache.json
+fabric/forgero-fabric-core/logs/
+fabric/forgero-fabric-core/run/
+fabric/forgero-fabric-core/build/
+fabric/forgero-fabric-core/.gradle/
+fabric/forgero-fabric-core/run/usercache.json
 
-/forgero-vanilla/logs/
-/forgero-vanilla/run/
-/forgero-vanilla/build/
+content/forgero-vanilla/logs/
+content/forgero-vanilla/run/
+content/forgero-vanilla/build/
 
-/forgero-extended/logs/
-/forgero-extended/run/
-/forgero-extended/build/
+content/forgero-extended/logs/
+content/forgero-extended/run/
+content/forgero-extended/build/
 
-/forgero-fabric-compat/logs/
-/forgero-fabric-compat/run/
-/forgero-fabric-compat/build/
-/forgero-fabric-compat/run/usercache.json
+fabric/forgero-fabric-compat/logs/
+fabric/forgero-fabric-compat/run/
+fabric/forgero-fabric-compat/build/
+fabric/forgero-fabric-compat/run/usercache.json
 
-/minecraft-common/logs/
-/minecraft-common/run/
-/minecraft-common/build/
+fabric/minecraft-common/logs/
+fabric/minecraft-common/run/
+fabric/minecraft-common/build/
 
-/core/logs/
-/core/run/
-/core/build/
+core/logs/
+core/run/
+core/build/
 
-/logs/
-/run/
+logs/
+run/
 /forgero-forge/run/
 /dest/
+
+fabric/logs/
