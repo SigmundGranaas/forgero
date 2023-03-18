@@ -12,42 +12,42 @@
   "properties": {
     "attributes": [
       {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 4
-      },
-      {
-        "id": "metal-base-mining_speed",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 7
-      },
-      {
-        "id": "metal-base-rarity",
+        "id": "metal-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 70
       },
       {
-        "id": "metal-base-durability",
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 7
+      },
+      {
+        "id": "metal-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
         "value": 800.0
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.7
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -60,7 +60,21 @@
         }
       },
       {
-        "id": "default_metal_rarity_upgrade",
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "id": "metal-rarity-upgrade",
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
