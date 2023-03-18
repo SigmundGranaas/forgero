@@ -1,5 +1,6 @@
 {
   "type": "METAL",
+  "parent": "metal",
   "name": "carmot",
   "container": {
     "type": "HOST",
@@ -11,42 +12,42 @@
   "properties": {
     "attributes": [
       {
-        "id": "metal-base-mining_level",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3
-      },
-      {
-        "id": "metal-base-mining_speed",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 11
-      },
-      {
+        "id": "metal-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 62
       },
       {
-        "id": "metal-base-durability",
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 11
+      },
+      {
+        "id": "metal-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
         "value": 800.0
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 1.7
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -57,6 +58,20 @@
             "AXE_HEAD"
           ]
         }
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 25
       }
     ]
   }

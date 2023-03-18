@@ -1,15 +1,16 @@
 package com.sigmundgranaas.forgero.core.texture.V2;
 
 
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
-
-import javax.imageio.ImageIO;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
+
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 
 public class TextureGenerator {
 
@@ -33,7 +34,10 @@ public class TextureGenerator {
 		var template = service.getTemplate(templateModel.template());
 		if (palette.isPresent() && template.isPresent()) {
 			var texture = new RawTexture(template.get().apply(palette.get()).getImage());
-			//saveImage(texture, templateModel.name());
+			if (ForgeroConfigurationLoader.configuration.exportGeneratedTextures) {
+				saveImage(texture, templateModel.name());
+
+			}
 			return Optional.of(texture);
 		}
 
