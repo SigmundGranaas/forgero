@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-core",
+  "id": "forgero-vanilla",
   "version": "${version}",
-  "name": "Forgero core",
+  "name": "Forgero vanilla pack",
   "description": "Equipment crafting expansion mod for Fabric!",
   "authors": [
     "Sigmund Granaas Sandring"
@@ -27,9 +27,12 @@
   "mixins": [
   ],
   "depends": {
+    "forgero-core": "*",
+    "minecraft": "1.19.x",
     "java": ">=17"
   },
   "custom": {
+    "forgeroResource": true,
     "modmenu": {
       "links": {
         "modmenu.discord": "https://discord.gg/v6sDsftE9N"

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-core",
+  "id": "forgero-fabric-compat",
   "version": "${version}",
-  "name": "Forgero core",
+  "name": "Forgero Fabric compatibility pack",
   "description": "Equipment crafting expansion mod for Fabric!",
   "authors": [
     "Sigmund Granaas Sandring"
@@ -22,12 +22,34 @@
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
   "environment": "*",
+  "accessWidener": "forgero-fabric-compat.accesswidener",
   "entrypoints": {
+    "dynamiclights": [
+      "com.sigmundgranaas.forgero.fabric.dynamiclights.DynamicLightsRegistryEndpoint"
+    ],
+    "client": [
+      "com.sigmundgranaas.forgero.fabric.ForgeroCompatClient"
+    ],
+    "main": [
+      "com.sigmundgranaas.forgero.fabric.ForgeroCompatInitializer"
+    ],
+    "modmenu": [
+      "com.sigmundgranaas.forgero.fabric.modmenu.ForgeroModMenuIntegration"
+    ]
   },
   "mixins": [
+    "forgero-fabric-compat.mixins.json"
   ],
   "depends": {
-    "java": ">=17"
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.19.x",
+    "java": ">=17",
+    "forgero-fabric-core": "*"
+  },
+  "suggests": {
+    "patchouli": "*",
+    "lambdynamiclights": "*"
   },
   "custom": {
     "modmenu": {
