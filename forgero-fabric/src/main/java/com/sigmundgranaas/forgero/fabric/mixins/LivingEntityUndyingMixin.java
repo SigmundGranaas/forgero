@@ -35,12 +35,9 @@ public abstract class LivingEntityUndyingMixin {
 	@Shadow
 	public abstract boolean addStatusEffect(StatusEffectInstance effect);
 
-	@Shadow
-	public abstract boolean shouldDisplaySoulSpeedEffects();
-
 	@Inject(method = "tryUseTotem", at = @At("HEAD"), cancellable = true)
 	public void undyingStateItem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-		if (!source.isOutOfWorld()) {
+
 			Hand[] hands = Hand.values();
 			for (Hand hand : hands) {
 				ItemStack stack = this.getStackInHand(hand);
@@ -52,7 +49,6 @@ public abstract class LivingEntityUndyingMixin {
 					break;
 				}
 			}
-		}
 	}
 
 	private void executeUndyingEffect(ItemStack stack) {

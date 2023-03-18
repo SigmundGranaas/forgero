@@ -46,7 +46,7 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 		this.renderBackground(matrices);
 		this.controlsList.render(matrices, mouseX, mouseY, delta);
 
-		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
+		drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
 
 		super.render(matrices, mouseX, mouseY, delta);
 	}

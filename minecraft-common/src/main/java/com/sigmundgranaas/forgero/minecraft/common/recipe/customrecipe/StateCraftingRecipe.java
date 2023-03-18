@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -29,7 +30,7 @@ import java.util.stream.IntStream;
 public class StateCraftingRecipe extends ShapedRecipe {
 
     public StateCraftingRecipe(ShapedRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
+        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput(null));
     }
 
 	@Override
@@ -71,8 +72,8 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
-		var target = StateConverter.of(this.getOutput());
+	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+		var target = StateConverter.of(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -90,15 +91,15 @@ public class StateCraftingRecipe extends ShapedRecipe {
 					.nameSpace(targetState.nameSpace());
 
 			var nbt = new CompositeEncoder().encode(builder.build());
-			var output = getOutput().copy();
+			var output = getOutput(registryManager).copy();
 			output.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, nbt);
 			return output;
 		}
-		return getOutput().copy();
+		return getOutput(registryManager).copy();
 	}
 
 	private Optional<State> result() {
-		return StateConverter.of(getOutput());
+		return StateConverter.of(getOutput(null));
 	}
 
 	@Override

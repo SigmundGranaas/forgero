@@ -11,21 +11,37 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerialize
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
-public class GemUpgradeRecipe extends SmithingRecipe {
-	public GemUpgradeRecipe(SmithingRecipe recipe) {
-		super(recipe.getId(), recipe.base, recipe.addition, recipe.getOutput().copy());
+public class GemUpgradeRecipe extends LegacySmithingRecipe {
+	public final Ingredient base;
+	public final Ingredient addition;
+	final ItemStack result;
+	private final Identifier id;
+
+	public GemUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
+		super(id, base, addition, result);
+		this.id = id;
+		this.base = base;
+		this.addition = addition;
+		this.result = result;
 	}
+
 
 	@Override
 	public boolean matches(Inventory inventory, World world) {
-		if (super.matches(inventory, world)) {
+		if (this.base.test(inventory.getStack(0)) && this.addition.test(inventory.getStack(1))) {
 			var base = base(inventory);
 			var addition = addition(inventory);
 			if (base.isPresent() && addition.isPresent()) {
@@ -47,9 +63,9 @@ public class GemUpgradeRecipe extends SmithingRecipe {
 	}
 
 	@Override
-	public ItemStack craft(Inventory inventory) {
+	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
 		var base = base(inventory);
-		var output = getOutput().copy();
+		var output = getOutput(registryManager).copy();
 		if (base.isPresent()) {
 			var newBase = base.get().levelUp();
 			var nbt = CompoundEncoder.ENCODER.encode(newBase);
@@ -59,25 +75,60 @@ public class GemUpgradeRecipe extends SmithingRecipe {
 		}
 		return output;
 	}
+	public boolean fits(int width, int height) {
+		return width * height >= 2;
+	}
+
+	public ItemStack getOutput(DynamicRegistryManager registryManager) {
+		return this.result;
+	}
+
+	public boolean testTemplate(ItemStack stack) {
+		return false;
+	}
+
+	public boolean testBase(ItemStack stack) {
+		return this.base.test(stack);
+	}
+
+	public boolean testAddition(ItemStack stack) {
+		return this.addition.test(stack);
+	}
+
+	public Identifier getId() {
+		return this.id;
+	}
+
+	public boolean isEmpty() {
+		return Stream.of(this.base, this.addition).anyMatch((ingredient) -> ingredient.getMatchingStacks().length == 0);
+	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return Serializer.INSTANCE;
+		return RecipeSerializer.SMITHING;
 	}
 
-	public static class Serializer extends SmithingRecipe.Serializer implements ForgeroRecipeSerializer {
+	public static class Serializer implements RecipeSerializer<GemUpgradeRecipe>, ForgeroRecipeSerializer {
 		public static final Serializer INSTANCE = new Serializer();
-
-		@Override
-		public SmithingRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new GemUpgradeRecipe(super.read(identifier, jsonObject));
+		public GemUpgradeRecipe read(Identifier identifier, JsonObject jsonObject) {
+			Ingredient ingredient = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "base"));
+			Ingredient ingredient2 = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "addition"));
+			ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
+			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
 		}
 
-		@Override
-		public SmithingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new GemUpgradeRecipe(super.read(identifier, packetByteBuf));
+		public GemUpgradeRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+			Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);
+			Ingredient ingredient2 = Ingredient.fromPacket(packetByteBuf);
+			ItemStack itemStack = packetByteBuf.readItemStack();
+			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
 		}
 
+		public void write(PacketByteBuf packetByteBuf, GemUpgradeRecipe smithingRecipe) {
+			smithingRecipe.base.write(packetByteBuf);
+			smithingRecipe.addition.write(packetByteBuf);
+			packetByteBuf.writeItemStack(smithingRecipe.result);
+		}
 		@Override
 		public Identifier getIdentifier() {
 			return new Identifier(Forgero.NAMESPACE, RecipeTypes.GEM_UPGRADE_RECIPE.getName());

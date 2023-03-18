@@ -48,13 +48,13 @@ public class GemUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRecip
 			return ItemStack.EMPTY;
 		}
 
-		var gemState = StateConverter.of(recipe.getOutput());
+		var gemState = StateConverter.of(recipe.getOutput(null));
 		if (gemState.isPresent() && gemState.get() instanceof LeveledState leveledState) {
 			var leveled = leveledState.levelUp();
 			return StateConverter.of(leveled);
 		}
 
-		return recipe.getOutput();
+		return recipe.getOutput(null);
 	}
 
 

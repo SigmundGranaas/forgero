@@ -91,9 +91,9 @@ public class StateCraftingRecipe extends PageCrafting {
 	@Override
 	protected ItemStack getRecipeOutput(Recipe<?> recipe) {
 		if (recipe instanceof CraftingRecipe craftingRecipe) {
-			return craftingRecipe.craft(createCraftingInventory(craftingRecipe));
+			return craftingRecipe.craft(createCraftingInventory(craftingRecipe), null);
 		}
-		return recipe.getOutput();
+		return recipe.getOutput(null);
 	}
 
 	@Override

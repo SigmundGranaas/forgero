@@ -17,12 +17,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 
 public class SchematicPartRecipe extends ShapelessRecipe {
 
 	public SchematicPartRecipe(ShapelessRecipe recipe) {
-		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(), recipe.getIngredients());
+		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(null), recipe.getIngredients());
 	}
 
 
@@ -41,8 +42,8 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
-		var target = StateConverter.of(this.getOutput());
+	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+		var target = StateConverter.of(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -56,7 +57,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 			}
 
 		}
-		return getOutput().copy();
+		return getOutput(registryManager).copy();
 	}
 
 	@Override

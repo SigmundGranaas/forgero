@@ -40,12 +40,12 @@ public class StateUpgradeRecipe extends PageDoubleRecipeRegistry<SmithingRecipe>
 		parent.renderIngredient(ms, recipeX + 4, recipeY + 4, mouseX, mouseY, ((AccessorSmithingRecipe) recipe).getBase());
 		parent.renderIngredient(ms, recipeX + 4, recipeY + 23, mouseX, mouseY, ((AccessorSmithingRecipe) recipe).getAddition());
 		parent.renderItemStack(ms, recipeX + 40, recipeY + 13, mouseX, mouseY, recipe.createIcon());
-		parent.renderItemStack(ms, recipeX + 76, recipeY + 13, mouseX, mouseY, recipe.craft(inventory));
+		parent.renderItemStack(ms, recipeX + 76, recipeY + 13, mouseX, mouseY, recipe.craft(inventory, null));
 	}
 
 	@Override
 	protected ItemStack getRecipeOutput(SmithingRecipe recipe) {
-		return recipe.getOutput();
+		return recipe.getOutput(null);
 	}
 
 	private CraftingInventory createCraftingInventory(SmithingRecipe recipe) {
@@ -53,6 +53,7 @@ public class StateUpgradeRecipe extends PageDoubleRecipeRegistry<SmithingRecipe>
 		if (parent == null) {
 			return inventory;
 		}
+
 
 		ItemStack[] original = recipe.base.getMatchingStacks();
 		if (original.length > 0) {

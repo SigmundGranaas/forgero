@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -25,7 +26,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstan
 public class RepairKitRecipe extends ShapelessRecipe {
 
     public RepairKitRecipe(ShapelessRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(), recipe.getIngredients());
+        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(null), recipe.getIngredients());
     }
 
 	@Override
@@ -37,7 +38,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
+	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
 		var state = IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
 				.map(StateConverter::of)
@@ -58,7 +59,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 			return newStack;
 		}
 
-		return getOutput().copy();
+		return getOutput(null).copy();
 	}
 
 

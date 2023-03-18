@@ -6,21 +6,37 @@ import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
+
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
+
+import java.util.stream.Stream;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
-public class StateUpgradeRecipe extends SmithingRecipe {
-	public StateUpgradeRecipe(SmithingRecipe recipe) {
-		super(recipe.getId(), recipe.base, recipe.addition, recipe.getOutput().copy());
+public class StateUpgradeRecipe extends LegacySmithingRecipe {
+	public final Ingredient base;
+	public final Ingredient addition;
+	final ItemStack result;
+	private final Identifier id;
+
+	public StateUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
+		super(id, base, addition, result);
+		this.id = id;
+		this.base = base;
+		this.addition = addition;
+		this.result = result;
 	}
 
 	@Override
@@ -28,7 +44,7 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 		if (inventory.containsAny(ItemStack::isEmpty)) {
 			return false;
 		}
-		if (super.matches(inventory, world)) {
+		if (this.base.test(inventory.getStack(0)) && this.addition.test(inventory.getStack(1))) {
 			var originStateOpt = StateConverter.of(inventory.getStack(0))
 					.filter(Composite.class::isInstance)
 					.map(Composite.class::cast);
@@ -41,12 +57,12 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 	}
 
 	@Override
-	public ItemStack craft(Inventory inventory) {
+	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
 		var originStateOpt = StateConverter.of(inventory.getStack(0));
 		var upgradeOpt = StateConverter.of(inventory.getStack(1));
 		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
-			var output = getOutput().copy();
+			var output = getOutput(registryManager).copy();
 			output.setNbt(inventory.getStack(0).getOrCreateNbt().copy());
 			output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
 			return output;
@@ -54,22 +70,60 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 		return inventory.getStack(0);
 	}
 
-	@Override
-	public RecipeSerializer<?> getSerializer() {
-		return Serializer.INSTANCE;
+
+	public boolean fits(int width, int height) {
+		return width * height >= 2;
 	}
 
-	public static class Serializer extends SmithingRecipe.Serializer implements ForgeroRecipeSerializer {
-		public static final Serializer INSTANCE = new Serializer();
+	public ItemStack getOutput(DynamicRegistryManager registryManager) {
+		return this.result;
+	}
 
-		@Override
-		public SmithingRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new StateUpgradeRecipe(super.read(identifier, jsonObject));
+	public boolean testTemplate(ItemStack stack) {
+		return false;
+	}
+
+	public boolean testBase(ItemStack stack) {
+		return this.base.test(stack);
+	}
+
+	public boolean testAddition(ItemStack stack) {
+		return this.addition.test(stack);
+	}
+
+	public Identifier getId() {
+		return this.id;
+	}
+
+	public boolean isEmpty() {
+		return Stream.of(this.base, this.addition).anyMatch((ingredient) -> ingredient.getMatchingStacks().length == 0);
+	}
+
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return RecipeSerializer.SMITHING;
+	}
+
+	public static class Serializer implements RecipeSerializer<StateUpgradeRecipe>, ForgeroRecipeSerializer {
+		public static final Serializer INSTANCE = new Serializer();
+		public StateUpgradeRecipe read(Identifier identifier, JsonObject jsonObject) {
+			Ingredient ingredient = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "base"));
+			Ingredient ingredient2 = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "addition"));
+			ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
+			return new StateUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
 		}
 
-		@Override
-		public SmithingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new StateUpgradeRecipe(super.read(identifier, packetByteBuf));
+		public StateUpgradeRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+			Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);
+			Ingredient ingredient2 = Ingredient.fromPacket(packetByteBuf);
+			ItemStack itemStack = packetByteBuf.readItemStack();
+			return new StateUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
+		}
+
+		public void write(PacketByteBuf packetByteBuf, StateUpgradeRecipe smithingRecipe) {
+			smithingRecipe.base.write(packetByteBuf);
+			smithingRecipe.addition.write(packetByteBuf);
+			packetByteBuf.writeItemStack(smithingRecipe.result);
 		}
 
 		@Override

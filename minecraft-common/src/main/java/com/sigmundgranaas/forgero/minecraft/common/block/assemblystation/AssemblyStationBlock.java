@@ -81,11 +81,6 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 		return buffer[0];
 	}
 
-	@Override
-	public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
-		return true;
-	}
-
 	public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
 		return stateFrom.isOf(this) || super.isSideInvisible(state, stateFrom, direction);
 	}
@@ -106,7 +101,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction direction = ctx.getPlayerFacing().getOpposite();
+		Direction direction = ctx.getPlayerLookDirection().getOpposite();
 		return this.getDefaultState().with(FACING, direction);
 	}
 

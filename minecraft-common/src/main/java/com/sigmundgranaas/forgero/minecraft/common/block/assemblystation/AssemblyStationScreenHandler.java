@@ -17,6 +17,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.Registries;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
@@ -108,9 +109,11 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 	}
 
+
+
 	@Override
-	public void close(PlayerEntity player) {
-		super.close(player);
+	public void onClosed(PlayerEntity player) {
+		super.onClosed(player);
 		this.context.run((world, pos) -> {
 			this.dropInventory(player, this.inventory);
 		});
@@ -233,7 +236,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		if (!world.isClient) {
 			var craftingInventory = new CraftingInventory(dummyHandler, 3, 3);
 			IntStream.range(0, 8).forEach(index -> craftingInventory.setStack(index, this.inventory.getStack(index)));
-			return world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingInventory, world).map(recipe -> recipe.craft(craftingInventory));
+			return world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingInventory, world).map(recipe -> recipe.craft(craftingInventory, world.getRegistryManager()));
 		}
 		return Optional.empty();
 
@@ -311,7 +314,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 	}
 
-	public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
-
+	public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
 
 }

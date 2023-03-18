@@ -189,7 +189,7 @@ public class SoulEntity extends AnimalEntity implements Flutterer {
 		public void start() {
 			Vec3d vec3d = this.getRandomLocation();
 			if (vec3d != null) {
-				SoulEntity.this.navigation.startMovingAlong(SoulEntity.this.navigation.findPathTo(new BlockPos(vec3d), 1), 1);
+				SoulEntity.this.navigation.startMovingAlong(SoulEntity.this.navigation.findPathTo(new BlockPos((int) vec3d.x, (int) vec3d.y, (int) vec3d.z), 1), 1);
 			}
 		}
 
