@@ -1,0 +1,7 @@
+dependencies {
+	implementation project(':forgero-core')
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
+}
