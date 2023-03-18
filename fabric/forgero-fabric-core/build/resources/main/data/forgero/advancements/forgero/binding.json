@@ -1,0 +1,35 @@
+{
+  "parent": "forgero:forgero/toolpart",
+  "display": {
+    "icon": {
+      "item": "forgero:iron-binding"
+    },
+    "title": {
+      "translate": "advancements.forgero.binding.title"
+    },
+    "description": {
+      "translate": "advancements.forgero.binding.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "default": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:binding"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "default"
+    ]
+  ]
+}

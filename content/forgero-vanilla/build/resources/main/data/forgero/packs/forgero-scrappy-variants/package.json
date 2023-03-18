@@ -1,0 +1,10 @@
+{
+  "name": "forgero-vanilla",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "forgero",
+  "dependencies": [
+    "minecraft",
+    "forgero"
+  ]
+}

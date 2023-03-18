@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
@@ -29,7 +30,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
 
 		@Override
-		public ItemStack transferSlot(PlayerEntity player, int index) {
+		public ItemStack quickMove(PlayerEntity player, int index) {
 			return ItemStack.EMPTY;
 		}
 
@@ -122,7 +123,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	// Shift + Player Inv Slot
 	@Override
-	public ItemStack transferSlot(PlayerEntity player, int slot) {
+	public ItemStack quickMove(PlayerEntity player, int slot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot currentSlot = this.slots.get(slot);
 		if (currentSlot.hasStack()) {

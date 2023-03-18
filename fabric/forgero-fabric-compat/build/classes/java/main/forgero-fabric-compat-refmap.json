@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "com/sigmundgranaas/forgero/fabric/mixins/BetterCombatWeaponRegistryMixin": {
+      "getAttributes(Lnet/minecraft/item/ItemStack;)Lnet/bettercombat/api/WeaponAttributes;": "Lnet/bettercombat/logic/WeaponRegistry;getAttributes(Lnet/minecraft/class_1799;)Lnet/bettercombat/api/WeaponAttributes;"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "com/sigmundgranaas/forgero/fabric/mixins/BetterCombatWeaponRegistryMixin": {
+        "getAttributes(Lnet/minecraft/item/ItemStack;)Lnet/bettercombat/api/WeaponAttributes;": "Lnet/bettercombat/logic/WeaponRegistry;getAttributes(Lnet/minecraft/class_1799;)Lnet/bettercombat/api/WeaponAttributes;"
+      }
+    }
+  }
+}

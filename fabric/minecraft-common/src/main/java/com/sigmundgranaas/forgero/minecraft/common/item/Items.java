@@ -18,6 +18,7 @@ public class Items {
 	static {
 		EMPTY_REPAIR_KIT = Registry.register(ITEM, new Identifier(Forgero.NAMESPACE, "empty_repair_kit"), new Item(new Item.Settings()));
 		BOTTLED_SOUL = Registry.register(ITEM, new Identifier("forgero", "bottled_soul"), new BottledSoulItem(new Item.Settings().rarity(Rarity.UNCOMMON)));
-		
+
+
 	}
 }

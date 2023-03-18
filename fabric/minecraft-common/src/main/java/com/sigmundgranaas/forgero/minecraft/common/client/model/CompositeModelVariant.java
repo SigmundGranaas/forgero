@@ -22,6 +22,9 @@ import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProv
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+
+import net.minecraft.client.render.model.Baker;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

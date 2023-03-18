@@ -1,0 +1,7 @@
+{
+  "namespace": "minecraft",
+  "dependencies": [
+    "minecraft",
+    "forgero"
+  ]
+}

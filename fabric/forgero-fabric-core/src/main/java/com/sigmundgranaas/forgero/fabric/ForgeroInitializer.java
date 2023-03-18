@@ -32,7 +32,6 @@ import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
-import com.sigmundgranaas.forgero.fabric.item.DynamicItems;
 import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
@@ -48,6 +47,7 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGener
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.item.Attributes;
+import com.sigmundgranaas.forgero.fabric.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;

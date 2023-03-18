@@ -1,0 +1,33 @@
+{
+  "type": "PICKAXE_HEAD",
+  "models": [
+    {
+      "name": "pickaxe_head_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "variants": [
+        {
+          "target": [
+            "model:clumpy_pickaxe_head.png"
+          ],
+          "template": "clumpy_pickaxe_head_tip_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "clumpy_pickaxe_head",
+      "modelType": "GENERATE",
+      "template": "clumpy_pickaxe_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:ore_miner_pickaxe_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "clumpy_pickaxe_head"
+    }
+  ]
+}

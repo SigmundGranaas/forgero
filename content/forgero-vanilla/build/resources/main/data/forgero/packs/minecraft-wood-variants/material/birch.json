@@ -1,0 +1,38 @@
+{
+  "type": "WOOD",
+  "name": "birch",
+  "parent": "wood",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:birch_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "id": "wood-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 35
+      },
+      {
+        "id": "wood-attack_speed-composite",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0.2
+      }
+    ]
+  },
+  "palette": {
+    "name": "birch"
+  }
+}

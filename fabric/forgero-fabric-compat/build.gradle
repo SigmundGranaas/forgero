@@ -36,11 +36,11 @@ dependencies {
 
 	modImplementation "vazkii.patchouli:Patchouli:1.19.3-78-FABRIC"
 
-	modImplementation "curse.maven:arrp-463113:4180873"
+	modImplementation("net.devtech:arrp:0.6.7")
 
 	//dynamiclights compat
-	modImplementation "curse.maven:modmenu-308702:4401053"
-	modImplementation "curse.maven:lambdynamiclights-393442:4257388"
+	modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
+	modImplementation "maven.modrinth:lambdynamiclights:${project.lambd_version}"
 	modImplementation("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
 	//better combat
@@ -53,17 +53,14 @@ dependencies {
 	// modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
 	// modImplementation "maven.modrinth:MpzVLzy5:InVK1xFf"
 
-
 	//emi
 	//modCompileOnly "dev.emi:emi:${emi_version}:api"
 	//modLocalRuntime "dev.emi:emi:${emi_version}"
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
-
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
 	//modImplementation "net.darkhax.bookshelf:Bookshelf-Fabric-1.19.2:16.1.11"
-
 
 	//Twilight forest compat
 	//modImplementation "teamtwilight:twilightforest:4.1.1102:universal"
@@ -104,11 +101,6 @@ dependencies {
 	//modCompileOnly "curse.maven:inventory-profiles-next-495267:4263990"
 	//modCompileOnly "curse.maven:libipn-679177:4263961"
 
-	//include project(':forgero-core')
-	//include project(':forgero-vanilla')
-	//include project(':forgero-extended')
-	//include project(':forgero-fabric')
-	//include project(':forgero-compat')
 	//Polymorph testing
 
 	//modImplementation "curse.maven:cardinal-components-318449:3669769"

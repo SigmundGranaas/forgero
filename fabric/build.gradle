@@ -17,7 +17,7 @@ archivesBaseName = "forgero-fabric"
 dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modApi "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include "curse.maven:arrp-463113:3901211"
 	include project(':forgero-core')
@@ -30,13 +30,15 @@ dependencies {
 	include project(':content:forgero-extended')
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
+
+	include "net.devtech:arrp:0.6.7"
 }
 
 subprojects {
 	dependencies {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modApi "net.fabricmc:fabric-loader:${project.loader_version}"
+		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 		annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -104,6 +106,9 @@ allprojects {
 		maven { url "https://api.modrinth.com/maven" }
 		maven { url "https://cursemaven.com" }
 		maven { url 'https://jitpack.io' }
+		maven {
+			url = uri("https://ueaj.dev/maven")
+		}
 	}
 
 	processResources {
