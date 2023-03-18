@@ -20,7 +20,7 @@
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
-  "icon": "assets/icon.png",
+  "icon": "assets/forgero/logo.png",
   "environment": "*",
   "depends": {
     "fabricloader": ">=0.12.12",
