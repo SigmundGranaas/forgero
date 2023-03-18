@@ -21,13 +21,15 @@ dependencies {
 
 	include "curse.maven:arrp-463113:3901211"
 	include project(':forgero-core')
+
+	include project(':fabric:forgero-fabric-core')
+	include project(':fabric:minecraft-common')
+	include project(':fabric:forgero-fabric-compat')
+
 	include project(':content:forgero-vanilla')
 	include project(':content:forgero-extended')
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
-	include project(':fabric:forgero-fabric-core')
-	include project(':fabric:minecraft-common')
-	include project(':fabric:forgero-fabric-compat')
 }
 
 subprojects {
