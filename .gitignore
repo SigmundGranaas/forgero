@@ -118,32 +118,11 @@ output/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-fabric/forgero-fabric-core/logs/
-fabric/forgero-fabric-core/run/
-fabric/forgero-fabric-core/build/
-fabric/forgero-fabric-core/.gradle/
-fabric/forgero-fabric-core/run/usercache.json
 
-content/forgero-vanilla/logs/
-content/forgero-vanilla/run/
-content/forgero-vanilla/build/
+*/logs/
+*/run/
+*/build/
 
-content/forgero-extended/logs/
-content/forgero-extended/run/
-content/forgero-extended/build/
-
-fabric/forgero-fabric-compat/logs/
-fabric/forgero-fabric-compat/run/
-fabric/forgero-fabric-compat/build/
-fabric/forgero-fabric-compat/run/usercache.json
-
-fabric/minecraft-common/logs/
-fabric/minecraft-common/run/
-fabric/minecraft-common/build/
-
-core/logs/
-core/run/
-core/build/
 
 logs/
 run/
