@@ -100,52 +100,18 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-.gradle
-build/
-
 # Ignore Gradle GUI config
 gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
 
-**/build/
-
-# Common working directory
-fabric/run/
-
-output/
-
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-/forgero-fabric/logs/
-/forgero-fabric/run/
-/forgero-fabric/build/
-/forgero-fabric/.gradle/
-/forgero-fabric/run/usercache.json
 
-/forgero-vanilla/logs/
-/forgero-vanilla/run/
-/forgero-vanilla/build/
-
-/forgero-extended/logs/
-/forgero-extended/run/
-/forgero-extended/build/
-
-/forgero-fabric-compat/logs/
-/forgero-fabric-compat/run/
-/forgero-fabric-compat/build/
-/forgero-fabric-compat/run/usercache.json
-
-/minecraft-common/logs/
-/minecraft-common/run/
-/minecraft-common/build/
-
-/core/logs/
-/core/run/
-/core/build/
-
-/logs/
-/run/
-/forgero-forge/run/
-/dest/
+*/logs/
+*/run/
+*/build/
+*/dest/
+.gradle/
+*/output/
