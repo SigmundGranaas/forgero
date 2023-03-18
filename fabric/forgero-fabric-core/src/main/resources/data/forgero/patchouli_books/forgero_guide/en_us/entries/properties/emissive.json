@@ -1,0 +1,17 @@
+{
+  "name": "Emissive",
+  "icon": "minecraft:glowstone_dust",
+  "category": "forgero:property_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Emissive materials can be useful to light up the world around you. When these are applied to your parts, they will light up!"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Emissive",
+      "item": "forgero:netherite-refined_pickaxe_head:{FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:[],ID:'forgero:netherite-refined_pickaxe_head',INGREDIENTS:[{ID:'forgero:refined_pickaxe_head-schematic',NAME:'refined_pickaxe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:netherite',NAME:'netherite',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'netherite-refined_pickaxe_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'PICKAXE_HEAD',UPGRADES:[{ID:'minecraft:glowstone',NAME:'glowstone',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}]}}",
+      "text": "Upgrading any part with Glowstone will make it light up dark areas. To make the effect stronger, add more Glowstone!"
+    }
+  ]
+}
