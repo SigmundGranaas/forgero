@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "aquarium",
+  "parent": "metal",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:aquarium_ingot"
@@ -11,43 +12,42 @@
   "properties": {
     "attributes": [
       {
-        "id": "metal-base-mining_level",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2
-      },
-      {
-        "id": "metal-base-mining-speed",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 6.5
-      },
-      {
-        "id": "metal-base-rarity",
+        "id": "metal-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 40
       },
       {
-        "id": "metal-base-durability",
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 6.5
+      },
+      {
+        "id": "metal-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "category": "ALL",
         "value": 455.0
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.7
       },
       {
-        "id": "metal-base-attack",
+        "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
