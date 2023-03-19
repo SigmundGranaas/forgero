@@ -1,0 +1,182 @@
+{
+  "mappings": {
+    "com/sigmundgranaas/forgero/fabric/mixins/ItemDescriptionInjector": {
+      "appendTooltip": "Lnet/minecraft/class_1792;method_7851(Lnet/minecraft/class_1799;Lnet/minecraft/class_1937;Ljava/util/List;Lnet/minecraft/class_1836;)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/WorldRenderBlockBreakingMixin": {
+      "removeBlockBreakingInfo": "Lnet/minecraft/class_761;method_22987(Lnet/minecraft/class_3191;)V",
+      "drawBlockOutline": "Lnet/minecraft/class_761;method_22712(Lnet/minecraft/class_4587;Lnet/minecraft/class_4588;Lnet/minecraft/class_1297;DDDLnet/minecraft/class_2338;Lnet/minecraft/class_2680;)V",
+      "drawCuboidShapeOutline": "method_3291(Lnet/minecraft/class_4587;Lnet/minecraft/class_4588;Lnet/minecraft/class_265;DDDFFFF)V",
+      "setBlockBreakingInfo": "Lnet/minecraft/class_761;method_8569(ILnet/minecraft/class_2338;I)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/ItemRenderContextMixin": {
+      "renderModel": "Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext;renderModel(Lnet/minecraft/class_1799;Lnet/minecraft/class_809$class_811;ZLnet/minecraft/class_4587;Lnet/minecraft/class_4597;IILnet/minecraft/class_1087;Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext$VanillaQuadHandler;)V",
+      "Lnet/minecraft/client/util/math/MatrixStack$Entry;getPositionMatrix()Lorg/joml/Matrix4f;": "Lnet/minecraft/class_4587$class_4665;method_23761()Lorg/joml/Matrix4f;"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/ItemStackDropGemOnBreakMixin": {
+      "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;": "Lnet/minecraft/class_1799;method_7909()Lnet/minecraft/class_1792;",
+      "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/class_1799;method_7956(ILnet/minecraft/class_1309;Ljava/util/function/Consumer;)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/PlayerInteractionManagerMixin": {
+      "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V": "Lnet/minecraft/class_636;method_41931(Lnet/minecraft/class_638;Lnet/minecraft/class_7204;)V",
+      "updateBlockBreakingProgress": "Lnet/minecraft/class_636;method_2902(Lnet/minecraft/class_2338;Lnet/minecraft/class_2350;)Z"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/RecipeManagerMixin": {
+      "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V": "Lnet/minecraft/class_1863;method_20705(Ljava/util/Map;Lnet/minecraft/class_3300;Lnet/minecraft/class_3695;)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/DisableVanillaToolsLootTableGeneration": {
+      "generateLoot(Lnet/minecraft/loot/context/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;": "Lnet/minecraft/class_52;method_319(Lnet/minecraft/class_47;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/ClientPlayNetworkGetTotemMixin": {
+      "onEntityStatus": "Lnet/minecraft/class_634;method_11148(Lnet/minecraft/class_2663;)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/PlayerCritChanceMixin": {
+      "attack": "Lnet/minecraft/class_1657;method_7324(Lnet/minecraft/class_1297;)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/ItemEntityMagneticMixin": {
+      "tick": "Lnet/minecraft/class_1542;method_5773()V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/PlayerEntityAttackMixin": {
+      "attack": "Lnet/minecraft/class_1657;method_7324(Lnet/minecraft/class_1297;)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityMagneticMixin": {
+      "baseTick": "Lnet/minecraft/class_1309;method_5670()V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/ItemStackUnbreakableMixin": {
+      "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z": "Lnet/minecraft/class_1799;method_7970(ILnet/minecraft/class_5819;Lnet/minecraft/class_3222;)Z"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/AbstractBlockMixin": {
+      "calcBlockBreakingDelta": "Lnet/minecraft/class_4970;method_9594(Lnet/minecraft/class_2680;Lnet/minecraft/class_1657;Lnet/minecraft/class_1922;Lnet/minecraft/class_2338;)F"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/PlayerServerInteractionManagerMixin": {
+      "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;ILjava/lang/String;)V": "Lnet/minecraft/class_3225;method_21717(Lnet/minecraft/class_2338;ILjava/lang/String;)V",
+      "processBlockBreakingAction": "Lnet/minecraft/class_3225;method_14263(Lnet/minecraft/class_2338;Lnet/minecraft/class_2846$class_2847;Lnet/minecraft/class_2350;II)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityUndyingMixin": {
+      "tryUseTotem": "Lnet/minecraft/class_1309;method_6095(Lnet/minecraft/class_1282;)Z"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/AbstractFurnaceWoodPartsFuelMixin": {
+      "createFuelTimeMap": "Lnet/minecraft/class_2609;method_11196()Ljava/util/Map;"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/LifecycleResourceManagerImplMixin": {
+      "getResource": "Lnet/minecraft/class_6861;method_14486(Lnet/minecraft/class_2960;)Ljava/util/Optional;"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/ItemSchematicRemainderMixin": {
+      "getRecipeRemainder": "Lnet/minecraft/class_1792;method_7858()Lnet/minecraft/class_1792;",
+      "hasRecipeRemainder": "Lnet/minecraft/class_1792;method_7857()Z"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/PiglinBrainMixin": {
+      "wearsGoldArmor": "Lnet/minecraft/class_4838;method_24719(Lnet/minecraft/class_1309;)Z",
+      "isGoldenItem": "Lnet/minecraft/class_4838;method_24735(Lnet/minecraft/class_1799;)Z"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityReapingMixin": {
+      "onDeath": "Lnet/minecraft/class_1309;method_6078(Lnet/minecraft/class_1282;)V"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/DynamicToolItemStackMixin": {
+      "getAttributeModifiers": "Lnet/minecraft/class_1799;method_7926(Lnet/minecraft/class_1304;)Lcom/google/common/collect/Multimap;",
+      "getTooltip": "Lnet/minecraft/class_1799;method_7950(Lnet/minecraft/class_1657;Lnet/minecraft/class_1836;)Ljava/util/List;",
+      "Lnet/minecraft/item/ItemStack;getAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;": "Lnet/minecraft/class_1799;method_7926(Lnet/minecraft/class_1304;)Lcom/google/common/collect/Multimap;",
+      "isSuitableFor": "Lnet/minecraft/class_1799;method_7951(Lnet/minecraft/class_2680;)Z",
+      "getMiningSpeedMultiplier": "Lnet/minecraft/class_1799;method_7924(Lnet/minecraft/class_2680;)F",
+      "getMaxDamage": "Lnet/minecraft/class_1799;method_7936()I",
+      "getItemBarStep": "Lnet/minecraft/class_1799;method_31579()I"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/ItemRenderMixin": {
+      "getModel": "Lnet/minecraft/class_918;method_4019(Lnet/minecraft/class_1799;Lnet/minecraft/class_1937;Lnet/minecraft/class_1309;I)Lnet/minecraft/class_1087;"
+    },
+    "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityMixin": {
+      "onDeath": "Lnet/minecraft/class_1309;method_6078(Lnet/minecraft/class_1282;)V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "com/sigmundgranaas/forgero/fabric/mixins/ItemDescriptionInjector": {
+        "appendTooltip": "Lnet/minecraft/class_1792;method_7851(Lnet/minecraft/class_1799;Lnet/minecraft/class_1937;Ljava/util/List;Lnet/minecraft/class_1836;)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/WorldRenderBlockBreakingMixin": {
+        "removeBlockBreakingInfo": "Lnet/minecraft/class_761;method_22987(Lnet/minecraft/class_3191;)V",
+        "drawBlockOutline": "Lnet/minecraft/class_761;method_22712(Lnet/minecraft/class_4587;Lnet/minecraft/class_4588;Lnet/minecraft/class_1297;DDDLnet/minecraft/class_2338;Lnet/minecraft/class_2680;)V",
+        "drawCuboidShapeOutline": "method_3291(Lnet/minecraft/class_4587;Lnet/minecraft/class_4588;Lnet/minecraft/class_265;DDDFFFF)V",
+        "setBlockBreakingInfo": "Lnet/minecraft/class_761;method_8569(ILnet/minecraft/class_2338;I)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/ItemRenderContextMixin": {
+        "renderModel": "Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext;renderModel(Lnet/minecraft/class_1799;Lnet/minecraft/class_809$class_811;ZLnet/minecraft/class_4587;Lnet/minecraft/class_4597;IILnet/minecraft/class_1087;Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext$VanillaQuadHandler;)V",
+        "Lnet/minecraft/client/util/math/MatrixStack$Entry;getPositionMatrix()Lorg/joml/Matrix4f;": "Lnet/minecraft/class_4587$class_4665;method_23761()Lorg/joml/Matrix4f;"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/ItemStackDropGemOnBreakMixin": {
+        "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;": "Lnet/minecraft/class_1799;method_7909()Lnet/minecraft/class_1792;",
+        "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/class_1799;method_7956(ILnet/minecraft/class_1309;Ljava/util/function/Consumer;)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/PlayerInteractionManagerMixin": {
+        "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V": "Lnet/minecraft/class_636;method_41931(Lnet/minecraft/class_638;Lnet/minecraft/class_7204;)V",
+        "updateBlockBreakingProgress": "Lnet/minecraft/class_636;method_2902(Lnet/minecraft/class_2338;Lnet/minecraft/class_2350;)Z"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/RecipeManagerMixin": {
+        "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V": "Lnet/minecraft/class_1863;method_20705(Ljava/util/Map;Lnet/minecraft/class_3300;Lnet/minecraft/class_3695;)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/DisableVanillaToolsLootTableGeneration": {
+        "generateLoot(Lnet/minecraft/loot/context/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;": "Lnet/minecraft/class_52;method_319(Lnet/minecraft/class_47;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/ClientPlayNetworkGetTotemMixin": {
+        "onEntityStatus": "Lnet/minecraft/class_634;method_11148(Lnet/minecraft/class_2663;)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/PlayerCritChanceMixin": {
+        "attack": "Lnet/minecraft/class_1657;method_7324(Lnet/minecraft/class_1297;)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/ItemEntityMagneticMixin": {
+        "tick": "Lnet/minecraft/class_1542;method_5773()V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/PlayerEntityAttackMixin": {
+        "attack": "Lnet/minecraft/class_1657;method_7324(Lnet/minecraft/class_1297;)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityMagneticMixin": {
+        "baseTick": "Lnet/minecraft/class_1309;method_5670()V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/ItemStackUnbreakableMixin": {
+        "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z": "Lnet/minecraft/class_1799;method_7970(ILnet/minecraft/class_5819;Lnet/minecraft/class_3222;)Z"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/AbstractBlockMixin": {
+        "calcBlockBreakingDelta": "Lnet/minecraft/class_4970;method_9594(Lnet/minecraft/class_2680;Lnet/minecraft/class_1657;Lnet/minecraft/class_1922;Lnet/minecraft/class_2338;)F"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/PlayerServerInteractionManagerMixin": {
+        "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;ILjava/lang/String;)V": "Lnet/minecraft/class_3225;method_21717(Lnet/minecraft/class_2338;ILjava/lang/String;)V",
+        "processBlockBreakingAction": "Lnet/minecraft/class_3225;method_14263(Lnet/minecraft/class_2338;Lnet/minecraft/class_2846$class_2847;Lnet/minecraft/class_2350;II)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityUndyingMixin": {
+        "tryUseTotem": "Lnet/minecraft/class_1309;method_6095(Lnet/minecraft/class_1282;)Z"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/AbstractFurnaceWoodPartsFuelMixin": {
+        "createFuelTimeMap": "Lnet/minecraft/class_2609;method_11196()Ljava/util/Map;"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/LifecycleResourceManagerImplMixin": {
+        "getResource": "Lnet/minecraft/class_6861;method_14486(Lnet/minecraft/class_2960;)Ljava/util/Optional;"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/ItemSchematicRemainderMixin": {
+        "getRecipeRemainder": "Lnet/minecraft/class_1792;method_7858()Lnet/minecraft/class_1792;",
+        "hasRecipeRemainder": "Lnet/minecraft/class_1792;method_7857()Z"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/PiglinBrainMixin": {
+        "wearsGoldArmor": "Lnet/minecraft/class_4838;method_24719(Lnet/minecraft/class_1309;)Z",
+        "isGoldenItem": "Lnet/minecraft/class_4838;method_24735(Lnet/minecraft/class_1799;)Z"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityReapingMixin": {
+        "onDeath": "Lnet/minecraft/class_1309;method_6078(Lnet/minecraft/class_1282;)V"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/DynamicToolItemStackMixin": {
+        "getAttributeModifiers": "Lnet/minecraft/class_1799;method_7926(Lnet/minecraft/class_1304;)Lcom/google/common/collect/Multimap;",
+        "getTooltip": "Lnet/minecraft/class_1799;method_7950(Lnet/minecraft/class_1657;Lnet/minecraft/class_1836;)Ljava/util/List;",
+        "Lnet/minecraft/item/ItemStack;getAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;": "Lnet/minecraft/class_1799;method_7926(Lnet/minecraft/class_1304;)Lcom/google/common/collect/Multimap;",
+        "isSuitableFor": "Lnet/minecraft/class_1799;method_7951(Lnet/minecraft/class_2680;)Z",
+        "getMiningSpeedMultiplier": "Lnet/minecraft/class_1799;method_7924(Lnet/minecraft/class_2680;)F",
+        "getMaxDamage": "Lnet/minecraft/class_1799;method_7936()I",
+        "getItemBarStep": "Lnet/minecraft/class_1799;method_31579()I"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/ItemRenderMixin": {
+        "getModel": "Lnet/minecraft/class_918;method_4019(Lnet/minecraft/class_1799;Lnet/minecraft/class_1937;Lnet/minecraft/class_1309;I)Lnet/minecraft/class_1087;"
+      },
+      "com/sigmundgranaas/forgero/fabric/mixins/LivingEntityMixin": {
+        "onDeath": "Lnet/minecraft/class_1309;method_6078(Lnet/minecraft/class_1282;)V"
+      }
+    }
+  }
+}

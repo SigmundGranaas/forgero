@@ -1,0 +1,16 @@
+{
+  "type": "STONE",
+  "name": "stone",
+  "parent": "default_stone",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:cobblestone"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "stone"
+  }
+}

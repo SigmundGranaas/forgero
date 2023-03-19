@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:quartz-gem"
+  },
+  "addition": {
+    "item": "forgero:quartz-gem"
+  },
+  "result": {
+    "item": "forgero:quartz-gem"
+  }
+}
+

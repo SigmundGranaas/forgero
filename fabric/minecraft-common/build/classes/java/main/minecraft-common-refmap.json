@@ -1,0 +1,28 @@
+{
+  "mappings": {
+    "com/sigmundgranaas/forgero/minecraft/common/mixins/ItemUUIDMixin": {
+      "ATTACK_SPEED_MODIFIER_ID": "field_8001:Ljava/util/UUID;",
+      "ATTACK_DAMAGE_MODIFIER_ID": "field_8006:Ljava/util/UUID;"
+    },
+    "com/sigmundgranaas/forgero/minecraft/common/mixins/JsonUnbakedModelOverrideMixin": {
+      "parent": "field_4253:Lnet/minecraft/class_793;"
+    },
+    "com/sigmundgranaas/forgero/minecraft/common/mixins/OreBlockXp": {
+      "experienceDropped": "field_27195:Lnet/minecraft/class_6017;"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "com/sigmundgranaas/forgero/minecraft/common/mixins/ItemUUIDMixin": {
+        "ATTACK_SPEED_MODIFIER_ID": "field_8001:Ljava/util/UUID;",
+        "ATTACK_DAMAGE_MODIFIER_ID": "field_8006:Ljava/util/UUID;"
+      },
+      "com/sigmundgranaas/forgero/minecraft/common/mixins/JsonUnbakedModelOverrideMixin": {
+        "parent": "field_4253:Lnet/minecraft/class_793;"
+      },
+      "com/sigmundgranaas/forgero/minecraft/common/mixins/OreBlockXp": {
+        "experienceDropped": "field_27195:Lnet/minecraft/class_6017;"
+      }
+    }
+  }
+}

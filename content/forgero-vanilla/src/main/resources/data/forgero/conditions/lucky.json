@@ -1,0 +1,32 @@
+{
+  "id": "forgero:tough",
+  "priority": 5,
+  "target": {
+    "types": [
+      "PART",
+      "TOOL",
+      "WEAPON",
+      "SCHEMATIC"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.06,
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 10
+      }
+    ],
+    "features": [
+      {
+        "type": "LUCK",
+        "value": 2
+      }
+    ]
+  }
+}

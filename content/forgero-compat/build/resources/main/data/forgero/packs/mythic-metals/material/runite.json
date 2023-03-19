@@ -1,0 +1,86 @@
+{
+  "type": "METAL",
+  "parent": "metal",
+  "name": "runite",
+  "container": {
+    "type": "HOST",
+    "id": "mythicmetals:runite_ingot"
+  },
+  "palette": {
+    "name": "runite"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 51
+      },
+      {
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 8.9
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1337.0
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.8
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.5,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 16
+      },
+      {
+        "id": "metal-rarity-upgrade",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 22
+      }
+    ]
+  }
+}
