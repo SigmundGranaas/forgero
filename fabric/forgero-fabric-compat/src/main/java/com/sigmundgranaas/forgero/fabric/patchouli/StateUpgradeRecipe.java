@@ -8,6 +8,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
@@ -54,17 +55,17 @@ public class StateUpgradeRecipe extends PageDoubleRecipeRegistry<SmithingRecipe>
 			return inventory;
 		}
 
+		if(recipe instanceof LegacySmithingRecipe legacySmithingRecipe){
+			ItemStack[] original = legacySmithingRecipe.base.getMatchingStacks();
+			if (original.length > 0) {
+				inventory.setStack(0, original[(parent.getTicksInBook() / 20) % original.length]);
+			}
 
-		ItemStack[] original = recipe.base.getMatchingStacks();
-		if (original.length > 0) {
-			inventory.setStack(0, original[(parent.getTicksInBook() / 20) % original.length]);
+			ItemStack[] upgrade = legacySmithingRecipe.addition.getMatchingStacks();
+			if (upgrade.length > 0) {
+				inventory.setStack(1, upgrade[(parent.getTicksInBook() / 20) % upgrade.length]);
+			}
 		}
-
-		ItemStack[] upgrade = recipe.addition.getMatchingStacks();
-		if (upgrade.length > 0) {
-			inventory.setStack(1, upgrade[(parent.getTicksInBook() / 20) % upgrade.length]);
-		}
-
 		return inventory;
 	}
 
