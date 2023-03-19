@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A custom data container that uses a {@link Map} to store data.
+ * A custom data container that uses a Json data to store custom resources.
  * Will store data as JsonData.
  * <p>
  * Can be used to store custom data in a {@link DataSupplier}.
