@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -45,5 +46,10 @@ public interface StateItem extends DynamicAttributeItem, State {
 
 	default boolean test(Matchable match, Context context) {
 		return defaultState().test(match, context);
+	}
+
+	@Override
+	default DataContainer customData() {
+		return defaultState().customData();
 	}
 }
