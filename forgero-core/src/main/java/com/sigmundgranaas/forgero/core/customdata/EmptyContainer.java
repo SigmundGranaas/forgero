@@ -2,6 +2,9 @@ package com.sigmundgranaas.forgero.core.customdata;
 
 import java.util.Optional;
 
+/**
+ * An empty data container. Used as a default value for custom data containers.
+ */
 public class EmptyContainer implements DataContainer {
 	@Override
 	public Optional<Integer> getInteger(String key) {

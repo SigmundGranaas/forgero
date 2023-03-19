@@ -2,6 +2,15 @@ package com.sigmundgranaas.forgero.core.customdata;
 
 import java.util.Optional;
 
+/**
+ * A container for custom data.
+ * Will be used to store custom data for resources.
+ * <p>
+ * Containers will be merged when resources are inherited.
+ *
+ * @see DataVisitor for how to extract data from a container.
+ * @see DataSupplier for how to get a container from a resource.
+ */
 public interface DataContainer {
 	static DataContainer empty() {
 		return new EmptyContainer();
