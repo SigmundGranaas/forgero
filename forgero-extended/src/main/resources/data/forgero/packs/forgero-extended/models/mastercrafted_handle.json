@@ -12,13 +12,13 @@
           "target": [
             "type:HOE"
           ],
-          "template": "mastercrafted_tool_handle.png"
+          "template": "mastercrafted_pickaxe_handle.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "mastercrafted_tool_handle.png"
+          "template": "mastercrafted_pickaxe_handle.png"
         },
         {
           "target": [
@@ -36,7 +36,7 @@
           "target": [
             "type:SWORD"
           ],
-          "template": "short_handle.png"
+          "template": "mastercrafted_short_handle.png"
         }
       ]
     },
@@ -52,6 +52,12 @@
         {
           "target": [
             "model:mastercrafted_tool_handle.png"
+          ],
+          "template": "mastercrafted_handle_grip.png"
+        },
+        {
+          "target": [
+            "model:mastercrafted_pickaxe_handle.png"
           ],
           "template": "mastercrafted_handle_grip.png"
         }
