@@ -16,6 +16,13 @@ import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A custom data container that uses a {@link Map} to store data.
+ * Will store data as JsonData.
+ * <p>
+ * Can be used to store custom data in a {@link DataSupplier}.
+ * Will handle contextual merges, as well as mapping to and from Lists when running into duplicated keys.
+ */
 public class CustomJsonDataContainer implements DataContainer {
 	@NotNull
 	private final Map<String, JsonElement> customData;
@@ -60,6 +67,14 @@ public class CustomJsonDataContainer implements DataContainer {
 		}
 	}
 
+	/**
+	 * Tries to parse a type of data with context
+	 *
+	 * @param key  the key to look for
+	 * @param type the type to parse
+	 * @param <T>  the type of data to parse
+	 * @return an optional containing the contextual data, or empty if not found
+	 */
 	private <T> Optional<ContextAwareData<T>> contextValue(String key, Class<T> type) {
 		var dataOptional = getObject(key, ContextAwareData.class);
 		if (dataOptional.isPresent()) {
@@ -69,8 +84,16 @@ public class CustomJsonDataContainer implements DataContainer {
 		return Optional.empty();
 	}
 
+	/**
+	 * Tries to parse a type of data from a JsonElement
+	 *
+	 * @param key  the key to look for
+	 * @param type the type to parse
+	 * @param <T>  the type of data to parse
+	 * @return an optional containing the data, or empty if not found
+	 */
 	public <T> Optional<T> getObject(String key, Class<T> type) {
-		Optional<JsonElement> element = Optional.ofNullable(customData.get(key));
+		Optional<JsonElement> element = Optional.ofNullable(getCustomData().get(key));
 		//noinspection OptionalIsPresent
 		if (element.isEmpty()) {
 			return Optional.empty();
@@ -78,15 +101,24 @@ public class CustomJsonDataContainer implements DataContainer {
 		return convertFromJsonElement(element.get(), type).or(() -> getObjectList(key, type).stream().findFirst());
 	}
 
+	/**
+	 * Tries to parse a type of data from a JsonElement as a List
+	 *
+	 * @param key  the key to look for
+	 * @param type the type to parse
+	 * @param <T>  the type of data to parse
+	 * @return A list of the available data, or an empty list if not found
+	 */
 	public <T> List<T> getObjectList(String key, Class<T> type) {
 		Type token = TypeToken.getParameterized(List.class, type).getType();
-		JsonElement element = customData.get(key);
+		JsonElement element = getCustomData().get(key);
 		if (element == null || element.isJsonNull()) {
 			return Collections.emptyList();
 		}
 		Optional<List<T>> typedList = getTypedList(element, type, token);
 		return typedList.orElse(Collections.emptyList());
 	}
+
 
 	private <T> Optional<List<T>> getTypedList(JsonElement element, Class<T> type, Type token) {
 		Optional<Object> obj = convertFromJsonElement(element, token);
@@ -116,11 +148,19 @@ public class CustomJsonDataContainer implements DataContainer {
 		}
 	}
 
+	/**
+	 * Merges two data containers, with the other container taking precedence.
+	 * Will convert the data to a list if there are duplicate keys. No filtering of contexts is done.
+	 * <p>
+	 *
+	 * @param other the other container to merge with
+	 * @return a new data container with the merged data
+	 */
 	@Override
 	public CustomJsonDataContainer merge(DataContainer other) {
 		if (other instanceof CustomJsonDataContainer customJsonDataContainer) {
-			Map<String, JsonElement> combinedMap = new HashMap<>(customData);
-			for (Map.Entry<String, JsonElement> entry : customJsonDataContainer.customData.entrySet()) {
+			Map<String, JsonElement> combinedMap = new HashMap<>(getCustomData());
+			for (Map.Entry<String, JsonElement> entry : customJsonDataContainer.getCustomData().entrySet()) {
 				combinedMap.computeIfPresent(entry.getKey(), (key, value) -> mergeAsList(value, entry.getValue()));
 			}
 			return new CustomJsonDataContainer(combinedMap);
@@ -128,9 +168,18 @@ public class CustomJsonDataContainer implements DataContainer {
 		return this;
 	}
 
+	/**
+	 * Merges two data containers, with the other container taking precedence.
+	 * <p>
+	 * Takes filtering into account, and will convert the data to a list if there are duplicate keys.
+	 *
+	 * @param other   the other container to merge with
+	 * @param context the context to filter by
+	 * @return a new data container with the merged data
+	 */
 	@Override
 	public DataContainer merge(DataContainer other, Context context) {
-		var filteredValues = merge(other).customData.entrySet().stream()
+		var filteredValues = merge(other).getCustomData().entrySet().stream()
 				.filter(entry -> isRightContext(entry, context))
 				.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
 		return new CustomJsonDataContainer(filteredValues);
