@@ -79,7 +79,19 @@ public class CustomJsonDataContainer implements DataContainer {
 		var dataOptional = getObject(key, ContextAwareData.class);
 		if (dataOptional.isPresent()) {
 			var data = dataOptional.get();
-			return convertFromJsonElement(new Gson().toJsonTree(data.value()), type).map(value -> new ContextAwareData<>(data.context(), value));
+			var converted = convertFromJsonElement(new Gson().toJsonTree(data.value()), type).map(value -> new ContextAwareData<>(data.context(), value));
+			if (converted.isEmpty()) {
+				if (customData.containsKey(key)) {
+					var element = customData.get(key);
+					if (element.isJsonObject() && element.getAsJsonObject().has("context")) {
+						var context = element.getAsJsonObject().get("context").getAsString();
+						return Optional.of(new ContextAwareData<>(Context.valueOf(context), null));
+					}
+				}
+				return converted;
+			}
+
+			return converted;
 		}
 		return Optional.empty();
 	}
