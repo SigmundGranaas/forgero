@@ -24,11 +24,11 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
 		return new SimpleState(name, type, properties);
 	}
 
-	static Ingredient of(String name, String nameSpace, Type type, List<Property> properties) {
+	static State of(String name, String nameSpace, Type type, List<Property> properties) {
 		return new SimpleState(name, nameSpace, type, properties);
 	}
 
-	static Ingredient of(String name, String nameSpace, Type type, List<Property> properties, DataContainer custom) {
+	static State of(String name, String nameSpace, Type type, List<Property> properties, DataContainer custom) {
 		return new SimpleState(name, nameSpace, type, properties, custom);
 	}
 
