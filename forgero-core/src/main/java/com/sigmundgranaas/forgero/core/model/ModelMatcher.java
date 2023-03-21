@@ -10,7 +10,7 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 	ModelMatcher EMPTY = new ModelMatcher() {
 		@Override
 		public int compareTo(@NotNull ModelMatcher o) {
-			return 0;
+			return comparator(this, o);
 		}
 
 		@Override
@@ -31,9 +31,18 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 
 			if (match1Identifier) {
 				if (match2Identifier) {
-					return 0;
+					if (entry1.match().criteria().size() > entry2.match().criteria().size())
+						return 1;
+					else{
+						return 0;
+					}
+
 				} else {
-					return -1;
+					if (entry1.match().criteria().size() < entry2.match().criteria().size())
+						return -1;
+					else{
+						return 0;
+					}
 				}
 			} else {
 				if (match2Identifier) {
@@ -51,6 +60,6 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 
 	@Override
 	default int compareTo(@NotNull ModelMatcher o) {
-		return 0;
+		return comparator(this, o);
 	}
 }

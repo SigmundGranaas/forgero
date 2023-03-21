@@ -30,12 +30,11 @@ public class MultipleModelMatcher implements ModelMatcher {
 				.sorted(ModelMatcher::comparator)
 				.map(matcher -> matcher.get(state, provider, context))
 				.flatMap(Optional::stream)
-				.sorted()
 				.findFirst();
 	}
 
 	@Override
 	public int compareTo(@NotNull ModelMatcher o) {
-		return 0;
+		return ModelMatcher.super.compareTo(o);
 	}
 }
