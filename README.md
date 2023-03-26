@@ -53,11 +53,11 @@ customization in Minecraft a greater depth.**
 Key features:
 
 * A wide variety of materials can be used to craft every part of a tool (But some are better suited than others)
-* Unique patterns which will enhance the look and attributes of your tools
+* Unique schematics which will enhance the look and attributes of your tools
 * Vanilla friendly, this mod generates textures from palettes created from Minecraft's own textures
 * Gems, which can further enhance tools and weapons through an expansive upgrade path
 * Enchanting support
-* Support for adding and customizing materials, patterns and gems entirely trough config files
+* Support for adding and customizing materials, schematics and gems entirely trough config files
 
 
 <!-- ROADMAP -->
@@ -65,14 +65,14 @@ Key features:
 ## Roadmap
 
 Forgero is in active development, and features are being added frequently.  
-We support [Semantic Versioning](https://semver.org/), meaning we make sure we break your saves as little as possible
-with updates, and if possible only in major releases.
+We support [Semantic Versioning](https://semver.org/), which means we make sure to not introduce breaking changes unless
+we are moving to a new major version.
 
 - [x] Tool parts and materials
 - [x] Pickaxes, shovels and axes
 - [x] Swords and hoes
 - [x] Rework model system to avoid flickering textures
-- [x] Patterns
+- [x] Schematics
 - [x] Enhanced tool properties, for example golden, and veinmining, as well as area mining
 - [x] Gems
 - [ ] Progression and station overhaul
