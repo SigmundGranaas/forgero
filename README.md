@@ -24,7 +24,7 @@
     <img src="assets/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Forgero [Fabric]</h3>
+<h3 align="center">Forgero [Fabric]</h3>
 
   <p align="center">
     A tool creation and customization mod for Minecraft!
@@ -100,7 +100,8 @@ You can also simply open an issue with the tag `enhancement`.
 Don't forget to give the project a star! Thanks again!  
 Your contributions are **greatly appreciated**.
 
-Thank you to Forgero's contributors (see [`CONTRIBUTORS.md`](https://github.com/SigmundGranaas/forgero/blob/1.19/CONTRIBUTORS.md)).
+Thank you to Forgero's contributors (
+see [`CONTRIBUTORS.md`](https://github.com/SigmundGranaas/forgero/blob/1.19/CONTRIBUTORS.md)).
 
 
 <!-- DEVELOPMENT -->
@@ -174,8 +175,7 @@ Creating this project could not have been done without the prior work of the com
 * [Fabric API](https://github.com/FabricMC/fabric)
 * [Tinker's Construct](https://github.com/SlimeKnights/TinkersConstruct)
 * [Smithee](https://github.com/LordDeatHunter/Smithee)
-* [Readme template](ttps://github.com/othneildrew/Best-README-Template/)
-
+* [Readme template](https://github.com/othneildrew/Best-README-Template/)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
