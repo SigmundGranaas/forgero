@@ -13,6 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.sigmundgranaas.forgero.core.property.Target;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -173,7 +174,11 @@ public class CustomJsonDataContainer implements DataContainer {
 		if (other instanceof CustomJsonDataContainer customJsonDataContainer) {
 			Map<String, JsonElement> combinedMap = new HashMap<>(getCustomData());
 			for (Map.Entry<String, JsonElement> entry : customJsonDataContainer.getCustomData().entrySet()) {
-				combinedMap.computeIfPresent(entry.getKey(), (key, value) -> mergeAsList(value, entry.getValue()));
+				if (combinedMap.containsKey(entry.getKey())) {
+					combinedMap.put(entry.getKey(), mergeAsList(combinedMap.get(entry.getKey()), entry.getValue()));
+				} else {
+					combinedMap.put(entry.getKey(), entry.getValue());
+				}
 			}
 			return new CustomJsonDataContainer(combinedMap);
 		}
@@ -190,9 +195,10 @@ public class CustomJsonDataContainer implements DataContainer {
 	 * @return a new data container with the merged data
 	 */
 	@Override
-	public DataContainer merge(DataContainer other, Context context) {
-		var filteredValues = merge(other).getCustomData().entrySet().stream()
+	public DataContainer merge(DataContainer other, Context context, Target target) {
+		Map<String, JsonElement> filteredValues = merge(other).getCustomData().entrySet().stream()
 				.filter(entry -> isRightContext(entry, context))
+				.filter(entry -> isRightTarget(entry, target))
 				.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
 		return new CustomJsonDataContainer(filteredValues);
 	}
@@ -222,6 +228,11 @@ public class CustomJsonDataContainer implements DataContainer {
 	private boolean isRightContext(Map.Entry<String, JsonElement> entry, Context context) {
 		var convertedValue = contextValue(entry.getKey(), Object.class);
 		return convertedValue.map(objectContextAwareData -> objectContextAwareData.context() == context).orElse(true);
+	}
+
+	private boolean isRightTarget(Map.Entry<String, JsonElement> entry, Target target) {
+		Optional<TargetData> data = convertFromJsonElement(entry.getValue(), TargetData.class);
+		return data.map(targetData -> targetData.isApplicable(target)).orElse(true);
 	}
 
 	@NotNull

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.state.Upgrade;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
@@ -49,7 +50,7 @@ public class SimpleUpgrade implements Upgrade {
 	}
 
 	@Override
-	public DataContainer customData() {
+	public DataContainer customData(Target target) {
 		return DataContainer.empty();
 	}
 }

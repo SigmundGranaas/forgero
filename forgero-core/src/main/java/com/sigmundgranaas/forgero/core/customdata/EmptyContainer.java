@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.core.customdata;
 
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.core.property.Target;
+
 /**
  * An empty data container. Used as a default value for custom data containers.
  */
@@ -32,7 +34,7 @@ public class EmptyContainer implements DataContainer {
 	}
 
 	@Override
-	public DataContainer merge(DataContainer other, Context context) {
+	public DataContainer merge(DataContainer other, Context context, Target target) {
 		return other;
 	}
 }

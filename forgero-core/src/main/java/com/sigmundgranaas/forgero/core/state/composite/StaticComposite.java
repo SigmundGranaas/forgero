@@ -132,7 +132,7 @@ public class StaticComposite implements Composite {
 	}
 
 	@Override
-	public DataContainer customData() {
+	public DataContainer customData(Target target) {
 		return DataContainer.empty();
 	}
 }

@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.core.customdata;
 
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.core.property.Target;
+
 /**
  * A container for custom data.
  * Will be used to store custom data for resources.
@@ -16,8 +18,8 @@ public interface DataContainer {
 		return new EmptyContainer();
 	}
 
-	static DataContainer transitiveMerge(DataContainer a, DataContainer b) {
-		return a.merge(b, Context.TRANSITIVE);
+	static DataContainer transitiveMerge(DataContainer a, DataContainer b, Target target) {
+		return a.merge(b, Context.TRANSITIVE, target);
 	}
 
 	Optional<Integer> getInteger(String key);
@@ -34,5 +36,6 @@ public interface DataContainer {
 
 	DataContainer merge(DataContainer other);
 
-	DataContainer merge(DataContainer other, Context context);
+	//TODO: remove target in favour of a better context solution
+	DataContainer merge(DataContainer other, Context context, Target target);
 }

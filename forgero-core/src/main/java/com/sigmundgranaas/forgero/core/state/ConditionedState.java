@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -84,7 +85,7 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	}
 
 	@Override
-	public DataContainer customData() {
+	public DataContainer customData(Target target) {
 		return customData;
 	}
 }

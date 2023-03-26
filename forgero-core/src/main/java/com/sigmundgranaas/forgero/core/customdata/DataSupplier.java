@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.customdata;
 
+import com.sigmundgranaas.forgero.core.property.Target;
+
 /**
  * A supplier of custom data.
  * <p>
@@ -8,11 +10,16 @@ package com.sigmundgranaas.forgero.core.customdata;
  *
  * @see DataContainer
  */
-@FunctionalInterface
 public interface DataSupplier {
-	DataContainer customData();
+	default DataContainer customData(Target target) {
+		return customData();
+	}
+
+	default DataContainer customData() {
+		return customData(Target.EMPTY);
+	}
 
 	default boolean hasData() {
-		return !(customData() instanceof EmptyContainer);
+		return !(customData(Target.EMPTY) instanceof EmptyContainer);
 	}
 }

@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.core.customdata;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * A {@link DataVisitor} that visits a {@link DataContainer} and returns the value of the key
@@ -44,14 +43,7 @@ public class ClassBasedVisitor<T> implements DataVisitor<T> {
 	@Override
 	public List<T> visitMultiple(DataContainer dataContainer) {
 		if (dataContainer instanceof CustomJsonDataContainer customJsonDataContainer) {
-			List<T> results = customJsonDataContainer.getObject(key(), List.class)
-					.map(list -> (List<?>) list)
-					.orElse(Collections.emptyList())
-					.stream()
-					.filter(type::isInstance)
-					.map(type::cast)
-					.collect(Collectors.toList());
-
+			List<T> results = customJsonDataContainer.getObjectList(key(), type);
 			if (results.isEmpty()) {
 				visit(dataContainer).ifPresent(results::add);
 			}

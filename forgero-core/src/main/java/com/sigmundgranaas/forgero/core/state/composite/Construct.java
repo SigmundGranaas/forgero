@@ -278,8 +278,9 @@ public class Construct implements Composite, ConstructedState {
 	}
 
 	@Override
-	public DataContainer customData() {
-		return components().stream().map(State::customData).reduce(DataContainer.empty(), DataContainer::transitiveMerge);
+	public DataContainer customData(Target target) {
+		var combinedTarget = target.combineTarget(new TypeTarget(Set.of(type().typeName())));
+		return components().stream().map(state -> state.customData(combinedTarget)).reduce(DataContainer.empty(), (dataContainer1, dataContainer2) -> DataContainer.transitiveMerge(dataContainer1, dataContainer2, combinedTarget));
 	}
 
 	public static class ConstructBuilder extends BaseComposite.BaseCompositeBuilder<ConstructBuilder> {

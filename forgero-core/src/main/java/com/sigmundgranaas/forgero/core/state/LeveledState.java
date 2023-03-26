@@ -89,7 +89,7 @@ public class LeveledState implements State {
 	}
 
 	@Override
-	public DataContainer customData() {
+	public DataContainer customData(Target target) {
 		return DataContainer.empty();
 	}
 }
