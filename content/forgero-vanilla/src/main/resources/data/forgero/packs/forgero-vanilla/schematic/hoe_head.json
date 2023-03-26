@@ -88,6 +88,9 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "2"
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    }
   }
 }

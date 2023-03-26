@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import java.util.List;
+
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -15,8 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class GemItem extends Item implements StateItem, State {
 	private final State DEFAULT;
@@ -87,5 +88,10 @@ public class GemItem extends Item implements StateItem, State {
 	@Override
 	public boolean isEquippable() {
 		return false;
+	}
+
+	@Override
+	public DataContainer customData() {
+		return defaultState().customData();
 	}
 }
