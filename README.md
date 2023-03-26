@@ -14,7 +14,7 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
+[![Discord][discord-shield]][discord-url]
 
 
 <!-- PROJECT LOGO -->
@@ -24,7 +24,7 @@
     <img src="assets/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Forgero [Fabric]</h3>
+  <h3 align="center">Forgero [Fabric]</h3>
 
   <p align="center">
     A tool creation and customization mod for Minecraft!
@@ -37,33 +37,6 @@
     <a href="https://github.com/sigmundgranaas/forgeroissues">Request Feature</a>
   </p>
 </div>
-
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
 
 
 <!-- ABOUT FORGERO -->
@@ -85,8 +58,6 @@ Key features:
 * Gems, which can further enhance tools and weapons through an expansive upgrade path
 * Enchanting support
 * Support for adding and customizing materials, patterns and gems entirely trough config files
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- ROADMAP -->
@@ -111,8 +82,6 @@ with updates, and if possible only in major releases.
 See the [open issues](https://github.com/sigmundgranaas/forgero/issues) for a full list of proposed features and known
 bugs.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 <!-- CONTRIBUTING -->
 
@@ -131,7 +100,7 @@ You can also simply open an issue with the tag `enhancement`.
 Don't forget to give the project a star! Thanks again!  
 Your contributions are **greatly appreciated**.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+Thank you to Forgero's contributors (see [`CONTRIBUTORS.md`](https://github.com/SigmundGranaas/forgero/blob/1.19/CONTRIBUTORS.md)).
 
 
 <!-- DEVELOPMENT -->
@@ -174,8 +143,6 @@ prerequisites out of the box:
    ./gradlew runClient
    ```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 <!-- LICENSE -->
 
@@ -183,8 +150,6 @@ prerequisites out of the box:
 
 Distributed under the MIT License. See [`LICENSE`](https://github.com/SigmundGranaas/forgero/blob/1.19/LICENSE) for more
 information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- CONTACT -->
@@ -195,8 +160,6 @@ Sigmund Granaas Sandring:
 
 - [GitHub](https://github.com/SigmundGranaas)
 - [Discord](https://discord.gg/3vK7ZwEDex)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- ACKNOWLEDGMENTS -->
@@ -213,11 +176,11 @@ Creating this project could not have been done without the prior work of the com
 * [Smithee](https://github.com/LordDeatHunter/Smithee)
 * [Readme template](ttps://github.com/othneildrew/Best-README-Template/)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[product-screenshot]: assets/Banner.png
 
 [contributors-shield]: https://img.shields.io/github/contributors/sigmundgranaas/forgero.svg?style=for-the-badge
 
@@ -243,4 +206,6 @@ Creating this project could not have been done without the prior work of the com
 
 [linkedin-url]: https://linkedin.com/in/sigmundgranaas
 
-[product-screenshot]: assets/Banner.png
+[discord-shield]: https://img.shields.io/discord/981828752029925408?label=chat%20on%20Discord&logo=Discord&style=for-the-badge
+
+[discord-url]: https://discord.gg/3vK7ZwEDex
