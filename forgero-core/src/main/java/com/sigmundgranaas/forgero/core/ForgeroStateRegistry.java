@@ -11,12 +11,15 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 
+import javax.annotation.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ForgeroStateRegistry {
+	@Nullable
 	public static StateCollection STATES;
 	public static List<StateProvider> CREATE_STATES;
 	public static Map<String, String> STATE_TO_CONTAINER;
@@ -30,7 +33,7 @@ public class ForgeroStateRegistry {
 	public static StateFinder stateFinder() {
 		return (String id) ->
 		{
-			if (isState().apply(id)) {
+			if (isState().apply(id) && STATES != null) {
 				return STATES.find(id).map(Supplier::get);
 			} else {
 				return Optional.empty();
@@ -39,7 +42,7 @@ public class ForgeroStateRegistry {
 	}
 
 	public static Function<String, Boolean> isState() {
-		return (id) -> STATES.contains(id) || CONTAINER_TO_STATE.containsKey(id);
+		return (id) -> (STATES != null && STATES.contains(id)) || CONTAINER_TO_STATE.containsKey(id);
 	}
 
 	public static ResourceListener<Map<String, State>> stateListener() {
