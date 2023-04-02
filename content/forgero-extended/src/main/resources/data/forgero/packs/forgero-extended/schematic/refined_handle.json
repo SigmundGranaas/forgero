@@ -1,6 +1,6 @@
 {
   "type": "HANDLE_SCHEMATIC",
-  "name": "reinforced_handle-schematic",
+  "name": "refined_handle-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"

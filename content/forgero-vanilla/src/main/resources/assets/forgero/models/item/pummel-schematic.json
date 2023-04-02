@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "forgero:item/pummel_schematic"
+    "layer0": "forgero:item/pommel_schematic_base"
   }
 }
