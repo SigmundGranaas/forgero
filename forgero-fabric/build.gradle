@@ -36,10 +36,10 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modApi "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation("net.devtech:arrp:0.6.2")
+    modImplementation("maven.modrinth:arrp:0.6.4")
 
 
-    include "net.devtech:arrp:0.6.2"
+    include "maven.modrinth:arrp:0.6.4"
     include project(':forgero-core')
     include project(':minecraft-common')
 }
