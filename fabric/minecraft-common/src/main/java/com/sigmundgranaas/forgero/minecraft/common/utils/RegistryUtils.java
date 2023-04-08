@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.utils;
 
 import java.util.Optional;
 
+import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -37,5 +38,9 @@ public class RegistryUtils {
 		} catch (Exception e) {
 			return Optional.empty();
 		}
+	}
+	
+	public static Identifier convert(Item item) {
+		return Registry.ITEM.getId(item);
 	}
 }

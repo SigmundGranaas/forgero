@@ -1,13 +1,16 @@
 package com.sigmundgranaas.forgero.fabric;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.core.texture.V2.Texture.imageToStream;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -30,6 +33,7 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.LootEntryData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
 import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
@@ -44,6 +48,11 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.dynamic.DynamicPackManager;
+import com.sigmundgranaas.forgero.minecraft.common.dynamic.pack.DynamicServerPack;
+import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data.Ingredient;
+import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data.Result;
+import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data.ShapelessRecipe;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.item.Attributes;
@@ -121,6 +130,23 @@ public class ForgeroInitializer implements ModInitializer {
 		dataReloader();
 		lootConditionReloader();
 		lootInjectionReloader();
+
+		var dynamicPack = DynamicPackManager.createAssetPack("dynamic_assets");
+
+		var dynamicImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		dynamicImage.setRGB(8, 8, new RgbColour(12, 3, 4).getRgb());
+
+		var resource = new Resource("dynamic", () -> imageToStream(dynamicImage));
+		dynamicPack.addResource(new Identifier("forgero:textures/item/oak-handle.png"), () -> resource);
+
+		DynamicServerPack dynamicServerPack = DynamicPackManager.createDataPack("dynamic_data");
+
+		var recipe = ShapelessRecipe.defaultedBuilder()
+				.result(Result.of("minecraft:diamond"))
+				.ingredients(List.of(Ingredient.item("minecraft:oak_planks"), Ingredient.item("minecraft:diamond")))
+				.build();
+
+		dynamicServerPack.addRecipe(new Identifier("forgero:recipes/magic_recipe.json"), recipe);
 	}
 
 	private void registerLevelPropertiesDefaults() {

@@ -22,9 +22,11 @@
     "PlayerCritChanceMixin",
     "PlayerEntityAttackMixin",
     "PlayerServerInteractionManagerMixin",
-    "RecipeManagerMixin"
+    "RecipeManagerMixin",
+    "ResourcePackManagerMixin"
   ],
   "client": [
+    "ClientBuiltinResourcePackMixin",
     "ClientPlayNetworkGetTotemMixin",
     "ItemDescriptionInjector",
     "ItemModelGeneratorMixin",
