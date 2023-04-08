@@ -47,4 +47,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean hideRarity = true;
+
+	@NotNull
+	public Boolean exportGeneratedTextures = false;
 }

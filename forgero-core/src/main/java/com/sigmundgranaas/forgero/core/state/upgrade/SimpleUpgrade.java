@@ -1,13 +1,15 @@
 package com.sigmundgranaas.forgero.core.state.upgrade;
 
+import java.util.List;
+
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.state.Upgrade;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class SimpleUpgrade implements Upgrade {
 	private final String name;
@@ -45,5 +47,10 @@ public class SimpleUpgrade implements Upgrade {
 	@Override
 	public Type type() {
 		return type;
+	}
+
+	@Override
+	public DataContainer customData(Target target) {
+		return DataContainer.empty();
 	}
 }

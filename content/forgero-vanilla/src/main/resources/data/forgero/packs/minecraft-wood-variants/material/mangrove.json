@@ -1,0 +1,57 @@
+{
+  "type": "WOOD",
+  "name": "mangrove",
+  "parent": "wood",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:mangrove_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 10
+      },
+      {
+        "id": "wood-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.3
+      },
+      {
+        "id": "wood-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 60.0
+      },
+      {
+        "id": "wood-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.8
+      },
+      {
+        "id": "wood-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.1,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "mangrove"
+  }
+}

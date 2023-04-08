@@ -1,9 +1,27 @@
-# Forgero Beta release 0.10.7
+# Forgero Beta release 0.10.8
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
+
+## Changelog 0.10.8
+
+* Rebalanced materials
+* Added weight attribute
+* Added new patchouli entry for available features
+* Added stick as a simple handle
+* Migrated the loot injection system to a new data-first format
+* Fixed tag converter overriding the wrong tags
+* Added option to see rarity in tooltip
+* Give patchouli book when first item obtained in game
+* Renamed reinforced handle to refined handle
+* Fixed translation issues
+* Fixed pattern and vein mining not working correctly
+* Added column mining
+* Made assembly table drop the placed tool/part in you exit the station
+* Added repair recipe for wooden as stone tools
+* Fixed a bug where upgrade models could not reference their parent's model
 
 ## Changelog 0.10.7
 
