@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.DynamicResource;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resource.Resource;
@@ -50,6 +51,10 @@ public class DynamicResourcePack implements ResourcePack {
 			Forgero.LOGGER.warn("Overriding  dynamic resource {} in {}", id, getName());
 		}
 		resources.put(id, resourceSupplier);
+	}
+
+	public void add(DynamicResource res) {
+		addResource(res.identifier(), res::resource);
 	}
 
 	@Override
