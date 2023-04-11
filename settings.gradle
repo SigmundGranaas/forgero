@@ -12,18 +12,22 @@ pluginManagement {
 }
 
 rootProject.name = 'forgero'
-//Core
+// Core
 include 'forgero-core'
 
-//Content
+// Content
 include 'content'
 include 'content:forgero-extended'
 include 'content:forgero-vanilla'
 include 'content:forgero-compat'
 include 'content:forgero-structures'
 
-//Fabric
+// Fabric
 include 'forgero-fabric'
 include 'fabric:forgero-fabric-core'
 include 'fabric:forgero-fabric-compat'
 include 'fabric:minecraft-common'
+
+// Libraries
+include 'fabric:dynamic-resource-pack'
+

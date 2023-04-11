@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.dynamic.resource;
+package com.sigmundgranaas.drp.impl.resource;
 
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;

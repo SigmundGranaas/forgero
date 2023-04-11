@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.dynamic.pack;
+package com.sigmundgranaas.drp.impl.pack;
 
 import static net.minecraft.resource.VanillaDataPackProvider.DEFAULT_PACK_METADATA;
 
@@ -15,8 +15,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.DynamicResource;
+import com.sigmundgranaas.drp.impl.resource.DynamicResource;
+import com.sigmundgranaas.drp.utils.Utils;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resource.Resource;
@@ -48,7 +48,7 @@ public class DynamicResourcePack implements ResourcePack {
 
 	public void addResource(Identifier id, Supplier<Resource> resourceSupplier) {
 		if (resources.containsKey(id)) {
-			Forgero.LOGGER.warn("Overriding  dynamic resource {} in {}", id, getName());
+			Utils.LOGGER.warn("Overriding  dynamic resource {} in {}", id, getName());
 		}
 		resources.put(id, resourceSupplier);
 	}

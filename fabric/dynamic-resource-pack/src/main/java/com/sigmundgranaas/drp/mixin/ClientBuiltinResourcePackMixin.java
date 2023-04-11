@@ -1,8 +1,8 @@
-package com.sigmundgranaas.forgero.fabric.mixins;
+package com.sigmundgranaas.drp.mixin;
 
 import java.util.function.Consumer;
 
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.DynamicPackManager;
+import com.sigmundgranaas.drp.api.DynamicPackManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

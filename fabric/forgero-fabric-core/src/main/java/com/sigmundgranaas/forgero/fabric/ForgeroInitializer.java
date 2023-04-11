@@ -18,6 +18,11 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.sigmundgranaas.drp.api.DynamicPackManager;
+import com.sigmundgranaas.drp.impl.pack.DynamicServerPack;
+import com.sigmundgranaas.drp.impl.resource.data.Ingredient;
+import com.sigmundgranaas.drp.impl.resource.data.Result;
+import com.sigmundgranaas.drp.impl.resource.data.ShapelessRecipe;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
@@ -48,11 +53,6 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.DynamicPackManager;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.pack.DynamicServerPack;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data.Ingredient;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data.Result;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data.ShapelessRecipe;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.item.Attributes;
@@ -82,8 +82,6 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 
 
 public class ForgeroInitializer implements ModInitializer {
-
-
 	public static final String MOD_NAMESPACE = "forgero";
 	public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
 

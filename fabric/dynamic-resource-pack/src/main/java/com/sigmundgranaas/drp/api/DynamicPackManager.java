@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.dynamic;
+package com.sigmundgranaas.drp.api;
 
 
 import java.util.HashMap;
@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.pack.DynamicClientPack;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.pack.DynamicServerPack;
+import com.sigmundgranaas.drp.impl.pack.DynamicClientPack;
+import com.sigmundgranaas.drp.impl.pack.DynamicServerPack;
+import com.sigmundgranaas.drp.utils.Utils;
 
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourcePackProfile;
@@ -29,7 +29,7 @@ public class DynamicPackManager {
 	private static void registerPack(String name, ResourcePack pack, ResourceType type, ResourcePackProfile.InsertionPosition position) {
 		var info = new PackInfo(type, pack, position);
 		if (packMap.containsKey(name)) {
-			Forgero.LOGGER.warn("Overriding previously registered pack with name: {}, you are very likely trying to register another pack with the same name", name);
+			Utils.LOGGER.warn("Overriding previously registered pack with name: {}, you are very likely trying to register another pack with the same name", name);
 		}
 		packMap.put(name, info);
 	}

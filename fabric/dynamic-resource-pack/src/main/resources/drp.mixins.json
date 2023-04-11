@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.drp.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ResourcePackManagerMixin"
+  ],
+  "client": [
+    "ClientBuiltinResourcePackMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

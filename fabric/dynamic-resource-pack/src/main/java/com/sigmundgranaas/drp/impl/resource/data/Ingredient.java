@@ -1,7 +1,7 @@
-package com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data;
+package com.sigmundgranaas.drp.impl.resource.data;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.JsonData;
+import com.sigmundgranaas.drp.impl.resource.JsonData;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

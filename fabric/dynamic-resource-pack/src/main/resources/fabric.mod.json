@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "dynamic_resource_pack",
+  "version": "${version}",
+  "name": "Dynamic Resource Packs",
+  "description": "Library to create and manage dynamic resource packs",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/drp/icon.png",
+  "environment": "*",
+  "entrypoints": {
+  },
+  "mixins": [
+    "drp.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.19.x",
+    "java": ">=17"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ]
+    }
+  }
+}

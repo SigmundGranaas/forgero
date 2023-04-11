@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.mixins;
+package com.sigmundgranaas.drp.mixin;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.DynamicPackManager;
+import com.sigmundgranaas.drp.api.DynamicPackManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -34,7 +34,6 @@ public class ResourcePackManagerMixin {
 
 		List<ResourcePackProfile> packs = new ArrayList<>();
 		DynamicPackManager.registerDynamicPacks(packs::add, ResourceType.SERVER_DATA);
-		DynamicPackManager.registerDynamicPacks(packs::add, ResourceType.CLIENT_RESOURCES);
 
 		Function<ResourcePackProfile, ResourcePackProvider> packProvider = (ResourcePackProfile profile) -> (Consumer<ResourcePackProfile> consumer, ResourcePackProfile.Factory factory) -> consumer.accept(profile);
 		packs.forEach(pack -> providers.add(packProvider.apply(pack)));

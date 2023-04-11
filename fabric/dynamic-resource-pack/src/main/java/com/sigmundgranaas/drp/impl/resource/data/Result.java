@@ -1,13 +1,13 @@
-package com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.data;
+package com.sigmundgranaas.drp.impl.resource.data;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.minecraft.common.dynamic.resource.JsonData;
-import com.sigmundgranaas.forgero.minecraft.common.utils.RegistryUtils;
+import com.sigmundgranaas.drp.impl.resource.JsonData;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 @Data
 @Accessors(fluent = true)
@@ -20,7 +20,7 @@ public class Result implements JsonData {
 	}
 
 	public static Result of(Item item) {
-		return of(RegistryUtils.convert(item));
+		return of(Registry.ITEM.getId(item));
 	}
 
 	public static Result of(String item) {

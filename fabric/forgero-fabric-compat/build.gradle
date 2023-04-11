@@ -33,6 +33,8 @@ dependencies {
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	implementation project(path: ':fabric:dynamic-resource-pack', configuration: 'namedElements')
+
 
 	modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.dynamic.resource;
+package com.sigmundgranaas.drp.impl.resource;
 
 import java.io.InputStream;
 

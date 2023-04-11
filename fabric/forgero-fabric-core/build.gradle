@@ -1,6 +1,7 @@
 dependencies {
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	implementation project(path: ':fabric:dynamic-resource-pack', configuration: 'namedElements')
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
