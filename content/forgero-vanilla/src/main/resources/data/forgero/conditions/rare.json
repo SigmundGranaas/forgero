@@ -1,0 +1,27 @@
+{
+  "id": "forgero:rare",
+  "priority": 3,
+  "target": {
+    "types": [
+      "PART",
+      "MATERIAL",
+      "TOOL",
+      "WEAPON"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.04,
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "END",
+        "operation": "ADDITION",
+        "value": 30
+      }
+    ],
+    "features": []
+  }
+}

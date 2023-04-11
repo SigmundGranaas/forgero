@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 public record DefaultPackage(List<String> dependencies, int priority,
                              Supplier<List<DataResource>> data,
                              String nameSpace, String name) implements DataPackage {
-    @Override
-    public List<DataResource> loadData() {
-        return data.get();
-    }
+	@Override
+	public List<DataResource> loadData() {
+		return data.get();
+	}
 }

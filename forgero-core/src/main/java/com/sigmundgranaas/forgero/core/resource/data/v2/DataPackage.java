@@ -9,17 +9,17 @@ import java.util.Collections;
 import java.util.List;
 
 public interface DataPackage extends Identifiable {
-    static DataPackage of(List<DataResource> data) {
-        return new DefaultPackage(Collections.emptyList(), 6, () -> data, Identifiers.EMPTY_IDENTIFIER, Identifiers.EMPTY_IDENTIFIER);
-    }
+	static DataPackage of(List<DataResource> data) {
+		return new DefaultPackage(Collections.emptyList(), 6, () -> data, Identifiers.EMPTY_IDENTIFIER, Identifiers.EMPTY_IDENTIFIER);
+	}
 
-    static DataPackage of(DataResource data) {
-        return new DefaultPackage(data.dependencies(), 6, () -> List.of(data), data.nameSpace(), data.name());
-    }
+	static DataPackage of(DataResource data) {
+		return new DefaultPackage(data.dependencies(), 6, () -> List.of(data), data.nameSpace(), data.name());
+	}
 
-    int priority();
+	int priority();
 
-    List<String> dependencies();
+	List<String> dependencies();
 
-    List<DataResource> loadData();
+	List<DataResource> loadData();
 }

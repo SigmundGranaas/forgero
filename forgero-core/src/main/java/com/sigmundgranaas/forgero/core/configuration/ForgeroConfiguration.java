@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
@@ -16,7 +16,19 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Boolean disableVanillaRecipes = false;
 
 	@NotNull
+	public Boolean disableVanillaLoot = false;
+
+	@NotNull
+	public Boolean disableVanillaTools = false;
+
+	@NotNull
 	public Boolean convertVanillaRecipesToForgeroTools = false;
+
+	@NotNull
+	public Boolean convertVanillaToolLoot = false;
+
+	@NotNull
+	public Boolean enableUnbreakableTools = false;
 
 	@NotNull
 	public Boolean enableRepairKits = true;
@@ -26,4 +38,16 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean logDisabledPackages = false;
+
+	@NotNull
+	public Integer baseSoulLevelRequirement = 1000;
+
+	@NotNull
+	public Boolean useEntityAttributes = true;
+
+	@NotNull
+	public Boolean hideRarity = true;
+
+	@NotNull
+	public Boolean exportGeneratedTextures = false;
 }

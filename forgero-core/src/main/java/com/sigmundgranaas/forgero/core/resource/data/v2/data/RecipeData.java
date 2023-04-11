@@ -11,21 +11,21 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord")
 @Builder(toBuilder = true)
 public class RecipeData {
-    private final List<IngredientData> ingredients;
-    @SerializedName("crafting_type")
-    private final String craftingType;
+	private final List<IngredientData> ingredients;
+	@SerializedName("crafting_type")
+	private final String craftingType;
 
-    private String target;
+	private String target;
 
-    public List<IngredientData> ingredients() {
-        return Objects.requireNonNullElse(ingredients, Collections.emptyList());
-    }
+	public List<IngredientData> ingredients() {
+		return Objects.requireNonNullElse(ingredients, Collections.emptyList());
+	}
 
-    public String type() {
-        return Objects.requireNonNullElse(craftingType, Identifiers.EMPTY_IDENTIFIER);
-    }
+	public String type() {
+		return Objects.requireNonNullElse(craftingType, Identifiers.EMPTY_IDENTIFIER);
+	}
 
-    public String target() {
-        return Objects.requireNonNullElse(target, Identifiers.EMPTY_IDENTIFIER);
-    }
+	public String target() {
+		return Objects.requireNonNullElse(target, Identifiers.EMPTY_IDENTIFIER);
+	}
 }

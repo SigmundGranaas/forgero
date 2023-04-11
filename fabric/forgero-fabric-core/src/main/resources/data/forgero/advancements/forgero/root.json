@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+      "item": "forgero:diamond-pickaxe"
+    },
+    "title": {
+      "translate": "advancements.forgero.root.title"
+    },
+    "description": {
+      "translate": "advancements.forgero.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "default": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {}
+    }
+  },
+  "rewards": {
+    "loot": [
+      "forgero:grant_book_on_advancement"
+    ]
+  },
+  "requirements": [
+    [
+      "default"
+    ]
+  ]
+}

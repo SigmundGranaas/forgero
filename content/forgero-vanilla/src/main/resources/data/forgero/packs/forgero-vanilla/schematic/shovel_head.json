@@ -1,0 +1,96 @@
+{
+  "type": "SHOVEL_HEAD_SCHEMATIC",
+  "name": "shovel_head-schematic",
+  "parent": "shovel_head_base",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SHOVEL_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.0
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -2.7
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.1
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 1,
+      "context": "LOCAL"
+    }
+  }
+}

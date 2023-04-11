@@ -1,16 +1,28 @@
 package com.sigmundgranaas.forgero.core.soul;
 
-public record SoulSource(String id) {
+import com.sigmundgranaas.forgero.core.state.Identifiable;
 
-    public String name() {
-        if (id == null) {
-            return "zombie";
-        }
-        var elements = id.split(":");
-        if (elements.length > 1) {
-            return elements[1];
-        }
+public record SoulSource(String id, String name) implements Identifiable {
 
-        return id;
-    }
+
+	public String name() {
+		if (name == null) {
+			return "zombie";
+		}
+		return name;
+	}
+
+	@Override
+	public String nameSpace() {
+		var elements = id.split(":");
+		if (elements.length > 1) {
+			return elements[0];
+		}
+		return id;
+	}
+
+	@Override
+	public String identifier() {
+		return id;
+	}
 }

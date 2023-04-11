@@ -10,13 +10,13 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ResourceRegistry<T> {
-    static ResourceRegistry<State> of(Map<String, State> map, TypeTree tree) {
-        return new BasicResourceRegistry(map, tree);
-    }
+	static ResourceRegistry<State> of(Map<String, State> map, TypeTree tree) {
+		return new BasicResourceRegistry(map, tree);
+	}
 
-    Optional<T> get(String id);
+	Optional<T> get(String id);
 
-    ImmutableList<T> get(Type type);
+	ImmutableList<T> get(Type type);
 
-    ImmutableList<T> all();
+	ImmutableList<T> all();
 }
