@@ -23,6 +23,7 @@ public class EnderTeleportationEntity extends ThrownEntity {
 	private LivingEntity owner;
 	private int lifeTicks;
 	private Vec3d targetPosition = new Vec3d(0f, 0f, 0f);
+	private double prevPosX, prevPosY, prevPosZ;
 
 	public EnderTeleportationEntity(EntityType<? extends ThrownEntity> entityType, World world) {
 		super(entityType, world);
@@ -77,12 +78,19 @@ public class EnderTeleportationEntity extends ThrownEntity {
 
 	}
 
-	private void spawnTeleportationParticles() {
-		double d = this.getX();
-		double e = this.getY();
-		double f = this.getZ();
-		for (int i = 0; i < 20; ++i) {
-			this.world.addParticle(ParticleTypes.PORTAL, d, e, f, this.random.nextGaussian() / 5, this.random.nextGaussian() / 5, this.random.nextGaussian() / 5);
+	public void spawnTeleportationParticles() {
+		double currentPosX = getX();
+		double currentPosY = getY();
+		double currentPosZ = getZ();
+
+		int particleCount = 10;
+		for (int i = 0; i < particleCount; i++) {
+			double interpolationFactor = (double) i / (particleCount - 1);
+			double posX = prevPosX + (currentPosX - prevPosX) * interpolationFactor;
+			double posY = prevPosY + (currentPosY - prevPosY) * interpolationFactor;
+			double posZ = prevPosZ + (currentPosZ - prevPosZ) * interpolationFactor;
+
+			world.addParticle(ParticleTypes.PORTAL, posX, posY, posZ, this.random.nextGaussian() / 5, this.random.nextGaussian() / 5, this.random.nextGaussian() / 5);
 		}
 	}
 
@@ -99,10 +107,13 @@ public class EnderTeleportationEntity extends ThrownEntity {
 
 	@Override
 	public void tick() {
+		prevPosX = getX();
+		prevPosY = getY();
+		prevPosZ = getZ();
 		super.tick();
 		if (this.owner != null) {
-			spawnTeleportationParticles();
-			// Update blink projectile position and direction
+
+
 			targetPosition = calculateTargetPosition();
 
 			// Smoothly move the entity towards the target position
@@ -126,14 +137,12 @@ public class EnderTeleportationEntity extends ThrownEntity {
 				// Remove the blink projectile entity after teleporting
 				this.remove(RemovalReason.KILLED);
 			}
-
-			// Limit the blink projectile
-			// Limit the blink projectile's life
 		}
 
 		if (this.lifeTicks > 1000) {
 			this.remove(RemovalReason.DISCARDED);
 		}
+		spawnTeleportationParticles();
 	}
 
 	public Vec3d calculateTargetPosition() {
