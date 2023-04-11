@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.identifier.texture;
 
 public interface TextureIdentifier {
-    String GENERATED_IDENTIFIER = "generated_";
+	String GENERATED_IDENTIFIER = "generated_";
 
-    String getFileNameWithExtension();
+	String getFileNameWithExtension();
 
-    String getFileNameWithoutExtension();
+	String getFileNameWithoutExtension();
 
-    String getIdentifier();
+	String getIdentifier();
 }

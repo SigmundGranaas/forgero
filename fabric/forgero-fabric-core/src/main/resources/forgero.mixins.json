@@ -1,0 +1,40 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.fabric.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractBlockMixin",
+    "AbstractFurnaceWoodPartsFuelMixin",
+    "DisableVanillaToolsLootTableGeneration",
+    "DynamicToolItemStackMixin",
+    "ItemEntityMagneticMixin",
+    "ItemSchematicRemainderMixin",
+    "ItemStackAttributeDescriptionMixin",
+    "ItemStackDropGemOnBreakMixin",
+    "ItemStackUnbreakableMixin",
+    "LivingEntityMagneticMixin",
+    "LivingEntityMixin",
+    "LivingEntityReapingMixin",
+    "LivingEntityUndyingMixin",
+    "MiningToolItemMixin",
+    "PiglinBrainMixin",
+    "PlayerCritChanceMixin",
+    "PlayerEntityAttackMixin",
+    "PlayerServerInteractionManagerMixin",
+    "RecipeManagerMixin"
+  ],
+  "client": [
+    "ClientPlayNetworkGetTotemMixin",
+    "ItemDescriptionInjector",
+    "ItemModelGeneratorMixin",
+    "ItemRenderContextMixin",
+    "ItemRenderMixin",
+    "LifecycleResourceManagerImplMixin",
+    "PlayerInteractionManagerMixin",
+    "WorldRenderBlockBreakingMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

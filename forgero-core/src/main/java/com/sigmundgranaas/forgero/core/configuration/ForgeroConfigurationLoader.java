@@ -18,7 +18,7 @@ public class ForgeroConfigurationLoader {
 	public static String configurationFolderName = "config";
 	public static Path configurationFilePath = Path.of(MessageFormat.format("./{0}/{1}", configurationFolderName, configurationFileName));
 
-	public static ForgeroConfiguration configuration;
+	public static ForgeroConfiguration configuration = defaultConfiguration;
 
 	public static ForgeroConfiguration load() {
 		if (!Files.exists(configurationFilePath)) {
@@ -29,7 +29,7 @@ public class ForgeroConfigurationLoader {
 		try (InputStream stream = Files.newInputStream(configurationFilePath)) {
 			var gson = createGson();
 			configuration = gson.fromJson(new JsonReader(new BufferedReader(new InputStreamReader(stream))), ForgeroConfiguration.class);
-
+			save();
 			if (configuration.resourceLogging) {
 				Forgero.LOGGER.info("Loaded Forgero configuration, located at: {}", configurationFilePath);
 			}
@@ -56,7 +56,8 @@ public class ForgeroConfigurationLoader {
 		}
 	}
 
-	private static @NotNull Gson createGson() {
+	private static @NotNull
+	Gson createGson() {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		return gsonBuilder.setPrettyPrinting().create();
 	}

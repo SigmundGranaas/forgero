@@ -6,5 +6,5 @@ import java.util.Map;
 
 @FunctionalInterface
 public interface ResourceListener<T> {
-    void listen(T resources, TypeTree tree, Map<String, String> idMapper);
+	void listen(T resources, TypeTree tree, Map<String, String> idMapper);
 }

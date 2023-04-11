@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.core.property.Property;
 public interface PassiveProperty extends Property {
 
 
-    PassivePropertyType getPassiveType();
+	PassivePropertyType getPassiveType();
 
-    default boolean isToggleable() {
-        return false;
-    }
+	default boolean isToggleable() {
+		return false;
+	}
 }

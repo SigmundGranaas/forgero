@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import java.util.Optional;
 
 public interface ModelTemplate {
-    int order();
+	int order();
 
-    Optional<Offset> getOffset();
+	Optional<Offset> getOffset();
 
-    <T> T convert(Converter<T, ModelTemplate> converter);
+	<T> T convert(Converter<T, ModelTemplate> converter);
 }

@@ -8,14 +8,14 @@ import java.util.Collections;
 
 public class ResourceRegistryTest {
 
-    @Test
-    void testGetPickaxe() {
-        var registry = ResourceRegistry.of(Collections.emptyMap(), new TypeTree());
-        registry.get("test");
-    }
+	@Test
+	void testGetPickaxe() {
+		var registry = ResourceRegistry.of(Collections.emptyMap(), new TypeTree());
+		registry.get("test");
+	}
 
-    @Test
-    void testGetPickaxeType() {
+	@Test
+	void testGetPickaxeType() {
 
-    }
+	}
 }
