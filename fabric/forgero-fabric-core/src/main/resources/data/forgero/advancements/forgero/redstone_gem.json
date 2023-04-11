@@ -1,0 +1,37 @@
+{
+  "parent": "forgero:forgero/gem",
+  "display": {
+    "icon": {
+      "item": "forgero:redstone-gem"
+    },
+    "title": {
+      "translate": "advancements.forgero.redstone-gem.title"
+    },
+    "description": {
+      "translate": "advancements.forgero.redstone-gem.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "default": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:redstone-gem"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "default"
+    ]
+  ]
+}

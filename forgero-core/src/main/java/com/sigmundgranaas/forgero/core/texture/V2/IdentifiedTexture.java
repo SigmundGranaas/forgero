@@ -8,33 +8,33 @@ import java.io.InputStream;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class IdentifiedTexture implements Identifiable, Texture {
-    private final String name;
-    private final String nameSpace;
-    private final BufferedImage image;
+	private final String name;
+	private final String nameSpace;
+	private final BufferedImage image;
 
-    public IdentifiedTexture(String name, String nameSpace, BufferedImage image) {
-        this.name = name;
-        this.nameSpace = nameSpace;
-        this.image = image;
-    }
+	public IdentifiedTexture(String name, String nameSpace, BufferedImage image) {
+		this.name = name;
+		this.nameSpace = nameSpace;
+		this.image = image;
+	}
 
-    @Override
-    public String name() {
-        return name;
-    }
+	@Override
+	public String name() {
+		return name;
+	}
 
-    @Override
-    public String nameSpace() {
-        return nameSpace;
-    }
+	@Override
+	public String nameSpace() {
+		return nameSpace;
+	}
 
-    @Override
-    public InputStream getStream() throws IOException {
-        return Texture.imageToStream(image);
-    }
+	@Override
+	public InputStream getStream() throws IOException {
+		return Texture.imageToStream(image);
+	}
 
-    @Override
-    public BufferedImage getImage() {
-        return image;
-    }
+	@Override
+	public BufferedImage getImage() {
+		return image;
+	}
 }

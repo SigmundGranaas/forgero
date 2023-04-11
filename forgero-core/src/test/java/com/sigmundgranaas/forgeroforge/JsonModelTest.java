@@ -13,20 +13,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class JsonModelTest {
-    static Function<String, ModelData> JSON_MODEL = (String json) -> JsonPOJOLoader.loadPOJO(JSON_TEST_PATH + json, ModelData.class).orElseThrow();
+	static Function<String, ModelData> JSON_MODEL = (String json) -> JsonPOJOLoader.loadPOJO(JSON_TEST_PATH + json, ModelData.class).orElseThrow();
 
-    @Test
-    void testLoadJsonConstruct() {
-        ModelData model = JSON_MODEL.apply("model.json");
-        assertNotNull(model);
-    }
+	@Test
+	void testLoadJsonConstruct() {
+		ModelData model = JSON_MODEL.apply("model.json");
+		assertNotNull(model);
+	}
 
-    @Test
-    void testModelValues() {
-        ModelData model = JSON_MODEL.apply("model.json");
-        assertNotNull(model.getModelType());
-        assertNotNull(model.getVariants());
-        assertTrue(model.getVariants().size() > 0);
-        model.getVariants().forEach(Assertions::assertNotNull);
-    }
+	@Test
+	void testModelValues() {
+		ModelData model = JSON_MODEL.apply("model.json");
+		assertNotNull(model.getModelType());
+		assertNotNull(model.getVariants());
+		assertTrue(model.getVariants().size() > 0);
+		model.getVariants().forEach(Assertions::assertNotNull);
+	}
 }

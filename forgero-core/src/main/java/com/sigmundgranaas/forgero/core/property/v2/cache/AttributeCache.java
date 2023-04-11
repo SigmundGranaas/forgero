@@ -12,29 +12,30 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.Callable;
 
 public class AttributeCache {
-    public static final LoadingCache<PropertyTargetCacheKey, Attribute> attributeCache = CacheBuilder.newBuilder()
-            .maximumSize(600)
-            .expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
-            .build(new CacheLoader<>() {
-                @Override
-                public @NotNull Attribute load(@NotNull PropertyTargetCacheKey stack) {
-                    return new FloatBasedAttribute(1f, "UNDEFINED");
-                }
-            });
+	public static final LoadingCache<PropertyTargetCacheKey, Attribute> attributeCache = CacheBuilder.newBuilder()
+			.maximumSize(600)
+			.expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
+			.build(new CacheLoader<>() {
+				@Override
+				public @NotNull
+				Attribute load(@NotNull PropertyTargetCacheKey stack) {
+					return new FloatBasedAttribute(1f, "UNDEFINED");
+				}
+			});
 
-    public static Attribute computeIfAbsent(ContainerTargetPair pair, Callable<Attribute> compute, String key) {
-        try {
-            return attributeCache.get(new PropertyTargetCacheKey(pair, key), compute);
-        } catch (Exception e) {
-            return new FloatBasedAttribute(1f, "UNDEFINED");
-        }
-    }
+	public static Attribute computeIfAbsent(ContainerTargetPair pair, Callable<Attribute> compute, String key) {
+		try {
+			return attributeCache.get(new PropertyTargetCacheKey(pair, key), compute);
+		} catch (Exception e) {
+			return new FloatBasedAttribute(1f, "UNDEFINED");
+		}
+	}
 
-    public static Attribute computeIfAbsent(PropertyTargetCacheKey key, Callable<Attribute> compute) {
-        try {
-            return attributeCache.get(key, compute);
-        } catch (Exception e) {
-            return new FloatBasedAttribute(1f, "UNDEFINED");
-        }
-    }
+	public static Attribute computeIfAbsent(PropertyTargetCacheKey key, Callable<Attribute> compute) {
+		try {
+			return attributeCache.get(key, compute);
+		} catch (Exception e) {
+			return new FloatBasedAttribute(1f, "UNDEFINED");
+		}
+	}
 }

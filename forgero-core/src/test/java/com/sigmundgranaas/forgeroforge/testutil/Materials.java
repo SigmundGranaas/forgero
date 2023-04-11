@@ -9,6 +9,6 @@ import static com.sigmundgranaas.forgeroforge.testutil.Properties.ATTACK_DAMAGE_
 
 
 public class Materials {
-    public static State OAK = Ingredient.of("oak", Types.WOOD, List.of(ATTACK_DAMAGE_1));
-    public static State IRON = Ingredient.of("iron", Types.METAL, List.of(Properties.ATTACK_DAMAGE_10));
+	public static State OAK = Ingredient.of("oak", Types.WOOD, List.of(ATTACK_DAMAGE_1));
+	public static State IRON = Ingredient.of("iron", Types.METAL, List.of(Properties.ATTACK_DAMAGE_10));
 }

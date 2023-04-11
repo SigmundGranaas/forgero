@@ -8,10 +8,10 @@ import static com.sigmundgranaas.forgero.core.resource.data.Constant.CORE_PATH;
 
 public class DataPackageSupplierTest {
 
-    @Test
-    void testLoadDataPackage() {
-        var dataPackage = new FilePackageLoader(CORE_PATH + "minecraft-vanilla").get();
-        Assertions.assertEquals("minecraft-vanilla", dataPackage.name());
-        Assertions.assertEquals("minecraft", dataPackage.nameSpace());
-    }
+	@Test
+	void testLoadDataPackage() {
+		var dataPackage = new FilePackageLoader(CORE_PATH + "minecraft-vanilla").get();
+		Assertions.assertEquals("minecraft-vanilla", dataPackage.name());
+		Assertions.assertEquals("minecraft", dataPackage.nameSpace());
+	}
 }
