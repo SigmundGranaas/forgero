@@ -4,5 +4,5 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface OptionalMapper<T, R> {
-    Optional<T> map(R res);
+	Optional<T> map(R res);
 }

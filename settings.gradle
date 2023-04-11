@@ -1,14 +1,29 @@
 pluginManagement {
-    repositories {
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        gradlePluginPortal()
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-    }
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		maven { url "https://maven.architectury.dev/" }
+		maven { url "https://files.minecraftforge.net/maven/" }
+		mavenCentral()
+		gradlePluginPortal()
+	}
 }
 
 rootProject.name = 'forgero'
-include 'forgero-fabric', 'forgero-extended', 'forgero-vanilla', 'forgero-core', 'forgero-fabric-compat', 'forgero-compat', 'forgero-structures', 'minecraft-common', 'forgero-forge', 'forgero-creatures'
+//Core
+include 'forgero-core'
+
+//Content
+include 'content'
+include 'content:forgero-extended'
+include 'content:forgero-vanilla'
+include 'content:forgero-compat'
+include 'content:forgero-structures'
+
+//Fabric
+include 'forgero-fabric'
+include 'fabric:forgero-fabric-core'
+include 'fabric:forgero-fabric-compat'
+include 'fabric:minecraft-common'

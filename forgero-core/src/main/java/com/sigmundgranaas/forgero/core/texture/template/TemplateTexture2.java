@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.texture.Texture;
 import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,45 +15,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TemplateTexture2 implements Texture {
-    private final List<PixelInformation> pixelValues;
-    private final List<RgbColour> greyScaleValues;
-    private final TemplateIdentifier id;
+	private final List<PixelInformation> pixelValues;
+	private final List<RgbColour> greyScaleValues;
+	private final TemplateIdentifier id;
 
-    public TemplateTexture2(ArrayList<PixelInformation> pixelValues, List<RgbColour> greyScaleValues, TemplateIdentifier id) {
-        this.pixelValues = pixelValues;
-        this.greyScaleValues = greyScaleValues;
-        this.id = id;
-    }
+	public TemplateTexture2(ArrayList<PixelInformation> pixelValues, List<RgbColour> greyScaleValues, TemplateIdentifier id) {
+		this.pixelValues = pixelValues;
+		this.greyScaleValues = greyScaleValues;
+		this.id = id;
+	}
 
 
-    public List<RgbColour> getGreyScaleValues() {
-        return greyScaleValues;
-    }
+	public List<RgbColour> getGreyScaleValues() {
+		return greyScaleValues;
+	}
 
-    public List<PixelInformation> getPixelValues() {
-        return pixelValues;
-    }
+	public List<PixelInformation> getPixelValues() {
+		return pixelValues;
+	}
 
-    @Override
-    public InputStream getStream() throws IOException {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(getImage(), "png", os);
-        InputStream is = new ByteArrayInputStream(os.toByteArray());
-        os.close();
-        return is;
-    }
+	@Override
+	public InputStream getStream() throws IOException {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		ImageIO.write(getImage(), "png", os);
+		InputStream is = new ByteArrayInputStream(os.toByteArray());
+		os.close();
+		return is;
+	}
 
-    @Override
-    public TemplateIdentifier getId() {
-        return id;
-    }
+	@Override
+	public TemplateIdentifier getId() {
+		return id;
+	}
 
-    @Override
-    public BufferedImage getImage() {
-        BufferedImage paletteImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-        for (PixelInformation pixel : pixelValues) {
-            paletteImage.setRGB(pixel.getLengthIndex(), pixel.getHeightIndex(), pixel.getRgbColor().getRgb());
-        }
-        return paletteImage;
-    }
+	@Override
+	public BufferedImage getImage() {
+		BufferedImage paletteImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+		for (PixelInformation pixel : pixelValues) {
+			paletteImage.setRGB(pixel.getLengthIndex(), pixel.getHeightIndex(), pixel.getRgbColor().getRgb());
+		}
+		return paletteImage;
+	}
 }

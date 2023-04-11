@@ -1,0 +1,77 @@
+dependencies {
+	implementation project(':forgero-core')
+	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modImplementation "curse.maven:arrp-463113:3901211"
+	include "curse.maven:arrp-463113:3901211"
+}
+
+sourceSets {
+	test {
+		compileClasspath += test.compileClasspath
+		runtimeClasspath += test.runtimeClasspath
+	}
+}
+
+loom {
+	runs {
+		runClient {
+			client()
+			ideConfigGenerated(true)
+
+			dependencies {
+				runtimeOnly project(':content:forgero-vanilla')
+				runtimeOnly project(':content:forgero-extended')
+				runtimeOnly project(':content:forgero-compat')
+				runtimeOnly project(':content:forgero-structures')
+			}
+		}
+
+		testmodServer {
+			server()
+			ideConfigGenerated project.rootProject == project
+			name = "Test Server"
+
+			dependencies {
+				runtimeOnly project(':content:forgero-vanilla')
+				runtimeOnly project(':content:forgero-extended')
+				runtimeOnly project(':content:forgero-compat')
+				runtimeOnly project(':content:forgero-structures')
+			}
+			source sourceSets.test
+		}
+
+		gametest {
+			inherit testmodServer
+			name "Game Test"
+
+			// Enable the gametest runner
+			vmArg "-Dfabric-api.gametest"
+			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+			runDir "build/gametest"
+		}
+		autoTestServer {
+			inherit testmodServer
+
+			name "Auto Test Server"
+			vmArg "-Dfabric.autoTest"
+		}
+
+		gametestClient {
+			inherit testmodServer
+			client()
+
+			name "test client"
+			//vmArg "-Dfabric.autoTest"
+		}
+	}
+}
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
+}

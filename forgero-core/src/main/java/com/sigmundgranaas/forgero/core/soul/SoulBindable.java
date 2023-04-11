@@ -4,5 +4,5 @@ import com.sigmundgranaas.forgero.core.state.State;
 
 public interface SoulBindable {
 
-    State bind(Soul soul);
+	State bind(Soul soul);
 }

@@ -6,5 +6,5 @@ import com.sigmundgranaas.forgero.core.texture.V2.TemplateTexture;
 import java.awt.image.BufferedImage;
 
 public interface RecolorStrategy {
-    BufferedImage recolor(TemplateTexture templateTexture, Palette palette);
+	BufferedImage recolor(TemplateTexture templateTexture, Palette palette);
 }

@@ -1,0 +1,77 @@
+{
+  "type": "METAL",
+  "name": "bronze",
+  "container": {
+    "type": "HOST",
+    "id": "mythicmetals:bronze_ingot"
+  },
+  "palette": {
+    "name": "bronze"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 25
+      },
+      {
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5.5
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 354.0
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.7
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.2,
+        "condition": {
+          "target": "TYPE",
+          "tag": [
+            "AXE_HEAD"
+          ]
+        }
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 14
+      }
+    ]
+  }
+}

@@ -30,7 +30,7 @@ public class ResourcePipeline {
 	private TypeTree tree;
 	private List<RecipeData> recipes;
 
-	public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration) {
+	public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration, Set<String> modDependencies) {
 		this.packages = packages;
 		this.dataListeners = dataListeners;
 		this.inflatedDataListener = inflatedDataListener;
@@ -40,7 +40,7 @@ public class ResourcePipeline {
 		this.tree = new TypeTree();
 		this.idMapper = new HashMap<>();
 		this.recipes = new ArrayList<>();
-		this.dependencies = new HashSet<>(ImmutableSet.<String>builder().add("forgero", "minecraft").build());
+		this.dependencies = new HashSet<>(ImmutableSet.<String>builder().add("forgero", "minecraft").addAll(modDependencies).build());
 		this.configuration = configuration;
 	}
 
