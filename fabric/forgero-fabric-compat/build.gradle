@@ -21,6 +21,7 @@ repositories {
 	maven { url 'https://maven.kosmx.dev/' }
 	maven { url 'https://jitpack.io' }
 	maven { url = uri("https://ueaj.dev/maven") }
+	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 	mavenLocal()
 }
 
@@ -33,8 +34,11 @@ dependencies {
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	implementation project(path: ':fabric:forgero-creatures', configuration: 'namedElements')
 
 	modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
+
+	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.19:3.1.38'
 
 	modImplementation "curse.maven:arrp-463113:3901211"
 
