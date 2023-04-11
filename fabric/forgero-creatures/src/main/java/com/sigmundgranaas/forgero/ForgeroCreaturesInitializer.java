@@ -1,10 +1,13 @@
 package com.sigmundgranaas.forgero;
 
 import static com.sigmundgranaas.forgero.creatures.CreatureTypes.KURUK;
+import static com.sigmundgranaas.forgero.creatures.CreatureTypes.STONE_GOLEM;
 import static com.sigmundgranaas.forgero.creatures.kuruk.KurukEntity.KURUK_ID;
+import static com.sigmundgranaas.forgero.creatures.stonegolem.StoneGolemEntity.STONE_GOLEM_ID;
 import static net.minecraft.util.registry.Registry.*;
 
 import com.sigmundgranaas.forgero.creatures.kuruk.KurukEntity;
+import com.sigmundgranaas.forgero.creatures.stonegolem.StoneGolemEntity;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -42,6 +45,11 @@ public class ForgeroCreaturesInitializer implements ModInitializer {
 
 			BiomeModifications.addSpawn(BiomeSelectors.tag(TagKey.of(BIOME_KEY, new Identifier("forgero:is_any_forest"))), SpawnGroup.CREATURE, KURUK, 1, 1, 1);
 			SpawnRestriction.register(KURUK, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
+
+			STONE_GOLEM = Registry.register(ENTITY_TYPE, STONE_GOLEM_ID, EntityType.Builder.create(StoneGolemEntity::new, SpawnGroup.CREATURE).setDimensions(1.4f, 2.7f).maxTrackingRange(10).build(STONE_GOLEM_ID.toString()));
+			FabricDefaultAttributeRegistry.register(STONE_GOLEM, StoneGolemEntity.createStoneGolemEntityAttributes());
+			BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(), SpawnGroup.MONSTER, STONE_GOLEM, 100, 1, 1);
+			SpawnRestriction.register(STONE_GOLEM, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, StoneGolemEntity::isValidSpawn);
 		}
 	}
 }
