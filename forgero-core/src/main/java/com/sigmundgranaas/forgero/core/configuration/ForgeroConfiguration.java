@@ -16,6 +16,9 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Boolean disableVanillaRecipes = false;
 
 	@NotNull
+	public Boolean enableCustomRecipeDeletion = true;
+
+	@NotNull
 	public Boolean disableVanillaLoot = false;
 
 	@NotNull
