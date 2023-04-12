@@ -1,0 +1,37 @@
+{
+  "type": "SWORD_GUARD",
+  "models": [
+    {
+      "name": "mastercrafted_sword_guard",
+      "template": "mastercrafted_sword_guard.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 60
+    },
+    {
+      "name": "sword_guard_reinforcement",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "mastercrafted_sword_guard_reinforcement.png",
+      "order": 62,
+      "variants": [
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:mastercrafted_sword_guard-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "mastercrafted_sword_guard"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "sword_guard_reinforcement"
+    }
+  ]
+}

@@ -1,12 +1,14 @@
 {
-  "type": "SWORD_GUARD_SCHEMATIC",
-  "name": "agile_sword_guard-schematic",
+  "type": "AXE_HEAD_SCHEMATIC",
+  "name": "mastercrafted_axe_head-schematic",
+  "parent": "axe_head_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_GUARD",
+    "type": "AXE_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -18,7 +20,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 2
+            "amount": 3
           }
         ]
       }
@@ -54,47 +56,38 @@
   "properties": {
     "attributes": [
       {
-        "id": "schematic-rarity-local",
-        "type": "RARITY",
-        "order": "BASE",
-        "category": "LOCAL",
-        "operation": "ADDITION",
-        "value": 56
-      },
-      {
-        "id": "schematic-rarity-composite",
-        "type": "RARITY",
+        "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 1.0
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 1
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2.4
       },
       {
         "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 0.2
-      },
-      {
-        "type": "ARMOR",
         "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.4
+        "operation": "ADDITION",
+        "value": -3.0
       },
       {
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.05
+        "value": 0.3
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "1"
+    "ingredient_count": "3"
   }
 }

@@ -1,13 +1,12 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
-  "name": "scimitar_blade-schematic",
-  "parent": "sword_blade_base",
+  "type": "SWORD_GUARD_SCHEMATIC",
+  "name": "refined_sword_guard-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "SWORD_GUARD",
     "target": "CREATE",
     "recipes": [
       {
@@ -19,7 +18,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 3
+            "amount": 2
           }
         ]
       }
@@ -39,8 +38,15 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
         "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
         "tier": 1
       }
     ]
@@ -53,43 +59,42 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 27
+        "value": 10
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.15
+        "value": 0.2
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.0
+        "value": 0.4
       },
       {
-        "type": "ATTACK_DAMAGE",
+        "type": "MINING_SPEED",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "value": 0.95
+      },
+      {
+        "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.25
+        "value": 0.5
       },
       {
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.16
+        "value": 0.1
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "2",
-    "better_compat_attribute_container": "bettercombat:cutlass"
+    "ingredient_count": "2"
   }
 }
