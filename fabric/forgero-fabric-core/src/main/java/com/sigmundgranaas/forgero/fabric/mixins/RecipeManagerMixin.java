@@ -1,26 +1,26 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
-
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.profiler.Profiler;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
+import com.sigmundgranaas.forgero.fabric.resources.RecipeDeletionReloader;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.minecraft.recipe.RecipeManager;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.profiler.Profiler;
 
 /**
  * RecipeManager mixin
@@ -43,6 +43,15 @@ public class RecipeManagerMixin {
 		if (ForgeroConfigurationLoader.configuration.disableVanillaRecipes || ForgeroConfigurationLoader.configuration.disableVanillaTools) {
 			removeAllVanillaToolRecipes(map);
 		}
+		if (ForgeroConfigurationLoader.configuration.enableCustomRecipeDeletion) {
+			deleteRecipes(map, resourceManager);
+		}
+	}
+
+	private void deleteRecipes(Map<Identifier, JsonElement> map, ResourceManager resourceManager) {
+		RecipeDeletionReloader.reload(resourceManager);
+		RecipeDeletionReloader.entries.forEach(map::remove);
+		Forgero.LOGGER.error("Removed recipes: " + RecipeDeletionReloader.entries);
 	}
 
 	private void removeAllVanillaToolRecipes(Map<Identifier, JsonElement> map) {

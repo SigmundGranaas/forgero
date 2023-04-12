@@ -117,6 +117,7 @@ public class ForgeroInitializer implements ModInitializer {
 		handler.accept(this::registerLevelPropertiesDefaults);
 		handler.accept(LootFunctions::register);
 		handler.accept(Attributes::register);
+
 		handler.run();
 		dataReloader();
 		lootConditionReloader();
