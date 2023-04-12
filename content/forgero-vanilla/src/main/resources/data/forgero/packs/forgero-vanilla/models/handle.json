@@ -52,24 +52,6 @@
             "model:short_handle.png"
           ],
           "template": "short_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:medium_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:axe_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:hoe_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
         }
       ]
     },

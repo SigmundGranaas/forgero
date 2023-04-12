@@ -12,31 +12,31 @@
           "target": [
             "type:HOE"
           ],
-          "template": "hoe_handle.png"
+          "template": "refined_tool_handle_long.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "pickaxe_handle.png"
+          "template": "refined_tool_handle_long.png"
         },
         {
           "target": [
             "type:AXE"
           ],
-          "template": "axe_handle.png"
+          "template": "refined_tool_handle_short.png"
         },
         {
           "target": [
             "type:SHOVEL"
           ],
-          "template": "medium_handle.png"
+          "template": "refined_tool_handle_short.png"
         },
         {
           "target": [
             "type:SWORD"
           ],
-          "template": "short_handle.png"
+          "template": "refined_short_handle.png"
         }
       ]
     },

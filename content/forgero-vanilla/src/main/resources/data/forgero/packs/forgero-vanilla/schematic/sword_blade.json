@@ -43,15 +43,6 @@
         "description": "sword_tip",
         "type": "TOOL_MATERIAL",
         "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "UTILITY"
-        ],
-        "description": "scabbard",
-        "type": "LEATHER",
-        "tier": 1
       }
     ]
   },

@@ -12,25 +12,25 @@
           "target": [
             "type:HOE"
           ],
-          "template": "mastercrafted_pickaxe_handle.png"
+          "template": "mastercrafted_tool_handle_long.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "mastercrafted_pickaxe_handle.png"
+          "template": "mastercrafted_tool_handle_long.png"
         },
         {
           "target": [
             "type:AXE"
           ],
-          "template": "mastercrafted_tool_handle.png"
+          "template": "mastercrafted_tool_handle_short.png"
         },
         {
           "target": [
             "type:SHOVEL"
           ],
-          "template": "mastercrafted_tool_handle.png"
+          "template": "mastercrafted_tool_handle_short.png"
         },
         {
           "target": [
@@ -41,48 +41,12 @@
       ]
     },
     {
-      "name": "grip",
-      "variants": [
-        {
-          "target": [
-            "model:mastercrafted_handle.png"
-          ],
-          "template": "mastercrafted_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:mastercrafted_tool_handle.png"
-          ],
-          "template": "mastercrafted_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:mastercrafted_pickaxe_handle.png"
-          ],
-          "template": "mastercrafted_handle_grip.png"
-        }
-      ]
-    },
-    {
       "name": "handle_reinforcement",
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "handle_reinforcement.png",
       "order": 15,
-      "offset": [
-        6,
-        6
-      ],
       "variants": [
-        {
-          "target": [
-            "type:AXE"
-          ],
-          "offset": [
-            5,
-            5
-          ]
-        },
         {
           "target": [
             "type:SWORD"
