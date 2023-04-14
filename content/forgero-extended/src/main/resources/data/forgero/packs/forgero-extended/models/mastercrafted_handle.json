@@ -55,6 +55,31 @@
             3,
             3
           ]
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "offset": [
+            4,
+            4
+          ]
+        }
+
+      ]
+    },
+    {
+      "name": "grip",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "handle_grip.png",
+      "order": 11,
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_short_handle.png"
+          ],
+          "template": "short_handle_grip.png"
         }
       ]
     },

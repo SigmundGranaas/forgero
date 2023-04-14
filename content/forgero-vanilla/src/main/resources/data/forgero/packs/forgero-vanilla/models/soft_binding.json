@@ -39,10 +39,10 @@
       ]
     },
     {
-      "name": "binding_gem",
+      "name": "soft_binding_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "square_gem_center.png",
+      "template": "sword_gem_center.png",
       "order": 90,
       "variants": [
         {
@@ -77,8 +77,8 @@
             "model:soft_binding.png"
           ],
           "offset": [
-            -1,
-            -1
+            -5,
+            3
           ]
         }
       ]
@@ -94,18 +94,18 @@
     {
       "target": [
         "type:GEM",
-        "slot:1"
+        "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "binding_gem"
+      "template": "soft_binding_gem"
     },
     {
       "target": [
         "type:TOTEM",
-        "slot:1"
+        "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "binding_gem"
+      "template": "soft_binding_gem"
     }
   ]
 }

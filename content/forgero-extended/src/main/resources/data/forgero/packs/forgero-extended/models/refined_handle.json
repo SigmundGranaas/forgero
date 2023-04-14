@@ -41,6 +41,21 @@
       ]
     },
     {
+      "name": "grip",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "handle_grip.png",
+      "order": 11,
+      "variants": [
+        {
+          "target": [
+            "model:refined_short_handle.png"
+          ],
+          "template": "short_handle_grip.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:refined_handle-schematic"
