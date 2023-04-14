@@ -18,7 +18,7 @@
           {
             "type": "SECONDARY_MATERIAL",
             "unique": true,
-            "amount": 2
+            "amount": 1
           }
         ]
       }
@@ -65,23 +65,23 @@
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 0.2
       },
       {
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": -0.1
+        "value": 0.1
       },
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": -0.1
+        "value": 0.1
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "2"
+    "ingredient_count": "1"
   }
 }
