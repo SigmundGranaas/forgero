@@ -72,6 +72,31 @@ public class AttributeWriterHelper extends BaseWriter {
 				.append(number(value));
 	}
 
+	public MutableText writeBaseNumber(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute, com.sigmundgranaas.forgero.core.property.v2.Attribute comparativeAttribute) {
+		float value = attribute.asFloat();
+		if (attribute.key().equals(AttackSpeed.KEY)) {
+			value = 4 + value;
+		}
+
+		return writeAttributeType(attribute.key())
+				.append(indented(1))
+				.append(Text.literal(number(value)).formatted(comparativeFormatting(attribute, comparativeAttribute)));
+	}
+
+	private Formatting comparativeFormatting(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute, com.sigmundgranaas.forgero.core.property.v2.Attribute comparativeAttribute) {
+		if (attribute.asFloat() > comparativeAttribute.asFloat()) {
+			return Formatting.GREEN;
+		} else if (attribute.asFloat() - comparativeAttribute.asFloat() > 1) {
+			return Formatting.DARK_GREEN;
+		} else if (attribute.asFloat() < comparativeAttribute.asFloat()) {
+			return Formatting.RED;
+		} else if (attribute.asFloat() - comparativeAttribute.asFloat() < -1) {
+			return Formatting.DARK_GREEN;
+		} else {
+			return Formatting.WHITE;
+		}
+	}
+
 	public MutableText writeMultiplicativeAttribute(Attribute attribute) {
 		return writeAttributeType(attribute.type())
 				.append(indented(1))
