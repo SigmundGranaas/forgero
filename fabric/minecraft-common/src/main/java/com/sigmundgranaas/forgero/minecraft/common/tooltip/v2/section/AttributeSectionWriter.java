@@ -25,6 +25,10 @@ public class AttributeSectionWriter extends SectionWriter {
 		super(configuration);
 		this.container = container;
 		this.helper = new AttributeWriterHelper(container, configuration);
+		if (container instanceof Identifiable identifiable && ForgeroStateRegistry.STATES != null) {
+			var baseContainer = ForgeroStateRegistry.STATES.find(identifiable.identifier());
+			baseContainer.ifPresent(stateSupplier -> this.helper.setComparativeContainer(stateSupplier.get()));
+		}
 	}
 
 	public static Optional<SectionWriter> of(PropertyContainer container) {
@@ -66,14 +70,6 @@ public class AttributeSectionWriter extends SectionWriter {
 		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.asFloat() == 0) {
 			return Optional.empty();
 		} else {
-			if (container instanceof Identifiable identifiable && ForgeroStateRegistry.STATES != null) {
-				var baseContainer = ForgeroStateRegistry.STATES.find(identifiable.identifier());
-				if (baseContainer.isPresent()) {
-					var newHelper = new AttributeWriterHelper(baseContainer.get().get(), configuration);
-					return Optional.of(helper.writeBaseNumber(attribute, newHelper.attributeOfType(attributeType)));
-				}
-			}
-
 			return Optional.of(helper.writeBaseNumber(attribute));
 		}
 	}
