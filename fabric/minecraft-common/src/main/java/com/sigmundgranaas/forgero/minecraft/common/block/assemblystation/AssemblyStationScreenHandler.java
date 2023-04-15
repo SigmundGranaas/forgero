@@ -198,13 +198,12 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				if (compositeOpt.isPresent()) {
 					if (inventory.isEmpty()) {
 						var composite = compositeOpt.get();
-						var elements = composite.components();
+						var elements = deconstructedItems(composite);
 						for (int i = 1; i < elements.size() + 1; i++) {
 							var element = elements.get(i - 1);
-							var newStack = StateConverter.of(element);
-							inventory.setStack(i, newStack);
-							setPreviousTrackedSlot(i, newStack);
-							serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, newStack));
+							inventory.setStack(i, element);
+							setPreviousTrackedSlot(i, element);
+							serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, element));
 						}
 					}
 					compositeSlot.doneConstructing();
@@ -220,7 +219,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	}
 
 	private List<ItemStack> deconstructedItems(Composite construct) {
-		return construct.components().stream().map(StateConverter::of).toList();
+		return construct.components().stream().filter(state -> !state.identifier().contains("schematic")).map(StateConverter::of).toList();
 	}
 
 	private boolean isDeconstructedInventory(Composite construct) {
