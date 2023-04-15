@@ -2,7 +2,6 @@
   "type": "AXE_HEAD_SCHEMATIC",
   "name": "mastercrafted_axe_head-schematic",
   "parent": "axe_head_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"

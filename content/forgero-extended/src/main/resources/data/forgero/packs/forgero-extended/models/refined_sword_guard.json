@@ -10,11 +10,13 @@
     },
     {
       "name": "sword_guard_reinforcement",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "refined_sword_guard_reinforcement.png",
-      "order": 62,
       "variants": [
+        {
+          "target": [
+            "model:refined_sword_guard.png"
+          ],
+          "template": "refined_sword_guard_reinforcement.png"
+        }
       ]
     },
     {

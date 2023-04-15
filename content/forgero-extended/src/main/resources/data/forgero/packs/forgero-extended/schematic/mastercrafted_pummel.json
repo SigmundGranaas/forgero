@@ -1,4 +1,4 @@
- {
+{
   "type": "PUMMEL_SCHEMATIC",
   "name": "mastercrafted_pummel-schematic",
   "container": {
@@ -33,9 +33,6 @@
       }
     ],
     "slots": [
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
