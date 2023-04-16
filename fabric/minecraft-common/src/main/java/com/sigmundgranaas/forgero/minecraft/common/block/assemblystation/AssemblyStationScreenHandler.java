@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,7 +14,6 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
@@ -21,8 +21,6 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
@@ -165,6 +163,10 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			if (!compositeSlot.isConstructed() && stack.isPresent()) {
 				compositeSlot.addToolToCompositeSlot(stack.get());
 				onItemAddedToToolSlot();
+			} else if (DisassemblyRecipeLoader.getEntries().stream()
+					.anyMatch(entry -> entry.getInput().test(compositeInventory.getStack(0)))) {
+				compositeSlot.addToolToCompositeSlot(compositeInventory.getStack(0));
+				onItemAddedToToolSlot();
 			}
 		}
 	}
@@ -195,6 +197,11 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				var disassemblyStack = compositeSlot.getStack();
 				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
 				var compositeOpt = compositeSlot.getComposite();
+
+				var itemRecipe = DisassemblyRecipeLoader.getEntries().stream()
+						.filter(entry -> entry.getInput().test(disassemblyStack))
+						.findFirst();
+
 				if (compositeOpt.isPresent()) {
 					if (inventory.isEmpty()) {
 						var composite = compositeOpt.get();
@@ -207,12 +214,15 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 						}
 					}
 					compositeSlot.doneConstructing();
-				} else if (disassemblyStack.getItem() == Items.DIAMOND_PICKAXE) {
-					inventory.setStack(0, empty);
-					setPreviousTrackedSlot(0, empty);
-					inventory.setStack(2, new ItemStack(Registry.ITEM.get(new Identifier("forgero:oak-handle"))));
-					inventory.setStack(1, new ItemStack(Registry.ITEM.get(new Identifier("forgero:diamond-pickaxe_head"))));
-					serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, empty));
+				} else if (itemRecipe.isPresent()) {
+					var recipe = itemRecipe.get();
+					for (int i = 1; i < recipe.getResults().size() + 1; i++) {
+						var element = new ItemStack(recipe.getResults().get(i - 1));
+						inventory.setStack(i, element);
+						setPreviousTrackedSlot(i, element);
+						serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, element));
+					}
+					compositeSlot.doneConstructing();
 				}
 			}
 		});
@@ -271,12 +281,16 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 
 		public boolean isEmpty() {
-			return construct == null;
+			return craftingInventory.isEmpty();
 		}
 
 
 		public void addToolToCompositeSlot(Composite construct) {
 			this.construct = construct;
+			this.isConstructed = false;
+		}
+
+		public void addToolToCompositeSlot(ItemStack construct) {
 			this.isConstructed = false;
 		}
 
@@ -291,8 +305,14 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 		@Override
 		public boolean canInsert(ItemStack stack) {
-			boolean isComposite = StateConverter.of(stack).filter(Composite.class::isInstance).isPresent();
 			boolean noDamage = (stack.getOrCreateNbt().contains("Damage") && stack.getOrCreateNbt().getInt("Damage") == 0) || !stack.getItem().isDamageable();
+
+			if (DisassemblyRecipeLoader.getEntries().stream()
+					.anyMatch(entry -> entry.getInput().test(stack))) {
+				return noDamage;
+			}
+			boolean isComposite = StateConverter.of(stack).filter(Composite.class::isInstance).isPresent();
+
 			return isComposite && craftingInventory.isEmpty() && noDamage;
 		}
 

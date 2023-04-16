@@ -52,6 +52,7 @@ import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
+import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -117,6 +118,7 @@ public class ForgeroInitializer implements ModInitializer {
 		handler.accept(this::registerLevelPropertiesDefaults);
 		handler.accept(LootFunctions::register);
 		handler.accept(Attributes::register);
+		handler.accept(this::disassemblyReloader);
 
 		handler.run();
 		dataReloader();
@@ -133,7 +135,6 @@ public class ForgeroInitializer implements ModInitializer {
 		Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
 		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
 	}
-
 
 	private void registerAARPRecipes() {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration));
@@ -162,6 +163,21 @@ public class ForgeroInitializer implements ModInitializer {
 			@Override
 			public Identifier getFabricId() {
 				return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "data");
+			}
+		});
+	}
+
+
+	private void disassemblyReloader() {
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+			@Override
+			public void reload(ResourceManager manager) {
+				DisassemblyRecipeLoader.reload(manager);
+			}
+
+			@Override
+			public Identifier getFabricId() {
+				return new Identifier(Forgero.NAMESPACE, "disassembly");
 			}
 		});
 	}
