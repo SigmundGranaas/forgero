@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.RecipeType;
@@ -183,6 +184,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				} else if (!compositeSlot.isEmpty() && output.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.construct)) {
 					compositeSlot.removeCompositeIngredient();
 					serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
+				} else if (!compositeSlot.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.getStack())) {
+					compositeSlot.removeCompositeIngredient();
+					serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
 				}
 			}
 		});
@@ -215,12 +219,14 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 					}
 					compositeSlot.doneConstructing();
 				} else if (itemRecipe.isPresent()) {
-					var recipe = itemRecipe.get();
-					for (int i = 1; i < recipe.getResults().size() + 1; i++) {
-						var element = new ItemStack(recipe.getResults().get(i - 1));
-						inventory.setStack(i, element);
-						setPreviousTrackedSlot(i, element);
-						serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, element));
+					if (inventory.isEmpty()) {
+						var recipe = itemRecipe.get();
+						for (int i = 1; i < recipe.getResults().size() + 1; i++) {
+							var element = new ItemStack(recipe.getResults().get(i - 1));
+							inventory.setStack(i, element);
+							setPreviousTrackedSlot(i, element);
+							serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, element));
+						}
 					}
 					compositeSlot.doneConstructing();
 				}
@@ -235,6 +241,19 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	private boolean isDeconstructedInventory(Composite construct) {
 		var deconstructed = deconstructedItems(construct);
 		return IntStream.range(0, deconstructed.size()).allMatch(index -> deconstructed.get(index).getItem() == inventory.getStack(index).getItem());
+	}
+
+	private boolean isDeconstructedInventory(ItemStack construct) {
+		var deconstructed = components(construct);
+		return IntStream.range(0, deconstructed.size()).allMatch(index -> deconstructed.get(index) == inventory.getStack(index).getItem());
+	}
+
+	private List<Item> components(ItemStack stack) {
+		return DisassemblyRecipeLoader.getEntries().stream()
+				.filter(entry -> entry.getInput().test(stack))
+				.findFirst()
+				.map(DisassemblyRecipeLoader.DisassemblyRecipe::getResults)
+				.orElse(List.of());
 	}
 
 	private Optional<ItemStack> craftInventory(World world) {
