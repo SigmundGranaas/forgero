@@ -9,6 +9,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public interface DifferenceWriter {
+	private static String plus(float number) {
+		return number > 0 ? "+" : "";
+	}
+
 	default Formatting getDifferenceFormatting(float difference) {
 		if (difference > 0) {
 			return Formatting.GREEN;
@@ -34,7 +38,7 @@ public interface DifferenceWriter {
 			MutableText marker = getArrow(difference);
 
 			if (ForgeroConfigurationLoader.configuration.showAttributeDifference) {
-				marker.append(Text.literal(" (" + number(difference) + ")"));
+				marker.append(Text.literal(" (" + plus(difference) + number(difference) + ")"));
 			}
 
 			return marker;
