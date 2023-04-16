@@ -53,4 +53,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean exportGeneratedTextures = false;
+	
+	@NotNull
+	public boolean showAttributeDifference = true;
 }
