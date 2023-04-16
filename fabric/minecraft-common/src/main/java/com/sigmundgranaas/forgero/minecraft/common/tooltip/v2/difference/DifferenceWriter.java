@@ -1,33 +1,43 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference;
 
+import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.number;
+
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public interface DifferenceWriter {
 	default Formatting getDifferenceFormatting(float difference) {
-		if (difference > 1.1) {
-			return Formatting.DARK_GREEN;
-		} else if (difference > 0.6) {
+		if (difference > 0) {
 			return Formatting.GREEN;
-		} else if (difference > 0.2) {
-			return Formatting.YELLOW;
-		} else if (difference < -1) {
-			return Formatting.DARK_RED;
-		} else if (difference < -0.6) {
+		} else if (difference < -0) {
 			return Formatting.RED;
-		} else if (difference < -0.2) {
-			return Formatting.GOLD;
 		} else {
 			return Formatting.WHITE;
 		}
 	}
 
-	default MutableText getDifferenceMarker(float difference) {
+	default MutableText getArrow(float difference) {
 		if (difference > 0) {
 			return Text.literal("↑");
 		} else if (difference < 0) {
 			return Text.literal("↓");
+		} else {
+			return Text.empty();
+		}
+	}
+
+	default MutableText getDifferenceMarker(float difference) {
+		if (difference != 0) {
+			MutableText marker = getArrow(difference);
+
+			if (ForgeroConfigurationLoader.configuration.showAttributeDifference) {
+				marker.append(Text.literal(" (" + number(difference) + ")"));
+			}
+
+			return marker;
 		} else {
 			return Text.empty();
 		}
