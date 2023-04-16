@@ -27,9 +27,9 @@ public class WeightWriter implements DifferenceWriter {
 	@Override
 	public MutableText getDifferenceMarker(float difference) {
 		if (difference < 0) {
-			return Text.literal("⌃");
+			return Text.literal("↑");
 		} else if (difference > 0) {
-			return Text.literal("⌄");
+			return Text.literal("↓");
 		} else {
 			return Text.empty();
 		}
