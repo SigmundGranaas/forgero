@@ -1,28 +1,26 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.DisassemblyHandler;
+import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.EmptyHandler;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.World;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
@@ -40,7 +38,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	private final SimpleInventory inventory;
 	private final ScreenHandlerContext context;
 	private final PlayerEntity player;
-	private final CompositeSlot compositeSlot;
+	private final DeconstructionSlot compositeSlot;
+
+	private final DisassemblyHandler disassemblyHandler = new EmptyHandler();
 
 	//This constructor gets called on the client when the server wants it to open the screenHandler,
 	//The client will call the other constructor with an empty Inventory and the screenHandler will automatically
@@ -61,7 +61,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		inventory.onOpen(playerInventory.player);
 		SimpleInventory compositeInventory = new SimpleInventory(1);
 		compositeInventory.addListener(this::onCompositeSlotChanged);
-		this.compositeSlot = new CompositeSlot(compositeInventory, 0, 34, 34, inventory);
+		this.compositeSlot = new DeconstructionSlot(compositeInventory, 0, 34, 34, inventory);
 
 		//This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
 		//This will not render the background of the slots however, this is the Screens job
@@ -147,7 +147,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	@Override
 	public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
-		return true;
+		return false;
 	}
 
 	public void onCompositeSlotChanged(Inventory compositeInventory) {
@@ -177,11 +177,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		this.context.run((world, pos) -> {
 			if (!world.isClient && compositeSlot.isRemovable()) {
 				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
-				var output = craftInventory(world);
-				if (output.isPresent() && compositeSlot.isRemovable() && StateConverter.of(output.get()).filter(Composite.class::isInstance).isPresent()) {
-					compositeSlot.setStack(output.get());
-					serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, output.get()));
-				} else if (!compositeSlot.isEmpty() && output.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.construct)) {
+				if (!compositeSlot.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.construct)) {
 					compositeSlot.removeCompositeIngredient();
 					serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), 0, ItemStack.EMPTY));
 				} else if (!compositeSlot.isEmpty() && compositeSlot.doneConstructing && !isDeconstructedInventory(compositeSlot.getStack())) {
@@ -256,16 +252,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				.orElse(List.of());
 	}
 
-	private Optional<ItemStack> craftInventory(World world) {
-		if (!world.isClient) {
-			var craftingInventory = new CraftingInventory(dummyHandler, 3, 3);
-			IntStream.range(0, 8).forEach(index -> craftingInventory.setStack(index, this.inventory.getStack(index)));
-			return world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingInventory, world).map(recipe -> recipe.craft(craftingInventory));
-		}
-		return Optional.empty();
-
-	}
-
 	private void onItemRemovedFromToolSlot() {
 		this.context.run((world, pos) -> {
 			if (!world.isClient) {
@@ -275,25 +261,15 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		});
 	}
 
-	private static class CompositeSlot extends Slot {
+	private static class DeconstructionSlot extends Slot {
 		private final Inventory craftingInventory;
-		private Composite construct;
-		private boolean isConstructed = false;
 		private boolean doneConstructing = false;
 
-
-		public CompositeSlot(Inventory inventory, int index, int x, int y, Inventory craftingInventory) {
+		public DeconstructionSlot(Inventory inventory, int index, int x, int y, Inventory craftingInventory) {
 			super(inventory, index, x, y);
 			this.craftingInventory = craftingInventory;
 		}
 
-		Optional<Composite> getComposite() {
-			return Optional.ofNullable(construct);
-		}
-
-		public boolean isConstructed() {
-			return isConstructed;
-		}
 
 		public boolean isDeconstructed() {
 			return true;
@@ -303,11 +279,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			return craftingInventory.isEmpty();
 		}
 
-
-		public void addToolToCompositeSlot(Composite construct) {
-			this.construct = construct;
-			this.isConstructed = false;
-		}
 
 		public void addToolToCompositeSlot(ItemStack construct) {
 			this.isConstructed = false;
@@ -334,7 +305,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 			return isComposite && craftingInventory.isEmpty() && noDamage;
 		}
-
 
 		public void doneConstructing() {
 			this.doneConstructing = true;
