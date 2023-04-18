@@ -21,6 +21,21 @@
             "type": "HANDLE"
           }
         ]
+      },
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "SWORD_BLADE"
+          },
+          {
+            "type": "SWORD_GUARD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
       }
     ],
     "components": [
