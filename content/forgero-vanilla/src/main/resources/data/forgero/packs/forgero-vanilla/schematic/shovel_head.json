@@ -20,7 +20,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 2
+            "amount": 1
           }
         ]
       }
@@ -88,6 +88,9 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "1"
+    "ingredient_count": {
+      "value": 1,
+      "context": "LOCAL"
+    }
   }
 }

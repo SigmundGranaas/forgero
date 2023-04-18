@@ -1,0 +1,7 @@
+{
+  "input": "minecraft:diamond_axe",
+  "results": [
+    "forgero:diamond-axe_head",
+    "forgero:oak-handle"
+  ]
+}

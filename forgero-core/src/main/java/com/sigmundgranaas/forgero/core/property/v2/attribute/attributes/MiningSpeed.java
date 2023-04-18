@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.v2.attribute.attributes;
 
+import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_KEY;
+
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -8,8 +10,6 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
-
-import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_KEY;
 
 public class MiningSpeed implements Attribute {
 
@@ -29,11 +29,11 @@ public class MiningSpeed implements Attribute {
 	}
 
 	public static Float apply(PropertyContainer container) {
-		return of(container).asFloat();
+		return Weight.of(container).reduceMiningSpeed(of(container).asFloat());
 	}
 
 	public static Float apply(PropertyContainer container, Target target) {
-		return of(container, target).asFloat();
+		return Weight.of(container).reduceMiningSpeed(of(container, target).asFloat());
 	}
 
 	public static Attribute of(PropertyContainer container, Target target) {

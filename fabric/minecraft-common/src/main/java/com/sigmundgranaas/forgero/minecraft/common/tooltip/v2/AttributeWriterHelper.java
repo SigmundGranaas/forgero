@@ -10,6 +10,8 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference.DifferenceHelper;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
@@ -20,6 +22,9 @@ public class AttributeWriterHelper extends BaseWriter {
 	private final PropertyContainer container;
 	private final AttributeHelper helper;
 	private final TooltipConfiguration configuration;
+	private final DifferenceHelper differenceHelper = new DifferenceHelper();
+	@Nullable
+	private PropertyContainer comparativeContainer;
 
 	public AttributeWriterHelper(PropertyContainer container, TooltipConfiguration configuration) {
 		this.container = container;
@@ -42,6 +47,10 @@ public class AttributeWriterHelper extends BaseWriter {
 		} catch (NumberFormatException e) {
 			return 1f;
 		}
+	}
+
+	public void setComparativeContainer(@Nullable PropertyContainer comparativeContainer) {
+		this.comparativeContainer = comparativeContainer;
 	}
 
 	public MutableText writePercentageAttribute(Attribute attribute) {
@@ -67,6 +76,17 @@ public class AttributeWriterHelper extends BaseWriter {
 			value = 4 + value;
 		}
 
+		if (comparativeContainer != null) {
+			var comparativeAttribute = new AttributeHelper(comparativeContainer).apply(attribute.key());
+			if (!attribute.asFloat().equals(comparativeAttribute.asFloat())) {
+				float difference = attribute.asFloat() - comparativeAttribute.asFloat();
+				return writeAttributeType(attribute.key())
+						.append(indented(1))
+						.append(Text.literal(number(value))
+								.append(differenceHelper.getDifferenceMarker(difference, attribute.key()))
+								.formatted(differenceHelper.getDifferenceFormatting(difference, attribute.key())));
+			}
+		}
 		return writeAttributeType(attribute.key())
 				.append(indented(1))
 				.append(number(value));

@@ -1,19 +1,19 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.condition.ConditionContainer;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.state.customvalue.CustomValue;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 public class ConditionedState implements State, Conditional<ConditionedState> {
 	private final IdentifiableContainer id;
@@ -21,9 +21,9 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 
 	private final List<Property> properties;
 
-	private final Map<String, CustomValue> customData;
+	private final DataContainer customData;
 
-	public ConditionedState(IdentifiableContainer id, ConditionContainer conditions, List<Property> properties, Map<String, CustomValue> customData) {
+	public ConditionedState(IdentifiableContainer id, ConditionContainer conditions, List<Property> properties, DataContainer customData) {
 		this.id = id;
 		this.conditions = conditions;
 		this.properties = properties;
@@ -32,7 +32,7 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 
 	public static ConditionedState of(State state) {
 		IdentifiableContainer id = new IdentifiableContainer(state.name(), state.nameSpace(), state.type());
-		return new ConditionedState(id, Conditional.EMPTY, state.getRootProperties(), state.customValues());
+		return new ConditionedState(id, Conditional.EMPTY, state.getRootProperties(), state.customData());
 	}
 
 	@Override
@@ -49,7 +49,6 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	public ConditionedState removeCondition(String identifier) {
 		return new ConditionedState(id, conditions.removeCondition(identifier), properties, customData);
 	}
-
 
 	@Override
 	public String identifier() {
@@ -86,7 +85,7 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	}
 
 	@Override
-	public Map<String, CustomValue> customValues() {
-		return this.customData;
+	public DataContainer customData(Target target) {
+		return customData;
 	}
 }

@@ -1,8 +1,19 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,18 +21,6 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 @Mixin(LootTable.class)
 public class DisableVanillaToolsLootTableGeneration {
@@ -55,7 +54,10 @@ public class DisableVanillaToolsLootTableGeneration {
 			String newId = resultItemRenamer(Registry.ITEM.getId(stack.getItem()).toString());
 			Item newItem = Registry.ITEM.get(new Identifier(newId));
 			ItemStack newStack = new ItemStack(newItem);
-			newStack.setNbt(stack.copy().getOrCreateNbt());
+
+			if (stack.hasNbt()) {
+				newStack.setNbt(stack.copy().getOrCreateNbt());
+			}
 			return newStack;
 		}
 		return stack;

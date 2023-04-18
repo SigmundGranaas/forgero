@@ -23,7 +23,7 @@
       "type": "patchouli:crafting",
       "title": "Basic blade and a guard",
       "recipe": "forgero:oak-sword_guard-basic_recipe",
-      "recipe2": "forgero:dark_oak-sword_guard-basic_recipe"
+      "recipe2": "forgero:dark_oak-sword_blade-basic_recipe"
     },
     {
       "type": "patchouli:crafting",

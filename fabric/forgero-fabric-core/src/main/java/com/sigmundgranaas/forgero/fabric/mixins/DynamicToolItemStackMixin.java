@@ -1,13 +1,20 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
+import java.util.List;
+
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveNess;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.MultiMapMergeHandler;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -20,16 +27,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 /**
  * Mixin originally used by The Fabric APIs dynamic attribute module, but has since been deprecated.
@@ -56,8 +55,8 @@ public abstract class DynamicToolItemStackMixin {
 
 	@Inject(at = @At("RETURN"), method = "isSuitableFor", cancellable = true)
 	public void isEffectiveOn(BlockState state, CallbackInfoReturnable<Boolean> info) {
-		if (this.getItem() instanceof DynamicEffectiveNess holder) {
-			info.setReturnValue(holder.isEffective(state, (ItemStack) (Object) this));
+		if (this.getItem() instanceof DynamicAttributeItem holder) {
+			info.setReturnValue(holder.isEffectiveOn(state, (ItemStack) (Object) this));
 		}
 	}
 

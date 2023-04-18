@@ -1,5 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import static com.sigmundgranaas.forgero.core.customdata.ContainerVisitor.VISITOR;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -9,6 +17,7 @@ import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.customdata.EnchantmentVisitor;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
@@ -20,11 +29,6 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 public class StateCraftingRecipe extends ShapedRecipe {
 
@@ -45,7 +49,6 @@ public class StateCraftingRecipe extends ShapedRecipe {
 						.anyMatch(name -> name.split("-")[0].equals(result.name().split("-")[0]));
 
 				return isSameMaterial;
-
 			}
 		}
 		return false;
@@ -88,10 +91,16 @@ public class StateCraftingRecipe extends ShapedRecipe {
 			builder.type(targetState.type())
 					.name(targetState.name())
 					.nameSpace(targetState.nameSpace());
-
-			var nbt = new CompositeEncoder().encode(builder.build());
+			var state = builder.build();
+			var nbt = new CompositeEncoder().encode(state);
 			var output = getOutput().copy();
 			output.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, nbt);
+			if (toolBuilderOpt.isPresent()) {
+				state.accept(VISITOR)
+						.map(EnchantmentVisitor::ofAll)
+						.orElse(Collections.emptyList())
+						.forEach(enchantment -> enchantment.embed(output));
+			}
 			return output;
 		}
 		return getOutput().copy();

@@ -22,7 +22,7 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
 			var compositeMatch = context.add(composite.type());
 			if (matchType.equals("UPGRADE")) {
 				return composite.slots().stream().allMatch(slot -> criteria.stream().anyMatch(criteria -> upgradeTest(slot, criteria, compositeMatch)));
-			} else if (match instanceof Constructed construct && criteria.size() == construct.parts().size()) {
+			} else if (match instanceof Constructed construct) {
 				List<String> matches = new ArrayList<>();
 				for (State ingredient : construct.parts()) {
 					for (String criteria : criteria) {

@@ -63,5 +63,23 @@
         "value": 0
       }
     ]
+  },
+  "custom_data": {
+    "enchantment": [
+      {
+        "targets": [
+          "type:PICKAXE_HEAD"
+        ],
+        "id": "minecraft:fortune",
+        "level": 1
+      },
+      {
+        "targets": [
+          "type:SWORD_BLADE"
+        ],
+        "id": "minecraft:looting",
+        "level": 1
+      }
+    ]
   }
 }

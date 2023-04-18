@@ -59,6 +59,8 @@ dependencies {
 	//modLocalRuntime "dev.emi:emi:${emi_version}"
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
+	//JEI
+	modImplementation "maven.modrinth:u6dRKJwZ:Fq2JkIID"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"

@@ -16,6 +16,9 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Boolean disableVanillaRecipes = false;
 
 	@NotNull
+	public Boolean enableCustomRecipeDeletion = true;
+
+	@NotNull
 	public Boolean disableVanillaLoot = false;
 
 	@NotNull
@@ -50,4 +53,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean exportGeneratedTextures = false;
+	
+	@NotNull
+	public boolean showAttributeDifference = true;
 }
