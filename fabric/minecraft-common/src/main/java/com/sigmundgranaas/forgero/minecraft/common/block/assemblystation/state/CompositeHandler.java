@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
@@ -37,27 +36,8 @@ public class CompositeHandler implements DisassemblyHandler {
 	}
 
 	@Override
-	public Optional<DisassemblyHandler> insertIntoDisassemblySlot(ItemStack stack) {
+	public DisassemblyHandler insertIntoDisassemblySlot(ItemStack stack) {
 		return DisassemblyHandler.createHandler(stack);
 	}
 
-	@Override
-	public void clearResults() {
-
-	}
-
-	@Override
-	public DisassemblyHandler removeItemFromDeconstructionSlot() {
-
-	}
-
-	@Override
-	public DisassemblyHandler removeItemFromResultSlot() {
-
-	}
-
-	@Override
-	public void clear() {
-
-	}
 }

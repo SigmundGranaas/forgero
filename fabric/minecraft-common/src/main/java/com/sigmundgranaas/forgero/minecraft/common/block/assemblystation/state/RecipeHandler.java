@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
 
@@ -20,29 +19,8 @@ public class RecipeHandler implements DisassemblyHandler {
 	}
 
 	@Override
-	public Optional<DisassemblyHandler> insertIntoDisassemblySlot(ItemStack stack) {
-		return Optional.empty();
+	public DisassemblyHandler insertIntoDisassemblySlot(ItemStack stack) {
+		return DisassemblyHandler.createHandler(stack);
 	}
 
-	@Override
-	public void clearResults() {
-
-	}
-
-	@Override
-	public DisassemblyHandler removeItemFromDeconstructionSlot() {
-		return new EmptyHandler();
-	}
-
-
-	@Override
-	public DisassemblyHandler removeItemFromResultSlot() {
-		return new EmptyHandler();
-	}
-
-
-	@Override
-	public void clear() {
-
-	}
 }
