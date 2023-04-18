@@ -1,5 +1,13 @@
 package com.sigmundgranaas.forgero.core.resource;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
@@ -13,9 +21,6 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.factory.TypeFactory;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 
-import java.text.MessageFormat;
-import java.util.*;
-
 public class ResourcePipeline {
 	private final List<DataPackage> packages;
 	private final List<ResourceListener<List<DataResource>>> dataListeners;
@@ -25,12 +30,13 @@ public class ResourcePipeline {
 	private final List<ResourceListener<List<String>>> createStateListener;
 	private final Set<String> dependencies;
 	private final ForgeroConfiguration configuration;
+	private final boolean silent;
 	private List<String> createsStates;
 	private Map<String, String> idMapper;
 	private TypeTree tree;
 	private List<RecipeData> recipes;
 
-	public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration, Set<String> modDependencies) {
+	public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration, Set<String> modDependencies, boolean silent) {
 		this.packages = packages;
 		this.dataListeners = dataListeners;
 		this.inflatedDataListener = inflatedDataListener;
@@ -42,7 +48,9 @@ public class ResourcePipeline {
 		this.recipes = new ArrayList<>();
 		this.dependencies = new HashSet<>(ImmutableSet.<String>builder().add("forgero", "minecraft").addAll(modDependencies).build());
 		this.configuration = configuration;
+		this.silent = silent;
 	}
+
 
 	public void execute() {
 		List<DataPackage> validatedPackages = validatePackages(packages);
@@ -87,7 +95,7 @@ public class ResourcePipeline {
 		packages.forEach(pack -> dependencies.add(pack.name()));
 
 		var validatedResources = packages.stream().filter(this::filterPackages).toList();
-		if (configuration.resourceLogging) {
+		if (configuration.resourceLogging && !silent) {
 			Forgero.LOGGER.info("Registered and validated {} Forgero packages", validatedResources.size());
 			Forgero.LOGGER.info("{}", validatedResources.stream().map(DataPackage::name).toList());
 		}
@@ -101,7 +109,9 @@ public class ResourcePipeline {
 		if (!dependencies.containsAll(dataPackage.dependencies())) {
 			if (configuration.logDisabledPackages) {
 				var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
-				Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
+				if (!silent) {
+					Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
+				}
 			}
 			return false;
 		}
@@ -119,7 +129,7 @@ public class ResourcePipeline {
 
 	private boolean filterResources(DataResource resource) {
 		boolean filter = ForgeroConfigurationLoader.configuration.disabledResources.stream().noneMatch(disabled -> resource.identifier().equals(disabled));
-		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging) {
+		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging && !silent) {
 			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration, located at {1}", resource.identifier(), ForgeroConfigurationLoader.configurationFilePath));
 		}
 
@@ -128,7 +138,7 @@ public class ResourcePipeline {
 
 	private boolean filterPacks(DataPackage dataPackage) {
 		boolean filter = ForgeroConfigurationLoader.configuration.disabledPacks.stream().noneMatch(disabled -> dataPackage.identifier().equals(disabled));
-		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging) {
+		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging && !silent) {
 			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration, located at {1}", dataPackage.identifier(), ForgeroConfigurationLoader.configurationFilePath));
 		}
 

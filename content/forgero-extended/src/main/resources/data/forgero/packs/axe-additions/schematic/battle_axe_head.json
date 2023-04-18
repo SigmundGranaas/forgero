@@ -77,7 +77,7 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.7
+        "value": 3.0
       },
       {
         "type": "ATTACK_SPEED",
@@ -89,7 +89,7 @@
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 0.4
       }
     ]
   },
