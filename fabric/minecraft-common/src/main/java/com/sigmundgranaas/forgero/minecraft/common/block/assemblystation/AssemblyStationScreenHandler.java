@@ -159,7 +159,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	@Override
 	public void onContentChanged(Inventory inventory) {
 		this.context.run((world, pos) -> {
-			if (!world.isClient && compositeSlot.doneConstructing && disassemblyHandler.isDisassembled(getItemsFromInventory())) {
+			if (!world.isClient && compositeSlot.doneConstructing) {
 				if (!compositeSlot.isEmpty()) {
 					compositeSlot.removeCompositeIngredient();
 					disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(compositeSlot.getStack());
