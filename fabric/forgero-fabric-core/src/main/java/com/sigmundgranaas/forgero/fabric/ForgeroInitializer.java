@@ -155,6 +155,7 @@ public class ForgeroInitializer implements ModInitializer {
 						.register(FabricPackFinder.supplier())
 						.state(ForgeroStateRegistry.stateListener())
 						.register(availableDependencies)
+						.silent()
 						.build()
 						.execute();
 			}

@@ -51,7 +51,6 @@ public class RecipeManagerMixin {
 	private void deleteRecipes(Map<Identifier, JsonElement> map, ResourceManager resourceManager) {
 		RecipeDeletionReloader.reload(resourceManager);
 		RecipeDeletionReloader.entries.forEach(map::remove);
-		Forgero.LOGGER.error("Removed recipes: " + RecipeDeletionReloader.entries);
 	}
 
 	private void removeAllVanillaToolRecipes(Map<Identifier, JsonElement> map) {
