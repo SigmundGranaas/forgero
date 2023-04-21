@@ -115,13 +115,3 @@ gradle-app.setting
 */dest/
 .gradle/
 */output/
-
-/fabric/forgero-fabric-compat/run/*
-/fabric/forgero-fabric-compat/build/*
-/fabric/forgero-fabric-compat/logs/*
-/fabric/forgero-fabric-core/build/*
-/fabric/forgero-fabric-core/run/*
-/fabric/forgero-fabric-core/logs/*
-/fabric/minecraft-common/build/*
-/fabric/minecraft-common/run/*
-/fabric/minecraft-common/logs/*
