@@ -1,0 +1,16 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "essence_cobble",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:essence_cobblestone"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "essence_cobble"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "uncommon_stone",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:uncommon_ingot"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "uncommon_stone"
+  }
+}

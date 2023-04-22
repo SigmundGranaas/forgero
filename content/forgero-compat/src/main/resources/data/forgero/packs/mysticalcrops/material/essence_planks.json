@@ -1,0 +1,23 @@
+{
+  "type": "WOOD",
+  "parent": "wood",
+  "name": "essence_planks",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:essence_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      }
+    ]
+  },
+  "palette": {
+    "name": "essence_planks"
+  }
+}

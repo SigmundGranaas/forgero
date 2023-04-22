@@ -1,0 +1,23 @@
+{
+  "type": "METAL",
+  "parent": "metal",
+  "name": "common_ingot",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:common_ingot"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 40
+      }
+    ]
+  },
+  "palette": {
+    "name": "common"
+  }
+}

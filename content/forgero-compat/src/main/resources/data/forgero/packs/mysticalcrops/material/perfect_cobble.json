@@ -1,0 +1,16 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "perfect_cobble",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:perfect_essence_cobblestone"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "perfect_cobble"
+  }
+}

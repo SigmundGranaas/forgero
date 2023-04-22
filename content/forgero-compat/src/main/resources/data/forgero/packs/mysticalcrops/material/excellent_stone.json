@@ -1,0 +1,16 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "excellent_stone",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:excellent_essence_stone"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "excellent_stone"
+  }
+}
