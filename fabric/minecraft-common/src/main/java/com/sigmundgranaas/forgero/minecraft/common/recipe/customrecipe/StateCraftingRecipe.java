@@ -16,7 +16,7 @@ import com.sigmundgranaas.forgero.core.state.composite.BaseComposite;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.customdata.EnchantmentVisitor;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
@@ -55,7 +55,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	private Optional<State> convertHead(ItemStack stack) {
-		var converted = StateConverter.of(stack);
+		var converted = CachedConverter.of(stack);
 		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))) {
 			return converted;
 		}
@@ -70,7 +70,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 				ingredients.add(craftingInventory.getStack(i));
 			}
 		}
-		return ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).toList();
+		return ingredients.stream().map(CachedConverter::of).flatMap(Optional::stream).toList();
 	}
 
 	private List<State> upgradesFromCraftingInventory(CraftingInventory craftingInventory) {
@@ -78,7 +78,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
 			if (this.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).anyMatch(ingredient -> ingredient.test(stack))) {
-				var state = StateConverter.of(stack);
+				var state = CachedConverter.of(stack);
 				if (state.isPresent() && (state.get().test(Type.BINDING) || state.get().test(Type.SWORD_GUARD))) {
 					upgrades.add(state.get());
 				}
@@ -90,7 +90,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	@Override
 	public ItemStack craft(CraftingInventory craftingInventory) {
-		var target = StateConverter.of(this.getOutput());
+		var target = CachedConverter.of(this.getOutput());
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -134,7 +134,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	private Optional<State> result() {
-		return StateConverter.of(getOutput());
+		return CachedConverter.of(getOutput());
 	}
 
 	@Override

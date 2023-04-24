@@ -1,5 +1,16 @@
 package com.sigmundgranaas.forgero.core;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import com.sigmundgranaas.forgero.core.registry.StateCollection;
 import com.sigmundgranaas.forgero.core.registry.StateFinder;
 import com.sigmundgranaas.forgero.core.registry.impl.ReloadableStateRegistry;
@@ -11,18 +22,12 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 
-import javax.annotation.Nullable;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
 public class ForgeroStateRegistry {
 	@Nullable
 	public static StateCollection STATES;
 	public static List<StateProvider> CREATE_STATES;
 	public static Map<String, String> STATE_TO_CONTAINER;
+	public static List<String> TAGS;
 	public static Map<String, String> CONTAINER_TO_STATE;
 	public static Set<String> COMPOSITES;
 	public static List<DataResource> CONSTRUCTS;
@@ -127,6 +132,14 @@ public class ForgeroStateRegistry {
 		return (resources, tree, idMapper) -> {
 			if (RECIPES == null) {
 				RECIPES = resources;
+			}
+		};
+	}
+
+	public static ResourceListener<List<String>> tagListener() {
+		return (resources, tree, idMapper) -> {
+			if (TAGS == null) {
+				TAGS = resources;
 			}
 		};
 	}

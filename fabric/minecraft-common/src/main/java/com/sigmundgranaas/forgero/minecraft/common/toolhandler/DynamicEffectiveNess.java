@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import java.util.Collections;
+import java.util.List;
+
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.TagKey;
-
-import java.util.Collections;
-import java.util.List;
 
 public interface DynamicEffectiveNess {
 
@@ -17,7 +17,7 @@ public interface DynamicEffectiveNess {
 	}
 
 	default List<TagKey<Block>> effectiveBlocks(ItemStack stack) {
-		return StateConverter.of(stack).map(EffectivenessHandler::of).orElse(Collections.emptyList());
+		return CachedConverter.of(stack).map(EffectivenessHandler::of).orElse(Collections.emptyList());
 	}
 
 	boolean isEffectiveOn(BlockState state, ItemStack stack);

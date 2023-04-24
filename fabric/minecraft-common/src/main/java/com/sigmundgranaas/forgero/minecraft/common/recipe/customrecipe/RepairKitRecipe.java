@@ -1,11 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
+import java.util.Optional;
+import java.util.stream.IntStream;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 
@@ -17,11 +22,6 @@ import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-import java.util.stream.IntStream;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 public class RepairKitRecipe extends ShapelessRecipe {
 
 	public RepairKitRecipe(ShapelessRecipe recipe) {
@@ -32,7 +32,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	public boolean matches(CraftingInventory craftingInventory, World world) {
 		return super.matches(craftingInventory, world) && IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
-				.filter(stack -> StateConverter.of(stack).isPresent())
+				.filter(stack -> CachedConverter.of(stack).isPresent())
 				.anyMatch(stack -> stack.getDamage() > 0);
 	}
 
@@ -40,12 +40,12 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	public ItemStack craft(CraftingInventory craftingInventory) {
 		var state = IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
-				.map(StateConverter::of)
+				.map(CachedConverter::of)
 				.flatMap(Optional::stream)
 				.findFirst();
 		var originalStack = IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
-				.filter(stack -> StateConverter.of(stack).isPresent())
+				.filter(stack -> CachedConverter.of(stack).isPresent())
 				.findFirst();
 		if (state.isPresent() && originalStack.isPresent() && state.get() instanceof ConstructedTool tool) {
 			var unbrokenState = tool.removeCondition(Conditions.BROKEN.name());

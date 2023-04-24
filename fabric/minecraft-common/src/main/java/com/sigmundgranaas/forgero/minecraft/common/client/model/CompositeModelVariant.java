@@ -1,15 +1,29 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.model.*;
+import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
+import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
+import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.model.TextureBasedModel;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
@@ -18,17 +32,6 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	private final LoadingCache<ItemStack, BakedModel> cache;
@@ -104,7 +107,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	}
 
 	private Optional<ModelTemplate> converter(ItemStack stack) {
-		var compositeOpt = StateConverter.of(stack);
+		var compositeOpt = CachedConverter.of(stack);
 		if (compositeOpt.isPresent()) {
 			var composite = compositeOpt.get();
 			return registry.find(composite);

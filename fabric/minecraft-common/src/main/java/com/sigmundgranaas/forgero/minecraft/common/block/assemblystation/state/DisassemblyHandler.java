@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.state.Composite;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
 
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ public interface DisassemblyHandler {
 		var recipe = DisassemblyRecipeLoader.getEntries().stream()
 				.filter(entry -> entry.getInput().test(stack))
 				.findFirst();
-		if (noDamage && StateConverter.of(stack).isPresent() && StateConverter.of(stack).get() instanceof Composite composite) {
+		if (noDamage && CachedConverter.of(stack).isPresent() && CachedConverter.of(stack).get() instanceof Composite composite) {
 			return new CompositeHandler(composite);
 		} else if (noDamage && recipe.isPresent()) {
 			return new RecipeHandler(recipe.get());

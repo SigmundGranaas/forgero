@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
@@ -15,8 +17,6 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-
-import java.util.Optional;
 
 public class GemUpgradeRecipe extends SmithingRecipe {
 	public GemUpgradeRecipe(SmithingRecipe recipe) {
@@ -37,12 +37,12 @@ public class GemUpgradeRecipe extends SmithingRecipe {
 	}
 
 	private Optional<LeveledState> base(Inventory inventory) {
-		var target = StateConverter.of(inventory.getStack(0));
+		var target = CachedConverter.of(inventory.getStack(0));
 		return target.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
 	}
 
 	private Optional<LeveledState> addition(Inventory inventory) {
-		var addition = StateConverter.of(inventory.getStack(1));
+		var addition = CachedConverter.of(inventory.getStack(1));
 		return addition.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
 	}
 

@@ -1,11 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedSchematicPart;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 
 import net.minecraft.inventory.CraftingInventory;
@@ -14,10 +18,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class SchematicPartRecipe extends ShapelessRecipe {
 
@@ -36,12 +36,12 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 				}
 			}
 		}
-		return ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).toList();
+		return ingredients.stream().map(CachedConverter::of).flatMap(Optional::stream).toList();
 	}
 
 	@Override
 	public ItemStack craft(CraftingInventory craftingInventory) {
-		var target = StateConverter.of(this.getOutput());
+		var target = CachedConverter.of(this.getOutput());
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -51,7 +51,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 				builder.id(targetState.identifier());
 				builder.addUpgrades(upgradeable.slots());
 				builder.type(targetState.type());
-				return StateConverter.of(builder.build());
+				return CachedConverter.of(builder.build());
 			}
 
 		}

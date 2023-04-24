@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -23,7 +23,7 @@ public class ForgeroMaterial implements ToolMaterial, DynamicAttributeItem {
 
 	@Override
 	public PropertyContainer dynamicProperties(ItemStack stack) {
-		return StateConverter.of(stack).orElse(DEFAULT.get());
+		return CachedConverter.of(stack).orElse(DEFAULT.get());
 	}
 
 	@Override

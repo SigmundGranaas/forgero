@@ -1,10 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 
@@ -15,8 +17,6 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class StateUpgradeRecipe extends SmithingRecipe {
 	public StateUpgradeRecipe(SmithingRecipe recipe) {
@@ -29,10 +29,10 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 			return false;
 		}
 		if (super.matches(inventory, world)) {
-			var originStateOpt = StateConverter.of(inventory.getStack(0))
+			var originStateOpt = CachedConverter.of(inventory.getStack(0))
 					.filter(Composite.class::isInstance)
 					.map(Composite.class::cast);
-			var upgradeOpt = StateConverter.of(inventory.getStack(1));
+			var upgradeOpt = CachedConverter.of(inventory.getStack(1));
 			if (originStateOpt.isPresent() && upgradeOpt.isPresent()) {
 				return originStateOpt.get().canUpgrade(upgradeOpt.get());
 			}
@@ -42,8 +42,8 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 
 	@Override
 	public ItemStack craft(Inventory inventory) {
-		var originStateOpt = StateConverter.of(inventory.getStack(0));
-		var upgradeOpt = StateConverter.of(inventory.getStack(1));
+		var originStateOpt = CachedConverter.of(inventory.getStack(0));
+		var upgradeOpt = CachedConverter.of(inventory.getStack(1));
 		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
 			var output = getOutput().copy();

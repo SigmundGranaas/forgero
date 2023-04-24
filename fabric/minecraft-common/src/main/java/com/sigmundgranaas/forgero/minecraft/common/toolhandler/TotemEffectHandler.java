@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 import com.sigmundgranaas.forgero.core.property.v2.RunnableHandler;
 import com.sigmundgranaas.forgero.core.state.Composite;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -54,7 +54,7 @@ public class TotemEffectHandler implements RunnableHandler {
 		for (Hand hand : Hand.values()) {
 			ItemStack itemStack = entity.getStackInHand(hand);
 			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
-			if (StateConverter.of(itemStack).filter(state -> state instanceof Composite composite && composite.has("forgero:soul-totem").isPresent()).isPresent()) {
+			if (CachedConverter.of(itemStack).filter(state -> state instanceof Composite composite && composite.has("forgero:soul-totem").isPresent()).isPresent()) {
 				itemStack = new ItemStack(totem);
 				if (!itemStack.isEmpty()) {
 					return itemStack;

@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.item;
 
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -7,11 +9,15 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.ForgeroMaterial;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tool.*;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicAxeItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicHoeItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicPickaxeItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicShovelItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicSwordItem;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -19,8 +25,6 @@ import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import java.util.Optional;
 
 public class StateToItemConverter {
 	private final StateProvider provider;
@@ -55,7 +59,7 @@ public class StateToItemConverter {
 				ingredientState = Optional.of(based.baseMaterial());
 			}
 		}
-		Ingredient ingredient = ingredientState.map(StateConverter::of).map(Ingredient::ofStacks).orElse(ToolMaterials.WOOD.getRepairIngredient());
+		Ingredient ingredient = ingredientState.map(CachedConverter::of).map(Ingredient::ofStacks).orElse(ToolMaterials.WOOD.getRepairIngredient());
 		if (state.type().test(Type.of("SWORD"), context)) {
 			return new DynamicSwordItem((new ForgeroMaterial(provider, ingredient)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
 		} else if (state.type().test(Type.of("PICKAXE"), context)) {
