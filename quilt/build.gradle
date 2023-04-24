@@ -1,0 +1,125 @@
+plugins {
+	id "idea"
+	alias libs.plugins.quilt.loom
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
+	id 'maven-publish'
+}
+
+configure(subprojects) {
+	apply plugin: 'java-library'
+	apply plugin: "idea"
+	apply plugin: 'maven-publish'
+	apply plugin: 'org.quiltmc.loom'
+}
+
+archivesBaseName = "forgero-quilt"
+
+dependencies {
+	minecraft libs.minecraft
+	mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
+	modImplementation libs.quilt.loader
+	modImplementation libs.qfapi
+
+	include "curse.maven:arrp-463113:3901211"
+	include project(':forgero-core')
+
+	include project(':quilt:forgero-quilt-core')
+	include project(':quilt:minecraft-common')
+	include project(':quilt:forgero-quilt-compat')
+
+	include project(':content:forgero-vanilla')
+	include project(':content:forgero-extended')
+	include project(':content:forgero-compat')
+	include project(':content:forgero-structures')
+
+}
+
+subprojects {
+	dependencies {
+		minecraft libs.minecraft
+		mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
+		modImplementation libs.quilt.loader
+		modImplementation libs.qfapi
+
+		annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+		implementation 'org.jetbrains:annotations:23.0.0'
+		implementation 'org.projectlombok:lombok:1.18.24'
+		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+	}
+	// configure the maven publication
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+				// add all the jars that should be included when publishing to maven
+
+			}
+		}
+
+		// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+		repositories {
+			maven {
+				name = "GitHubPackages"
+				url = "https://maven.pkg.github.com/sigmundgranaas/forgero"
+				credentials {
+					username = System.getenv("GITHUB_ACTOR")
+					password = System.getenv("GITHUB_TOKEN")
+				}
+			}
+			// Add repositories to publish to here.
+			// Notice: This block does NOT have the same function as the block in the top level.
+			// The repositories here will be used for publishing your artifact, not for
+			// retrieving dependencies.
+		}
+	}
+}
+
+curseforge {
+	apiKey = System.getenv("CurseForgeApiKey") ?: ""
+	project {
+		id = '581435'
+		changelogType = "markdown"
+		changelog = file('changelog.md')
+
+		releaseType = 'release'
+		addGameVersion project.minecraft_version
+		addGameVersion 'Fabric'
+		addGameVersion 'Quilt'
+		addGameVersion "Java 17"
+
+		mainArtifact(remapJar) {
+			displayName = "Forgero [Quilt]: $rootProject.version"
+			relations {
+				embeddedLibrary 'arrp'
+				requiredDependency 'qfapi'
+				optionalDependency 'patchouli'
+			}
+		}
+	}
+	options {
+		forgeGradleIntegration = false // defaults to true
+	}
+}
+
+allprojects {
+	repositories {
+		maven { url "https://api.modrinth.com/maven" }
+		maven { url "https://cursemaven.com" }
+		maven { url 'https://jitpack.io' }
+	}
+
+	processResources {
+		inputs.property "version", rootProject.version
+
+		filesMatching("quilt.mod.json") {
+			expand "version": rootProject.version
+		}
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${archivesBaseName}" }
+		}
+	}
+}

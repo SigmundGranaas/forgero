@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "quilt_loader": {
+  "id": "forgero-vanilla",
+  "version": "${version}",
+  "metadata": {
+    "name": "Forgero Vanilla",
+    "description": "Equipment crafting expansion mod for Fabric!",
+    "contributors": {
+      "Sigmund Granaas Sandring": "Owner",
+      "Aulluna": "",
+      "Rad233": "",
+      "identithree": "",
+      "macaroni0423": "",
+      "Steveplays28": "",
+      "CantWeAllDisagree": "Ported to quilt"
+    },
+    "contact": {
+      "homepage": "https://sigmundgranaas.com",
+      "sources": "https://github.com/sigmundgranaas/forgero",
+      "issues": "https://github.com/sigmundgranaas/forgero/issues"
+    },
+    "license": "MIT",
+    "icon": "assets/forgero/icon.png",
+    "environment": "*",
+    "accessWidener": "minecraft-common.accesswidener"
+  },
+  "intermediate_mappings": "net.fabricmc:intermediary",           
+  "entrypoints": {
+    "dynamiclights": "com.sigmundgranaas.forgero.quilt.dynamiclights.DynamicLightsRegistryEndpoint",
+    "client": "com.sigmundgranaas.forgero.quilt.ForgeroCompatClient",
+    "main": "com.sigmundgranaas.forgero.quilt.ForgeroCompatInitializer",
+    "modmenu": "com.sigmundgranaas.forgero.quilt.modmenu.ForgeroModMenuIntegration"
+  },
+  "depends": [
+    {
+      "id": "quilt_loader",
+      "versions": ">=0.18.10-"
+    },
+    {
+      "id": "quilted_fabric_api",
+      "versions": ">=4.0.0-"
+    },
+    {
+      "id": "minecraft",
+      "versions": ">=1.19.2"
+    },
+    {
+      "id": "java",
+      "versions": ">=17"
+    },
+    {
+      "id": "forgero-quilt-core",
+      "versions": "*"
+    }
+  ]
+  },
+  "suggests": {
+    "patchouli": "*",
+    "lambdynamiclights": "*"
+  },
+  "mixin": "forgero-quilt-compat.mixins.json",
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero"
+      }
+    }
+  } 
+}

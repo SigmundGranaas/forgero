@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.quilt.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.sigmundgranaas.forgero.quilt.mixins.CompatMixinPlugin",
+  "mixins": [
+    "BetterCombatWeaponRegistryMixin"
+  ],
+  "client": [
+    "ModMenuInitMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,6 +1,0 @@
-{
-  "name": "Gems",
-  "description": "Gems are levelable upgrades which can be applied to to tool parts. Gems will be dropped when your tool is destroyed, which means you can continue upgrading your gems between tools. ",
-  "icon": "forgero:lapis-gem",
-  "sortnum": 3
-}

@@ -1,12 +1,14 @@
 pluginManagement {
 	repositories {
 		maven {
+			name = 'Quilt'
+			url = 'https://maven.quiltmc.org/repository/release'
+		}
+		// Currently needed for Intermediary and other temporary dependencies
+		maven {
 			name = 'Fabric'
 			url = 'https://maven.fabricmc.net/'
 		}
-		maven { url "https://maven.architectury.dev/" }
-		maven { url "https://files.minecraftforge.net/maven/" }
-		mavenCentral()
 		gradlePluginPortal()
 	}
 }
@@ -23,7 +25,7 @@ include 'content:forgero-compat'
 include 'content:forgero-structures'
 
 //Fabric
-include 'forgero-fabric'
-include 'fabric:forgero-fabric-core'
-include 'fabric:forgero-fabric-compat'
-include 'fabric:minecraft-common'
+include 'forgero-quilt'
+include 'quilt:forgero-quilt-core'
+include 'quilt:forgero-quilt-compat'
+include 'quilt:minecraft-common'
