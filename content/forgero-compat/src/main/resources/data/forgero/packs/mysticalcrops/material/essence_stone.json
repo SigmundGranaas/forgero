@@ -1,0 +1,51 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "essence_stone",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:essence_stone"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "stone-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 17
+      },
+      {
+        "id": "stone-mining-speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.2
+      },
+      {
+        "id": "stone-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.7
+      },
+      {
+        "id": "stone-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 150.0
+      },
+      {
+        "id": "stone-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 23
+      }
+    ]
+  },
+  "palette": {
+    "name": "essence_stone"
+  }
+}
