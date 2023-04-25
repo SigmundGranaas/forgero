@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.ItemStack;
 
@@ -14,7 +14,7 @@ public interface StateItem extends DynamicAttributeItem, State {
 	State defaultState();
 
 	default State dynamicState(ItemStack stack) {
-		return CachedConverter.of(stack).orElse(defaultState());
+		return StateService.INSTANCE.convert(stack).orElse(defaultState());
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public interface StateItem extends DynamicAttributeItem, State {
 	}
 
 	default State state(ItemStack stack) {
-		return CachedConverter.of(stack).orElse(defaultState());
+		return StateService.INSTANCE.convert(stack).orElse(defaultState());
 	}
 
 

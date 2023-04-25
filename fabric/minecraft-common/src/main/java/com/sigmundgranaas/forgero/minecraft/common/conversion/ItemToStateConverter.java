@@ -1,17 +1,20 @@
 package com.sigmundgranaas.forgero.minecraft.common.conversion;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
-
-import java.util.Optional;
-import java.util.function.Function;
+import net.minecraft.util.registry.Registry;
 
 public class ItemToStateConverter implements Converter<Item, Optional<State>> {
-	private final Function<Item, Optional<State>> stateFinder;
+	private final Registry<Item> registry;
+	private final StateService stateFinder;
 
-	public ItemToStateConverter(Function<Item, Optional<State>> stateFinder) {
+	public ItemToStateConverter(Registry<Item> registry, StateService stateFinder) {
+		this.registry = registry;
 		this.stateFinder = stateFinder;
 	}
 
@@ -20,7 +23,7 @@ public class ItemToStateConverter implements Converter<Item, Optional<State>> {
 		if (item instanceof StateItem stateItem) {
 			return Optional.of(stateItem.defaultState());
 		} else {
-			return stateFinder.apply(item);
+			return stateFinder.find(registry.getId(item));
 		}
 	}
 }

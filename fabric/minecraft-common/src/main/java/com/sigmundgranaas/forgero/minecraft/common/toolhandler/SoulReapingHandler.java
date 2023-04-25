@@ -12,8 +12,8 @@ import com.sigmundgranaas.forgero.core.soul.SoulBindable;
 import com.sigmundgranaas.forgero.core.soul.SoulSource;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
@@ -32,13 +32,16 @@ public class SoulReapingHandler implements RunnableHandler {
 
 	private final LivingEntity targetEntity;
 
-	public SoulReapingHandler(PlayerEntity entity, LivingEntity targetEntity) {
+	private final StateService service;
+
+	public SoulReapingHandler(PlayerEntity entity, LivingEntity targetEntity, StateService service) {
 		this.entity = entity;
 		this.targetEntity = targetEntity;
+		this.service = service;
 	}
 
 	public static SoulReapingHandler of(PlayerEntity entity, LivingEntity targetEntity) {
-		return new SoulReapingHandler(entity, targetEntity);
+		return new SoulReapingHandler(entity, targetEntity, StateService.INSTANCE);
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class SoulReapingHandler implements RunnableHandler {
 	@Override
 	public void run() {
 		ItemStack stack = entity.getMainHandStack();
-		var converted = CachedConverter.of(stack);
+		var converted = service.convert(stack);
 		if (converted.isPresent() && converted.get() instanceof Composite construct) {
 			String name = targetEntity.hasCustomName() && targetEntity.getCustomName() != null ? targetEntity.getCustomName().getString() : targetEntity.getName().getString();
 			SoulSource soulSource = new SoulSource(EntityType.getId(targetEntity.getType()).toString(), name);
@@ -70,7 +73,7 @@ public class SoulReapingHandler implements RunnableHandler {
 						state = comp.removeUpgrade("forgero:soul-totem");
 					}
 				}
-				entity.getInventory().setStack(entity.getInventory().selectedSlot, CachedConverter.of(state));
+				entity.getInventory().setStack(entity.getInventory().selectedSlot, service.convert(state).orElse(ItemStack.EMPTY));
 			} else if (hasSoulTotemInHand()) {
 				entity.world.sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
 				ItemStack totemSack = getTotemStack();
@@ -79,7 +82,7 @@ public class SoulReapingHandler implements RunnableHandler {
 				if (construct instanceof SoulBindable bindable) {
 					state = bindable.bind(soul);
 				}
-				entity.getInventory().setStack(entity.getInventory().selectedSlot, CachedConverter.of(state));
+				entity.getInventory().setStack(entity.getInventory().selectedSlot, service.convert(state).orElse(ItemStack.EMPTY));
 			}
 		}
 	}

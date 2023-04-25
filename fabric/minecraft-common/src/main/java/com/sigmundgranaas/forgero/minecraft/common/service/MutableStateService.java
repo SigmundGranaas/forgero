@@ -1,14 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.StateProvider;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-class MutableStateService extends StateService {
+class MutableStateService implements StateService {
 	private StateService stateService;
 
 	public MutableStateService(StateService stateService) {
@@ -20,22 +22,32 @@ class MutableStateService extends StateService {
 	}
 
 	@Override
-	Optional<State> find(Item item) {
+	public Optional<State> find(Item item) {
 		return stateService.find(item);
 	}
 
 	@Override
-	Optional<State> find(Identifier id) {
+	public Collection<StateProvider> all() {
+		return stateService.all();
+	}
+
+	@Override
+	public Optional<State> find(Identifier id) {
 		return stateService.find(id);
 	}
 
 	@Override
-	Optional<State> convert(ItemStack stack) {
+	public Optional<State> convert(ItemStack stack) {
 		return stateService.convert(stack);
 	}
 
 	@Override
-	boolean isInitialized() {
+	public Optional<ItemStack> convert(State state) {
+		return stateService.convert(state);
+	}
+
+	@Override
+	public boolean isInitialized() {
 		return stateService.isInitialized();
 	}
 

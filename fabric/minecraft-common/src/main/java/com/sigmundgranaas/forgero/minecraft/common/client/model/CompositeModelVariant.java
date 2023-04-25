@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -20,8 +19,8 @@ import com.sigmundgranaas.forgero.core.model.TextureBasedModel;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,11 +36,13 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	private final LoadingCache<ItemStack, BakedModel> cache;
 	private final LoadingCache<String, BakedModel> defaultCache;
 	private final ModelRegistry registry;
+	private final StateService stateService;
 	private ModelLoader loader;
 	private Function<SpriteIdentifier, Sprite> textureGetter;
 
-	public CompositeModelVariant(ModelRegistry modelRegistry) {
+	public CompositeModelVariant(ModelRegistry modelRegistry, StateService stateService) {
 		this.registry = modelRegistry;
+		this.stateService = stateService;
 		this.cache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
 			@Override
 			public @NotNull
@@ -53,9 +54,8 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			@Override
 			public @NotNull
 			BakedModel load(@NotNull String value) {
-				return ForgeroStateRegistry.STATES
+				return StateService.INSTANCE
 						.find(value)
-						.map(Supplier::get)
 						.flatMap(modelRegistry::find)
 						.flatMap(modelTemplate -> convertModel(modelTemplate))
 						.orElse(new EmptyBakedModel());
@@ -107,7 +107,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	}
 
 	private Optional<ModelTemplate> converter(ItemStack stack) {
-		var compositeOpt = CachedConverter.of(stack);
+		var compositeOpt = stateService.convert(stack);
 		if (compositeOpt.isPresent()) {
 			var composite = compositeOpt.get();
 			return registry.find(composite);

@@ -4,7 +4,7 @@
   "name": "iron",
   "container": {
     "type": "HOST",
-    "id": "minecraft:iron_ingot"
+    "tag": "c:iron_ingot"
   },
   "properties": {
     "attributes": [

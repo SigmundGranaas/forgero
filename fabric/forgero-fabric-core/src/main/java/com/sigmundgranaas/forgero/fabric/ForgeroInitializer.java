@@ -64,6 +64,7 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
@@ -107,23 +108,25 @@ public class ForgeroInitializer implements ModInitializer {
 				.build()
 				.execute();
 
-		var handler = RegistryHandler.HANDLER;
-		handler.accept(this::registerBlocks);
-		handler.accept(this::registerAARPRecipes);
-		handler.accept(this::registerStates);
-		handler.accept(this::registerRecipes);
-		handler.accept(DynamicItems::registerDynamicItems);
-		handler.accept(this::registerTreasure);
-		handler.accept(this::registerCommands);
-		handler.accept(this::registerLevelPropertiesDefaults);
-		handler.accept(LootFunctions::register);
-		handler.accept(Attributes::register);
-		handler.accept(this::disassemblyReloader);
+		var handler = RegistryHandler.getHandler();
+		handler.acceptJob(this::registerBlocks);
+		handler.acceptJob(this::registerAARPRecipes);
+		handler.acceptJob(this::registerStates);
+		handler.acceptJob(this::registerRecipes);
+		handler.acceptJob(DynamicItems::registerDynamicItems);
+		handler.acceptJob(this::registerTreasure);
+		handler.acceptJob(this::registerCommands);
+		handler.acceptJob(this::registerLevelPropertiesDefaults);
+		handler.acceptJob(LootFunctions::register);
+		handler.acceptJob(Attributes::register);
+		handler.acceptJob(this::disassemblyReloader);
 
-		handler.run();
+		handler.runJobs();
 		dataReloader();
 		lootConditionReloader();
 		lootInjectionReloader();
+
+		ServerLifecycleEvents.SERVER_STARTING.register(server -> handler.initialize());
 	}
 
 	private void registerLevelPropertiesDefaults() {

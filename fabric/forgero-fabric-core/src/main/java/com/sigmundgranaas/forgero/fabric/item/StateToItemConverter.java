@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.ForgeroMaterial;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
@@ -18,6 +17,7 @@ import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicHoeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicPickaxeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicShovelItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicSwordItem;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -43,7 +43,7 @@ public class StateToItemConverter {
 		if (state.type().test(Type.of("SWORD"), context) || state.type().test(Type.of("TOOL"), context)) {
 			return createTool();
 		} else if (state.type().test(Type.GEM)) {
-			return new GemItem(getItemSettings(state), state);
+			return new GemItem(getItemSettings(state), state, StateService.INSTANCE);
 		}
 		return defaultStateItem();
 	}
@@ -59,17 +59,22 @@ public class StateToItemConverter {
 				ingredientState = Optional.of(based.baseMaterial());
 			}
 		}
-		Ingredient ingredient = ingredientState.map(CachedConverter::of).map(Ingredient::ofStacks).orElse(ToolMaterials.WOOD.getRepairIngredient());
+		StateService service = StateService.INSTANCE;
+		Ingredient ingredient = ingredientState
+				.flatMap(service::convert)
+				.map(Ingredient::ofStacks)
+				.orElse(ToolMaterials.WOOD.getRepairIngredient());
+
 		if (state.type().test(Type.of("SWORD"), context)) {
-			return new DynamicSwordItem((new ForgeroMaterial(provider, ingredient)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+			return new DynamicSwordItem((new ForgeroMaterial(provider, ingredient, service)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
 		} else if (state.type().test(Type.of("PICKAXE"), context)) {
-			return new DynamicPickaxeItem(new ForgeroMaterial(provider, ingredient), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+			return new DynamicPickaxeItem(new ForgeroMaterial(provider, ingredient, service), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
 		} else if (state.type().test(Type.of("AXE"), context)) {
-			return new DynamicAxeItem((new ForgeroMaterial(provider, ingredient)), attack_damage, attack_speed, getItemSettings(state), () -> state);
+			return new DynamicAxeItem((new ForgeroMaterial(provider, ingredient, service)), attack_damage, attack_speed, getItemSettings(state), () -> state);
 		} else if (state.type().test(Type.of("HOE"), context)) {
-			return new DynamicHoeItem((new ForgeroMaterial(provider, ingredient)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+			return new DynamicHoeItem((new ForgeroMaterial(provider, ingredient, service)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
 		} else if (state.type().test(Type.of("SHOVEL"), context)) {
-			return new DynamicShovelItem((new ForgeroMaterial(provider, ingredient)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+			return new DynamicShovelItem((new ForgeroMaterial(provider, ingredient, service)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
 		}
 		return new DefaultStateItem(getItemSettings(state), provider);
 	}

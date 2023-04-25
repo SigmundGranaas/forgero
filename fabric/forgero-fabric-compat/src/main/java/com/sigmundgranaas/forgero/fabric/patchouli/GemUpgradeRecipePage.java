@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import vazkii.patchouli.client.book.ClientBookRegistry;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.page.abstr.PageDoubleRecipeRegistry;
@@ -47,16 +47,15 @@ public class GemUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRecip
 			return ItemStack.EMPTY;
 		}
 
-		var gemState = CachedConverter.of(recipe.getOutput());
+		var gemState = StateService.INSTANCE.convert(recipe.getOutput());
 		if (gemState.isPresent() && gemState.get() instanceof LeveledState leveledState) {
 			var leveled = leveledState.levelUp();
-			return CachedConverter.of(leveled);
+			return StateService.INSTANCE.convert(leveled).orElse(recipe.getOutput());
 		}
 
 		return recipe.getOutput();
 	}
-
-
+	
 	@Override
 	protected int getRecipeHeight() {
 		return 60;

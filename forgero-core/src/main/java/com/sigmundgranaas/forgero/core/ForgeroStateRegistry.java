@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.core;
 
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,7 @@ public class ForgeroStateRegistry {
 	public static List<StateProvider> CREATE_STATES;
 	public static Map<String, String> STATE_TO_CONTAINER;
 	public static List<String> TAGS;
+	public static Map<String, String> TAGS_MAPPING;
 	public static Map<String, String> CONTAINER_TO_STATE;
 	public static Set<String> COMPOSITES;
 	public static List<DataResource> CONSTRUCTS;
@@ -70,27 +74,35 @@ public class ForgeroStateRegistry {
 			if (CONTAINER_TO_STATE == null) {
 				var containerToState = new HashMap<String, String>();
 				var stateToContainer = new HashMap<String, String>();
+				var tags = new ArrayList<String>();
+				var tagToState = new HashMap<String, String>();
 				resources.stream()
 						.filter(data -> data.container().isPresent())
 						.forEach(data -> {
 							String containerId = data.container().get().getId().equals("this") ? data.identifier() : data.container().get().getId();
 							String stateId = data.identifier();
-							if (idMapper.containsKey(stateId)) {
-								if (idMapper.containsKey(containerId)) {
-									stateToContainer.put(idMapper.get(stateId), idMapper.get(containerId));
-									containerToState.put(idMapper.get(containerId), idMapper.get(stateId));
-								} else {
-									stateToContainer.put(idMapper.get(stateId), containerId);
-									containerToState.put(containerId, idMapper.get(stateId));
-								}
-
+							if (containerId.equals(EMPTY_IDENTIFIER)) {
+								tags.add(data.container().get().getTag());
+								tagToState.put(data.container().get().getTag(), stateId);
 							} else {
-								stateToContainer.put(stateId, containerId);
-								containerToState.put(containerId, stateId);
+								if (idMapper.containsKey(stateId)) {
+									if (idMapper.containsKey(containerId)) {
+										stateToContainer.put(idMapper.get(stateId), idMapper.get(containerId));
+										containerToState.put(idMapper.get(containerId), idMapper.get(stateId));
+									} else {
+										stateToContainer.put(idMapper.get(stateId), containerId);
+										containerToState.put(containerId, idMapper.get(stateId));
+									}
+								} else {
+									stateToContainer.put(stateId, containerId);
+									containerToState.put(containerId, stateId);
+								}
 							}
 						});
 				CONTAINER_TO_STATE = containerToState;
 				STATE_TO_CONTAINER = stateToContainer;
+				TAGS = tags;
+				TAGS_MAPPING = tagToState;
 			}
 		};
 	}
@@ -132,14 +144,6 @@ public class ForgeroStateRegistry {
 		return (resources, tree, idMapper) -> {
 			if (RECIPES == null) {
 				RECIPES = resources;
-			}
-		};
-	}
-
-	public static ResourceListener<List<String>> tagListener() {
-		return (resources, tree, idMapper) -> {
-			if (TAGS == null) {
-				TAGS = resources;
 			}
 		};
 	}

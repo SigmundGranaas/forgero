@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.UndyingHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,7 +43,7 @@ public abstract class LivingEntityUndyingMixin {
 			Hand[] hands = Hand.values();
 			for (Hand hand : hands) {
 				ItemStack stack = this.getStackInHand(hand);
-				var handler = CachedConverter.of(stack).flatMap(container -> UndyingHandler.of(container, stack));
+				var handler = StateService.INSTANCE.convert(stack).flatMap(container -> UndyingHandler.of(container, stack));
 				if (handler.isPresent()) {
 					executeUndyingEffect(stack);
 					handler.get().handle();

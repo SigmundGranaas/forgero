@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -15,15 +15,17 @@ import net.minecraft.recipe.Ingredient;
 public class ForgeroMaterial implements ToolMaterial, DynamicAttributeItem {
 	private final StateProvider DEFAULT;
 	private final Ingredient ingredient;
+	private final StateService service;
 
-	public ForgeroMaterial(StateProvider aDefault, Ingredient ingredient) {
+	public ForgeroMaterial(StateProvider aDefault, Ingredient ingredient, StateService service) {
 		DEFAULT = aDefault;
 		this.ingredient = ingredient;
+		this.service = service;
 	}
 
 	@Override
 	public PropertyContainer dynamicProperties(ItemStack stack) {
-		return CachedConverter.of(stack).orElse(DEFAULT.get());
+		return service.convert(stack).orElse(DEFAULT.get());
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import static dev.lambdaurora.lambdynlights.api.DynamicLightHandlers.registerDyn
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LumaHandler;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 
@@ -18,7 +18,7 @@ public class DynamicLightsRegistryEndpoint implements DynamicLightsInitializer {
 	public void onInitializeDynamicLights() {
 		registerDynamicLightHandler(EntityType.PLAYER, (player) -> {
 			for (ItemStack stack : player.getHandItems()) {
-				Optional<Integer> luma = CachedConverter.of(stack).flatMap(LumaHandler::of).map(Attribute::asInt);
+				Optional<Integer> luma = StateService.INSTANCE.convert(stack).flatMap(LumaHandler::of).map(Attribute::asInt);
 				if (luma.isPresent()) {
 					return luma.get();
 				}

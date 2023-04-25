@@ -2,13 +2,13 @@ package com.sigmundgranaas.forgero.fabric.registry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.registry.StateCollection;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import com.sigmundgranaas.forgero.minecraft.common.service.UninitializedStateService;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -23,14 +23,6 @@ public class RegistryHandler {
 		this.syncedEntries = new ArrayList<>();
 	}
 
-	public static StateService getService() {
-		if (!StateService..isInitialized()) {
-			Forgero.LOGGER.warn("Forgero is not initialized yet. Please wait for the mod to finish loading.");
-			return SERVICE;
-		}
-		return SERVICE;
-	}
-
 	public static RegistryHandler getHandler() {
 		return HANDLER;
 	}
@@ -42,14 +34,16 @@ public class RegistryHandler {
 	public void initialize() {
 		StateCollection collection = ForgeroStateRegistry.STATES;
 		List<String> tags = ForgeroStateRegistry.TAGS;
+		Map<String, String> itemToStateMap = ForgeroStateRegistry.CONTAINER_TO_STATE;
+		Map<String, String> tagToStateMap = ForgeroStateRegistry.TAGS_MAPPING;
 		if (collection == null || tags == null) {
-			Forgero.LOGGER.warn("Forgero is not initialized yet. Please wait for the mod to finish loading.");
+			Forgero.LOGGER.error("Forgero is not initialized yet. Please wait for the mod to finish loading.");
 			return;
 		}
 		List<Identifier> convertedTags = tags.stream().map(Identifier::new).toList();
-		SERVICE = new ForgeroInstanceRegistry(convertedTags, collection, Registry.ITEM);
-		StateService.INSTANCE = () -> SERVICE;
-		runSynced(SERVICE);
+		StateService service = new ForgeroInstanceRegistry(convertedTags, collection, Registry.ITEM, itemToStateMap, tagToStateMap);
+		StateService.initialize(service);
+		runSynced(service);
 	}
 
 	public void acceptJob(Runnable handler) {

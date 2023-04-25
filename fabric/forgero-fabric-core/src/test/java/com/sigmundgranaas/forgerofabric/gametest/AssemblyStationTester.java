@@ -4,8 +4,9 @@ import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
@@ -20,7 +21,7 @@ public class AssemblyStationTester {
 		if (state.isEmpty()) {
 			throw new GameTestException("Unable to find item");
 		}
-		var tool = CachedConverter.of(state.get());
+		var tool = StateService.INSTANCE.convert(state.get()).orElse(ItemStack.EMPTY);
 		tool.getOrCreateNbt().putInt("Damage", 1);
 
 		var screenHandler = new AssemblyStationScreenHandler(1, player.getInventory());
