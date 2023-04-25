@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.CachedStackConverter;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.ItemToStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateToStackConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateMapper;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.utils.ItemUtils;
 import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
@@ -29,13 +30,15 @@ public class ForgeroInstanceRegistry implements StateService {
 	private final Registry<Item> itemRegistry;
 	private final Map<String, String> itemToStateMap;
 	private final Map<String, String> tagToStateMap;
+	private final StateMapper mapper;
 
-	public ForgeroInstanceRegistry(List<Identifier> tags, StateCollection collection, Registry<Item> itemRegistry, Map<String, String> itemToStateMap, Map<String, String> tagToStateMap) {
+	public ForgeroInstanceRegistry(List<Identifier> tags, StateCollection collection, Registry<Item> itemRegistry, Map<String, String> itemToStateMap, Map<String, String> tagToStateMap, StateMapper mapper) {
 		this.tags = tags;
 		this.collection = collection;
 		this.itemRegistry = itemRegistry;
 		this.itemToStateMap = itemToStateMap;
 		this.tagToStateMap = tagToStateMap;
+		this.mapper = mapper;
 	}
 
 	@Override
@@ -106,5 +109,10 @@ public class ForgeroInstanceRegistry implements StateService {
 	@Override
 	public boolean isInitialized() {
 		return true;
+	}
+
+	@Override
+	public StateMapper getMapper() {
+		return mapper;
 	}
 }

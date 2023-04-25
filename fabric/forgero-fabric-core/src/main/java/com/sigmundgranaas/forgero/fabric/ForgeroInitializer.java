@@ -53,6 +53,7 @@ import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -110,7 +111,6 @@ public class ForgeroInitializer implements ModInitializer {
 
 		var handler = RegistryHandler.getHandler();
 		handler.acceptJob(this::registerBlocks);
-		handler.acceptJob(this::registerAARPRecipes);
 		handler.acceptJob(this::registerStates);
 		handler.acceptJob(this::registerRecipes);
 		handler.acceptJob(DynamicItems::registerDynamicItems);
@@ -126,6 +126,7 @@ public class ForgeroInitializer implements ModInitializer {
 		lootConditionReloader();
 		lootInjectionReloader();
 
+		handler.acceptSyncedJob(this::registerAARPRecipes);
 		ServerLifecycleEvents.SERVER_STARTING.register(server -> handler.initialize());
 	}
 
@@ -139,13 +140,13 @@ public class ForgeroInitializer implements ModInitializer {
 		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
 	}
 
-	private void registerAARPRecipes() {
+	private void registerAARPRecipes(StateService service) {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration));
 		ARRPGenerator.register(PartToSchematicGenerator::new);
 		ARRPGenerator.register(MaterialPartTagGenerator::new);
 		ARRPGenerator.register(SchematicPartTagGenerator::new);
 		ARRPGenerator.register(PartTypeTagGenerator::new);
-		ARRPGenerator.generate();
+		ARRPGenerator.generate(service);
 	}
 
 	private void dataReloader() {

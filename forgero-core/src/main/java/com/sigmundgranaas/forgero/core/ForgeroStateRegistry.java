@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,8 @@ public class ForgeroStateRegistry {
 	public static List<StateProvider> CREATE_STATES;
 	public static Map<String, String> STATE_TO_CONTAINER;
 	public static List<String> TAGS;
-	public static Map<String, String> TAGS_MAPPING;
+	public static Map<String, String> STATE_TO_TAG;
+	public static Map<String, String> TAG_TO_STATE;
 	public static Map<String, String> CONTAINER_TO_STATE;
 	public static Set<String> COMPOSITES;
 	public static List<DataResource> CONSTRUCTS;
@@ -74,7 +74,7 @@ public class ForgeroStateRegistry {
 			if (CONTAINER_TO_STATE == null) {
 				var containerToState = new HashMap<String, String>();
 				var stateToContainer = new HashMap<String, String>();
-				var tags = new ArrayList<String>();
+				var stateToTag = new HashMap<String, String>();
 				var tagToState = new HashMap<String, String>();
 				resources.stream()
 						.filter(data -> data.container().isPresent())
@@ -82,7 +82,7 @@ public class ForgeroStateRegistry {
 							String containerId = data.container().get().getId().equals("this") ? data.identifier() : data.container().get().getId();
 							String stateId = data.identifier();
 							if (containerId.equals(EMPTY_IDENTIFIER)) {
-								tags.add(data.container().get().getTag());
+								stateToTag.put(stateId, data.container().get().getTag());
 								tagToState.put(data.container().get().getTag(), stateId);
 							} else {
 								if (idMapper.containsKey(stateId)) {
@@ -101,8 +101,9 @@ public class ForgeroStateRegistry {
 						});
 				CONTAINER_TO_STATE = containerToState;
 				STATE_TO_CONTAINER = stateToContainer;
-				TAGS = tags;
-				TAGS_MAPPING = tagToState;
+				STATE_TO_TAG = stateToTag;
+				TAG_TO_STATE = tagToState;
+
 			}
 		};
 	}

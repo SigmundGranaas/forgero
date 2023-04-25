@@ -52,6 +52,11 @@ class MutableStateService implements StateService {
 	}
 
 	@Override
+	public StateMapper getMapper() {
+		return stateService.getMapper();
+	}
+
+	@Override
 	public Optional<State> find(String id) {
 		return stateService.find(id);
 	}

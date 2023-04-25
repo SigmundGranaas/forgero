@@ -47,6 +47,11 @@ public class UninitializedStateService implements StateService {
 	}
 
 	@Override
+	public StateMapper getMapper() {
+		return new StateMapper();
+	}
+
+	@Override
 	public Optional<State> find(String id) {
 		Forgero.LOGGER.warn("Forgero is not initialized yet. Please wait for the mod to finish loading.");
 		return Optional.empty();

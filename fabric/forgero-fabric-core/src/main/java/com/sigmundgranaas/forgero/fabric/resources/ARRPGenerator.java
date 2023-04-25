@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,8 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.DynamicResourceGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateMapper;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import lombok.Synchronized;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
@@ -30,6 +33,11 @@ public class ARRPGenerator {
 	public static final RuntimeResourcePack RESOURCE_PACK_BUILTIN = RuntimeResourcePack.create("forgero:builtin_generator");
 	public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:dynamic_generator");
 	private static final List<DynamicResourceGenerator> generators = new ArrayList<>();
+	private final StateMapper mapper;
+
+	public ARRPGenerator(StateMapper mapper) {
+		this.mapper = mapper;
+	}
 
 	@Synchronized
 	public static void register(DynamicResourceGenerator generator) {
@@ -41,8 +49,8 @@ public class ARRPGenerator {
 		generators.add(supplier.get());
 	}
 
-	public static void generate() {
-		new ARRPGenerator().generateResources();
+	public static void generate(StateService service) {
+		new ARRPGenerator(service.getMapper()).generateResources();
 		generators.stream()
 				.filter(DynamicResourceGenerator::enabled)
 				.forEach(generator -> generator.generate(RESOURCE_PACK));
@@ -65,9 +73,8 @@ public class ARRPGenerator {
 		var states = node.getResources(State.class);
 		if (states.size() > 0) {
 			states.stream()
-					.filter(state -> ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(state.identifier()))
-					.map(state -> new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.identifier())))
-					.forEach(typeTag::add);
+					.map(State::identifier)
+					.forEach(id -> add(id, typeTag));
 			RESOURCE_PACK_BUILTIN.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase()), typeTag);
 		}
 	}
@@ -90,12 +97,18 @@ public class ARRPGenerator {
 			if (states.size() > 0) {
 				states.stream()
 						.map(State::identifier)
-						.map(Identifier::new)
-						.forEach(materialToolTag::add);
+						.forEach(id -> add(id, materialToolTag));
 				RESOURCE_PACK_BUILTIN.addTag(new Identifier(Forgero.NAMESPACE, "items/" + key + "_tool"), materialToolTag);
 			}
 		}
-
 	}
 
+	private void add(String id, JTag tag) {
+		Optional<Identifier> tagId = mapper.stateToTag(id);
+		if (tagId.isPresent()) {
+			tag.add(tagId.get());
+		} else {
+			tag.add(mapper.stateToContainer(id));
+		}
+	}
 }
