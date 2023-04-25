@@ -19,7 +19,6 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modApi "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include "curse.maven:arrp-463113:3901211"
 	include project(':forgero-core')
 
 	include project(':fabric:forgero-fabric-core')

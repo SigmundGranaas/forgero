@@ -73,12 +73,28 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		return ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).toList();
 	}
 
+	private List<State> upgradesFromCraftingInventory(CraftingInventory craftingInventory) {
+		List<State> upgrades = new ArrayList<>();
+		for (int i = 0; i < craftingInventory.size(); i++) {
+			var stack = craftingInventory.getStack(i);
+			if (this.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).anyMatch(ingredient -> ingredient.test(stack))) {
+				var state = StateConverter.of(stack);
+				if (state.isPresent() && (state.get().test(Type.BINDING) || state.get().test(Type.SWORD_GUARD))) {
+					upgrades.add(state.get());
+				}
+			}
+		}
+		return upgrades;
+
+	}
+
 	@Override
 	public ItemStack craft(CraftingInventory craftingInventory) {
 		var target = StateConverter.of(this.getOutput());
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
+			var upgrades = upgradesFromCraftingInventory(craftingInventory);
 			var toolBuilderOpt = ConstructedTool.ToolBuilder.builder(parts);
 			BaseComposite.BaseCompositeBuilder<?> builder;
 			if (toolBuilderOpt.isPresent()) {
@@ -88,9 +104,20 @@ public class StateCraftingRecipe extends ShapedRecipe {
 				parts.forEach(builder::addIngredient);
 			}
 
+
 			builder.type(targetState.type())
 					.name(targetState.name())
 					.nameSpace(targetState.nameSpace());
+
+			if (targetState instanceof ConstructedTool constructedTool) {
+				builder.addSlotContainer(constructedTool.toolBuilder().getUpgradeContainer());
+			}
+
+			for (State upgrade : upgrades) {
+				builder.addUpgrade(upgrade);
+			}
+
+
 			var state = builder.build();
 			var nbt = new CompositeEncoder().encode(state);
 			var output = getOutput().copy();
