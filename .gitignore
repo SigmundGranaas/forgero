@@ -109,9 +109,11 @@ gradle-app.setting
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 
-*/logs/
-*/run/
-*/build/
-*/dest/
+
 .gradle/
-*/output/
+
+[Ll]ogs/
+[Rr]un/
+[Bb]uild/
+[Dd]est/
+[Oo]utput/
