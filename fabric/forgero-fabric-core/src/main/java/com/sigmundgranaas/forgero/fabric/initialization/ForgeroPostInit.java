@@ -206,11 +206,11 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerAARPRecipes(StateService service) {
-		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration));
-		ARRPGenerator.register(PartToSchematicGenerator::new);
-		ARRPGenerator.register(MaterialPartTagGenerator::new);
-		ARRPGenerator.register(SchematicPartTagGenerator::new);
-		ARRPGenerator.register(PartTypeTagGenerator::new);
+		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
+		ARRPGenerator.register(() -> new PartToSchematicGenerator(service));
+		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
+		ARRPGenerator.register(() -> new SchematicPartTagGenerator(service));
+		ARRPGenerator.register(() -> new PartTypeTagGenerator(service));
 		ARRPGenerator.generate(service);
 	}
 
