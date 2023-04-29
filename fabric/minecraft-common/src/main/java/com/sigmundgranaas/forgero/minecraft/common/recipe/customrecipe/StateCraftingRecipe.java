@@ -16,11 +16,11 @@ import com.sigmundgranaas.forgero.core.state.composite.BaseComposite;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.customdata.EnchantmentVisitor;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -31,9 +31,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class StateCraftingRecipe extends ShapedRecipe {
+	private final StateService service;
 
-	public StateCraftingRecipe(ShapedRecipe recipe) {
+	public StateCraftingRecipe(ShapedRecipe recipe, StateService service) {
 		super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
+		this.service = service;
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	private Optional<State> convertHead(ItemStack stack) {
-		var converted = StateConverter.of(stack);
+		var converted = service.convert(stack);
 		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))) {
 			return converted;
 		}
@@ -70,7 +72,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 				ingredients.add(craftingInventory.getStack(i));
 			}
 		}
-		return ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).toList();
+		return ingredients.stream().map(service::convert).flatMap(Optional::stream).toList();
 	}
 
 	private List<State> upgradesFromCraftingInventory(CraftingInventory craftingInventory) {
@@ -78,7 +80,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
 			if (this.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).anyMatch(ingredient -> ingredient.test(stack))) {
-				var state = StateConverter.of(stack);
+				var state = service.convert(stack);
 				if (state.isPresent() && (state.get().test(Type.BINDING) || state.get().test(Type.SWORD_GUARD))) {
 					upgrades.add(state.get());
 				}
@@ -90,7 +92,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	@Override
 	public ItemStack craft(CraftingInventory craftingInventory) {
-		var target = StateConverter.of(this.getOutput());
+		var target = service.convert(this.getOutput());
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -134,7 +136,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	private Optional<State> result() {
-		return StateConverter.of(getOutput());
+		return service.convert(getOutput());
 	}
 
 	@Override
@@ -147,12 +149,12 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 		@Override
 		public StateCraftingRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new StateCraftingRecipe(super.read(identifier, jsonObject));
+			return new StateCraftingRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
 		}
 
 		@Override
 		public StateCraftingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new StateCraftingRecipe(super.read(identifier, packetByteBuf));
+			return new StateCraftingRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

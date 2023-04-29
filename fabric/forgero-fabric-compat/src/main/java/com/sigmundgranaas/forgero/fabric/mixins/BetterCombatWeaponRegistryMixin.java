@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.SchematicBased;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.bettercombat.api.AttributesContainer;
 import net.bettercombat.api.WeaponAttributes;
 import net.bettercombat.logic.WeaponRegistry;
@@ -27,7 +27,7 @@ public abstract class BetterCombatWeaponRegistryMixin {
 
 	@Inject(method = "getAttributes(Lnet/minecraft/item/ItemStack;)Lnet/bettercombat/api/WeaponAttributes;", at = @At(value = "TAIL"), cancellable = true)
 	private static void injectCustomForgeroAttributes(ItemStack stack, CallbackInfoReturnable<WeaponAttributes> cir) {
-		var state = StateConverter.of(stack);
+		var state = StateService.INSTANCE.convert(stack);
 		if (state.isPresent() && state.get() instanceof ConstructedTool tool) {
 			var head = tool.getHead();
 			if (head instanceof SchematicBased based) {
