@@ -106,7 +106,7 @@ public class ARRPGenerator {
 	private void add(String id, JTag tag) {
 		Optional<Identifier> tagId = mapper.stateToTag(id);
 		if (tagId.isPresent()) {
-			tag.add(tagId.get());
+			tag.tag(tagId.get());
 		} else {
 			tag.add(mapper.stateToContainer(id));
 		}

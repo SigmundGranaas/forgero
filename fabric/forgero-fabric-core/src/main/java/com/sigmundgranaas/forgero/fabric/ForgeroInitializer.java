@@ -65,7 +65,6 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
@@ -112,7 +111,6 @@ public class ForgeroInitializer implements ModInitializer {
 		var handler = RegistryHandler.getHandler();
 		handler.acceptJob(this::registerBlocks);
 		handler.acceptJob(this::registerStates);
-		handler.acceptJob(this::registerRecipes);
 		handler.acceptJob(DynamicItems::registerDynamicItems);
 		handler.acceptJob(this::registerTreasure);
 		handler.acceptJob(this::registerCommands);
@@ -127,7 +125,8 @@ public class ForgeroInitializer implements ModInitializer {
 		lootInjectionReloader();
 
 		handler.acceptSyncedJob(this::registerAARPRecipes);
-		ServerLifecycleEvents.SERVER_STARTING.register(server -> handler.initialize());
+		handler.acceptSyncedJob((service) -> registerRecipes());
+		handler.initialize();
 	}
 
 	private void registerLevelPropertiesDefaults() {
