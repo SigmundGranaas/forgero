@@ -71,15 +71,14 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder().build());
 		for (State material : materials) {
-			if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
-				var model = new JModel();
-				model.parent("item/generated");
-				//model.textures(new JTextures().layer0("forgero:item/base_repair_kit"));
-				model.textures(new JTextures().layer0("forgero:item/repair_kit_leather_base")
-						.layer1("forgero:item/repair_kit_needle_base")
-						.layer2(String.format("forgero:item/%s-repair_kit", material.name())));
-				pack.addModel(model, new Identifier(Forgero.NAMESPACE, "item/" + material.name() + "_repair_kit"));
-			}
+			var model = new JModel();
+			model.parent("item/generated");
+			//model.textures(new JTextures().layer0("forgero:item/base_repair_kit"));
+			model.textures(new JTextures().layer0("forgero:item/repair_kit_leather_base")
+					.layer1("forgero:item/repair_kit_needle_base")
+					.layer2(String.format("forgero:item/%s-repair_kit", material.name())));
+			pack.addModel(model, new Identifier(Forgero.NAMESPACE, "item/" + material.name() + "_repair_kit"));
+
 		}
 	}
 
