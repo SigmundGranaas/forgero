@@ -3,7 +3,7 @@
   "name": "nether_quartz",
   "container": {
     "type": "HOST",
-    "id": "minecraft:quartz"
+    "tag": "c:quartz"
   },
   "palette": {
     "name": "nether_quartz"
