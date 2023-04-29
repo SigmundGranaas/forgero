@@ -11,6 +11,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
+/**
+ * Service for finding states from items and vice versa.
+ * <p>
+ * Will be initialized by Forgero.
+ * <p>
+ * Can convert between states and items.
+ */
 public interface StateService extends StateFinder {
 	StateService INSTANCE = new MutableStateService(new UninitializedStateService());
 
