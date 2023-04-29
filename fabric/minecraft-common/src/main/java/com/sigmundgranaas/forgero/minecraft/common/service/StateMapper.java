@@ -30,15 +30,12 @@ public class StateMapper {
 		this.tagToStateMap = new HashMap<>();
 	}
 
-	public String containerToState(String id) {
+	public Optional<String> containerToState(String id) {
 		Optional<String> identifier = Optional.ofNullable(containerToStateMap.get(id));
-		return identifier.orElseGet(() -> Optional.ofNullable(tagToStateMap.get(findTagIdFromContainer(new Identifier(id))
-						.map(Identifier::toString)
-						.orElse("")))
-				.orElse(id));
+		return identifier.or(() -> Optional.ofNullable(tagToStateMap.get(findTagIdFromContainer(new Identifier(id)).map(Identifier::toString).orElse(""))));
 	}
 
-	public String containerToState(Identifier id) {
+	public Optional<String> containerToState(Identifier id) {
 		return containerToState(id.toString());
 	}
 

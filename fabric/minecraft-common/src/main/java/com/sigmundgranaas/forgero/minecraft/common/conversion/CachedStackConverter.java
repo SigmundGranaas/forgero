@@ -50,7 +50,7 @@ public class CachedStackConverter implements Converter<ItemStack, Optional<State
 		try {
 			return stackCache.get(stack, () -> convertCompound(stack));
 		} catch (Exception e) {
-			return Optional.empty();
+			return stateService.find(stack.getItem());
 		}
 	}
 

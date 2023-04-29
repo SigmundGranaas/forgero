@@ -57,8 +57,7 @@ public class ForgeroInstanceRegistry implements StateService {
 
 	private Optional<State> findInTags(String id) {
 		try {
-			Identifier identifier = new Identifier(id);
-			return findInTags(identifier);
+			return mapper.containerToState(id).flatMap(collection::find).map(Supplier::get);
 		} catch (Exception e) {
 			return Optional.empty();
 		}
