@@ -35,7 +35,7 @@ public class RegistryHandler {
 		run();
 	}
 
-	public void initialize() {
+	public StateService initialize() {
 		StateCollection collection = ForgeroStateRegistry.STATES;
 		Map<String, String> itemToStateMap = CONTAINER_TO_STATE;
 		Map<String, String> stateToItemMap = ForgeroStateRegistry.STATE_TO_CONTAINER;
@@ -43,13 +43,14 @@ public class RegistryHandler {
 		Map<String, String> stateToTag = ForgeroStateRegistry.STATE_TO_TAG;
 		if (collection == null || CONTAINER_TO_STATE == null) {
 			Forgero.LOGGER.error("Forgero is not initialized yet. Please wait for the mod to finish loading.");
-			return;
+			throw new IllegalStateException("Forgero is not initialized yet. Please wait for the mod to finish loading.");
 		}
 		List<Identifier> convertedTags = TAG_TO_STATE.keySet().stream().map(Identifier::new).toList();
 		StateMapper mapper = new StateMapper(itemToStateMap, stateToItemMap, stateToTag, tagToStateMap);
 		StateService service = new ForgeroInstanceRegistry(convertedTags, collection, Registry.ITEM, itemToStateMap, tagToStateMap, mapper);
 		StateService.initialize(service);
 		runSynced(service);
+		return service;
 	}
 
 	public void acceptJob(Runnable handler) {

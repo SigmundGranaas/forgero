@@ -28,6 +28,12 @@
     ],
     "main": [
       "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"
+    ],
+    "forgeroInitialized": [
+      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPostInit"
+    ],
+    "forgeroPreInitialization": [
+      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPreInit"
     ]
   },
   "mixins": [
