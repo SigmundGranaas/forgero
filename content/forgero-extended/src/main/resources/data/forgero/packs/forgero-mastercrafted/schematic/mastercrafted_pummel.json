@@ -1,0 +1,72 @@
+{
+  "type": "PUMMEL_SCHEMATIC",
+  "name": "mastercrafted_pummel-schematic",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "PUMMEL",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "METAL",
+            "unique": true,
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "METAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5
+      },
+      {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": "1"
+  }
+}

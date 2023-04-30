@@ -52,73 +52,6 @@
             "model:short_handle.png"
           ],
           "template": "short_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:medium_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:axe_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
-        },
-        {
-          "target": [
-            "model:hoe_handle.png"
-          ],
-          "template": "medium_handle_grip.png"
-        }
-      ]
-    },
-    {
-      "name": "handle_pummel",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "pummel.png",
-      "order": 12,
-      "variants": [
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            -1,
-            -1
-          ]
-        }
-      ]
-    },
-    {
-      "name": "handle_reinforcement",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "handle_reinforcement.png",
-      "order": 15,
-      "offset": [
-        6,
-        6
-      ],
-      "variants": [
-        {
-          "target": [
-            "type:AXE"
-          ],
-          "offset": [
-            5,
-            5
-          ]
-        },
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            3,
-            3
-          ]
         }
       ]
     },
@@ -144,21 +77,6 @@
       ],
       "modelType": "UPGRADE",
       "template": "grip"
-    },
-    {
-      "target": [
-        "type:TOOL_MATERIAL",
-        "slot:2"
-      ],
-      "modelType": "UPGRADE",
-      "template": "handle_reinforcement"
-    },
-    {
-      "target": [
-        "type:PUMMEL",
-        "slot:1"
-      ],
-      "modelType": "COMPOSITE"
     }
   ]
 }
