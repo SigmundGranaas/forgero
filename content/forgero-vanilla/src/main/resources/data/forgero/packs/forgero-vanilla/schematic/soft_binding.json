@@ -67,15 +67,14 @@
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 1
       },
       {
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 1
       }
-
     ]
   },
   "custom_data": {
