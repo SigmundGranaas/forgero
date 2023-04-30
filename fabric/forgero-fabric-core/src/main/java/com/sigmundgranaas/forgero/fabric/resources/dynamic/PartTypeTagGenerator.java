@@ -8,9 +8,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.tags.JTag;
@@ -18,11 +18,16 @@ import net.devtech.arrp.json.tags.JTag;
 import net.minecraft.util.Identifier;
 
 public class PartTypeTagGenerator implements DynamicResourceGenerator {
+	private final StateService service;
 	private final Map<String, List<String>> idTagEntries = new HashMap<>();
+
+	public PartTypeTagGenerator(StateService service) {
+		this.service = service;
+	}
 
 	@Override
 	public void generate(RuntimeResourcePack pack) {
-		ForgeroStateRegistry.STATES.all().stream()
+		service.all().stream()
 				.map(Supplier::get)
 				.filter(state -> state.test(Type.PART))
 				.forEach(this::mapTags);

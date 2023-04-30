@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot.function;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions.CONDITION_LOOT_FUNCTION_TYPE;
+
+import java.util.Comparator;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -7,8 +12,8 @@ import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
@@ -17,23 +22,21 @@ import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 
-import java.util.Comparator;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions.CONDITION_LOOT_FUNCTION_TYPE;
-
 public class ConditionFunction extends ConditionalLootFunction {
-	protected ConditionFunction(LootCondition[] conditions) {
+	private final StateService service;
+
+	protected ConditionFunction(LootCondition[] conditions, StateService service) {
 		super(conditions);
+		this.service = service;
 	}
 
 	public static ConditionFunction of(LootCondition[] conditions) {
-		return new ConditionFunction(conditions);
+		return new ConditionFunction(conditions, StateService.INSTANCE);
 	}
 
 	@Override
 	protected ItemStack process(ItemStack stack, LootContext context) {
-		var converted = StateConverter.of(stack);
+		var converted = service.convert(stack);
 		if (converted.isPresent() && converted.get() instanceof Conditional<?> conditional) {
 			var conditions = Conditions.INSTANCE.all().stream()
 					.filter(condition -> condition.isApplicable(conditional))
@@ -67,7 +70,7 @@ public class ConditionFunction extends ConditionalLootFunction {
 		}
 
 		public LootFunction build() {
-			return new ConditionFunction(this.getConditions());
+			return new ConditionFunction(this.getConditions(), StateService.INSTANCE);
 		}
 	}
 
@@ -80,7 +83,7 @@ public class ConditionFunction extends ConditionalLootFunction {
 		}
 
 		public ConditionFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {
-			return new ConditionFunction(lootConditions);
+			return new ConditionFunction(lootConditions, StateService.INSTANCE);
 		}
 	}
 }

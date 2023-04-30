@@ -1,23 +1,28 @@
 package com.sigmundgranaas.forgero.fabric.resources.dynamic;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeUtils;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.devtech.arrp.api.RuntimeResourcePack;
 
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 public class PartToSchematicGenerator implements DynamicResourceGenerator {
+	private final StateService service;
+
+	public PartToSchematicGenerator(StateService service) {
+		this.service = service;
+	}
 
 	@Override
 	public void generate(RuntimeResourcePack pack) {
@@ -29,7 +34,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 	}
 
 	private List<ConstructedState> parts() {
-		return ForgeroStateRegistry.STATES.all().stream()
+		return service.all().stream()
 				.map(Supplier::get)
 				.filter(ConstructedState.class::isInstance)
 				.map(ConstructedState.class::cast)
