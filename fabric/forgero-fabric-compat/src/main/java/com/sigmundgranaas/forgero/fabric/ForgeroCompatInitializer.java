@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.fabric;
 
-import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
-import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
+//import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
+//import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 
 import net.fabricmc.api.ModInitializer;
@@ -26,10 +26,10 @@ public class ForgeroCompatInitializer implements ModInitializer {
 			ToolStatTagGenerator.generateTags();
 		}
 
-		if (patchouli) {
-			BookDropOnAdvancement.registerBookDrop();
-			GuideBookGenerator.registerGuideBookRecipes();
-		}
+//		if (patchouli) {
+//			BookDropOnAdvancement.registerBookDrop();
+//			GuideBookGenerator.registerGuideBookRecipes();
+//		}
 	}
 
 	public static boolean isModLoaded(String id) {

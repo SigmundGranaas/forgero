@@ -1,3 +1,5 @@
+//file:noinspection GroovyAssignabilityCheck
+
 plugins {
 	id "idea"
 	id "fabric-loom" version "1.1.8" apply true
