@@ -1,15 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.List;
+import java.util.Optional;
+
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.List;
-import java.util.Optional;
 
 public class AttributeSectionWriter extends SectionWriter {
 
@@ -22,6 +25,10 @@ public class AttributeSectionWriter extends SectionWriter {
 		super(configuration);
 		this.container = container;
 		this.helper = new AttributeWriterHelper(container, configuration);
+		if (container instanceof Identifiable identifiable && ForgeroStateRegistry.STATES != null) {
+			var baseContainer = ForgeroStateRegistry.STATES.find(identifiable.identifier());
+			baseContainer.ifPresent(stateSupplier -> this.helper.setComparativeContainer(stateSupplier.get()));
+		}
 	}
 
 	public static Optional<SectionWriter> of(PropertyContainer container) {
@@ -59,7 +66,7 @@ public class AttributeSectionWriter extends SectionWriter {
 	}
 
 	protected Optional<Text> entry(String attributeType) {
-		var attribute = helper.attributeOfType(attributeType);
+		Attribute attribute = helper.attributeOfType(attributeType);
 		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.asFloat() == 0) {
 			return Optional.empty();
 		} else {

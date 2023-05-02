@@ -9,7 +9,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
 
@@ -21,10 +21,12 @@ import net.minecraft.world.World;
 
 public class GemItem extends Item implements StateItem, State {
 	private final State DEFAULT;
+	private final StateService service;
 
-	public GemItem(Settings settings, State defaultState) {
+	public GemItem(Settings settings, State defaultState, StateService service) {
 		super(settings);
 		this.DEFAULT = defaultState;
+		this.service = service;
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class GemItem extends Item implements StateItem, State {
 
 	@Override
 	public Text getName(ItemStack stack) {
-		var state = StateConverter.of(stack).orElse(DEFAULT);
+		var state = service.convert(stack).orElse(DEFAULT);
 		var text = Text.empty();
 		if (state instanceof LeveledState leveledState) {
 			text.append(Text.literal(String.format("Level %s ", leveledState.level())));

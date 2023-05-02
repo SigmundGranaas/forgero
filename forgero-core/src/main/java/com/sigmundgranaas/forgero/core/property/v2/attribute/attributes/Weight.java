@@ -50,4 +50,10 @@ public class Weight implements Attribute {
 		var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
 		return (percentage * (speed + 4)) - 4;
 	}
+
+	public float reduceMiningSpeed(float speed) {
+		long negatedValue = Math.abs((int) this.value - 100);
+		var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
+		return percentage * speed;
+	}
 }

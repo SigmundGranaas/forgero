@@ -14,6 +14,25 @@
         "value": 10
       },
       {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 50
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.7
+      },
+      {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
@@ -26,34 +45,6 @@
         "operation": "ADDITION",
         "category": "UTILITY",
         "value": 50
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.7
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.8
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "UTILITY",
-        "value": 1.05
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "UTILITY",
-        "value": 1.05
       }
     ]
   },

@@ -1,0 +1,40 @@
+{
+  "type": "PUMMEL",
+  "models": [
+    {
+      "name": "refined_pummel",
+      "template": "refined_pummel.png",
+      "type": "GENERATE",
+      "palette": "METAL",
+      "order": 12,
+      "offset": [
+        5,
+        5
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "offset": [
+            -1,
+            -1
+          ]
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ]
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:METAL",
+        "id:refined_pummel-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "refined_pummel"
+    }
+  ]
+}

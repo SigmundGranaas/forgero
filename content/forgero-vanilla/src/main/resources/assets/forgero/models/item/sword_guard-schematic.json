@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "forgero:item/sword_guard_schematic"
+    "layer0": "forgero:item/paper_schematic_base",
+    "layer1": "forgero:item/sword_guard_outline_paper"
   }
 }

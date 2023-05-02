@@ -1,14 +1,18 @@
 package com.sigmundgranaas.forgero.core.resource;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
+
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.core.resource.data.v2.PackageSupplier;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.state.State;
-
-import java.util.*;
-import java.util.function.Supplier;
 
 public class PipelineBuilder {
 
@@ -20,6 +24,7 @@ public class PipelineBuilder {
 	private final List<ResourceListener<Map<String, State>>> stateListener = new ArrayList<>();
 	private final List<ResourceListener<List<RecipeData>>> recipeListener = new ArrayList<>();
 	private final List<ResourceListener<List<String>>> createStateListener = new ArrayList<>();
+	private boolean silent = false;
 	private Supplier<ForgeroConfiguration> configProvider = ForgeroConfiguration::new;
 
 	public static PipelineBuilder builder() {
@@ -72,7 +77,12 @@ public class PipelineBuilder {
 		return this;
 	}
 
+	public PipelineBuilder silent() {
+		this.silent = true;
+		return this;
+	}
+
 	public ResourcePipeline build() {
-		return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, createStateListener, configProvider.get(), dependencies);
+		return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, createStateListener, configProvider.get(), dependencies, silent);
 	}
 }
