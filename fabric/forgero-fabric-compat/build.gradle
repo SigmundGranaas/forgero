@@ -49,9 +49,9 @@ dependencies {
 	modCompileOnly("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
 
 	//betterend&betternether
-	// modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
-	// modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
-	// modImplementation "maven.modrinth:MpzVLzy5:InVK1xFf"
+	//modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
+	//modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
+	//modImplementation "maven.modrinth:MpzVLzy5:InVK1xFf"
 
 
 	//emi
