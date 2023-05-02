@@ -1,6 +1,6 @@
 {
   "type": "STONE",
-  "name": "crying_obsidian",
+  "name": "obsidian",
   "container": {
     "type": "HOST",
     "id": "minecraft:crying_obsidian"
