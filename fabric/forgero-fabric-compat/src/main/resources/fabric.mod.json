@@ -45,10 +45,9 @@
     "fabric-api": "*",
     "minecraft": "1.19.x",
     "java": ">=17",
-    "forgero-fabric-core": "*"
+    "forgero": "*"
   },
   "suggests": {
-    "patchouli": "*",
     "lambdynamiclights": "*"
   },
   "custom": {
