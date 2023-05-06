@@ -23,8 +23,8 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.AdditionalHealthHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicAttributeTool;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
@@ -187,7 +187,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	default float getMiningSpeedMultiplier(BlockState state, ItemStack stack) {
 		if (stack.getItem() instanceof State dynamic && isEffectiveOn(state, stack)) {
 			try {
-				return miningSpeedCache.get(stack, () -> mingSpeedCalculation(StateConverter.of(stack).orElse(dynamic), state));
+				return miningSpeedCache.get(stack, () -> mingSpeedCalculation(StateService.INSTANCE.convert(stack).orElse(dynamic), state));
 			} catch (ExecutionException e) {
 				return 1f;
 			}

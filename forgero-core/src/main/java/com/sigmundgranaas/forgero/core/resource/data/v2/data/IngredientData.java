@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 
 
-import com.sigmundgranaas.forgero.core.util.Identifiers;
-import lombok.Builder;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-import java.util.Objects;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
+import lombok.Builder;
 
 
 @Builder(toBuilder = true)
@@ -16,9 +16,11 @@ public class IngredientData {
 
 	@Builder.Default
 	private final int amount = 1;
+
 	@Builder.Default
 	@Nullable
 	private final String type = Identifiers.EMPTY_IDENTIFIER;
+
 	@Builder.Default
 	@Nullable
 	private final String id = Identifiers.EMPTY_IDENTIFIER;

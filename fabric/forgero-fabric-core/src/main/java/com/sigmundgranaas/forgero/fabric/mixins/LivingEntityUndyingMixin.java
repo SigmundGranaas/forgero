@@ -1,7 +1,12 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.UndyingHandler;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
@@ -13,12 +18,6 @@ import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityUndyingMixin {
@@ -44,7 +43,7 @@ public abstract class LivingEntityUndyingMixin {
 			Hand[] hands = Hand.values();
 			for (Hand hand : hands) {
 				ItemStack stack = this.getStackInHand(hand);
-				var handler = StateConverter.of(stack).flatMap(container -> UndyingHandler.of(container, stack));
+				var handler = StateService.INSTANCE.convert(stack).flatMap(container -> UndyingHandler.of(container, stack));
 				if (handler.isPresent()) {
 					executeUndyingEffect(stack);
 					handler.get().handle();

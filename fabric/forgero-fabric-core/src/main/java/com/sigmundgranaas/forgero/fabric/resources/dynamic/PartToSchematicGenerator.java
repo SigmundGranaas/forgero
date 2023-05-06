@@ -1,23 +1,28 @@
 package com.sigmundgranaas.forgero.fabric.resources.dynamic;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeUtils;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.devtech.arrp.api.RuntimeResourcePack;
 
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 public class PartToSchematicGenerator implements DynamicResourceGenerator {
+	protected final StateService service;
+
+	public PartToSchematicGenerator(StateService service) {
+		this.service = service;
+	}
 
 	@Override
 	public void generate(RuntimeResourcePack pack) {
@@ -28,8 +33,8 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 				.forEach(recipe -> pack.addData(generateId(recipe), recipe.toString().getBytes()));
 	}
 
-	private List<ConstructedState> parts() {
-		return ForgeroStateRegistry.STATES.all().stream()
+	protected List<ConstructedState> parts() {
+		return service.all().stream()
 				.map(Supplier::get)
 				.filter(ConstructedState.class::isInstance)
 				.map(ConstructedState.class::cast)
@@ -37,7 +42,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 				.toList();
 	}
 
-	private Optional<RecipeData> createRecipe(ConstructedState construct) {
+	protected Optional<RecipeData> createRecipe(ConstructedState construct) {
 		var schematic = construct.parts().stream().filter(ingredient -> ingredient.name().contains("schematic")).findFirst();
 		if (schematic.isPresent()) {
 			var paper = IngredientData.builder().id("minecraft:paper").build();
@@ -48,7 +53,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		return Optional.empty();
 	}
 
-	private JsonObject convertRecipeData(RecipeData construct) {
+	protected JsonObject convertRecipeData(RecipeData construct) {
 		var json = new JsonObject();
 		json.addProperty("type", "minecraft:crafting_shapeless");
 		var ingredients = new JsonArray();
@@ -60,7 +65,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		return json;
 	}
 
-	private Identifier generateId(JsonObject recipe) {
+	protected Identifier generateId(JsonObject recipe) {
 		String output = recipe.getAsJsonObject("result").get("item").getAsString().split(":")[1];
 		return new Identifier("forgero:recipes/" + output + "_recipe" + ".json");
 	}

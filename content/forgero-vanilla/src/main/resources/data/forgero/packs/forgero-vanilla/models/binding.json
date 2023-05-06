@@ -39,13 +39,6 @@
       ]
     },
     {
-      "name": "soft_binding",
-      "template": "soft_binding.png",
-      "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": 40
-    },
-    {
       "name": "spiked_binding",
       "template": "spiked_binding.png",
       "type": "GENERATE",

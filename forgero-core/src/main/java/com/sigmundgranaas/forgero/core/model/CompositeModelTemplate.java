@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.core.model;
 
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CompositeModelTemplate implements ModelTemplate {
+public class CompositeModelTemplate implements ModelTemplate, Comparable<ModelTemplate> {
 	private final List<ModelTemplate> models;
 
 	public CompositeModelTemplate() {
@@ -34,5 +35,10 @@ public class CompositeModelTemplate implements ModelTemplate {
 	@Override
 	public <T> T convert(Converter<T, ModelTemplate> converter) {
 		return converter.convert(this);
+	}
+
+	@Override
+	public int compareTo(@NotNull ModelTemplate o) {
+		return 0;
 	}
 }

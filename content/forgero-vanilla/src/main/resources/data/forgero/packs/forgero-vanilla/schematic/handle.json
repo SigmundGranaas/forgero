@@ -52,20 +52,20 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 10
+        "value": 25
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 1
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 1
       },
       {
         "type": "ATTACK_SPEED",
@@ -77,11 +77,14 @@
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 1
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "2"
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    }
   }
 }

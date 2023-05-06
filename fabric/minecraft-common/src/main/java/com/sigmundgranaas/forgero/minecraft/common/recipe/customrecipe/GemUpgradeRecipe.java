@@ -1,12 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -16,11 +18,12 @@ import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-
 public class GemUpgradeRecipe extends SmithingRecipe {
-	public GemUpgradeRecipe(SmithingRecipe recipe) {
+	private final StateService service;
+
+	public GemUpgradeRecipe(SmithingRecipe recipe, StateService service) {
 		super(recipe.getId(), recipe.base, recipe.addition, recipe.getOutput().copy());
+		this.service = service;
 	}
 
 	@Override
@@ -37,12 +40,12 @@ public class GemUpgradeRecipe extends SmithingRecipe {
 	}
 
 	private Optional<LeveledState> base(Inventory inventory) {
-		var target = StateConverter.of(inventory.getStack(0));
+		var target = service.convert(inventory.getStack(0));
 		return target.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
 	}
 
 	private Optional<LeveledState> addition(Inventory inventory) {
-		var addition = StateConverter.of(inventory.getStack(1));
+		var addition = service.convert(inventory.getStack(1));
 		return addition.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
 	}
 
@@ -70,12 +73,12 @@ public class GemUpgradeRecipe extends SmithingRecipe {
 
 		@Override
 		public SmithingRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new GemUpgradeRecipe(super.read(identifier, jsonObject));
+			return new GemUpgradeRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
 		}
 
 		@Override
 		public SmithingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new GemUpgradeRecipe(super.read(identifier, packetByteBuf));
+			return new GemUpgradeRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

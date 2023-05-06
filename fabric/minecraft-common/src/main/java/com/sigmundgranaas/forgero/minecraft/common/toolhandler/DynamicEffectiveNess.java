@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
+import java.util.Collections;
+import java.util.List;
+
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,7 +22,7 @@ public interface DynamicEffectiveNess {
 	}
 
 	default List<TagKey<Block>> effectiveBlocks(ItemStack stack) {
-		return StateConverter.of(stack).map(EffectivenessHandler::of).orElse(Collections.emptyList());
+		return StateService.INSTANCE.convert(stack).map(EffectivenessHandler::of).orElse(Collections.emptyList());
 	}
 
 	boolean isEffectiveOn(BlockState state, ItemStack stack);

@@ -10,8 +10,6 @@
     "DynamicToolItemStackMixin",
     "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
-    "ItemStackAttributeDescriptionMixin",
-    "ItemStackDropGemOnBreakMixin",
     "ItemStackUnbreakableMixin",
     "LivingEntityMagneticMixin",
     "LivingEntityMixin",

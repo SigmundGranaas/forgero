@@ -21,6 +21,18 @@
         "value": 20
       },
       {
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 100
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",

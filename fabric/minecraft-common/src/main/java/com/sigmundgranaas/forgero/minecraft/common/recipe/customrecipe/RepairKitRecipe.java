@@ -1,13 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
+import java.util.Optional;
+import java.util.stream.IntStream;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -17,22 +22,19 @@ import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-import java.util.stream.IntStream;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 public class RepairKitRecipe extends ShapelessRecipe {
+	private final StateService service;
 
-    public RepairKitRecipe(ShapelessRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(), recipe.getIngredients());
-    }
+	public RepairKitRecipe(ShapelessRecipe recipe, StateService service) {
+		super(recipe.getId(), recipe.getGroup(),recipe.getCategory(), recipe.getOutput(), recipe.getIngredients());
+		this.service = service;
+	}
 
 	@Override
 	public boolean matches(CraftingInventory craftingInventory, World world) {
 		return super.matches(craftingInventory, world) && IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
-				.filter(stack -> StateConverter.of(stack).isPresent())
+				.filter(stack -> service.convert(stack).isPresent())
 				.anyMatch(stack -> stack.getDamage() > 0);
 	}
 
@@ -40,12 +42,12 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	public ItemStack craft(CraftingInventory craftingInventory) {
 		var state = IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
-				.map(StateConverter::of)
+				.map(service::convert)
 				.flatMap(Optional::stream)
 				.findFirst();
 		var originalStack = IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
-				.filter(stack -> StateConverter.of(stack).isPresent())
+				.filter(stack -> service.convert(stack).isPresent())
 				.findFirst();
 		if (state.isPresent() && originalStack.isPresent() && state.get() instanceof ConstructedTool tool) {
 			var unbrokenState = tool.removeCondition(Conditions.BROKEN.name());
@@ -77,12 +79,12 @@ public class RepairKitRecipe extends ShapelessRecipe {
 
 		@Override
 		public RepairKitRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new RepairKitRecipe(super.read(identifier, jsonObject));
+			return new RepairKitRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
 		}
 
 		@Override
 		public RepairKitRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new RepairKitRecipe(super.read(identifier, packetByteBuf));
+			return new RepairKitRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

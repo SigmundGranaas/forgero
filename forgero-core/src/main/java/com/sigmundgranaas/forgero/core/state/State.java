@@ -1,21 +1,21 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import java.util.List;
+
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
+import com.sigmundgranaas.forgero.core.customdata.DataSupplier;
+import com.sigmundgranaas.forgero.core.customdata.Visitable;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
-import com.sigmundgranaas.forgero.core.state.customvalue.CustomValue;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object>, Typed {
+public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object>, Typed, Visitable, DataSupplier {
 	static State of(Construct construct) {
 		return new CompositeIngredient(construct);
 	}
@@ -24,11 +24,11 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
 		return new SimpleState(name, type, properties);
 	}
 
-	static Ingredient of(String name, String nameSpace, Type type, List<Property> properties) {
+	static State of(String name, String nameSpace, Type type, List<Property> properties) {
 		return new SimpleState(name, nameSpace, type, properties);
 	}
 
-	static Ingredient of(String name, String nameSpace, Type type, List<Property> properties, Map<String, String> custom) {
+	static State of(String name, String nameSpace, Type type, List<Property> properties, DataContainer custom) {
 		return new SimpleState(name, nameSpace, type, properties, custom);
 	}
 
@@ -61,17 +61,5 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
 		} else {
 			return 0;
 		}
-	}
-
-	default boolean hasCustomValue(String identifier) {
-		return getCustomValue(identifier).isPresent();
-	}
-
-	default Optional<CustomValue> getCustomValue(String identifier) {
-		return Optional.ofNullable(customValues().get(identifier));
-	}
-
-	default Map<String, CustomValue> customValues() {
-		return Collections.emptyMap();
 	}
 }
