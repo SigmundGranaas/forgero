@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.v2.attribute.attributes;
 
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -46,14 +47,26 @@ public class Weight implements Attribute {
 	}
 
 	public float reduceAttackSpeed(float speed) {
-		long negatedValue = Math.abs((int) this.value - 100);
-		var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
-		return (percentage * (speed + 4)) - 4;
+		if (ForgeroConfigurationLoader.configuration.weightReducesAttackSpeed && ForgeroConfigurationLoader.configuration.weightAttackSpeedReductionScaler != 0) {
+			float scaler = Math.max(0, Math.min(ForgeroConfigurationLoader.configuration.weightAttackSpeedReductionScaler, 100));
+			long negatedValue = Math.abs((int) this.value - 100);
+			var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
+			return (percentage * (speed + 4)) - 4;
+		} else {
+			return speed;
+		}
+
 	}
 
 	public float reduceMiningSpeed(float speed) {
-		long negatedValue = Math.abs((int) this.value - 100);
-		var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
-		return percentage * speed;
+		if (ForgeroConfigurationLoader.configuration.weightReducesMiningSpeed && ForgeroConfigurationLoader.configuration.weightMiningSpeedReductionScaler != 0) {
+			float scaler = Math.max(0, Math.min(ForgeroConfigurationLoader.configuration.weightMiningSpeedReductionScaler, 100));
+			long negatedValue = Math.abs((int) this.value - 100);
+			var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
+			percentage = 1 - ((1 - percentage) * (scaler / 100));
+			return percentage * speed;
+		} else {
+			return speed;
+		}
 	}
 }

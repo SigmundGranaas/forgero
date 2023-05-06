@@ -55,8 +55,16 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Boolean exportGeneratedTextures = false;
 
 	@NotNull
-	public boolean showAttributeDifference = true;
+	public Boolean showAttributeDifference = true;
 
 	@NotNull
-	public boolean enableRecipesForAllSchematics = false;
+	public Boolean enableRecipesForAllSchematics = false;
+	@NotNull
+	public Integer weightMiningSpeedReductionScaler = 0;
+	@NotNull
+	public Integer weightAttackSpeedReductionScaler = 100;
+	@NotNull
+	public Boolean weightReducesAttackSpeed = true;
+	@NotNull
+	public Boolean weightReducesMiningSpeed = true;
 }
