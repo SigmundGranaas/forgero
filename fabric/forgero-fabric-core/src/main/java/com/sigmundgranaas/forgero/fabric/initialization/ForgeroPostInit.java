@@ -33,6 +33,7 @@ import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
+import com.sigmundgranaas.forgero.fabric.resources.dynamic.AllPartToAllSchematicsGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
@@ -207,7 +208,12 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 
 	private void registerAARPRecipes(StateService service) {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
-		ARRPGenerator.register(() -> new PartToSchematicGenerator(service));
+		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
+			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service));
+		} else {
+			ARRPGenerator.register(() -> new PartToSchematicGenerator(service));
+		}
+
 		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
 		ARRPGenerator.register(() -> new SchematicPartTagGenerator(service));
 		ARRPGenerator.register(() -> new PartTypeTagGenerator(service));
