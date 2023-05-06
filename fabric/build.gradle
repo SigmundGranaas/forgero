@@ -84,7 +84,7 @@ modrinth {
 	uploadFile = remapJar
 	gameVersions = [minecraft_version]
 	loaders = ["fabric", "quilt"]
-	versionName = "Forgero"
+	versionName = "Forgero $version"
 	changelog = file('../changelog.md').text
 	dependencies {
 		required.project "fabric-api"
