@@ -60,7 +60,7 @@ dependencies {
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	modImplementation "maven.modrinth:jei:12.4.0.22"
+	modImplementation "maven.modrinth:jei:J5TcglXt"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
