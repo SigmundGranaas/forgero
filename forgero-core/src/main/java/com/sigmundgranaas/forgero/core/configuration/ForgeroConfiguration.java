@@ -60,7 +60,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
 	public Boolean enableRecipesForAllSchematics = false;
 	@NotNull
-	public Integer weightMiningSpeedReductionScaler = 0;
+	public Integer weightMiningSpeedReductionScaler = 30;
 	@NotNull
 	public Integer weightAttackSpeedReductionScaler = 100;
 	@NotNull
