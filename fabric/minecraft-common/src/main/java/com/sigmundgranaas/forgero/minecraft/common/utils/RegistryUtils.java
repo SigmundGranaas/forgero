@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.minecraft.common.utils;
 
 import java.util.Optional;
 
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 /**
  * A utility class for working with registries. Will try to provide safe handling of registry lookups.

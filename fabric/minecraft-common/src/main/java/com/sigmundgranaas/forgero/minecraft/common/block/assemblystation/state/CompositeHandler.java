@@ -30,7 +30,7 @@ public class CompositeHandler implements DisassemblyHandler {
 			return false;
 		}
 		for (int i = 0; i < stacks.size(); i++) {
-			if (!stacks.get(i).isItemEqualIgnoreDamage(compared.get(i))) {
+			if (!stacks.get(i).isItemEqual(compared.get(i))) {
 				return false;
 			}
 		}

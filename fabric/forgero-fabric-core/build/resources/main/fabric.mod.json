@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "forgero-fabric-core",
-  "version": "0.10.8+1.19.3",
+  "version": "0.10.9-rc1+1.19.3",
   "name": "Forgero for Fabric",
   "description": "Equipment crafting expansion mod for Fabric!",
   "authors": [
@@ -28,6 +28,12 @@
     ],
     "main": [
       "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"
+    ],
+    "forgeroInitialized": [
+      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPostInit"
+    ],
+    "forgeroPreInitialization": [
+      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPreInit"
     ]
   },
   "mixins": [

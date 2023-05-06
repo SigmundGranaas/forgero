@@ -117,7 +117,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	// Shift + Player Inv Slot
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int slot) {
+	public ItemStack quickMove(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(invSlot);
 		if (slot.hasStack()) {

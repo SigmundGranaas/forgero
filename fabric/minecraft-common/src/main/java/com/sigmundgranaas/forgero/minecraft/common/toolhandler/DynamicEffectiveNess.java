@@ -3,10 +3,6 @@ package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 import java.util.Collections;
 import java.util.List;
 
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
-import java.util.Collections;
-import java.util.List;
-
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.block.Block;

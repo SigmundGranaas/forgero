@@ -11,7 +11,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+
 
 /**
  * A {@link DataVisitor} for {@link EnchantmentData}.
@@ -62,7 +63,7 @@ public class EnchantmentVisitor extends ClassBasedVisitor<EnchantmentVisitor.Enc
 		 */
 		public void embed(ItemStack stack) {
 			RegistryUtils.safeId(id())
-					.flatMap(id -> RegistryUtils.safeRegistryLookup(Registry.ENCHANTMENT, id))
+					.flatMap(id -> RegistryUtils.safeRegistryLookup(Registries.ENCHANTMENT, id))
 					.filter(enchant -> enchant.isAcceptableItem(stack))
 					.ifPresent(enchant -> stack.addEnchantment(enchant, level()));
 		}

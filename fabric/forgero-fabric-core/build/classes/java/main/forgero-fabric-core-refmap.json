@@ -13,10 +13,6 @@
       "renderModel": "Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext;renderModel(Lnet/minecraft/class_1799;Lnet/minecraft/class_809$class_811;ZLnet/minecraft/class_4587;Lnet/minecraft/class_4597;IILnet/minecraft/class_1087;Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext$VanillaQuadHandler;)V",
       "Lnet/minecraft/client/util/math/MatrixStack$Entry;getPositionMatrix()Lorg/joml/Matrix4f;": "Lnet/minecraft/class_4587$class_4665;method_23761()Lorg/joml/Matrix4f;"
     },
-    "com/sigmundgranaas/forgero/fabric/mixins/ItemStackDropGemOnBreakMixin": {
-      "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;": "Lnet/minecraft/class_1799;method_7909()Lnet/minecraft/class_1792;",
-      "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/class_1799;method_7956(ILnet/minecraft/class_1309;Ljava/util/function/Consumer;)V"
-    },
     "com/sigmundgranaas/forgero/fabric/mixins/PlayerInteractionManagerMixin": {
       "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V": "Lnet/minecraft/class_636;method_41931(Lnet/minecraft/class_638;Lnet/minecraft/class_7204;)V",
       "updateBlockBreakingProgress": "Lnet/minecraft/class_636;method_2902(Lnet/minecraft/class_2338;Lnet/minecraft/class_2350;)Z"
@@ -102,10 +98,6 @@
       "com/sigmundgranaas/forgero/fabric/mixins/ItemRenderContextMixin": {
         "renderModel": "Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext;renderModel(Lnet/minecraft/class_1799;Lnet/minecraft/class_809$class_811;ZLnet/minecraft/class_4587;Lnet/minecraft/class_4597;IILnet/minecraft/class_1087;Lnet/fabricmc/fabric/impl/client/indigo/renderer/render/ItemRenderContext$VanillaQuadHandler;)V",
         "Lnet/minecraft/client/util/math/MatrixStack$Entry;getPositionMatrix()Lorg/joml/Matrix4f;": "Lnet/minecraft/class_4587$class_4665;method_23761()Lorg/joml/Matrix4f;"
-      },
-      "com/sigmundgranaas/forgero/fabric/mixins/ItemStackDropGemOnBreakMixin": {
-        "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;": "Lnet/minecraft/class_1799;method_7909()Lnet/minecraft/class_1792;",
-        "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/class_1799;method_7956(ILnet/minecraft/class_1309;Ljava/util/function/Consumer;)V"
       },
       "com/sigmundgranaas/forgero/fabric/mixins/PlayerInteractionManagerMixin": {
         "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V": "Lnet/minecraft/class_636;method_41931(Lnet/minecraft/class_638;Lnet/minecraft/class_7204;)V",

@@ -28,6 +28,7 @@ import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
+import com.sigmundgranaas.forgero.fabric.item.DynamicItems;
 import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
 import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
@@ -40,7 +41,6 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.item.Attributes;
-import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
 import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
 import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
@@ -48,12 +48,13 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
-import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
@@ -100,15 +101,15 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 				.filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
 
 		ForgeroStateRegistry.CREATE_STATES.stream()
-				.filter(state -> !Registry.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
-				.filter(state -> !Registry.ITEM.containsId(new Identifier(state.get().identifier())))
+				.filter(state -> !Registries.ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
+				.filter(state -> !Registries.ITEM.containsId(new Identifier(state.get().identifier())))
 				.sorted((element1, element2) -> compareStates(element1.get(), element2.get(), sortingMap))
 				.forEach(state -> {
 					try {
 						var converter = StateToItemConverter.of(state);
 						Identifier identifier = converter.id();
 						var item = converter.convert();
-						Registry.register(Registry.ITEM, identifier, item);
+						Registry.register(Registries.ITEM, identifier, item);
 					} catch (InvalidIdentifierException e) {
 						LOGGER.error("invalid identifier: {}", state.get().identifier());
 						LOGGER.error(e);
@@ -201,9 +202,9 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerBlocks() {
-		Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
-		Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
-		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+		Registry.register(Registries.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
+		Registry.register(Registries.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
+		Registry.register(Registries.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
 	}
 
 	private void registerAARPRecipes(StateService service) {

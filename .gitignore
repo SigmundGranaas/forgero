@@ -116,3 +116,8 @@ gradle-app.setting
 [Bb]uild/
 [Dd]est/
 [Oo]utput/
+
+**/[Ll]ogs/
+**/[Rr]un/
+**/[Dd]est/
+**/[Oo]utput/

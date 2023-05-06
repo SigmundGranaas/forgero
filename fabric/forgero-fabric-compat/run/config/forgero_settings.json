@@ -4,6 +4,7 @@
   ],
   "disabledPacks": [],
   "disableVanillaRecipes": false,
+  "enableCustomRecipeDeletion": true,
   "disableVanillaLoot": false,
   "disableVanillaTools": false,
   "convertVanillaRecipesToForgeroTools": false,
@@ -15,5 +16,11 @@
   "baseSoulLevelRequirement": 1000,
   "useEntityAttributes": true,
   "hideRarity": true,
-  "exportGeneratedTextures": false
+  "exportGeneratedTextures": false,
+  "showAttributeDifference": true,
+  "enableRecipesForAllSchematics": false,
+  "weightMiningSpeedReductionScaler": 30,
+  "weightAttackSpeedReductionScaler": 100,
+  "weightReducesAttackSpeed": true,
+  "weightReducesMiningSpeed": true
 }
