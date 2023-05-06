@@ -7,6 +7,9 @@ you have backed up your save.**
 
 # Changelog
 
+* Published new artifacts to Github Packages
+* Added new mod entrypoints
+* Added a new service based system for handling states
 * Mystical crop compatability (CantWeAllDisagree )
 * Reworked all refined and mastercrafted textures (JorisDeBeer)
 * Added new mastercrafted and refined parts for guards and pommels (JorisDeBeer)
