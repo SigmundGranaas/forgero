@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registry;
+import net.minecraft.util.registry.Registry;
 
 
 public class ItemToStateConverter implements Converter<Item, Optional<State>> {

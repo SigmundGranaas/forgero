@@ -11,9 +11,9 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 
 import net.minecraft.block.Block;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class EffectivenessHandler {
 	public static String EFFECTIVENESS_KEY = "EFFECTIVE_BLOCKS";
@@ -28,7 +28,7 @@ public class EffectivenessHandler {
 					.filter(feature -> feature.type().equals(EFFECTIVENESS_KEY))
 					.map(PropertyData::getTags)
 					.flatMap(List::stream)
-					.map(tag -> TagKey.of(Registries.BLOCK.getKey(), new Identifier(tag)))
+					.map(tag -> TagKey.of(Registry.BLOCK.getKey(), new Identifier(tag)))
 					.toList();
 		}
 		return Collections.emptyList();

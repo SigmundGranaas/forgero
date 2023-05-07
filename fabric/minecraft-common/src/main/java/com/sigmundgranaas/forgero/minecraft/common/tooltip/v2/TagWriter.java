@@ -1,10 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
 import java.util.List;
+
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
+
+import net.minecraft.text.MutableText;
 
 public class TagWriter {
 	public static MutableText writeTagList(List<String> tags) {

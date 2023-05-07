@@ -1,22 +1,27 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
-import com.sigmundgranaas.forgero.core.property.*;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
-import com.sigmundgranaas.forgero.core.state.State;
-
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
+
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.MutableText;
+import net.minecraft.util.Formatting;
 
 public class AttributeWriter implements Writer {
-	private final List<Text> tooltip;
+	private final List<net.minecraft.text.Text> tooltip;
 	private final List<AttributeType> attributes;
 	private final AttributeHelper helper;
 
@@ -30,7 +35,7 @@ public class AttributeWriter implements Writer {
 		return new AttributeWriter(helper);
 	}
 
-	public static void write(State state, List<Text> tooltip, TooltipContext context) {
+	public static void write(State state, List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		var attributes = state.getRootProperties();
 
 		MutableText slots = Text.literal(" Attributes: ").formatted(Formatting.GRAY);
@@ -44,7 +49,7 @@ public class AttributeWriter implements Writer {
 		addAttributeInt(attributes, AttributeType.RARITY, "Rarity", tooltip);
 	}
 
-	private static void addAttribute(List<Property> attributes, AttributeType type, String title, List<Text> tooltip) {
+	private static void addAttribute(List<Property> attributes, AttributeType type, String title, List<net.minecraft.text.Text> tooltip) {
 		float result = Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
 		if (result != 0f) {
 			MutableText miningLevel = Text.translatable(String.format("  %s: ", title)).formatted(Formatting.GRAY);
@@ -63,7 +68,7 @@ public class AttributeWriter implements Writer {
 				.forEach(attribute -> writeBaseAttribute(attribute, tooltip, title));
 	}
 
-	private static void addAttributeInt(List<Property> attributes, AttributeType type, String title, List<Text> tooltip) {
+	private static void addAttributeInt(List<Property> attributes, AttributeType type, String title, List<net.minecraft.text.Text> tooltip) {
 		int result = (int) Property.stream(attributes).applyAttribute(Target.createEmptyTarget(), type);
 		if (result != 0) {
 			MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(title))).append(" : ").formatted(Formatting.GRAY);
@@ -84,13 +89,13 @@ public class AttributeWriter implements Writer {
 				.forEach(attribute -> writeBaseAttribute(attribute, tooltip, title));
 	}
 
-	private static void writeBaseMultiplication(Attribute attribute, List<Text> tooltip, String title) {
+	private static void writeBaseMultiplication(Attribute attribute, List<net.minecraft.text.Text> tooltip, String title) {
 		MutableText miningLevel = Text.translatable(String.format("  %s: ", title)).formatted(Formatting.GRAY);
 		miningLevel.append(Text.literal(String.format(" multiplier %sx", attribute.getValue())).formatted(Formatting.WHITE));
 		tooltip.add(miningLevel);
 	}
 
-	private static void writeBaseAttribute(Attribute attribute, List<Text> tooltip, String title) {
+	private static void writeBaseAttribute(Attribute attribute, List<net.minecraft.text.Text> tooltip, String title) {
 		MutableText miningLevel = Text.translatable(String.format("  %s: ", title)).formatted(Formatting.GRAY);
 		miningLevel.append(Text.literal(String.format(" base %s", attribute.getValue())).formatted(Formatting.WHITE));
 		tooltip.add(miningLevel);
@@ -123,7 +128,7 @@ public class AttributeWriter implements Writer {
 		}
 	}
 
-	private void intAttribute(AttributeType type, List<Text> tooltip) {
+	private void intAttribute(AttributeType type, List<net.minecraft.text.Text> tooltip) {
 		int result = (int) helper.attribute(type);
 		if (result != 0) {
 			MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString().toLowerCase()))).append(": ").formatted(Formatting.GRAY);
@@ -132,7 +137,7 @@ public class AttributeWriter implements Writer {
 		}
 	}
 
-	private void floatAttribute(AttributeType type, List<Text> tooltip) {
+	private void floatAttribute(AttributeType type, List<net.minecraft.text.Text> tooltip) {
 		float result = Property.stream(helper.attributes()).applyAttribute(Target.createEmptyTarget(), type);
 		if (result != 0f && type == ATTACK_SPEED) {
 			result += 4f;
@@ -146,7 +151,7 @@ public class AttributeWriter implements Writer {
 	}
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		if (attributes.size() > 0) {
 			MutableText attributes = Text.literal(" ").append(Text.translatable(Writer.toTranslationKey("attributes"))).append(": ").formatted(Formatting.GRAY);
 			tooltip.add(attributes);

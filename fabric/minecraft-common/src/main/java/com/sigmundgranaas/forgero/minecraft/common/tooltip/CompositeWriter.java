@@ -1,17 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.state.composite.Constructed;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
-
-import java.util.List;
 
 public class CompositeWriter implements Writer {
 	private final Composite composite;
@@ -31,7 +31,7 @@ public class CompositeWriter implements Writer {
 		return Rarity.COMMON;
 	}
 
-	public static void write(Composite composite, List<Text> tooltip, TooltipContext context, int indent) {
+	public static void write(Composite composite, List<net.minecraft.text.Text> tooltip, TooltipContext context, int indent) {
 		StringBuilder stringIndent = new StringBuilder(" ");
 		stringIndent.append(" ".repeat(Math.max(0, indent)));
 
@@ -67,7 +67,7 @@ public class CompositeWriter implements Writer {
 		}
 	}
 
-	private void writeCompositeWithIndent(List<Text> tooltip, TooltipContext context, int indent) {
+	private void writeCompositeWithIndent(List<net.minecraft.text.Text> tooltip, TooltipContext context, int indent) {
 		StringBuilder stringIndent = new StringBuilder(" ");
 		stringIndent.append(" ".repeat(Math.max(0, indent)));
 
@@ -110,7 +110,7 @@ public class CompositeWriter implements Writer {
 
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		writeCompositeWithIndent(tooltip, context, 0);
 	}
 }

@@ -1,10 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot.function;
 
-import static net.minecraft.registry.Registries.LOOT_FUNCTION_TYPE;
+
+import static net.minecraft.util.registry.Registry.LOOT_FUNCTION_TYPE;
 
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class LootFunctions {
 

@@ -17,7 +17,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 
 @Mixin(MiningToolItem.class)
 public class MiningToolItemMixin {

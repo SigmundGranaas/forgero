@@ -10,8 +10,8 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeWrapperImpl;
 
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class PartSmeltingRecipeGenerator implements RecipeGenerator {
 
@@ -31,7 +31,7 @@ public class PartSmeltingRecipeGenerator implements RecipeGenerator {
 
 	@Override
 	public boolean isValid() {
-		if (!Registries.ITEM.containsId(new Identifier(part.identifier()))) {
+		if (!Registry.ITEM.containsId(new Identifier(part.identifier()))) {
 			return false;
 		}
 		return ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier());

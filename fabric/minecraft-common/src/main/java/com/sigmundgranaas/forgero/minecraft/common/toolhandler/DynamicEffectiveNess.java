@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 
 
 public interface DynamicEffectiveNess {

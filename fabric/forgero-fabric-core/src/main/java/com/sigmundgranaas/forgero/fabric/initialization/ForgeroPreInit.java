@@ -20,7 +20,6 @@ import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -48,8 +47,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 			public void reload(ResourceManager manager) {
 				SoulLevelPropertyRegistry.refresh();
 				Gson gson = new Gson();
-				for (Resource res : manager.findResources("leveled_soul_properties", path -> path.getPath().endsWith(".json")).values()) {
-					try (InputStream stream = res.getInputStream()) {
+				for (Identifier res : manager.findResources("leveled_soul_properties", path -> path.endsWith(".json"))) {
+					try (InputStream stream = manager.getResource(res).getInputStream()) {
 						SoulLevelPropertyData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), SoulLevelPropertyData.class);
 						SoulLevelPropertyRegistry.register(data.getId(), new SoulLevelPropertyDataProcessor(data));
 					} catch (Exception e) {

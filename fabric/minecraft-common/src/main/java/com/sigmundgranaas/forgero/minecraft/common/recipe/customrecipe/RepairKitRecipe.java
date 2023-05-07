@@ -26,7 +26,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public RepairKitRecipe(ShapelessRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(),recipe.getCategory(), recipe.getOutput(), recipe.getIngredients());
+		super(recipe.getId(), recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
 		this.service = service;
 	}
 

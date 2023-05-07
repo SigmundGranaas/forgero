@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.ConditionalWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.BaseWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.List;
 
 public abstract class SectionWriter extends BaseWriter implements ConditionalWriter {
 
@@ -18,7 +18,7 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
 		this.configuration = configuration;
 	}
 
-	public Text createSection(String sectionName) {
+	public net.minecraft.text.Text createSection(String sectionName) {
 		return indented(sectionIndent())
 				.append(translatedSection(sectionName))
 				.append(sectionSeparator())
@@ -26,7 +26,7 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
 	}
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		if (configuration.padded()) {
 			tooltip.add(Text.empty());
 		}
@@ -43,7 +43,7 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
 		return sectionIndent() + 1;
 	}
 
-	public Text translatedSection(String sectionName) {
+	public net.minecraft.text.Text translatedSection(String sectionName) {
 		return Text.translatable(translatableSectionElement(sectionName)).formatted(base());
 	}
 
@@ -55,7 +55,7 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
 		return String.format("tooltip.forgero.section.%s", element);
 	}
 
-	public Text sectionSeparator() {
+	public net.minecraft.text.Text sectionSeparator() {
 		return Text.translatable(translatableSectionElement("section_separator"));
 	}
 
@@ -63,5 +63,5 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
 		return configuration.sectionOrder();
 	}
 
-	public abstract List<Text> entries();
+	public abstract List<net.minecraft.text.Text> entries();
 }

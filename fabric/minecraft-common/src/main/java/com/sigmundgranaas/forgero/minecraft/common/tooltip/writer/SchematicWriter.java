@@ -13,10 +13,10 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.SlotSectionWriter;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class SchematicWriter extends StateWriter {
@@ -25,7 +25,7 @@ public class SchematicWriter extends StateWriter {
 	}
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		Optional<Integer> materials = state.accept(VISITOR).flatMap(container -> container.getInteger(INGREDIENT_COUNT));
 		if (materials.isPresent()) {
 			MutableText materialText = Text.translatable("tooltip.forgero.material_count").formatted(Formatting.GRAY).append(Text.literal(materials.get().toString()).formatted(Formatting.WHITE));

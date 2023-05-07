@@ -26,17 +26,17 @@ public abstract class PlayerServerInteractionManagerMixin {
 	protected ServerWorld world;
 
 	@Shadow
-	public abstract void finishMining(BlockPos pos, int sequence, String reason);
+	public abstract void finishMining(BlockPos pos, PlayerActionC2SPacket.Action action, String reason);
 
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;ILjava/lang/String;)V"), method = "processBlockBreakingAction")
-	public void processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, CallbackInfo ci) {
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/network/packet/c2s/play/PlayerActionC2SPacket$Action;Ljava/lang/String;)V"), method = "processBlockBreakingAction")
+	public void processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, CallbackInfo ci) {
 		var soulHandler = SoulHandler.of(player.getMainHandStack());
 		soulHandler.ifPresent(soul -> soul.processBlockBreak(pos, world, player));
 		PropertyHelper.ofPlayerHands(player)
 				.flatMap(container -> ToolBlockHandler.of(container, world, pos, player))
 				.ifPresent(handler -> handler.handleExceptOrigin(info -> {
 					soulHandler.ifPresent(soul -> soul.processBlockBreak(info, world, player));
-					this.finishMining(info, sequence, "destroyed");
+					this.finishMining(info, action, "destroyed");
 				}).cleanUp());
 	}
 }

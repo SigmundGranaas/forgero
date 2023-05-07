@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import static net.minecraft.registry.Registries.ITEM;
+import static net.minecraft.util.registry.Registry.ITEM;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
+import net.minecraft.util.registry.Registry;
 
 
 public class Items {

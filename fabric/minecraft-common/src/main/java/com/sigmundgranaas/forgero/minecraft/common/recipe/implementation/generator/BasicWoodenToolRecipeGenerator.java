@@ -9,8 +9,8 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeWrapperImpl;
 
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 
 public class BasicWoodenToolRecipeGenerator implements RecipeGenerator {
@@ -31,7 +31,7 @@ public class BasicWoodenToolRecipeGenerator implements RecipeGenerator {
 
 	@Override
 	public boolean isValid() {
-		if (!Registries.ITEM.containsId(new Identifier(String.format("forgero:%s-%s", material.name(), partName)))) {
+		if (!Registry.ITEM.containsId(new Identifier(String.format("forgero:%s-%s", material.name(), partName)))) {
 			return false;
 		}
 		return ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier());

@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -52,9 +51,8 @@ public abstract class WorldRenderBlockBreakingMixin {
 	@Final
 	private Int2ObjectMap<BlockBreakingInfo> blockBreakingInfos;
 
-	@Invoker("drawCuboidShapeOutline")
-	public static void drawCuboidShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape shape, double offsetX, double offsetY, double offsetZ, float red, float green, float blue, float alpha) {
-
+	@Shadow
+	private static void drawShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape voxelShape, double d, double e, double f, float g, float h, float i, float j) {
 	}
 
 	@Inject(at = @At("HEAD"), method = "drawBlockOutline")
@@ -64,7 +62,7 @@ public abstract class WorldRenderBlockBreakingMixin {
 		}
 		PropertyHelper.ofPlayerHands(this.client.player)
 				.flatMap(container -> ToolBlockHandler.of(container, world, pos, this.client.player))
-				.ifPresent(handler -> handler.handleExceptOrigin(info -> drawCuboidShapeOutline(matrices,
+				.ifPresent(handler -> handler.handleExceptOrigin(info -> drawShapeOutline(matrices,
 						vertexConsumer,
 						world.getBlockState(info).getOutlineShape(this.world, info, ShapeContext.of(entity)),
 						(double) info.getX() - cameraX,

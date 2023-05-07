@@ -1,18 +1,22 @@
 package com.sigmundgranaas.forgero.fabric.client;
 
+import java.util.Collections;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
-import net.minecraft.client.model.*;
+import net.minecraft.client.model.ModelData;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.ModelPartBuilder;
+import net.minecraft.client.model.ModelPartData;
+import net.minecraft.client.model.ModelTransform;
+import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.AnimalModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.util.Identifier;
 
-import java.util.Collections;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 @Environment(value = EnvType.CLIENT)
 public class SoulEntityModel<T extends SoulEntity>
@@ -22,15 +26,15 @@ public class SoulEntityModel<T extends SoulEntity>
 
 	public SoulEntityModel(ModelPart root) {
 		super(false, 24.0f, 0.0f);
-		this.bone = root.getChild(EntityModelPartNames.BONE);
+		this.bone = root.getChild("bone");
 	}
 
 	public static TexturedModelData getTexturedModelData() {
 		float f = 19.0f;
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
-		ModelPartData modelPartData2 = modelPartData.addChild(EntityModelPartNames.BONE, ModelPartBuilder.create(), ModelTransform.pivot(0.0f, 19.0f, 0.0f));
-		ModelPartData modelPartData3 = modelPartData2.addChild(EntityModelPartNames.BODY, ModelPartBuilder.create().uv(0, 0).cuboid(-3.5f, -4.0f, -5.0f, 7.0f, 7.0f, 10.0f), ModelTransform.NONE);
+		ModelPartData modelPartData2 = modelPartData.addChild("bone", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 19.0F, 0.0F));
+		ModelPartData modelPartData3 = modelPartData2.addChild("body", ModelPartBuilder.create().uv(0, 0).cuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F), ModelTransform.NONE);
 		return TexturedModelData.of(modelData, 64, 64);
 	}
 

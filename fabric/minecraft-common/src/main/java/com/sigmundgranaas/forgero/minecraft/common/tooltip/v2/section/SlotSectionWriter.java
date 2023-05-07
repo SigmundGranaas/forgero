@@ -1,21 +1,21 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import static com.sigmundgranaas.forgero.minecraft.common.tooltip.CompositeWriter.getRarityFromInt;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Rarity;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.minecraft.common.tooltip.CompositeWriter.getRarityFromInt;
 
 public class SlotSectionWriter extends SectionWriter {
 	private static final String sectionTranslationKey = "slots";
@@ -43,7 +43,7 @@ public class SlotSectionWriter extends SectionWriter {
 	}
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		tooltip.add(createSection(sectionTranslationKey));
 		tooltip.addAll(entries());
 		super.write(tooltip, context);
@@ -55,11 +55,11 @@ public class SlotSectionWriter extends SectionWriter {
 	}
 
 	@Override
-	public List<Text> entries() {
+	public List<net.minecraft.text.Text> entries() {
 		return container.slots().stream().map(this::writeSlot).flatMap(List::stream).toList();
 	}
 
-	private List<Text> writeSlot(Slot slot) {
+	private List<net.minecraft.text.Text> writeSlot(Slot slot) {
 		MutableText mutableText = indented(entryIndent()).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(neutral()));
 		if (slot.filled()) {
 			Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());

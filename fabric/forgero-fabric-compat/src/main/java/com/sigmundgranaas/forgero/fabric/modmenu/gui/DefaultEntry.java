@@ -37,16 +37,16 @@ public class DefaultEntry extends ConfigurationEntry {
 
 	@Override
 	public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-		button.setY(y);
-		button.setX(x + xDefaultPosition);
+		button.y = y;
+		button.x = x + xDefaultPosition;
 		button.render(matrices, mouseX, mouseY, tickDelta);
 
-		reset.setY(y);
-		reset.setX(x + xDefaultPosition + button.getWidth() + 5);
+		reset.y = (y);
+		reset.x = x + xDefaultPosition + button.getWidth() + 5;
 		reset.render(matrices, mouseX, mouseY, tickDelta);
 
-		textWidget.setY(y + 5);
-		textWidget.setX(x + xTextPosition);
+		textWidget.y = y + 5;
+		textWidget.x = x + xTextPosition;
 		textWidget.render(matrices, mouseX, mouseY, tickDelta);
 	}
 }

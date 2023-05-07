@@ -14,8 +14,8 @@ import com.sigmundgranaas.forgero.core.registry.StateCollection;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateMapper;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class RegistryHandler {
 	private static final RegistryHandler HANDLER = new RegistryHandler();
@@ -47,7 +47,7 @@ public class RegistryHandler {
 		}
 		List<Identifier> convertedTags = TAG_TO_STATE.keySet().stream().map(Identifier::new).toList();
 		StateMapper mapper = new StateMapper(itemToStateMap, stateToItemMap, stateToTag, tagToStateMap);
-		StateService service = new ForgeroInstanceRegistry(convertedTags, collection, Registries.ITEM, itemToStateMap, tagToStateMap, mapper);
+		StateService service = new ForgeroInstanceRegistry(convertedTags, collection, Registry.ITEM, itemToStateMap, tagToStateMap, mapper);
 		StateService.initialize(service);
 		runSynced(service);
 		return service;

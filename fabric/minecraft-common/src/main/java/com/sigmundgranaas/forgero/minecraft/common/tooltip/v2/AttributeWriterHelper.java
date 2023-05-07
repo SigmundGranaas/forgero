@@ -11,11 +11,11 @@ import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference.DifferenceHelper;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class AttributeWriterHelper extends BaseWriter {
@@ -146,7 +146,7 @@ public class AttributeWriterHelper extends BaseWriter {
 		}
 	}
 
-	public Text translatableMultiplier() {
+	public net.minecraft.text.Text translatableMultiplier() {
 		return Text.translatable("tooltip.forgero.attribute.multiplier");
 	}
 
@@ -167,7 +167,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 
 	}
 

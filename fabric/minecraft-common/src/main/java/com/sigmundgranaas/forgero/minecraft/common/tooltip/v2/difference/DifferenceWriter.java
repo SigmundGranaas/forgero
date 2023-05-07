@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference;
 import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.number;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public interface DifferenceWriter {

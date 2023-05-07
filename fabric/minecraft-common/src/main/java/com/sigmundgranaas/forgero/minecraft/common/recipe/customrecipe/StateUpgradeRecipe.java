@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
+import java.util.Set;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -12,6 +14,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
@@ -28,7 +31,7 @@ public class StateUpgradeRecipe extends SmithingRecipe {
 
 	@Override
 	public boolean matches(Inventory inventory, World world) {
-		if (inventory.containsAny(ItemStack::isEmpty)) {
+		if (inventory.containsAny(Set.of(Items.AIR))) {
 			return false;
 		}
 		if (super.matches(inventory, world)) {

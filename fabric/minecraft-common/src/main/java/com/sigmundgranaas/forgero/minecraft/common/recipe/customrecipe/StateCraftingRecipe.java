@@ -34,7 +34,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	private final StateService service;
 
 	public StateCraftingRecipe(ShapedRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(),recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
+		super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
 		this.service = service;
 	}
 

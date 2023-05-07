@@ -7,12 +7,12 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.registry.Registries;
+import net.minecraft.util.registry.Registry;
 
 
 public class SoulHelper {
 	public static State of(LivingEntity entity, ConstructedTool tool) {
-		SoulSource soulSource = new SoulSource(Registries.ENTITY_TYPE.getId(entity.getType()).toString(), entity.getName().getString());
+		SoulSource soulSource = new SoulSource(Registry.ENTITY_TYPE.getId(entity.getType()).toString(), entity.getName().getString());
 		Soul soul = new Soul(soulSource, SoulLevelPropertyRegistry.handler());
 		return tool.bind(soul);
 	}

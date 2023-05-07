@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
-
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 
 public class ListWidget extends TextFieldWidget {
 	protected final String suggestion;

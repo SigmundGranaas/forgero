@@ -22,10 +22,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
-		@Override
-		public ItemStack quickMove(PlayerEntity player, int index) {
-			return ItemStack.EMPTY;
-		}
 
 		@Override
 		public boolean canUse(PlayerEntity player) {
@@ -117,13 +113,13 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	// Shift + Player Inv Slot
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int invSlot) {
+	public ItemStack transferSlot(PlayerEntity player, int index) {
 		ItemStack newStack = ItemStack.EMPTY;
-		Slot slot = this.slots.get(invSlot);
+		Slot slot = this.slots.get(index);
 		if (slot.hasStack()) {
 			ItemStack originalStack = slot.getStack();
 			newStack = originalStack.copy();
-			if (invSlot < this.inventory.size()) {
+			if (index < this.inventory.size()) {
 				if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}

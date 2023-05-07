@@ -4,7 +4,7 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation("net.devtech:arrp:0.6.7")
+	modImplementation("curse.maven:arrp-463113:3680866")
 }
 
 sourceSets {

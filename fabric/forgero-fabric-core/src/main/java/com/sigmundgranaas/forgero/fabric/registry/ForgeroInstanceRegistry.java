@@ -19,11 +19,10 @@ import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 
 
 public class ForgeroInstanceRegistry implements StateService {
@@ -67,7 +66,7 @@ public class ForgeroInstanceRegistry implements StateService {
 
 	private Optional<State> findInTags(Identifier id) {
 		return tags.stream()
-				.map(tag -> TagKey.of(Registries.ITEM.getKey(), tag))
+				.map(tag -> TagKey.of(Registry.ITEM.getKey(), tag))
 				.filter(tag -> hasItem(tag, id))
 				.map(tag -> Optional.ofNullable(tagToStateMap.get(tag.toString())))
 				.flatMap(Optional::stream)

@@ -5,10 +5,10 @@ import java.text.MessageFormat;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.ForgeroConfigurationScreen;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 
 public class ResetButtonWidget extends ButtonWidget {
 	private final Object object;
@@ -16,7 +16,7 @@ public class ResetButtonWidget extends ButtonWidget {
 
 	public ResetButtonWidget(int x, int y, int width, int height, Object object, Field field) {
 		super(x - width / 2, y - height / 2, width, height, Text.translatable("forgero.menu.options.reset"), button -> {
-		}, (nar) -> Text.translatable(MessageFormat.format("forgero.menu.options.{0}", field.getName())));
+		}, (var1, var2, var3, var4) -> Text.translatable(MessageFormat.format("forgero.menu.options.{0}", field.getName())));
 
 		this.object = object;
 		this.field = field;

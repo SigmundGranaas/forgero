@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 
 @Mixin(AbstractFurnaceBlockEntity.class)
@@ -30,8 +30,8 @@ public class AbstractFurnaceWoodPartsFuelMixin {
 					.stream()
 					.filter(state -> state instanceof MaterialBased based && based.baseMaterial().test(Type.WOOD))
 					.map(state -> new Identifier(state.identifier()))
-					.filter(Registries.ITEM::containsId)
-					.map(Registries.ITEM::get)
+					.filter(Registry.ITEM::containsId)
+					.map(Registry.ITEM::get)
 					.forEach(item -> map.put(item, 300));
 		}
 	}

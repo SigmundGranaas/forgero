@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
@@ -11,11 +13,8 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State, StateItem {
 	private final StateProvider DEFAULT;

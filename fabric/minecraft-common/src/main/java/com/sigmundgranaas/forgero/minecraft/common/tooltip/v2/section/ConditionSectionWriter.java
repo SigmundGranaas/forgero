@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.text.Text;
-
-import java.util.List;
-import java.util.Optional;
 
 public class ConditionSectionWriter extends SectionWriter {
 	private final Conditional<?> container;
@@ -39,7 +39,7 @@ public class ConditionSectionWriter extends SectionWriter {
 	}
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		if (!configuration.hideSectionTitle()) {
 			tooltip.add(createSection("conditions"));
 		}
@@ -54,11 +54,11 @@ public class ConditionSectionWriter extends SectionWriter {
 	}
 
 	@Override
-	public List<Text> entries() {
+	public List<net.minecraft.text.Text> entries() {
 		return container.namedConditions().stream().map(this::entry).toList();
 	}
 
-	public Text entry(NamedCondition data) {
+	public net.minecraft.text.Text entry(NamedCondition data) {
 		return indented(entryIndent()).append(Text.translatable(String.format("condition.forgero.%s", data.name())));
 	}
 }

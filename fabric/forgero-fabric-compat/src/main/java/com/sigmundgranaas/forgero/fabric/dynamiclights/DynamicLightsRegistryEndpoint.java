@@ -17,7 +17,7 @@ public class DynamicLightsRegistryEndpoint implements DynamicLightsInitializer {
 	@Override
 	public void onInitializeDynamicLights() {
 		registerDynamicLightHandler(EntityType.PLAYER, (player) -> {
-			for (ItemStack stack : player.getHandItems()) {
+			for (ItemStack stack : player.getItemsHand()) {
 				Optional<Integer> luma = StateService.INSTANCE.convert(stack).flatMap(LumaHandler::of).map(Attribute::asInt);
 				if (luma.isPresent()) {
 					return luma.get();

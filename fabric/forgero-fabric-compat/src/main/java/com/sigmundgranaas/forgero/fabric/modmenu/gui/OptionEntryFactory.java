@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Optional;
+
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
+
+import net.minecraft.client.MinecraftClient;
 
 public class OptionEntryFactory {
 	public Optional<ConfigurationEntry> convertToEntry(Field field, Object value, int x, int y) {

@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.EightWayDirection;
 import net.minecraft.world.WorldView;
 
 /**
@@ -21,19 +20,18 @@ public class BlockSelectionUtils {
 	 */
 	public static Set<BlockPos> getBlockPositionsAround(BlockPos blockPos) {
 		var directions = Direction.values();
-		var eightWayDirections = EightWayDirection.values();
 		var offsetBlockPositions = new HashSet<BlockPos>();
 
 		for (Direction direction : directions) {
-			BlockPos offsetBlockPos = blockPos.offset(direction, 1);
+			BlockPos offsetBlockPos = blockPos.offset(direction);
 			offsetBlockPositions.add(offsetBlockPos);
 		}
 
-		for (EightWayDirection eightWayDirection : eightWayDirections) {
-			BlockPos offsetBlockPos = blockPos.add(eightWayDirection.getOffsetX(), 1, eightWayDirection.getOffsetZ());
-			BlockPos offsetBlockPos2 = blockPos.add(eightWayDirection.getOffsetX(), -1, eightWayDirection.getOffsetZ());
-			offsetBlockPositions.add(offsetBlockPos);
-			offsetBlockPositions.add(offsetBlockPos2);
+		for (Direction horizontalDirection : directions) {
+			if (horizontalDirection.getAxis().isHorizontal()) {
+				BlockPos offsetBlockPos = blockPos.offset(horizontalDirection).down();
+				offsetBlockPositions.add(offsetBlockPos);
+			}
 		}
 		return offsetBlockPositions;
 	}

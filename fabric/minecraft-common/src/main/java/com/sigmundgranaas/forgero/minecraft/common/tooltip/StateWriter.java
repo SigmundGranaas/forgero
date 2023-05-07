@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
+import static com.sigmundgranaas.forgero.core.type.Type.*;
+
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -8,15 +12,11 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.ToolWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.writer.PartWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.writer.SchematicWriter;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.List;
-
-import static com.sigmundgranaas.forgero.core.type.Type.*;
 
 public class StateWriter implements Writer {
 	protected final State state;
@@ -40,7 +40,7 @@ public class StateWriter implements Writer {
 	}
 
 	@Override
-	public void write(List<Text> tooltip, TooltipContext context) {
+	public void write(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		if (this.state instanceof SoulContainer container) {
 			new SoulWriter(container.getSoul()).write(tooltip, context);
 		}
@@ -64,13 +64,13 @@ public class StateWriter implements Writer {
 		}
 	}
 
-	private void writePassives(List<Text> tooltip, TooltipContext context) {
+	private void writePassives(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		var writer = new PassiveWriter();
 		state.stream().getPassiveProperties().forEach(writer::addPassive);
 		writer.write(tooltip, context);
 	}
 
-	private void writeActive(List<Text> tooltip, TooltipContext context) {
+	private void writeActive(List<net.minecraft.text.Text> tooltip, TooltipContext context) {
 		var writer = new ActiveWriter();
 		writer.write(tooltip, context);
 	}

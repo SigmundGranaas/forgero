@@ -12,11 +12,11 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 public class GemItem extends Item implements StateItem, State {
@@ -35,18 +35,18 @@ public class GemItem extends Item implements StateItem, State {
 	}
 
 	@Override
-	public Text getName() {
+	public net.minecraft.text.Text getName() {
 		return Writer.nameToTranslatableText(DEFAULT);
 	}
 
 	@Override
-	public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+	public void appendTooltip(ItemStack itemStack, World world, List<net.minecraft.text.Text> tooltip, TooltipContext tooltipContext) {
 		new DefaultWriter(dynamicState(itemStack)).write(tooltip, tooltipContext);
 		super.appendTooltip(itemStack, world, tooltip, tooltipContext);
 	}
 
 	@Override
-	public Text getName(ItemStack stack) {
+	public net.minecraft.text.Text getName(ItemStack stack) {
 		var state = service.convert(stack).orElse(DEFAULT);
 		var text = Text.empty();
 		if (state instanceof LeveledState leveledState) {

@@ -1,22 +1,20 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
-
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class DynamicShovelItem extends ShovelItem implements StateItem {
 	private final StateProvider DEFAULT;

@@ -9,11 +9,11 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 
 /**
@@ -57,7 +57,7 @@ public class BlockUtils {
 	public static Predicate<BlockPos> isInTag(BlockView view, String tag) {
 		try {
 			Identifier tagId = new Identifier(tag);
-			TagKey<Block> tagKey = TagKey.of(Registries.BLOCK.getKey(), tagId);
+			TagKey<Block> tagKey = TagKey.of(Registry.BLOCK.getKey(), tagId);
 			return isInTag(view, tagKey);
 		} catch (InvalidIdentifierException e) {
 			Forgero.LOGGER.error("Invalid tag identifier used to create a block selector filter: " + tag);

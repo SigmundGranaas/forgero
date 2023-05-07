@@ -8,14 +8,14 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationEntry;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationListWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.OptionEntryFactory;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -74,19 +74,15 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		ButtonWidget reload = ButtonWidget.builder(Text.translatable("forgero.menu.options.reload_config"), button -> {
+		ButtonWidget reload = new ButtonWidget(this.width / 2 - 154, this.height - 28, 150, 20, Text.translatable("forgero.menu.options.reload_config"), button -> {
 			ForgeroConfigurationLoader.load();
 			RebuildConfigScreen();
-		}).width(150).build();
-		reload.setX(this.width / 2 - 154);
-		reload.setY(this.height - 28);
+		});
 		this.addDrawableChild(reload);
-
-		ButtonWidget done = ButtonWidget.builder(ScreenTexts.DONE, button -> {
+		
+		ButtonWidget done = new ButtonWidget(this.width / 2 + 4, this.height - 28, 150, 20, ScreenTexts.DONE, button -> {
 			close();
-		}).width(150).build();
-		done.setX(this.width / 2 + 4);
-		done.setY(this.height - 28);
+		});
 		this.addDrawableChild(done);
 		return list;
 	}

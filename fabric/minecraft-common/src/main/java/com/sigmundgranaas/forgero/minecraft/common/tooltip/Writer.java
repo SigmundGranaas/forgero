@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.state.State;
-
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 import java.util.List;
 
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
+
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.MutableText;
+import net.minecraft.util.Formatting;
 
 public interface Writer {
 
@@ -22,7 +22,7 @@ public interface Writer {
 		return String.format("description.%s.%s", Forgero.NAMESPACE, stateToSeparatedName(input));
 	}
 
-	static Text nameToTranslatableText(State state) {
+	static net.minecraft.text.Text nameToTranslatableText(State state) {
 		MutableText text = Text.literal("");
 		for (String element : state.name().split("-")) {
 			text.append(Text.translatable(Writer.toTranslationKey(element)));
@@ -39,11 +39,11 @@ public interface Writer {
 		return state.name();
 	}
 
-	static Text writeModifierSection(String modifier, String action) {
+	static net.minecraft.text.Text writeModifierSection(String modifier, String action) {
 		return Text.translatable("tooltip.forgero.hold").formatted(Formatting.DARK_GRAY)
 				.append(Text.translatable(String.format("tooltip.forgero.%s", modifier)).formatted(Formatting.WHITE))
 				.append(Text.translatable(String.format("tooltip.forgero.%s", action)).formatted(Formatting.DARK_GRAY));
 	}
 
-	void write(List<Text> tooltip, TooltipContext context);
+	void write(List<net.minecraft.text.Text> tooltip, TooltipContext context);
 }

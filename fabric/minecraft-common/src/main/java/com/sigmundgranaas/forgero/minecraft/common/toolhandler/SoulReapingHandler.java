@@ -22,9 +22,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class SoulReapingHandler implements RunnableHandler {
 
@@ -90,7 +90,7 @@ public class SoulReapingHandler implements RunnableHandler {
 	private boolean hasSoulTotemInHand() {
 		for (Hand hand : Hand.values()) {
 			ItemStack handStack = entity.getStackInHand(hand);
-			Item totem = Registries.ITEM.get(new Identifier("forgero:soul-totem"));
+			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
 			if (totem != Items.AIR && handStack.isOf(totem)) {
 				return true;
 			}
@@ -101,7 +101,7 @@ public class SoulReapingHandler implements RunnableHandler {
 	private ItemStack getTotemStack() {
 		for (Hand hand : Hand.values()) {
 			ItemStack handStack = entity.getStackInHand(hand);
-			Item totem = Registries.ITEM.get(new Identifier("forgero:soul-totem"));
+			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
 			if (totem != Items.AIR && handStack.isOf(totem)) {
 				return handStack;
 			}

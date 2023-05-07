@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
+import java.util.stream.IntStream;
+
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
+import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.stream.IntStream;
 
 public abstract class BaseWriter implements Writer {
 	public MutableText indented(int level) {
