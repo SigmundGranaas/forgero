@@ -16,45 +16,45 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class FilePackageLoader implements Supplier<DataPackage> {
-    private final ResourceLoader loader;
+	private final ResourceLoader loader;
 
-    private final String folderPath;
+	private final String folderPath;
 
-    public FilePackageLoader(String folderPath) {
-        this.folderPath = folderPath;
-        ResourceLocator walker = PathWalker.builder()
-                .contentFilter(new JsonContentFilter())
-                .pathFinder(PathFinder::ClassLoaderFinder)
-                .build();
-        this.loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
-    }
+	public FilePackageLoader(String folderPath) {
+		this.folderPath = folderPath;
+		ResourceLocator walker = PathWalker.builder()
+				.contentFilter(new JsonContentFilter())
+				.pathFinder(PathFinder::ClassLoaderFinder)
+				.build();
+		this.loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
+	}
 
-    public FilePackageLoader(ResourceLoader loader, String folderPath) {
-        this.loader = loader;
-        this.folderPath = folderPath;
-    }
+	public FilePackageLoader(ResourceLoader loader, String folderPath) {
+		this.loader = loader;
+		this.folderPath = folderPath;
+	}
 
-    public static Supplier<DataPackage> of(String folderPath) {
-        ResourceLocator walker = PathWalker.builder()
-                .contentFilter(new JsonContentFilter())
-                .pathFinder(PathFinder::ClassLoaderFinder)
-                .build();
-        var loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
+	public static Supplier<DataPackage> of(String folderPath) {
+		ResourceLocator walker = PathWalker.builder()
+				.contentFilter(new JsonContentFilter())
+				.pathFinder(PathFinder::ClassLoaderFinder)
+				.build();
+		var loader = FileResourceLoader.of(folderPath, walker, List.of(new DefaultMapper()));
 
-        return new FilePackageLoader(loader, folderPath);
-    }
+		return new FilePackageLoader(loader, folderPath);
+	}
 
-    private List<DataResource> resources() {
-        return loader.load();
-    }
+	private List<DataResource> resources() {
+		return loader.load();
+	}
 
-    @Override
-    public DataPackage get() {
-        var packageInfo = loader.loadResource(folderPath + "/package.json");
-        var dependencies = packageInfo.map(DataResource::dependencies).orElse(ImmutableList.<String>builder().build());
-        var priority = packageInfo.map(DataResource::priority).orElse(5);
-        var name = packageInfo.map(DataResource::name).orElse(Identifiers.EMPTY_IDENTIFIER);
-        var nameSpace = packageInfo.map(DataResource::nameSpace).orElse(Identifiers.EMPTY_IDENTIFIER);
-        return new DefaultPackage(dependencies, priority, this::resources, nameSpace, name);
-    }
+	@Override
+	public DataPackage get() {
+		var packageInfo = loader.loadResource(folderPath + "/package.json");
+		var dependencies = packageInfo.map(DataResource::dependencies).orElse(ImmutableList.<String>builder().build());
+		var priority = packageInfo.map(DataResource::priority).orElse(5);
+		var name = packageInfo.map(DataResource::name).orElse(Identifiers.EMPTY_IDENTIFIER);
+		var nameSpace = packageInfo.map(DataResource::nameSpace).orElse(Identifiers.EMPTY_IDENTIFIER);
+		return new DefaultPackage(dependencies, priority, this::resources, nameSpace, name);
+	}
 }

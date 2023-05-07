@@ -10,27 +10,27 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface PathFinder {
-    static Optional<Path> ClassLoaderFinder(String path) {
-        Optional<URL> url = Optional.ofNullable(PathFinder.class.getClassLoader().getResource(path))
-                .or(() -> Optional.ofNullable(PathFinder.class.getClassLoader().getResource(path.substring(1))));
-        return url.flatMap(PathFinder::uriConverter).map(Path::of);
-    }
+	static Optional<Path> ClassLoaderFinder(String path) {
+		Optional<URL> url = Optional.ofNullable(PathFinder.class.getClassLoader().getResource(path))
+				.or(() -> Optional.ofNullable(PathFinder.class.getClassLoader().getResource(path.substring(1))));
+		return url.flatMap(PathFinder::uriConverter).map(Path::of);
+	}
 
-    static Optional<Path> ClassFinder(String path) {
-        Optional<URL> url = Optional.ofNullable(PathFinder.class.getResource(path))
-                .or(() -> Optional.ofNullable(PathFinder.class.getResource(path.substring(1))));
-        return url.flatMap(PathFinder::uriConverter).map(Path::of);
-    }
+	static Optional<Path> ClassFinder(String path) {
+		Optional<URL> url = Optional.ofNullable(PathFinder.class.getResource(path))
+				.or(() -> Optional.ofNullable(PathFinder.class.getResource(path.substring(1))));
+		return url.flatMap(PathFinder::uriConverter).map(Path::of);
+	}
 
-    private static Optional<URI> uriConverter(URL url) {
-        try {
-            return Optional.of(url.toURI());
-        } catch (URISyntaxException exception) {
-            Forgero.LOGGER.error("Unable to convert url: {} to URI", url);
-            Forgero.LOGGER.error(exception);
-            return Optional.empty();
-        }
-    }
+	private static Optional<URI> uriConverter(URL url) {
+		try {
+			return Optional.of(url.toURI());
+		} catch (URISyntaxException exception) {
+			Forgero.LOGGER.error("Unable to convert url: {} to URI", url);
+			Forgero.LOGGER.error(exception);
+			return Optional.empty();
+		}
+	}
 
-    Optional<Path> find(String location);
+	Optional<Path> find(String location);
 }

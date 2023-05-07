@@ -1,37 +1,70 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import com.google.common.collect.ImmutableSet;
-import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
-import com.sigmundgranaas.forgero.core.resource.data.v2.loading.PathWalker;
-import com.sigmundgranaas.forgero.core.settings.ForgeroSettings;
-import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
-import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
-import com.sigmundgranaas.forgero.core.util.loader.PathFinder;
+import java.util.Collections;
+import java.util.List;
 
-public interface ForgeroConfiguration {
-    ForgeroConfiguration DEFAULT = new DefaultConfiguration();
+import org.jetbrains.annotations.NotNull;
 
-    default InputStreamLoader streamLoader() {
-        return new ClassLoader();
-    }
+public class ForgeroConfiguration implements ForgeroConfigurationData {
+	@NotNull
+	public List<String> disabledResources = List.of("forgero:diamond-sacrificial_dagger_blade");
 
-    default ResourceLocator locator() {
-        return PathWalker.builder()
-                .pathFinder(pathFinder())
-                .pathFinder(pathFinder())
-                .depth(10)
-                .build();
-    }
+	@NotNull
+	public List<String> disabledPacks = Collections.emptyList();
 
-    default PathFinder pathFinder() {
-        return PathFinder::ClassFinder;
-    }
+	@NotNull
+	public Boolean disableVanillaRecipes = false;
 
-    default ForgeroSettings settings() {
-        return ForgeroSettings.SETTINGS;
-    }
+	@NotNull
+	public Boolean enableCustomRecipeDeletion = true;
 
-    default ImmutableSet<String> availableDependencies() {
-        return ImmutableSet.<String>builder().add("forgero", "minecraft").build();
-    }
+	@NotNull
+	public Boolean disableVanillaLoot = false;
+
+	@NotNull
+	public Boolean disableVanillaTools = false;
+
+	@NotNull
+	public Boolean convertVanillaRecipesToForgeroTools = false;
+
+	@NotNull
+	public Boolean convertVanillaToolLoot = false;
+
+	@NotNull
+	public Boolean enableUnbreakableTools = false;
+
+	@NotNull
+	public Boolean enableRepairKits = true;
+
+	@NotNull
+	public Boolean resourceLogging = true;
+
+	@NotNull
+	public Boolean logDisabledPackages = false;
+
+	@NotNull
+	public Integer baseSoulLevelRequirement = 1000;
+
+	@NotNull
+	public Boolean useEntityAttributes = true;
+
+	@NotNull
+	public Boolean hideRarity = true;
+
+	@NotNull
+	public Boolean exportGeneratedTextures = false;
+
+	@NotNull
+	public Boolean showAttributeDifference = true;
+
+	@NotNull
+	public Boolean enableRecipesForAllSchematics = false;
+	@NotNull
+	public Integer weightMiningSpeedReductionScaler = 30;
+	@NotNull
+	public Integer weightAttackSpeedReductionScaler = 100;
+	@NotNull
+	public Boolean weightReducesAttackSpeed = true;
+	@NotNull
+	public Boolean weightReducesMiningSpeed = true;
 }

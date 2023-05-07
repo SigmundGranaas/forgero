@@ -1,92 +1,35 @@
-# Forgero Beta release 0.10.6
+# Forgero Beta release 0.10.9
 
 ## ! Warning !
 
 **This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
 you have backed up your save.**
 
-## Changelog 0.10.6
+# Changelog
 
-* Added a new recipe type for Patchouli (State upgrade recipe)
-* Added patchouli entry for pommels
-* Renamed Pummel to Pommel
-* Fixed compat issue with EMI Loot
-* Fixed scabbard configuration for some sword blades
-* Fixed createstation command to fill up chests with proper items
-* Fixed sword guards from the extended package not being able to apply to sword (And added gametest to cover this)
-* Added new ruined smithing house structure
-* Fixed shovel head gem placement
-
-## Changelog 0.10.5
-
-* Fixed repair kits not working, and added a gametest to assert that it functions correctly
-* Added a toggle to convert all vanilla tool recipes to Forgero variants
-* Added a toggle to disable vanilla tool recipes
-* Fixed assembly station being able to deconstruct damaged items
-* New chinese translations by Rad233
-* Simplified schematic conversion recipes
-* Fixed Texture registry being called when not initialized causing a hard crash
-* Added tags for all schematic part types
-
-## Changelog 0.10.4.1
-
-* Fixed patchouli guidebook recipe generator which caused a crash
-* Fixed patchouli entries using old recipe format
-* Added a gametest to the fabric compat module to check essential compatability
-* Added a new recipe renderer for Forgero state recipes to correctly render cycled crafting output
-
-## Changelog 0.10.4
-
-* Fixed various tags which broke some recipes
-* Fixed mod dependencies not applying properly causing compatability with other mods to break
-* Added support for creating custom parts using resources
-* Added tests for common recipes
-* Optimised recipe creation process
-* Improved performance when mining with forgero tools
-* Implemented a lot of caching to help with expensive calculations being made too often
-* Fixed crash when viewing tooltip with languages using commas instead of periods for decimals
-* Fixed mining level not applying to modded blocks
-
-## Changelog 0.10.3
-
-* Fixed compatability with Roughly enough resources
-* Changed data loading to never load disabled packages
-* Fixed mining levels on tools
-* Added drop to Assembly table
-* Added assembly table to mineable tag
-* Fixes various issues with duplicated mining speed application and calculations
-
-## Changelog 0.10.2
-
-* Fixed path mining pickaxe pattern mining description
-* Implemented basic resource reloading data/assets
-* Fixed patchouli advancement only generating when patchouli is loaded
-* Improved assembly table model and voxel shape
-* Assembly table drops inventory when closed
-* Removed custom Forgero tool and weapon groups
-* Removed generated oak variants of extended tools
-
-## Changelog 0.10.1
-
-* Removed uses of Fabric resource generators. Replaced with dynamic ARRP generators.
-* Fixed mythicmetals integration, and optimised some materials
-* Fixed materials count for reinforced handle
-* Created a naming split element, to make it easier to negate spacing in names for some languages
-
-## Changelog 0.10.0
-
-* Completely revamped the core design and structure of Forgero
-* Basically rewrote the system from scratch ( Yay..... )
-* Added several new and unique schematics
-* New module and pack systems to handle new content added via Forgero
-* Packs added: vanilla, extended, structures and compatability
-* New undying totem upgrade available
-* New assembly station for taking apart tools
-* New structures where the assembly station can be found
-* Native support for Sodium(Indium is no longer required)
-* Performance improvements when rendering item models
-* Repair kits for all materials (craft base kit with leather + iron, then craft repair kit from base kit + desired
-  material)
-* New materials available (Polar bear pelt)
-
+* Published new artifacts to Github Packages
+* Added new mod entrypoints
+* Added a new service based system for handling states
+* Mystical crop compatability (CantWeAllDisagree )
+* Reworked all refined and mastercrafted textures (JorisDeBeer)
+* Added new mastercrafted and refined parts for guards and pommels (JorisDeBeer)
+* Updated icons
+* Added option to enable recipes for all schematics
+* Added options to tweak how much weight reduces speed
+* Added recipe for sword including the sword guard
+* Buffed the battleaxe slightly
+* Made weight affect mining speed
+* Added a datapack driven tool disassembly system
+* Added colorized stats in tooltip to show difference between base part and upgraded part
+* Fixed assembly station being able to dupe some schematics
+* Missing reinforcement slot on duelling sword guard
+* Fixed bug where Forgero would cause all items in inventory to have an empty nbt tag
+* Fixed material count on a base shovel schematic
+* Added a datapack driven recipe removal system
+* Cleaned up some material attributes (rapus95)
+* Fixed a nullpointer crash
+* Removed Remove resourceType == MODEL requirement for model files
+* Rewrite for the customResource system to handle all types of data
+* Added support for enchantment in customResource fields
+* Fixed multiple bugs with the model selector
 

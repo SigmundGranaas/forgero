@@ -6,5 +6,5 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface UpgradeSupplier {
-    Optional<State> get(String id);
+	Optional<State> get(String id);
 }

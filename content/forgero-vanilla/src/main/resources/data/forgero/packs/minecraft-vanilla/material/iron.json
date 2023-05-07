@@ -1,0 +1,23 @@
+{
+  "type": "METAL",
+  "parent": "metal",
+  "name": "iron",
+  "container": {
+    "type": "HOST",
+    "tag": "c:iron_ingot"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 40
+      }
+    ]
+  },
+  "palette": {
+    "name": "iron"
+  }
+}

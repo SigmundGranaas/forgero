@@ -9,11 +9,11 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public interface StateCollection {
-    Optional<? extends Supplier<State>> find(String id);
+	Optional<? extends Supplier<State>> find(String id);
 
-    ImmutableList<StateProvider> find(Type type);
+	ImmutableList<StateProvider> find(Type type);
 
-    boolean contains(String id);
+	boolean contains(String id);
 
-    ImmutableList<StateProvider> all();
+	ImmutableList<StateProvider> all();
 }

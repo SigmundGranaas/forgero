@@ -1,65 +1,59 @@
-version = project.mod_version
-group = project.maven_group
-archives_base_name = project.archives_base_name
+plugins {
+	id "maven-publish"
+}
 
+version = "${project.forgero_version}+${project.minecraft_version}"
+group = project.maven_group
 
 subprojects {
-    repositories {
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = "Modrinth"
-                    url = "https://api.modrinth.com/maven"
-                }
-            }
-            filter {
-                includeGroup "maven.modrinth"
-            }
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        mavenCentral()
-        mavenLocal()
-        maven { url = "https://storage.googleapis.com/devan-maven/" }
-        maven { url = "https://maven.shedaniel.me/" }
-        maven {
-            url "https://cursemaven.com"
-            content {
-                includeGroup "curse.maven"
-            }
-        }
+	version = "${project.forgero_version}+${project.minecraft_version}"
+	group = project.maven_group
 
-        repositories {
-            maven { url 'https://maven.blamejared.com' }
-        }
-        maven { url = "https://modmaven.dev/" }
-        maven { url = "https://minecraft.guntram.de/maven/" }
-        maven { url = "https://www.cursemaven.com" }
-        maven { url = "https://maven.shedaniel.me/" }
-        maven { url = "https://maven.terraformersmc.com/" }
-        maven { url = "https://maven.wispforest.io/" }
-        maven { url = "https://ladysnake.jfrog.io/artifactory/mods" }
-        maven { url = "https://maven.cafeteria.dev" }
-        maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }
-        maven { url = "https://api.modrinth.com/maven/" }
-        maven { url = 'https://maven.blamejared.com' }
-        maven { url = "https://storage.googleapis.com/devan-maven/" }
-        maven {
-            name 'Gegy'
-            url 'https://maven.gegy.dev'
-        }
-    }
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
 }
 
-configure(subprojects) {
-    apply plugin: 'java-library'
+subprojects {
+	if (it.name != 'content') {
+		apply plugin: "maven-publish"
+		apply plugin: "java-library"
+		repositories {
+			mavenCentral()
+			mavenLocal()
+		}
+
+		publishing {
+			repositories {
+				maven {
+					name = "GitHubPackages"
+					url = uri("https://maven.pkg.github.com/sigmundgranaas/forgero")
+					credentials {
+						username = "sigmundgranaas"
+						password = System.getenv("GPR_API_KEY")
+					}
+				}
+			}
+
+
+			publishing {
+				publications {
+					gpr(MavenPublication) {
+						groupId = group // Replace with your groupId
+						artifactId = archivesBaseName // Replace with your module's name
+						from components.java
+					}
+				}
+			}
+		}
+	}
 }
+
 
 task copyJars(type: Copy) {
-    group = 'build'
-    from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
-    exclude "**/*-dev.jar"
-    into "$buildDir/libs"
+	group = 'build'
+	from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
+	exclude "**/*-dev.jar"
+	into "$buildDir/libs"
 }

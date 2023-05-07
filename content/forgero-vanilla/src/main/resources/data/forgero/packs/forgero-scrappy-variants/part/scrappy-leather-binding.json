@@ -1,0 +1,26 @@
+{
+  "type": "TOOL_BINDING",
+  "name": "leather-scrappy_binding",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "PASS",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "category": "PASS",
+        "operation": "ADDITION",
+        "value": 80
+      }
+    ]
+  }
+}

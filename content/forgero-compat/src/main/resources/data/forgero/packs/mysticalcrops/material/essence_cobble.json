@@ -1,0 +1,44 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "essence_cobble",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:essence_cobblestone"
+  },
+  "properties": {
+    "attributes": [
+      {
+      "id": "stone-rarity-composite",
+      "type": "RARITY",
+      "order": "COMPOSITE",
+      "operation": "ADDITION",
+      "value": 15
+    },
+    {
+      "id": "stone-mining-speed-composite",
+      "type": "MINING_SPEED",
+      "order": "COMPOSITE",
+      "operation": "ADDITION",
+      "value": 4.3
+    },
+    {
+      "id": "stone-attack_damage-composite",
+      "type": "ATTACK_DAMAGE",
+      "order": "COMPOSITE",
+      "operation": "ADDITION",
+      "value": 2.5
+    },
+    {
+      "id": "stone-durability-composite",
+      "type": "DURABILITY",
+      "order": "COMPOSITE",
+      "operation": "ADDITION",
+      "value": 115.0
+    }
+    ]
+  },
+  "palette": {
+    "name": "essence_cobble"
+  }
+}

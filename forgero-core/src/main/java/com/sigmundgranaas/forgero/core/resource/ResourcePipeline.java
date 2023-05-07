@@ -1,7 +1,17 @@
 package com.sigmundgranaas.forgero.core.resource;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.resource.data.DataBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.StateConverter;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
@@ -11,109 +21,127 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.factory.TypeFactory;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 
-import java.util.*;
-
 public class ResourcePipeline {
-    private final List<DataPackage> packages;
-    private final List<ResourceListener<List<DataResource>>> dataListeners;
-    private final List<ResourceListener<List<DataResource>>> inflatedDataListener;
-    private final List<ResourceListener<Map<String, State>>> stateListener;
-    private final List<ResourceListener<List<RecipeData>>> recipeListener;
+	private final List<DataPackage> packages;
+	private final List<ResourceListener<List<DataResource>>> dataListeners;
+	private final List<ResourceListener<List<DataResource>>> inflatedDataListener;
+	private final List<ResourceListener<Map<String, State>>> stateListener;
+	private final List<ResourceListener<List<RecipeData>>> recipeListener;
+	private final List<ResourceListener<List<String>>> createStateListener;
+	private final Set<String> dependencies;
+	private final ForgeroConfiguration configuration;
+	private final boolean silent;
+	private List<String> createsStates;
+	private Map<String, String> idMapper;
+	private TypeTree tree;
+	private List<RecipeData> recipes;
 
-    private final List<ResourceListener<List<String>>> createStateListener;
+	public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration, Set<String> modDependencies, boolean silent) {
+		this.packages = packages;
+		this.dataListeners = dataListeners;
+		this.inflatedDataListener = inflatedDataListener;
+		this.stateListener = stateListener;
+		this.recipeListener = recipeListener;
+		this.createStateListener = createStateListener;
+		this.tree = new TypeTree();
+		this.idMapper = new HashMap<>();
+		this.recipes = new ArrayList<>();
+		this.dependencies = new HashSet<>(ImmutableSet.<String>builder().add("forgero", "minecraft").addAll(modDependencies).build());
+		this.configuration = configuration;
+		this.silent = silent;
+	}
 
-    private final Set<String> dependencies;
-    private final ForgeroConfiguration configuration;
-    private List<String> createsStates;
-    private Map<String, String> idMapper;
-    private TypeTree tree;
-    private List<RecipeData> recipes;
 
+	public void execute() {
+		List<DataPackage> validatedPackages = validatePackages(packages);
 
-    public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration) {
-        this.packages = packages;
-        this.dataListeners = dataListeners;
-        this.inflatedDataListener = inflatedDataListener;
-        this.stateListener = stateListener;
-        this.recipeListener = recipeListener;
-        this.createStateListener = createStateListener;
-        this.tree = new TypeTree();
-        this.idMapper = new HashMap<>();
-        this.recipes = new ArrayList<>();
-        this.dependencies = new HashSet<>(configuration.availableDependencies());
-        this.configuration = configuration;
-    }
+		List<DataResource> validatedResources = validateResources(validatedPackages);
 
-    public void execute() {
-        List<DataPackage> validatedPackages = validatePackages(packages);
+		tree = assembleTypeTree(validatedResources);
+		var dataBuilder = DataBuilder.of(validatedResources, tree);
+		List<DataResource> resources = dataBuilder.buildResources();
+		this.recipes = dataBuilder.recipes();
 
-        List<DataResource> validatedResources = validateResources(validatedPackages);
+		Map<String, State> states = mapStates(resources);
 
-        tree = assembleTypeTree(validatedResources);
-        var dataBuilder = DataBuilder.of(validatedResources, tree);
-        List<DataResource> resources = dataBuilder.buildResources();
-        this.recipes = dataBuilder.recipes();
+		recipeListener.forEach(listener -> listener.listen(recipes, tree, idMapper));
+		dataListeners.forEach(listener -> listener.listen(validatedResources, tree, idMapper));
+		inflatedDataListener.forEach(listener -> listener.listen(resources, tree, idMapper));
+		stateListener.forEach(listener -> listener.listen(states, tree, idMapper));
+		createStateListener.forEach(listener -> listener.listen(createsStates, tree, idMapper));
+	}
 
-        Map<String, State> states = mapStates(resources);
+	private Map<String, State> mapStates(List<DataResource> validatedResources) {
+		StateConverter converter = new StateConverter(tree);
+		validatedResources.forEach(converter::convert);
+		idMapper = converter.nameMapper();
+		createsStates = converter.createStates().stream().map(idMapper::get).distinct().toList();
+		return converter.states();
+	}
 
-        recipeListener.forEach(listener -> listener.listen(recipes, tree, idMapper));
-        dataListeners.forEach(listener -> listener.listen(validatedResources, tree, idMapper));
-        inflatedDataListener.forEach(listener -> listener.listen(resources, tree, idMapper));
-        stateListener.forEach(listener -> listener.listen(states, tree, idMapper));
-        createStateListener.forEach(listener -> listener.listen(createsStates, tree, idMapper));
-    }
+	private TypeTree assembleTypeTree(List<DataResource> resources) {
+		TypeTree tree = new TypeTree();
+		TypeFactory
+				.convert(resources)
+				.forEach(tree::addNode);
+		tree.resolve();
+		return tree;
+	}
 
-    private Map<String, State> mapStates(List<DataResource> validatedResources) {
-        StateConverter converter = new StateConverter(tree);
-        validatedResources.forEach(converter::convert);
-        idMapper = converter.nameMapper();
-        createsStates = converter.createStates().stream().map(idMapper::get).distinct().toList();
-        return converter.states();
-    }
+	private List<DataPackage> validatePackages(List<DataPackage> packages) {
+		dependencies.add("forgero");
+		dependencies.add("minecraft");
 
-    private TypeTree assembleTypeTree(List<DataResource> resources) {
-        TypeTree tree = new TypeTree();
-        TypeFactory
-                .convert(resources)
-                .forEach(tree::addNode);
-        tree.resolve();
-        return tree;
-    }
+		packages.forEach(pack -> dependencies.add(pack.name()));
 
-    private List<DataPackage> validatePackages(List<DataPackage> packages) {
-        dependencies.add("forgero");
-        dependencies.add("minecraft");
+		var validatedResources = packages.stream().filter(this::filterPackages).toList();
+		if (configuration.resourceLogging && !silent) {
+			Forgero.LOGGER.info("Registered and validated {} Forgero packages", validatedResources.size());
+			Forgero.LOGGER.info("{}", validatedResources.stream().map(DataPackage::name).toList());
+		}
+		return validatedResources;
+	}
 
-        packages.forEach(pack -> dependencies.add(pack.name()));
+	private boolean filterPackages(DataPackage dataPackage) {
+		if (!filterPacks(dataPackage)) {
+			return false;
+		}
+		if (!dependencies.containsAll(dataPackage.dependencies())) {
+			if (configuration.logDisabledPackages) {
+				var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
+				if (!silent) {
+					Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
+				}
+			}
+			return false;
+		}
 
-        var validatedResources = packages.stream().filter(this::filterPackages).toList();
-        if (configuration.settings().getResourceLogging()) {
-            Forgero.LOGGER.info("Registered and validated {} Forgero packages", validatedResources.size());
-            Forgero.LOGGER.info("{}", validatedResources.stream().map(DataPackage::name).toList());
-        }
-        return validatedResources;
-    }
+		return true;
+	}
 
-    private boolean filterPackages(DataPackage dataPackage) {
-        if (!configuration.settings().filterPacks(dataPackage)) {
-            return false;
-        }
-        if (!dependencies.containsAll(dataPackage.dependencies())) {
-            if (configuration.settings().getLogDisabledPackages()) {
-                var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
-                Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
-            }
-            return false;
-        }
+	private List<DataResource> validateResources(List<DataPackage> resources) {
+		return resources.parallelStream()
+				.map(DataPackage::loadData)
+				.flatMap(List::stream)
+				.filter(this::filterResources)
+				.toList();
+	}
 
-        return true;
-    }
+	private boolean filterResources(DataResource resource) {
+		boolean filter = ForgeroConfigurationLoader.configuration.disabledResources.stream().noneMatch(disabled -> resource.identifier().equals(disabled));
+		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging && !silent) {
+			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration, located at {1}", resource.identifier(), ForgeroConfigurationLoader.configurationFilePath));
+		}
 
-    private List<DataResource> validateResources(List<DataPackage> resources) {
-        return resources.parallelStream()
-                .map(DataPackage::loadData)
-                .flatMap(List::stream)
-                .filter(configuration.settings()::filterResources)
-                .toList();
-    }
+		return filter;
+	}
+
+	private boolean filterPacks(DataPackage dataPackage) {
+		boolean filter = ForgeroConfigurationLoader.configuration.disabledPacks.stream().noneMatch(disabled -> dataPackage.identifier().equals(disabled));
+		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging && !silent) {
+			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration, located at {1}", dataPackage.identifier(), ForgeroConfigurationLoader.configurationFilePath));
+		}
+
+		return filter;
+	}
 }

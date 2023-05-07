@@ -15,42 +15,47 @@ public record PaletteTemplateModel(String palette,
                                    int order,
                                    @Nullable Offset offset) implements ModelTemplate, ModelMatcher, Identifiable {
 
-    @Override
-    public Optional<Offset> getOffset() {
-        return Optional.ofNullable(offset);
-    }
+	@Override
+	public Optional<Offset> getOffset() {
+		return Optional.ofNullable(offset);
+	}
 
-    @Override
-    public <T> T convert(Converter<T, ModelTemplate> converter) {
-        return converter.convert(this);
-    }
+	@Override
+	public <T> T convert(Converter<T, ModelTemplate> converter) {
+		return converter.convert(this);
+	}
 
-    @Override
-    public boolean match(Matchable state, Context context) {
-        return true;
-    }
+	@Override
+	public boolean match(Matchable state, Context context) {
+		return true;
+	}
 
-    @Override
-    public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
-        return Optional.of(this);
-    }
+	@Override
+	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
+		return Optional.of(this);
+	}
 
-    @Override
-    public String name() {
-        return String.format("%s-%s", palette, template);
-    }
+	@Override
+	public String name() {
+		return String.format("%s-%s", palette, template);
+	}
 
-    @Override
-    public String nameSpace() {
-        return String.format("%s", Forgero.NAMESPACE);
-    }
+	@Override
+	public String nameSpace() {
+		return String.format("%s", Forgero.NAMESPACE);
+	}
 
 
-    @Override
-    public int compareTo(@NotNull ModelMatcher o) {
-        if (o instanceof ModelTemplate templateO) {
-            return order() - templateO.order();
-        }
-        return 0;
-    }
+	@Override
+	public String toString() {
+		return name();
+	}
+
+	@Override
+	public int compareTo(@NotNull ModelMatcher o) {
+		if (o instanceof ModelTemplate templateO) {
+			return order() - templateO.order();
+		}
+		return 0;
+	}
 }

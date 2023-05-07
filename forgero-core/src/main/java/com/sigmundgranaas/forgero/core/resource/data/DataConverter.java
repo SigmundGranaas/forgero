@@ -6,5 +6,5 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface DataConverter<T> {
-    Optional<T> convert(DataResource resource);
+	Optional<T> convert(DataResource resource);
 }

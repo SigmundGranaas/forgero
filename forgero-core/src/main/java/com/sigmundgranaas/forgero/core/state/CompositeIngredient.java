@@ -7,19 +7,19 @@ import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public class CompositeIngredient extends Construct implements Ingredient {
-    public CompositeIngredient(Construct construct) {
-        super(construct.ingredients(), SlotContainer.of(construct.slots()), construct.name(), construct.nameSpace(), construct.type());
-    }
+	public CompositeIngredient(Construct construct) {
+		super(construct.ingredients(), SlotContainer.of(construct.slots()), construct.name(), construct.nameSpace(), construct.type());
+	}
 
-    @Override
-    public boolean test(Matchable match, Context context) {
-        if (match instanceof Type typeMatch) {
-            if (this.type().test(typeMatch, context)) {
-                return true;
-            } else {
-                return ingredients().stream().anyMatch(ingredient -> ingredient.test(match, context));
-            }
-        }
-        return match.test(this, context);
-    }
+	@Override
+	public boolean test(Matchable match, Context context) {
+		if (match instanceof Type typeMatch) {
+			if (this.type().test(typeMatch, context)) {
+				return true;
+			} else {
+				return ingredients().stream().anyMatch(ingredient -> ingredient.test(match, context));
+			}
+		}
+		return match.test(this, context);
+	}
 }

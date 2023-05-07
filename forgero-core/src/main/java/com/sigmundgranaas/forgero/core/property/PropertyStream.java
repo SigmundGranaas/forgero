@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.property.active.ActiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.passive.Static;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 
@@ -19,70 +19,75 @@ import java.util.stream.Stream;
  * This will make it easier to use this stream of properties by providing convenience methods like applyAttribute for reducing a specific attribute to a desired number.
  */
 public record PropertyStream(
-        Stream<Property> stream) implements ForwardingStream<Property> {
+		Stream<Property> stream) implements ForwardingStream<Property> {
 
-    public static <T extends PropertyContainer> ImmutableList<T> sortedByRarity(ImmutableList<T> list) {
-        return list.stream()
-                .sorted(Comparator.comparing(container -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY)))
-                .collect(ImmutableList.toImmutableList());
-    }
+	public static <T extends PropertyContainer> ImmutableList<T> sortedByRarity(ImmutableList<T> list) {
+		return list.stream()
+				.sorted(Comparator.comparing(container -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY)))
+				.collect(ImmutableList.toImmutableList());
+	}
 
-    @Override
-    public Stream<Property> getStream() {
-        return stream;
-    }
+	@Override
+	public Stream<Property> getStream() {
+		return stream;
+	}
 
-    public float applyAttribute(Target target, AttributeType attributeType) {
-        return getAttributeOfType(attributeType)
-                .reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
-    }
+	public float applyAttribute(Target target, AttributeType attributeType) {
+		return getAttributeOfType(attributeType.toString())
+				.reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
+	}
 
-    public float applyAttribute(AttributeType attributeType) {
-        return applyAttribute(Target.createEmptyTarget(), attributeType);
-    }
+	public float applyAttribute(Target target, String attributeType) {
+		return getAttributeOfType(attributeType)
+				.reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
+	}
 
-    public Stream<Attribute> getAttributeOfType(AttributeType attributeType) {
-        var rootAttributes = getAttributes()
-                .filter(attribute -> attributeType == attribute.getAttributeType()).toList();
+	public float applyAttribute(AttributeType attributeType) {
+		return applyAttribute(Target.createEmptyTarget(), attributeType);
+	}
 
-        Map<String, Attribute> idMap = rootAttributes
-                .stream()
-                .filter(attribute -> !attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
-                .collect(Collectors.toMap(Attribute::getId, attribute -> attribute, (existing, replacement) -> existing.getPriority() > replacement.getPriority() ? existing : replacement));
+	public Stream<Attribute> getAttributeOfType(String attributeType) {
+		var rootAttributes = getAttributes()
+				.filter(attribute -> attributeType.equals(attribute.getAttributeType())).toList();
 
-        var nonIdAttributes = rootAttributes
-                .stream()
-                .filter(attribute -> attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
-                .toList();
+		Map<String, Attribute> idMap = rootAttributes
+				.stream()
+				.filter(attribute -> !attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
+				.collect(Collectors.toMap(Attribute::getId, attribute -> attribute, (existing, replacement) -> existing.getPriority() > replacement.getPriority() ? existing : replacement));
 
-        return Stream.of(idMap.values(), nonIdAttributes)
-                .flatMap(Collection::stream)
-                .sorted(Attribute::compareTo)
-                .distinct();
-    }
+		var nonIdAttributes = rootAttributes
+				.stream()
+				.filter(attribute -> attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
+				.toList();
 
-    public Stream<Attribute> getAttributes() {
-        return stream.filter(property -> property instanceof Attribute)
-                .map(Attribute.class::cast);
-    }
+		return Stream.of(idMap.values(), nonIdAttributes)
+				.flatMap(Collection::stream)
+				.sorted(Attribute::compareTo)
+				.distinct();
+	}
 
-    public Stream<ActiveProperty> getActiveProperties() {
-        return stream.filter(property -> property instanceof ActiveProperty)
-                .map(ActiveProperty.class::cast);
-    }
+	public Stream<Attribute> getAttributes() {
+		return stream.filter(property -> property instanceof Attribute)
+				.map(Attribute.class::cast);
+	}
 
-    public Stream<PassiveProperty> getPassiveProperties() {
-        return stream.filter(property -> property instanceof PassiveProperty)
-                .map(PassiveProperty.class::cast);
-    }
+	public Stream<PassiveProperty> getPassiveProperties() {
+		return stream.filter(property -> property instanceof PassiveProperty)
+				.map(PassiveProperty.class::cast);
+	}
 
-    public Stream<Static> getStaticPassiveProperties() {
-        return getPassiveProperties().filter(property -> property instanceof Static)
-                .map(Static.class::cast);
-    }
+	public Stream<PropertyData> features() {
+		return stream.filter(property -> property instanceof PropertyData)
+				.map(PropertyData.class::cast);
+	}
 
-    public Stream<LeveledProperty> getLeveledPassiveProperties() {
-        return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
-                .map(LeveledProperty.class::cast);
-    }
+	public Stream<Static> getStaticPassiveProperties() {
+		return getPassiveProperties().filter(property -> property instanceof Static)
+				.map(Static.class::cast);
+	}
+
+	public Stream<LeveledProperty> getLeveledPassiveProperties() {
+		return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
+				.map(LeveledProperty.class::cast);
+	}
 }

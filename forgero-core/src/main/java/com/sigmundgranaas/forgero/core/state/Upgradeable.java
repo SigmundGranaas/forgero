@@ -6,13 +6,13 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 public interface Upgradeable<T extends State> {
-    T upgrade(State upgrade);
+	T upgrade(State upgrade);
 
-    ImmutableList<State> upgrades();
+	ImmutableList<State> upgrades();
 
-    T removeUpgrade(String id);
+	T removeUpgrade(String id);
 
-    boolean canUpgrade(State state);
+	boolean canUpgrade(State state);
 
-    List<Slot> slots();
+	List<Slot> slots();
 }

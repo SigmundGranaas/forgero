@@ -5,15 +5,15 @@ import java.nio.file.Path;
 import java.util.function.Predicate;
 
 public class JsonContentFilter implements Predicate<Path> {
-    @Override
-    public boolean test(Path path) {
-        if (!Files.isRegularFile(path)) {
-            return false;
-        }
+	@Override
+	public boolean test(Path path) {
+		if (!Files.isRegularFile(path)) {
+			return false;
+		}
 
-        if (!path.getFileName().toString().endsWith(".json")) {
-            return false;
-        }
-        return true;
-    }
+		if (!path.getFileName().toString().endsWith(".json")) {
+			return false;
+		}
+		return true;
+	}
 }
