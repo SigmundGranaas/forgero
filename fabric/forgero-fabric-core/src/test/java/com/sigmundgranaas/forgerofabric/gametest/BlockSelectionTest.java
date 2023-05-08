@@ -25,7 +25,7 @@ import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 @SuppressWarnings("unused")
 public class BlockSelectionTest {
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
+	@GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
 	public void test3x3PatternSelectionNorth(TestContext context) {
 		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 0, 0)).add(-3, 1, -3);
 		BlockPos relative = context.getRelativePos(rootPos);
@@ -39,7 +39,7 @@ public class BlockSelectionTest {
 		assertSelected(selected, square, context);
 	}
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
+	@GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
 	public void test3x3PatternSelectionEast(TestContext context) {
 		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 0, 0)).add(-3, 1, -3);
 		BlockPos relative = context.getRelativePos(rootPos);
@@ -52,7 +52,7 @@ public class BlockSelectionTest {
 		assertSelected(selected, square, context);
 	}
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
+	@GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
 	public void test3x3PatternSelectionDown(TestContext context) {
 		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 0, 0)).add(-3, 1, -3);
 		BlockPos relative = context.getRelativePos(rootPos);
@@ -65,7 +65,7 @@ public class BlockSelectionTest {
 		assertSelected(selected, square, context);
 	}
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
+	@GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
 	public void testVeinMiningDepth2(TestContext context) {
 		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 0, 0)).add(-3, 2, -3);
 		BlockPos relative = context.getRelativePos(rootPos);
@@ -78,7 +78,7 @@ public class BlockSelectionTest {
 		assertSelected(selected, square, context);
 	}
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
+	@GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
 	public void testVeinMiningDepth2FailsForTooBigSelection(TestContext context) {
 		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 0, 0)).add(-3, 2, -3);
 		BlockPos relative = context.getRelativePos(rootPos);

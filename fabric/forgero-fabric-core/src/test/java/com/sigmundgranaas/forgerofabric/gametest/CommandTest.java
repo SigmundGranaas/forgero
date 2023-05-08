@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgerofabric.gametest;
 
-import com.mojang.authlib.GameProfile;
+import java.util.UUID;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import com.mojang.authlib.GameProfile;
 
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
@@ -13,17 +13,17 @@ import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.UUID;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 public class CommandTest {
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
+	@GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
 	public void TestCreateStationWithOp(TestContext context) {
 		GameProfile profile = new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer-op");
 		context.getWorld().getServer().getPlayerManager().addToOperators(profile);
 
 
-        ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile);
-        testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
+		ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile);
+		testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
 
 		BlockPos targetPos = new BlockPos(1, 5, 0);
 		BlockPos absolute = context.getAbsolutePos(targetPos);
@@ -48,13 +48,13 @@ public class CommandTest {
 
 	}
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
+	@GameTest(structureName = FabricGameTest.EMPTY_STRUCTURE, batchId = "Command testing", required = true)
 	public void failCreateStationWhenNotOp(TestContext context) {
 		GameProfile profile = new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer2");
 		context.getWorld().getServer().getPlayerManager().addToOperators(profile);
 
-        ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile);
-        testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
+		ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile);
+		testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
 
 		BlockPos targetPos = new BlockPos(1, 5, 0);
 		BlockPos absolute = context.getAbsolutePos(targetPos);

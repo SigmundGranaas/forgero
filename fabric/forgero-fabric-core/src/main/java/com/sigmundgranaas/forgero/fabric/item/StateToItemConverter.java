@@ -87,7 +87,7 @@ public class StateToItemConverter {
 	}
 
 	private Item defaultStateItem() {
-		var item = new DefaultStateItem(new Item.Settings(), provider);
+		var item = new DefaultStateItem(getItemSettings(provider.get()), provider);
 		return item;
 	}
 

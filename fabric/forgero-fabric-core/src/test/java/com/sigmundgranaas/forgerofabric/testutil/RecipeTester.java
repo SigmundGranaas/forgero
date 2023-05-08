@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgerofabric.testutil;
 
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+
+import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
+
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -9,16 +15,10 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Identifier;
-
-import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
-
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+import net.minecraft.util.registry.Registry;
 
 public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements Supplier<Boolean> {
 
@@ -46,13 +46,13 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
 	}
 
-    private static Item itemFromString(String identifier) {
-        Item item = Registries.ITEM.get(new Identifier(identifier));
-        if (item == Items.AIR) {
-            return Registries.ITEM.get(new Identifier("forgero:" + identifier));
-        }
-        return item;
-    }
+	private static Item itemFromString(String identifier) {
+		Item item = Registry.ITEM.get(new Identifier(identifier));
+		if (item == Items.AIR) {
+			return Registry.ITEM.get(new Identifier("forgero:" + identifier));
+		}
+		return item;
+	}
 
 	public static RecipeTester<CraftingInventory, CraftingRecipe> ofPart(String schematic, String material, int count, String result, TestContext context) {
 		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
