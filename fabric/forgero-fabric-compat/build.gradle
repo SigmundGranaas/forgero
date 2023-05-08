@@ -34,9 +34,9 @@ dependencies {
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation "vazkii.patchouli:Patchouli:1.19.3-78-FABRIC"
+	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
-	modImplementation("net.devtech:arrp:0.6.7")
+	modImplementation("curse.maven:arrp-463113:3680866")
 
 	//dynamiclights compat
 	modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
@@ -44,9 +44,9 @@ dependencies {
 	modImplementation("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
 	//better combat
-	modImplementation "maven.modrinth:better-combat:1.6.1+1.19.3-fabric"
-	modImplementation "maven.modrinth:cloth-config:9.0.94+fabric"
-	modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
+	modImplementation "maven.modrinth:better-combat:${project.better_combat_version}"
+	modImplementation "maven.modrinth:cloth-config:${project.cloth_config_version}"
+	modImplementation("maven.modrinth:playeranimator:${project.player_anim_version}")
 
 	//betterend&betternether
 	// modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
@@ -60,7 +60,7 @@ dependencies {
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	modImplementation "maven.modrinth:jei:J5TcglXt"
+	//modImplementation "maven.modrinth:jei:J5TcglXt"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
@@ -156,7 +156,7 @@ loom {
 			name "Client Extended Compat Optimised"
 
 			dependencies {
-				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+				modRuntimeOnly "maven.modrinth:lazydfu:${project.lazydfu_version}"
 				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
 			}
 			client()
@@ -166,9 +166,9 @@ loom {
 			name "Client Extended Compat Optimised Just Load"
 
 			dependencies {
-				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+				modRuntimeOnly "maven.modrinth:lazydfu:${project.lazydfu_version}"
 				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
-				modRuntimeOnly "maven.modrinth:just-load:ob5o9Cf5"
+				modRuntimeOnly "maven.modrinth:just-load:${project.just_load_version}"
 			}
 
 			client()
