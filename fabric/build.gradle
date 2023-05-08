@@ -55,7 +55,7 @@ curseforge {
 		changelogType = "markdown"
 		changelog = file('../changelog.md')
 
-		releaseType = 'beta'
+		releaseType = project.release_type
 		addGameVersion project.minecraft_version
 		addGameVersion 'Fabric'
 		addGameVersion 'Quilt'
@@ -78,12 +78,14 @@ curseforge {
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
 
-	projectId = "forgero"
+	projectId = project.modid
 	versionNumber = version
-	versionType = "beta"
+	versionType = project.release_type
 	uploadFile = remapJar
 	gameVersions = [minecraft_version]
 	loaders = ["fabric", "quilt"]
+	versionName = "Forgero $version"
+	changelog = file('../changelog.md').text
 	dependencies {
 		required.project "fabric-api"
 	}

@@ -2,7 +2,6 @@
   "type": "AXE_HEAD_SCHEMATIC",
   "name": "refined_axe_head-schematic",
   "parent": "axe_head_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -70,7 +69,6 @@
         "operation": "MULTIPLICATION",
         "value": 1
       },
-
       {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
@@ -89,7 +87,6 @@
         "operation": "MULTIPLICATION",
         "value": 2.5
       },
-
       {
         "type": "WEIGHT",
         "order": "COMPOSITE",

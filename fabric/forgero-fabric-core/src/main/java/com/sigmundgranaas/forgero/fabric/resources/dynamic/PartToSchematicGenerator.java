@@ -18,7 +18,7 @@ import net.devtech.arrp.api.RuntimeResourcePack;
 import net.minecraft.util.Identifier;
 
 public class PartToSchematicGenerator implements DynamicResourceGenerator {
-	private final StateService service;
+	protected final StateService service;
 
 	public PartToSchematicGenerator(StateService service) {
 		this.service = service;
@@ -33,7 +33,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 				.forEach(recipe -> pack.addData(generateId(recipe), recipe.toString().getBytes()));
 	}
 
-	private List<ConstructedState> parts() {
+	protected List<ConstructedState> parts() {
 		return service.all().stream()
 				.map(Supplier::get)
 				.filter(ConstructedState.class::isInstance)
@@ -42,7 +42,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 				.toList();
 	}
 
-	private Optional<RecipeData> createRecipe(ConstructedState construct) {
+	protected Optional<RecipeData> createRecipe(ConstructedState construct) {
 		var schematic = construct.parts().stream().filter(ingredient -> ingredient.name().contains("schematic")).findFirst();
 		if (schematic.isPresent()) {
 			var paper = IngredientData.builder().id("minecraft:paper").build();
@@ -53,7 +53,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		return Optional.empty();
 	}
 
-	private JsonObject convertRecipeData(RecipeData construct) {
+	protected JsonObject convertRecipeData(RecipeData construct) {
 		var json = new JsonObject();
 		json.addProperty("type", "minecraft:crafting_shapeless");
 		var ingredients = new JsonArray();
@@ -65,7 +65,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		return json;
 	}
 
-	private Identifier generateId(JsonObject recipe) {
+	protected Identifier generateId(JsonObject recipe) {
 		String output = recipe.getAsJsonObject("result").get("item").getAsString().split(":")[1];
 		return new Identifier("forgero:recipes/" + output + "_recipe" + ".json");
 	}

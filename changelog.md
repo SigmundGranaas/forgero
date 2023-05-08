@@ -7,6 +7,19 @@ you have backed up your save.**
 
 # Changelog
 
+* Published new artifacts to Github Packages
+* Added new mod entrypoints
+* Added a new service based system for handling states
+* Mystical crop compatability (CantWeAllDisagree )
+* Reworked all refined and mastercrafted textures (JorisDeBeer)
+* Added new mastercrafted and refined parts for guards and pommels (JorisDeBeer)
+* Updated icons
+* Added option to enable recipes for all schematics
+* Added options to tweak how much weight reduces speed
+* Added recipe for sword including the sword guard
+* Buffed the battleaxe slightly
+* Made weight affect mining speed
+* Added a datapack driven tool disassembly system
 * Added colorized stats in tooltip to show difference between base part and upgraded part
 * Fixed assembly station being able to dupe some schematics
 * Missing reinforcement slot on duelling sword guard
