@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -20,6 +21,7 @@ public class BlockSelectionUtils {
 	 */
 	public static Set<BlockPos> getBlockPositionsAround(BlockPos blockPos) {
 		var directions = Direction.values();
+		var eightWayDirections = EightWayDirection.values();
 		var offsetBlockPositions = new HashSet<BlockPos>();
 
 		for (Direction direction : directions) {
@@ -27,11 +29,11 @@ public class BlockSelectionUtils {
 			offsetBlockPositions.add(offsetBlockPos);
 		}
 
-		for (Direction horizontalDirection : directions) {
-			if (horizontalDirection.getAxis().isHorizontal()) {
-				BlockPos offsetBlockPos = blockPos.offset(horizontalDirection).down();
-				offsetBlockPositions.add(offsetBlockPos);
-			}
+		for (EightWayDirection eightWayDirection : eightWayDirections) {
+			BlockPos offsetBlockPos = blockPos.add(eightWayDirection.getOffsetX(), 1, eightWayDirection.getOffsetZ());
+			BlockPos offsetBlockPos2 = blockPos.add(eightWayDirection.getOffsetX(), -1, eightWayDirection.getOffsetZ());
+			offsetBlockPositions.add(offsetBlockPos);
+			offsetBlockPositions.add(offsetBlockPos2);
 		}
 		return offsetBlockPositions;
 	}
@@ -54,5 +56,30 @@ public class BlockSelectionUtils {
 			}
 			return true;
 		};
+	}
+
+	private enum EightWayDirection {
+		NORTH(Direction.NORTH),
+		NORTH_EAST(Direction.NORTH, Direction.EAST),
+		EAST(Direction.EAST),
+		SOUTH_EAST(Direction.SOUTH, Direction.EAST),
+		SOUTH(Direction.SOUTH),
+		SOUTH_WEST(Direction.SOUTH, Direction.WEST),
+		WEST(Direction.WEST),
+		NORTH_WEST(Direction.NORTH, Direction.WEST);
+
+		private final Direction[] directions;
+
+		EightWayDirection(Direction... directions) {
+			this.directions = directions;
+		}
+
+		public int getOffsetX() {
+			return Arrays.stream(directions).mapToInt(Direction::getOffsetX).sum();
+		}
+
+		public int getOffsetZ() {
+			return Arrays.stream(directions).mapToInt(Direction::getOffsetZ).sum();
+		}
 	}
 }
