@@ -7,9 +7,6 @@
   "mixins": [
     "BetterCombatWeaponRegistryMixin"
   ],
-  "client": [
-    "ModMenuInitMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }

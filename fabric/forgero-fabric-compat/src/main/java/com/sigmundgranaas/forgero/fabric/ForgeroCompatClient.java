@@ -1,19 +1,20 @@
 package com.sigmundgranaas.forgero.fabric;
 
-import com.sigmundgranaas.forgero.fabric.patchouli.GemUpgradeRecipePage;
-import com.sigmundgranaas.forgero.fabric.patchouli.StateCraftingRecipe;
-import com.sigmundgranaas.forgero.fabric.patchouli.StateUpgradeRecipe;
+//import com.sigmundgranaas.forgero.fabric.patchouli.GemUpgradeRecipePage;
+//import com.sigmundgranaas.forgero.fabric.patchouli.StateCraftingRecipe;
+//import com.sigmundgranaas.forgero.fabric.patchouli.StateUpgradeRecipe;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
+//import net.fabricmc.loader.api.FabricLoader;
 
 public class ForgeroCompatClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		if (FabricLoader.getInstance().isModLoaded("patchouli")) {
-			GemUpgradeRecipePage.register();
-			StateCraftingRecipe.register();
-			StateUpgradeRecipe.register();
-		}
+		// Patchouli compat, disabled until it's updated to 1.19.4
+//		if (FabricLoader.getInstance().isModLoaded("patchouli")) {
+//			GemUpgradeRecipePage.register();
+//			StateCraftingRecipe.register();
+//			StateUpgradeRecipe.register();
+//		}
 	}
 }

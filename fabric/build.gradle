@@ -1,3 +1,5 @@
+//file:noinspection GroovyAssignabilityCheck
+
 plugins {
 	id "idea"
 	id "fabric-loom" version "1.1.8" apply true
@@ -19,7 +21,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include "curse.maven:arrp-463113:3901211"
+	include "net.devtech:arrp:0.6.7"
 	include project(':forgero-core')
 
 	include project(':fabric:forgero-fabric-core')

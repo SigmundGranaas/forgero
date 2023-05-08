@@ -3,7 +3,7 @@
   "id": "forgero-fabric-compat",
   "version": "${version}",
   "name": "Forgero Fabric compatibility pack",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Forgero modules for Fabric dependent mods",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -48,7 +48,6 @@
     "forgero-fabric-core": "*"
   },
   "suggests": {
-    "patchouli": "*",
     "lambdynamiclights": "*"
   },
   "custom": {
@@ -60,7 +59,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

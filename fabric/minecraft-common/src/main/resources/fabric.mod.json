@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "forgero-common",
   "version": "${version}",
-  "name": "Forgero common library",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "name": "Forgero commons library",
+  "description": "Forgero library for common mc code",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -29,11 +29,8 @@
     "common.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.12.12",
-    "fabric": "*",
     "minecraft": "1.19.x",
-    "java": ">=17",
-    "forgero-fabric-core": "*"
+    "java": ">=17"
   },
   "custom": {
     "forgeroResource": true,
@@ -45,7 +42,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }
