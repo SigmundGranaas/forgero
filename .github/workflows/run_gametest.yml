@@ -14,8 +14,25 @@ on:
     branches: [ 1.* ]
 
 jobs:
+  skip_duplicate_jobs:
+    name: Skip duplicate jobs
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          paths_ignore: '["**/README.md", "**/docs/**", "**/.gitignore", "**/LICENSE"]'
+          concurrent_skipping: same_content_newer
+
   gametest:
     runs-on: ubuntu-latest
+    needs: skip_duplicate_jobs
+    if: needs.skip_duplicate_jobs.outputs.should_skip != 'true'
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
