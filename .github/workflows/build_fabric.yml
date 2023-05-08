@@ -54,3 +54,9 @@ jobs:
         with:
           gradle-version: wrapper
           arguments: fabric:forgero-fabric-core:build --stacktrace
+
+      - name: Upload Gradle artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: compiled_jar_files
+          path: fabric/build/libs/

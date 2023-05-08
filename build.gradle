@@ -2,11 +2,24 @@ plugins {
 	id "maven-publish"
 }
 
-version = "${project.forgero_version}+${project.minecraft_version}"
+def getGitVersion = { ->
+	def stdout = new ByteArrayOutputStream()
+	exec {
+		commandLine "git", "describe", "--tags"
+		standardOutput = stdout
+	}
+
+	def gitVersionString = stdout.toString().trim()
+	def gitVersionStringParsed = gitVersionString.startsWith("v") ? gitVersionString.substring(1) : gitVersionString
+
+	return gitVersionStringParsed
+}
+
+version = "${getGitVersion()}"
 group = project.maven_group
 
 subprojects {
-	version = "${project.forgero_version}+${project.minecraft_version}"
+	version = "${getGitVersion()}"
 	group = project.maven_group
 
 	repositories {
