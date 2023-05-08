@@ -2,7 +2,6 @@
   "type": "SHOVEL_HEAD_SCHEMATIC",
   "name": "piglin_shovel_head-schematic",
   "parent": "shovel_head_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"

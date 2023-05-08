@@ -2,7 +2,6 @@
   "type": "SWORD_BLADE_SCHEMATIC",
   "name": "piglin_sword_blade-schematic",
   "parent": "sword_blade_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"

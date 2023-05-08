@@ -1,6 +1,6 @@
 {
   "type": "WOOD",
-  "name": "mushroom",
+  "name": "nether_mushroom",
   "parent": "wood",
   "container": {
     "type": "HOST",
