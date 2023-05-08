@@ -28,7 +28,7 @@ jobs:
           paths_ignore: '["**/README.md", "**/docs/**", "**/.gitignore", "**/LICENSE"]'
           concurrent_skipping: same_content_newer
 
-  gametest_compat:
+  gametest_fabric_compat:
     runs-on: ubuntu-latest
     needs: skip_duplicate_jobs
     if: needs.skip_duplicate_jobs.outputs.should_skip != 'true'
