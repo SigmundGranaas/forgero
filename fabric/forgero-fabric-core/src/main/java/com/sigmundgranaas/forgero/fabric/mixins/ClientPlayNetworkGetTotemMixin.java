@@ -32,12 +32,14 @@ public abstract class ClientPlayNetworkGetTotemMixin {
 
 	@Inject(at = @At("HEAD"), method = "onEntityStatus")
 	private void getTotem(EntityStatusS2CPacket packet, CallbackInfo indo) {
-		Entity entity = packet.getEntity(world);
-		if (entity instanceof PlayerEntity player) {
-			if (packet.getStatus() == ENTITY_STATUS_TOTEM) {
-				TotemEffectHandler.of(client, player, world).run();
-			} else if (packet.getStatus() == ENTITY_STATUS_SOUL_LEVEL_UP) {
-				SoulLevelUpHandler.of(client, player, world).run();
+		if(world != null){
+			Entity entity = packet.getEntity(world);
+			if (entity instanceof PlayerEntity player) {
+				if (packet.getStatus() == ENTITY_STATUS_TOTEM) {
+					TotemEffectHandler.of(client, player, world).run();
+				} else if (packet.getStatus() == ENTITY_STATUS_SOUL_LEVEL_UP) {
+					SoulLevelUpHandler.of(client, player, world).run();
+				}
 			}
 		}
 	}
