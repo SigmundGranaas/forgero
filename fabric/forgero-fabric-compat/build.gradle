@@ -34,13 +34,13 @@ dependencies {
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
+	modCompileOnlyApi "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
 
 	modImplementation "curse.maven:arrp-463113:3901211"
 
 	//dynamiclights compat
 	modImplementation "curse.maven:modmenu-308702:4145207"
-	modImplementation "curse.maven:lambdynamiclights-393442:3824820"
+	modCompileOnlyApi "curse.maven:lambdynamiclights-393442:3824820"
 	modImplementation("dev.lambdaurora:spruceui:4.1.0+1.19.2")
 
 	//better combat
@@ -128,7 +128,7 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
 
 	// Mod Menu API
-	modApi "com.terraformersmc:modmenu:${this.modmenu_version}"
+	modCompileOnlyApi "com.terraformersmc:modmenu:${this.modmenu_version}"
 	modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 
