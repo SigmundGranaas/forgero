@@ -10,7 +10,7 @@
     {
       "type": "patchouli:spotlight",
       "title": "Assembly station",
-      "item": "forgero:mangrove-mastercrafted_hoe_head{FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:['forgero:quick'],ID:'forgero:mangrove-mastercrafted_hoe_head',INGREDIENTS:[{ID:'forgero:mastercrafted_hoe_head-schematic',NAME:'mastercrafted_hoe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:mangrove',NAME:'mangrove',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'mangrove-mastercrafted_hoe_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'HOE_HEAD',UPGRADES:[]}}",
+      "item": "forgero:oak-mastercrafted_hoe_head{FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:['forgero:quick'],ID:'forgero:oak-mastercrafted_hoe_head',INGREDIENTS:[{ID:'forgero:mastercrafted_hoe_head-schematic',NAME:'mastercrafted_hoe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:oak',NAME:'oak',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'oak-mastercrafted_hoe_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'HOE_HEAD',UPGRADES:[]}}",
       "text": "Conditions are tailored to only spawn on specific types of parts. This makes it possible for some parts to also have unique conditions that can only spawn on them."
     },
     {
