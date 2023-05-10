@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableMap;
+import com.sigmundgranaas.forgero.fabric.ForgeroCompatInitializer;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -14,14 +15,13 @@ public class CompatMixinPlugin implements IMixinConfigPlugin {
 	private static final Supplier<Boolean> TRUE = () -> true;
 
 	private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
-			//"com.sigmundgranaas.forgero.fabric.mixins.BetterCombatWeaponRegistryMixin", () -> true,
-			//"com.sigmundgranaas.forgero.fabric.mixins.ModMenuInitMixin", () -> true
+			"com.sigmundgranaas.forgero.fabric.mixins.BetterCombatWeaponRegistryMixin", ForgeroCompatInitializer.bettercombat,
+			"com.sigmundgranaas.forgero.fabric.mixins.ModMenuInitMixin", ForgeroCompatInitializer.modmenu
 	);
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		//return CONDITIONS.getOrDefault(mixinClassName, TRUE).get();
-		return true;
+		return CONDITIONS.getOrDefault(mixinClassName, TRUE).get();
 	}
 
 	//Boilerplate
