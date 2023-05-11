@@ -29,6 +29,12 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.util.Identifier;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -62,6 +68,7 @@ public class ForgeroClient implements ClientModInitializer {
 				.data(modelRegistry.paletteListener())
 				.data(modelRegistry.modelListener())
 				.register(availableDependencies)
+				.silent()
 				.build()
 				.execute();
 		// TODO: Set configuration's available dependencies

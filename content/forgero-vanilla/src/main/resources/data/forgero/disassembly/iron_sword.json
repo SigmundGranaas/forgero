@@ -1,0 +1,8 @@
+{
+  "input": "minecraft:iron_sword",
+  "results": [
+    "forgero:iron-sword_blade",
+    "forgero:oak-handle",
+    "forgero:iron-sword_guard"
+  ]
+}

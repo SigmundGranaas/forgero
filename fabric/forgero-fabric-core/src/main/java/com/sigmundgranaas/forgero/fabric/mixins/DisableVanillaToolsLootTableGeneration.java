@@ -54,7 +54,10 @@ public class DisableVanillaToolsLootTableGeneration {
 			String newId = resultItemRenamer(Registries.ITEM.getId(stack.getItem()).toString());
 			Item newItem = Registries.ITEM.get(new Identifier(newId));
 			ItemStack newStack = new ItemStack(newItem);
-			newStack.setNbt(stack.copy().getOrCreateNbt());
+
+			if (stack.hasNbt()) {
+				newStack.setNbt(stack.copy().getOrCreateNbt());
+			}
 			return newStack;
 		}
 		return stack;

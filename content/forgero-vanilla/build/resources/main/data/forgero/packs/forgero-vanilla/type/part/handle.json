@@ -1,9 +1,0 @@
-{
-  "parent": "TOOL_PART",
-  "name": "HANDLE",
-  "children": [
-    {
-      "name": "TOOL_HANDLE"
-    }
-  ]
-}

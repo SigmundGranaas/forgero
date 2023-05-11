@@ -12,7 +12,7 @@
       "name": "guard_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "square_gem_center.png",
+      "template": "sword_gem_center.png",
       "order": 66,
       "offset": [
         -3,

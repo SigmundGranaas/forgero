@@ -28,7 +28,7 @@ public class ItemGroups {
 			.build();
 
 	private static ItemStack createSchematicIcon() {
-		return new ItemStack(Registries.ITEM.get(new Identifier("forgero:pickaxe_head-schematic")));
+		return new ItemStack(Registries.ITEM.get(new Identifier("forgero:mastercrafted_pickaxe_head-schematic")));
 	}
 
 	private static ItemStack createPartIcon() {

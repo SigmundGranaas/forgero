@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
@@ -11,11 +16,6 @@ import lombok.Data;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @Data
 @Builder(toBuilder = true)
@@ -68,23 +68,15 @@ public class StateFilter {
 		if (exclusion.stream().anyMatch(exclusion -> stringMatch(exclusion, state))) {
 			return false;
 		}
-
-		if (include.size() > 0 && include.stream().noneMatch(include -> stringMatch(include, state))) {
-			return false;
-		}
-
-		return true;
+		
+		return include.size() == 0 || include.stream().anyMatch(include -> stringMatch(include, state));
 	}
 
 	private boolean stringMatch(String match, State state) {
 		if (state.identifier().contains(match)) {
 			return true;
 		}
-		if (state.type().typeName().contains(match)) {
-			return true;
-		}
-
-		return false;
+		return state.type().typeName().contains(match);
 	}
 
 }

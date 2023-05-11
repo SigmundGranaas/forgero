@@ -3,8 +3,9 @@
 plugins {
 	id "idea"
 	id "fabric-loom" version "1.1.8" apply true
-	id 'com.matthewprenger.cursegradle' version '1.4.0'
 	id 'maven-publish'
+	id "com.modrinth.minotaur" version "2.+"
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 configure(subprojects) {
@@ -49,48 +50,24 @@ subprojects {
 		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 	}
 	// configure the maven publication
-	publishing {
-		publications {
-			mavenJava(MavenPublication) {
-				from components.java
-				// add all the jars that should be included when publishing to maven
 
-			}
-		}
-
-		// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-		repositories {
-			maven {
-				name = "GitHubPackages"
-				url = "https://maven.pkg.github.com/sigmundgranaas/forgero"
-				credentials {
-					username = System.getenv("GITHUB_ACTOR")
-					password = System.getenv("GITHUB_TOKEN")
-				}
-			}
-			// Add repositories to publish to here.
-			// Notice: This block does NOT have the same function as the block in the top level.
-			// The repositories here will be used for publishing your artifact, not for
-			// retrieving dependencies.
-		}
-	}
 }
 
 curseforge {
-	apiKey = System.getenv("CurseForgeApiKey") ?: ""
+	apiKey = System.getenv("CURSEFORGE_API_KEY") ?: ""
 	project {
 		id = '581435'
 		changelogType = "markdown"
-		changelog = file('changelog.md')
+		changelog = file('../changelog.md')
 
-		releaseType = 'release'
+		releaseType = project.release_type
 		addGameVersion project.minecraft_version
 		addGameVersion 'Fabric'
 		addGameVersion 'Quilt'
 		addGameVersion "Java 17"
 
 		mainArtifact(remapJar) {
-			displayName = "Forgero [Fabric]: $rootProject.version"
+			displayName = "Forgero [Fabric]: $version"
 			relations {
 				embeddedLibrary 'arrp'
 				requiredDependency 'fabric-api'
@@ -101,6 +78,26 @@ curseforge {
 	options {
 		forgeGradleIntegration = false // defaults to true
 	}
+}
+
+modrinth {
+	token = System.getenv("MODRINTH_TOKEN")
+
+	projectId = project.modid
+	versionNumber = version
+	versionType = project.release_type
+	uploadFile = remapJar
+	gameVersions = [minecraft_version]
+	loaders = ["fabric", "quilt"]
+	versionName = "Forgero $version"
+	changelog = file('../changelog.md').text
+	dependencies {
+		required.project "fabric-api"
+	}
+}
+
+task publishToModrinthAndCurseForge {
+	dependsOn 'modrinth', 'curseforge'
 }
 
 allprojects {

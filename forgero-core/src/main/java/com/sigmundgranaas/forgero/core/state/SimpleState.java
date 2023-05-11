@@ -1,18 +1,19 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.state.customvalue.CustomValue;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
 public final class SimpleState implements Ingredient, Conditional<State> {
@@ -20,14 +21,14 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	private final String nameSpace;
 	private final Type type;
 	private final List<Property> properties;
-	private final Map<String, CustomValue> customData;
+	private final DataContainer customData;
 
 	public SimpleState(String name, Type type, List<Property> properties) {
 		this.name = name;
 		this.type = type;
 		this.properties = properties;
 		this.nameSpace = Forgero.NAMESPACE;
-		this.customData = new HashMap<>();
+		this.customData = DataContainer.empty();
 	}
 
 	public SimpleState(String name, String nameSpace, Type type, List<Property> properties) {
@@ -35,15 +36,15 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 		this.nameSpace = nameSpace;
 		this.type = type;
 		this.properties = properties;
-		this.customData = new HashMap<>();
+		this.customData = DataContainer.empty();
 	}
 
-	public SimpleState(String name, String nameSpace, Type type, List<Property> properties, Map<String, String> custom) {
+	public SimpleState(String name, String nameSpace, Type type, List<Property> properties, DataContainer custom) {
 		this.name = name;
 		this.nameSpace = nameSpace;
 		this.type = type;
 		this.properties = properties;
-		this.customData = custom.entrySet().stream().collect(Collectors.toMap((Map.Entry::getKey), (keyPair -> CustomValue.of(keyPair.getKey(), keyPair.getValue()))));
+		this.customData = custom;
 	}
 
 	@Override
@@ -78,19 +79,6 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	}
 
 	@Override
-	public Optional<CustomValue> getCustomValue(String identifier) {
-		if (customData.containsKey(identifier)) {
-			return Optional.of(customData.get(identifier));
-		}
-		return Optional.empty();
-	}
-
-	@Override
-	public Map<String, CustomValue> customValues() {
-		return this.customData;
-	}
-
-	@Override
 	public List<PropertyContainer> conditions() {
 		return Collections.emptyList();
 	}
@@ -103,5 +91,10 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	@Override
 	public State removeCondition(String identifier) {
 		return this;
+	}
+
+	@Override
+	public DataContainer customData(Target target) {
+		return customData;
 	}
 }

@@ -30,7 +30,7 @@
     "client": [
       "com.sigmundgranaas.forgero.fabric.ForgeroCompatClient"
     ],
-    "main": [
+    "forgeroInitialized": [
       "com.sigmundgranaas.forgero.fabric.ForgeroCompatInitializer"
     ],
     "modmenu": [

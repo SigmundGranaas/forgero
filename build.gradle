@@ -1,17 +1,55 @@
+plugins {
+	id "maven-publish"
+}
+
 version = "${project.forgero_version}+${project.minecraft_version}"
 group = project.maven_group
 
-
 subprojects {
+	version = "${project.forgero_version}+${project.minecraft_version}"
+	group = project.maven_group
+
 	repositories {
 		mavenCentral()
 		mavenLocal()
 	}
-
-	version = "${project.forgero_version}+${project.minecraft_version}"
-	group = project.maven_group
-
 }
+
+subprojects {
+	if (it.name != 'content') {
+		apply plugin: "maven-publish"
+		apply plugin: "java-library"
+		repositories {
+			mavenCentral()
+			mavenLocal()
+		}
+
+		publishing {
+			repositories {
+				maven {
+					name = "GitHubPackages"
+					url = uri("https://maven.pkg.github.com/sigmundgranaas/forgero")
+					credentials {
+						username = "sigmundgranaas"
+						password = System.getenv("GPR_API_KEY")
+					}
+				}
+			}
+
+
+			publishing {
+				publications {
+					gpr(MavenPublication) {
+						groupId = group // Replace with your groupId
+						artifactId = archivesBaseName // Replace with your module's name
+						from components.java
+					}
+				}
+			}
+		}
+	}
+}
+
 
 task copyJars(type: Copy) {
 	group = 'build'

@@ -1,6 +1,12 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -16,11 +22,6 @@ import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
 
 public class StaticComposite implements Composite {
 	private final SlotContainer upgrades;
@@ -128,5 +129,10 @@ public class StaticComposite implements Composite {
 	@Override
 	public Composite copy() {
 		return this;
+	}
+
+	@Override
+	public DataContainer customData(Target target) {
+		return DataContainer.empty();
 	}
 }

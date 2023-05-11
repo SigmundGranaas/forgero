@@ -54,14 +54,19 @@ dependencies {
 	// modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
 	// modImplementation "maven.modrinth:MpzVLzy5:InVK1xFf"
 
+
 	//emi
 	//modCompileOnly "dev.emi:emi:${emi_version}:api"
 	//modLocalRuntime "dev.emi:emi:${emi_version}"
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
+	//JEI
+	modImplementation "maven.modrinth:jei:J5TcglXt"
+
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
 	//modImplementation "net.darkhax.bookshelf:Bookshelf-Fabric-1.19.2:16.1.11"
+
 
 	//Twilight forest compat
 	//modImplementation "teamtwilight:twilightforest:4.1.1102:universal"

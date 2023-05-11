@@ -1,13 +1,16 @@
 package com.sigmundgranaas.forgero.fabric;
 
+import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
+import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
+import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
 //import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 //import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 
-public class ForgeroCompatInitializer implements ModInitializer {
+public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final boolean toolstats;
 	public static final boolean patchouli;
 	public static final boolean modmenu;
@@ -20,8 +23,12 @@ public class ForgeroCompatInitializer implements ModInitializer {
 		bettercombat = isModLoaded("bettercombat");
 	}
 
+	public static boolean isModLoaded(String id) {
+		return FabricLoader.getInstance().isModLoaded(id);
+	}
+
 	@Override
-	public void onInitialize() {
+	public void onInitialized(StateService service) {
 		if (toolstats) {
 			ToolStatTagGenerator.generateTags();
 		}
@@ -30,9 +37,5 @@ public class ForgeroCompatInitializer implements ModInitializer {
 //			BookDropOnAdvancement.registerBookDrop();
 //			GuideBookGenerator.registerGuideBookRecipes();
 //		}
-	}
-
-	public static boolean isModLoaded(String id) {
-		return FabricLoader.getInstance().isModLoaded(id);
 	}
 }

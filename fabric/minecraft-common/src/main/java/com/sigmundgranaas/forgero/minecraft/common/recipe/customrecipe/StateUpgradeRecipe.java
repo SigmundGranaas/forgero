@@ -1,42 +1,30 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
-
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 
-import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 public class StateUpgradeRecipe extends LegacySmithingRecipe {
-	public final Ingredient base;
-	public final Ingredient addition;
-	final ItemStack result;
-	private final Identifier id;
+	private final StateService service;
 
-	public StateUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
-		super(id, base, addition, result);
-		this.id = id;
-		this.base = base;
-		this.addition = addition;
-		this.result = result;
+	public StateUpgradeRecipe(SmithingRecipe recipe, StateService service) {
+		super(recipe.getId(), recipe.base, recipe.addition, recipe.getOutput().copy());
+		this.service = service;
 	}
 
 	@Override
@@ -44,11 +32,11 @@ public class StateUpgradeRecipe extends LegacySmithingRecipe {
 		if (inventory.containsAny(ItemStack::isEmpty)) {
 			return false;
 		}
-		if (this.base.test(inventory.getStack(0)) && this.addition.test(inventory.getStack(1))) {
-			var originStateOpt = StateConverter.of(inventory.getStack(0))
+		if (this.base.test(inventory.getStack(0)) && this.addition.test(inventory.getStack(1)) {
+			var originStateOpt = service.convert(inventory.getStack(0))
 					.filter(Composite.class::isInstance)
 					.map(Composite.class::cast);
-			var upgradeOpt = StateConverter.of(inventory.getStack(1));
+			var upgradeOpt = service.convert(inventory.getStack(1));
 			if (originStateOpt.isPresent() && upgradeOpt.isPresent()) {
 				return originStateOpt.get().canUpgrade(upgradeOpt.get());
 			}
@@ -58,8 +46,8 @@ public class StateUpgradeRecipe extends LegacySmithingRecipe {
 
 	@Override
 	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
-		var originStateOpt = StateConverter.of(inventory.getStack(0));
-		var upgradeOpt = StateConverter.of(inventory.getStack(1));
+		var originStateOpt = service.convert(inventory.getStack(0));
+		var upgradeOpt = service.convert(inventory.getStack(1));
 		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
 			var output = getOutput(registryManager).copy();
@@ -101,7 +89,7 @@ public class StateUpgradeRecipe extends LegacySmithingRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializer.SMITHING;
+		return Serializer.INSTANCE;
 	}
 
 	public static class Serializer implements RecipeSerializer<StateUpgradeRecipe>, ForgeroRecipeSerializer {
@@ -113,6 +101,9 @@ public class StateUpgradeRecipe extends LegacySmithingRecipe {
 			return new StateUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
 		}
 
+		@Override
+		public SmithingRecipe read(Identifier identifier, JsonObject jsonObject) {
+			return new StateUpgradeRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
 		public StateUpgradeRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
 			Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);
 			Ingredient ingredient2 = Ingredient.fromPacket(packetByteBuf);
@@ -120,6 +111,9 @@ public class StateUpgradeRecipe extends LegacySmithingRecipe {
 			return new StateUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
 		}
 
+		@Override
+		public SmithingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+			return new StateUpgradeRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
 		public void write(PacketByteBuf packetByteBuf, StateUpgradeRecipe smithingRecipe) {
 			smithingRecipe.base.write(packetByteBuf);
 			smithingRecipe.addition.write(packetByteBuf);

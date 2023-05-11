@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.sigmundgranaas.forgero.core.customdata.VisitorHelper;
+import com.sigmundgranaas.forgero.core.customdata.handler.LootVisitor;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.LootEntryData;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.ConditionFunction;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.GemLevelFunction;
@@ -47,12 +50,22 @@ public class SingleLootEntry implements LootEntry {
 	public void apply(LootTable.Builder builder) {
 		var pool = LootPool.builder()
 				.rolls(BinomialLootNumberProvider.create(rolls, chance));
-		filter.get().forEach(item -> pool.with(ItemEntry.builder(item).apply(new GemLevelFunction.Builder()).apply(new ConditionFunction.Builder()).weight(1)));
+		filter.get().stream().filter(this::filter).forEach(item -> pool.with(ItemEntry.builder(item).apply(new GemLevelFunction.Builder()).apply(new ConditionFunction.Builder()).weight(1)));
 		builder.pool(pool);
 	}
 
 	@Override
 	public boolean matches(Identifier id) {
 		return target.stream().anyMatch(target -> target.equals(id));
+	}
+
+
+	private boolean filter(Item item) {
+		Optional<LootVisitor.CustomLootData> customLootData = VisitorHelper.of(item, LootVisitor::new);
+		//noinspection RedundantIfStatement
+		if (customLootData.isPresent() && customLootData.get().isExcluded(target.stream().map(Identifier::toString).toList())) {
+			return false;
+		}
+		return true;
 	}
 }

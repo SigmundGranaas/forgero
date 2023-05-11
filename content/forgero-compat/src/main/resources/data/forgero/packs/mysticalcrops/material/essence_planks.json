@@ -1,0 +1,37 @@
+{
+  "type": "WOOD",
+  "parent": "wood",
+  "name": "essence_planks",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:essence_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 7
+      },
+      {
+        "id": "wood-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 45
+      },
+      {
+        "id": "wood-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.3
+      }
+    ]
+  },
+  "palette": {
+    "name": "essence_planks"
+  }
+}

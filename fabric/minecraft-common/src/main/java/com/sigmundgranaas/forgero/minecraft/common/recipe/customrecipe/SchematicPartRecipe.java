@@ -9,8 +9,8 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedSchematicPart;
-import com.sigmundgranaas.forgero.minecraft.common.conversion.StateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -21,11 +21,12 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 
 public class SchematicPartRecipe extends ShapelessRecipe {
+	private final StateService service;
 
-	public SchematicPartRecipe(ShapelessRecipe recipe) {
-		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getOutput(null), recipe.getIngredients());
+	public SchematicPartRecipe(ShapelessRecipe recipe, StateService service) {
+		super(recipe.getId(), recipe.getGroup(),recipe.getCategory(), recipe.getOutput(null), recipe.getIngredients());
+		this.service = service;
 	}
-
 
 	private List<State> partsFromCraftingInventory(CraftingInventory craftingInventory) {
 		List<ItemStack> ingredients = new ArrayList<>();
@@ -38,12 +39,12 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 				}
 			}
 		}
-		return ingredients.stream().map(StateConverter::of).flatMap(Optional::stream).toList();
+		return ingredients.stream().map(service::convert).flatMap(Optional::stream).toList();
 	}
 
 	@Override
 	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
-		var target = StateConverter.of(this.getOutput(null));
+		var target = service.convert(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -53,7 +54,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 				builder.id(targetState.identifier());
 				builder.addUpgrades(upgradeable.slots());
 				builder.type(targetState.type());
-				return StateConverter.of(builder.build());
+				return service.convert(builder.build()).orElse(ItemStack.EMPTY);
 			}
 
 		}
@@ -75,12 +76,12 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 
 		@Override
 		public SchematicPartRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new SchematicPartRecipe(super.read(identifier, jsonObject));
+			return new SchematicPartRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
 		}
 
 		@Override
 		public SchematicPartRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new SchematicPartRecipe(super.read(identifier, packetByteBuf));
+			return new SchematicPartRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

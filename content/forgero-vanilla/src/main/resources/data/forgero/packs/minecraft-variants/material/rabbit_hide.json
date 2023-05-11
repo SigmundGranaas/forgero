@@ -15,6 +15,18 @@
       },
       {
         "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 50
+      },
+      {
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "type": "DURABILITY",
         "order": "BASE",
         "operation": "MULTIPLICATION",
         "category": "OFFENSIVE",

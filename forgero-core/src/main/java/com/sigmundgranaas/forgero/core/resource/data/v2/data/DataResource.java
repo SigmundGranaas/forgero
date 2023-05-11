@@ -1,19 +1,27 @@
 package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.core.customdata.CustomJsonDataContainer;
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.core.resource.data.SchemaVersion;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
-import java.util.*;
-import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 @Builder(toBuilder = true)
 public class DataResource implements Identifiable {
@@ -79,7 +87,7 @@ public class DataResource implements Identifiable {
 
 	@Builder.Default
 	@SerializedName("custom_data")
-	private Map<String, String> customData = new HashMap<>();
+	private Map<String, JsonElement> customData = new HashMap<>();
 
 	public static <T> List<T> mergeProperty(List<T> attribute1, List<T> attribute2) {
 		if (attribute1 == null && attribute2 == null)
@@ -194,7 +202,7 @@ public class DataResource implements Identifiable {
 		return builder.property(newProps).build();
 	}
 
-	public Map<String, String> getCustomData() {
-		return Objects.requireNonNullElse(customData, new HashMap<>());
+	public DataContainer getCustomData() {
+		return CustomJsonDataContainer.of(customData);
 	}
 }

@@ -1,0 +1,8 @@
+{
+  "input": "minecraft:stone_sword",
+  "results": [
+    "forgero:stone-sword_blade",
+    "forgero:oak-handle",
+    "forgero:stone-sword_guard"
+  ]
+}

@@ -1,6 +1,21 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
-import com.sigmundgranaas.forgero.core.property.*;
+import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
@@ -12,15 +27,6 @@ import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
 
 public class ConstructedComposite extends BaseComposite implements ConstructedState {
 	private final List<State> parts;
@@ -76,9 +82,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 		if (property instanceof Attribute attribute) {
 			if (Category.UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
 				return false;
-			} else if (attribute.getOrder() == CalculationOrder.COMPOSITE) {
-				return false;
-			}
+			} else return attribute.getOrder() != CalculationOrder.COMPOSITE;
 		}
 		return true;
 	}
@@ -145,6 +149,12 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	@Override
 	public ConstructedComposite copy() {
 		return toBuilder().build();
+	}
+
+	@Override
+	public DataContainer customData(Target target) {
+		var combinedTarget = target.combineTarget(new TypeTarget(Set.of(type().typeName())));
+		return components().stream().map(state -> state.customData(combinedTarget)).reduce(DataContainer.empty(), (dataContainer1, dataContainer2) -> DataContainer.transitiveMerge(dataContainer1, dataContainer2, combinedTarget));
 	}
 
 	public static class ConstructBuilder extends BaseCompositeBuilder<ConstructBuilder> {

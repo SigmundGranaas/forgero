@@ -12,6 +12,9 @@ import static com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator.RESOURCE
 
 public class ToolStatTagGenerator {
 	public static void generateTags() {
+		if (ForgeroStateRegistry.STATES == null){
+			return;
+		}
 		var tag = new JTag();
 		ForgeroStateRegistry.STATES.all().stream()
 				.map(Supplier::get)

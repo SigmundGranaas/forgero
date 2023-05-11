@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -10,11 +15,6 @@ import com.sigmundgranaas.forgero.core.util.match.Context;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
-
 public record ModelMatch(List<String> criteria, String matchType) implements Matchable {
 	@Override
 	public boolean test(Matchable match, Context context) {
@@ -22,7 +22,7 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
 			var compositeMatch = context.add(composite.type());
 			if (matchType.equals("UPGRADE")) {
 				return composite.slots().stream().allMatch(slot -> criteria.stream().anyMatch(criteria -> upgradeTest(slot, criteria, compositeMatch)));
-			} else if (match instanceof Constructed construct && criteria.size() == construct.parts().size()) {
+			} else if (match instanceof Constructed construct) {
 				List<String> matches = new ArrayList<>();
 				for (State ingredient : construct.parts()) {
 					for (String criteria : criteria) {
@@ -66,7 +66,7 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
 			}
 			return ingredient.test(type, context);
 		} else if (criteria.contains("id")) {
-			return ingredient.identifier().contains(criteria.replace("id:", ""));
+			return ingredient.identifier().split(":")[1].equals(criteria.replace("id:", ""));
 		} else if (criteria.contains("model")) {
 			return context.test(new ModelMatchEntry(criteria.replace("model:", "")), context);
 		} else if (ingredient.name().split(ELEMENT_SEPARATOR)[0].equals(criteria)) {
