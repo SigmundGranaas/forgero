@@ -34,9 +34,9 @@ import net.minecraft.world.World;
 public class StateCraftingRecipe extends ShapedRecipe {
 	private final StateService service;
 
-    public StateCraftingRecipe(ShapedRecipe recipe) {
-        super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput(null));
-	    this.service = service;
+	public StateCraftingRecipe(ShapedRecipe recipe, StateService service) {
+		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput(null));
+		this.service = service;
 	}
 
 	@Override
@@ -92,12 +92,12 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
+	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
 		var target = service.convert(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
-			var upgrades = upgradesFromCraftingInventory(craftingInventory);
+			var upgrades = upgradesFromCraftingInventory(craftingInventory, null);
 			var toolBuilderOpt = ConstructedTool.ToolBuilder.builder(parts);
 			BaseComposite.BaseCompositeBuilder<?> builder;
 			if (toolBuilderOpt.isPresent()) {

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -17,14 +18,10 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
-
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class GemUpgradeRecipe extends LegacySmithingRecipe {
 	public final Ingredient base;
@@ -79,6 +76,7 @@ public class GemUpgradeRecipe extends LegacySmithingRecipe {
 		}
 		return output;
 	}
+
 	public boolean fits(int width, int height) {
 		return width * height >= 2;
 	}
@@ -114,18 +112,19 @@ public class GemUpgradeRecipe extends LegacySmithingRecipe {
 
 	public static class Serializer implements RecipeSerializer<GemUpgradeRecipe>, ForgeroRecipeSerializer {
 		public static final Serializer INSTANCE = new Serializer();
+
 		public GemUpgradeRecipe read(Identifier identifier, JsonObject jsonObject) {
 			Ingredient ingredient = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "base"));
 			Ingredient ingredient2 = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "addition"));
 			ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
-			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
+			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack, StateService.INSTANCE);
 		}
 
 		public GemUpgradeRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
 			Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);
 			Ingredient ingredient2 = Ingredient.fromPacket(packetByteBuf);
 			ItemStack itemStack = packetByteBuf.readItemStack();
-			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack);
+			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack, StateService.INSTANCE);
 		}
 
 		public void write(PacketByteBuf packetByteBuf, GemUpgradeRecipe smithingRecipe) {
@@ -133,6 +132,7 @@ public class GemUpgradeRecipe extends LegacySmithingRecipe {
 			smithingRecipe.addition.write(packetByteBuf);
 			packetByteBuf.writeItemStack(smithingRecipe.result);
 		}
+
 		@Override
 		public Identifier getIdentifier() {
 			return new Identifier(Forgero.NAMESPACE, RecipeTypes.GEM_UPGRADE_RECIPE.getName());
