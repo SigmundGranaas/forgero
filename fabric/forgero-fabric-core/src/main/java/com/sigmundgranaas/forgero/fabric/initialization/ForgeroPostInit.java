@@ -78,8 +78,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 
 		dataReloader();
 		lootConditionReloader();
-		lootInjectionReloader();
-
 
 		registerRecipes();
 		registerAARPRecipes(service);
@@ -158,30 +156,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 			@Override
 			public Identifier getFabricId() {
 				return new Identifier(Forgero.NAMESPACE, "loot_condition");
-			}
-		});
-	}
-
-	private void lootInjectionReloader() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public void reload(ResourceManager manager) {
-				Gson gson = new Gson();
-				TreasureInjector injector = TreasureInjector.getInstance();
-				for (Resource res : manager.findResources("forgero_loot", path -> path.getPath().endsWith(".json")).values()) {
-					try (InputStream stream = res.getInputStream()) {
-						LootEntryData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), LootEntryData.class);
-						injector.registerEntry(data.id(), SingleLootEntry.of(data));
-					} catch (Exception e) {
-						Forgero.LOGGER.error(e);
-					}
-				}
-				TreasureInjector.getInstance().registerDynamicLoot();
-			}
-
-			@Override
-			public Identifier getFabricId() {
-				return ResourceReloadListenerKeys.LOOT_TABLES;
 			}
 		});
 	}
