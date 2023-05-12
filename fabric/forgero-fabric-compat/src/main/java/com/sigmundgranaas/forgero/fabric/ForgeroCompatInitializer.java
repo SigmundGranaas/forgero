@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.fabric;
 
+import java.util.function.Supplier;
+
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
@@ -9,16 +11,16 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
-	public static final boolean toolstats;
-	public static final boolean patchouli;
-	public static final boolean modmenu;
-	public static final boolean bettercombat;
+	public static final Supplier<Boolean> toolstats;
+	public static final Supplier<Boolean> patchouli;
+	public static final Supplier<Boolean> modmenu;
+	public static final Supplier<Boolean> bettercombat;
 
 	static {
-		toolstats = isModLoaded("toolstats");
-		patchouli = isModLoaded("patchouli");
-		modmenu = isModLoaded("modmenu");
-		bettercombat = isModLoaded("bettercombat");
+		toolstats = () -> isModLoaded("toolstats");
+		patchouli = () -> isModLoaded("patchouli");
+		modmenu = () -> isModLoaded("modmenu");
+		bettercombat = () -> isModLoaded("bettercombat");
 	}
 
 	public static boolean isModLoaded(String id) {
@@ -27,11 +29,11 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 	@Override
 	public void onInitialized(StateService service) {
-		if (toolstats) {
+		if (toolstats.get()) {
 			ToolStatTagGenerator.generateTags();
 		}
 
-		if (patchouli) {
+		if (patchouli.get()) {
 			BookDropOnAdvancement.registerBookDrop();
 			GuideBookGenerator.registerGuideBookRecipes();
 		}
