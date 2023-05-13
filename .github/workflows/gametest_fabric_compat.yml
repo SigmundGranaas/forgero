@@ -56,10 +56,10 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Runs gametest
+      - name: Run gametest (Fabric compat)
         run: ./gradlew fabric:forgero-fabric-compat:runGameTest
 
-      - name: Cleanup Gradle Cache
+      - name: Cleanup Gradle cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.
         run: |
