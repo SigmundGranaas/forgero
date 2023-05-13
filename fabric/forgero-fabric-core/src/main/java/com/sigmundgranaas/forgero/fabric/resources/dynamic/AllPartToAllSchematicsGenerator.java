@@ -11,14 +11,14 @@ import net.minecraft.util.Identifier;
 public class AllPartToAllSchematicsGenerator extends PartToSchematicGenerator {
 
 
-	public AllPartToAllSchematicsGenerator(StateService service) {
-		super(service);
+	public AllPartToAllSchematicsGenerator(StateService service, RecipeCreator recipeCreator, RecipeFilter recipeFilter) {
+		super(service, recipeCreator, recipeFilter);
 	}
 
 	@Override
 	public void generate(RuntimeResourcePack pack) {
 		parts().stream()
-				.map(this::createRecipe)
+				.map(recipeCreator::createRecipe)
 				.flatMap(Optional::stream)
 				.map(this::convertRecipeData)
 				.forEach(recipe -> pack.addData(generateId(recipe), recipe.toString().getBytes()));

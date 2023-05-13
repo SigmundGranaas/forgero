@@ -22,7 +22,6 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConditionData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.LootEntryData;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
@@ -41,7 +40,6 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGene
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.item.Attributes;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicItems;
-import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
 import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -56,7 +54,6 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -183,9 +180,9 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerAARPRecipes(StateService service) {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
-			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service));
+			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
 		} else {
-			ARRPGenerator.register(() -> new PartToSchematicGenerator(service));
+			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.BaseVariantFilter()));
 		}
 
 		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
