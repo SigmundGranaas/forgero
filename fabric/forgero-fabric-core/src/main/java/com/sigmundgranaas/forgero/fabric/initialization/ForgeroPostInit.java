@@ -17,6 +17,8 @@ import com.sigmundgranaas.forgero.core.condition.LootCondition;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConditionData;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
@@ -149,9 +151,9 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerAARPRecipes(StateService service) {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
-			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service));
+			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
 		} else {
-			ARRPGenerator.register(() -> new PartToSchematicGenerator(service));
+			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.BaseVariantFilter()));
 		}
 
 		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
