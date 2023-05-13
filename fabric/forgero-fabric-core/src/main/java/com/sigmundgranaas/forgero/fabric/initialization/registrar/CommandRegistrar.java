@@ -1,8 +1,11 @@
-package com.sigmundgranaas.forgero.fabric.command;
+package com.sigmundgranaas.forgero.fabric.initialization.registrar;
+
+import static net.minecraft.server.command.CommandManager.literal;
+
+import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.Forgero;
-
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Registrar;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,12 +18,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 
-import java.util.Optional;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
-import static net.minecraft.server.command.CommandManager.literal;
-
-public class CommandRegistry {
-	public void registerCommand() {
+public class CommandRegistrar implements Registrar {
+	@Override
+	public void register() {
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, test) -> {
 			dispatcher.register(CommandManager.literal("forgero").executes(context -> {
@@ -53,5 +55,4 @@ public class CommandRegistry {
 			);
 		});
 	}
-
 }
