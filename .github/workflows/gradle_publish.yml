@@ -22,18 +22,34 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git --version
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git status
+          git tag
+          git describe
+
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adopt'
+          distribution: 'temurin'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Build with Gradle
+      - name: Execute Gradle build
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: build
+
+      - name: Upload Gradle artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: compiled_jar_files
+          path: fabric/build/libs/
 
       # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
@@ -44,8 +60,8 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish to CurseForge
         run: ./gradlew curseforge
         env:
           CurseForgeApiKey: ${{ secrets.CURSEFORGEAPIKEY }}
-      
