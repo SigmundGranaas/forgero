@@ -1,13 +1,15 @@
-package com.sigmundgranaas.forgero.fabric.loot;
+package com.sigmundgranaas.forgero.fabric.initialization.registrar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sigmundgranaas.forgero.fabric.loot.ExtendedLootTable;
 import com.sigmundgranaas.forgero.minecraft.common.loot.LootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
 import com.sigmundgranaas.forgero.minecraft.common.loot.StateFilter;
+import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Registrar;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootTables;
@@ -15,19 +17,19 @@ import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 
-public class TreasureInjector {
-	private static TreasureInjector INSTANCE;
+public class TreasureLootRegistrar implements Registrar {
+	private static TreasureLootRegistrar INSTANCE;
 	private final Map<String, LootEntry> entryMap;
 	private final List<LootEntry> entries;
 
-	public TreasureInjector() {
+	public TreasureLootRegistrar() {
 		this.entryMap = new HashMap<>();
 		this.entries = new ArrayList<>();
 	}
 
-	public static TreasureInjector getInstance() {
+	public static TreasureLootRegistrar getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new TreasureInjector();
+			INSTANCE = new TreasureLootRegistrar();
 		}
 		return INSTANCE;
 	}
@@ -62,7 +64,7 @@ public class TreasureInjector {
 		this.entryMap.put(id, entry);
 	}
 
-	public void registerLoot() {
+	public void register() {
 		registerEntries();
 		if (ExtendedLootTable.isValid()) {
 			ExtendedLootTable.register();

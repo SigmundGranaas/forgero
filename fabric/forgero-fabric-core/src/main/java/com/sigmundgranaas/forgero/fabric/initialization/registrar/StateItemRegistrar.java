@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.initialization;
+package com.sigmundgranaas.forgero.fabric.initialization.registrar;
 
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
@@ -16,6 +16,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
+import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Registrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
@@ -26,10 +27,10 @@ import net.minecraft.util.registry.Registry;
 /**
  * A class to handle registration of states.
  */
-public class StateRegistrar implements Registrar<Item> {
+public class StateItemRegistrar implements Registrar {
 	private final StateService service;
 
-	public StateRegistrar(StateService service) {
+	public StateItemRegistrar(StateService service) {
 		this.service = service;
 	}
 
@@ -61,7 +62,7 @@ public class StateRegistrar implements Registrar<Item> {
 	}
 
 	@Override
-	public void register(Registry<Item> registry) {
+	public void registerItem(Registry<Item> registry) {
 		var sortingMap = generateSortingMap();
 		getValidStates(registry)
 				.sorted(new StateComparator(sortingMap))
@@ -71,7 +72,7 @@ public class StateRegistrar implements Registrar<Item> {
 	/**
 	 * A utility class to extract and manipulate attributes from State objects.
 	 */
-	class StateAttributes {
+	static class StateAttributes {
 		/**
 		 * Retrieves the material name from a State object.
 		 *
@@ -97,7 +98,7 @@ public class StateRegistrar implements Registrar<Item> {
 	/**
 	 * A comparator class to compare two State objects based on a given ordering map.
 	 */
-	class StateComparator implements Comparator<Supplier<State>> {
+	static class StateComparator implements Comparator<Supplier<State>> {
 		private final Map<String, Integer> orderingMap;
 
 		public StateComparator(Map<String, Integer> orderingMap) {
