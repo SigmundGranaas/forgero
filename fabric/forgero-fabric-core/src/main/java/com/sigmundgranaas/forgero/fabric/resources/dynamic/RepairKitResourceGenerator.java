@@ -88,9 +88,9 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 				.orElse(ImmutableList.<State>builder().build());
 		var lang = new JLang();
 		for (State material : materials) {
-			if (ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier())) {
+			if (StateService.INSTANCE.find(material.identifier()).isPresent()) {
 				var name = material.name().substring(0, 1).toUpperCase() + material.name().substring(1);
-				lang.item(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"), String.format("%s Repair kit", name));
+				lang.item(new Identifier(Forgero.NAMESPACE, material.name().replace("_", " ") + "_repair_kit"), String.format("%s Repair kit", name));
 			}
 		}
 		pack.addLang(new Identifier(Forgero.NAMESPACE, "en_us"), lang);

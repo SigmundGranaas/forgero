@@ -31,6 +31,7 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generat
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.SlotUpgradeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.TemplateGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.ToolRecipeCreator;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 public class RecipeCreatorImpl implements RecipeCreator {
 
@@ -40,18 +41,19 @@ public class RecipeCreatorImpl implements RecipeCreator {
 	private final TemplateGenerator templateGenerator;
 	private final RecipeDataHelper helper;
 	private final RecipeDataMapper mapper;
+	private final StateService service;
 
-	public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates) {
+	public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates, StateService service) {
 		this.templateGenerator = new TemplateGenerator(recipeTemplates);
 		this.helper = new RecipeDataHelper();
 		this.mapper = new RecipeDataMapper(this.helper);
 		this.generators = new ArrayList<>();
+		this.service = service;
 	}
 
 	public static RecipeCreator getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates()
-			);
+			INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates(), StateService.INSTANCE);
 		}
 		return INSTANCE;
 	}
@@ -107,7 +109,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
 				.orElse(ImmutableList.<State>builder().build());
 		var recipes = new ArrayList<RecipeGenerator>();
 		for (State material : materials) {
-			recipes.add(new RepairKitRecipeGenerator(material, templateGenerator));
+			recipes.add(new RepairKitRecipeGenerator(material, templateGenerator, service));
 		}
 		return recipes;
 	}
