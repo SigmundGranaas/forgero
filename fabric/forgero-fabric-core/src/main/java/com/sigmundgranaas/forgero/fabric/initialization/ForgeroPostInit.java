@@ -163,6 +163,4 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerRecipes() {
 		RecipeRegistry.INSTANCE.registerRecipeSerializers();
 	}
-
-
 }
