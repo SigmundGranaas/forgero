@@ -65,10 +65,3 @@ jobs:
         with:
           gradle-version: wrapper
           arguments: fabric:build --stacktrace
-
-      - name: Upload Gradle artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: compiled_jar_files
-          path: fabric/build/libs/
-          if-no-files-found: error
