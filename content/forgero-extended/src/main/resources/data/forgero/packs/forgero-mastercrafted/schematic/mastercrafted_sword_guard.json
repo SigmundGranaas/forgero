@@ -66,13 +66,13 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.5
+        "value": 0.4
       },
       {
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.5
+        "value": 0.4
       },
       {
         "type": "ARMOR",
@@ -84,7 +84,7 @@
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.3
       }
     ]
   },

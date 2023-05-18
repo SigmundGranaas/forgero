@@ -69,7 +69,7 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.2
       },
       {
         "type": "DURABILITY",
@@ -81,7 +81,7 @@
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.2
       }
     ]
   },

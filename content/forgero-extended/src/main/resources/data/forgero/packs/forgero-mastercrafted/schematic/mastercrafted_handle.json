@@ -83,7 +83,7 @@
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.5
+        "value": 0.8
       },
       {
         "type": "ATTACK_SPEED",

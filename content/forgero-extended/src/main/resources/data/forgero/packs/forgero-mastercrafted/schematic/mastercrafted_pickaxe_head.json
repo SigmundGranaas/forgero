@@ -70,6 +70,12 @@
         "value": 1.5
       },
       {
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
@@ -80,6 +86,12 @@
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -2.6
       },
       {
         "type": "WEIGHT",
