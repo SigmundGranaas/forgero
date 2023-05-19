@@ -32,7 +32,7 @@ public interface BlockSelector {
 	}
 
 	static BlockSelector of(List<String> pattern, PlayerEntity player, List<String> tags) {
-		Predicate<BlockPos> filter = isInTags(player.world, tags);
+		Predicate<BlockPos> filter = isInTags(player.getWorld(), tags);
 		var selector = new PatternSelector(pattern, Direction.getEntityFacingOrder(player), player.getHorizontalFacing());
 		var filteredSelector = new FilteredSelector(selector, filter);
 		return CachedSelector.of(filteredSelector);

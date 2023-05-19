@@ -15,6 +15,7 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerialize
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
@@ -32,7 +33,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
+	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		return super.matches(craftingInventory, world) && IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
 				.filter(stack -> service.convert(stack).isPresent())
@@ -40,7 +41,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
 		var state = IntStream.range(0, 8)
 				.mapToObj(craftingInventory::getStack)
 				.map(service::convert)

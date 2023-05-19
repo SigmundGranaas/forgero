@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerialize
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
@@ -28,7 +29,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 		this.service = service;
 	}
 
-	private List<State> partsFromCraftingInventory(CraftingInventory craftingInventory) {
+	private List<State> partsFromCraftingInventory(RecipeInputInventory craftingInventory) {
 		List<ItemStack> ingredients = new ArrayList<>();
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
@@ -43,7 +44,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
 		var target = service.convert(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();

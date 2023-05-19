@@ -15,14 +15,15 @@ import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
-import net.minecraft.item.ItemGroups;
-
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+
+import net.minecraft.item.ItemGroups;
+import net.minecraft.registry.Registries;
 
 
 public class ForgeroInitializer implements ModInitializer {

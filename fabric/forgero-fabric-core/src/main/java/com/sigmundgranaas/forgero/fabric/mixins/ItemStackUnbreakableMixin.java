@@ -37,7 +37,7 @@ public abstract class ItemStackUnbreakableMixin {
 				var tool = StateService.INSTANCE.convert(stack);
 				if (tool.isPresent() && tool.get() instanceof ConstructedTool conditional && !ContainsFeatureCache.check(PropertyTargetCacheKey.of(conditional, BROKEN_TYPE_KEY))) {
 					stack.setDamage(Durability.apply(conditional));
-					player.world.playSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_BREAK, player.getSoundCategory(), 0.8f, 0.8f + player.world.random.nextFloat() * 0.4f, false);
+					player.getWorld().playSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_BREAK, player.getSoundCategory(), 0.8f, 0.8f + player.getWorld().random.nextFloat() * 0.4f, false);
 					var newStack = StateService.INSTANCE.convert(conditional.applyCondition(Conditions.BROKEN)).orElse(player.getMainHandStack());
 					newStack.setDamage(stack.getDamage());
 					player.getInventory().setStack(player.getInventory().selectedSlot, newStack);

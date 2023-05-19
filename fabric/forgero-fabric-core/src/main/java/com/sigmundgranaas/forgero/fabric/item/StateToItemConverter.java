@@ -24,6 +24,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -95,17 +96,17 @@ public class StateToItemConverter {
 		return item;
 	}
 
-	public ItemGroup getItemGroup(State state) {
+	public RegistryKey<ItemGroup> getItemGroup(State state) {
 		if (state.test(Type.TOOL)) {
 			return net.minecraft.item.ItemGroups.TOOLS;
 		} else if (state.test(Type.WEAPON)) {
 			return net.minecraft.item.ItemGroups.COMBAT;
 		} else if (state.test(Type.PART)) {
-			return ItemGroups.FORGERO_TOOL_PARTS;
+			return ItemGroups.FORGERO_TOOL_PARTS_KEY;
 		} else if (state.test(Type.SCHEMATIC)) {
-			return ItemGroups.FORGERO_SCHEMATICS;
+			return ItemGroups.FORGERO_SCHEMATICS_KEY;
 		} else if (state.test(Type.TRINKET)) {
-			return ItemGroups.FORGERO_GEMS;
+			return ItemGroups.FORGERO_GEMS_KEY;
 		}
 		return net.minecraft.item.ItemGroups.INGREDIENTS;
 	}

@@ -106,15 +106,15 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializer.SMITHING;
+		return RecipeSerializer.SMITHING_TRIM;
 	}
 
 	public static class Serializer implements RecipeSerializer<GemUpgradeRecipe>, ForgeroRecipeSerializer {
 		public static final Serializer INSTANCE = new Serializer();
 
 		public GemUpgradeRecipe read(Identifier identifier, JsonObject jsonObject) {
-			Ingredient ingredient = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "base"));
-			Ingredient ingredient2 = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "addition"));
+			Ingredient ingredient = Ingredient.method_52177(JsonHelper.getObject(jsonObject, "base"));
+			Ingredient ingredient2 = Ingredient.method_52177(JsonHelper.getObject(jsonObject, "addition"));
 			ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
 			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack, StateService.INSTANCE);
 		}

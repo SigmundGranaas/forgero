@@ -60,8 +60,8 @@ public class SoulReapingHandler implements RunnableHandler {
 			if (ContainsFeatureCache.check(PropertyTargetCacheKey.of(construct, "SOUL_REAPING"))) {
 				SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
 				soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
-				entity.world.spawnEntity(soulEntity);
-				soulEntity.world.sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
+				entity.getWorld().spawnEntity(soulEntity);
+				soulEntity.getWorld().sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
 			} else if (ContainsFeatureCache.check(new PropertyTargetCacheKey(ContainerTargetPair.of(construct), "SOUL_BINDING"))) {
 				State state = construct;
 				if (construct instanceof SoulBindable bindable) {
@@ -69,13 +69,13 @@ public class SoulReapingHandler implements RunnableHandler {
 				}
 				if (state instanceof Composite comp) {
 					if (comp.has("forgero:soul-totem").isPresent()) {
-						entity.world.sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
+						entity.getWorld().sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
 						state = comp.removeUpgrade("forgero:soul-totem");
 					}
 				}
 				entity.getInventory().setStack(entity.getInventory().selectedSlot, service.convert(state).orElse(ItemStack.EMPTY));
 			} else if (hasSoulTotemInHand()) {
-				entity.world.sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
+				entity.getWorld().sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
 				ItemStack totemSack = getTotemStack();
 				totemSack.decrement(1);
 				State state = construct;

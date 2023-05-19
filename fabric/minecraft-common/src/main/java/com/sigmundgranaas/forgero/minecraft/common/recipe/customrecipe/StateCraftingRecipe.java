@@ -23,6 +23,7 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerialize
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
@@ -40,7 +41,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
+	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		if (super.matches(craftingInventory, world)) {
 			if (result().isPresent() && result().get() instanceof Composite result) {
 				boolean isSameMaterial = IntStream.range(0, craftingInventory.size())
@@ -65,7 +66,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		return Optional.empty();
 	}
 
-	private List<State> partsFromCraftingInventory(CraftingInventory craftingInventory) {
+	private List<State> partsFromCraftingInventory(RecipeInputInventory craftingInventory) {
 		List<ItemStack> ingredients = new ArrayList<>();
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
@@ -76,7 +77,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		return ingredients.stream().map(service::convert).flatMap(Optional::stream).toList();
 	}
 
-	private List<State> upgradesFromCraftingInventory(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+	private List<State> upgradesFromCraftingInventory(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
 		List<State> upgrades = new ArrayList<>();
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
@@ -92,7 +93,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
 		var target = service.convert(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();

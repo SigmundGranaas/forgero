@@ -62,6 +62,6 @@ public abstract class LivingEntityUndyingMixin {
 		this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 900, 1));
 		this.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
 		this.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0));
-		entity.world.sendEntityStatus(entity, (byte) 35);
+		entity.getWorld().sendEntityStatus(entity, (byte) 35);
 	}
 }

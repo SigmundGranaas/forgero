@@ -108,8 +108,8 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 		public static final Serializer INSTANCE = new Serializer();
 
 		public StateUpgradeRecipe read(Identifier identifier, JsonObject jsonObject) {
-			Ingredient ingredient = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "base"));
-			Ingredient ingredient2 = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "addition"));
+			Ingredient ingredient = Ingredient.method_52177(JsonHelper.getObject(jsonObject, "base"));
+			Ingredient ingredient2 = Ingredient.method_52177(JsonHelper.getObject(jsonObject, "addition"));
 			ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
 			return new StateUpgradeRecipe(StateService.INSTANCE, identifier, ingredient, ingredient2, itemStack);
 		}

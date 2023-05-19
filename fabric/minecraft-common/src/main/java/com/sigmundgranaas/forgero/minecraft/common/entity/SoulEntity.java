@@ -114,7 +114,7 @@ public class SoulEntity extends AnimalEntity implements Flutterer {
 
 	public void createSoulParticles(int amount) {
 		for (int i = 0; i < amount; i++) {
-			this.world.addParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getX() + this.random.nextGaussian() / 3, this.getY() + this.random.nextGaussian() / 3, this.getZ() + this.random.nextGaussian() / 3, 0, 0, 0);
+			this.getWorld().addParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getX() + this.random.nextGaussian() / 3, this.getY() + this.random.nextGaussian() / 3, this.getZ() + this.random.nextGaussian() / 3, 0, 0, 0);
 		}
 	}
 
@@ -132,7 +132,7 @@ public class SoulEntity extends AnimalEntity implements Flutterer {
 		if (itemStack.isOf(GLASS_BOTTLE)) {
 			createSoulParticles(30);
 			playSoulSound();
-			if (this.world.isClient) {
+			if (this.getWorld().isClient) {
 				return ActionResult.CONSUME;
 			}
 			if (!player.getAbilities().creativeMode) {
@@ -163,7 +163,7 @@ public class SoulEntity extends AnimalEntity implements Flutterer {
 	}
 
 	public boolean isInAir() {
-		return !this.onGround;
+		return !this.isOnGround();
 	}
 
 	@Nullable
