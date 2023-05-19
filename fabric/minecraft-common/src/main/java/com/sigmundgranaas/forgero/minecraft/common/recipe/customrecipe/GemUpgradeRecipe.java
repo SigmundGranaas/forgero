@@ -15,15 +15,15 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 
-public class GemUpgradeRecipe extends LegacySmithingRecipe {
+public class GemUpgradeRecipe implements SmithingRecipe {
 	public final Ingredient base;
 	public final Ingredient addition;
 	final ItemStack result;
@@ -31,7 +31,6 @@ public class GemUpgradeRecipe extends LegacySmithingRecipe {
 	private final StateService service;
 
 	public GemUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result, StateService service) {
-		super(id, base, addition, result);
 		this.id = id;
 		this.base = base;
 		this.addition = addition;

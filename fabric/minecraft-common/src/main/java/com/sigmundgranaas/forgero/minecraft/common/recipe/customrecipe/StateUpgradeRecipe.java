@@ -16,15 +16,15 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 
-public class StateUpgradeRecipe extends LegacySmithingRecipe {
+public class StateUpgradeRecipe implements SmithingRecipe {
 	public final Ingredient base;
 	public final Ingredient addition;
 	final ItemStack result;
@@ -32,7 +32,6 @@ public class StateUpgradeRecipe extends LegacySmithingRecipe {
 	private final Identifier id;
 
 	public StateUpgradeRecipe(StateService service, Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
-		super(id, base, addition, result);
 		this.service = service;
 		this.id = id;
 		this.base = base;
