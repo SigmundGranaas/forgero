@@ -38,18 +38,6 @@
         "value": 3.5
       },
       {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 4,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
-      },
-      {
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "ADDITION",
