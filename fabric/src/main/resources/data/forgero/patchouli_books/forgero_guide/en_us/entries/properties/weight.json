@@ -1,0 +1,35 @@
+{
+  "name": "Weight attribute",
+  "icon": "minecraft:gold_ingot",
+  "category": "forgero:property_category",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The weight of your tool in our mod influences your attack speed. This effect is enabled through the `weightReducesAttackSpeed` setting. The `weightAttackSpeedReductionScaler`, set to 50 by default, determines the degree of this reduction."
+    },
+    {
+      "type": "text",
+      "text": "For instance, a tool with 80% weight (100 being the maximum) decreases the attack speed by around 15%. If you adjust the `weightAttackSpeedReductionScaler` to 75, the reduction in attack speed increases to about 23%."
+    },
+    {
+      "type": "text",
+      "text": "Similarly, the weight attribute affects the mining speed when the `weightReducesMiningSpeed` configuration is active. The `weightMiningSpeedReductionScaler`, with a default value of 20, governs this effect."
+    },
+    {
+      "type": "text",
+      "text": "A tool with a weight of 70 results in a reduction in mining speed by around 6% at the default setting. If the `weightMiningSpeedReductionScaler` is modified to 40, the mining speed reduction amounts to approximately 12%."
+    },
+    {
+      "type": "text",
+      "text": "The weight attribute is part of the configuration of all tool part heads and materials, not just the 'sword blade schematic' or 'metal'. Depending on the configuration settings, the weight can be either added or multiplied."
+    },
+    {
+      "type": "text",
+      "text": "The total effect of the weight attribute on attack and mining speeds is only calculated after the entire tool or weapon is crafted, as all components, including the handle and any upgrades, contribute to the total weight. Currently, the weight attribute does not affect the tool's damage output."
+    },
+    {
+      "type": "text",
+      "text": "In essence, the weight attribute introduces a new layer of strategy to crafting, prompting players to carefully consider the trade-offs of different materials and configurations. The full impact of the weight attribute only becomes apparent after the tool is fully crafted, adding a level of strategic planning to your gameplay."
+    }
+  ]
+}

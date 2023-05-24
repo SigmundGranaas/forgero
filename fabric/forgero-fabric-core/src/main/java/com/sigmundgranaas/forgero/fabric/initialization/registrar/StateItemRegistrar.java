@@ -81,7 +81,15 @@ public class StateItemRegistrar implements Registrar {
 		 */
 		static String getMaterialName(State state) {
 			var elements = state.name().split(ELEMENT_SEPARATOR);
-			return (elements.length > 1) ? elements[0] : state.name();
+			if (elements.length > 1) {
+				if (elements[1].equals("schematic") || elements[1].equals("gem")) {
+					return elements[1];
+				} else {
+					return elements[0];
+				}
+			} else {
+				return state.name();
+			}
 		}
 
 		/**
