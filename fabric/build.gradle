@@ -18,7 +18,6 @@ archivesBaseName = "forgero-fabric"
 dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include project(':forgero-core')
 
@@ -31,7 +30,7 @@ dependencies {
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
 
-	include "net.devtech:arrp:0.6.7"
+	include "net.devtech:arrp:${project.aarp_version}"
 }
 
 subprojects {

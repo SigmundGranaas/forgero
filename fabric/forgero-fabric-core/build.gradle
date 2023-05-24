@@ -2,9 +2,15 @@ dependencies {
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation ("net.fabricmc:fabric-loader:${project.loader_version}")
 
-	modImplementation("net.devtech:arrp:0.6.7")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"){
+		exclude group: "net.fabricmc", module: "fabric-loader"
+	}
+
+	modImplementation("net.devtech:arrp:${project.aarp_version}"){
+		exclude group: "net.fabricmc", module: "fabric-loader"
+	}
 }
 
 sourceSets {
