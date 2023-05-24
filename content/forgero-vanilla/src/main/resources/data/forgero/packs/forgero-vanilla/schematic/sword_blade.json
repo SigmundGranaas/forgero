@@ -41,8 +41,7 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "TOOL_MATERIAL",
-        "tier": 1
+        "type": "TOOL_MATERIAL"
       }
     ]
   },
@@ -55,43 +54,6 @@
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 25
-      },
-      {
-        "id": "schematic-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -3.1
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
       }
     ]
   },

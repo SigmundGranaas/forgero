@@ -40,8 +40,7 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "TOOL_MATERIAL",
-        "tier": 1
+        "type": "TOOL_MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
@@ -49,8 +48,7 @@
           "UTILITY"
         ],
         "description": "scabbard",
-        "type": "SECONDARY_MATERIAL",
-        "tier": 1
+        "type": "SECONDARY_MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
@@ -58,8 +56,7 @@
           "OFFENSIVE"
         ],
         "description": "trinket",
-        "type": "LEATHER",
-        "tier": 1
+        "type": "LEATHER"
       }
     ]
   },
@@ -74,41 +71,32 @@
         "value": 75
       },
       {
-        "id": "schematic-rarity-composite",
+        "id": "sword_blade_schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
+        "id": "sword_blade_schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
+        "id": "mastercrafted_sword_blade_schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
+        "id": "mastercrafted_sword_blade_schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 1.5
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.9
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.15
       }
     ]
   },

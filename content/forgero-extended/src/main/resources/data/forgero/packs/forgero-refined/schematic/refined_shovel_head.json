@@ -63,29 +63,32 @@
         "value": 50
       },
       {
-        "id": "schematic-rarity-composite",
+        "id": "refined-schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.3
+        "value": 1.25
       },
       {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.3
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.65
-      },
-      {
-        "type": "WEIGHT",
+        "id": "refined-schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 1.25
+      },
+      {
+        "id": "refined-schematic-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.25
+      },
+      {
+        "id": "refined-schematic-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.25
       }
     ],
     "features": [

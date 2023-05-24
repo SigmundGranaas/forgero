@@ -1,6 +1,7 @@
 {
   "type": "HANDLE_SCHEMATIC",
   "name": "mastercrafted_handle-schematic",
+  "parent": "handle-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -73,29 +74,18 @@
         "value": 75
       },
       {
-        "id": "schematic-rarity-composite",
+        "id": "mastercrafted-schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
+        "id": "mastercrafted-schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.6
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 1.5
       }
     ]
   },

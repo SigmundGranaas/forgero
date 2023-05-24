@@ -1,6 +1,7 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
   "name": "mastercrafted_sword_guard-schematic",
+  "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -62,29 +63,25 @@
         "value": 75
       },
       {
-        "id": "schematic-rarity-composite",
+        "id": "mastercrafted-schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 1.5
       },
       {
+        "id": "mastercrafted-schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 1.5
       },
       {
+        "id": "mastercrafted-schematic-armor-composite",
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 1.5
       }
     ]
   },

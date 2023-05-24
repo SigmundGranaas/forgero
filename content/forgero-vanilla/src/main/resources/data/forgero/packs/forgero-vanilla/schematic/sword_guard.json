@@ -66,25 +66,28 @@
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.4
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.4
       },
       {
+        "id": "schematic-armor-composite",
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.4
       },
       {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.4
       }
     ]
   },
