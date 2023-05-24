@@ -35,19 +35,18 @@ dependencies {
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
 	// Patchouli compat, disabled until it's updated to 1.19.4
-//	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
+	//modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
-	modImplementation("net.devtech:arrp:0.6.7")
+	modImplementation("net.devtech:arrp:${project.aarp_version}")
 
 	//dynamiclights compat
-	modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
-	modImplementation "maven.modrinth:lambdynamiclights:${project.lambd_version}"
-	modImplementation("dev.lambdaurora:spruceui:${project.spruceui_version}")
+	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lambd_version}")
+	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
 	//better combat
-	modImplementation "maven.modrinth:better-combat:${project.better_combat_version}"
-	modImplementation "maven.modrinth:cloth-config:${project.cloth_config_version}"
-	modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
+	modCompileOnly("maven.modrinth:better-combat:${project.better_combat_version}")
+	//modImplementation "maven.modrinth:cloth-config:9.0.94+fabric"
+	//modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
 
 	//betterend&betternether
 	// modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
@@ -61,7 +60,7 @@ dependencies {
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	modImplementation "maven.modrinth:jei:13.1.0.9"
+	modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
@@ -119,13 +118,17 @@ dependencies {
 	//modImplementation "curse.maven:combatedit-385513:3869344"
 
 	//modImplementation 'com.ptsmods:devlogin:2.1'
+
+	modCompileOnlyApi ("net.fabricmc:fabric-loader:${project.loader_version}")
+
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+
 	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
 
 	// Mod Menu API
-	modApi "com.terraformersmc:modmenu:${this.modmenu_version}"
-	modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
+	modImplementation("com.terraformersmc:modmenu:${this.modmenu_version}")
+
 }
 
 sourceSets {
@@ -169,7 +172,7 @@ loom {
 			dependencies {
 				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
 				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
-				modRuntimeOnly "maven.modrinth:just-load:ob5o9Cf5"
+				modRuntimeOnly "maven.modrinth:just-load:${project.justload_version}"
 			}
 
 			client()

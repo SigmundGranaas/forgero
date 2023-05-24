@@ -63,28 +63,25 @@
         "value": 1.3
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.9
       },
       {
+        "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.8
+        "value": 1.9
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.45
-      },
-      {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.15
+        "value": 0.8
       }
     ]
   },

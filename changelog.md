@@ -7,6 +7,7 @@ you have backed up your save.**
 
 # Changelog
 
+* Added Bettenether compatability (JorisDeBeer)
 * Published new artifacts to Github Packages
 * Added new mod entrypoints
 * Added a new service based system for handling states

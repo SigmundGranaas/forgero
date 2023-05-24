@@ -3,6 +3,22 @@
   "parent": "tool_part_head_schematic",
   "resource_type": "ABSTRACT",
   "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.3
+      },
+      {
+        "id": "schematic-atack_speed-composite",
+        "type": "ATTACK_SPEED",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -1.5
+      }
+    ],
     "features": [
       {
         "type": "EFFECTIVE_BLOCKS",

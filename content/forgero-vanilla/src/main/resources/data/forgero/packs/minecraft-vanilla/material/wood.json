@@ -40,17 +40,11 @@
         "value": 2
       },
       {
-        "id": "wood-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
+        "id": "wood-attack_speed-composite",
+        "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.4,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
+        "value": 0
       },
       {
         "id": "wood-armor-composite",
@@ -65,13 +59,6 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 5
-      },
-      {
-        "id": "wood-attack-speed-composite",
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
       },
       {
         "id": "wood-rarity-upgrade",

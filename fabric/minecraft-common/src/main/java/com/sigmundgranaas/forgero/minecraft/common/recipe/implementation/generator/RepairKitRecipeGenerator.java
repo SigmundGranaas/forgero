@@ -3,24 +3,26 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.genera
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.util.Identifier;
 
 public class RepairKitRecipeGenerator implements RecipeGenerator {
 	private final RecipeTypes type = RecipeTypes.REPAIR_KIT_RECIPE;
 	private final State material;
+	private final StateService service;
 
 	private final TemplateGenerator generator;
 
-	public RepairKitRecipeGenerator(State material, TemplateGenerator generator) {
+	public RepairKitRecipeGenerator(State material, TemplateGenerator generator, StateService service) {
 		this.material = material;
 		this.generator = generator;
+		this.service = service;
 	}
 
 	@Override
@@ -44,6 +46,6 @@ public class RepairKitRecipeGenerator implements RecipeGenerator {
 
 	@Override
 	public boolean isValid() {
-		return ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier()) && ForgeroConfigurationLoader.configuration.enableRepairKits;
+		return service.find(material.identifier()).isPresent() && ForgeroConfigurationLoader.configuration.enableRepairKits;
 	}
 }

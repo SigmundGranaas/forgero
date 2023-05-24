@@ -40,19 +40,6 @@
         "value": 3.0
       },
       {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.3,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
-      },
-      {
         "id": "metal-armor-composite",
         "type": "ARMOR",
         "order": "COMPOSITE",

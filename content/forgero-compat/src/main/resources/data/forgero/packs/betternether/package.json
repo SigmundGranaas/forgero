@@ -1,0 +1,12 @@
+{
+  "name": "betternether-materials",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "minecraft",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "betternether"
+  ]
+}

@@ -35,19 +35,6 @@
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 1.8
-      },
-      {
-        "id": "wood-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
       }
     ]
   },
