@@ -24,6 +24,13 @@ repositories {
 	mavenLocal()
 }
 
+configurations {
+	modRuntimeOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
+	modCompileOnlyApi.exclude group: 'net.fabricmc', module: 'fabric-loader'
+	modCompileOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
+
+}
+
 dependencies {
 	runtimeOnly project(':content:forgero-vanilla')
 	runtimeOnly project(':content:forgero-extended')
@@ -34,19 +41,19 @@ dependencies {
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation "vazkii.patchouli:Patchouli:1.19.3-78-FABRIC"
+	modApi "vazkii.patchouli:Patchouli:1.19.3-78-FABRIC"
 
 	modImplementation("net.devtech:arrp:0.6.7")
 
 	//dynamiclights compat
-	modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
-	modImplementation "maven.modrinth:lambdynamiclights:${project.lambd_version}"
-	modImplementation("dev.lambdaurora:spruceui:${project.spruceui_version}")
+	modCompileOnlyApi "maven.modrinth:modmenu:${project.modmenu_version}"
+	modCompileOnlyApi "maven.modrinth:lambdynamiclights:${project.lambd_version}"
+	modCompileOnlyApi("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
 	//better combat
-	modImplementation "maven.modrinth:better-combat:1.6.1+1.19.3-fabric"
-	modImplementation "maven.modrinth:cloth-config:9.0.94+fabric"
-	modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
+	modCompileOnly "maven.modrinth:better-combat:1.6.1+1.19.3-fabric"
+	modCompileOnly "maven.modrinth:cloth-config:9.0.94+fabric"
+	modCompileOnly("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
 
 	//betterend&betternether
 	// modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
@@ -60,7 +67,7 @@ dependencies {
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	modImplementation "maven.modrinth:jei:J5TcglXt"
+	modRuntimeOnly "maven.modrinth:jei:J5TcglXt"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
@@ -119,11 +126,11 @@ dependencies {
 
 	//modImplementation 'com.ptsmods:devlogin:2.1'
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
+	modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modApi("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
 
 	// Mod Menu API
-	modApi "com.terraformersmc:modmenu:${this.modmenu_version}"
+	modCompileOnlyApi "com.terraformersmc:modmenu:${this.modmenu_version}"
 	modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 

@@ -1,10 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
@@ -14,11 +17,7 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-
-public class DynamicShovelItem extends ShovelItem implements StateItem {
+public class DynamicShovelItem extends ShovelItem implements ToolStateItem {
 	private final StateProvider DEFAULT;
 
 	public DynamicShovelItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
@@ -28,7 +27,7 @@ public class DynamicShovelItem extends ShovelItem implements StateItem {
 
 	@Override
 	public int getItemBarStep(ItemStack stack) {
-		return StateItem.super.getItemBarStep(stack);
+		return ToolStateItem.super.getItemBarStep(stack);
 	}
 
 	public int getItemBarColor(ItemStack stack) {

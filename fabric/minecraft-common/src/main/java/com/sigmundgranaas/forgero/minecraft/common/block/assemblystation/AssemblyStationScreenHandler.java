@@ -120,9 +120,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	public ItemStack quickMove(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(invSlot);
-		if (slot.hasStack()) {
+		if (slot.hasStack() && (this.compositeSlot.canInsert(slot.getStack()) || invSlot < this.inventory.size())) {
 			ItemStack originalStack = slot.getStack();
-			newStack = originalStack.copy();
+			newStack = originalStack;
 			if (invSlot < this.inventory.size()) {
 				if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
@@ -137,7 +137,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				slot.markDirty();
 			}
 		}
-
 		return newStack;
 	}
 
@@ -151,7 +150,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		compositeSlot.doneConstructing();
 		if (isEmpty && disassemblyHandler.isDisassembled(getItemsFromInventory())) {
 			onItemRemovedFromToolSlot();
-		} else {
+		} else if (!compositeInventory.isEmpty()) {
 			onItemAddedToToolSlot();
 		}
 	}
@@ -214,6 +213,11 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			this.resultInventory = craftingInventory;
 		}
 
+		@Override
+		public int getMaxItemCount() {
+			return 1;
+		}
+
 		public boolean isEmpty() {
 			return inventory.isEmpty();
 		}
@@ -232,7 +236,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 		@Override
 		public boolean canInsert(ItemStack stack) {
-			return doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(stack) instanceof EmptyHandler);
+			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(stack) instanceof EmptyHandler);
 		}
 
 		public void doneConstructing() {

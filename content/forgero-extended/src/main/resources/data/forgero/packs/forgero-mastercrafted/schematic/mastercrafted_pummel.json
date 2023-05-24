@@ -1,6 +1,7 @@
 {
   "type": "PUMMEL_SCHEMATIC",
   "name": "mastercrafted_pummel-schematic",
+  "parent": "pummel-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -46,23 +47,18 @@
         "value": 75
       },
       {
-        "id": "schematic-rarity-composite",
+        "id": "mastercrafted-schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
+        "id": "mastercrafted-schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
       }
     ]
   },

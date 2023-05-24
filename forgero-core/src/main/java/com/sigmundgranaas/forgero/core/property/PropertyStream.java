@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgero.core.property;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
@@ -7,12 +13,6 @@ import com.sigmundgranaas.forgero.core.property.passive.Static;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
-
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The property stream is a special stream for handling property specific operations.
@@ -62,8 +62,7 @@ public record PropertyStream(
 
 		return Stream.of(idMap.values(), nonIdAttributes)
 				.flatMap(Collection::stream)
-				.sorted(Attribute::compareTo)
-				.distinct();
+				.sorted(Attribute::compareTo);
 	}
 
 	public Stream<Attribute> getAttributes() {
