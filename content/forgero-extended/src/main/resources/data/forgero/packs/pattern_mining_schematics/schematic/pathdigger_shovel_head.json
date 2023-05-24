@@ -1,13 +1,13 @@
 {
-  "type": "PICKAXE_HEAD_SCHEMATIC",
-  "name": "path_mining_pickaxe_head-schematic",
-  "parent": "pickaxe_head_base",
+  "type": "SHOVEL_HEAD_SCHEMATIC",
+  "name": "path_digger_shovel_head-schematic",
+  "parent": "shovel_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "PICKAXE_HEAD",
+    "type": "SHOVEL_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -19,7 +19,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 3
+            "amount": 2
           }
         ]
       }
@@ -58,54 +58,39 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 66
+        "category": "LOCAL",
+        "value": 45
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.27
+        "value": 1.24
       },
       {
+        "id": "schematic-mining_speed-composite",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.9
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.8
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.2
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.9
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.3
       }
     ],
     "features": [
       {
         "type": "BLOCK_BREAKING_PATTERN",
         "pattern": [
-          "X",
-          "x"
+          "xxx",
+          "xxx",
+          "xxx"
         ]
       }
     ]
