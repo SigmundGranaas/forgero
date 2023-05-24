@@ -1,13 +1,13 @@
 {
-  "type": "SHOVEL_HEAD_SCHEMATIC",
-  "name": "grave_digger_head-schematic",
-  "parent": "shovel_head_base",
+  "type": "PICKAXE_HEAD_SCHEMATIC",
+  "name": "ore_miner_pickaxe_head-schematic",
+  "parent": "pickaxe_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SHOVEL_HEAD",
+    "type": "PICKAXE_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -19,7 +19,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 2
+            "amount": 3
           }
         ]
       }
@@ -58,55 +58,45 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "operation": "ADDITION",
         "category": "LOCAL",
-        "value": 35
+        "operation": "ADDITION",
+        "value": 66
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.25
+        "value": 1.27
       },
       {
+        "id": "schematic-mining_speed-composite",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.0
+        "operation": "MULTIPLICATION",
+        "value": 0.9
       },
       {
-        "type": "ATTACK_DAMAGE",
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.7
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.8
       }
     ],
     "features": [
       {
         "type": "VEIN_MINING",
-        "value": 1,
         "tags": [
-          "forgero:vein_mining_dirt"
-        ]
+          "forgero:vein_mining_ores"
+        ],
+        "value": 8
       }
     ]
   },
   "custom_data": {
     "ingredient_count": {
-      "value": 2,
+      "value": 3,
       "context": "LOCAL"
     }
   }

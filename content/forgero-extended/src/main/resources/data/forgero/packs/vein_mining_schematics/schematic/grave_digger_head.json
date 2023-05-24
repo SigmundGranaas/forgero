@@ -1,12 +1,13 @@
 {
-  "type": "BINDING_SCHEMATIC",
-  "name": "spiked_binding-schematic",
+  "type": "SHOVEL_HEAD_SCHEMATIC",
+  "name": "grave_digger_head-schematic",
+  "parent": "shovel_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "TOOL_BINDING",
+    "type": "SHOVEL_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -57,40 +58,39 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 20
+        "category": "LOCAL",
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 1.25
       },
       {
+        "id": "schematic-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "order": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.9
+      },
+      {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
-      },
+        "value": 0.8
+      }
+    ],
+    "features": [
       {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -0.2
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.2
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.2
+        "type": "VEIN_MINING",
+        "value": 3,
+        "tags": [
+          "forgero:vein_mining_dirt"
+        ]
       }
     ]
   },

@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
-
 import java.util.List;
+
+import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
 /**
  * Base interface for properties which will change attributes, create passive buffs and enabling special actions

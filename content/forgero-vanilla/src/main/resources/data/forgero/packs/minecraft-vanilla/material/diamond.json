@@ -38,18 +38,6 @@
         "value": 3.5
       },
       {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 4,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
-      },
-      {
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "ADDITION",
@@ -73,6 +61,13 @@
         "operation": "ADDITION",
         "category": "ALL",
         "value": 40
+      },
+      {
+        "type": "WEIGHT",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 3
       },
       {
         "type": "MINING_SPEED",

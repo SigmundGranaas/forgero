@@ -40,8 +40,7 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "MATERIAL",
-        "tier": 1
+        "type": "MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
@@ -49,12 +48,8 @@
           "OFFENSIVE"
         ],
         "description": "trinket",
-        "type": "TRINKET",
-        "tier": 1
+        "type": "TRINKET"
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -75,28 +70,25 @@
         "value": 1.25
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.9
       },
       {
+        "id": "serrated-schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.6
+        "value": 1.2
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.7
-      },
-      {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 1.2
       }
     ],
     "passive": [
