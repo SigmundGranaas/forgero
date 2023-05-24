@@ -10,12 +10,9 @@ import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DataPipeLin
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DisassemblyReloader;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.LootConditionReloadListener;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.CommandRegistrar;
+import com.sigmundgranaas.forgero.fabric.initialization.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
-import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
-import com.sigmundgranaas.forgero.fabric.item.DynamicItems;
-import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
-import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.AllPartToAllSchematicsGenerator;
@@ -25,24 +22,14 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
-import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
-import com.sigmundgranaas.forgero.minecraft.common.item.Attributes;
-import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
-import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
-import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.InvalidIdentifierException;
 
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 
@@ -95,7 +82,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 * @param stateService The state service provides services related to Forgero states.
 	 */
 	private void registerItems(StateService stateService) {
-		new StateItemRegistrar(stateService).registerItem(Registry.ITEM);
+		new StateItemRegistrar(stateService).registerItem(Registries.ITEM);
 		new DynamicItemsRegistrar().register();
 	}
 

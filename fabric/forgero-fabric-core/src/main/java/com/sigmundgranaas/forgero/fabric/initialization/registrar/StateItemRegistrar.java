@@ -20,9 +20,10 @@ import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Registrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
-import net.minecraft.util.registry.Registry;
 
 /**
  * A class to handle registration of states.
@@ -54,7 +55,7 @@ public class StateItemRegistrar implements Registrar {
 			var converter = StateToItemConverter.of(state);
 			Identifier identifier = converter.id();
 			var item = converter.convert();
-			Registry.register(Registry.ITEM, identifier, item);
+			Registry.register(Registries.ITEM, identifier, item);
 		} catch (InvalidIdentifierException e) {
 			Forgero.LOGGER.error("Invalid identifier: {}", state.get().identifier());
 			Forgero.LOGGER.error(e);

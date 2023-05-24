@@ -149,7 +149,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 	 * RecipeFilter implementation that keeps all variants of schematic recipes.
 	 */
 	public static class AllVariantFilter implements RecipeFilter {
-		@Override
+
 		/**
 		 * Checks whether a ConstructedState object should be kept.
 		 * All variants of schematic recipes are kept.
@@ -157,6 +157,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		 * @param state The ConstructedState object.
 		 * @return true, as all objects should be kept.
 		 */
+		@Override
 		public boolean shouldKeep(ConstructedState state) {
 			return true;
 		}
