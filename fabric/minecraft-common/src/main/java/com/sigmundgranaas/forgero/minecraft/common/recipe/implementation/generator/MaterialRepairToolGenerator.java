@@ -39,7 +39,7 @@ public class MaterialRepairToolGenerator implements RecipeGenerator {
 		template.add("ingredients", ingredients);
 
 		template.getAsJsonObject("result").addProperty("item", "forgero:" + material.name() + "_repair_kit");
-		Identifier id = new Identifier(Forgero.NAMESPACE, material.name() + "_tool_repair_kit_recipe");
+		Identifier id = new Identifier(Forgero.NAMESPACE, material.name() + "_tool_basic_repair_recipe");
 		return RecipeWrapper.of(id, template, type);
 	}
 

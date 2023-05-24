@@ -1,0 +1,40 @@
+{
+  "type": "WOOD",
+  "name": "nether_mushroom",
+  "parent": "wood",
+  "container": {
+    "type": "HOST",
+    "id": "betternether:nether_mushroom_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite",
+        "type": "RARITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 25
+      },
+      {
+        "id": "wood-durability-composite",
+        "type": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 30
+      },
+      {
+        "id": "wood-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      }
+    ],
+    "passive": [],
+    "active": []
+  },
+  "palette": {
+    "name": "nether_mushroom"
+  }
+}

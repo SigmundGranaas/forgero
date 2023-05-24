@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.loot.function;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions.CONDITION_LOOT_FUNCTION_TYPE;
+import static com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar.CONDITION_LOOT_FUNCTION_TYPE;
 
 import java.util.Comparator;
 
