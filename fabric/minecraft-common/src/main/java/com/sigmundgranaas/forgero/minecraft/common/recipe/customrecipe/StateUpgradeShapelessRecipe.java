@@ -1,18 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.Upgradeable;
-import com.sigmundgranaas.forgero.core.state.composite.ConstructedSchematicPart;
-import com.sigmundgranaas.forgero.core.util.Utils;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
-import com.sigmundgranaas.forgero.minecraft.common.utils.RegistryUtils;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
@@ -22,13 +22,6 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	private final StateService service;
 
@@ -37,25 +30,11 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 		this.service = service;
 	}
 
-	private List<State> partsFromCraftingInventory(CraftingInventory craftingInventory) {
-		List<ItemStack> ingredients = new ArrayList<>();
-		for (int i = 0; i < craftingInventory.size(); i++) {
-			var stack = craftingInventory.getStack(i);
-			if (this.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).anyMatch(ingredient -> ingredient.test(stack))) {
-				int finalI = i;
-				if (ingredients.stream().noneMatch(item -> item.isOf(craftingInventory.getStack(finalI).getItem()))) {
-					ingredients.add(craftingInventory.getStack(i));
-				}
-			}
-		}
-		return ingredients.stream().map(service::convert).flatMap(Optional::stream).toList();
-	}
-
-	private Optional<State> findUpgrade(Inventory inventory){
+	private Optional<State> findUpgrade(Inventory inventory) {
 		for (int i = 0; i < inventory.size(); i++) {
 			ItemStack stack = inventory.getStack(i);
 			var state = service.convert(stack);
-			if(state.isPresent() && !isSameStateShallow(stack, getOutput())){
+			if (state.isPresent() && !isSameStateShallow(stack, getOutput())) {
 				return state;
 			}
 		}
@@ -63,18 +42,19 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	}
 
 
-	private boolean isSameStateShallow(ItemStack reference, ItemStack comparator){
+	private boolean isSameStateShallow(ItemStack reference, ItemStack comparator) {
 		return service.convert(reference).map(Identifiable::identifier).orElse("Missing").equals(service.convert(comparator).map(Identifiable::identifier).orElse(EMPTY_IDENTIFIER));
 	}
 
-	private Optional<State> findRoot(Inventory inventory){
+	private Optional<State> findRoot(Inventory inventory) {
 		return findRootIndex(inventory).map(inventory::getStack).flatMap(service::convert);
 	}
-	private Optional<Integer> findRootIndex(Inventory inventory){
+
+	private Optional<Integer> findRootIndex(Inventory inventory) {
 		for (int i = 0; i < inventory.size(); i++) {
 			ItemStack stack = inventory.getStack(i);
 			var state = service.convert(stack);
-			if(state.isPresent() && isSameStateShallow(stack, getOutput())){
+			if (state.isPresent() && isSameStateShallow(stack, getOutput())) {
 				return Optional.of(i);
 			}
 		}
@@ -86,10 +66,10 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 		var originStateOpt = findRoot(craftingInventory);
 		var upgradeOpt = findUpgrade(craftingInventory);
 		var originIndex = findRootIndex(craftingInventory);
-		if (originStateOpt.isPresent() && upgradeOpt.isPresent() &&  originIndex.isPresent() && originStateOpt.get() instanceof Composite state) {
+		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originIndex.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
 			var output = getOutput().copy();
-			if(craftingInventory.getStack(originIndex.get()).hasNbt()){
+			if (craftingInventory.getStack(originIndex.get()).hasNbt()) {
 				output.setNbt(craftingInventory.getStack(originIndex.get()).getOrCreateNbt().copy());
 			}
 			output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));

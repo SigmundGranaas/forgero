@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgerofabric.testutil;
 
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+
+import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
+
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -13,12 +19,6 @@ import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
-
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
 public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements Supplier<Boolean> {
 
@@ -79,6 +79,15 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 
 		Item outcome = itemFromString(target);
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
+	}
+
+	public static RecipeTester<CraftingInventory, CraftingRecipe> craftingTableUpgrade(String target, String upgrade, TestContext context) {
+		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+		inventory.setStack(0, new ItemStack(itemFromString(target)));
+		inventory.setStack(1, new ItemStack(itemFromString(upgrade)));
+
+		Item outcome = itemFromString(target);
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
 	}
 
 	public Optional<ItemStack> craft() {
