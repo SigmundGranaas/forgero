@@ -1,6 +1,7 @@
 {
   "name": "spiked_binding-schematic",
   "parent": "binding-schematic",
+  "type": "BINDING_SCHEMATIC",
   "container": {
     "type": "CREATE",
     "id": "this"
