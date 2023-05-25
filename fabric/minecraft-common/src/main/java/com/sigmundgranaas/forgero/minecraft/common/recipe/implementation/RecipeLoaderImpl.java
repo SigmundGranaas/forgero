@@ -48,6 +48,8 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
 			recipes.put(RecipeTypes.ANY_PART_TO_STONE, getRecipeAsJson(recipeFolderPath + "/wood_to_stone_upgrade.json"));
 			recipes.put(RecipeTypes.PART_SMELTING_RECIPE, getRecipeAsJson(recipeFolderPath + "/part_smelting_recipe.json"));
 			recipes.put(RecipeTypes.PART_BLASTING_RECIPE, getRecipeAsJson(recipeFolderPath + "/part_blasting_recipe.json"));
+			recipes.put(RecipeTypes.STATE_UPGRADE_CRAFTING_TABLE_RECIPE, getRecipeAsJson(recipeFolderPath + "/state_upgrade_crafting_table_recipe.json"));
+
 
 			return recipes;
 		} catch (NullPointerException | JsonIOException e) {
