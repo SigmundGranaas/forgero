@@ -7,6 +7,7 @@ you have backed up your save.**
 
 # Changelog
 
+* Added toggleable support for performing upgrades in the crafting table
 * Added Bettenether compatability (JorisDeBeer)
 * Published new artifacts to Github Packages
 * Added new mod entrypoints
