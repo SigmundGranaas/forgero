@@ -21,21 +21,24 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+
+import org.spongepowered.asm.mixin.Dynamic;
 
 public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public StateUpgradeShapelessRecipe(ShapelessRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(), CraftingRecipeCategory.EQUIPMENT, recipe.getOutput(), recipe.getIngredients());
+		super(recipe.getId(), recipe.getGroup(), CraftingRecipeCategory.EQUIPMENT, recipe.getOutput(null), recipe.getIngredients());
 		this.service = service;
 	}
 
-	private Optional<State> findUpgrade(Inventory inventory) {
+	private Optional<State> findUpgrade(Inventory inventory, DynamicRegistryManager manager) {
 		for (int i = 0; i < inventory.size(); i++) {
 			ItemStack stack = inventory.getStack(i);
 			var state = service.convert(stack);
-			if (state.isPresent() && !isSameStateShallow(stack, getOutput())) {
+			if (state.isPresent() && !isSameStateShallow(stack, getOutput(manager))) {
 				return state;
 			}
 		}
@@ -47,15 +50,15 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 		return service.convert(reference).map(Identifiable::identifier).orElse("Missing").equals(service.convert(comparator).map(Identifiable::identifier).orElse(EMPTY_IDENTIFIER));
 	}
 
-	private Optional<State> findRoot(Inventory inventory) {
-		return findRootIndex(inventory).map(inventory::getStack).flatMap(service::convert);
+	private Optional<State> findRoot(Inventory inventory, DynamicRegistryManager manager) {
+		return findRootIndex(inventory, manager).map(inventory::getStack).flatMap(service::convert);
 	}
 
-	private Optional<Integer> findRootIndex(Inventory inventory) {
+	private Optional<Integer> findRootIndex(Inventory inventory, DynamicRegistryManager manager) {
 		for (int i = 0; i < inventory.size(); i++) {
 			ItemStack stack = inventory.getStack(i);
 			var state = service.convert(stack);
-			if (state.isPresent() && isSameStateShallow(stack, getOutput())) {
+			if (state.isPresent() && isSameStateShallow(stack, getOutput(manager))) {
 				return Optional.of(i);
 			}
 		}
@@ -63,20 +66,20 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
-		var originStateOpt = findRoot(craftingInventory);
-		var upgradeOpt = findUpgrade(craftingInventory);
-		var originIndex = findRootIndex(craftingInventory);
+	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager manager) {
+		var originStateOpt = findRoot(craftingInventory, manager);
+		var upgradeOpt = findUpgrade(craftingInventory, manager);
+		var originIndex = findRootIndex(craftingInventory, manager);
 		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originIndex.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
-			var output = getOutput().copy();
+			var output = getOutput(manager).copy();
 			if (craftingInventory.getStack(originIndex.get()).hasNbt()) {
 				output.setNbt(craftingInventory.getStack(originIndex.get()).getOrCreateNbt().copy());
 			}
 			output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
 			return output;
 		}
-		return getOutput().copy();
+		return getOutput(manager).copy();
 	}
 
 	@Override
