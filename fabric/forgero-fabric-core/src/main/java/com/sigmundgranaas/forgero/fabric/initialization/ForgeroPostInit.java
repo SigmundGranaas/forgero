@@ -1,203 +1,70 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
-import static net.minecraft.util.registry.Registry.ITEM;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.condition.Conditions;
-import com.sigmundgranaas.forgero.core.condition.LootCondition;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
-import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConditionData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.LootEntryData;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
-import com.sigmundgranaas.forgero.fabric.command.CommandRegistry;
-import com.sigmundgranaas.forgero.fabric.item.DynamicItems;
-import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
-import com.sigmundgranaas.forgero.fabric.loot.TreasureInjector;
+import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DataPipeLineReloader;
+import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DisassemblyReloader;
+import com.sigmundgranaas.forgero.fabric.initialization.datareloader.LootConditionReloadListener;
+import com.sigmundgranaas.forgero.fabric.initialization.registrar.CommandRegistrar;
+import com.sigmundgranaas.forgero.fabric.initialization.registrar.DynamicItemsRegistrar;
+import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegistrar;
+import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.AllPartToAllSchematicsGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
-import com.sigmundgranaas.forgero.minecraft.common.item.Attributes;
-import com.sigmundgranaas.forgero.minecraft.common.loot.SingleLootEntry;
-import com.sigmundgranaas.forgero.minecraft.common.loot.function.LootFunctions;
-import com.sigmundgranaas.forgero.minecraft.common.resources.DisassemblyRecipeLoader;
+import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
+import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.resource.ResourceManager;
+
 import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.ModMetadata;
 
+/**
+ * The ForgeroPostInitialization class handles the post-initialization phase of the Forgero mod.
+ * This phase involves registering various game elements such as blocks, items, commands, and data reload listeners.
+ * <p>
+ * Post-initialization is typically used for actions that must occur after all states have been loaded into Forgero,
+ * such as cross-mod integrations or actions that need complete game data like registering recipes.
+ * <p>
+ * This class implements the ForgeroInitializedEntryPoint interface, which defines the contract for
+ * the Forgero mod's post-initialization phase, which supplies a StateService object that can be used to interact with Forgero's States.
+ */
 public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
 
+	/**
+	 * The onInitialized method is called after all mods have been loaded.
+	 * This method initiates the registration of various game elements.
+	 *
+	 * @param stateService The state service provides services related to game states.
+	 */
 	@Override
-	public void onInitialized(StateService service) {
+	public void onInitialized(StateService stateService) {
 		registerBlocks();
-		registerStates(service);
-		DynamicItems.registerDynamicItems();
-		registerTreasure();
+		registerItems(stateService);
+		registerTreasureLoot();
 		registerCommands();
-		LootFunctions.register();
-		Attributes.register();
-		disassemblyReloader();
-
-		dataReloader();
-		lootConditionReloader();
-		lootInjectionReloader();
-
-
-		registerRecipes();
-		registerAARPRecipes(service);
-	}
-
-	private void registerTreasure() {
-		TreasureInjector.getInstance().registerLoot();
-	}
-
-	private void registerCommands() {
-		new CommandRegistry().registerCommand();
-	}
-
-	private void registerStates(StateService service) {
-		var sortingMap = new HashMap<String, Integer>();
-
-		service.all().stream().map(Supplier::get)
-				.filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL)).forEach(state -> sortingMap.compute(materialName(state), (key, value) -> value == null || rarity(state) > value ? rarity(state) : value));
-
-		ForgeroStateRegistry.CREATE_STATES.stream()
-				.filter(state -> !ITEM.containsId(new Identifier(ForgeroStateRegistry.STATE_TO_CONTAINER.get(state.get().identifier()))))
-				.filter(state -> !ITEM.containsId(new Identifier(state.get().identifier())))
-				.sorted((element1, element2) -> compareStates(element1.get(), element2.get(), sortingMap))
-				.forEach(state -> {
-					try {
-						var converter = StateToItemConverter.of(state);
-						Identifier identifier = converter.id();
-						var item = converter.convert();
-						Registry.register(ITEM, identifier, item);
-					} catch (InvalidIdentifierException e) {
-						LOGGER.error("invalid identifier: {}", state.get().identifier());
-						LOGGER.error(e);
-					}
-				});
-	}
-
-	private void dataReloader() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public void reload(ResourceManager manager) {
-				var config = ForgeroConfigurationLoader.load();
-				Set<String> availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
-				PipelineBuilder.builder()
-						.register(() -> config)
-						.register(FabricPackFinder.supplier())
-						.state(ForgeroStateRegistry.stateListener())
-						.register(availableDependencies)
-						.silent()
-						.build()
-						.execute();
-			}
-
-			@Override
-			public Identifier getFabricId() {
-				return new Identifier(ForgeroInitializer.MOD_NAMESPACE, "data");
-			}
-		});
-	}
-
-	private void lootConditionReloader() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public void reload(ResourceManager manager) {
-				Conditions.INSTANCE.refresh();
-				Gson gson = new Gson();
-				for (Identifier res : manager.findResources("conditions", path -> path.endsWith(".json"))) {
-					try (InputStream stream = manager.getResource(res).getInputStream()) {
-						ConditionData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), ConditionData.class);
-						LootCondition.of(data).ifPresent(Conditions.INSTANCE::register);
-					} catch (Exception e) {
-						Forgero.LOGGER.error(e);
-					}
-				}
-			}
-
-			@Override
-			public Identifier getFabricId() {
-				return new Identifier(Forgero.NAMESPACE, "loot_condition");
-			}
-		});
-	}
-
-	private void lootInjectionReloader() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public void reload(ResourceManager manager) {
-				Gson gson = new Gson();
-				TreasureInjector injector = TreasureInjector.getInstance();
-				for (Identifier res : manager.findResources("forgero_loot", path -> path.endsWith(".json"))) {
-					try (InputStream stream = manager.getResource(res).getInputStream()) {
-						LootEntryData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), LootEntryData.class);
-						injector.registerEntry(data.id(), SingleLootEntry.of(data));
-					} catch (Exception e) {
-						Forgero.LOGGER.error(e);
-					}
-				}
-				TreasureInjector.getInstance().registerDynamicLoot();
-			}
-
-			@Override
-			public Identifier getFabricId() {
-				return ResourceReloadListenerKeys.LOOT_TABLES;
-			}
-		});
-	}
-
-	private void disassemblyReloader() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public void reload(ResourceManager manager) {
-				DisassemblyRecipeLoader.reload(manager);
-			}
-
-			@Override
-			public Identifier getFabricId() {
-				return new Identifier(Forgero.NAMESPACE, "disassembly");
-			}
-		});
+		registerLootFunctions();
+		registerItemAttributes();
+		registerDisassemblyReloadListener();
+		registerDataReloadListener();
+		registerLootConditionReloadListener();
+		registerRecipeSerializers();
+		registerAARPRecipes(stateService);
 	}
 
 	private void registerBlocks() {
@@ -206,12 +73,91 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
 	}
 
+	/**
+	 * The registerItems method registers the items defined in the mod.
+	 * It uses the StateItemRegistrar class to handle the registration.
+	 * <p>
+	 * Dynamic items are those whose are loaded based on different settings or configurations
+	 *
+	 * @param stateService The state service provides services related to Forgero states.
+	 */
+	private void registerItems(StateService stateService) {
+		new StateItemRegistrar(stateService).registerItem(Registry.ITEM);
+		new DynamicItemsRegistrar().register();
+	}
+
+	/**
+	 * The registerTreasureLoot method registers treasure loot injection for the mod.
+	 */
+	private void registerTreasureLoot() {
+		TreasureLootRegistrar.getInstance().register();
+	}
+
+	/**
+	 * The registerCommands method registers the commands used by the mod.
+	 * Commands provide ways for players to create some default Forgero structures to get started with the mod.
+	 */
+	private void registerCommands() {
+		new CommandRegistrar().register();
+	}
+
+	/**
+	 * The registerLootFunctions method registers the loot functions used by the mod.
+	 * The Loot functions alter the state of looted Forgero items to give them special conditions or levels
+	 */
+	private void registerLootFunctions() {
+		new LootFunctionRegistrar().register();
+	}
+
+	/**
+	 * The registerItemAttributes method registers the entity attributes used in the mod.
+	 */
+	private void registerItemAttributes() {
+		new AttributesRegistrar().register();
+	}
+
+	/**
+	 * The registerDisassemblyReloadListener method registers a reload listener for disassembly station recipes.
+	 */
+	private void registerDisassemblyReloadListener() {
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DisassemblyReloader());
+	}
+
+	/**
+	 * The registerDataReloadListener method registers a reload listener for data the data pipeline to reload the Foregero pack configuration to update states.
+	 */
+	private void registerDataReloadListener() {
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DataPipeLineReloader());
+	}
+
+	/**
+	 * The registerLootConditionReloadListener method registers a reload listener for Conditions that can be applied to items
+	 */
+	private void registerLootConditionReloadListener() {
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new LootConditionReloadListener());
+	}
+
+	/**
+	 * The registerRecipeSerializers registers recipe serializers for the mod.
+	 * Recipe serializers are needed for all the different recipes used to craft Forgero tools and parts
+	 */
+	private void registerRecipeSerializers() {
+		RecipeRegistry.INSTANCE.registerRecipeSerializers();
+	}
+
+
+	/**
+	 * The registerAarpRecipes method registers AARP recipes for the mod.
+	 * These recipes are handled by AARP as a dynamic resource pack
+	 *
+	 * @param service The state service provides services related to game states.
+	 */
 	private void registerAARPRecipes(StateService service) {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
-			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service));
+			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
 		} else {
-			ARRPGenerator.register(() -> new PartToSchematicGenerator(service));
+			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.BaseVariantFilter()));
 		}
 
 		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
@@ -219,42 +165,4 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		ARRPGenerator.register(() -> new PartTypeTagGenerator(service));
 		ARRPGenerator.generate(service);
 	}
-
-	private void registerRecipes() {
-		RecipeRegistry.INSTANCE.registerRecipeSerializers();
-	}
-
-
-	private int getOrderingFromState(Map<String, Integer> map, State state) {
-		var name = materialName(state);
-		int rarity = (int) state.stream().applyAttribute(AttributeType.RARITY);
-		return map.getOrDefault(name, rarity);
-	}
-
-	private String materialName(State state) {
-		var elements = state.name().split(ELEMENT_SEPARATOR);
-		if (elements.length > 1) {
-			return elements[0];
-		} else {
-			return state.name();
-		}
-	}
-
-	private int compareStates(State element1, State element2, Map<String, Integer> map) {
-		int elementOrdering = getOrderingFromState(map, element1) - getOrderingFromState(map, element2);
-		int nameOrdering = materialName(element1).compareTo(materialName(element2));
-
-		if (elementOrdering != 0) {
-			return elementOrdering;
-		} else if (nameOrdering != 0) {
-			return nameOrdering;
-		} else {
-			return rarity(element1) - rarity(element2);
-		}
-	}
-
-	private int rarity(State state) {
-		return (int) state.stream().applyAttribute(AttributeType.RARITY);
-	}
-
 }

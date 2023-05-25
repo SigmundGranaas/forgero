@@ -63,35 +63,32 @@
         "value": 75
       },
       {
-        "id": "schematic-rarity-composite",
+        "id": "mastercrafted-schematic-rarity-composite",
         "type": "RARITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 1.5
       },
       {
+        "id": "mastercrafted-schematic-mining_speed-composite",
         "type": "MINING_SPEED",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
+        "id": "mastercrafted-schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
+        "id": "mastercrafted-schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.6
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 1.5
       }
     ]
   },

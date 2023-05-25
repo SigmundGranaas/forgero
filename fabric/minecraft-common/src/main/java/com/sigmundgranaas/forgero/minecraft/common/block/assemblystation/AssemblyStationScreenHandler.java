@@ -133,7 +133,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				slot.markDirty();
 			}
 		}
-
 		return newStack;
 	}
 
@@ -147,7 +146,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		compositeSlot.doneConstructing();
 		if (isEmpty && disassemblyHandler.isDisassembled(getItemsFromInventory())) {
 			onItemRemovedFromToolSlot();
-		} else {
+		} else if (!compositeInventory.isEmpty()) {
 			onItemAddedToToolSlot();
 		}
 	}
@@ -210,6 +209,11 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			this.resultInventory = craftingInventory;
 		}
 
+		@Override
+		public int getMaxItemCount() {
+			return 1;
+		}
+
 		public boolean isEmpty() {
 			return inventory.isEmpty();
 		}
@@ -228,7 +232,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 		@Override
 		public boolean canInsert(ItemStack stack) {
-			return doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(stack) instanceof EmptyHandler);
+			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(stack) instanceof EmptyHandler);
 		}
 
 		public void doneConstructing() {

@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 
@@ -16,7 +15,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
-public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeItem, State, StateItem {
+public class DynamicPickaxeItem extends PickaxeItem implements ToolStateItem {
 	private final StateProvider DEFAULT;
 
 	public DynamicPickaxeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings, StateProvider defaultState) {
@@ -27,7 +26,7 @@ public class DynamicPickaxeItem extends PickaxeItem implements DynamicAttributeI
 
 	@Override
 	public int getItemBarStep(ItemStack stack) {
-		return StateItem.super.getItemBarStep(stack);
+		return ToolStateItem.super.getItemBarStep(stack);
 	}
 
 	public int getItemBarColor(ItemStack stack) {

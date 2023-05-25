@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.Attributes.*;
+import static com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar.*;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

@@ -10,6 +10,8 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
+import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference.DifferenceHelper;
 import com.sigmundgranaas.forgero.minecraft.common.utils.Text;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +63,7 @@ public class AttributeWriterHelper extends BaseWriter {
 
 	public MutableText writeBaseNumber(Attribute attribute) {
 		float value = attribute.leveledValue();
-		if (attribute.getAttributeType().equals(AttackSpeed.KEY)) {
+		if (attribute.getAttributeType().equals(AttackSpeed.KEY) && isPartHead(container)) {
 			value = 4 + value;
 		}
 
@@ -70,9 +72,13 @@ public class AttributeWriterHelper extends BaseWriter {
 				.append(number(value));
 	}
 
+	private boolean isPartHead(Object o) {
+		return o instanceof Matchable matchable && (matchable.test(Type.SWORD_BLADE) || matchable.test(Type.TOOL_PART_HEAD));
+	}
+
 	public MutableText writeBaseNumber(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute) {
 		float value = attribute.asFloat();
-		if (attribute.key().equals(AttackSpeed.KEY)) {
+		if (attribute.key().equals(AttackSpeed.KEY) && isPartHead(container)) {
 			value = 4 + value;
 		}
 
