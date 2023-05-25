@@ -40,7 +40,7 @@ public class RecipeTest {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testCraftPickaxeWithBinding(TestContext context) {
-		var test = RecipeTester.ofTool("oak-pickaxe_head", "oak_binding", "oak-handle", "oak-pickaxe", context);
+		var test = RecipeTester.ofTool("oak-pickaxe_head", "oak-binding", "oak-handle", "oak-pickaxe", context);
 		assertTrue(test, "unable to craft oak pickaxe with binding");
 		context.complete();
 	}
