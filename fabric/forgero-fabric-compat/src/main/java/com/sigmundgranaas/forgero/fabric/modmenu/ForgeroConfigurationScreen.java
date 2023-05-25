@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationEntry;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationListWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.OptionEntryFactory;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -41,14 +42,14 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		// Render background texture with vOffset -100 to match Mod Menu's vOffset
-		this.renderBackground(matrices);
-		this.controlsList.render(matrices, mouseX, mouseY, delta);
+		this.renderBackground(context);
+		this.controlsList.render(context, mouseX, mouseY, delta);
 
-		drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
+		//drawCenteredTextWithShadow(context, this.textRenderer, this.title, this.width / 2, 8, 16777215);
 
-		super.render(matrices, mouseX, mouseY, delta);
+		super.render(context, mouseX, mouseY, delta);
 	}
 
 

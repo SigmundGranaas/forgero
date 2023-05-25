@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,7 +38,7 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		this.type = type;
 	}
 
-	public static RecipeTester<CraftingInventory, CraftingRecipe> ofTool(String head, String handle, String outCome, TestContext context) {
+	public static RecipeTester<RecipeInputInventory, CraftingRecipe> ofTool(String head, String handle, String outCome, TestContext context) {
 		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
 		inventory.setStack(1, new ItemStack(itemFromString(head)));
 		inventory.setStack(3, new ItemStack(itemFromString(handle)));
@@ -54,7 +55,7 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
         return item;
     }
 
-	public static RecipeTester<CraftingInventory, CraftingRecipe> ofPart(String schematic, String material, int count, String result, TestContext context) {
+	public static RecipeTester<RecipeInputInventory, CraftingRecipe> ofPart(String schematic, String material, int count, String result, TestContext context) {
 		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
 		inventory.setStack(0, new ItemStack(itemFromString(schematic)));
 		IntStream.range(0, count).forEach(index -> inventory.setStack(index + 1, new ItemStack(itemFromString(material))));
@@ -63,7 +64,7 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
 	}
 
-	public static RecipeTester<CraftingInventory, CraftingRecipe> repairKit(String kit, ItemStack tool, String result, TestContext context) {
+	public static RecipeTester<RecipeInputInventory, CraftingRecipe> repairKit(String kit, ItemStack tool, String result, TestContext context) {
 		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
 		inventory.setStack(0, new ItemStack(itemFromString(kit)));
 		inventory.setStack(1, tool);
@@ -81,7 +82,7 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
 	}
 
-	public static RecipeTester<CraftingInventory, CraftingRecipe> craftingTableUpgrade(String target, String upgrade, TestContext context) {
+	public static RecipeTester<RecipeInputInventory, CraftingRecipe> craftingTableUpgrade(String target, String upgrade, TestContext context) {
 		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
 		inventory.setStack(0, new ItemStack(itemFromString(target)));
 		inventory.setStack(1, new ItemStack(itemFromString(upgrade)));

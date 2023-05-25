@@ -16,6 +16,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
@@ -66,7 +67,7 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager manager) {
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager manager) {
 		var originStateOpt = findRoot(craftingInventory, manager);
 		var upgradeOpt = findUpgrade(craftingInventory, manager);
 		var originIndex = findRootIndex(craftingInventory, manager);

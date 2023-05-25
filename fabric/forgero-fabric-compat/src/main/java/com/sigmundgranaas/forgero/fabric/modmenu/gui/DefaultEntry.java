@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 
 import java.util.List;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -36,7 +37,7 @@ public class DefaultEntry extends ConfigurationEntry {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+	public void render(DrawContext matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 		button.setY(y);
 		button.setX(x + xDefaultPosition);
 		button.render(matrices, mouseX, mouseY, tickDelta);

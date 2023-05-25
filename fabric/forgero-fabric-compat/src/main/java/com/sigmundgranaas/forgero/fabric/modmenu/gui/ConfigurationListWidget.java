@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric.modmenu.gui;
 import com.sigmundgranaas.forgero.fabric.modmenu.ForgeroConfigurationScreen;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -29,7 +30,7 @@ public class ConfigurationListWidget extends ElementListWidget<ConfigurationEntr
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 }
