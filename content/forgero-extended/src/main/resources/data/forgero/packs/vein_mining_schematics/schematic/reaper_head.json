@@ -79,7 +79,7 @@
     "features": [
       {
         "type": "VEIN_MINING",
-        "depth": 10,
+        "value": 8,
         "tags": [
           "forgero:plants"
         ]
