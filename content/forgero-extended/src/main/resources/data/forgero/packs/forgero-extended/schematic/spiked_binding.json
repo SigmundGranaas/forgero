@@ -1,6 +1,7 @@
 {
-  "type": "BINDING_SCHEMATIC",
   "name": "spiked_binding-schematic",
+  "parent": "binding-schematic",
+  "type": "BINDING_SCHEMATIC",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -59,7 +60,7 @@
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 20
+        "value": 40
       },
       {
         "id": "schematic-rarity-composite",
@@ -69,25 +70,14 @@
         "value": 0.3
       },
       {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.2
-      },
-      {
         "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
+        "order": "END",
         "operation": "ADDITION",
-        "value": -0.2
+        "value": -0.1
       },
       {
+        "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.2
-      },
-      {
-        "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.2

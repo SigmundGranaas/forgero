@@ -69,6 +69,7 @@
         "value": 0.4
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
@@ -89,10 +90,11 @@
         "value": -0.3
       },
       {
+        "id": "battleaxe-schematic-weight-composite",
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 1.2
       }
     ]
   },

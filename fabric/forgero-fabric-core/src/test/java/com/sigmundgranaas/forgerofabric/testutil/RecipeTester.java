@@ -81,6 +81,15 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
 	}
 
+	public static RecipeTester<CraftingInventory, CraftingRecipe> craftingTableUpgrade(String target, String upgrade, TestContext context) {
+		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+		inventory.setStack(0, new ItemStack(itemFromString(target)));
+		inventory.setStack(1, new ItemStack(itemFromString(upgrade)));
+
+		Item outcome = itemFromString(target);
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
+	}
+
 	public Optional<ItemStack> craft() {
 		return context.getWorld()
 				.getRecipeManager()

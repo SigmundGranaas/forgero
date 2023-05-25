@@ -74,7 +74,7 @@
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.6
+        "value": 1.4
       },
       {
         "id": "short_sword-schematic-attack_speed-composite",
