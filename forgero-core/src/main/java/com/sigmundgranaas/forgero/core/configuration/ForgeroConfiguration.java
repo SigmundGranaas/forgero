@@ -67,4 +67,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Boolean weightReducesAttackSpeed = true;
 	@NotNull
 	public Boolean weightReducesMiningSpeed = true;
+
+	@NotNull
+	public Boolean enableUpgradeInCraftingTable = true;
 }
