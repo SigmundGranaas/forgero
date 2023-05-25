@@ -20,13 +20,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.util.Identifier;
 
 public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public StateUpgradeShapelessRecipe(ShapelessRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
+		super(recipe.getId(), recipe.getGroup(), CraftingRecipeCategory.EQUIPMENT, recipe.getOutput(), recipe.getIngredients());
 		this.service = service;
 	}
 
