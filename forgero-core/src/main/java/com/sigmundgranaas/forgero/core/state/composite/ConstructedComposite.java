@@ -1,11 +1,13 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
 import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,10 +66,9 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 	@Override
 	public List<Property> compositeProperties(Target target) {
-		var props = new ArrayList<Property>();
 
 		var upgradeProps = super.compositeProperties(target);
-		props.addAll(upgradeProps);
+		var props = new ArrayList<>(upgradeProps);
 
 		var partProps = parts().stream().map(part -> part.applyProperty(target)).flatMap(List::stream).toList();
 		props.addAll(combineCompositeProperties(partProps));
@@ -88,22 +89,21 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	}
 
 	private List<Property> combineCompositeProperties(List<Property> props) {
-		var compositeAttributes = Property.stream(props)
+		List<Property> compositeAttributes = Property.stream(props)
 				.getAttributes()
-				.collect(Collectors.toMap(Attribute::toString, attribute -> attribute, (attribute1, attribute2) -> attribute1.getPriority() > attribute2.getPriority() ? attribute1 : attribute2))
-				.values()
-				.stream()
 				.filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
-				.map(Property.class::cast)
-				.toList();
+				.collect(Collectors.toList());
 
 		var newValues = new ArrayList<Property>();
 		for (AttributeType type : AttributeType.values()) {
 			var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
 			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
+			String combinedId = compositeAttributes.stream().filter(attr -> attr.type().equals(type.toString())).map(Attribute.class::cast).map(Attribute::getId).reduce(EMPTY_IDENTIFIER, String::join);
+			combinedId = combinedId + UUID.randomUUID();
+			newBaseAttribute.applyId(combinedId);
 			var attribute = newBaseAttribute.build();
 			if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1) {
-				newValues.add(newBaseAttribute.build());
+				newValues.add(attribute);
 			}
 		}
 		return newValues;

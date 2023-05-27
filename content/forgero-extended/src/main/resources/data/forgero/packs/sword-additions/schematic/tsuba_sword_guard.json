@@ -1,6 +1,7 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
   "name": "tsuba_sword_guard-schematic",
+  "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -69,28 +70,25 @@
         "value": 0.3
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.2
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "value": 0.3
-      },
-      {
+        "id": "schematic-armor-composite",
         "type": "ARMOR",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.2
       },
       {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.02
+        "value": 0.1
       }
     ]
   },

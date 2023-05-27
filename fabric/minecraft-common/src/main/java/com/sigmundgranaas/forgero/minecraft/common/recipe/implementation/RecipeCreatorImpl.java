@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
@@ -24,6 +26,7 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTyp
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.BasicStonePartUpgradeRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.BasicWoodenToolRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CraftingTableUpgradeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.MaterialRepairToolGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.PartSmeltingRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.RepairKitRecipeGenerator;
@@ -31,6 +34,7 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generat
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.SlotUpgradeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.TemplateGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.ToolRecipeCreator;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 public class RecipeCreatorImpl implements RecipeCreator {
 
@@ -40,18 +44,19 @@ public class RecipeCreatorImpl implements RecipeCreator {
 	private final TemplateGenerator templateGenerator;
 	private final RecipeDataHelper helper;
 	private final RecipeDataMapper mapper;
+	private final StateService service;
 
-	public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates) {
+	public RecipeCreatorImpl(Map<RecipeTypes, JsonObject> recipeTemplates, StateService service) {
 		this.templateGenerator = new TemplateGenerator(recipeTemplates);
 		this.helper = new RecipeDataHelper();
 		this.mapper = new RecipeDataMapper(this.helper);
 		this.generators = new ArrayList<>();
+		this.service = service;
 	}
 
 	public static RecipeCreator getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates()
-			);
+			INSTANCE = new RecipeCreatorImpl(RecipeLoader.INSTANCE.loadRecipeTemplates(), StateService.INSTANCE);
 		}
 		return INSTANCE;
 	}
@@ -107,7 +112,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
 				.orElse(ImmutableList.<State>builder().build());
 		var recipes = new ArrayList<RecipeGenerator>();
 		for (State material : materials) {
-			recipes.add(new RepairKitRecipeGenerator(material, templateGenerator));
+			recipes.add(new RepairKitRecipeGenerator(material, templateGenerator, service));
 		}
 		return recipes;
 	}
@@ -192,9 +197,17 @@ public class RecipeCreatorImpl implements RecipeCreator {
 
 	private List<RecipeGenerator> upgradeRecipes(DataResource res) {
 		if (res.construct().isPresent()) {
-			return res.construct().get().slots().stream()
+			List<RecipeGenerator> upgradeRecipes = res.construct().get().slots().stream()
 					.map(slot -> new SlotUpgradeGenerator(helper, templateGenerator, slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier())))
 					.collect(Collectors.toList());
+
+			if(ForgeroConfigurationLoader.configuration.enableUpgradeInCraftingTable){
+				res.construct().get().slots().stream()
+						.map(slot -> new CraftingTableUpgradeGenerator(helper, templateGenerator, slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier())))
+						.forEach(upgradeRecipes::add);
+			}
+
+			return upgradeRecipes;
 		} else {
 			return Collections.emptyList();
 		}

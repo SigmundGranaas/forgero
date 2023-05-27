@@ -63,28 +63,32 @@
         "value": 1.1
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 0.7
       },
       {
+        "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.6
+        "value": 1.4
       },
       {
+        "id": "short_sword-schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.3
+        "operation": "MULTIPLICATION",
+        "value": 1.4
       },
       {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "order": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.12
+        "value": 0.4
       }
     ]
   },
