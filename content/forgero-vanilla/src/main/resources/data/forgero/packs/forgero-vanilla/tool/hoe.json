@@ -21,6 +21,21 @@
             "type": "HANDLE"
           }
         ]
+      },
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "HOE_HEAD"
+          },
+          {
+            "type": "TOOL_BINDING"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
       }
     ],
     "components": [

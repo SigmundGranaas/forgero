@@ -47,6 +47,15 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
 	}
 
+	public static RecipeTester<CraftingInventory, CraftingRecipe> ofTool(String head, String binding, String handle, String outCome, TestContext context) {
+		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
+		inventory.setStack(2, new ItemStack(itemFromString(head)));
+		inventory.setStack(4, new ItemStack(itemFromString(binding)));
+		inventory.setStack(6, new ItemStack(itemFromString(handle)));
+		Item outcome = itemFromString(outCome);
+
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
+	}
     private static Item itemFromString(String identifier) {
         Item item = Registries.ITEM.get(new Identifier(identifier));
         if (item == Items.AIR) {
