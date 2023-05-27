@@ -28,8 +28,11 @@ jobs:
           paths_ignore: '["**/README.md", "**/docs/**", "**/.gitignore", "**/LICENSE"]'
           concurrent_skipping: same_content_newer
 
-  publish:
-    runs-on: ubuntu-latest
+  build_fabric:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
     needs: skip_duplicate_jobs
     if: needs.skip_duplicate_jobs.outputs.should_skip != 'true'
 
