@@ -25,6 +25,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get mod version from Gradle
+        uses: madhead/read-java-properties@latest
+        id: forgero_version
+        with:
+          file: gradle.properties
+          property: mod_version
+          default: 0.0.1
+
+      - name: Get supported Minecraft version from Gradle
+        uses: madhead/read-java-properties@latest
+        id: supported_minecraft_version
+        with:
+          file: gradle.properties
+          property: minecraft_version
+          default: 0.0.1
+
+      - run: echo version string ${{ steps.mod_version.outputs.value }}+mc${{ steps.supported_minecraft_version.outputs.value }}
+
       - name: Set up Git
         run: |
           git --version
@@ -33,6 +51,11 @@ jobs:
           git status
           git describe --tags
         shell: bash
+
+      - name: Create Git release tag
+        run: |
+          git tag ${{ steps.mod_version.outputs.value }}+mc${{ steps.supported_minecraft_version.outputs.value }}
+          git push origin ${{ steps.mod_version.outputs.value }}+mc${{ steps.supported_minecraft_version.outputs.value }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
