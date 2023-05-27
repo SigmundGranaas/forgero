@@ -4,8 +4,6 @@ plugins {
 	id "maven-publish"
 }
 
-def ENV = System.getenv()
-
 def getGitVersion = { ->
 	def stdout = new ByteArrayOutputStream()
 	exec {
@@ -19,17 +17,13 @@ def getGitVersion = { ->
 	return gitVersionStringParsed
 }
 
-def getVersion = {
-	return ENV.GITHUB_RUN_NUMBER ? "${getGitVersion()}" : "${project.forgero_version}+${project.minecraft_version}"
-}
-
 println("Forgero version: ${getGitVersion()}")
 
-version = "${getVersion()}"
+version = "${getGitVersion()}"
 group = project.maven_group
 
 subprojects {
-	version = "${getVersion()}"
+	version = "${getGitVersion()}"
 	group = project.maven_group
 
 	repositories {
@@ -59,11 +53,12 @@ subprojects {
 				}
 			}
 
+
 			publishing {
 				publications {
 					gpr(MavenPublication) {
 						groupId = group // Replace with your groupId
-						artifactId = archives_base_name // Replace with your module's name
+						artifactId = archivesBaseName // Replace with your module's name
 						from components.java
 					}
 				}
