@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgerofabric.gametest;
 
-import com.sigmundgranaas.forgerofabric.testutil.RecipeTester;
+import java.util.function.Supplier;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import com.sigmundgranaas.forgerofabric.testutil.RecipeTester;
 
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
 
-import java.util.function.Supplier;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 public class RecipeTest {
 	public static void assertTrue(Supplier<Boolean> test, String errorMessage) {
@@ -35,6 +35,13 @@ public class RecipeTest {
 	public void testCraftOakKatana(TestContext context) {
 		var test = RecipeTester.ofTool("oak-katana_blade", "oak-handle", "oak-sword", context);
 		assertTrue(test, "unable to craft oak katana");
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
+	public void testCraftPickaxeWithBinding(TestContext context) {
+		var test = RecipeTester.ofTool("oak-pickaxe_head", "oak-binding", "oak-handle", "oak-pickaxe", context);
+		assertTrue(test, "unable to craft oak pickaxe with binding");
 		context.complete();
 	}
 
