@@ -1,0 +1,68 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "target": [
+        "id:acacia-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:birch-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:crimson-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:dark_oak-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:jungle-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:mangrove-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:oak-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:spruce-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    },
+    {
+      "target": [
+        "id:warped-stick"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle"
+    }
+  ]
+}

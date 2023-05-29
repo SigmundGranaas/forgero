@@ -65,13 +65,6 @@
     },
     {
       "target": [
-        "id:oak-simple_handle"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "handle"
-    },
-    {
-      "target": [
         "type:MATERIAL",
         "slot:0"
       ],
