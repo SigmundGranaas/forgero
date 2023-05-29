@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import java.util.Optional;
+
+import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
@@ -8,16 +11,26 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public record PaletteTemplateModel(String palette,
                                    String template,
                                    int order,
-                                   @Nullable Offset offset) implements ModelTemplate, ModelMatcher, Identifiable {
+                                   @Nullable Offset offset,
+                                   @Nullable Integer resolution,
+                                   @Nullable JsonObject displayOverrides) implements ModelTemplate, ModelMatcher, Identifiable {
 
 	@Override
 	public Optional<Offset> getOffset() {
 		return Optional.ofNullable(offset);
+	}
+
+	@Override
+	public Integer getResolution() {
+		return Optional.ofNullable(resolution).orElse(16);
+	}
+
+	@Override
+	public Optional<JsonObject> getDisplayOverrides() {
+		return Optional.ofNullable(displayOverrides);
 	}
 
 	@Override
