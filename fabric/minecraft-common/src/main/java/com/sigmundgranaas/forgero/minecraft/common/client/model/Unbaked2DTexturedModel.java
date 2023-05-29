@@ -1,5 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
+import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
@@ -18,19 +27,13 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
-import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
-
 public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 	public static final String TRANSPARENT_BASE_IDENTIFIER = "transparent_base";
 	private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
 	private final List<PaletteTemplateModel> textures;
+	private final List<JsonObject> displayOverrides;
 	private final Map<String, Offset> offsetMap;
+	private final Map<String, Integer> resolutionMap;
 	private final Map<String, Integer> indexMap;
 	private final String id;
 	private final ModelLoader loader;
@@ -42,7 +45,9 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		this.textures = textures;
 		this.id = id;
 		this.offsetMap = new HashMap<>();
+		this.resolutionMap = new HashMap<>();
 		this.indexMap = new HashMap<>();
+		this.displayOverrides = new ArrayList<>();
 		this.textures.sort(Comparator.comparing(PaletteTemplateModel::order));
 	}
 
@@ -55,6 +60,9 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		model.addProperty("parent", "minecraft:item/handheld");
 		model.add("textures", this.getTextures());
 		model.addProperty("gui_light", "front");
+		if (this.displayOverrides.size() > 0) {
+			model.add("display", displayOverrides.get(0));
+		}
 		return model.toString();
 	}
 
@@ -69,13 +77,14 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 				var texture = textureName(this.textures.get(i));
 				var layer = "layer" + i;
 				this.offsetMap.put(layer, textures.get(i).getOffset().orElse(new Offset(0, 0)));
+				this.resolutionMap.put(layer, textures.get(i).getResolution());
+				textures.get(i).getDisplayOverrides().ifPresent(displayOverrides::add);
 				this.indexMap.put(layer, i + 1);
 				jsonTextures.addProperty(layer, getTextureBasePath() + texture);
 			}
 		} else {
 			jsonTextures.addProperty("layer" + 1, getTextureBasePath() + TRANSPARENT_BASE_IDENTIFIER);
 		}
-
 		return jsonTextures;
 	}
 
@@ -95,6 +104,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 				element.to.add(offset.x(), offset.y(), 0);
 				break;
 			}
+
 		}
 		for (ModelElementFace face : element.faces.values()) {
 			int index = this.indexMap.getOrDefault(face.textureId, 1);
@@ -111,6 +121,29 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 				element.to.add(0, index * 0.001f, 0);
 			}
 		}
+
+	}
+
+	private void applyResolutionScaling(ModelElement element) {
+		Integer topResolution = resolutionMap.values().stream().reduce(16, Integer::max);
+		if (topResolution.equals(16)) {
+			return;
+		}
+
+		for (ModelElementFace face : element.faces.values()) {
+			var res = resolutionMap.getOrDefault(face.textureId, 16);
+			if (!res.equals(topResolution)) {
+				float initialZ = element.from.getZ();
+				float scale = (float) res / topResolution;
+				element.from.multiplyComponentwise(scale, scale, 1);
+				element.to.multiplyComponentwise(scale, scale, 1);
+
+				float z = element.from.getZ();
+				element.from.add(0, 0, z - initialZ);
+				element.to.add(0, 0, z - initialZ);
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -123,10 +156,8 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		for (ModelElement element : generated_model.getElements()) {
 			applyOffset(element);
 		}
-
-		var elements = generated_model.getElements();
-		for (ModelElement element : elements) {
-
+		for (ModelElement element : generated_model.getElements()) {
+			applyResolutionScaling(element);
 		}
 
 		if (parentModel instanceof JsonUnbakedModel parent) {

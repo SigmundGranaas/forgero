@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 
-import com.sigmundgranaas.forgero.core.util.Identifiers;
-import lombok.Builder;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
+
+import com.sigmundgranaas.forgero.core.util.Identifiers;
+import lombok.Builder;
+import org.jetbrains.annotations.NotNull;
 
 @Builder
 public class ModelEntryData {
@@ -18,8 +18,19 @@ public class ModelEntryData {
 	@Nullable
 	private List<Float> offset = Collections.emptyList();
 
+	@Builder.Default
+	@Nullable
+	private Integer resolution = 16;
+
+	@NotNull
 	public List<Float> getOffset() {
 		return Objects.requireNonNullElse(offset, Collections.emptyList());
+
+	}
+
+	@NotNull
+	public Integer getResolution() {
+		return Objects.requireNonNullElse(resolution, 16);
 
 	}
 
