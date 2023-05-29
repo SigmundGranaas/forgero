@@ -1,0 +1,53 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "template": "short_handle.png",
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "refined_handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "template": "refined_short_handle.png",
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "template": "mastercrafted_short_handle.png",
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    }
+  ]
+}

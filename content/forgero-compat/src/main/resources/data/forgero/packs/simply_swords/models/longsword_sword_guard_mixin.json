@@ -1,0 +1,110 @@
+{
+  "type": "SWORD_GUARD",
+  "models": [
+    {
+      "name": "sword_guard",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "refined_sword_guard",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_sword_guard",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "agile_guard",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "duelling_guard",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kimiri_guard",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "name": "tsuba_guard",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:longsword_blade.png"
+          ],
+          "offset": [
+            6,
+            6
+          ]
+        }
+      ]
+    }
+  ]
+}

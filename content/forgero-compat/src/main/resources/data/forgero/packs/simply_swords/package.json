@@ -1,0 +1,11 @@
+{
+  "name": "simply_swords",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "forgero",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla"
+  ]
+}

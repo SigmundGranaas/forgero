@@ -1,0 +1,156 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "longsword_blade",
+      "template": "longsword_blade.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 40,
+      "resolution": 32,
+      "display_overrides": {
+        "thirdperson_righthand": {
+          "rotation": [
+            0,
+            -90,
+            55
+          ],
+          "translation": [
+            0,
+            6,
+            0
+          ],
+          "scale": [
+            1.7,
+            1.7,
+            0.85
+          ]
+        },
+        "thirdperson_lefthand": {
+          "rotation": [
+            0,
+            90,
+            -55
+          ],
+          "translation": [
+            0,
+            6,
+            0
+          ],
+          "scale": [
+            1.7,
+            1.7,
+            0.85
+          ]
+        },
+        "firstperson_righthand": {
+          "rotation": [
+            0,
+            -90,
+            25
+          ],
+          "translation": [
+            1,
+            5,
+            1
+          ],
+          "scale": [
+            1.36,
+            1.36,
+            0.68
+          ]
+        },
+        "firstperson_lefthand": {
+          "rotation": [
+            0,
+            90,
+            -25
+          ],
+          "translation": [
+            1,
+            5,
+            1
+          ],
+          "scale": [
+            1.36,
+            1.36,
+            0.68
+          ]
+        },
+        "ground": {
+          "translation": [
+            0,
+            4,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            0.5
+          ]
+        },
+        "gui": {
+          "scale": [
+            1.35,
+            1.35,
+            1
+          ]
+        },
+        "fixed": {
+          "rotation": [
+            0,
+            180,
+            0
+          ],
+          "translation": [
+            0,
+            0,
+            -0.5
+          ],
+          "scale": [
+            2,
+            2,
+            1
+          ]
+        },
+        "head": {
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "translation": [
+            0,
+            6,
+            0
+          ],
+          "scale": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:longsword_blade.png"
+          ],
+          "template": "longsword_blade_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:longsword_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "longsword_blade"
+    }
+  ]
+}

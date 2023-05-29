@@ -1,0 +1,44 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:great_axe_head.png"
+          ],
+          "template": "great_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:great_axe_head.png"
+          ],
+          "template": "great_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "great_axe_head",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:longsword_blade.png"
+          ],
+          "template": "great_handle.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}
