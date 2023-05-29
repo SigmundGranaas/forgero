@@ -1,9 +1,12 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelEntryData;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import com.sigmundgranaas.forgero.core.util.match.Context;
@@ -16,7 +19,8 @@ public record PaletteTemplateModel(String palette,
                                    int order,
                                    @Nullable Offset offset,
                                    @Nullable Integer resolution,
-                                   @Nullable JsonObject displayOverrides) implements ModelTemplate, ModelMatcher, Identifiable {
+                                   @Nullable JsonObject displayOverrides,
+                                   @Nullable List<ModelEntryData> secondaryTextures) implements ModelTemplate, ModelMatcher, Identifiable {
 
 	@Override
 	public Optional<Offset> getOffset() {
@@ -26,6 +30,11 @@ public record PaletteTemplateModel(String palette,
 	@Override
 	public Integer getResolution() {
 		return Optional.ofNullable(resolution).orElse(16);
+	}
+
+	@Override
+	public List<ModelEntryData> getSecondaryTextures() {
+		return Optional.ofNullable(secondaryTextures).orElse(Collections.emptyList());
 	}
 
 	@Override

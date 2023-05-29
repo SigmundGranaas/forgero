@@ -34,6 +34,7 @@ public class ModelConverter {
 		this.generationModels = generationModels;
 		this.models = models;
 		this.textures = textures;
+
 	}
 
 	public static boolean notEmpty(String test) {
@@ -106,7 +107,7 @@ public class ModelConverter {
 
 	private List<ModelMatchPairing> pairings(ModelData data) {
 		if (!data.getModelType().equals("GENERATE")) {
-			return List.of(generate(PaletteData.builder().name(data.getPalette()).build(), data.getTemplate(), data.order(), new ArrayList<>(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null)));
+			return List.of(generate(PaletteData.builder().name(data.getPalette()).build(), data.getTemplate(), data.order(), new ArrayList<>(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), data.getSecondaryTextures()));
 		} else {
 			List<PaletteData> palettes = tree.find(data.getPalette()).map(node -> node.getResources(PaletteData.class)).orElse(ImmutableList.<PaletteData>builder().build());
 			var variants = data.getVariants().stream()
@@ -121,15 +122,15 @@ public class ModelConverter {
 			variants.add(data);
 			return palettes.stream()
 					.map(palette -> variants.stream()
-							.map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()), Offset.of(entry.getOffset()), entry.getResolution(), data.displayOverrides().orElse(null)))
+							.map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()), Offset.of(entry.getOffset()), entry.getResolution(), data.displayOverrides().orElse(null), data.getSecondaryTextures()))
 							.toList())
 					.flatMap(List::stream)
 					.toList();
 		}
 	}
 
-	private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria, Offset offset, Integer resolution, @Nullable JsonObject displayOverrides) {
-		var model = new PaletteTemplateModel(palette.getTarget(), template, order, offset, resolution, displayOverrides);
+	private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria, Offset offset, Integer resolution, @Nullable JsonObject displayOverrides, List<ModelEntryData> secondaryTextures) {
+		var model = new PaletteTemplateModel(palette.getTarget(), template, order, offset, resolution, displayOverrides, secondaryTextures);
 		textures.put(model.identifier(), model);
 		criteria.add(model.palette());
 		return new ModelMatchPairing(new ModelMatch(criteria, ""), model);

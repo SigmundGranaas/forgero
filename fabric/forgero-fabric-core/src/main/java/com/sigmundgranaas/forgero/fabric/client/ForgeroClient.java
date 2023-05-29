@@ -4,6 +4,7 @@ import static com.sigmundgranaas.forgero.fabric.client.SoulEntityModel.SOUL_ENTI
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelEntryData;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -79,7 +81,7 @@ public class ForgeroClient implements ClientModInitializer {
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder().build());
 		for (State material : materials) {
-			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null));
+			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null, null));
 		}
 
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
@@ -87,6 +89,16 @@ public class ForgeroClient implements ClientModInitializer {
 		TEXTURES.values().forEach(texture -> {
 			ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""))));
 		});
+
+		TEXTURES.values().stream()
+				.map(PaletteTemplateModel::getSecondaryTextures)
+				.flatMap(List::stream)
+				.map(ModelEntryData::getTemplate)
+				.distinct()
+				.forEach(texture -> {
+					ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(texture)));
+				});
+
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_leather_base")));
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_needle_base")));
 	}

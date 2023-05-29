@@ -12,6 +12,7 @@ import java.util.function.Function;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelEntryData;
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.JsonUnbakedModelOverrideMixin;
 
@@ -82,8 +83,15 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 				this.indexMap.put(layer, i + 1);
 				jsonTextures.addProperty(layer, getTextureBasePath() + texture);
 			}
-		} else {
-			jsonTextures.addProperty("layer" + 1, getTextureBasePath() + TRANSPARENT_BASE_IDENTIFIER);
+		}
+
+		var overrideTextures = this.textures.stream().map(PaletteTemplateModel::getSecondaryTextures).flatMap(List::stream).sorted(Comparator.comparingInt(ModelEntryData::getOrder)).toList();
+		if (overrideTextures.size() > 0) {
+			for (int i = 0; i < overrideTextures.size(); i++) {
+				var layer = "layer" + (jsonTextures.size() + i);
+				this.indexMap.put(layer, jsonTextures.size() + i + 1);
+				jsonTextures.addProperty(layer, overrideTextures.get(i).getTemplate());
+			}
 		}
 		return jsonTextures;
 	}

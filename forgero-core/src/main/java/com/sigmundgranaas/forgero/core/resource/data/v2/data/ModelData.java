@@ -46,6 +46,10 @@ public class ModelData {
 	@SerializedName(value = "display_overrides", alternate = "display")
 	private JsonObject displayOverrides;
 
+	@Nullable
+	@SerializedName(value = "secondary_textures")
+	private List<ModelEntryData> secondaryTextures;
+
 	@Builder.Default
 	@Nullable
 	private Integer resolution = 16;
@@ -56,7 +60,6 @@ public class ModelData {
 
 	public String getModelType() {
 		return Objects.requireNonNullElse(modelType, Identifiers.EMPTY_IDENTIFIER);
-
 	}
 
 	public String getTemplate() {
@@ -71,16 +74,18 @@ public class ModelData {
 
 	public int order() {
 		return order;
-
 	}
 
 	public List<ModelEntryData> getVariants() {
 		return Objects.requireNonNullElse(variants, Collections.emptyList());
-
 	}
 
 	public List<Float> getOffset() {
 		return Objects.requireNonNullElse(offset, Collections.emptyList());
+	}
+
+	public List<ModelEntryData> getSecondaryTextures() {
+		return Objects.requireNonNullElse(secondaryTextures, Collections.emptyList());
 	}
 
 	public Optional<JsonObject> displayOverrides() {
