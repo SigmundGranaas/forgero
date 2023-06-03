@@ -42,6 +42,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		for (UpgradeStationScreenHandler.PositionedSlot slot : this.handler.slots.stream().filter(UpgradeStationScreenHandler.PositionedSlot.class::isInstance).map(UpgradeStationScreenHandler.PositionedSlot.class::cast).toList()) {
 			if (isPointWithinBounds(slot.x, slot.y, 16, 16, mouseX, mouseY) && !slot.hasStack()) {
 				lines.add(Text.literal("This slot accepts...")); // Here you need to add the description based on the slot
+				super.renderTooltip(matrices, lines, mouseX, mouseY);
 				renderCycledSlot(slot, lines, mouseX, mouseY);
 			}
 		}
@@ -82,7 +83,6 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 				this.drawSlot(matrices, slot1);
 			}
 		}
-
 	}
 
 	private void drawSlot(MatrixStack matrices, UpgradeStationScreenHandler.PositionedSlot slot) {

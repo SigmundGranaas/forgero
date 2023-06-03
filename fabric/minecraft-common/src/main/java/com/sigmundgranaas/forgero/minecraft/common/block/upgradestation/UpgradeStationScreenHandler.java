@@ -113,13 +113,13 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		int startOffsetX = parentOffsetX - totalWidth / 2;
 
 		int currentWidth = 0;
-
+		int placedSlots = 0;
 		for (TreeNode child : node.getChildren()) {
 			int childSlots = child.getLeafCount();
 			int childSlotWidth = childSlots * SLOT_SIZE;
 			int childSpacingWidth = (childSlots - 1) * slotSpacing;
 			int childWidth = childSlotWidth + childSpacingWidth;
-			int slotOffsetX = startOffsetX + currentWidth + childWidth / 2;
+			int slotOffsetX = startOffsetX + currentWidth + (childWidth / 2);
 
 			var inventory = new SimpleInventory(1);
 			var slot = new PositionedSlot(inventory, 0, slotOffsetX, offsetY, child.slot);
@@ -127,8 +127,8 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			addSlot(slot);
 			slot.insertStack(service.convert(child.getState()).orElse(ItemStack.EMPTY));
 
-			placeSlots(child, slotOffsetX, offsetY + verticalSpacing, slotSpacing);
-
+			placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing);
+			placedSlots += 1;
 			currentWidth += childWidth + slotSpacing;
 		}
 	}
@@ -274,6 +274,9 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		}
 
 		public State getParentPart() {
+			if (this.parent == null) {
+				return null;
+			}
 			return this.parent.getState();
 		}
 	}
