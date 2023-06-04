@@ -17,10 +17,13 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
 
 public class UpgradeStationScreenHandler extends ScreenHandler {
 
@@ -39,6 +42,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	public final int verticalSpacing = 25;   // adjust this value as needed
 	public final int compositeSlotY = 20;
 	protected final CompositeSlot compositeSlot;
+	private final PlayerEntity entity;
 	private final SimpleInventory inventory;
 	private final ScreenHandlerContext context;
 	private final StateService service;
@@ -57,6 +61,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		super(UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER, syncId);
 		this.context = context;
 		this.inventory = new SimpleInventory(1);
+		this.entity = playerInventory.player;
 		inventory.addListener(this::onContentChanged);
 		//some inventories do custom logic when a player opens it.
 		inventory.onOpen(playerInventory.player);
@@ -92,25 +97,32 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			slotList.clear();
 			ToolTree toolTree = new ToolTree(component.get());
 			toolTree.buildTree();
-			placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot);
+			placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot, entity.getWorld(), entity);
 		} else if (this.slotList.size() > 0) {
 			compositeSlot.state = null;
-			this.slotList.forEach(this.slots::remove);
-			slotList.clear();
+			this.slotList.forEach(slot -> slot.inventory.clear());
 		}
 	}
 
 
 	public void refreshTree(State state) {
-		this.slotList.forEach(this.slots::remove);
-		slotList.clear();
-		compositeSlot.inventory.setStack(0, service.convert(state).get());
-		ToolTree toolTree = new ToolTree(state);
-		toolTree.buildTree();
-		placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot);
+		this.context.run((world, pos) -> {
+			this.slotList.forEach(slot -> {
+				slot.inventory.clear();
+				slot.inventory.markDirty();
+			});
+
+			this.slotList.forEach(this.slots::remove);
+			slotList.clear();
+			compositeSlot.inventory.setStack(0, service.convert(state).get());
+
+			ToolTree toolTree = new ToolTree(state);
+			toolTree.buildTree();
+			placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot, world, this.entity);
+		});
 	}
 
-	private void placeSlots(TreeNode node, int parentOffsetX, int offsetY, int slotSpacing, Slot parent) {
+	private void placeSlots(TreeNode node, int parentOffsetX, int offsetY, int slotSpacing, Slot parent, World world, PlayerEntity entity) {
 		// Calculate total number of slots for the node, including children's slots
 		int totalSlots = node.getLeafCount();
 		// Calculate total slot width and spacing width
@@ -133,9 +145,13 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			var slot = new PositionedSlot(inventory, 0, slotOffsetX, offsetY, child.slot, parent, ((Composite) node.state).getSlotContainer());
 			slotList.add(slot);
 			addSlot(slot);
-			slot.inventory.setStack(0, service.convert(child.getState()).orElse(ItemStack.EMPTY));
-
-			placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing, slot);
+			ItemStack stack = service.convert(child.getState()).orElse(ItemStack.EMPTY);
+			if (!world.isClient() && entity instanceof ServerPlayerEntity serverPlayerEntity) {
+				slot.inventory.setStack(0, stack);
+				setPreviousTrackedSlot(slot.id, stack);
+				serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), slot.id, stack));
+			}
+			placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing, slot, world, entity);
 			placedSlots += 1;
 			currentWidth += childWidth + slotSpacing;
 		}
@@ -278,9 +294,9 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	public class PositionedSlot extends Slot {
 		public final int xPosition;
 		public final int yPosition;
-		@Nullable
-		public final com.sigmundgranaas.forgero.core.state.Slot slot;
 		private final SlotContainer container;
+		@Nullable
+		public com.sigmundgranaas.forgero.core.state.Slot slot;
 		@Nullable
 		public Slot parent;
 
@@ -315,24 +331,23 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		}
 
 		@Override
-		public void onQuickTransfer(ItemStack newItem, ItemStack original) {
+		public void onTakeItem(PlayerEntity player, ItemStack stack) {
 			if (this.slot != null && this.slot.get().isPresent() && this.parent != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
-				this.container.empty(slot);
+				this.slot = this.container.empty(slot);
 				refreshTree(compositeSlot.state);
 			}
-			super.onQuickTransfer(newItem, original);
+			super.onTakeItem(player, stack);
 		}
 
 		@Override
 		public ItemStack insertStack(ItemStack stack, int count) {
-			var stateOpt = StateService.INSTANCE.convert(stack);
-
-			if (this.parent != null && this.slot != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
-				container.canUpgrade(stateOpt.get());
-				container.set(stateOpt.get());
-				refreshTree(compositeSlot.state);
+			if (this.canInsert(stack)) {
+				var stateOpt = StateService.INSTANCE.convert(stack);
+				if (stateOpt.isPresent() && this.parent != null && this.slot != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
+					this.slot = container.set(stateOpt.get()).orElse(slot);
+					refreshTree(compositeSlot.state);
+				}
 			}
-
 
 			return super.insertStack(stack, count);
 		}

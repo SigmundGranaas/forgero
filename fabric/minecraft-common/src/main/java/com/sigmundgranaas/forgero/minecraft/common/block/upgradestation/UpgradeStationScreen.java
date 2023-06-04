@@ -89,14 +89,19 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		int centerY = (this.height - this.backgroundHeight) / 2;
 		drawTexture(matrices, centerX, centerY, 0, 0, backgroundWidth, backgroundHeight);
 
-		this.renderLinesBetweenSlots(matrices);
 
-		for (Slot slot : handler.slots) {
-			// Render your slots here
-			if (slot instanceof UpgradeStationScreenHandler.PositionedSlot || slot instanceof UpgradeStationScreenHandler.CompositeSlot) {
-				this.drawSlot(matrices, slot);
+		if (this.handler.compositeSlot.hasStack()) {
+			this.renderLinesBetweenSlots(matrices);
+			for (Slot slot : handler.slots) {
+				// Render your slots here
+				if (slot instanceof UpgradeStationScreenHandler.PositionedSlot) {
+					this.drawSlot(matrices, slot);
+				}
 			}
 		}
+
+		this.drawSlot(matrices, handler.compositeSlot);
+
 	}
 
 	private void drawSlot(MatrixStack matrices, Slot slot) {
@@ -130,8 +135,9 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		// Add this line to your render method
 
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
-		renderCustomTooltip(matrices, new ArrayList<>(), mouseX, mouseY);
-
+		if (this.handler.compositeSlot.hasStack()) {
+			renderCustomTooltip(matrices, new ArrayList<>(), mouseX, mouseY);
+		}
 	}
 
 
