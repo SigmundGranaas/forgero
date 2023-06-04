@@ -1,15 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
+import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -38,11 +37,10 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		}
 	};
 	public final int verticalSpacing = 25;   // adjust this value as needed
-	public final int horizontalSpacing = 24; // adjust this value as needed
+	public final int compositeSlotY = 20;
+	protected final CompositeSlot compositeSlot;
 	private final SimpleInventory inventory;
 	private final ScreenHandlerContext context;
-	private final PlayerEntity player;
-	private final CompositeSlot compositeSlot;
 	private final StateService service;
 	private final List<Slot> slotList;
 
@@ -57,7 +55,6 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	//and can therefore directly provide it as an argument. This inventory will then be synced to the client.
 	public UpgradeStationScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
 		super(UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER, syncId);
-		this.player = playerInventory.player;
 		this.context = context;
 		this.inventory = new SimpleInventory(1);
 		inventory.addListener(this::onContentChanged);
@@ -65,7 +62,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		inventory.onOpen(playerInventory.player);
 		SimpleInventory compositeInventory = new SimpleInventory(1);
 		compositeInventory.addListener(this::onCompositeSlotChanged);
-		this.compositeSlot = new CompositeSlot(compositeInventory, 0, 80, 10);
+		this.compositeSlot = new CompositeSlot(compositeInventory, 0, 80, compositeSlotY, null);
 		this.service = StateService.INSTANCE;
 		this.slotList = new ArrayList<>();
 		//This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
@@ -78,31 +75,42 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		//The player inventory
 		for (m = 0; m < 3; ++m) {
 			for (l = 0; l < 9; ++l) {
-				this.addSlot(new Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 84 + m * 18));
+				this.addSlot(new Slot(playerInventory, l + m * 9, 8 + l * 18, 138 + m * 18));
 			}
 		}
 		//The player Hotbar
 		for (m = 0; m < 9; ++m) {
-			this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 142));
+			this.addSlot(new Slot(playerInventory, m + 27, 8 + m * 18, 196));
 		}
-
 	}
 
 	public void onCompositeSlotChanged(Inventory compositeInventory) {
 		var component = service.convert(compositeInventory.getStack(0));
 		if (component.isPresent()) {
+			this.compositeSlot.state = component.get();
 			this.slotList.forEach(this.slots::remove);
 			slotList.clear();
 			ToolTree toolTree = new ToolTree(component.get());
 			toolTree.buildTree();
-			placeSlots(toolTree.getRoot(), 80, 35, 2);
-		} else {
+			placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot);
+		} else if (this.slotList.size() > 0) {
+			compositeSlot.state = null;
 			this.slotList.forEach(this.slots::remove);
 			slotList.clear();
 		}
 	}
 
-	private void placeSlots(TreeNode node, int parentOffsetX, int offsetY, int slotSpacing) {
+
+	public void refreshTree(State state) {
+		this.slotList.forEach(this.slots::remove);
+		slotList.clear();
+		compositeSlot.inventory.setStack(0, service.convert(state).get());
+		ToolTree toolTree = new ToolTree(state);
+		toolTree.buildTree();
+		placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot);
+	}
+
+	private void placeSlots(TreeNode node, int parentOffsetX, int offsetY, int slotSpacing, Slot parent) {
 		// Calculate total number of slots for the node, including children's slots
 		int totalSlots = node.getLeafCount();
 		// Calculate total slot width and spacing width
@@ -122,52 +130,17 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			int slotOffsetX = startOffsetX + currentWidth + (childWidth / 2);
 
 			var inventory = new SimpleInventory(1);
-			var slot = new PositionedSlot(inventory, 0, slotOffsetX, offsetY, child.slot);
+			var slot = new PositionedSlot(inventory, 0, slotOffsetX, offsetY, child.slot, parent, ((Composite) node.state).getSlotContainer());
 			slotList.add(slot);
 			addSlot(slot);
-			slot.insertStack(service.convert(child.getState()).orElse(ItemStack.EMPTY));
+			slot.inventory.setStack(0, service.convert(child.getState()).orElse(ItemStack.EMPTY));
 
-			placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing);
+			placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing, slot);
 			placedSlots += 1;
 			currentWidth += childWidth + slotSpacing;
 		}
 	}
 
-
-	private int calculateSubtreeWidthHelper(State state, Map<State, Integer> widthMap) {
-		if (widthMap.containsKey(state)) {
-			return widthMap.get(state);
-		}
-
-		int width = 0;
-
-		if (state instanceof ConstructedState construct) {
-			for (State constructed : construct.parts()) {
-				width += calculateSubtreeWidthHelper(constructed, widthMap);
-			}
-		}
-
-		if (state instanceof Composite composite) {
-			for (com.sigmundgranaas.forgero.core.state.Slot upgradeSlot : composite.slots()) {
-				// Width is added for every slot, whether filled or not
-				width += 1;
-
-				// If the slot is filled, recursively calculate the width of the upgrade
-				if (upgradeSlot.filled()) {
-					width += calculateSubtreeWidthHelper(upgradeSlot.get().get(), widthMap);
-				}
-			}
-		}
-
-		widthMap.put(state, width);
-		return width;
-	}
-
-	private Map<State, Integer> calculateSubtreeWidth(State root) {
-		Map<State, Integer> widthMap = new HashMap<>();
-		calculateSubtreeWidthHelper(root, widthMap);
-		return widthMap;
-	}
 
 	@Override
 	public void close(PlayerEntity player) {
@@ -187,50 +160,54 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	@Override
 	public ItemStack transferSlot(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
-		Slot slot = this.slots.get(invSlot);
-		if (slot.hasStack()) {
-			ItemStack originalStack = slot.getStack();
-			newStack = originalStack;
-			if (invSlot < this.inventory.size()) {
-				if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
+		if (this.slots.size() >= invSlot) {
+			Slot slot = this.slots.get(invSlot);
+			if (slot.hasStack()) {
+				ItemStack originalStack = slot.getStack();
+				newStack = originalStack;
+				if (invSlot < this.inventory.size()) {
+					if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
-				return ItemStack.EMPTY;
-			}
 
-			if (originalStack.isEmpty()) {
-				slot.setStack(ItemStack.EMPTY);
-			} else {
-				slot.markDirty();
+				if (originalStack.isEmpty()) {
+					slot.setStack(ItemStack.EMPTY);
+				} else {
+					slot.markDirty();
+				}
 			}
 		}
+
 		return newStack;
 	}
 
-
-	private static class CompositeSlot extends Slot {
-		public CompositeSlot(Inventory inventory, int index, int x, int y) {
-			super(inventory, index, x, y);
-
-		}
+	public CompositeSlot getCompositeSlot() {
+		return compositeSlot;
 	}
 
-	public static class PositionedSlot extends Slot {
-		public final int xPosition;
-		public final int yPosition;
-		@Nullable
-		public final com.sigmundgranaas.forgero.core.state.Slot slot;
 
-		public PositionedSlot(Inventory inventory, int index, int xPosition, int yPosition, @Nullable com.sigmundgranaas.forgero.core.state.Slot slot) {
-			super(inventory, index, xPosition, yPosition);
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-			this.slot = slot;
+	public static class CompositeSlot extends Slot {
+		public int x;
+		public int y;
+		@Nullable
+		protected State state;
+
+		public CompositeSlot(Inventory inventory, int index, int x, int y, @Nullable State state) {
+			super(inventory, index, x, y);
+			this.state = state;
 		}
 
-		public @Nullable com.sigmundgranaas.forgero.core.state.Slot getSlot() {
-			return slot;
+		@Override
+		public int getMaxItemCount() {
+			return 1;
+		}
+
+		@Override
+		public boolean canInsert(ItemStack stack) {
+			return StateService.INSTANCE.convert(stack).isPresent() && StateService.INSTANCE.convert(stack).get() instanceof Composite;
 		}
 	}
 
@@ -295,6 +272,69 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		@Override
 		public Type type() {
 			return Type.of("EMPTY");
+		}
+	}
+
+	public class PositionedSlot extends Slot {
+		public final int xPosition;
+		public final int yPosition;
+		@Nullable
+		public final com.sigmundgranaas.forgero.core.state.Slot slot;
+		private final SlotContainer container;
+		@Nullable
+		public Slot parent;
+
+		public PositionedSlot(Inventory inventory, int index, int xPosition, int yPosition, @Nullable com.sigmundgranaas.forgero.core.state.Slot slot, @Nullable Slot parent, SlotContainer container) {
+			super(inventory, index, xPosition, yPosition);
+			this.xPosition = xPosition;
+			this.yPosition = yPosition;
+			this.slot = slot;
+			this.parent = parent;
+			this.container = container;
+		}
+
+		public @Nullable com.sigmundgranaas.forgero.core.state.Slot getSlot() {
+			return slot;
+		}
+
+		@Override
+		public int getMaxItemCount() {
+			return 1;
+		}
+
+		@Override
+		public boolean canTakeItems(PlayerEntity playerEntity) {
+			return slot != null;
+		}
+
+
+		@Override
+		public boolean canInsert(ItemStack stack) {
+			var stateOpt = StateService.INSTANCE.convert(stack);
+			return slot != null && stateOpt.isPresent() && container.canUpgrade(stateOpt.get());
+		}
+
+		@Override
+		public void onQuickTransfer(ItemStack newItem, ItemStack original) {
+			if (this.slot != null && this.slot.get().isPresent() && this.parent != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
+				this.container.empty(slot);
+				refreshTree(compositeSlot.state);
+			}
+			super.onQuickTransfer(newItem, original);
+		}
+
+		@Override
+		public ItemStack insertStack(ItemStack stack, int count) {
+			var stateOpt = StateService.INSTANCE.convert(stack);
+
+			if (this.parent != null && this.slot != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
+				container.canUpgrade(stateOpt.get());
+				container.set(stateOpt.get());
+				refreshTree(compositeSlot.state);
+			}
+
+
+			return super.insertStack(stack, count);
 		}
 	}
 

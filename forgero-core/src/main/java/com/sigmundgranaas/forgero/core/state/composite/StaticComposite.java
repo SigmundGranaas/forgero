@@ -85,6 +85,11 @@ public class StaticComposite implements Composite {
 	}
 
 	@Override
+	public SlotContainer getSlotContainer() {
+		return upgrades;
+	}
+
+	@Override
 	@NotNull
 	public String name() {
 		return name;

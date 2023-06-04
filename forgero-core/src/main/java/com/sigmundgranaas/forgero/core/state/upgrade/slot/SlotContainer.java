@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
-import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.state.CopyAble;
-import com.sigmundgranaas.forgero.core.state.Slot;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.util.match.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.state.CopyAble;
+import com.sigmundgranaas.forgero.core.state.Slot;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.Context;
 
 public class SlotContainer implements CopyAble<SlotContainer> {
 	private final List<Slot> slots;
@@ -75,5 +75,11 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 			return this;
 		}
 		return new SlotContainer(Stream.of(originalSlots, emptySlots).flatMap(List::stream).toList());
+	}
+
+	public void empty(Slot slot) {
+		if (this.slots.remove(slot)) {
+			this.slots.add(slot.empty());
+		}
 	}
 }

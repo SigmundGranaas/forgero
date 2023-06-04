@@ -63,6 +63,11 @@ public class Construct implements Composite, ConstructedState {
 	}
 
 	@Override
+	public SlotContainer getSlotContainer() {
+		return this.upgrades;
+	}
+
+	@Override
 	@NotNull
 	public String name() {
 		return name;
