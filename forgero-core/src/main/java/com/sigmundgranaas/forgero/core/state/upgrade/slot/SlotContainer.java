@@ -34,12 +34,28 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 	}
 
 	public Optional<Slot> set(State entry) {
-		return slots.stream()
-				.filter(slot -> slot.test(entry, Context.of()))
-				.map(slot -> slot.fill(entry, slot.category()))
-				.flatMap(Optional::stream)
-				.findFirst()
-				.map(this::set);
+		for (Slot slot : slots) {
+			if (slot.test(entry, Context.of())) {
+				Optional<Slot> mappedSlot = slot.fill(entry, slot.category());
+				if (mappedSlot.isPresent()) {
+					return Optional.of(this.set(mappedSlot.get()));
+				}
+			}
+		}
+		return Optional.empty();
+	}
+
+	public Slot set(State entry, Slot slot) {
+		for (Slot slot1 : slots) {
+			if (slot == slot1 && slot.test(entry, Context.of())) {
+				Optional<Slot> mappedSlot = slot.fill(entry, slot.category());
+				if (mappedSlot.isPresent()) {
+					this.slots.set(this.slots.indexOf(slot1), mappedSlot.get());
+					return mappedSlot.get();
+				}
+			}
+		}
+		return slot;
 	}
 
 	public Optional<Slot> set(State entry, int index) {

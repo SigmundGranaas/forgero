@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
@@ -11,13 +12,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -37,12 +36,14 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 	public UpgradeStationScreen(UpgradeStationScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, Text.translatable("block.forgero.upgrade_station"));
 		this.itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+		super.backgroundHeight = this.backgroundHeight;
+		super.backgroundWidth = this.backgroundWidth;
 	}
 
 
 	public void renderCustomTooltip(MatrixStack matrices, List<Text> lines, int mouseX, int mouseY) {
-		for (UpgradeStationScreenHandler.PositionedSlot slot : this.handler.slots.stream().filter(UpgradeStationScreenHandler.PositionedSlot.class::isInstance).map(UpgradeStationScreenHandler.PositionedSlot.class::cast).toList()) {
-			if (isPointWithinBounds(slot.x, slot.y, 16, 16, mouseX, mouseY) && !slot.hasStack() && slot.slot != null) {
+		for (UpgradeStationScreenHandler.PositionedSlot slot : this.handler.slotPool.stream().filter(Objects::nonNull).map(UpgradeStationScreenHandler.PositionedSlot.class::cast).toList()) {
+			if (isPointWithinBounds(slot.xPosition, slot.yPosition, 16, 16, mouseX, mouseY) && !slot.hasStack() && slot.slot != null) {
 				lines.addAll(new SlotSectionWriter.SlotWriter(slot.slot, TooltipConfiguration.builder().build()).entries());
 				super.renderTooltip(matrices, lines, mouseX, mouseY);
 				renderCycledSlot(slot, lines, mouseX, mouseY);
@@ -92,16 +93,14 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 		if (this.handler.compositeSlot.hasStack()) {
 			this.renderLinesBetweenSlots(matrices);
-			for (Slot slot : handler.slots) {
+			for (Slot slot : handler.slotPool) {
 				// Render your slots here
-				if (slot instanceof UpgradeStationScreenHandler.PositionedSlot) {
+				if (slot instanceof UpgradeStationScreenHandler.PositionedSlot positioned && slot.isEnabled() && positioned.slot != null) {
 					this.drawSlot(matrices, slot);
 				}
 			}
 		}
-
 		this.drawSlot(matrices, handler.compositeSlot);
-
 	}
 
 	private void drawSlot(MatrixStack matrices, Slot slot) {
@@ -116,14 +115,6 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		RenderSystem.setShaderTexture(0, TEXTURE);
 
 		this.drawTexture(matrices, centerX + x, centerY + y, 194, 55, 18, 18);
-
-		if (!slot.hasStack()) {
-			ItemStack stack = new ItemStack(Items.IRON_INGOT);
-			Sprite sprite = itemRenderer.getModels().getModel(stack).getParticleSprite();
-
-			//RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
-			//drawSprite(matrices, centerX + x + 1, centerY + y + 1, this.getZOffset(), 16, 16, sprite);
-		}
 	}
 
 	@Override
@@ -155,6 +146,12 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		renderLineBetweenSlots(matrices, startX + x, halfWayY + y, endX + x, halfWayY + y, thickness, color, opacity);
 	}
 
+
+	@Override
+	protected void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType) {
+		super.onMouseClick(slot, slotId, button, actionType);
+	}
+
 	// Render the vertical line from the end of the horizontal line to the child
 	private void renderVerticalToChild(MatrixStack matrices, int startX, int startY, int endX, int endY, int thickness, int color, float opacity) {
 		// Calculate the halfway point
@@ -164,18 +161,22 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 	// Call these functions in renderLinesBetweenSlots
 	public void renderLinesBetweenSlots(MatrixStack matrices) {
-		for (Slot slot : this.handler.slots) {
-			if (!(slot instanceof UpgradeStationScreenHandler.PositionedSlot positionedSlot)) {
+		for (Slot slot : this.handler.slotPool) {
+			if (!(slot instanceof UpgradeStationScreenHandler.PositionedSlot positionedSlot) || !slot.isEnabled()) {
 				continue;
 			}
-			if (positionedSlot.parent != null) {
+			if (positionedSlot.parent != null && positionedSlot.parent.isEnabled()) {
 				Slot parent = positionedSlot.parent;
 
-				int parentCenterX = parent.x + 18 / 2;
-				int parentCenterY = parent.y + 18 / 2;
+				int parentCenterX = parent.x + 16 / 2;
+				int parentCenterY = parent.y + 16 / 2;
 
-				int childCenterX = positionedSlot.xPosition + 18 / 2;
-				int childCenterY = positionedSlot.yPosition + 18 / 2;
+				if (parent instanceof UpgradeStationScreenHandler.PositionedSlot positionedSlot1) {
+					parentCenterX = positionedSlot1.xPosition + 16 / 2;
+					parentCenterY = positionedSlot1.yPosition + 16 / 2;
+				}
+				int childCenterX = positionedSlot.xPosition + 16 / 2;
+				int childCenterY = positionedSlot.yPosition + 16 / 2;
 
 				int thickness = 2;
 				int color = 0xFFFFFF;
@@ -223,9 +224,6 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		titleY = 5;
 
 		playerInventoryTitleY = 127;
-
-		this.x = (this.width - this.backgroundWidth) / 2;
-		this.y = (this.height - this.backgroundHeight) / 2;
 	}
 
 }

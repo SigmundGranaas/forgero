@@ -28,25 +28,18 @@ import net.minecraft.world.World;
 public class UpgradeStationScreenHandler extends ScreenHandler {
 
 	private static final int SLOT_SIZE = 18;
-	public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
-		@Override
-		public ItemStack transferSlot(PlayerEntity player, int index) {
-			return ItemStack.EMPTY;
-		}
 
-		@Override
-		public boolean canUse(PlayerEntity player) {
-			return true;
-		}
-	};
-	public final int verticalSpacing = 25;   // adjust this value as needed
+	public final int verticalSpacing = 25;
 	public final int compositeSlotY = 20;
 	protected final CompositeSlot compositeSlot;
+	protected final List<PositionedSlot> slotPool;
 	private final PlayerEntity entity;
-	private final SimpleInventory inventory;
+	private final SimpleInventory compositeInventory;
 	private final ScreenHandlerContext context;
 	private final StateService service;
-	private final List<Slot> slotList;
+	private final int maxSlots = 100;
+	private boolean isBuildingTree = false;
+	private int activeSlots;
 
 	//This constructor gets called on the client when the server wants it to open the screenHandler,
 	//The client will call the other constructor with an empty Inventory and the screenHandler will automatically
@@ -60,66 +53,89 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	public UpgradeStationScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
 		super(UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER, syncId);
 		this.context = context;
-		this.inventory = new SimpleInventory(1);
+		this.compositeInventory = new SimpleInventory(1);
 		this.entity = playerInventory.player;
-		inventory.addListener(this::onContentChanged);
+		compositeInventory.addListener(this::onContentChanged);
 		//some inventories do custom logic when a player opens it.
-		inventory.onOpen(playerInventory.player);
-		SimpleInventory compositeInventory = new SimpleInventory(1);
+		compositeInventory.onOpen(playerInventory.player);
 		compositeInventory.addListener(this::onCompositeSlotChanged);
 		this.compositeSlot = new CompositeSlot(compositeInventory, 0, 80, compositeSlotY, null);
 		this.service = StateService.INSTANCE;
-		this.slotList = new ArrayList<>();
 		//This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
 		//This will not render the background of the slots however, this is the Screens job
-		int m;
-		int l;
-
 		this.addSlot(compositeSlot);
 
-		//The player inventory
-		for (m = 0; m < 3; ++m) {
-			for (l = 0; l < 9; ++l) {
-				this.addSlot(new Slot(playerInventory, l + m * 9, 8 + l * 18, 138 + m * 18));
+		this.slotPool = new ArrayList<>(maxSlots);
+
+		this.activeSlots = 0;
+
+
+		int i;
+
+		for (i = 0; i < 9; ++i) {
+			this.addSlot(new Slot(playerInventory, this.slots.size() - 1, 8 + i * 18, 196));
+		}
+
+		for (i = 0; i < 3; ++i) {
+			for (int j = 0; j < 9; ++j) {
+				this.addSlot(new Slot(playerInventory, this.slots.size() - 1, 8 + j * 18, 138 + i * 18));
 			}
 		}
-		//The player Hotbar
-		for (m = 0; m < 9; ++m) {
-			this.addSlot(new Slot(playerInventory, m + 27, 8 + m * 18, 196));
+
+
+		// initialization of the slot pool
+		for (int j = 0; j < maxSlots; j++) {
+			var inventory = new SimpleInventory(1);
+			var slot = new PositionedSlot(inventory, this.slots.size(), 0, 0, null, null, null); //initialize with dummy values, will be populated later
+			this.slotPool.add(slot);
+			this.addSlot(slot);
 		}
 	}
 
+
 	public void onCompositeSlotChanged(Inventory compositeInventory) {
-		var component = service.convert(compositeInventory.getStack(0));
-		if (component.isPresent()) {
-			this.compositeSlot.state = component.get();
-			this.slotList.forEach(this.slots::remove);
-			slotList.clear();
-			ToolTree toolTree = new ToolTree(component.get());
-			toolTree.buildTree();
-			placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot, entity.getWorld(), entity);
-		} else if (this.slotList.size() > 0) {
-			compositeSlot.state = null;
-			this.slotList.forEach(slot -> slot.inventory.clear());
+		if (!isBuildingTree) {
+			this.isBuildingTree = true;
+			for (int i = 0; i < this.activeSlots; i++) {
+				slotPool.get(i).clear();
+			}
+			this.activeSlots = 0;
+
+			var component = service.convert(compositeInventory.getStack(0));
+			if (component.isPresent()) {
+				this.compositeSlot.state = component.get();
+				ToolTree toolTree = new ToolTree(component.get());
+				toolTree.buildTree();
+				placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot, entity.getWorld(), entity);
+			} else {
+				for (int i = 0; i < this.activeSlots; i++) {
+					PositionedSlot slot = slotPool.get(i);
+					slot.clear();
+				}
+				compositeSlot.state = null;
+			}
+
+			this.isBuildingTree = false;
+			updateToClient();
 		}
 	}
 
 
 	public void refreshTree(State state) {
-		this.context.run((world, pos) -> {
-			this.slotList.forEach(slot -> {
-				slot.inventory.clear();
-				slot.inventory.markDirty();
-			});
-
-			this.slotList.forEach(this.slots::remove);
-			slotList.clear();
+		if (!isBuildingTree) {
+			this.isBuildingTree = true;
+			for (int i = 0; i < this.activeSlots; i++) {
+				slotPool.get(i).clear();
+			}
+			this.activeSlots = 0;
 			compositeSlot.inventory.setStack(0, service.convert(state).get());
-
+			this.compositeSlot.state = state;
 			ToolTree toolTree = new ToolTree(state);
 			toolTree.buildTree();
-			placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot, world, this.entity);
-		});
+			placeSlots(toolTree.getRoot(), 75, compositeSlotY + verticalSpacing, 1, compositeSlot, this.entity.getWorld(), this.entity);
+			updateToClient();
+			this.isBuildingTree = false;
+		}
 	}
 
 	private void placeSlots(TreeNode node, int parentOffsetX, int offsetY, int slotSpacing, Slot parent, World world, PlayerEntity entity) {
@@ -141,54 +157,63 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			int childWidth = childSlotWidth + childSpacingWidth;
 			int slotOffsetX = startOffsetX + currentWidth + (childWidth / 2);
 
-			var inventory = new SimpleInventory(1);
-			var slot = new PositionedSlot(inventory, 0, slotOffsetX, offsetY, child.slot, parent, ((Composite) node.state).getSlotContainer());
-			slotList.add(slot);
-			addSlot(slot);
-			ItemStack stack = service.convert(child.getState()).orElse(ItemStack.EMPTY);
-			if (!world.isClient() && entity instanceof ServerPlayerEntity serverPlayerEntity) {
-				slot.inventory.setStack(0, stack);
-				setPreviousTrackedSlot(slot.id, stack);
-				serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), slot.id, stack));
+			if (this.activeSlots >= this.maxSlots) {
+				throw new IllegalStateException("Too many slots required, consider increasing the maxSlots parameter.");
 			}
-			placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing, slot, world, entity);
+
+			PositionedSlot slot = this.slotPool.get(this.activeSlots);
+			int index = this.slots.indexOf(slot);
+			PositionedSlot newSlot = new PositionedSlot(slot.inventory, 0, slotOffsetX, offsetY, child.slot, parent, ((Composite) node.state).getSlotContainer());
+			newSlot.id = slot.id;
+			this.slots.set(index, newSlot);
+			this.slotPool.set(this.activeSlots, newSlot);
+			ItemStack stack = service.convert(child.getState()).orElse(ItemStack.EMPTY);
+			if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+				newSlot.inventory.setStack(0, stack);
+				this.setPreviousTrackedSlot(newSlot.id, stack);
+				serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.getRevision(), newSlot.id, stack));
+			}
+			this.activeSlots++;
+			placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing, newSlot, world, entity);
 			placedSlots += 1;
 			currentWidth += childWidth + slotSpacing;
 		}
 	}
 
-
 	@Override
 	public void close(PlayerEntity player) {
 		super.close(player);
 		this.context.run((world, pos) -> {
-			this.dropInventory(player, this.inventory);
+			this.dropInventory(player, this.compositeInventory);
 		});
 	}
-
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
 		return true;
 	}
 
-	// Shift + Player Inv Slot
 	@Override
 	public ItemStack transferSlot(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
-		if (this.slots.size() >= invSlot) {
+		if (this.slots.size() > invSlot) {
 			Slot slot = this.slots.get(invSlot);
 			if (slot.hasStack()) {
 				ItemStack originalStack = slot.getStack();
-				newStack = originalStack;
-				if (invSlot < this.inventory.size()) {
-					if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
+				newStack = originalStack.copy();
+				if (invSlot < this.compositeInventory.size()) {
+					// When the slot is in the player's inventory, try moving the stack to the composite inventory
+					if (!this.insertItem(originalStack, this.compositeInventory.size(), this.slots.size(), true)) {
 						return ItemStack.EMPTY;
 					}
-				} else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
-					return ItemStack.EMPTY;
+				} else {
+					// When the slot is in the composite inventory, try moving the stack to the player's inventory
+					if (!this.insertItem(originalStack, 0, this.compositeInventory.size(), false)) {
+						return ItemStack.EMPTY;
+					}
 				}
 
+				// If the original stack is empty after moving, clear the slot; otherwise, mark it as dirty
 				if (originalStack.isEmpty()) {
 					slot.setStack(ItemStack.EMPTY);
 				} else {
@@ -266,12 +291,6 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			return this.parent;
 		}
 
-		public State getParentPart() {
-			if (this.parent == null) {
-				return null;
-			}
-			return this.parent.getState();
-		}
 	}
 
 	public static class EmptyState implements State {
@@ -291,71 +310,8 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		}
 	}
 
-	public class PositionedSlot extends Slot {
-		public final int xPosition;
-		public final int yPosition;
-		private final SlotContainer container;
-		@Nullable
-		public com.sigmundgranaas.forgero.core.state.Slot slot;
-		@Nullable
-		public Slot parent;
-
-		public PositionedSlot(Inventory inventory, int index, int xPosition, int yPosition, @Nullable com.sigmundgranaas.forgero.core.state.Slot slot, @Nullable Slot parent, SlotContainer container) {
-			super(inventory, index, xPosition, yPosition);
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-			this.slot = slot;
-			this.parent = parent;
-			this.container = container;
-		}
-
-		public @Nullable com.sigmundgranaas.forgero.core.state.Slot getSlot() {
-			return slot;
-		}
-
-		@Override
-		public int getMaxItemCount() {
-			return 1;
-		}
-
-		@Override
-		public boolean canTakeItems(PlayerEntity playerEntity) {
-			return slot != null;
-		}
-
-
-		@Override
-		public boolean canInsert(ItemStack stack) {
-			var stateOpt = StateService.INSTANCE.convert(stack);
-			return slot != null && stateOpt.isPresent() && container.canUpgrade(stateOpt.get());
-		}
-
-		@Override
-		public void onTakeItem(PlayerEntity player, ItemStack stack) {
-			if (this.slot != null && this.slot.get().isPresent() && this.parent != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
-				this.slot = this.container.empty(slot);
-				refreshTree(compositeSlot.state);
-			}
-			super.onTakeItem(player, stack);
-		}
-
-		@Override
-		public ItemStack insertStack(ItemStack stack, int count) {
-			if (this.canInsert(stack)) {
-				var stateOpt = StateService.INSTANCE.convert(stack);
-				if (stateOpt.isPresent() && this.parent != null && this.slot != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
-					this.slot = container.set(stateOpt.get()).orElse(slot);
-					refreshTree(compositeSlot.state);
-				}
-			}
-
-			return super.insertStack(stack, count);
-		}
-	}
-
 	// Empty state representing an unfilled slot
-
-	public class ToolTree {
+	public static class ToolTree {
 		private final TreeNode root;
 
 		public ToolTree(State rootState) {
@@ -390,6 +346,85 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 					this.buildTreeHelper(childNode);
 				}
 			}
+		}
+	}
+
+	public class PositionedSlot extends Slot {
+		public int xPosition;
+		public int yPosition;
+		@Nullable
+		public com.sigmundgranaas.forgero.core.state.Slot slot;
+		@Nullable
+		public Slot parent;
+		private SlotContainer container;
+
+		public PositionedSlot(Inventory inventory, int index, int xPosition, int yPosition, @Nullable com.sigmundgranaas.forgero.core.state.Slot slot, @Nullable Slot parent, SlotContainer container) {
+			super(inventory, index, xPosition, yPosition);
+			this.xPosition = xPosition;
+			this.yPosition = yPosition;
+			this.slot = slot;
+			this.id = index;
+			this.parent = parent;
+			this.container = container;
+		}
+
+
+		public @Nullable com.sigmundgranaas.forgero.core.state.Slot getSlot() {
+			return slot;
+		}
+
+		@Override
+		public int getMaxItemCount() {
+			return 1;
+		}
+
+
+		@Override
+		public boolean canTakeItems(PlayerEntity playerEntity) {
+			return slot != null;
+		}
+
+
+		@Override
+		public boolean canInsert(ItemStack stack) {
+			var stateOpt = StateService.INSTANCE.convert(stack);
+			return slot != null && stateOpt.isPresent() && container.canUpgrade(stateOpt.get());
+		}
+
+		@Override
+		public void onTakeItem(PlayerEntity player, ItemStack stack) {
+			super.onTakeItem(player, stack);
+			if (this.slot != null && this.slot.get().isPresent() && this.parent != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
+				this.slot = this.container.empty(slot);
+				refreshTree(compositeSlot.state);
+			}
+		}
+
+		@Override
+		public ItemStack insertStack(ItemStack stack, int count) {
+			ItemStack handled = super.insertStack(stack, count);
+			if (this.canInsert(stack)) {
+				var stateOpt = StateService.INSTANCE.convert(stack);
+				if (stateOpt.isPresent() && this.parent != null && this.slot != null && compositeSlot.state != null && compositeSlot.state instanceof Composite composite) {
+					this.slot = container.set(stateOpt.get(), this.slot);
+					refreshTree(compositeSlot.state);
+				}
+			}
+			return handled;
+		}
+
+		public void clear() {
+			this.xPosition = 0;
+			this.yPosition = 0;
+			this.slot = null;
+			this.parent = null;
+			this.container = null;
+			this.inventory.removeStack(0);
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return this.slot != null || this.container != null || this.parent != null;
 		}
 	}
 
