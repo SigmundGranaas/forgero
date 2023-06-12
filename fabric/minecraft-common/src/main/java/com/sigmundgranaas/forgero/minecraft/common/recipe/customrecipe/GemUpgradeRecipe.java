@@ -106,7 +106,7 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializer.SMITHING_TRIM;
+		return GemUpgradeRecipe.Serializer.INSTANCE.getSerializer();
 	}
 
 	public static class Serializer implements RecipeSerializer<GemUpgradeRecipe>, ForgeroRecipeSerializer {

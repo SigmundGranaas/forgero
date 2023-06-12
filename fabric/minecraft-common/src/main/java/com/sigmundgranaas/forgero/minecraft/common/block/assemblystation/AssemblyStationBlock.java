@@ -33,7 +33,7 @@ import static net.minecraft.block.Blocks.DEEPSLATE;
 public class AssemblyStationBlock extends HorizontalFacingBlock {
 
     public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
-    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
+    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F).solidBlock((BlockState state, BlockView world, BlockPos pos) -> true));
     public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings());
 
     // a public identifier for multiple parts of our bigger chest
@@ -101,7 +101,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction direction = ctx.getPlayerLookDirection().getOpposite();
+		Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
 		return this.getDefaultState().with(FACING, direction);
 	}
 
@@ -148,6 +148,8 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 			return false;
 		}
 	}
+
+
 
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
