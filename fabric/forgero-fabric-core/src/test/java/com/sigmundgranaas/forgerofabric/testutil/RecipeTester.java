@@ -47,7 +47,7 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
 	}
 
-	public static RecipeTester<CraftingInventory, CraftingRecipe> ofTool(String head, String binding, String handle, String outCome, TestContext context) {
+	public static RecipeTester<RecipeInputInventory, CraftingRecipe> ofTool(String head, String binding, String handle, String outCome, TestContext context) {
 		CraftingInventory inventory = new CraftingInventory(dummyHandler, 3, 3);
 		inventory.setStack(2, new ItemStack(itemFromString(head)));
 		inventory.setStack(4, new ItemStack(itemFromString(binding)));

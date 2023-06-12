@@ -25,9 +25,21 @@ public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHa
 		titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
 	}
 
+
 	@Override
 	protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-
+		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, TEXTURE);
+		int x = (width - backgroundWidth) / 2;
+		int y = (height - backgroundHeight) / 2;
+		context.drawTexture(TEXTURE, x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 	}
 
+	@Override
+	public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
+		renderBackground(matrices);
+		super.render(matrices, mouseX, mouseY, delta);
+		drawMouseoverTooltip(matrices, mouseX, mouseY);
+	}
 }
