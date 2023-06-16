@@ -115,4 +115,9 @@ public class ForgeroInstanceRegistry implements StateService {
 	public StateMapper getMapper() {
 		return mapper;
 	}
+
+	@Override
+	public StateService uncached() {
+		return new UncachedStateService(this);
+	}
 }

@@ -133,7 +133,7 @@ public class StaticComposite implements Composite {
 
 	@Override
 	public Composite copy() {
-		return this;
+		return new StaticComposite(upgrades.copy(), name(), nameSpace(), type(), properties);
 	}
 
 	@Override

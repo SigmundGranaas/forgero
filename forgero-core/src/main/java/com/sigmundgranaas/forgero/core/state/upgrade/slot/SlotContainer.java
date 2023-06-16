@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
@@ -78,7 +79,7 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 
 	@Override
 	public SlotContainer copy() {
-		return new SlotContainer(slots());
+		return new SlotContainer(slots().stream().map(Slot::copy).collect(Collectors.toList()));
 	}
 
 	public SlotContainer remove(String id) {

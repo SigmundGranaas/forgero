@@ -52,6 +52,11 @@ public class UninitializedStateService implements StateService {
 	}
 
 	@Override
+	public StateService uncached() {
+		return this;
+	}
+
+	@Override
 	public Optional<State> find(String id) {
 		Forgero.LOGGER.warn("Forgero is not initialized yet. Please wait for the mod to finish loading.");
 		return Optional.empty();

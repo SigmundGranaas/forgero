@@ -18,7 +18,7 @@ you have backed up your save.**
 * Updated icons
 * Added option to enable recipes for all schematics
 * Added options to tweak how much weight reduces speed
-* Added recipe for sword including the sword guard
+* Added recipe for sword and tools including the sword guard and the binding
 * Buffed the battleaxe slightly
 * Made weight affect mining speed
 * Added a datapack driven tool disassembly system

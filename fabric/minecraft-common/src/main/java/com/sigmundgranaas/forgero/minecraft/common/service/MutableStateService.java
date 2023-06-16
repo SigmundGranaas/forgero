@@ -57,6 +57,11 @@ class MutableStateService implements StateService {
 	}
 
 	@Override
+	public StateService uncached() {
+		return this.stateService.uncached();
+	}
+
+	@Override
 	public Optional<State> find(String id) {
 		return stateService.find(id);
 	}
