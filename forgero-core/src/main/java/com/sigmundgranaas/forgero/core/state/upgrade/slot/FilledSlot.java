@@ -3,13 +3,11 @@ package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
-import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.v2.UpgradePropertyProcessor;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -39,22 +37,7 @@ public class FilledSlot extends AbstractTypedSlot {
 
 	private List<Property> filterProperties(Target target) {
 		var properties = upgrade.applyProperty(target);
-		var otherProperties = properties.stream().filter(property -> !(property instanceof Attribute)).toList();
-		var attributes = Property.stream(properties)
-				.getAttributes()
-				.filter(this::filterAttribute)
-				.map(attribute -> AttributeBuilder.createAttributeBuilderFromAttribute(attribute).applyCategory(Category.UNDEFINED).build())
-				.toList();
-		return Stream.of(otherProperties, attributes)
-				.flatMap(List::stream)
-				.map(Property.class::cast)
-				.toList();
-	}
-
-	private boolean filterAttribute(Attribute attribute) {
-		if (attribute.getCategory() == Category.UNDEFINED || attribute.getCategory() == Category.ALL) {
-			return true;
-		} else return categories.contains(attribute.getCategory());
+		return new UpgradePropertyProcessor(categories).process(properties);
 	}
 
 	@Override

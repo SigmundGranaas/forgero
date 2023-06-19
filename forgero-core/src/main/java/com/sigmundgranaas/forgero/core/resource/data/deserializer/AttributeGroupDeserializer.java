@@ -40,10 +40,10 @@ public class AttributeGroupDeserializer implements JsonDeserializer<List<Propert
 					PropertyPojo.Attribute attribute = context.deserialize(attributeElement, PropertyPojo.Attribute.class);
 
 					// Set default values for each property in case they are missing
-					attribute.context = groupObject.has("context") ? Context.of(contextValue) : Contexts.UNDEFINED;
-					attribute.operation = groupObject.has("operation") ? NumericOperation.valueOf(operationValue) : NumericOperation.ADDITION;
-					attribute.order = groupObject.has("order") ? CalculationOrder.valueOf(orderValue) : CalculationOrder.BASE;
-					attribute.category = groupObject.has("category") ? Category.valueOf(categoryValue) : Category.UNDEFINED;
+					attribute.context = groupObject.has("context") ? Context.of(contextValue) : attribute.context;
+					attribute.operation = groupObject.has("operation") ? NumericOperation.valueOf(operationValue) : attribute.operation;
+					attribute.order = groupObject.has("order") ? CalculationOrder.valueOf(orderValue) : attribute.order;
+					attribute.category = groupObject.has("category") ? Category.valueOf(categoryValue) : attribute.category;
 					attribute.priority = priorityValue;
 
 					attributeList.add(attribute);

@@ -125,8 +125,9 @@ public class AttributeBuilder {
 		return builder;
 	}
 
-	private void applyContext(Context context) {
+	public AttributeBuilder applyContext(Context context) {
 		this.context = context;
+		return this;
 	}
 
 	public AttributeBuilder applyCondition(Predicate<Target> condition) {

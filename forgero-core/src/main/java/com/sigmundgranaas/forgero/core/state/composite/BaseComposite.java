@@ -9,10 +9,8 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
@@ -55,7 +53,6 @@ public abstract class BaseComposite implements Composite {
 		List<Property> upgradeProps = slots().stream()
 				.map(state -> state.applyProperty(target))
 				.flatMap(List::stream)
-				.filter(this::filterAttribute)
 				.collect(Collectors.toList());
 
 		upgradeProps.addAll(slots().stream().map(slot -> slot.stream().features().toList()).flatMap(List::stream).toList());
@@ -63,12 +60,6 @@ public abstract class BaseComposite implements Composite {
 		return upgradeProps;
 	}
 
-	protected boolean filterAttribute(Property property) {
-		if (property instanceof Attribute attribute) {
-			return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory()) || attribute.getCategory() == Category.UNDEFINED;
-		}
-		return false;
-	}
 
 	@Override
 	public Optional<State> has(String id) {

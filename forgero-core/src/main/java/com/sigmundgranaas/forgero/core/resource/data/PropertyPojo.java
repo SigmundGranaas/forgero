@@ -41,7 +41,6 @@ public class PropertyPojo {
 
 	public void setAttributes(List<PropertyPojo.Attribute> attributes) {
 		var newList = new ArrayList<>(attributes);
-		newList.addAll(attributes);
 		this.attributes = newList;
 		this.groupedAttributes = Collections.emptyList();
 	}

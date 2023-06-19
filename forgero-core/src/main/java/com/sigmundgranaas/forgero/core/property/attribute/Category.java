@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 import java.util.EnumSet;
 
 public enum Category {
+	PASS,
 	OFFENSIVE,
 	UTILITY,
 	DEFENSIVE,
