@@ -1,8 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.composite.Constructed;
@@ -11,10 +15,6 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfigurati
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 public class BaseAttributeSectionWriter extends SectionWriter {
 
@@ -53,7 +53,7 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 	public boolean shouldWrite() {
 		return container.stream()
 				.getAttributes()
-				.anyMatch(attr -> attr.getOrder() == CalculationOrder.COMPOSITE) && !(container instanceof Constructed);
+				.anyMatch(attribute -> attribute.getContext().test(Contexts.COMPOSITE)) && !(container instanceof Constructed);
 	}
 
 	@Override
@@ -67,8 +67,8 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 	}
 
 	protected List<Text> entry(String attributeType) {
-		Optional<Attribute> attributeOpt = helper.attributesOfType(attributeType).filter(attribute -> CalculationOrder.COMPOSITE.equals(attribute.getOrder())).findFirst();
-		if (attributeOpt.isPresent()) {
+		Optional<Attribute> attributeOpt = helper.attributesOfType(attributeType).filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE)).findFirst();
+		if (attributeOpt.isPresent() && attributeOpt.get().leveledValue() != 0) {
 			Attribute attribute = attributeOpt.get();
 			if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
 				var builder = ImmutableList.<Text>builder();

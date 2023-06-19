@@ -11,33 +11,34 @@
       {
         "id": "wood-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 15
       },
       {
         "id": "wood-mining_speed-composite",
         "type": "MINING_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.2
       },
       {
         "id": "wood-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 80.0
       },
       {
         "id": "wood-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.2
       },
       {
         "id": "wood-attack_speed-utility-upgrade",
+        "context": "UPGRADE",
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "category": "OFFENSIVE",
@@ -46,6 +47,7 @@
       },
       {
         "id": "wood-mining_speed-offensive-upgrade",
+        "context": "UPGRADE",
         "type": "MINING_SPEED",
         "order": "BASE",
         "category": "OFFENSIVE",
@@ -54,6 +56,7 @@
       },
       {
         "id": "wood-attack_speed-utility-upgrade",
+        "context": "UPGRADE",
         "type": "ATTACK_SPEED",
         "order": "BASE",
         "category": "UTILITY",
@@ -62,6 +65,7 @@
       },
       {
         "id": "wood-durability-utility-upgrade",
+        "context": "UPGRADE",
         "type": "DURABILITY",
         "order": "BASE",
         "category": "UTILITY",

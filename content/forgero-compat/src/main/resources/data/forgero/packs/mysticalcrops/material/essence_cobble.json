@@ -9,33 +9,33 @@
   "properties": {
     "attributes": [
       {
-      "id": "stone-rarity-composite",
-      "type": "RARITY",
-      "order": "COMPOSITE",
-      "operation": "ADDITION",
-      "value": 15
-    },
-    {
-      "id": "stone-mining-speed-composite",
-      "type": "MINING_SPEED",
-      "order": "COMPOSITE",
-      "operation": "ADDITION",
-      "value": 4.3
-    },
-    {
-      "id": "stone-attack_damage-composite",
-      "type": "ATTACK_DAMAGE",
-      "order": "COMPOSITE",
-      "operation": "ADDITION",
-      "value": 2.5
-    },
-    {
-      "id": "stone-durability-composite",
-      "type": "DURABILITY",
-      "order": "COMPOSITE",
-      "operation": "ADDITION",
-      "value": 115.0
-    }
+        "id": "stone-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 15
+      },
+      {
+        "id": "stone-mining-speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.3
+      },
+      {
+        "id": "stone-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.5
+      },
+      {
+        "id": "stone-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 115.0
+      }
     ]
   },
   "palette": {

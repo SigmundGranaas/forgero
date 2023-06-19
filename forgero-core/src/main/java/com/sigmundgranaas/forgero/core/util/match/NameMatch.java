@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.state.Identifiable;
 
 public record NameMatch(String name) implements Matchable {
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Identifiable id) {
 			return id.name().equals(name);
 		} else if (match instanceof NameMatch nameMatch) {

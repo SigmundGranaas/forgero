@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.core.soul;
 
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyDataBuilder;
-import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyDataBuilder;
+import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 
 public class SoulLevelPropertyDataProcessor implements PropertyLevelProvider {
 	private final SoulLevelPropertyData data;
@@ -20,7 +20,7 @@ public class SoulLevelPropertyDataProcessor implements PropertyLevelProvider {
 		if (data.getProperties() != null) {
 			var props = new PropertyPojo();
 			props.features = Objects.requireNonNullElse(data.getProperties().features, Collections.emptyList());
-			props.attributes = Objects.requireNonNullElse(data.getProperties().attributes, Collections.emptyList());
+			props.setAttributes(Objects.requireNonNullElse(data.getProperties().getAttributes(), Collections.emptyList()));
 			newDataBuilder.properties(props);
 		}
 		this.data = newDataBuilder.build();
@@ -33,7 +33,7 @@ public class SoulLevelPropertyDataProcessor implements PropertyLevelProvider {
 
 	@Override
 	public List<Property> apply(Integer level) {
-		List<Property> attributes = data.getProperties().attributes.stream()
+		List<Property> attributes = data.getProperties().getAttributes().stream()
 				.map(AttributeBuilder::createAttributeBuilder)
 				.map(builder -> builder.applyLevel(level))
 				.map(AttributeBuilder::build)

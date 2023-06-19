@@ -1,31 +1,24 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
 import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
-import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
-import com.sigmundgranaas.forgero.core.property.CalculationOrder;
-import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
+import com.sigmundgranaas.forgero.core.property.v2.CompositePropertyProcessor;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
@@ -65,53 +58,35 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 
 	@Override
+	public ConstructedComposite removeUpgrade(String id) {
+		return this;
+	}
+
+	@Override
 	public List<Property> compositeProperties(Target target) {
+		var propertyProcessor = new CompositePropertyProcessor();
+		var props = new ArrayList<>(super.compositeProperties(target));
 
-		var upgradeProps = super.compositeProperties(target);
-		var props = new ArrayList<>(upgradeProps);
+		var partProps = parts().stream()
+				.map(part -> part.applyProperty(target))
+				.flatMap(List::stream)
+				.toList();
 
-		var partProps = parts().stream().map(part -> part.applyProperty(target)).flatMap(List::stream).toList();
-		props.addAll(combineCompositeProperties(partProps));
+		props.addAll(propertyProcessor.process(partProps));
 
-		var otherProps = partProps.stream().filter(this::filterNormalProperties).toList();
+		var otherProps = partProps.stream()
+				.filter(this::filterNormalProperties)
+				.toList();
 		props.addAll(otherProps);
 
 		return props;
 	}
 
 	private boolean filterNormalProperties(Property property) {
-		if (property instanceof Attribute attribute) {
-			if (Category.UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
-				return false;
-			} else return attribute.getOrder() != CalculationOrder.COMPOSITE;
+		if (property instanceof com.sigmundgranaas.forgero.core.property.Attribute attribute) {
+			return attribute.getContext().test(Contexts.UNDEFINED);
 		}
 		return true;
-	}
-
-	private List<Property> combineCompositeProperties(List<Property> props) {
-		List<Property> compositeAttributes = Property.stream(props)
-				.getAttributes()
-				.filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
-				.collect(Collectors.toList());
-
-		var newValues = new ArrayList<Property>();
-		for (AttributeType type : AttributeType.values()) {
-			var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
-			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
-			String combinedId = compositeAttributes.stream().filter(attr -> attr.type().equals(type.toString())).map(Attribute.class::cast).map(Attribute::getId).reduce(EMPTY_IDENTIFIER, String::join);
-			combinedId = combinedId + UUID.randomUUID();
-			newBaseAttribute.applyId(combinedId);
-			var attribute = newBaseAttribute.build();
-			if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1) {
-				newValues.add(attribute);
-			}
-		}
-		return newValues;
-	}
-
-	@Override
-	public ConstructedComposite removeUpgrade(String id) {
-		return this;
 	}
 
 	@Override
@@ -128,7 +103,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
 				return true;

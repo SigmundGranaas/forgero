@@ -9,10 +9,8 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
@@ -20,7 +18,7 @@ import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import lombok.Getter;
@@ -55,7 +53,6 @@ public abstract class BaseComposite implements Composite {
 		List<Property> upgradeProps = slots().stream()
 				.map(state -> state.applyProperty(target))
 				.flatMap(List::stream)
-				.filter(this::filterAttribute)
 				.collect(Collectors.toList());
 
 		upgradeProps.addAll(slots().stream().map(slot -> slot.stream().features().toList()).flatMap(List::stream).toList());
@@ -63,12 +60,6 @@ public abstract class BaseComposite implements Composite {
 		return upgradeProps;
 	}
 
-	protected boolean filterAttribute(Property property) {
-		if (property instanceof Attribute attribute) {
-			return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory()) || attribute.getCategory() == Category.PASS;
-		}
-		return false;
-	}
 
 	@Override
 	public Optional<State> has(String id) {
@@ -107,7 +98,7 @@ public abstract class BaseComposite implements Composite {
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
 				return true;

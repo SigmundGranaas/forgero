@@ -6,96 +6,94 @@
     "id": "minecraft:diamond"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 80
-      },
-      {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.0
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 8
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1500
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.5
-      },
-      {
-        "type": "ARMOR",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 20
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "type": "RARITY",
+        "context": "COMPOSITE",
         "order": "BASE",
-        "operation": "ADDITION",
-        "category": "ALL",
-        "value": 40
+        "attributes": [
+          {
+            "type": "RARITY",
+            "operation": "ADDITION",
+            "value": 80
+          },
+          {
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "value": 3.0
+          },
+          {
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "value": 8
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "value": 1500
+          },
+          {
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "value": 3.5
+          },
+          {
+            "type": "ARMOR",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "type": "WEIGHT",
+            "operation": "ADDITION",
+            "value": 20
+          },
+          {
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "value": 0
+          }
+        ]
       },
       {
-        "type": "WEIGHT",
+        "context": "UPGRADE",
         "order": "BASE",
-        "operation": "ADDITION",
-        "category": "ALL",
-        "value": 3
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 1.2
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "OFFENSIVE",
-        "value": 1.5
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "OFFENSIVE",
-        "value": 600
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 300
+        "attributes": [
+          {
+            "type": "RARITY",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "type": "WEIGHT",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 3
+          },
+          {
+            "type": "MINING_SPEED",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 1.2
+          },
+          {
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.5
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 600
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 300
+          }
+        ]
       }
     ]
   },

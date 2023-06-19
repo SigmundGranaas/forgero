@@ -6,103 +6,100 @@
     "id": "betternether:nether_ruby"
   },
   "properties": {
-    "attributes": [
-
+    "grouped_attributes": [
       {
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 110
-      },
-      {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 4
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 9.5
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1900
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5.5,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
-      },
-      {
-        "type": "ARMOR",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 20
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "type": "RARITY",
+        "context": "COMPOSITE",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 50
+        "attributes": [
+          {
+            "type": "RARITY",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 110
+          },
+          {
+            "type": "MINING_LEVEL",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 4
+          },
+          {
+            "type": "MINING_SPEED",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 9.5
+          },
+          {
+            "type": "DURABILITY",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 1900
+          },
+          {
+            "type": "ATTACK_DAMAGE",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "type": "ARMOR",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "type": "WEIGHT",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 20
+          },
+          {
+            "type": "ATTACK_SPEED",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 0
+          }
+        ]
       },
       {
-        "type": "MINING_SPEED",
+        "context": "UPGRADE",
         "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 3.5
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "OFFENSIVE",
-        "value": 2.5
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "OFFENSIVE",
-        "value": 700
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 400
+        "attributes": [
+          {
+            "type": "RARITY",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 50
+          },
+          {
+            "type": "MINING_SPEED",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 3.5
+          },
+          {
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 700
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 400
+          }
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

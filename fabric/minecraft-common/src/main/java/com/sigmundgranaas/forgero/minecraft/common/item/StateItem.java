@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.item;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -32,7 +32,7 @@ public interface StateItem extends State {
 		return defaultState().type();
 	}
 
-	default boolean test(Matchable match, Context context) {
+	default boolean test(Matchable match, MatchContext context) {
 		return defaultState().test(match, context);
 	}
 
