@@ -53,6 +53,35 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "refined-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.5
+          }
+        ]
+      }
+    ],
     "attributes": [
       {
         "id": "schematic-rarity-local",
@@ -61,34 +90,6 @@
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 75
-      },
-      {
-        "id": "mastercrafted-schematic-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "mastercrafted-schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "mastercrafted-schematic-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "mastercrafted-schematic-durability-composite",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
       }
     ]
   },

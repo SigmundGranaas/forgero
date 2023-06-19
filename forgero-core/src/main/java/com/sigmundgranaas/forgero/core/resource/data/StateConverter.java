@@ -1,5 +1,15 @@
 package com.sigmundgranaas.forgero.core.resource.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.resource.data.factory.PropertyBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConstructData;
@@ -18,10 +28,6 @@ import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
-
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class StateConverter implements DataConverter<State> {
 	private final HashMap<String, State> states = new HashMap<>();

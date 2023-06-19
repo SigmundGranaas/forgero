@@ -2,8 +2,6 @@ package com.sigmundgranaas.forgero.core.property;
 
 import java.util.List;
 
-import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
-
 /**
  * Base interface for properties which will change attributes, create passive buffs and enabling special actions
  * Properties are designed to be pooled together and filtered every time they are used.
@@ -14,10 +12,6 @@ import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 public interface Property {
 	static PropertyStream stream(List<Property> properties) {
 		return new PropertyStream(properties.stream());
-	}
-
-	static PropertyPojo pojo(List<Property> properties) {
-		return new PropertyPojo();
 	}
 
 	String type();

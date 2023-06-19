@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.model;
 
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import java.util.Optional;
+
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public interface ModelMatcher extends Comparable<ModelMatcher> {
 	ModelMatcher EMPTY = new ModelMatcher() {
@@ -14,12 +14,12 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 		}
 
 		@Override
-		public boolean match(Matchable state, Context context) {
+		public boolean match(Matchable state, MatchContext context) {
 			return false;
 		}
 
 		@Override
-		public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
+		public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
 			return Optional.empty();
 		}
 	};
@@ -30,7 +30,7 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 			var match2Identifier = entry2.match().criteria().stream().anyMatch(match -> match.contains("id:"));
 
 			//If both reference an identifier, the one with the most criteria is preferred
-			if(match1Identifier && match2Identifier){
+			if (match1Identifier && match2Identifier) {
 				return Integer.compare(entry1.match().criteria().size(), entry2.match().criteria().size());
 			}
 
@@ -47,9 +47,9 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 		return 0;
 	}
 
-	boolean match(Matchable state, Context context);
+	boolean match(Matchable state, MatchContext context);
 
-	Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context);
+	Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context);
 
 	@Override
 	default int compareTo(@NotNull ModelMatcher o) {

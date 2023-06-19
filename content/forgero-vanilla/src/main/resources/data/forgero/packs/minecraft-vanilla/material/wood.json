@@ -3,111 +3,104 @@
   "name": "wood",
   "resource_type": "ABSTRACT",
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "wood-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "id": "wood-mining-level-composite",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "id": "wood-mining-speed-composite",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2
-      },
-      {
-        "id": "wood-durability-composite",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 40
-      },
-      {
-        "id": "wood-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2
-      },
-      {
-        "id": "wood-attack_speed-composite",
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "id": "wood-armor-composite",
-        "type": "ARMOR",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.5
-      },
-      {
-        "id": "wood-weight-composite",
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "id": "wood-rarity-upgrade",
-        "type": "RARITY",
+        "context": "COMPOSITE",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 2
+        "attributes": [
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 5
+          },
+          {
+            "id": "wood-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 0
+          },
+          {
+            "id": "wood-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 2
+          },
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 40
+          },
+          {
+            "id": "wood-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2
+          },
+          {
+            "id": "wood-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 0
+          },
+          {
+            "id": "wood-armor-composite",
+            "type": "ARMOR",
+            "value": 1.5
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "value": 5
+          }
+        ]
       },
       {
-        "id": "wood-weight-upgrade",
-        "type": "WEIGHT",
+        "context": "UPGRADE",
         "order": "BASE",
-        "operation": "ADDITION",
-        "category": "ALL",
-        "value": 1
-      },
-      {
-        "id": "wood-attack_damage-offensive-upgrade",
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "category": "OFFENSIVE",
-        "operation": "ADDITION",
-        "value": 0.2
-      },
-      {
-        "id": "wood-mining_speed-offensive-upgrade",
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "category": "OFFENSIVE",
-        "operation": "ADDITION",
-        "value": 0.2
-      },
-      {
-        "id": "wood-attack_speed-utility-upgrade",
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "ADDITION",
-        "value": 0.2
-      },
-      {
-        "id": "wood-durability-utility-upgrade",
-        "type": "DURABILITY",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "MULTIPLICATION",
-        "value": 1.03
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 2
+          },
+          {
+            "id": "wood-weight-upgrade",
+            "type": "WEIGHT",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 1
+          },
+          {
+            "id": "wood-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "category": "OFFENSIVE",
+            "operation": "ADDITION",
+            "value": 0.2
+          },
+          {
+            "id": "wood-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "category": "OFFENSIVE",
+            "operation": "ADDITION",
+            "value": 0.2
+          },
+          {
+            "id": "wood-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "category": "UTILITY",
+            "operation": "ADDITION",
+            "value": 0.2
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "category": "UTILITY",
+            "operation": "MULTIPLICATION",
+            "value": 1.03
+          }
+        ]
       }
+    ],
+    "attributes": [
     ]
   }
 }

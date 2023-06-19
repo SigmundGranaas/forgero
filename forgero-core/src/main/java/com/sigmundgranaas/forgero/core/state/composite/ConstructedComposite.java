@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
@@ -25,7 +26,7 @@ import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
@@ -83,7 +84,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 		if (property instanceof Attribute attribute) {
 			if (Category.UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
 				return false;
-			} else return attribute.getOrder() != CalculationOrder.COMPOSITE;
+			} else return !attribute.getContext().test(Contexts.COMPOSITE);
 		}
 		return true;
 	}
@@ -91,13 +92,13 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	private List<Property> combineCompositeProperties(List<Property> props) {
 		List<Property> compositeAttributes = Property.stream(props)
 				.getAttributes()
-				.filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
+				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
 				.collect(Collectors.toList());
 
 		var newValues = new ArrayList<Property>();
 		for (AttributeType type : AttributeType.values()) {
 			var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
-			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
+			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.UNDEFINED);
 			String combinedId = compositeAttributes.stream().filter(attr -> attr.type().equals(type.toString())).map(Attribute.class::cast).map(Attribute::getId).reduce(EMPTY_IDENTIFIER, String::join);
 			combinedId = combinedId + UUID.randomUUID();
 			newBaseAttribute.applyId(combinedId);
@@ -128,7 +129,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
 				return true;

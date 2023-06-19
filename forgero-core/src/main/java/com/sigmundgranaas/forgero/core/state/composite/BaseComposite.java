@@ -20,7 +20,7 @@ import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import lombok.Getter;
@@ -65,7 +65,7 @@ public abstract class BaseComposite implements Composite {
 
 	protected boolean filterAttribute(Property property) {
 		if (property instanceof Attribute attribute) {
-			return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory()) || attribute.getCategory() == Category.PASS;
+			return Category.UPGRADE_CATEGORIES.contains(attribute.getCategory()) || attribute.getCategory() == Category.UNDEFINED;
 		}
 		return false;
 	}
@@ -107,7 +107,7 @@ public abstract class BaseComposite implements Composite {
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
 				return true;

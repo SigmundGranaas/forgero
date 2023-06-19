@@ -61,6 +61,30 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "refined-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.5
+          }
+        ]
+      }
+    ],
     "attributes": [
       {
         "id": "schematic-rarity-local",
@@ -71,30 +95,9 @@
         "value": 75
       },
       {
-        "id": "sword_blade_schematic-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "sword_blade_schematic-durability-composite",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "mastercrafted_sword_blade_schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
         "id": "mastercrafted_sword_blade_schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 0.15
       }

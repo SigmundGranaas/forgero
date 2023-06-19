@@ -7,9 +7,6 @@ public enum Category {
 	UTILITY,
 	DEFENSIVE,
 	ALL,
-	COMPOSITE,
-	LOCAL,
-	PASS,
 	UNDEFINED;
 
 	public static final EnumSet<Category> UPGRADE_CATEGORIES = EnumSet.of(OFFENSIVE, UTILITY, DEFENSIVE, ALL);

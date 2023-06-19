@@ -11,14 +11,14 @@
       {
         "id": "wood-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 30
       },
       {
         "id": "wood-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "category": "ALL",
         "value": 35
@@ -26,7 +26,7 @@
       {
         "id": "wood-weight-composite",
         "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 3
       }

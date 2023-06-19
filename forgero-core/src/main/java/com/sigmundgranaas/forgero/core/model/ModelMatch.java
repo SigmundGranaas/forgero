@@ -11,13 +11,13 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.FilledSlot;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 
 public record ModelMatch(List<String> criteria, String matchType) implements Matchable {
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Composite composite) {
 			var compositeMatch = context.add(composite.type());
 			if (matchType.equals("UPGRADE")) {
@@ -58,10 +58,10 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
 		return false;
 	}
 
-	private boolean ingredientTest(State ingredient, String criteria, Context context) {
+	private boolean ingredientTest(State ingredient, String criteria, MatchContext context) {
 		if (criteria.contains("type")) {
 			var type = Type.of(criteria.replace("type:", ""));
-			if (context.test(type, Context.of())) {
+			if (context.test(type, MatchContext.of())) {
 				return true;
 			}
 			return ingredient.test(type, context);
@@ -75,13 +75,13 @@ public record ModelMatch(List<String> criteria, String matchType) implements Mat
 		return ingredient.test(new NameMatch(criteria), context);
 	}
 
-	private boolean upgradeTest(Slot upgrade, String criteria, Context context) {
+	private boolean upgradeTest(Slot upgrade, String criteria, MatchContext context) {
 		if (upgrade.filled()) {
 			if (criteria.contains("slot:")) {
 				return criteria.replace("slot:", "").equals(String.valueOf(upgrade.index()));
 			} else if (criteria.contains("type")) {
 				var type = Type.of(criteria.replace("type:", ""));
-				if (context.test(type, Context.of())) {
+				if (context.test(type, MatchContext.of())) {
 					return true;
 				}
 				return upgrade.test(Type.of(criteria.replace("type:", "")), context);

@@ -7,14 +7,14 @@
       {
         "id": "schematic-rarity-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.3
       },
       {
         "id": "schematic-atack_speed-composite",
         "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": -1.5
       }

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
@@ -52,7 +52,7 @@ public class AttributeSectionWriter extends SectionWriter {
 
 	@Override
 	public boolean shouldWrite() {
-		return entries().size() > 0 && container.stream().getAttributes().noneMatch(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE);
+		return entries().size() > 0 && container.stream().getAttributes().noneMatch(attribute -> attribute.getContext().test(Contexts.COMPOSITE));
 	}
 
 	@Override

@@ -7,13 +7,13 @@ import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
 
 public class CompositeModelEntry implements ModelMatcher {
-	public static Optional<ModelTemplate> findUpgradeModel(Slot upgradeSlot, Composite construct, Context context, ModelProvider provider) {
+	public static Optional<ModelTemplate> findUpgradeModel(Slot upgradeSlot, Composite construct, MatchContext context, ModelProvider provider) {
 		if (upgradeSlot.filled()) {
 			if (upgradeSlot.get().get() instanceof Composite upgradeConstruct) {
 				return provider.find(upgradeConstruct).filter(matcher -> matcher.match(upgradeConstruct, context)).flatMap(matcher -> matcher.get(upgradeConstruct, provider, context));
@@ -27,12 +27,12 @@ public class CompositeModelEntry implements ModelMatcher {
 	}
 
 	@Override
-	public boolean match(Matchable state, Context context) {
+	public boolean match(Matchable state, MatchContext context) {
 		return state instanceof Composite;
 	}
 
 	@Override
-	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
+	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
 		if (state instanceof Composite composite) {
 			var compositeModelTemplate = new CompositeModelTemplate();
 			var compositeContext = context.add(composite.type()).add(new NameMatch(composite.name()));
@@ -53,7 +53,7 @@ public class CompositeModelEntry implements ModelMatcher {
 				}
 			}
 
-			Context finalFilledContext = filledContext;
+			MatchContext finalFilledContext = filledContext;
 			composite.slots().stream()
 					.map(slot -> findUpgradeModel(slot, composite, finalFilledContext, provider))
 					.flatMap(Optional::stream)
@@ -64,7 +64,7 @@ public class CompositeModelEntry implements ModelMatcher {
 		return Optional.empty();
 	}
 
-	private Optional<ModelTemplate> convert(State state, ModelProvider provider, Context context) {
+	private Optional<ModelTemplate> convert(State state, ModelProvider provider, MatchContext context) {
 		var modelMatcher = provider.find(state);
 		return modelMatcher.filter(matcher -> matcher.match(state, context)).flatMap(matcher -> matcher.get(state, provider, context));
 	}

@@ -9,7 +9,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
 	}
 
 	@Override
-	default boolean test(Matchable match, Context context) {
+	default boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
 				return true;

@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
-import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.state.CopyAble;
-import com.sigmundgranaas.forgero.core.state.Slot;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.util.match.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.state.CopyAble;
+import com.sigmundgranaas.forgero.core.state.Slot;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
 public class SlotContainer implements CopyAble<SlotContainer> {
 	private final List<Slot> slots;
@@ -36,7 +36,7 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 
 	public Optional<Slot> set(State entry) {
 		return slots.stream()
-				.filter(slot -> slot.test(entry, Context.of()))
+				.filter(slot -> slot.test(entry, MatchContext.of()))
 				.map(slot -> slot.fill(entry, slot.category()))
 				.flatMap(Optional::stream)
 				.findFirst()
@@ -60,7 +60,7 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 	public boolean canUpgrade(State state) {
 		return slots.stream()
 				.filter(slot -> !slot.filled())
-				.anyMatch(slot -> slot.test(state, Context.of()));
+				.anyMatch(slot -> slot.test(state, MatchContext.of()));
 	}
 
 	@Override
