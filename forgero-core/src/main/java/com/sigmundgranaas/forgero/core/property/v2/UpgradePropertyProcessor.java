@@ -40,7 +40,7 @@ public class UpgradePropertyProcessor implements PropertyProcessor {
 	private Attribute mapToUndefined(Attribute attribute) {
 		return AttributeBuilder.createAttributeBuilderFromAttribute(attribute)
 				.applyCategory(Category.PASS)
-				.applyContext(Contexts.UPGRADE)
+				.applyContext(Contexts.UNDEFINED)
 				.build();
 	}
 
