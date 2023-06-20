@@ -12,11 +12,6 @@ import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
-import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.state.CopyAble;
-import com.sigmundgranaas.forgero.core.state.Slot;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.util.match.Context;
 
 public class SlotContainer implements CopyAble<SlotContainer> {
 	private final List<Slot> slots;
@@ -42,7 +37,7 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 
 	public Optional<Slot> set(State entry) {
 		for (Slot slot : slots) {
-			if (slot.test(entry, Context.of())) {
+			if (slot.test(entry, MatchContext.of())) {
 				Optional<Slot> mappedSlot = slot.fill(entry, slot.category());
 				if (mappedSlot.isPresent()) {
 					return Optional.of(this.set(mappedSlot.get()));
@@ -54,7 +49,7 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 
 	public Slot set(State entry, Slot slot) {
 		for (Slot slot1 : slots) {
-			if (slot == slot1 && slot.test(entry, Context.of())) {
+			if (slot == slot1 && slot.test(entry, MatchContext.of())) {
 				Optional<Slot> mappedSlot = slot.fill(entry, slot.category());
 				if (mappedSlot.isPresent()) {
 					this.slots.set(this.slots.indexOf(slot1), mappedSlot.get());

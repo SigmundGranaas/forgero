@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -390,7 +390,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		@Override
 		public boolean canInsert(ItemStack stack) {
 			var stateOpt = StateService.INSTANCE.convert(stack);
-			return slot != null && stateOpt.isPresent() && slot.test(stateOpt.get(), Context.of());
+			return slot != null && stateOpt.isPresent() && slot.test(stateOpt.get(), MatchContext.of());
 		}
 
 
