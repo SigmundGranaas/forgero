@@ -50,21 +50,8 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 	private static final VoxelShape SHAPE_RIGHT;
 
 	static {
-		VoxelShape shapeLeft = VoxelShapes.empty();
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 1));
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.75, 0.375, 0.625, 0.9375));
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0.625, 0.0625, 1, 0.875, 0.9375));
-
-		SHAPE_LEFT = shapeLeft.simplify();
-
-		VoxelShape shapeRight = VoxelShapes.empty();
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.875, 0, 1.875, 1, 1));
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
-
-		SHAPE_RIGHT = shapeRight.simplify();
+		SHAPE_LEFT = left();
+		SHAPE_RIGHT = right();
 	}
 
 	protected UpgradeStationBlock(Settings settings) {
@@ -73,6 +60,23 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 		this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(PART, UpgradeStationBlockPart.LEFT);
 	}
 
+	private static VoxelShape left() {
+		VoxelShape shape = VoxelShapes.empty();
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 1, 0, 1, 1, 1));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.625, 0.0625, 1, 0.875, 0.9375));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0.0625, 0.375, 0.625, 0.25));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0.75, 0.375, 0.625, 0.9375));
+		return shape;
+	}
+
+	public static VoxelShape right() {
+		VoxelShape shape = VoxelShapes.empty();
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1, 1, 0, 2, 1, 1));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
+		return shape;
+	}
 
 	public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
 		VoxelShape[] buffer = new VoxelShape[]{shape, VoxelShapes.empty()};
