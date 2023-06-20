@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.property.v2.CompositePropertyProcessor;
+import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
@@ -96,8 +97,14 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 	public ConstructBuilder toBuilder() {
 		return builder()
-				.addIngredients(parts())
-				.addUpgrades(slots())
+				.addIngredients(parts().stream().map(part -> {
+					if (part instanceof Composite composite) {
+						return composite.copy();
+					} else {
+						return part;
+					}
+				}).toList())
+				.addSlotContainer(slotContainer.copy())
 				.type(type())
 				.id(identifier());
 	}

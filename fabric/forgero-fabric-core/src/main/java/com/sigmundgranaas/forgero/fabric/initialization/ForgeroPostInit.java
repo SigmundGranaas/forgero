@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.fabric.initialization;
 
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.*;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
@@ -70,6 +72,10 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
 		Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
 		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+
+		Registry.register(Registry.BLOCK, UPGRADE_STATION, UPGRADE_STATION_BLOCK);
+		Registry.register(Registry.ITEM, UPGRADE_STATION, UPGRADE_STATION_ITEM);
+		Registry.register(Registry.SCREEN_HANDLER, UPGRADE_STATION, UPGRADE_STATION_SCREEN_HANDLER);
 	}
 
 	/**

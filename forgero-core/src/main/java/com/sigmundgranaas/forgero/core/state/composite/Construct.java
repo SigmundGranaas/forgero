@@ -59,8 +59,13 @@ public class Construct implements Composite, ConstructedState {
 		return new ConstructBuilder();
 	}
 
-	public static ConstructBuilder builder(List<? extends Slot> slots) {
-		return new ConstructBuilder(slots);
+	public static ConstructBuilder builder(SlotContainer container) {
+		return new ConstructBuilder(container);
+	}
+
+	@Override
+	public SlotContainer getSlotContainer() {
+		return this.upgrades;
 	}
 
 	@Override
@@ -249,8 +254,14 @@ public class Construct implements Composite, ConstructedState {
 
 	public ConstructBuilder toBuilder() {
 		return builder()
-				.addIngredients(ingredients())
-				.addUpgrades(upgrades.slots())
+				.addIngredients(ingredients().stream().map(ingredient -> {
+					if (ingredient instanceof Composite composite) {
+						return composite.copy();
+					} else {
+						return ingredient;
+					}
+				}).toList())
+				.addSlotContainer(upgrades.copy())
 				.type(type())
 				.id(identifier());
 	}
@@ -291,9 +302,9 @@ public class Construct implements Composite, ConstructedState {
 			this.upgradeContainer = SlotContainer.of(Collections.emptyList());
 		}
 
-		public ConstructBuilder(List<? extends Slot> upgradeSlots) {
+		public ConstructBuilder(SlotContainer container) {
 			this.ingredientList = new ArrayList<>();
-			this.upgradeContainer = SlotContainer.of(upgradeSlots);
+			this.upgradeContainer = container;
 		}
 
 		public Construct build() {

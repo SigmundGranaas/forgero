@@ -83,7 +83,7 @@ public class StateConverter implements DataConverter<State> {
 	}
 
 	private State buildConstruct(DataResource resource) {
-		var builder = Construct.builder(createSlots(resource.construct().get()));
+		var builder = Construct.builder(SlotContainer.of(createSlots(resource.construct().get())));
 		builder.type(tree.type(resource.type()));
 		builder.nameSpace(resource.nameSpace());
 		//builder.name(resource.name());

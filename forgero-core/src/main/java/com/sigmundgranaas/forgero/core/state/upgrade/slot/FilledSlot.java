@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import java.util.stream.Stream;
+
+import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.v2.UpgradePropertyProcessor;
+import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -72,6 +76,10 @@ public class FilledSlot extends AbstractTypedSlot {
 
 	@Override
 	public Slot copy() {
+		var upgrade = this.upgrade;
+		if (upgrade instanceof Composite composite) {
+			upgrade = composite.copy();
+		}
 		return new FilledSlot(index, type, upgrade, description, categories);
 	}
 }

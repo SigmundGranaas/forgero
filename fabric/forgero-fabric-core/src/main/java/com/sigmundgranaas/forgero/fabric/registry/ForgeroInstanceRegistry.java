@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.registry.StateCollection;
@@ -15,7 +16,6 @@ import com.sigmundgranaas.forgero.minecraft.common.conversion.StateToStackConver
 import com.sigmundgranaas.forgero.minecraft.common.service.StateMapper;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.utils.ItemUtils;
-import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -101,7 +101,8 @@ public class ForgeroInstanceRegistry implements StateService {
 
 	@Override
 	public Optional<ItemStack> convert(State state) {
-		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, StateUtils::containerMapper).convert(state);
+		Function<String, Optional<Identifier>> mapFn = (String id) -> Optional.of(mapper.stateToContainer(id));
+		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, mapFn).convert(state);
 		return Optional.ofNullable(stack);
 	}
 
@@ -113,5 +114,10 @@ public class ForgeroInstanceRegistry implements StateService {
 	@Override
 	public StateMapper getMapper() {
 		return mapper;
+	}
+
+	@Override
+	public StateService uncached() {
+		return new UncachedStateService(this);
 	}
 }

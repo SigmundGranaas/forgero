@@ -35,6 +35,7 @@ public abstract class BaseComposite implements Composite {
 		this.id = id;
 	}
 
+
 	@Override
 	public @NotNull
 	List<Property> applyProperty(Target target) {
@@ -125,6 +126,11 @@ public abstract class BaseComposite implements Composite {
 	@Override
 	public List<Slot> slots() {
 		return slotContainer.slots();
+	}
+
+	@Override
+	public SlotContainer getSlotContainer() {
+		return this.slotContainer;
 	}
 
 	@Getter

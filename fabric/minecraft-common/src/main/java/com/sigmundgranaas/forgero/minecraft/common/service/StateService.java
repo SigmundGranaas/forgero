@@ -43,4 +43,6 @@ public interface StateService extends StateFinder {
 	boolean isInitialized();
 
 	StateMapper getMapper();
+
+	StateService uncached();
 }

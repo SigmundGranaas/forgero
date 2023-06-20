@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.TYPE_IDENTIFIER;
+
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.registry.StateFinder;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -8,10 +12,6 @@ import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgero.core.type.Type;
 
 import net.minecraft.nbt.NbtCompound;
-
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.TYPE_IDENTIFIER;
 
 
 public class ConstructParser extends CompositeParser {
@@ -26,7 +26,7 @@ public class ConstructParser extends CompositeParser {
 			var id = compound.getString(NbtConstants.ID_IDENTIFIER);
 			var stateOpt = supplier.find(id);
 			if (stateOpt.isPresent() && stateOpt.get() instanceof Construct construct) {
-				builder = Construct.builder(construct.slots());
+				builder = Construct.builder(construct.getSlotContainer().copy());
 			} else if (ForgeroStateRegistry.CONTAINER_TO_STATE.containsKey(id)) {
 				return supplier.find(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));
 			} else {

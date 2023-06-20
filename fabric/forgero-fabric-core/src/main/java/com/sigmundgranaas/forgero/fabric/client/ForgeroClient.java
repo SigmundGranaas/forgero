@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.fabric.client;
 
 import static com.sigmundgranaas.forgero.fabric.client.SoulEntityModel.SOUL_ENTITY_MODEL_LAYER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.sigmundgranaas.forgero.fabric.client.model.ForgeroModelVariantProvide
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
+import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -50,6 +52,7 @@ public class ForgeroClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		initializeItemModels();
 		HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
+		HandledScreens.register(UPGRADE_STATION_SCREEN_HANDLER, UpgradeStationScreen::new);
 	}
 
 	private void initializeItemModels() {

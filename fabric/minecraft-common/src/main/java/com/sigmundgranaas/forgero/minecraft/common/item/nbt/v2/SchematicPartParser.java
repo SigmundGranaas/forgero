@@ -1,24 +1,23 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.TYPE_IDENTIFIER;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.registry.StateFinder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedSchematicPart;
-import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.TYPE_IDENTIFIER;
 
 
 public class SchematicPartParser extends CompositeParser {
@@ -49,7 +48,7 @@ public class SchematicPartParser extends CompositeParser {
 				var builder = optBuilder.get();
 				builder.id(id);
 				if (stateOpt.isPresent() && stateOpt.get() instanceof Composite upgradeable) {
-					builder.addSlotContainer(new SlotContainer(upgradeable.slots()));
+					builder.addSlotContainer(upgradeable.getSlotContainer().copy());
 				}
 				parseUpgrades(builder::addUpgrade, compound);
 				if (compound.contains(TYPE_IDENTIFIER)) {
