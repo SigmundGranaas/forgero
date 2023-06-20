@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.property.active;
 
-import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
-import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
-
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
+import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
 public record VeinBreaking(int depth, String tag, String description) implements ActiveProperty {
 

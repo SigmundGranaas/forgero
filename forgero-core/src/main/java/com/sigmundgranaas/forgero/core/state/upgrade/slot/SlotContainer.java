@@ -10,6 +10,12 @@ import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.state.CopyAble;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.state.CopyAble;
+import com.sigmundgranaas.forgero.core.state.Slot;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.Context;
 
 public class SlotContainer implements CopyAble<SlotContainer> {
@@ -74,7 +80,7 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 	public boolean canUpgrade(State state) {
 		return slots.stream()
 				.filter(slot -> !slot.filled())
-				.anyMatch(slot -> slot.test(state, Context.of()));
+				.anyMatch(slot -> slot.test(state, MatchContext.of()));
 	}
 
 	@Override

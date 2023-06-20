@@ -10,25 +10,27 @@
       {
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
+        "context": "LOCAL",
         "operation": "ADDITION",
         "value": 40
       },
       {
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 40
       },
       {
         "type": "RARITY",
         "order": "BASE",
+        "context": "UPGRADE",
         "operation": "ADDITION",
         "category": "ALL",
         "value": 40
       },
       {
         "type": "WEIGHT",
+        "context": "UPGRADE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
@@ -36,6 +38,7 @@
       },
       {
         "type": "DURABILITY",
+        "context": "UPGRADE",
         "order": "BASE",
         "operation": "MULTIPLICATION",
         "category": "OFFENSIVE",
@@ -43,6 +46,7 @@
       },
       {
         "type": "DURABILITY",
+        "context": "UPGRADE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
@@ -50,6 +54,7 @@
       },
       {
         "type": "ATTACK_SPEED",
+        "context": "UPGRADE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
@@ -57,6 +62,7 @@
       },
       {
         "type": "ATTACK_DAMAGE",
+        "context": "UPGRADE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",

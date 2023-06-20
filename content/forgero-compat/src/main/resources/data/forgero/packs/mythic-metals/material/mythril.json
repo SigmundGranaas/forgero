@@ -14,67 +14,55 @@
       {
         "id": "metal-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 87
       },
       {
         "id": "metal-mining_level-composite",
         "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 4
       },
       {
         "id": "metal-mining_speed-composite",
         "type": "MINING_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 14
       },
       {
         "id": "metal-durability-composite",
-        "type": "DURABILITY",
+        "context": "DURABILITY",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 1564.0
       },
       {
         "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
+        "context": "ATTACK_DAMAGE",
         "order": "COMPOSITE",
         "operation": "ADDITION",
         "value": 1.5
       },
       {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.9,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
-      },
-      {
         "id": "metal-armor-composite",
         "type": "ARMOR",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 4
       },
       {
         "id": "metal-weight-composite",
         "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 45
       },
       {
         "id": "metal-rarity-upgrade",
+        "context": "UPGRADE",
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",

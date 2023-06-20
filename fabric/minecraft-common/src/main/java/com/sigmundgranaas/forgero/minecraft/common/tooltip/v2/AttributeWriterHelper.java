@@ -63,7 +63,7 @@ public class AttributeWriterHelper extends BaseWriter {
 
 	public MutableText writeBaseNumber(Attribute attribute) {
 		float value = attribute.leveledValue();
-		if (attribute.getAttributeType().equals(AttackSpeed.KEY) && isPartHead(container)) {
+		if (attribute.getAttributeType().equals(AttackSpeed.KEY) && (isPartHead(container) || (isSchematic(container)) && value < -1)) {
 			value = 4 + value;
 		}
 
@@ -74,6 +74,10 @@ public class AttributeWriterHelper extends BaseWriter {
 
 	private boolean isPartHead(Object o) {
 		return o instanceof Matchable matchable && (matchable.test(Type.SWORD_BLADE) || matchable.test(Type.TOOL_PART_HEAD));
+	}
+
+	private boolean isSchematic(Object o) {
+		return o instanceof Matchable matchable && matchable.test(Type.SCHEMATIC);
 	}
 
 	public MutableText writeBaseNumber(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute) {

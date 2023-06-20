@@ -1,6 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
-import com.sigmundgranaas.forgero.core.property.*;
+import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sigmundgranaas.forgero.core.context.Contexts;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.State;
 
@@ -8,12 +19,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
 
 public class AttributeWriter implements Writer {
 	private final List<Text> tooltip;
@@ -53,12 +58,12 @@ public class AttributeWriter implements Writer {
 		}
 		var props = Property.stream(attributes).getAttributes().filter(attr -> attr.type().equals(type.toString())).toList();
 		props.stream()
-				.filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
 				.filter(attribute -> attribute.getOperation() == NumericOperation.MULTIPLICATION)
 				.forEach(attribute -> writeBaseMultiplication(attribute, tooltip, title));
 
 		props.stream()
-				.filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
 				.filter(attribute -> attribute.getOperation() == NumericOperation.ADDITION)
 				.forEach(attribute -> writeBaseAttribute(attribute, tooltip, title));
 	}
@@ -74,12 +79,12 @@ public class AttributeWriter implements Writer {
 
 		var props = Property.stream(attributes).getAttributes().filter(attr -> attr.type().equals(type.toString())).toList();
 		props.stream()
-				.filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
 				.filter(attribute -> attribute.getOperation() == NumericOperation.MULTIPLICATION)
 				.forEach(attribute -> writeBaseMultiplication(attribute, tooltip, title));
 
 		props.stream()
-				.filter(prop -> prop.getOrder() == CalculationOrder.COMPOSITE)
+				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
 				.filter(attribute -> attribute.getOperation() == NumericOperation.ADDITION)
 				.forEach(attribute -> writeBaseAttribute(attribute, tooltip, title));
 	}

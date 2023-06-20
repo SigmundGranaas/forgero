@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.ForgeroMaterial;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
@@ -38,7 +38,7 @@ public class StateToItemConverter {
 	}
 
 	public Item convert() {
-		var context = Context.of();
+		var context = MatchContext.of();
 		var state = provider.get();
 		if (state.type().test(Type.of("SWORD"), context) || state.type().test(Type.of("TOOL"), context)) {
 			return createTool();
@@ -49,7 +49,7 @@ public class StateToItemConverter {
 	}
 
 	private Item createTool() {
-		var context = Context.of();
+		var context = MatchContext.of();
 		var state = provider.get();
 		int attack_damage = (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
 		float attack_speed = state.stream().applyAttribute(AttributeType.ATTACK_SPEED);

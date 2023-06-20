@@ -10,44 +10,51 @@
     "attributes": [
       {
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 20
-      },
+      }
+    ]
+    "grouped_attributes": [
       {
-        "type": "RARITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "ALL",
-        "value": 5
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.9
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 65
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 0.5
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "MIDDLE",
-        "operation": "MULTIPLICATION",
-        "category": "UTILITY",
-        "value": 1.05
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "type": "DURABILITY",
+            "order": "BASE",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 0.9
+          },
+          {
+            "type": "DURABILITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 65
+          },
+          {
+            "type": "ATTACK_SPEED",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.3
+          },
+          {
+            "type": "MINING_SPEED",
+            "order": "MIDDLE",
+            "operation": "MULTIPLICATION",
+            "category": "UTILITY",
+            "value": 1.05
+          }
+        ]
       }
     ]
   },

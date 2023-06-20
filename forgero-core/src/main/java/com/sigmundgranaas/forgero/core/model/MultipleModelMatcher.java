@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.model;
 
-import com.sigmundgranaas.forgero.core.util.match.Context;
-import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 public class MultipleModelMatcher implements ModelMatcher {
 	private final List<ModelMatcher> matchers;
@@ -19,12 +19,12 @@ public class MultipleModelMatcher implements ModelMatcher {
 	}
 
 	@Override
-	public boolean match(Matchable state, Context context) {
+	public boolean match(Matchable state, MatchContext context) {
 		return matchers.stream().anyMatch(matchers -> matchers.match(state, context));
 	}
 
 	@Override
-	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
+	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
 		return matchers.stream()
 				.filter(modelMatcher -> modelMatcher.match(state, context))
 				.sorted(ModelMatcher::comparator)

@@ -11,14 +11,14 @@
       {
         "id": "stone-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 14
       },
       {
         "id": "stone-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 120.0
       }
