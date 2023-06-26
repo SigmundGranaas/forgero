@@ -1,11 +1,26 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
+import static net.minecraft.block.Blocks.DEEPSLATE;
+
 import com.sigmundgranaas.forgero.core.Forgero;
 
-import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
@@ -25,15 +40,13 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
-import org.jetbrains.annotations.Nullable;
-
-import static net.minecraft.block.Blocks.DEEPSLATE;
-
 public class AssemblyStationBlock extends HorizontalFacingBlock {
 
 	public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
-	public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
-	public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
+	public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(
+			Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
+	public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(
+			ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
 	// a public identifier for multiple parts of our bigger chest
 	public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
 
@@ -71,7 +84,9 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
 		int times = (to.getHorizontal() - from.getHorizontal() + 4) % 4;
 		for (int i = 0; i < times; i++) {
-			buffer[0].forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = VoxelShapes.union(buffer[1], VoxelShapes.cuboid(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)));
+			buffer[0].forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = VoxelShapes.union(buffer[1],
+					VoxelShapes.cuboid(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)
+			));
 			buffer[0] = buffer[1];
 			buffer[1] = VoxelShapes.empty();
 		}
@@ -110,7 +125,10 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
 	@Override
 	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-		return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new AssemblyStationScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.literal("assembly_station"));
+		return new SimpleNamedScreenHandlerFactory(
+				(syncId, inventory, player) -> new AssemblyStationScreenHandler(syncId, inventory,
+						ScreenHandlerContext.create(world, pos)
+				), Text.literal("assembly_station"));
 	}
 
 	@Override
@@ -194,5 +212,10 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 		public String asString() {
 			return this.name;
 		}
+	}
+
+	@Override
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new AssemblyStationBlockEntity(pos, state);
 	}
 }

@@ -17,14 +17,18 @@ import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.fabric.client.blockentity.AssemblyStationBlockEntity;
 import com.sigmundgranaas.forgero.fabric.client.model.ForgeroModelVariantProvider;
+import com.sigmundgranaas.forgero.fabric.client.renderer.blockentity.AssemblyStationBlockEntityRenderer;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -53,21 +57,17 @@ public class ForgeroClient implements ClientModInitializer {
 		initializeItemModels();
 		HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
 		HandledScreens.register(UPGRADE_STATION_SCREEN_HANDLER, UpgradeStationScreen::new);
+
+		BlockEntityRendererFactories.register(BlockEntityType.Builder.create((pos, state) -> new AssemblyStationBlockEntity()), AssemblyStationBlockEntityRenderer::new);
 	}
 
 	private void initializeItemModels() {
 		var modelRegistry = new ModelRegistry();
-		var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
+		var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(
+				ModMetadata::getId).collect(Collectors.toSet());
 
-		PipelineBuilder
-				.builder()
-				.register(FabricPackFinder.supplier())
-				.data(modelRegistry.paletteListener())
-				.data(modelRegistry.modelListener())
-				.register(availableDependencies)
-				.silent()
-				.build()
-				.execute();
+		PipelineBuilder.builder().register(FabricPackFinder.supplier()).data(modelRegistry.paletteListener()).data(
+				modelRegistry.modelListener()).register(availableDependencies).silent().build().execute();
 		// TODO: Set configuration's available dependencies
 		assetReloader();
 		registerToolPartTextures(modelRegistry);
@@ -78,33 +78,42 @@ public class ForgeroClient implements ClientModInitializer {
 	}
 
 	private void registerToolPartTextures(ModelRegistry modelRegistry) {
-		var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
-				.map(node -> node.getResources(State.class))
-				.orElse(ImmutableList.<State>builder().build());
+		var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL).map(
+				node -> node.getResources(State.class)).orElse(ImmutableList.<State>builder().build());
 		for (State material : materials) {
-			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null));
+			ForgeroClient.TEXTURES.put(
+					String.format("forgero:%s-repair_kit.png", material.name()),
+					new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null)
+			);
 		}
 
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
 		TEXTURES.putAll(modelRegistry.getTextures());
 		TEXTURES.values().forEach(texture -> {
-			ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""))));
+			ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(
+					(atlasTexture, atlasRegistry) -> atlasRegistry.register(
+							new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""))));
 		});
-		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_leather_base")));
-		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_needle_base")));
+		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(
+				(atlasTexture, atlasRegistry) -> atlasRegistry.register(
+						new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_leather_base")));
+		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(
+				(atlasTexture, atlasRegistry) -> atlasRegistry.register(
+						new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_needle_base")));
 	}
 
 	private void assetReloader() {
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public void reload(ResourceManager manager) {
-				TextureGenerator.getInstance(new FileService(), PALETTE_REMAP).clear();
-			}
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(
+				new SimpleSynchronousResourceReloadListener() {
+					@Override
+					public void reload(ResourceManager manager) {
+						TextureGenerator.getInstance(new FileService(), PALETTE_REMAP).clear();
+					}
 
-			@Override
-			public Identifier getFabricId() {
-				return new Identifier(Forgero.NAMESPACE, "dynamic_textures");
-			}
-		});
+					@Override
+					public Identifier getFabricId() {
+						return new Identifier(Forgero.NAMESPACE, "dynamic_textures");
+					}
+				});
 	}
 }
