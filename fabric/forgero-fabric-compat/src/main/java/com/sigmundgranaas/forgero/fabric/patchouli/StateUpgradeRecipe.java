@@ -17,7 +17,7 @@ import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.page.abstr.PageDoubleRecipeRegistry;
 import vazkii.patchouli.mixin.AccessorSmithingRecipe;
 
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+import static com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
 public class StateUpgradeRecipe extends PageDoubleRecipeRegistry<SmithingRecipe> {
 	public static Identifier ID = new Identifier(Forgero.NAMESPACE, RecipeTypes.STATE_UPGRADE_RECIPE.getName());

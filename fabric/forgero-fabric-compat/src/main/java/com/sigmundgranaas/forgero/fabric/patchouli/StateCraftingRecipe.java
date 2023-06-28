@@ -20,7 +20,7 @@ import vazkii.patchouli.client.book.ClientBookRegistry;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.page.PageCrafting;
 
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+import static com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
 public class StateCraftingRecipe extends PageCrafting {
 	public static Identifier ID = new Identifier(Forgero.NAMESPACE, RecipeTypes.STATE_CRAFTING_RECIPE.getName());

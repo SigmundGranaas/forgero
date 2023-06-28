@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state;
+package com.sigmundgranaas.forgero.fabric.block.assemblystation.state;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +39,7 @@ public class CompositeHandler implements DisassemblyHandler {
 
 	@Override
 	public DisassemblyHandler insertIntoDisassemblySlot(ItemStack stack) {
-		return DisassemblyHandler.createHandler(stack);
+		return createHandler(stack);
 	}
 
 }

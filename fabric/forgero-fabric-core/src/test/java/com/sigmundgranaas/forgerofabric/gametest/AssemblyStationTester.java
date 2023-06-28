@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgerofabric.gametest;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler;
+import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreenHandler;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.ItemStack;

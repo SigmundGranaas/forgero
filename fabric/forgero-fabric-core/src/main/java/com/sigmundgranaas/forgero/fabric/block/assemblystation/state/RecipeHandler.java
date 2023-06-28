@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state;
+package com.sigmundgranaas.forgero.fabric.block.assemblystation.state;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class RecipeHandler implements DisassemblyHandler {
 
 	@Override
 	public DisassemblyHandler insertIntoDisassemblySlot(ItemStack stack) {
-		return DisassemblyHandler.createHandler(stack);
+		return createHandler(stack);
 	}
 
 }

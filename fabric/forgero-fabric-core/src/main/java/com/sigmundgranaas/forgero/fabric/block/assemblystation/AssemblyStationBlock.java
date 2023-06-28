@@ -1,8 +1,10 @@
-package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
+package com.sigmundgranaas.forgero.fabric.block.assemblystation;
 
 import static net.minecraft.block.Blocks.DEEPSLATE;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+
+import com.sigmundgranaas.forgero.fabric.blockentity.assemblystation.AssemblyStationBlockEntity;
 
 import net.minecraft.block.entity.BlockEntity;
 
@@ -212,10 +214,5 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 		public String asString() {
 			return this.name;
 		}
-	}
-
-	@Override
-	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new AssemblyStationBlockEntity(pos, state);
 	}
 }

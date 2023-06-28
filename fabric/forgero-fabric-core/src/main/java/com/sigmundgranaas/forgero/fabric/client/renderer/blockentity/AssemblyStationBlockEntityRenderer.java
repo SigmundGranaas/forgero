@@ -1,34 +1,37 @@
 package com.sigmundgranaas.forgero.fabric.client.renderer.blockentity;
 
-import com.sigmundgranaas.forgero.fabric.client.blockentity.AssemblyStationBlockEntity;
-import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock;
-
-import net.minecraft.block.entity.LootableContainerBlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Direction;
+import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationBlock;
+import com.sigmundgranaas.forgero.fabric.blockentity.assemblystation.AssemblyStationBlockEntity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Direction;
 
 @Environment(EnvType.CLIENT)
 public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<AssemblyStationBlockEntity> {
 	private final ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
+	public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {}
+
 	@Override
 	public void render(AssemblyStationBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		//		if (!EasyAnvils.CONFIG.get(ClientConfig.class).renderAnvilContents) return;
-		Direction direction = ((LootableContainerBlockEntity) this).getCachedState().get(AssemblyStationBlock.FACING);
-		int posData = (int) ((LootableContainerBlockEntity) this).getPos().asLong();
+		Direction direction = entity.getCachedState().get(AssemblyStationBlock.FACING);
+		int posData = (int) entity.getPos().asLong();
 		this.renderFlatItem(
-				0, ((LootableContainerBlockEntity) this).getStack(0), direction, matrices, light, overlay, posData);
+				0, ((Inventory) entity).getStack(0), direction, matrices, light, overlay, vertexConsumers, posData);
 		this.renderFlatItem(
-				1, ((LootableContainerBlockEntity) this).getStack(1), direction, matrices, light, overlay, posData);
+				1, ((Inventory) entity).getStack(1), direction, matrices, light, overlay, vertexConsumers, posData);
 	}
 
 	private void renderFlatItem(int index, ItemStack stack, Direction direction, MatrixStack poseStack, int packedLight, int packedOverlay, VertexConsumerProvider vertexConsumers, int posData) {

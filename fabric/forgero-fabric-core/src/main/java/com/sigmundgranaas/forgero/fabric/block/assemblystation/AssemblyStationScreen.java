@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
+package com.sigmundgranaas.forgero.fabric.block.assemblystation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 

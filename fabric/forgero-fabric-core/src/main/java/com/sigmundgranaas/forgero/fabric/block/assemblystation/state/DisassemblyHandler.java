@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state;
+package com.sigmundgranaas.forgero.fabric.block.assemblystation.state;
 
 import java.util.List;
 

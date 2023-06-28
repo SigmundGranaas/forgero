@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.client;
 
+import static com.sigmundgranaas.forgero.fabric.blockentity.assemblystation.AssemblyStationBlockEntity.ASSEMBLY_STATION_BLOCK_ENTITY;
 import static com.sigmundgranaas.forgero.fabric.client.SoulEntityModel.SOUL_ENTITY_MODEL_LAYER;
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 import java.util.HashMap;
@@ -17,14 +18,16 @@ import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.fabric.client.blockentity.AssemblyStationBlockEntity;
+import com.sigmundgranaas.forgero.fabric.blockentity.assemblystation.AssemblyStationBlockEntity;
 import com.sigmundgranaas.forgero.fabric.client.model.ForgeroModelVariantProvider;
 import com.sigmundgranaas.forgero.fabric.client.renderer.blockentity.AssemblyStationBlockEntityRenderer;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
-import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
+import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -58,7 +61,8 @@ public class ForgeroClient implements ClientModInitializer {
 		HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
 		HandledScreens.register(UPGRADE_STATION_SCREEN_HANDLER, UpgradeStationScreen::new);
 
-		BlockEntityRendererFactories.register(BlockEntityType.Builder.create((pos, state) -> new AssemblyStationBlockEntity()), AssemblyStationBlockEntityRenderer::new);
+		BlockEntityRendererFactories.register(BlockEntityType.Builder.create(AssemblyStationBlockEntity::new), AssemblyStationBlockEntityRenderer::new);
+		BlockEntityRendererRegistry.register(AssemblyStationBlockEntity::new, AssemblyStationBlockEntityRenderer::new);
 	}
 
 	private void initializeItemModels() {

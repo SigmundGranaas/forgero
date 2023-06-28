@@ -1,11 +1,11 @@
-package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
+package com.sigmundgranaas.forgero.fabric.block.assemblystation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.DisassemblyHandler;
-import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.EmptyHandler;
+import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.DisassemblyHandler;
+import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.EmptyHandler;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
