@@ -12,12 +12,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
 
@@ -33,7 +30,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 	};
 	private final SimpleInventory inventory;
-	private final ScreenHandlerContext context;
 	private final PlayerEntity player;
 	private final DeconstructionSlot compositeSlot;
 	private DisassemblyHandler disassemblyHandler = new EmptyHandler();
@@ -42,21 +38,20 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	//The client will call the other constructor with an empty Inventory and the screenHandler will automatically
 	//sync this empty inventory with the inventory on the server.
 	public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
+		this(syncId, playerInventory, new SimpleInventory(10));
 	}
 
 	//This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
 	//and can therefore directly provide it as an argument. This inventory will then be synced to the client.
-	public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
+	public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
 		super(AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER, syncId);
 		this.player = playerInventory.player;
-		this.context = context;
-		this.inventory = new SimpleInventory(10);
-		inventory.addListener(this::onContentChanged);
+		this.inventory = (SimpleInventory) inventory;
+		((SimpleInventory) inventory).addListener(this::onContentChanged);
 		//some inventories do custom logic when a player opens it.
 		inventory.onOpen(playerInventory.player);
 		SimpleInventory compositeInventory = new SimpleInventory(1);
-		compositeInventory.addListener(this::onCompositeSlotChanged);
+//		compositeInventory.addListener(this::onCompositeSlotChanged);
 		this.compositeSlot = new DeconstructionSlot(compositeInventory, 0, 34, 34, inventory);
 
 		//This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
@@ -102,13 +97,13 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 	}
 
-	@Override
-	public void close(PlayerEntity player) {
-		super.close(player);
-		this.context.run((world, pos) -> {
-			this.dropInventory(player, this.inventory);
-		});
-	}
+//	@Override
+//	public void close(PlayerEntity player) {
+//		super.close(player);
+//		this.context.run((world, pos) -> {
+//			this.dropInventory(player, this.inventory);
+//		});
+//	}
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
@@ -145,28 +140,28 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		return false;
 	}
 
-	public void onCompositeSlotChanged(Inventory compositeInventory) {
-		boolean isEmpty = compositeInventory.isEmpty();
-		compositeSlot.doneConstructing();
-		if (isEmpty && disassemblyHandler.isDisassembled(getItemsFromInventory())) {
-			onItemRemovedFromToolSlot();
-		} else if (!compositeInventory.isEmpty()) {
-			onItemAddedToToolSlot();
-		}
-	}
+//	public void onCompositeSlotChanged(Inventory compositeInventory) {
+//		boolean isEmpty = compositeInventory.isEmpty();
+//		compositeSlot.doneConstructing();
+//		if (isEmpty && disassemblyHandler.isDisassembled(getItemsFromInventory())) {
+//			onItemRemovedFromToolSlot();
+//		} else if (!compositeInventory.isEmpty()) {
+//			onItemAddedToToolSlot();
+//		}
+//	}
 
-	@Override
-	public void onContentChanged(Inventory inventory) {
-		this.context.run((world, pos) -> {
-			if (!world.isClient && compositeSlot.doneConstructing) {
-				if (!compositeSlot.isEmpty()) {
-					compositeSlot.removeCompositeIngredient();
-					disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(compositeSlot.getStack());
-				}
-			}
-		});
-		super.onContentChanged(inventory);
-	}
+//	@Override
+//	public void onContentChanged(Inventory inventory) {
+//		this.context.run((world, pos) -> {
+//			if (!world.isClient && compositeSlot.doneConstructing) {
+//				if (!compositeSlot.isEmpty()) {
+//					compositeSlot.removeCompositeIngredient();
+//					disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(compositeSlot.getStack());
+//				}
+//			}
+//		});
+//		super.onContentChanged(inventory);
+//	}
 
 	private List<ItemStack> getItemsFromInventory() {
 		List<ItemStack> items = new ArrayList<>();
@@ -174,35 +169,35 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			items.add(inventory.getStack(i));
 		}
 		return items.stream()
-				.filter(itemStack -> !itemStack.isEmpty())
-				.collect(Collectors.toList());
+		            .filter(itemStack -> !itemStack.isEmpty())
+		            .collect(Collectors.toList());
 	}
 
+//	private void onItemAddedToToolSlot() {
+//		this.context.run((world, pos) -> {
+//			if (!world.isClient && this.player instanceof ServerPlayerEntity serverPlayerEntity) {
+//				compositeSlot.addToolToCompositeSlot();
+//				this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(compositeSlot.getStack());
+//				var items = disassemblyHandler.disassemble();
+//				for (int i = 1; i < items.size() + 1; i++) {
+//					var element = items.get(i - 1);
+//					inventory.setStack(i, element);
+//					setPreviousTrackedSlot(i, element);
+//					serverPlayerEntity.networkHandler.sendPacket(
+//							new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, element));
+//				}
+//				compositeSlot.doneConstructing();
+//			}
+//		});
+//	}
 
-	private void onItemAddedToToolSlot() {
-		this.context.run((world, pos) -> {
-			if (!world.isClient && this.player instanceof ServerPlayerEntity serverPlayerEntity) {
-				compositeSlot.addToolToCompositeSlot();
-				this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(compositeSlot.getStack());
-				var items = disassemblyHandler.disassemble();
-				for (int i = 1; i < items.size() + 1; i++) {
-					var element = items.get(i - 1);
-					inventory.setStack(i, element);
-					setPreviousTrackedSlot(i, element);
-					serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i, element));
-				}
-				compositeSlot.doneConstructing();
-			}
-		});
-	}
-
-	private void onItemRemovedFromToolSlot() {
-		this.context.run((world, pos) -> {
-			compositeSlot.removeCompositeIngredient();
-			inventory.clear();
-			this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(compositeSlot.getStack());
-		});
-	}
+//	private void onItemRemovedFromToolSlot() {
+//		this.context.run((world, pos) -> {
+//			compositeSlot.removeCompositeIngredient();
+//			inventory.clear();
+//			this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(compositeSlot.getStack());
+//		});
+//	}
 
 	private static class DeconstructionSlot extends Slot {
 		private final Inventory resultInventory;
@@ -236,7 +231,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 		@Override
 		public boolean canInsert(ItemStack stack) {
-			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(stack) instanceof EmptyHandler);
+			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(
+					stack) instanceof EmptyHandler);
 		}
 
 		public void doneConstructing() {
@@ -256,7 +252,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 	}
 
-	public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
+	public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(
+			AssemblyStationScreenHandler::new);
 
 
 }

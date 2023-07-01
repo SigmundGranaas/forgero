@@ -31,9 +31,9 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		Direction direction = entity.getCachedState().get(AssemblyStationBlock.FACING);
 		int posData = (int) entity.getPos().asLong();
 		this.renderFlatItem(
-				0, ((Inventory) entity).getStack(0), direction, matrices, light, overlay, vertexConsumers, posData);
+				0, entity.getItems().get(0), direction, matrices, light, overlay, vertexConsumers, posData);
 		this.renderFlatItem(
-				1, ((Inventory) entity).getStack(1), direction, matrices, light, overlay, vertexConsumers, posData);
+				1, entity.getItems().get(1), direction, matrices, light, overlay, vertexConsumers, posData);
 	}
 
 	private void renderFlatItem(int index, ItemStack stack, Direction direction, MatrixStack poseStack, int packedLight, int packedOverlay, VertexConsumerProvider vertexConsumers, int posData) {

@@ -116,14 +116,6 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	}
 
 	@Override
-	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-		return new SimpleNamedScreenHandlerFactory(
-				(syncId, inventory, player) -> new AssemblyStationScreenHandler(syncId, inventory,
-						ScreenHandlerContext.create(world, pos)
-				), Text.literal("assembly_station"));
-	}
-
-	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		super.onPlaced(world, pos, state, placer, itemStack);
 		if (!world.isClient) {
@@ -194,8 +186,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	}
 
 	public enum AssemblyStationPart implements StringIdentifiable {
-		RIGHT("right"),
-		LEFT("left");
+		RIGHT("right"), LEFT("left");
 
 		private final String name;
 
