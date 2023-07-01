@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.fabric.blockentity.assemblystation.AssemblySta
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -16,12 +15,15 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Quaternion;
 
 @Environment(EnvType.CLIENT)
 public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<AssemblyStationBlockEntity> {
-	private final ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+	private final ItemRenderer itemRenderer;
 
-	public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {}
+	public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
+		itemRenderer = ctx.getItemRenderer();
+	}
 
 	@Override
 	public void render(AssemblyStationBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
@@ -39,24 +41,28 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 
 		poseStack.push();
 		poseStack.translate(0.0, 1.0375, 0.0);
-		poseStack.multiply(Direction.Axis.XN.rotationDegrees(90.0F));
-		boolean mirrored = (direction.getAxis().getStep() == 1 ? 1 : 0) != index % 2;
+//		poseStack.multiply(Direction.Axis.XN.rotationDegrees(90.0F));
+		poseStack.multiply(Quaternion.fromEulerXyz(90f, 0f, 0f));
+		boolean mirrored = (direction.getAxis().ordinal() == 1 ? 1 : 0) != index % 2;
 
 		switch (direction.getAxis()) {
 			case X -> {
 				if (mirrored) {
 					poseStack.translate(0.25, -0.5, 0.0);
 				} else {
-					poseStack.multiply(Direction.Axis.ZP.rotationDegrees(180.0F));
+//					poseStack.multiply(Direction.Axis.ZP.rotationDegrees(180.0F));
+					poseStack.multiply(Quaternion.fromEulerXyz(0f, 0f, -180f));
 					poseStack.translate(-0.75, 0.5, 0.0);
 				}
 			}
 			case Z -> {
 				if (mirrored) {
-					poseStack.multiply(Axis.ZN.rotationDegrees(90.0F));
+//					poseStack.multiply(Direction.Axis.ZN.rotationDegrees(90.0F));
+					poseStack.multiply(Quaternion.fromEulerXyz(0, 0f, 90f));
 					poseStack.translate(0.25, 0.5, 0.0);
 				} else {
-					poseStack.multiply(Axis.ZP.rotationDegrees(90.0F));
+//					poseStack.multiply(Axis.ZP.rotationDegrees(90.0F));
+					poseStack.multiply(Quaternion.fromEulerXyz(0, 0f, -90f));
 					poseStack.translate(-0.75, -0.5, 0.0);
 				}
 			}

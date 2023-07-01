@@ -61,8 +61,7 @@ public class ForgeroClient implements ClientModInitializer {
 		HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
 		HandledScreens.register(UPGRADE_STATION_SCREEN_HANDLER, UpgradeStationScreen::new);
 
-		BlockEntityRendererFactories.register(BlockEntityType.Builder.create(AssemblyStationBlockEntity::new), AssemblyStationBlockEntityRenderer::new);
-		BlockEntityRendererRegistry.register(AssemblyStationBlockEntity::new, AssemblyStationBlockEntityRenderer::new);
+		BlockEntityRendererFactories.register(ASSEMBLY_STATION_BLOCK_ENTITY, AssemblyStationBlockEntityRenderer::new);
 	}
 
 	private void initializeItemModels() {

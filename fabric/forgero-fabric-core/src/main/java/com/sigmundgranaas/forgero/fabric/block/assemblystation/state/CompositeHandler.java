@@ -39,7 +39,7 @@ public class CompositeHandler implements DisassemblyHandler {
 
 	@Override
 	public DisassemblyHandler insertIntoDisassemblySlot(ItemStack stack) {
-		return createHandler(stack);
+		return DisassemblyHandler.createHandler(stack);
 	}
 
 }
