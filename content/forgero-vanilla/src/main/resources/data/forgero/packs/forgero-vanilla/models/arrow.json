@@ -1,0 +1,43 @@
+{
+  "type": "ARROW",
+  "models": [
+    {
+      "name": "arrow",
+      "template": "arrow.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 10
+    },
+    {
+      "name": "arrow_feather",
+      "template": "arrow_feather.png",
+      "type": "GENERATE",
+      "palette": "FEATHER",
+      "order": 30
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "type:ARROW_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "arrow"
+    },
+    {
+      "target": [
+        "type:ARROW_HEAD",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "arrow_head"
+    },
+    {
+      "target": [
+        "type:FEATHER",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "arrow_feather"
+    }
+  ]
+}
