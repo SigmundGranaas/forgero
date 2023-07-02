@@ -31,7 +31,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 					AssemblyStationBlock.ASSEMBLY_STATION_BLOCK
 			).build());
 
-	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
+	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(10, ItemStack.EMPTY);
 
 	public AssemblyStationBlockEntity(BlockPos blockPos, BlockState blockState) {
 		super(ASSEMBLY_STATION_BLOCK_ENTITY, blockPos, blockState);
@@ -56,6 +56,10 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+		for (ItemStack stack : items) {
+			Forgero.LOGGER.info(stack.getName());
+		}
+
 		//We provide *this* to the screenHandler as our class Implements Inventory
 		//Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
 		return new AssemblyStationScreenHandler(syncId, playerInventory, this);
