@@ -97,7 +97,16 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	}
 
 	public ToolBuilder toolBuilder() {
-		return ToolBuilder.builder(getHead(), getHandle())
+		var head = getHead();
+		if (head instanceof Composite composite) {
+			head = composite.copy();
+		}
+
+		var handle = getHandle();
+		if (handle instanceof Composite composite) {
+			handle = composite.copy();
+		}
+		return ToolBuilder.builder(head, handle)
 				.addSlotContainer(slotContainer.copy())
 				.conditions(conditions)
 				.type(type())

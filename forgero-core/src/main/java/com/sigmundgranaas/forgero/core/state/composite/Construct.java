@@ -1,8 +1,23 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.property.*;
+import com.sigmundgranaas.forgero.core.context.Contexts;
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
@@ -11,14 +26,10 @@ import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class Construct implements Composite, ConstructedState {
@@ -48,8 +59,13 @@ public class Construct implements Composite, ConstructedState {
 		return new ConstructBuilder();
 	}
 
-	public static ConstructBuilder builder(List<? extends Slot> slots) {
-		return new ConstructBuilder(slots);
+	public static ConstructBuilder builder(SlotContainer container) {
+		return new ConstructBuilder(container);
+	}
+
+	@Override
+	public SlotContainer getSlotContainer() {
+		return this.upgrades;
 	}
 
 	@Override
@@ -87,7 +103,7 @@ public class Construct implements Composite, ConstructedState {
 				.flatMap(List::stream)
 				.map(prop -> prop.applyProperty(target))
 				.flatMap(List::stream)
-				.filter(prop -> !(prop instanceof Attribute attribute && attribute.getCategory() == Category.LOCAL))
+				.filter(prop -> !(prop instanceof Attribute attribute && attribute.getContext().test(Contexts.LOCAL)))
 				.collect(Collectors.toList());
 
 		var upgradeProps = ingredients()
@@ -102,14 +118,14 @@ public class Construct implements Composite, ConstructedState {
 				.collect(Collectors.toMap(Attribute::toString, attribute -> attribute, (attribute1, attribute2) -> attribute1.getPriority() > attribute2.getPriority() ? attribute1 : attribute2))
 				.values()
 				.stream()
-				.filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
+				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
 				.map(Property.class::cast)
 				.toList();
 
 		var newValues = new ArrayList<Property>();
 		for (AttributeType type : AttributeType.values()) {
 			var newBaseAttribute = new AttributeBuilder(type.toString()).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
-			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
+			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.UNDEFINED);
 			var attribute = newBaseAttribute.build();
 			if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1) {
 				newValues.add(newBaseAttribute.build());
@@ -147,7 +163,7 @@ public class Construct implements Composite, ConstructedState {
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
 				return true;
@@ -238,8 +254,14 @@ public class Construct implements Composite, ConstructedState {
 
 	public ConstructBuilder toBuilder() {
 		return builder()
-				.addIngredients(ingredients())
-				.addUpgrades(upgrades.slots())
+				.addIngredients(ingredients().stream().map(ingredient -> {
+					if (ingredient instanceof Composite composite) {
+						return composite.copy();
+					} else {
+						return ingredient;
+					}
+				}).toList())
+				.addSlotContainer(upgrades.copy())
 				.type(type())
 				.id(identifier());
 	}
@@ -267,6 +289,12 @@ public class Construct implements Composite, ConstructedState {
 		return toBuilder().build();
 	}
 
+	@Override
+	public DataContainer customData(Target target) {
+		var combinedTarget = target.combineTarget(new TypeTarget(Set.of(type().typeName())));
+		return components().stream().map(state -> state.customData(combinedTarget)).reduce(DataContainer.empty(), (dataContainer1, dataContainer2) -> DataContainer.transitiveMerge(dataContainer1, dataContainer2, combinedTarget));
+	}
+
 	public static class ConstructBuilder extends BaseComposite.BaseCompositeBuilder<ConstructBuilder> {
 
 		public ConstructBuilder() {
@@ -274,9 +302,9 @@ public class Construct implements Composite, ConstructedState {
 			this.upgradeContainer = SlotContainer.of(Collections.emptyList());
 		}
 
-		public ConstructBuilder(List<? extends Slot> upgradeSlots) {
+		public ConstructBuilder(SlotContainer container) {
 			this.ingredientList = new ArrayList<>();
-			this.upgradeContainer = SlotContainer.of(upgradeSlots);
+			this.upgradeContainer = container;
 		}
 
 		public Construct build() {

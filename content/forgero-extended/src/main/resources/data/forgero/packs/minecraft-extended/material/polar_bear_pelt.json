@@ -1,0 +1,76 @@
+{
+  "type": "LEATHER",
+  "name": "polar_bear_pelt",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 40
+      },
+      {
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 40
+      },
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "UPGRADE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 40
+      },
+      {
+        "type": "WEIGHT",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 3
+      },
+      {
+        "type": "DURABILITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "operation": "MULTIPLICATION",
+        "category": "OFFENSIVE",
+        "value": 0.9
+      },
+      {
+        "type": "DURABILITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 300
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 0.3
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "UTILITY",
+        "value": 0.5
+      }
+    ]
+  },
+  "palette": {
+    "name": "polar_bear_pelt_palette"
+  }
+}

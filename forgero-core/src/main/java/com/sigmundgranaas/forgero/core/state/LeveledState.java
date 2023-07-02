@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgero.core.state;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -7,11 +13,6 @@ import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.type.Type;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Builder(toBuilder = true)
 public class LeveledState implements State {
@@ -85,5 +86,10 @@ public class LeveledState implements State {
 				.nameSpace(nameSpace)
 				.type(type)
 				.build();
+	}
+
+	@Override
+	public DataContainer customData(Target target) {
+		return DataContainer.empty();
 	}
 }

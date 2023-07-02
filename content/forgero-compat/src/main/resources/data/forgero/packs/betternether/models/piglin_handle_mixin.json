@@ -1,0 +1,24 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL",
+            "model:piglin_shovel_head.png"
+          ],
+          "template": "piglin_handle.png"
+        },
+        {
+          "target": [
+            "type:HOE",
+            "model:piglin_hoe_head.png"
+          ],
+          "template": "piglin_handle.png"
+        }
+      ]
+    }
+  ]
+}

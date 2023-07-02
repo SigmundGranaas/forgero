@@ -1,0 +1,103 @@
+{
+  "type": "PICKAXE_HEAD_SCHEMATIC",
+  "name": "path_mining_pickaxe_head-schematic",
+  "parent": "pickaxe_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "PICKAXE_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 3
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 66
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.27
+      },
+      {
+        "id": "schematic-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.9
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.8
+      }
+    ],
+    "features": [
+      {
+        "type": "BLOCK_BREAKING_PATTERN",
+        "pattern": [
+          "X",
+          "x"
+        ]
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    }
+  }
+}

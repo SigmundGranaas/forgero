@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forgero:item/paper_schematic_base",
+    "layer1": "forgero:item/axe_outline_paper"
+  }
+}

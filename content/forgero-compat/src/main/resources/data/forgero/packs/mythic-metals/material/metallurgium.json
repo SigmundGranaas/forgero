@@ -1,0 +1,74 @@
+{
+  "type": "METAL",
+  "name": "metallurgium",
+  "parent": "metal",
+  "container": {
+    "type": "HOST",
+    "id": "mythicmetals:metallurgium_ingot"
+  },
+  "palette": {
+    "name": "metallurgium"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 110
+      },
+      {
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 15
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3000.0
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.1
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 6
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 25
+      },
+      {
+        "id": "metal-rarity-upgrade",
+        "context": "UPGRADE",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 45
+      }
+    ]
+  }
+}

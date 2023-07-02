@@ -1,0 +1,23 @@
+{
+  "type": "GEM",
+  "name": "ender-gem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
+      }
+    ]
+  },
+  "palette": {
+    "name": "ender_gem"
+  }
+}

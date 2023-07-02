@@ -1,0 +1,58 @@
+{
+  "type": "METAL",
+  "parent": "metal",
+  "name": "redstone",
+  "container": {
+    "type": "HOST",
+    "id": "wiredredstone:redstone_alloy_ingot"
+  },
+  "palette": {
+    "name": "redstone"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "value": 30
+          },
+          {
+            "id": "metal-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 3
+          },
+          {
+            "id": "metal-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 5
+          },
+          {
+            "id": "metal-durability-composite",
+            "type": "DURABILITY",
+            "value": 800
+          },
+          {
+            "id": "metal-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 3.0
+          },
+          {
+            "id": "metal-armor-composite",
+            "type": "ARMOR",
+            "value": 4
+          },
+          {
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "value": 25
+          }
+        ]
+      }
+    ]
+  }
+}

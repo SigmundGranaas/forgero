@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+import static com.sigmundgranaas.forgero.core.type.Type.*;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
-import static com.sigmundgranaas.forgero.core.type.Type.*;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
 public class NameCompositor {
 	public String compositeName(List<State> ingredients) {
@@ -21,24 +21,24 @@ public class NameCompositor {
 	}
 
 	private int sorter(State ingredient) {
-		if (ingredient.test(MATERIAL, Context.of())) {
+		if (ingredient.test(MATERIAL, MatchContext.of())) {
 			return 1;
-		} else if (ingredient.test(SCHEMATIC, Context.of())) {
+		} else if (ingredient.test(SCHEMATIC, MatchContext.of())) {
 			return 2;
 		}
 		return 0;
 	}
 
 	private Optional<String> mapper(State ingredient) {
-		if (ingredient.test(TOOL_PART_HEAD, Context.of())) {
+		if (ingredient.test(TOOL_PART_HEAD, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_head", ""));
 		}
-		if (ingredient.test(SWORD_BLADE, Context.of())) {
+		if (ingredient.test(SWORD_BLADE, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_blade", ""));
-		} else if (ingredient.test(HANDLE, Context.of())) {
+		} else if (ingredient.test(HANDLE, MatchContext.of())) {
 			return Optional.empty();
 
-		} else if (ingredient.test(SCHEMATIC, Context.of())) {
+		} else if (ingredient.test(SCHEMATIC, MatchContext.of())) {
 			var elements = ingredient.name().split(ELEMENT_SEPARATOR);
 			if (elements.length == 2) {
 				return Optional.of(elements[0]);

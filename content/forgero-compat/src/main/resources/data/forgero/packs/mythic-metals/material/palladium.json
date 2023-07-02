@@ -1,0 +1,75 @@
+{
+  "type": "METAL",
+  "name": "palladium",
+  "parent": "metal",
+  "container": {
+    "type": "HOST",
+    "id": "mythicmetals:palladium_ingot"
+  },
+  "palette": {
+    "name": "palladium"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 71
+      },
+      {
+        "id": "metal-base-mining_level",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 8
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 1234.0
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.4
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "id": "metal-rarity-upgrade",
+        "context": "UPGRADE",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 30
+      }
+    ]
+  }
+}

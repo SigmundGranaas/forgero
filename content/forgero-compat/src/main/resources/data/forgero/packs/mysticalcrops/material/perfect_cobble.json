@@ -1,0 +1,66 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "perfect_cobble",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:perfect_essence_cobblestone"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "stone-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 33
+      },
+      {
+        "id": "stone-mining-speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.9
+      },
+      {
+        "id": "stone-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.3
+      },
+      {
+        "id": "stone-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 225
+      },
+      {
+        "id": "stone-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 32
+      },
+      {
+        "id": "stone-attack_damage-offensive-upgrade",
+        "type": "ATTACK_DAMAGE",
+        "context": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 0.9
+      },
+      {
+        "id": "stone-mining-level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.0
+      }
+    ]
+  },
+  "palette": {
+    "name": "perfect_cobble"
+  }
+}

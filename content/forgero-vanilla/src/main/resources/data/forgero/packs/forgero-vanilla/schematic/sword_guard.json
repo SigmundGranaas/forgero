@@ -1,0 +1,100 @@
+{
+  "type": "SWORD_GUARD_SCHEMATIC",
+  "name": "sword_guard-schematic",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORD_GUARD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 25
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.4
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.4
+      },
+      {
+        "id": "schematic-armor-composite",
+        "type": "ARMOR",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.4
+      },
+      {
+        "id": "schematic-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.4
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    }
+  }
+}

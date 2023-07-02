@@ -1,0 +1,53 @@
+{
+  "type": "STONE",
+  "name": "deepslate",
+  "parent": "default_stone",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:deepslate"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "stone-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 18
+      },
+      {
+        "id": "stone-mining-speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.4
+      },
+      {
+        "id": "stone-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 220.0
+      },
+      {
+        "id": "stone-rarity-upgrade",
+        "type": "RARITY",
+        "context": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 5
+      },
+      {
+        "id": "stone-attack_damage-offensive-upgrade",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 0.5
+      }
+    ]
+  },
+  "palette": {
+    "name": "deepslate"
+  }
+}

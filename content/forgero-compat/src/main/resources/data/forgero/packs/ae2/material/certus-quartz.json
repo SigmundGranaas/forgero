@@ -1,0 +1,16 @@
+{
+  "type": "MINERAL",
+  "name": "certus_quartz",
+  "parent": "nether-quartz",
+  "container": {
+    "type": "HOST",
+    "id": "ae2:certus_quartz_crystal"
+  },
+  "palette": {
+    "name": "certus_quartz"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "name": "spiked_binding-schematic",
+  "parent": "binding-schematic",
+  "type": "BINDING_SCHEMATIC",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "TOOL_BINDING",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 40
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.3
+      },
+      {
+        "type": "ATTACK_SPEED",
+        "order": "END",
+        "operation": "ADDITION",
+        "value": -0.1
+      },
+      {
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    }
+  }
+}

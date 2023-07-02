@@ -1,0 +1,95 @@
+{
+  "type": "SWORD_BLADE_SCHEMATIC",
+  "name": "knife_blade-schematic",
+  "parent": "sword_blade_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORD_BLADE",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "sword_tip",
+        "type": "MATERIAL",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 20
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.8
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.5
+      },
+      {
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.2
+      },
+      {
+        "id": "schematic-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 1,
+      "context": "LOCAL"
+    },
+    "better_compat_attribute_container": "bettercombat:dagger"
+  }
+}

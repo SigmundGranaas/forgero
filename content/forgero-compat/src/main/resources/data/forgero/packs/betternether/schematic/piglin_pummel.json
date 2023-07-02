@@ -1,0 +1,75 @@
+{
+  "type": "PUMMEL_SCHEMATIC",
+  "name": "piglin_pommel-schematic",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "PUMMEL",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "METAL",
+            "unique": true,
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "METAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "context": "LOCAL",
+        "value": 60
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.2
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "category": "UTILITY",
+        "operation": "MULTIPLICATION",
+        "value": 1.2
+      },
+      {
+        "id": "schematic-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": "1"
+  }
+}

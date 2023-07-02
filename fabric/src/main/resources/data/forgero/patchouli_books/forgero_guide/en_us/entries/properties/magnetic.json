@@ -1,0 +1,17 @@
+{
+  "name": "Magnetic",
+  "icon": "forgero:magnetico",
+  "category": "forgero:property_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Magnetism allows items to be attracted to it's source."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Magnetism",
+      "item": "forgero:netherite-refined_pickaxe_head:{FORGERO:{COMPOSITE_TYPE:'SCHEMATIC_PART',CONDITIONS:[],ID:'forgero:netherite-refined_pickaxe_head',INGREDIENTS:[{ID:'forgero:refined_pickaxe_head-schematic',NAME:'refined_pickaxe_head-schematic',NAMESPACE:'forgero',STATE_TYPE:'STATE'},{ID:'minecraft:netherite',NAME:'netherite',NAMESPACE:'minecraft',STATE_TYPE:'STATE'}],NAME:'netherite-refined_pickaxe_head',NAMESPACE:'forgero',STATE_TYPE:'COMPOSITE',TYPE:'PICKAXE_HEAD',UPGRADES:[{ID:'forgero:magnetico-gem',NAME:'magnetico-gem',NAMESPACE:'forgero',STATE_TYPE:'STATE'}]}}",
+      "text": "When the Magnetico Gem is applied to a tool. It's level will determine the range and strength of the magnetic pull of your tool."
+    }
+  ]
+}

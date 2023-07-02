@@ -1,26 +1,28 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
-import com.sigmundgranaas.forgero.core.property.*;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
-import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
-import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
-import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
-import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.core.util.match.NameMatch;
-import org.jetbrains.annotations.NotNull;
+import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
+import com.sigmundgranaas.forgero.core.context.Contexts;
+import com.sigmundgranaas.forgero.core.customdata.DataContainer;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
+import com.sigmundgranaas.forgero.core.property.v2.CompositePropertyProcessor;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
+import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.core.util.match.NameMatch;
+import org.jetbrains.annotations.NotNull;
 
 public class ConstructedComposite extends BaseComposite implements ConstructedState {
 	private final List<State> parts;
@@ -57,57 +59,35 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 
 	@Override
+	public ConstructedComposite removeUpgrade(String id) {
+		return this;
+	}
+
+	@Override
 	public List<Property> compositeProperties(Target target) {
-		var props = new ArrayList<Property>();
+		var propertyProcessor = new CompositePropertyProcessor();
+		var props = new ArrayList<>(super.compositeProperties(target));
 
-		var upgradeProps = super.compositeProperties(target);
-		props.addAll(upgradeProps);
+		var partProps = parts().stream()
+				.map(part -> part.applyProperty(target))
+				.flatMap(List::stream)
+				.toList();
 
-		var partProps = parts().stream().map(part -> part.applyProperty(target)).flatMap(List::stream).toList();
-		props.addAll(combineCompositeProperties(partProps));
+		props.addAll(propertyProcessor.process(partProps));
 
-		var otherProps = partProps.stream().filter(this::filterNormalProperties).toList();
+		var otherProps = partProps.stream()
+				.filter(this::filterNormalProperties)
+				.toList();
 		props.addAll(otherProps);
 
 		return props;
 	}
 
 	private boolean filterNormalProperties(Property property) {
-		if (property instanceof Attribute attribute) {
-			if (Category.UPGRADE_CATEGORIES.contains(attribute.getCategory())) {
-				return false;
-			} else if (attribute.getOrder() == CalculationOrder.COMPOSITE) {
-				return false;
-			}
+		if (property instanceof com.sigmundgranaas.forgero.core.property.Attribute attribute) {
+			return attribute.getContext().test(Contexts.UNDEFINED);
 		}
 		return true;
-	}
-
-	private List<Property> combineCompositeProperties(List<Property> props) {
-		var compositeAttributes = Property.stream(props)
-				.getAttributes()
-				.collect(Collectors.toMap(Attribute::toString, attribute -> attribute, (attribute1, attribute2) -> attribute1.getPriority() > attribute2.getPriority() ? attribute1 : attribute2))
-				.values()
-				.stream()
-				.filter(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE)
-				.map(Property.class::cast)
-				.toList();
-
-		var newValues = new ArrayList<Property>();
-		for (AttributeType type : AttributeType.values()) {
-			var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
-			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.PASS);
-			var attribute = newBaseAttribute.build();
-			if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1) {
-				newValues.add(newBaseAttribute.build());
-			}
-		}
-		return newValues;
-	}
-
-	@Override
-	public ConstructedComposite removeUpgrade(String id) {
-		return this;
 	}
 
 	@Override
@@ -117,14 +97,20 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 	public ConstructBuilder toBuilder() {
 		return builder()
-				.addIngredients(parts())
-				.addUpgrades(slots())
+				.addIngredients(parts().stream().map(part -> {
+					if (part instanceof Composite composite) {
+						return composite.copy();
+					} else {
+						return part;
+					}
+				}).toList())
+				.addSlotContainer(slotContainer.copy())
 				.type(type())
 				.id(identifier());
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
 				return true;
@@ -145,6 +131,12 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	@Override
 	public ConstructedComposite copy() {
 		return toBuilder().build();
+	}
+
+	@Override
+	public DataContainer customData(Target target) {
+		var combinedTarget = target.combineTarget(new TypeTarget(Set.of(type().typeName())));
+		return components().stream().map(state -> state.customData(combinedTarget)).reduce(DataContainer.empty(), (dataContainer1, dataContainer2) -> DataContainer.transitiveMerge(dataContainer1, dataContainer2, combinedTarget));
 	}
 
 	public static class ConstructBuilder extends BaseCompositeBuilder<ConstructBuilder> {
