@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "test",
+  "version": "${version}",
+  "environment": "*",
+  "description": "Forgero game tests",
+  "license": "MIT",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgerofabric.gametest.RecipeTest",
+      "com.sigmundgranaas.forgerofabric.gametest.AssemblyStationTester",
+      "com.sigmundgranaas.forgerofabric.gametest.RepairKitTest",
+      "com.sigmundgranaas.forgerofabric.gametest.UpgradeTest",
+      "com.sigmundgranaas.forgerofabric.gametest.BlockSelectionTest",
+      "com.sigmundgranaas.forgerofabric.gametest.MiningLevelTest"
+    ]
+  }
+}

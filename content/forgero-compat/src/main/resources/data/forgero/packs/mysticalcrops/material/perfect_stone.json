@@ -1,0 +1,67 @@
+{
+  "type": "STONE",
+  "parent": "default_stone",
+  "name": "perfect_stone",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:perfect_essence_stone"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "stone-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 34
+      },
+      {
+        "id": "stone-mining-level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.0
+      },
+      {
+        "id": "stone-mining-speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "id": "stone-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.4
+      },
+      {
+        "id": "stone-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 250
+      },
+      {
+        "id": "stone-weight-composite",
+        "type": "WEIGHT",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 34
+      },
+      {
+        "id": "stone-attack_damage-offensive-upgrade",
+        "context": "UPGRADE",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 1
+      }
+    ]
+  },
+  "palette": {
+    "name": "perfect_stone"
+  }
+}

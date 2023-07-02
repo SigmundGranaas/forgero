@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.texture.V2;
 
-import com.sigmundgranaas.forgero.core.texture.V2.recolor.DefaultRecolorStrategy;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.sigmundgranaas.forgero.core.texture.V2.recolor.DefaultRecolorStrategy;
 
 public class TextureService {
 	public static String PALETTE_PATH = "assets/forgero/templates/materials/";
@@ -28,7 +28,7 @@ public class TextureService {
 			return remapped;
 		}
 		if (paletteCache.containsKey(name)) {
-			return Optional.of(paletteCache.get(name));
+			return Optional.ofNullable(paletteCache.get(name));
 		}
 		var template = loader.load(PALETTE_PATH + name);
 		template.ifPresent(palette -> paletteCache.put(name, new Palette(palette)));

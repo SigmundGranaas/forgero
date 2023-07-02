@@ -1,0 +1,31 @@
+{
+  "name": "pickaxe_head_base",
+  "parent": "tool_part_head_schematic",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-attack_speed-composite",
+        "type": "ATTACK_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -2.7
+      },
+      {
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5
+      }
+    ],
+    "features": [
+      {
+        "type": "EFFECTIVE_BLOCKS",
+        "tags": [
+          "minecraft:mineable/pickaxe"
+        ]
+      }
+    ]
+  }
+}

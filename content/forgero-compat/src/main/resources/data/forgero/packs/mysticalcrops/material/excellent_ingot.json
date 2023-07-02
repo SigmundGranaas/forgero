@@ -1,0 +1,44 @@
+{
+  "type": "METAL",
+  "parent": "metal",
+  "name": "excellent_ingot",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:excellent_ingot"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 59
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 6.9
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 325
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.4
+      }
+    ]
+  },
+  "palette": {
+    "name": "excellent"
+  }
+}

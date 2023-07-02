@@ -1,0 +1,74 @@
+{
+  "type": "METAL",
+  "name": "mythril",
+  "parent": "metal",
+  "container": {
+    "type": "HOST",
+    "id": "mythicmetals:mythril_ingot"
+  },
+  "palette": {
+    "name": "mythril"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 87
+      },
+      {
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 14
+      },
+      {
+        "id": "metal-durability-composite",
+        "context": "DURABILITY",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1564.0
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "context": "ATTACK_DAMAGE",
+        "order": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.5
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 45
+      },
+      {
+        "id": "metal-rarity-upgrade",
+        "context": "UPGRADE",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 30
+      }
+    ]
+  }
+}

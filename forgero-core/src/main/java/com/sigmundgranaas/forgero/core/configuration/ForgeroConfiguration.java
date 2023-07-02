@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
@@ -14,6 +14,9 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean disableVanillaRecipes = false;
+
+	@NotNull
+	public Boolean enableCustomRecipeDeletion = true;
 
 	@NotNull
 	public Boolean disableVanillaLoot = false;
@@ -44,4 +47,27 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean useEntityAttributes = true;
+
+	@NotNull
+	public Boolean hideRarity = true;
+
+	@NotNull
+	public Boolean exportGeneratedTextures = false;
+
+	@NotNull
+	public Boolean showAttributeDifference = true;
+
+	@NotNull
+	public Boolean enableRecipesForAllSchematics = false;
+	@NotNull
+	public Integer weightMiningSpeedReductionScaler = 20;
+	@NotNull
+	public Integer weightAttackSpeedReductionScaler = 50;
+	@NotNull
+	public Boolean weightReducesAttackSpeed = true;
+	@NotNull
+	public Boolean weightReducesMiningSpeed = true;
+
+	@NotNull
+	public Boolean enableUpgradeInCraftingTable = true;
 }

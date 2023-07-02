@@ -1,0 +1,7 @@
+{
+  "input": "minecraft:wooden_hoe",
+  "results": [
+    "forgero:oak-shovel_head",
+    "forgero:oak-handle"
+  ]
+}

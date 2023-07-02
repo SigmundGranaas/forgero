@@ -1,0 +1,31 @@
+{
+  "name": "hoe_head_base",
+  "parent": "tool_part_head_schematic",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.3
+      },
+      {
+        "id": "schematic-atack_speed-composite",
+        "type": "ATTACK_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -1.5
+      }
+    ],
+    "features": [
+      {
+        "type": "EFFECTIVE_BLOCKS",
+        "tags": [
+          "minecraft:mineable/hoe"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "type": "WOOD",
+  "name": "stalagnate",
+  "parent": "wood",
+  "container": {
+    "type": "HOST",
+    "id": "betternether:stalagnate_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 25
+      },
+      {
+        "id": "wood-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 40
+      }
+    ],
+    "passive": [],
+    "active": []
+  },
+  "palette": {
+    "name": "stalagnate"
+  }
+}

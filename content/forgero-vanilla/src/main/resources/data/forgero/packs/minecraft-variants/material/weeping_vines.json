@@ -1,0 +1,85 @@
+{
+  "type": "PLANT",
+  "name": "weeping_vines",
+  "parent": "vines",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:weeping_vines"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "vine-rarity-composite",
+            "type": "RARITY",
+            "value": 10
+          },
+          {
+            "id": "vine-durability-composite",
+            "type": "DURABILITY",
+            "value": 40
+          },
+          {
+            "id": "vine-weight-composite",
+            "type": "WEIGHT",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "vine-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "vine-durability-offensive",
+            "type": "DURABILITY",
+            "order": "BASE",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 0.4
+          },
+          {
+            "id": "vine-durability-utility",
+            "type": "DURABILITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 70
+          },
+          {
+            "id": "vine-attack_speed-utility",
+            "type": "ATTACK_SPEED",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.2
+          },
+          {
+            "id": "vine-mining_speed-utility",
+            "type": "MINING_SPEED",
+            "order": "MIDDLE",
+            "operation": "MULTIPLICATION",
+            "category": "UTILITY",
+            "value": 1.02
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "weeping_vines"
+  }
+}

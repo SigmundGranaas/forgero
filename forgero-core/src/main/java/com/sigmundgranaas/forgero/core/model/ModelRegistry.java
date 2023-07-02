@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.resource.ResourceListener;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
@@ -8,11 +14,7 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.PaletteData;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
-import com.sigmundgranaas.forgero.core.util.match.Context;
-
-import java.util.*;
-
-import static com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType.MODEL;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
 public class ModelRegistry {
 	private final HashMap<String, ModelMatcher> modelMap;
@@ -46,7 +48,7 @@ public class ModelRegistry {
 	public ResourceListener<List<DataResource>> modelListener() {
 		return (resources, tree, idMapper) -> {
 			this.tree = tree;
-			resources.stream().filter(resource -> resource.resourceType() == MODEL).forEach(this::register);
+			resources.stream().filter(resource -> resource.models().size() > 0).forEach(this::register);
 		};
 	}
 
@@ -75,9 +77,9 @@ public class ModelRegistry {
 	}
 
 	public Optional<ModelTemplate> find(State state) {
-		var context = Context.of();
+		var context = MatchContext.of();
 		if (modelMap.containsKey(state.identifier())) {
-			return modelMap.get(state.identifier()).get(state, this::provider, Context.of());
+			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of());
 		} else {
 			var modelEntries = tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build());
 			return modelEntries.stream().sorted(ModelMatcher::comparator).filter(entry -> entry.match(state, context)).map(modelMatcher -> modelMatcher.get(state, this::provider, context)).flatMap(Optional::stream).findFirst();

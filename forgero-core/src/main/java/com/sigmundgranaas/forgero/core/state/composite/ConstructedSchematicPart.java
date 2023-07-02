@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.condition.ConditionContainer;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -13,11 +18,6 @@ import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class ConstructedSchematicPart extends ConstructedComposite implements MaterialBased, SchematicBased, Conditional<ConstructedSchematicPart> {
 	private final State schematic;
@@ -42,13 +42,17 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	@Override
 	public @NotNull
 	List<Property> applyProperty(Target target) {
-		return Stream.of(super.applyProperty(target), conditionProperties()).flatMap(List::stream).toList();
+		return Stream.of(super.applyProperty(target), conditionProperties())
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(super.getRootProperties(), conditionProperties()).flatMap(List::stream).toList();
+		return Stream.of(super.getRootProperties(), conditionProperties())
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	@Override

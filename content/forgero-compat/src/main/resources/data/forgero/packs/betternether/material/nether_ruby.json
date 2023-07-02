@@ -1,0 +1,124 @@
+{
+  "type": "MINERAL",
+  "name": "nether_ruby",
+  "container": {
+    "type": "HOST",
+    "id": "betternether:nether_ruby"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "type": "RARITY",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 110
+          },
+          {
+            "type": "MINING_LEVEL",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 4
+          },
+          {
+            "type": "MINING_SPEED",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 9.5
+          },
+          {
+            "type": "DURABILITY",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 1900
+          },
+          {
+            "type": "ATTACK_DAMAGE",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "type": "ARMOR",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "type": "WEIGHT",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 20
+          },
+          {
+            "type": "ATTACK_SPEED",
+            "order": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "order": "BASE",
+        "attributes": [
+          {
+            "type": "RARITY",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 50
+          },
+          {
+            "type": "MINING_SPEED",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 3.5
+          },
+          {
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 700
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 400
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "nether_ruby"
+  },
+  "custom_data": {
+    "enchantment": [
+      {
+        "targets": [
+          "type:PICKAXE_HEAD",
+          "type:AXE_HEAD",
+          "type:SHOVEL_HEAD",
+          "type:HOE_HEAD",
+          "type:SWORD_BLADE"
+        ],
+        "id": "betternether:ruby_fire",
+        "level": 1,
+        "force": true
+      }
+    ]
+  }
+}

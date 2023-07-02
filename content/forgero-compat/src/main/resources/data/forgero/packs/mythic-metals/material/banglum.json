@@ -1,0 +1,67 @@
+{
+  "type": "METAL",
+  "name": "banglum",
+  "parent": "metal",
+  "container": {
+    "type": "HOST",
+    "id": "mythicmetals:banglum_ingot"
+  },
+  "palette": {
+    "name": "banglum"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 11
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 260.0
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.2
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "id": "metal-rarity-upgrade",
+        "context": "UPGRADE",
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 12
+      }
+    ]
+  }
+}

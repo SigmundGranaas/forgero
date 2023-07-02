@@ -1,0 +1,30 @@
+{
+  "type": "WOOD",
+  "name": "birch",
+  "parent": "wood",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:birch_planks"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "wood-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "id": "wood-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 35
+      }
+    ]
+  },
+  "palette": {
+    "name": "birch"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "TOTEM",
+  "name": "undying-totem",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:totem_of_undying"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 60
+      }
+    ],
+    "features": [
+      {
+        "type": "UNDYING_REVIVAL",
+        "value": 1
+      }
+    ]
+  },
+  "palette": {
+    "name": "emerald"
+  }
+}

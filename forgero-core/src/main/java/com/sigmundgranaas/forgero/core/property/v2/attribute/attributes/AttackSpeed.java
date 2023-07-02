@@ -22,11 +22,11 @@ public class AttackSpeed implements Attribute {
 	}
 
 	public static Float apply(PropertyContainer container) {
-		return of(container).asFloat();
+		return Weight.of(container).reduceAttackSpeed(of(container).asFloat());
 	}
 
 	public static Float apply(PropertyContainer container, Target target) {
-		return of(container, target).asFloat();
+		return Weight.of(container).reduceAttackSpeed(of(container, target).asFloat());
 	}
 
 	public static Attribute of(PropertyContainer container, Target target) {
