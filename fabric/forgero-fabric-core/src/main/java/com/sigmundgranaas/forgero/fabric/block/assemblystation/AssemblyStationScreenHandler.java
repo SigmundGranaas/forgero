@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.DisassemblyHandler;
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.EmptyHandler;
 
@@ -29,7 +30,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			return true;
 		}
 	};
-	private final SimpleInventory inventory;
+	private final Inventory inventory;
 	private final PlayerEntity player;
 	private final DeconstructionSlot compositeSlot;
 	private DisassemblyHandler disassemblyHandler = new EmptyHandler();
@@ -46,8 +47,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	public AssemblyStationScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
 		super(AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER, syncId);
 		this.player = playerInventory.player;
-		this.inventory = (SimpleInventory) inventory;
-		((SimpleInventory) inventory).addListener(this::onContentChanged);
+		this.inventory = inventory;
+		Forgero.LOGGER.info(this.inventory.size());
+//		inventory.addListener(this::onContentChanged);
 		//some inventories do custom logic when a player opens it.
 		inventory.onOpen(playerInventory.player);
 		SimpleInventory compositeInventory = new SimpleInventory(1);

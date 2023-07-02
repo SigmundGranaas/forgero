@@ -9,11 +9,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -97,17 +94,23 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (!world.isClient) {
-			//This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity casted to
-			//a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
-			NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-
-			if (screenHandlerFactory != null) {
-				//With this call the server will request the client to open the appropriate Screenhandler
-				player.openHandledScreen(screenHandlerFactory);
-			}
+		if (world.isClient) {
+			return ActionResult.SUCCESS;
 		}
-		return ActionResult.SUCCESS;
+
+		// This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity casted to
+		// a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
+		NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+		// With this call the server will request the client to open the appropriate Screenhandler
+		player.openHandledScreen(screenHandlerFactory);
+
+		return ActionResult.CONSUME;
+	}
+
+	@Override
+	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		return blockEntity instanceof NamedScreenHandlerFactory ? (NamedScreenHandlerFactory) blockEntity : null;
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
