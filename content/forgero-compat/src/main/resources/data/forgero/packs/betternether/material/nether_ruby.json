@@ -14,37 +14,31 @@
         "attributes": [
           {
             "type": "RARITY",
-            "order": "COMPOSITE",
             "operation": "ADDITION",
             "value": 110
           },
           {
             "type": "MINING_LEVEL",
-            "order": "COMPOSITE",
             "operation": "ADDITION",
             "value": 4
           },
           {
             "type": "MINING_SPEED",
-            "order": "COMPOSITE",
             "operation": "ADDITION",
             "value": 9.5
           },
           {
             "type": "DURABILITY",
-            "order": "COMPOSITE",
             "operation": "ADDITION",
             "value": 1900
           },
           {
             "type": "ATTACK_DAMAGE",
-            "order": "COMPOSITE",
             "operation": "ADDITION",
             "value": 5
           },
           {
             "type": "ARMOR",
-            "order": "COMPOSITE",
             "operation": "ADDITION",
             "value": 5
           },
@@ -56,7 +50,6 @@
           },
           {
             "type": "ATTACK_SPEED",
-            "order": "COMPOSITE",
             "operation": "ADDITION",
             "value": 0
           }
