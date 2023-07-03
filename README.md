@@ -21,7 +21,7 @@
 <br />
 <div align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/forgero">
-    <img src="assets/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Forgero [Fabric]</h3>
@@ -34,7 +34,7 @@
     <br />
     <a href="https://github.com/sigmundgranaas/forgero/issues">Report Bug</a>
     ·
-    <a href="https://github.com/sigmundgranaas/forgeroissues">Request Feature</a>
+    <a href="https://github.com/sigmundgranaas/forgero/issues">Request Feature</a>
   </p>
 </div>
 
@@ -44,7 +44,7 @@
 ## About
 
 <a href="https://www.curseforge.com/minecraft/mc-mods/forgero">
-    <img align="center" src="assets/banner.png" alt="Logo" >
+    <img align="center" src="assets/banner/banner.png" alt="Banner" >
 </a>
 
 **Forgero was created to fill a gap in the mods available for Fabric. The aim of the mod is to give tool creation and
@@ -177,7 +177,7 @@ Creating this project could not have been done without the prior work of the com
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[product-screenshot]: assets/Banner.png
+[product-screenshot]: assets/banner/banner.png
 
 [contributors-shield]: https://img.shields.io/github/contributors/sigmundgranaas/forgero.svg?style=for-the-badge
 
