@@ -1,3 +1,5 @@
+//file:noinspection GroovyAssignabilityCheck
+
 plugins {
 	id "idea"
 	id 'fabric-loom' apply true
@@ -181,6 +183,7 @@ loom {
 				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
 				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
 				modRuntimeOnly "maven.modrinth:just-load:ob5o9Cf5"
+				modRuntimeOnly "maven.modrinth:modernfix:gRSAAIUU"
 			}
 
 			client()
