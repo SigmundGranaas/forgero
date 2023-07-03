@@ -7,6 +7,9 @@ import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.Disassembly
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.EmptyHandler;
 import com.sigmundgranaas.forgero.fabric.inventory.ImplementedInventory;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -16,6 +19,9 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -25,13 +31,14 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
 	public static final Identifier IDENTIFIER = new Identifier(Forgero.NAMESPACE, "assembly_station_block_entity");
 	public static final BlockEntityType<AssemblyStationBlockEntity> ASSEMBLY_STATION_BLOCK_ENTITY = Registry.register(
-			Registry.BLOCK_ENTITY_TYPE, IDENTIFIER, FabricBlockEntityTypeBuilder.create(
-					AssemblyStationBlockEntity::new,
+			Registry.BLOCK_ENTITY_TYPE, IDENTIFIER, FabricBlockEntityTypeBuilder.create(AssemblyStationBlockEntity::new,
 					AssemblyStationBlock.ASSEMBLY_STATION_BLOCK
 			).build());
 
@@ -83,6 +90,16 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		// return new TranslatableText(getCachedState().getBlock().getTranslationKey());
 	}
 
+	@Nullable
+	@Override
+	public Packet<ClientPlayPacketListener> toUpdatePacket() {
+		return BlockEntityUpdateS2CPacket.create(this);
+	}
+
+	@Override
+	public NbtCompound toInitialChunkDataNbt() {
+		return createNbt();
+	}
 
 	@Override
 	public void setStack(int slot, ItemStack stack) {
@@ -94,6 +111,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 			onSlotUpdated();
 		}
 
+		updateBlockEntityListeners();
 	}
 
 	@Override
@@ -104,17 +122,32 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 			onSlotUpdated();
 		}
 
+		updateBlockEntityListeners();
 		return ImplementedInventory.super.removeStack(slot);
 	}
 
 	public void onDisassemblySlotUpdated() {
 		boolean isEmpty = getStack(0).isEmpty();
+		var itemsToCompare = new ArrayList<>(getItems().stream().toList());
+		itemsToCompare.remove(disassemblySlotIndex);
+		itemsToCompare.removeIf(itemStack -> itemStack == ItemStack.EMPTY);
 		disassemblySlot.doneConstructing();
 
-		if (isEmpty && disassemblyHandler.isDisassembled(getItems())) {
+		if (isEmpty && disassemblyHandler.isDisassembled(itemsToCompare)) {
 			onItemRemovedFromDisassemblySlot();
 		} else if (!isEmpty) {
 			onItemAddedToDisassemblySlot();
+		}
+	}
+
+	/**
+	 * Update the block entity listeners so the inventory gets updated on the client.
+	 * This is done because the item renderer needs to access the inventory clientside.
+	 */
+	private void updateBlockEntityListeners() {
+		if (this.world != null) {
+			var state = this.world.getBlockState(this.pos);
+			this.world.updateListeners(this.pos, state, state, Block.NOTIFY_LISTENERS);
 		}
 	}
 
@@ -126,8 +159,6 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		for (int i = 1; i < items.size() + 1; i++) {
 			var element = items.get(i - 1);
 			setStack(i, element);
-//			serverPlayerEntity.networkHandler.sendPacket(
-//					new InventoryS2CPacket(this.syncId, this.nextRevision(), i, element));
 		}
 
 		disassemblySlot.doneConstructing();

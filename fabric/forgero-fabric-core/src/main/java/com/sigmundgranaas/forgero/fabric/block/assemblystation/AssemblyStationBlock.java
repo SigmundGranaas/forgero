@@ -29,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 import static net.minecraft.block.Blocks.DEEPSLATE;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock implements BlockEntityProvider {
-
 	public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
 	public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(
 			Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
@@ -38,8 +37,9 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	// a public identifier for multiple parts of our bigger chest
 	public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
 
-	private static final VoxelShape SHAPE_LEFT;
+	public AssemblyStationBlockEntity blockEntity;
 
+	private static final VoxelShape SHAPE_LEFT;
 	private static final VoxelShape SHAPE_RIGHT;
 
 	static {
@@ -121,6 +121,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		super.onPlaced(world, pos, state, placer, itemStack);
+
 		if (!world.isClient) {
 			BlockPos blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
 			world.breakBlock(blockPos, true, placer, 1);
@@ -185,7 +186,12 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	@Nullable
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new AssemblyStationBlockEntity(pos, state);
+		AssemblyStationPart part = state.get(PART);
+
+		if (part == AssemblyStationPart.LEFT) {
+			blockEntity = new AssemblyStationBlockEntity(pos, state);
+		}
+		return blockEntity;
 	}
 
 	public enum AssemblyStationPart implements StringIdentifiable {

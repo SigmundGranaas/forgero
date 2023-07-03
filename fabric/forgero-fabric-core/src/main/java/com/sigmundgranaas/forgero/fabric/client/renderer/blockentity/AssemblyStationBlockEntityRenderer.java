@@ -12,10 +12,9 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 @Environment(EnvType.CLIENT)
 public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<AssemblyStationBlockEntity> {
@@ -30,10 +29,7 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		//		if (!EasyAnvils.CONFIG.get(ClientConfig.class).renderAnvilContents) return;
 		Direction direction = entity.getCachedState().get(AssemblyStationBlock.FACING);
 		int posData = (int) entity.getPos().asLong();
-		this.renderFlatItem(
-				0, entity.getItems().get(0), direction, matrices, light, overlay, vertexConsumers, posData);
-		this.renderFlatItem(
-				1, entity.getItems().get(1), direction, matrices, light, overlay, vertexConsumers, posData);
+		this.renderFlatItem(0, entity.getItems().get(0), direction, matrices, light, overlay, vertexConsumers, posData);
 	}
 
 	private void renderFlatItem(int index, ItemStack stack, Direction direction, MatrixStack poseStack, int packedLight, int packedOverlay, VertexConsumerProvider vertexConsumers, int posData) {
@@ -41,33 +37,33 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 
 		poseStack.push();
 		poseStack.translate(0.0, 1.0375, 0.0);
-//		poseStack.multiply(Direction.Axis.XN.rotationDegrees(90.0F));
-		poseStack.multiply(Quaternion.fromEulerXyz(90f, 0f, 0f));
-		boolean mirrored = (direction.getAxis().ordinal() == 1 ? 1 : 0) != index % 2;
 
+		boolean mirrored = (direction.getAxis().ordinal() == 1 ? 1 : 0) != index % 2;
 		switch (direction.getAxis()) {
 			case X -> {
 				if (mirrored) {
-					poseStack.translate(0.25, -0.5, 0.0);
+					poseStack.translate(-0.5f, 0f, 0.5f);
 				} else {
-//					poseStack.multiply(Direction.Axis.ZP.rotationDegrees(180.0F));
-					poseStack.multiply(Quaternion.fromEulerXyz(0f, 0f, -180f));
-					poseStack.translate(-0.75, 0.5, 0.0);
+					poseStack.translate(0.5f, 0f, 0f);
+					poseStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90f));
 				}
+
 			}
 			case Z -> {
 				if (mirrored) {
-//					poseStack.multiply(Direction.Axis.ZN.rotationDegrees(90.0F));
-					poseStack.multiply(Quaternion.fromEulerXyz(0, 0f, 90f));
-					poseStack.translate(0.25, 0.5, 0.0);
+					poseStack.translate(0f, 0f, -0.5f);
 				} else {
-//					poseStack.multiply(Axis.ZP.rotationDegrees(90.0F));
-					poseStack.multiply(Quaternion.fromEulerXyz(0, 0f, -90f));
-					poseStack.translate(-0.75, -0.5, 0.0);
+					poseStack.translate(0f, 0f, 0.5f);
 				}
 			}
 		}
-		poseStack.scale(0.375F, 0.375F, 0.375F);
+
+		// Rotate the tool so it's flat on the surface of the station
+		poseStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90f));
+		poseStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90f));
+
+		// Scale the tool down
+		poseStack.scale(0.75f, 0.75f, 0.75f);
 
 		this.itemRenderer.renderItem(stack, ModelTransformation.Mode.FIXED, packedLight, packedOverlay, poseStack,
 				vertexConsumers, posData + index
