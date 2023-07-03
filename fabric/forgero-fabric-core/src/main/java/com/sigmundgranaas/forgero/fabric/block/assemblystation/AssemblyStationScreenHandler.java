@@ -44,8 +44,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		super(AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER, syncId);
 		this.player = playerInventory.player;
 		this.inventory = inventory;
-		// DEBUG
-//		Forgero.LOGGER.info(this.inventory.size());
 
 		// Some inventories do custom logic when a player opens it
 		inventory.onOpen(playerInventory.player);
