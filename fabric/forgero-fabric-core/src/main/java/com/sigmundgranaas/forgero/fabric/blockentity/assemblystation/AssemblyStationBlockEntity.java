@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.fabric.blockentity.assemblystation;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationBlock;
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreenHandler;
+import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.DisassemblyHandler;
+import com.sigmundgranaas.forgero.fabric.block.assemblystation.state.EmptyHandler;
 import com.sigmundgranaas.forgero.fabric.inventory.ImplementedInventory;
-
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,15 +13,19 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
 	public static final Identifier IDENTIFIER = new Identifier(Forgero.NAMESPACE, "assembly_station_block_entity");
@@ -31,32 +35,38 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 					AssemblyStationBlock.ASSEMBLY_STATION_BLOCK
 			).build());
 
-	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(10, ItemStack.EMPTY);
+	public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(10, ItemStack.EMPTY);
+	public DisassemblySlot disassemblySlot;
+	public final int disassemblySlotIndex = 0;
+
+	private DisassemblyHandler disassemblyHandler = new EmptyHandler();
 
 	public AssemblyStationBlockEntity(BlockPos blockPos, BlockState blockState) {
 		super(ASSEMBLY_STATION_BLOCK_ENTITY, blockPos, blockState);
+
+		disassemblySlot = new DisassemblySlot(this, 0, 34, 34, this);
 	}
 
 	@Override
 	public DefaultedList<ItemStack> getItems() {
-		return items;
+		return inventory;
 	}
 
 	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
-		Inventories.readNbt(nbt, items);
+		Inventories.readNbt(nbt, inventory);
 	}
 
 	@Override
 	public void writeNbt(NbtCompound nbt) {
-		Inventories.writeNbt(nbt, items);
+		Inventories.writeNbt(nbt, inventory);
 		super.writeNbt(nbt);
 	}
 
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-		for (ItemStack stack : items) {
+		for (ItemStack stack : inventory) {
 			Forgero.LOGGER.info(stack.getName());
 		}
 
@@ -71,5 +81,110 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		return Text.translatable(getCachedState().getBlock().getTranslationKey());
 		// for earlier versions
 		// return new TranslatableText(getCachedState().getBlock().getTranslationKey());
+	}
+
+
+	@Override
+	public void setStack(int slot, ItemStack stack) {
+		ImplementedInventory.super.setStack(slot, stack);
+
+		if (slot == disassemblySlotIndex) {
+			onDisassemblySlotUpdated();
+		} else {
+			onSlotUpdated();
+		}
+
+	}
+
+	@Override
+	public ItemStack removeStack(int slot) {
+		if (slot == disassemblySlotIndex) {
+			onItemRemovedFromDisassemblySlot();
+		} else {
+			onSlotUpdated();
+		}
+
+		return ImplementedInventory.super.removeStack(slot);
+	}
+
+	public void onDisassemblySlotUpdated() {
+		boolean isEmpty = getStack(0).isEmpty();
+		disassemblySlot.doneConstructing();
+
+		if (isEmpty && disassemblyHandler.isDisassembled(getItems())) {
+			onItemRemovedFromDisassemblySlot();
+		} else if (!isEmpty) {
+			onItemAddedToDisassemblySlot();
+		}
+	}
+
+	private void onItemAddedToDisassemblySlot() {
+		disassemblySlot.addToolToDisassemblySlot();
+		this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(disassemblySlot.getStack());
+		var items = disassemblyHandler.disassemble();
+
+		for (int i = 1; i < items.size() + 1; i++) {
+			var element = items.get(i - 1);
+			setStack(i, element);
+//			serverPlayerEntity.networkHandler.sendPacket(
+//					new InventoryS2CPacket(this.syncId, this.nextRevision(), i, element));
+		}
+
+		disassemblySlot.doneConstructing();
+	}
+
+	private void onItemRemovedFromDisassemblySlot() {
+		disassemblySlot.removeTool();
+		inventory.clear();
+		this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(disassemblySlot.getStack());
+	}
+
+	public void onSlotUpdated() {
+		if (disassemblySlot.doneConstructing) {
+			if (!disassemblySlot.isEmpty()) {
+				disassemblySlot.removeTool();
+				disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(disassemblySlot.getStack());
+			}
+		}
+	}
+
+	public static class DisassemblySlot extends Slot {
+		private final Inventory resultInventory;
+		private boolean doneConstructing = true;
+
+		public DisassemblySlot(Inventory inventory, int index, int x, int y, Inventory craftingInventory) {
+			super(inventory, index, x, y);
+			this.resultInventory = craftingInventory;
+		}
+
+		@Override
+		public int getMaxItemCount() {
+			return 1;
+		}
+
+		public boolean isEmpty() {
+			return inventory.isEmpty();
+		}
+
+		public void addToolToDisassemblySlot() {
+			this.doneConstructing = false;
+		}
+
+		public void removeTool() {
+			this.doneConstructing = true;
+			if (!this.inventory.getStack(0).isEmpty()) {
+				this.inventory.getStack(0).decrement(1);
+			}
+		}
+
+		@Override
+		public boolean canInsert(ItemStack stack) {
+			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(
+					stack) instanceof EmptyHandler);
+		}
+
+		public void doneConstructing() {
+			this.doneConstructing = true;
+		}
 	}
 }
