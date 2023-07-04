@@ -1,13 +1,13 @@
 {
-  "type": "ARROW_HEAD_SCHEMATIC",
-  "name": "arrow_head-schematic",
+  "type": "ARROW_FEATHER_SCHEMATIC",
+  "name": "arrow_feather-schematic",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "ARROW_HEAD",
+    "type": "ARROW_FEATHER",
     "target": "CREATE",
     "recipes": [
       {

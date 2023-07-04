@@ -2,6 +2,6 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "forgero:item/paper_schematic_base",
-    "layer1": "forgero:item/bow_outline_paper"
+    "layer1": "forgero:item/arrow_head_outline_paper"
   }
 }

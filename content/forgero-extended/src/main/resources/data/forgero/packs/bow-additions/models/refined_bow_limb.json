@@ -1,0 +1,35 @@
+{
+  "type": "BOW_LIMB",
+  "models": [
+    {
+      "name": "refined_bow_limb",
+      "modelType": "GENERATE",
+      "template": "refined_bow_limb.png",
+      "palette": "WOOD",
+      "order": 20
+    },
+    {
+      "name": "refined_bow_limb_reinforcement",
+      "modelType": "GENERATE",
+      "template": "refined_bow_limb_reinforcement.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 25
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "refined_bow_limb_reinforcement"
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:refined_bow_limb-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "refined_bow_limb"
+    }
+  ]
+}

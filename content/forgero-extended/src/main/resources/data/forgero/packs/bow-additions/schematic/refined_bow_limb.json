@@ -1,13 +1,12 @@
 {
-  "type": "ARROW_SCHEMATIC",
-  "name": "arrow-schematic",
-  "resource_type": "DEFAULT",
+  "type": "BOW_LIMB_SCHEMATIC",
+  "name": "refined_bow_limb-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "ARROW",
+    "type": "BOW_LIMB",
     "target": "CREATE",
     "recipes": [
       {
@@ -17,8 +16,9 @@
             "id": "this"
           },
           {
-            "type": "TOOL_MATERIAL",
-            "unique": true
+            "type": "WOOD",
+            "unique": true,
+            "amount": 3
           }
         ]
       }
@@ -28,7 +28,7 @@
         "id": "this"
       },
       {
-        "type": "TOOL_MATERIAL",
+        "type": "WOOD",
         "unique": true
       }
     ],
@@ -36,9 +36,10 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "ARROW_HEAD",
+        "type": "SECONDARY_MATERIAL",
+        "description": "grip",
         "tier": 1
       },
       {
@@ -46,10 +47,21 @@
         "category": [
           "UTILITY"
         ],
-        "type": "FEATHER",
+        "type": "SECONDARY_MATERIAL",
+        "description": "string",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "type": "TOOL_MATERIAL",
+        "description": "reinforcement",
         "tier": 1
       }
     ]
+
   },
   "properties": {
     "attributes": [
@@ -87,6 +99,9 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "3"
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    }
   }
 }

@@ -2,8 +2,8 @@
   "type": "ARROW",
   "models": [
     {
-      "name": "arrow",
-      "template": "arrow.png",
+      "name": "arrow_shaft",
+      "template": "arrow_shaft.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 10
@@ -34,7 +34,7 @@
     {
       "target": [
         "type:FEATHER",
-        "slot:1"
+        "slot:0"
       ],
       "modelType": "UPGRADE",
       "template": "arrow_feather"

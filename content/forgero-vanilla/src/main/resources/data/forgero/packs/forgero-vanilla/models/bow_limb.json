@@ -12,12 +12,15 @@
       "name": "bow_handle",
       "template": "bow_handle.png",
       "type": "GENERATE",
-      "palette": "WOOD",
-      "order": 20
+      "palette": "MATERIAL",
+      "order": 25
     },
     {
-      "modelType": "BASED_COMPOSITE",
-      "template": "bow_limb"
+      "name": "bow_string",
+      "template": "bow_string.png",
+      "type": "GENERATE",
+      "palette": "STRING",
+      "order": 10
     },
     {
       "target": [
@@ -26,6 +29,22 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "bow_limb"
+    },
+    {
+      "target": [
+        "type:SECONDARY_MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_handle"
+    },
+    {
+      "target": [
+        "type:STRING",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_string"
     }
   ]
 }

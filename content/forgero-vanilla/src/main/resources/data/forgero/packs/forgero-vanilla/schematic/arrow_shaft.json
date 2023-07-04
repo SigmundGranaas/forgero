@@ -1,12 +1,13 @@
 {
-  "type": "BOW_LIMB_SCHEMATIC",
-  "name": "bow_limb-schematic",
+  "type": "ARROW_SHAFT_SCHEMATIC",
+  "name": "arrow_shaft-schematic",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "BOW_LIMB",
+    "type": "ARROW_SHAFT",
     "target": "CREATE",
     "recipes": [
       {
@@ -16,7 +17,7 @@
             "id": "this"
           },
           {
-            "type": "WOOD",
+            "type": "TOOL_MATERIAL",
             "unique": true,
             "amount": 3
           }
@@ -28,7 +29,7 @@
         "id": "this"
       },
       {
-        "type": "WOOD",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],
@@ -36,56 +37,30 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "UTILITY"
+          "OFFENSIVE"
         ],
-        "type": "SECONDARY_MATERIAL",
-        "description": "grip",
+        "type": "MATERIAL",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "UTILITY"
+          "OFFENSIVE"
         ],
-        "type": "SECONDARY_MATERIAL",
-        "description": "string",
+        "type": "TRINKET",
         "tier": 1
       }
     ]
-
   },
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 2.4
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.0
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -3.0
+        "value": 25
       }
     ]
   },
