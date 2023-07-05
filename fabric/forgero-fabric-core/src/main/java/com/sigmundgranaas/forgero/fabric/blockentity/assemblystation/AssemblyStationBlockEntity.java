@@ -25,6 +25,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
@@ -38,7 +39,8 @@ import java.util.ArrayList;
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
 	public static final Identifier IDENTIFIER = new Identifier(Forgero.NAMESPACE, "assembly_station_block_entity");
 	public static final BlockEntityType<AssemblyStationBlockEntity> ASSEMBLY_STATION_BLOCK_ENTITY = Registry.register(
-			Registry.BLOCK_ENTITY_TYPE, IDENTIFIER, FabricBlockEntityTypeBuilder.create(AssemblyStationBlockEntity::new,
+			Registry.BLOCK_ENTITY_TYPE, IDENTIFIER, FabricBlockEntityTypeBuilder.create(
+					AssemblyStationBlockEntity::new,
 					AssemblyStationBlock.ASSEMBLY_STATION_BLOCK
 			).build());
 
@@ -52,6 +54,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		super(ASSEMBLY_STATION_BLOCK_ENTITY, blockPos, blockState);
 
 		disassemblySlot = new DisassemblySlot(this, 0, 34, 34, this);
+		updateBlockEntityListeners();
 	}
 
 	@Override
@@ -63,6 +66,12 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 		Inventories.readNbt(nbt, inventory);
+
+		// Update disassembly handler, syncs it with the inventory after the NBT read
+		// This is done so the disassembly handler remembers the tool has already been disassembled
+		disassemblySlot.addToolToDisassemblySlot();
+		this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(disassemblySlot.getStack());
+		updateBlockEntityListeners();
 	}
 
 	@Override
@@ -100,6 +109,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	@Override
 	public void setStack(int slot, ItemStack stack) {
 		ImplementedInventory.super.setStack(slot, stack);
+		updateBlockEntityListeners();
 
 		if (slot == disassemblySlotIndex) {
 			onDisassemblySlotUpdated();
@@ -118,8 +128,9 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 			onSlotUpdated();
 		}
 
+		var itemStack = ImplementedInventory.super.removeStack(slot);
 		updateBlockEntityListeners();
-		return ImplementedInventory.super.removeStack(slot);
+		return itemStack;
 	}
 
 	public void onDisassemblySlotUpdated() {
@@ -134,6 +145,8 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		} else if (!isEmpty) {
 			onItemAddedToDisassemblySlot();
 		}
+
+		updateBlockEntityListeners();
 	}
 
 	/**
@@ -141,10 +154,12 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	 * This is done because the item renderer needs to access the inventory clientside.
 	 */
 	private void updateBlockEntityListeners() {
-		if (this.world != null) {
-			var state = this.world.getBlockState(this.pos);
-			this.world.updateListeners(this.pos, state, state, Block.NOTIFY_LISTENERS);
-		}
+		var world = this.getWorld();
+		if (world == null) return;
+
+		var state = world.getBlockState(this.pos);
+		world.updateListeners(this.pos, state, state, Block.NOTIFY_LISTENERS);
+		Forgero.LOGGER.info("updateBlockEntityListeners");
 	}
 
 	private void onItemAddedToDisassemblySlot() {
@@ -158,12 +173,16 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		}
 
 		disassemblySlot.doneConstructing();
+		updateBlockEntityListeners();
+
 	}
 
 	private void onItemRemovedFromDisassemblySlot() {
 		disassemblySlot.removeTool();
 		inventory.clear();
-		this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(disassemblySlot.getStack());
+		this.disassemblyHandler = new EmptyHandler();
+		updateBlockEntityListeners();
+
 	}
 
 	public void onSlotUpdated() {

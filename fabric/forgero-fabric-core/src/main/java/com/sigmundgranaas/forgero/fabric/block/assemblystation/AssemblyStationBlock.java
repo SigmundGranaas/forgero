@@ -30,14 +30,13 @@ import static net.minecraft.block.Blocks.DEEPSLATE;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock implements BlockEntityProvider {
 	public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
+
 	public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(
 			Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
 	public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(
 			ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
 	// a public identifier for multiple parts of our bigger chest
 	public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
-
-	public AssemblyStationBlockEntity blockEntity;
 
 	private static final VoxelShape SHAPE_LEFT;
 	private static final VoxelShape SHAPE_RIGHT;
@@ -62,10 +61,9 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 
 	protected AssemblyStationBlock(Settings settings) {
 		super(settings);
-		this.setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(PART, AssemblyStationPart.LEFT));
-		this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(PART, AssemblyStationPart.LEFT);
+		this.setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(PART, AssemblyStationPart.RIGHT));
+		this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(PART, AssemblyStationPart.RIGHT);
 	}
-
 
 	public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
 		VoxelShape[] buffer = new VoxelShape[]{shape, VoxelShapes.empty()};
@@ -98,13 +96,23 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 			return ActionResult.SUCCESS;
 		}
 
+		AssemblyStationPart part = state.get(PART);
+		BlockPos leftPartBlockPos;
+
+		// Get left part's block position
+		if (part == AssemblyStationPart.RIGHT) {
+			leftPartBlockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
+		} else {
+			leftPartBlockPos = pos;
+		}
+
 		// This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity casted to
 		// a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
-		NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+		NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, leftPartBlockPos);
 		// With this call the server will request the client to open the appropriate Screenhandler
 		player.openHandledScreen(screenHandlerFactory);
 
-		return ActionResult.CONSUME;
+		return ActionResult.SUCCESS;
 	}
 
 	@Override
@@ -114,7 +122,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction direction = ctx.getPlayerFacing().getOpposite();
+		Direction direction = ctx.getPlayerFacing();
 		return this.getDefaultState().with(FACING, direction);
 	}
 
@@ -123,9 +131,9 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 		super.onPlaced(world, pos, state, placer, itemStack);
 
 		if (!world.isClient) {
-			BlockPos blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+			BlockPos blockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
 			world.breakBlock(blockPos, true, placer, 1);
-			world.setBlockState(blockPos, state.with(PART, AssemblyStationPart.RIGHT), 3);
+			world.setBlockState(blockPos, state.with(PART, AssemblyStationPart.LEFT), 3);
 			world.updateNeighbors(pos, Blocks.AIR);
 			state.updateNeighbors(world, pos, 3);
 		}
@@ -143,7 +151,6 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 			world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
 			world.updateNeighbors(pos, Blocks.AIR);
 			state.updateNeighbors(world, pos, 3);
-
 		}
 		super.onBreak(world, pos, state, player);
 	}
@@ -151,7 +158,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	@Override
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
 		if (super.canPlaceAt(state, world, pos)) {
-			BlockPos blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+			BlockPos blockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
 			return !world.getBlockState(blockPos).isSolidBlock(world, blockPos);
 		} else {
 			return false;
@@ -189,9 +196,10 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 		AssemblyStationPart part = state.get(PART);
 
 		if (part == AssemblyStationPart.LEFT) {
-			blockEntity = new AssemblyStationBlockEntity(pos, state);
+			return new AssemblyStationBlockEntity(pos, state);
+		} else {
+			return null;
 		}
-		return blockEntity;
 	}
 
 	public enum AssemblyStationPart implements StringIdentifiable {
