@@ -5,13 +5,13 @@
       "name": "arrow_feather",
       "template": "arrow_feather.png",
       "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
+      "id": "minecraft:feather",
       "order": 20
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
-        "type:ARROW_FEATHER_SCHEMATIC"
+        "type:ARROW",
+        "type:FEATHER"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "arrow_feather"

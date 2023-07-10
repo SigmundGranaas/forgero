@@ -1,13 +1,13 @@
 {
-  "type": "BOW",
-  "name": "bow",
+  "type": "ARROW",
+  "name": "arrow",
   "resource_type": "CONSTRUCT_TEMPLATE",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "BOW",
+    "type": "ARROW",
     "target": "CREATE",
     "recipes": [
       {
@@ -15,34 +15,29 @@
         "ingredients": [
           {
             "unique": true,
-            "type": "BOW_LIMB"
+            "type": "ARROW_HEAD"
           },
           {
             "type": "HANDLE"
+          },
+          {
+            "type": "FEATHER"
           }
         ]
       }
     ],
     "components": [
       {
-        "type": "BOW_LIMB"
+        "type": "ARROW_HEAD"
       },
       {
         "type": "HANDLE"
+      },
+      {
+        "type": "FEATHER"
       }
     ],
     "slots": [
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "UTILITY"
-        ],
-        "type": "STRING",
-        "tier": 1
-      }
     ]
-  },
-  "model": {
-    "type": "COMPOSITE"
   }
 }

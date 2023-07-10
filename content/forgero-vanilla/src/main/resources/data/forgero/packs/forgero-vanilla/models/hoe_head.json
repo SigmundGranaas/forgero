@@ -28,8 +28,7 @@
         "type:HOE_HEAD_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "hoe_head",
-      "order": 20
+      "template": "hoe_head"
     },
     {
       "target": [

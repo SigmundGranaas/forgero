@@ -37,6 +37,12 @@
             "type:SWORD"
           ],
           "template": "short_handle.png"
+        },
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "arrow_shaft.png"
         }
       ]
     },
