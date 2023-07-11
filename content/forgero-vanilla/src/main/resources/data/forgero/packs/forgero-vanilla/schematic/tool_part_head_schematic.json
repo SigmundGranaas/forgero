@@ -38,7 +38,7 @@
           {
             "id": "schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 1.2
+            "value": 1
           },
           {
             "id": "schematic-weight-composite",

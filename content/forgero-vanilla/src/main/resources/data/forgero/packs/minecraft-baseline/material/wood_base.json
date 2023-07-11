@@ -22,17 +22,17 @@
           {
             "id": "wood-mining-speed-composite",
             "type": "MINING_SPEED",
-            "value": 2
+            "value": 0
           },
           {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "value": 40
+            "value": 0
           },
           {
             "id": "wood-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 2
+            "value": 0
           },
           {
             "id": "wood-attack_speed-composite",
@@ -47,7 +47,7 @@
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 5
+            "value": 0
           }
         ]
       },
@@ -81,14 +81,14 @@
             "type": "MINING_SPEED",
             "category": "OFFENSIVE",
             "operation": "ADDITION",
-            "value": 0.2
+            "value": 0
           },
           {
             "id": "wood-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "category": "UTILITY",
             "operation": "ADDITION",
-            "value": 0.2
+            "value": 0
           },
           {
             "id": "wood-durability-utility-upgrade",

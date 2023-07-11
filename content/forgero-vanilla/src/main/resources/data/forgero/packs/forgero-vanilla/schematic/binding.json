@@ -1,4 +1,4 @@
-{
+ {
   "type": "BINDING_SCHEMATIC",
   "name": "binding-schematic",
   "container": {
@@ -73,14 +73,14 @@
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 0
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0
       }
     ]
   },

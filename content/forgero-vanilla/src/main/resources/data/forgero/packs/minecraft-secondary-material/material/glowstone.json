@@ -1,6 +1,7 @@
 {
   "type": "GLASS",
   "name": "glowstone",
+  "parent": "glass_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:glowstone_dust"

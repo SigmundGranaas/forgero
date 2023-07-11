@@ -73,21 +73,21 @@
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0
       },
       {
         "id": "schematic-armor-composite",
         "type": "ARMOR",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0
       }
     ]
   },

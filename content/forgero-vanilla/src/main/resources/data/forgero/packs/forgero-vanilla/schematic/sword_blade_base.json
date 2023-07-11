@@ -28,17 +28,17 @@
           {
             "id": "schematic-durability-composite",
             "type": "DURABILITY",
-            "value": 1
+            "value": 0
           },
           {
             "id": "schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 2
+            "value": 0
           },
           {
             "id": "schematic-weight-composite",
             "type": "WEIGHT",
-            "value": 1
+            "value": 0
           }
         ]
       },
@@ -55,12 +55,12 @@
           {
             "id": "schematic-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 0.5
+            "value": 0
           },
           {
             "id": "schematic-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": -2.1
+            "value": 0
           }
         ]
       }

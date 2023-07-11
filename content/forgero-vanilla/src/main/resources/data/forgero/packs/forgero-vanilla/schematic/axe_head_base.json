@@ -9,14 +9,14 @@
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.4
+        "value": 0
       },
       {
         "id": "schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.8
+        "value": 0
       }
     ],
     "features": [

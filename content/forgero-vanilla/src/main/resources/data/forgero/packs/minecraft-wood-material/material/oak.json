@@ -1,8 +1,7 @@
 {
   "type": "WOOD",
   "name": "oak",
-  "resource_type": "DEFAULT",
-  "parent": "wood",
+  "parent": "wood_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:oak_planks"

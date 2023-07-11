@@ -1,7 +1,7 @@
 {
-  "type": "STONE",
+  "type": "MINERAL",
+  "name": "mineral_base",
   "resource_type": "ABSTRACT",
-  "name": "default_stone",
   "properties": {
     "grouped_attributes": [
       {
@@ -10,42 +10,34 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "stone-rarity-composite",
             "type": "RARITY",
-            "value": 10
+            "value": 80
           },
           {
-            "id": "stone-mining-level-composite",
             "type": "MINING_LEVEL",
-            "value": 1.0
+            "value": 3.0
           },
           {
-            "id": "stone-mining-speed-composite",
             "type": "MINING_SPEED",
-            "value": 4
+            "value": 8
           },
           {
-            "id": "stone-durability-composite",
             "type": "DURABILITY",
-            "value": 100.0
+            "value": 4783
           },
           {
-            "id": "stone-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 2.4
+            "value": 3.5
           },
           {
-            "id": "stone-weight-composite",
+            "type": "ARMOR",
+            "value": 5
+          },
+          {
             "type": "WEIGHT",
             "value": 20
           },
           {
-            "id": "stone-armor-composite",
-            "type": "ARMOR",
-            "value": 3
-          },
-          {
-            "id": "stone-attack_speed-composite",
             "type": "ATTACK_SPEED",
             "value": 0
           }
@@ -54,46 +46,47 @@
       {
         "context": "UPGRADE",
         "order": "BASE",
-        "operation": "ADDITION",
         "attributes": [
           {
-            "id": "stone-rarity-upgrade",
             "type": "RARITY",
+            "operation": "ADDITION",
             "category": "ALL",
-            "value": 2
+            "value": 40
           },
           {
-            "id": "stone-weight-upgrade",
             "type": "WEIGHT",
+            "operation": "ADDITION",
             "category": "ALL",
             "value": 3
           },
           {
-            "id": "stone-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "category": "OFFENSIVE",
-            "value": 0.3
-          },
-          {
-            "id": "stone_mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
+            "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": 0.5
+            "value": 1.2
           },
           {
-            "id": "stone-durability-offensive-upgrade",
-            "type": "DURABILITY",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 30
+            "value": 1.5
           },
           {
-            "id": "stone-durability-utility-upgrade",
             "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 600
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 10
+            "value": 300
           }
         ]
       }
+    ],
+    "attributes": [
     ]
   }
 }

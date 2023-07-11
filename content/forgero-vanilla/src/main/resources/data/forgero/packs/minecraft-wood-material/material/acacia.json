@@ -20,7 +20,7 @@
         "type": "MINING_SPEED",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.3
+        "value": 2.1
       },
       {
         "id": "wood-durability-composite",
@@ -34,7 +34,7 @@
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 1.8
+        "value": 0.8
       }
     ]
   },

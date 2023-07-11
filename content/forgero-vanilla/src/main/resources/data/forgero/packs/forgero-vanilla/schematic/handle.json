@@ -65,14 +65,14 @@
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 0
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0
       }
     ]
   },
