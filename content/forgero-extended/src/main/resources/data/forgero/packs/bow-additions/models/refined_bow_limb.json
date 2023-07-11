@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "refined_bow_limb_reinforcement",
+      "name": "bow_reinforcement",
       "modelType": "GENERATE",
       "template": "refined_bow_limb_reinforcement.png",
       "palette": "TOOL_MATERIAL",
@@ -21,7 +21,7 @@
         "slot:2"
       ],
       "modelType": "UPGRADE",
-      "template": "refined_bow_limb_reinforcement"
+      "template": "bow_reinforcement"
     },
     {
       "target": [
