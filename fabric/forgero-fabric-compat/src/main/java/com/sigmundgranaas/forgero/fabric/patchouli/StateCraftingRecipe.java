@@ -1,8 +1,13 @@
 package com.sigmundgranaas.forgero.fabric.patchouli;
 
+import static com.sigmundgranaas.forgero.fabric.block.DummyHandler.dummyHandler;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
+import vazkii.patchouli.client.book.ClientBookRegistry;
+import vazkii.patchouli.client.book.gui.GuiBook;
+import vazkii.patchouli.client.book.page.PageCrafting;
 
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -15,12 +20,6 @@ import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
-
-import vazkii.patchouli.client.book.ClientBookRegistry;
-import vazkii.patchouli.client.book.gui.GuiBook;
-import vazkii.patchouli.client.book.page.PageCrafting;
-
-import static com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
 public class StateCraftingRecipe extends PageCrafting {
 	public static Identifier ID = new Identifier(Forgero.NAMESPACE, RecipeTypes.STATE_CRAFTING_RECIPE.getName());
