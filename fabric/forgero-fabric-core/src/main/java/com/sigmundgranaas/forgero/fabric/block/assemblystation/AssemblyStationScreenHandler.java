@@ -124,9 +124,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	@Override
 	public void onContentChanged(Inventory inventory) {
 		this.context.run((world, pos) -> {
-			if (!world.isClient && disassemblySlot.doneConstructing) {
+			if (!world.isClient && disassemblySlot.finishedDisassembling) {
 				if (!disassemblySlot.isEmpty()) {
-					disassemblySlot.removeCompositeIngredient();
+					disassemblySlot.removeDisassemblyItem();
 					disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(disassemblySlot.getStack());
 				}
 			}
@@ -135,13 +135,13 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		super.onContentChanged(inventory);
 	}
 
-	public void onDisassemblySlotChanged(Inventory compositeInventory) {
-		boolean isEmpty = compositeInventory.isEmpty();
-		disassemblySlot.doneConstructing();
+	public void onDisassemblySlotChanged(Inventory disassemblyInventory) {
+		boolean isEmpty = disassemblyInventory.isEmpty();
+		disassemblySlot.finishDisassembling();
 
 		if (isEmpty && disassemblyHandler.isDisassembled(getItemsFromInventory())) {
 			onItemRemovedFromDisassemblySlot();
-		} else if (!compositeInventory.isEmpty()) {
+		} else if (!disassemblyInventory.isEmpty()) {
 			onItemAddedToDisassemblySlot();
 		}
 	}
@@ -162,14 +162,14 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 							new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), i + 1, element));
 				}
 
-				disassemblySlot.doneConstructing();
+				disassemblySlot.finishDisassembling();
 			}
 		});
 	}
 
 	private void onItemRemovedFromDisassemblySlot() {
 		this.context.run((world, pos) -> {
-			disassemblySlot.removeCompositeIngredient();
+			disassemblySlot.removeDisassemblyItem();
 			inventory.clear();
 			this.disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(disassemblySlot.getStack());
 		});

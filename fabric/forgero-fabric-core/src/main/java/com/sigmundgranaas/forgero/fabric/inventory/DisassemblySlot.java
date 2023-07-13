@@ -9,7 +9,7 @@ import net.minecraft.screen.slot.Slot;
 
 public class DisassemblySlot extends Slot {
 	public final Inventory resultInventory;
-	public boolean doneConstructing = true;
+	public boolean finishedDisassembling = true;
 
 	public DisassemblySlot(Inventory inventory, int index, int x, int y, Inventory craftingInventory) {
 		super(inventory, index, x, y);
@@ -26,11 +26,11 @@ public class DisassemblySlot extends Slot {
 	}
 
 	public void addToolToDisassemblySlot() {
-		this.doneConstructing = false;
+		this.finishedDisassembling = false;
 	}
 
-	public void removeCompositeIngredient() {
-		this.doneConstructing = true;
+	public void removeDisassemblyItem() {
+		this.finishedDisassembling = true;
 		if (!this.inventory.getStack(0).isEmpty()) {
 			this.inventory.getStack(0).decrement(1);
 		}
@@ -38,11 +38,11 @@ public class DisassemblySlot extends Slot {
 
 	@Override
 	public boolean canInsert(ItemStack stack) {
-		return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(
+		return this.inventory.isEmpty() && finishedDisassembling && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(
 				stack) instanceof EmptyHandler);
 	}
 
-	public void doneConstructing() {
-		this.doneConstructing = true;
+	public void finishDisassembling() {
+		this.finishedDisassembling = true;
 	}
 }

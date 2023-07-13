@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.renderer.blockentity;
+package com.sigmundgranaas.forgero.fabric.client.render.blockentity;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationBlock;

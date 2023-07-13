@@ -18,18 +18,14 @@ import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.fabric.blockentity.assemblystation.AssemblyStationBlockEntity;
 import com.sigmundgranaas.forgero.fabric.client.model.ForgeroModelVariantProvider;
-import com.sigmundgranaas.forgero.fabric.client.renderer.blockentity.AssemblyStationBlockEntityRenderer;
+import com.sigmundgranaas.forgero.fabric.client.render.blockentity.AssemblyStationBlockEntityRenderer;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
-
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.resource.ResourceManager;
