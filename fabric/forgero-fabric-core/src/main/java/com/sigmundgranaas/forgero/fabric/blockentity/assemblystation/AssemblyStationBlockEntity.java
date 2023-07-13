@@ -35,43 +35,50 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
 	public static final Identifier IDENTIFIER = new Identifier(Forgero.NAMESPACE, "assembly_station_block_entity");
-	public SimpleInventory inventory = new SimpleInventory(9);
+	public static final BlockEntityType<AssemblyStationBlockEntity> ASSEMBLY_STATION_BLOCK_ENTITY = Registry.register(
+			Registry.BLOCK_ENTITY_TYPE, IDENTIFIER, FabricBlockEntityTypeBuilder.create(
+					AssemblyStationBlockEntity::new,
+					AssemblyStationBlock.ASSEMBLY_STATION_BLOCK
+			).build());
 	public SimpleInventory disassemblyInventory = new SimpleInventory(1);
-
+	public SimpleInventory resultInventory = new SimpleInventory(9);
 
 	public AssemblyStationBlockEntity(BlockPos blockPos, BlockState blockState) {
 		super(ASSEMBLY_STATION_BLOCK_ENTITY, blockPos, blockState);
+
 		updateListeners();
-		inventory.addListener(inv -> updateListeners());
+		resultInventory.addListener(inv -> updateListeners());
 		disassemblyInventory.addListener(inv -> updateListeners());
 	}
 
 	public List<ItemStack> getItems() {
 		var list = new ArrayList<ItemStack>();
 		ItemStack disassemblyStack = disassemblyInventory.getStack(0);
+
 		if (!disassemblyStack.isEmpty()) {
 			list.add(disassemblyStack);
 		} else {
 			list.add(new ItemStack(Items.AIR));
 		}
-		for (int i = 0; i < inventory.size(); i++) {
-			ItemStack inventoryStack = inventory.getStack(i);
+
+		for (int i = 0; i < resultInventory.size(); i++) {
+			ItemStack inventoryStack = resultInventory.getStack(i);
 			if (!inventoryStack.isEmpty()) {
 				list.add(inventoryStack);
 			} else {
 				list.add(new ItemStack(Items.AIR));
 			}
 		}
+
 		return list;
 	}
 
-
 	@Override
 	public void readNbt(NbtCompound nbt) {
-		inventory.clear();
+		resultInventory.clear();
 		disassemblyInventory.clear();
 		super.readNbt(nbt);
-		Inventories.readNbt(nbt, inventory.stacks);
+		Inventories.readNbt(nbt, resultInventory.stacks);
 
 		if (nbt.contains("DisassemblyItems")) {
 			Inventories.readNbt(nbt.getCompound("DisassemblyItems"), disassemblyInventory.stacks);
@@ -82,7 +89,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	@Override
 	public void writeNbt(NbtCompound nbt) {
-		Inventories.writeNbt(nbt, inventory.stacks);
+		Inventories.writeNbt(nbt, resultInventory.stacks);
 
 		NbtCompound disassemblyNbt = new NbtCompound();
 		Inventories.writeNbt(disassemblyNbt, disassemblyInventory.stacks);
@@ -93,15 +100,14 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-		return new AssemblyStationScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, pos), inventory, disassemblyInventory);
+		return new AssemblyStationScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(world, pos),
+				resultInventory, disassemblyInventory
+		);
 	}
 
 	@Override
 	public Text getDisplayName() {
-		// for 1.19+
 		return Text.translatable(getCachedState().getBlock().getTranslationKey());
-		// for earlier versions
-		// return new TranslatableText(getCachedState().getBlock().getTranslationKey());
 	}
 
 	@Nullable
@@ -117,8 +123,8 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	}
 
 	/**
-	 * Update the block entity listeners so the inventory gets updated on the client.
-	 * This is done because the item renderer needs to access the inventory clientside.
+	 * Update the block entity listeners so the resultInventory gets updated on the client.
+	 * This is done because the item renderer needs to access the resultInventory clientside.
 	 */
 	private void updateListeners() {
 		var world = this.getWorld();
@@ -131,16 +137,8 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 			final Chunk chunk = world.getChunk(pos);
 			final Packet<?> packet = toUpdatePacket();
 
-			serverWorld.getChunkManager().threadedAnvilChunkStorage.getPlayersWatchingChunk(chunk.getPos(), false)
-					.forEach(player -> player.networkHandler.sendPacket(packet));
+			serverWorld.getChunkManager().threadedAnvilChunkStorage.getPlayersWatchingChunk(
+					chunk.getPos(), false).forEach(player -> player.networkHandler.sendPacket(packet));
 		}
 	}
-
-	public static final BlockEntityType<AssemblyStationBlockEntity> ASSEMBLY_STATION_BLOCK_ENTITY = Registry.register(
-			Registry.BLOCK_ENTITY_TYPE, IDENTIFIER, FabricBlockEntityTypeBuilder.create(
-					AssemblyStationBlockEntity::new,
-					AssemblyStationBlock.ASSEMBLY_STATION_BLOCK
-			).build());
-
-
 }

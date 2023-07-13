@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.client.renderer.blockentity;
 
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.block.assemblystation.AssemblyStationBlock;
 import com.sigmundgranaas.forgero.fabric.blockentity.assemblystation.AssemblyStationBlockEntity;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,22 +14,23 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 @Environment(EnvType.CLIENT)
 public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<AssemblyStationBlockEntity> {
 	private final ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
+	@SuppressWarnings("unused")
 	public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {}
 
 	@Override
 	public void render(AssemblyStationBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		//		if (!EasyAnvils.CONFIG.get(ClientConfig.class).renderAnvilContents) return;
+		if (!ForgeroConfigurationLoader.configuration.renderItemsOnStations) return;
+
 		Direction direction = entity.getCachedState().get(AssemblyStationBlock.FACING);
 		int posData = (int) entity.getPos().asLong();
 		var items = entity.getItems();
-
-//		for (var item : items) {
-//			Forgero.LOGGER.info(item);
-//		}
 
 		for (int i = 0; i < items.size(); i++) {
 			this.renderItem(i, items.get(i), direction, matrices, light, overlay, vertexConsumers, posData);
@@ -53,7 +52,7 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 			case X -> poseStack.translate(0f, 0f, 0.5f * directionMultiplier);
 			case Z -> poseStack.translate(0.5f * directionMultiplier, 0f, 0f);
 		}
-//
+
 //		if (index == 0) {
 //			switch (direction.getAxis()) {
 //				case X -> {
