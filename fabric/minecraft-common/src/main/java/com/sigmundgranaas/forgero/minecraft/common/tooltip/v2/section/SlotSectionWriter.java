@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 import static com.sigmundgranaas.forgero.minecraft.common.tooltip.CompositeWriter.getRarityFromInt;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
@@ -77,17 +78,17 @@ public class SlotSectionWriter extends SectionWriter {
 		}
 
 		public List<Text> writeSlot(Slot slot) {
-			MutableText mutableText = indented(entryIndent()).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(neutral()));
+			MutableText mutableText = indented(entryIndent()).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase(Locale.ENGLISH))).append(Text.literal(": ")).formatted(neutral()));
 			if (slot.filled()) {
 				Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
 				mutableText.append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
 			} else {
-				if (slot.identifier().equals(slot.typeName().toLowerCase())) {
+				if (slot.identifier().equals(slot.typeName().toLowerCase(Locale.ENGLISH))) {
 					mutableText.append(Text.literal("- ")).formatted(base());
 				} else {
-					mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).append(Text.literal(" - ")).formatted(base());
+					mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase(Locale.ENGLISH)))).append(Text.literal(" - ")).formatted(base());
 				}
-				mutableText.append(Text.translatable(String.format("tooltip.forgero.section.%s", slot.category().stream().findFirst().get().toString().toLowerCase())).formatted(base()));
+				mutableText.append(Text.translatable(String.format("tooltip.forgero.section.%s", slot.category().stream().findFirst().get().toString().toLowerCase(Locale.ENGLISH))).formatted(base()));
 			}
 			return List.of(mutableText);
 		}

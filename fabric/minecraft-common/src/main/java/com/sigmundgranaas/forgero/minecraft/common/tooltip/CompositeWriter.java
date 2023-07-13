@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
+import java.util.List;
+import java.util.Locale;
+
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
@@ -10,8 +13,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
-
-import java.util.List;
 
 public class CompositeWriter implements Writer {
 	private final Composite composite;
@@ -39,7 +40,7 @@ public class CompositeWriter implements Writer {
 			MutableText slots = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("slots")).formatted(Formatting.GRAY));
 			tooltip.add(slots);
 			composite.slots().forEach(slot -> {
-				MutableText mutableText = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).formatted(Formatting.GRAY));
+				MutableText mutableText = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase(Locale.ENGLISH))).formatted(Formatting.GRAY));
 				if (slot.filled()) {
 					Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
 					mutableText.append(Text.literal(": ")).append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
@@ -75,15 +76,15 @@ public class CompositeWriter implements Writer {
 			MutableText slots = Text.literal(stringIndent.toString()).append(Text.translatable(Writer.toTranslationKey("slots")).append(Text.literal(":")).formatted(Formatting.GRAY));
 			tooltip.add(slots);
 			composite.slots().forEach(slot -> {
-				MutableText mutableText = Text.literal(stringIndent + " ").append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase())).append(Text.literal(": ")).formatted(Formatting.GRAY));
+				MutableText mutableText = Text.literal(stringIndent + " ").append(Text.translatable(Writer.toTranslationKey(slot.identifier().toLowerCase(Locale.ENGLISH))).append(Text.literal(": ")).formatted(Formatting.GRAY));
 				if (slot.filled()) {
 					Rarity rarity = getRarityFromInt(AttributeHelper.of(slot.get().get()).rarity());
 					mutableText.append(Writer.nameToTranslatableText(slot.get().get())).formatted(rarity.formatting);
 				} else {
-					if (slot.identifier().equals(slot.typeName().toLowerCase())) {
+					if (slot.identifier().equals(slot.typeName().toLowerCase(Locale.ENGLISH))) {
 						mutableText.append(Text.literal("-")).formatted(Formatting.GRAY);
 					} else {
-						mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase()))).formatted(Formatting.GRAY);
+						mutableText.append(Text.translatable(Writer.toTranslationKey(slot.typeName().toLowerCase(Locale.ENGLISH)))).formatted(Formatting.GRAY);
 					}
 
 				}

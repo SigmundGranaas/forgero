@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
@@ -10,11 +16,6 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfigurati
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public class UpgradeAttributeSectionWriter extends SectionWriter {
 	public static final Set<Category> UPGRADE_CATEGORIES = Set.of(Category.UTILITY, Category.DEFENSIVE, Category.OFFENSIVE, Category.ALL);
@@ -67,7 +68,7 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 		List<Text> entries = configuration.writableAttributes().stream().map(attribute -> entry(attribute, category)).flatMap(List::stream).toList();
 		if (entries.size() > 0) {
 			var builder = ImmutableList.<Text>builder();
-			Text section = indented(1).append(createSection(category.toString().toLowerCase()));
+			Text section = indented(1).append(createSection(category.toString().toLowerCase(Locale.ENGLISH)));
 			if (category != Category.ALL) {
 				builder.add(section);
 			}
