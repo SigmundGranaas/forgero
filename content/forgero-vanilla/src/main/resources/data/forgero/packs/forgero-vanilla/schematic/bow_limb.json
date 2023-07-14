@@ -1,6 +1,7 @@
 {
   "type": "BOW_LIMB_SCHEMATIC",
   "name": "bow_limb-schematic",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -52,7 +53,6 @@
         "tier": 1
       }
     ]
-
   },
   "properties": {
     "attributes": [

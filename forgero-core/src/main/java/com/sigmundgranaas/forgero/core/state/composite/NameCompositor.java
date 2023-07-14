@@ -30,14 +30,13 @@ public class NameCompositor {
 	}
 
 	private Optional<String> mapper(State ingredient) {
-		if (ingredient.test(TOOL_PART_HEAD, MatchContext.of())) {
+		if (ingredient.test(TOOL_PART_HEAD, MatchContext.of()) || ingredient.test(ARROW_HEAD, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_head", ""));
 		}
 		if (ingredient.test(SWORD_BLADE, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_blade", ""));
 		} else if (ingredient.test(HANDLE, MatchContext.of())) {
 			return Optional.empty();
-
 		} else if (ingredient.test(SCHEMATIC, MatchContext.of())) {
 			var elements = ingredient.name().split(ELEMENT_SEPARATOR);
 			if (elements.length == 2) {

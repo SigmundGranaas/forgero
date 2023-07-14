@@ -71,7 +71,7 @@ public class StateConverter implements DataConverter<State> {
 			if (resource.construct().get().components().size() > 0) {
 				state = buildTool(resource)
 						.or(() -> buildSchematicPart(resource))
-						.orElse(buildConstruct(resource));
+						.orElseGet(() -> buildConstruct(resource));
 			} else {
 				state = buildStaticComposite(resource);
 			}
@@ -123,6 +123,9 @@ public class StateConverter implements DataConverter<State> {
 	}
 
 	private Optional<State> buildSchematicPart(DataResource resource) {
+		if (resource.type().equals("ARROW")) {
+			return Optional.empty();
+		}
 		var parts = resource.construct()
 				.map(ConstructData::components)
 				.orElse(Collections.emptyList())
