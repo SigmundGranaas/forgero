@@ -1,6 +1,7 @@
 {
   "type": "FEATHER",
   "name": "feather",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "HOST",
     "id": "minecraft:feather"
