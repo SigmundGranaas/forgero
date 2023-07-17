@@ -33,6 +33,9 @@ public class NameCompositor {
 		if (ingredient.test(TOOL_PART_HEAD, MatchContext.of()) || ingredient.test(ARROW_HEAD, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_head", ""));
 		}
+		if (ingredient.test(BOW_LIMB)) {
+			return Optional.of(ingredient.name().replace("_limb", ""));
+		}
 		if (ingredient.test(SWORD_BLADE, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_blade", ""));
 		} else if (ingredient.test(HANDLE, MatchContext.of())) {

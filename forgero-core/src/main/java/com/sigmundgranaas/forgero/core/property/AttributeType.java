@@ -11,6 +11,9 @@ public enum AttributeType {
 	RARITY,
 	ARMOR,
 	WEIGHT,
+	STABILITY,
+	FORCE,
+	FLEXIBLITY,
 	DURABILITY;
 
 	@Override

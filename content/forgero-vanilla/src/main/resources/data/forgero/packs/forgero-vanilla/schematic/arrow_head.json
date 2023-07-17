@@ -45,6 +45,38 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
+      },
+      {
+        "id": "arrowhead-base-stability",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "type": "STABILITY",
+        "value": 3
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 0.1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 0.3
+          },
+          {
+            "id": "schematic-stability-composite",
+            "type": "WEIGHT",
+            "value": 0.1
+          }
+        ]
       }
     ]
   },

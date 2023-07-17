@@ -10,9 +10,11 @@ import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.DynamicArrowItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.ForgeroMaterial;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicAxeItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicBowItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicHoeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicPickaxeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicShovelItem;
@@ -40,8 +42,10 @@ public class StateToItemConverter {
 	public Item convert() {
 		var context = MatchContext.of();
 		var state = provider.get();
-		if (state.type().test(Type.of("SWORD"), context) || state.type().test(Type.of("TOOL"), context)) {
+		if (state.type().test(Type.of("WEAPON"), context) || state.type().test(Type.of("TOOL"), context)) {
 			return createTool();
+		} else if (state.type().test(Type.ARROW)) {
+			return new DynamicArrowItem(getItemSettings(state), provider);
 		} else if (state.type().test(Type.GEM)) {
 			return new GemItem(getItemSettings(state), state, StateService.INSTANCE);
 		}
@@ -67,6 +71,8 @@ public class StateToItemConverter {
 
 		if (state.type().test(Type.of("SWORD"), context)) {
 			return new DynamicSwordItem((new ForgeroMaterial(provider, ingredient, service)), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
+		} else if (state.type().test(Type.of("BOW"), context)) {
+			return new DynamicBowItem(getItemSettings(state), provider, service);
 		} else if (state.type().test(Type.of("PICKAXE"), context)) {
 			return new DynamicPickaxeItem(new ForgeroMaterial(provider, ingredient, service), (int) state.stream().applyAttribute(AttributeType.ATTACK_DAMAGE), state.stream().applyAttribute(AttributeType.ATTACK_SPEED), getItemSettings(state), provider);
 		} else if (state.type().test(Type.of("AXE"), context)) {
