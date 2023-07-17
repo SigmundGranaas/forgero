@@ -41,6 +41,6 @@ public class AttackSpeed implements Attribute {
 
 	@Override
 	public Float asFloat() {
-		return Math.max(value, -3.5f);
+		return Math.max(value, -3.9f);
 	}
 }

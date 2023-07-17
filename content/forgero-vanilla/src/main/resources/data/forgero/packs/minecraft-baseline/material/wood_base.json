@@ -1,6 +1,6 @@
 {
   "type": "WOOD",
-  "name": "wood",
+  "name": "wood_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -22,22 +22,22 @@
           {
             "id": "wood-mining-speed-composite",
             "type": "MINING_SPEED",
-            "value": 0
+            "value": 2
           },
           {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "value": 0
+            "value": 40
           },
           {
             "id": "wood-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 0
+            "value": 2
           },
           {
             "id": "wood-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 0
+            "value": 1.2
           },
           {
             "id": "wood-armor-composite",
