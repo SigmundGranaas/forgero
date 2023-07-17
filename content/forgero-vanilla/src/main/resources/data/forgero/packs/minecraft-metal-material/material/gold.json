@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "name": "gold",
-  "parent": "metal",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:gold_ingot"
@@ -31,7 +31,7 @@
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 25
+            "value": 23
           },
           {
             "id": "metal-attack_damage-composite",
@@ -41,12 +41,12 @@
           {
             "id": "metal-armor-composite",
             "type": "ARMOR",
-            "value": 2
+            "value": 0
           },
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 50
+            "value": 0
           }
         ]
       },

@@ -17,7 +17,7 @@
           {
             "id": "stone-mining-level-composite",
             "type": "MINING_LEVEL",
-            "value": 1.0
+            "value": 1
           },
           {
             "id": "stone-mining-speed-composite",
@@ -27,17 +27,17 @@
           {
             "id": "stone-durability-composite",
             "type": "DURABILITY",
-            "value": 100.0
+            "value": 122
           },
           {
             "id": "stone-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 2.4
+            "value": 3
           },
           {
             "id": "stone-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 0
           },
           {
             "id": "stone-armor-composite",
@@ -47,7 +47,7 @@
           {
             "id": "stone-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 0
+            "value": 1.2
           }
         ]
       },

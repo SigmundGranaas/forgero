@@ -1,7 +1,7 @@
 {
   "type": "STONE",
   "name": "stone",
-  "parent": "default_stone",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:cobblestone"

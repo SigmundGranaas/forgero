@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "name": "netherite",
-  "parent": "metal",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:netherite_ingot"
@@ -31,12 +31,12 @@
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 2100.0
+            "value": 2021
           },
           {
             "id": "metal-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 4.0
+            "value": 6
           },
           {
             "id": "metal-armor-composite",
@@ -46,7 +46,7 @@
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 35
+            "value": 0
           }
         ]
       },

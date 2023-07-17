@@ -27,7 +27,7 @@
           {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "value": 40
+            "value": 50
           },
           {
             "id": "wood-attack_damage-composite",
@@ -42,7 +42,7 @@
           {
             "id": "wood-armor-composite",
             "type": "ARMOR",
-            "value": 1.5
+            "value": 0
           },
           {
             "id": "wood-weight-composite",

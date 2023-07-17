@@ -13,44 +13,44 @@
         "order": "BASE",
         "attributes": [
           {
+            "id": "mineral-rarity-composite",
             "type": "RARITY",
-            "operation": "ADDITION",
             "value": 80
           },
           {
+            "id": "mineral-mining-level-composite",
             "type": "MINING_LEVEL",
-            "operation": "ADDITION",
             "value": 3.0
           },
           {
+            "id": "mineral-mining-speed-composite",
             "type": "MINING_SPEED",
-            "operation": "ADDITION",
             "value": 8
           },
           {
+            "id": "mineral-durability-composite",
             "type": "DURABILITY",
-            "operation": "ADDITION",
-            "value": 34879
+            "value": 1551
           },
           {
+            "id": "mineral-attack-damage-composite",
             "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "value": 3.5
-          },
-          {
-            "type": "ARMOR",
-            "operation": "ADDITION",
             "value": 5
           },
           {
-            "type": "WEIGHT",
-            "operation": "ADDITION",
-            "value": 20
+            "id": "mineral-armor-composite",
+            "type": "ARMOR",
+            "value": 0
           },
           {
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
+            "id": "mineral-weight-composite",
+            "type": "WEIGHT",
             "value": 0
+          },
+          {
+            "id": "mineral-attack-speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 1.2
           }
         ]
       },
