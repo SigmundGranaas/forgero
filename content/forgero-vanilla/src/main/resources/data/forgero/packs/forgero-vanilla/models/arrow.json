@@ -6,6 +6,21 @@
         "type:ARROW"
       ],
       "modelType": "COMPOSITE"
+    },
+    {
+      "name": "feather",
+      "template": "arrow_feather.png",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "order": 20
+    },
+    {
+      "target": [
+        "type:FEATHER",
+        "type:ARROW"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "feather"
     }
   ]
 }

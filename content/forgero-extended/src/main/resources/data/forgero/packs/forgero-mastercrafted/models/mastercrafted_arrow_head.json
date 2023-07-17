@@ -2,19 +2,19 @@
   "type": "ARROW_HEAD",
   "models": [
     {
-      "name": "arrow_head",
-      "template": "arrow_head.png",
+      "name": "mastercrafted_arrow_head",
       "type": "GENERATE",
+      "template": "mastercrafted_arrow_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 5
     },
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "type:ARROW_HEAD_SCHEMATIC"
+        "id:mastercrafted_arrow_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "arrow_head"
+      "template": "mastercrafted_arrow_head"
     }
   ]
 }
