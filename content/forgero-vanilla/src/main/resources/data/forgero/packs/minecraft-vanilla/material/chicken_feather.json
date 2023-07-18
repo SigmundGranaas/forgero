@@ -25,8 +25,7 @@
         "type": "STABILITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 5
+        "value": 20
       },
       {
         "type": "DURABILITY",

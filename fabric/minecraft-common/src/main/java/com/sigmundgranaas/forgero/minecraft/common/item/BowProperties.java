@@ -28,7 +28,7 @@ public class BowProperties {
 
 	public static Optional<BowProperties> fromItemStack(ItemStack itemStack, StateService service) {
 		Optional<State> optionalState = service.convert(itemStack);
-		return optionalState.map(state -> new BowProperties(Force.of(state).asFloat(), Flexibility.of(state).asFloat()));
+		return optionalState.map(state -> new BowProperties(Flexibility.of(state).asFloat(), Force.of(state).asFloat()));
 	}
 
 	public float getFlexibility() {

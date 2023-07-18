@@ -77,6 +77,14 @@
       },
       {
         "type": "FLEXIBILITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "type": "FORCE",
+        "order": "BASE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
@@ -86,12 +94,6 @@
         "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 1.0
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -3.0
       }
     ]
   },

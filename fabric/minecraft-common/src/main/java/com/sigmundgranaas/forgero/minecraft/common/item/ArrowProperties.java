@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 public class ArrowProperties {
 	private static final float MIN_STABILITY = 0;
-	private static final float BASELINE_STABILITY = 100;
+	private static final float BASELINE_STABILITY = 20;
 
 	private static final float MIN_WEIGHT = 0;
 	private static final float BASELINE_WEIGHT = 3.1f;
@@ -29,7 +29,7 @@ public class ArrowProperties {
 		Optional<State> optionalState = service.convert(itemStack);
 		if (optionalState.isPresent()) {
 			State state = optionalState.get();
-			return new ArrowProperties(Weight.of(state).asFloat(), Stability.of(state).asFloat());
+			return new ArrowProperties(Stability.of(state).asFloat(), Weight.of(state).asFloat());
 		} else {
 			return new ArrowProperties(1.0F, 1.0F);  // Default values for vanilla arrows
 		}

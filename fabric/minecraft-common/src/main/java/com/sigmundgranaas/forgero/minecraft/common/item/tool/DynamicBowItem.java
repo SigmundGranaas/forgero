@@ -106,8 +106,8 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 
 	private PersistentProjectileEntity createProjectile(ArrowItem arrowItem, ItemStack arrowStack, PlayerEntity shooter, World world, BowProperties bowProps, ArrowProperties arrowProps, float pullProgress) {
 		PersistentProjectileEntity projectile = arrowItem.createArrow(world, arrowStack, shooter);
-		float launchVelocity = 100;
-		float inaccuracy = 0;
+		float launchVelocity = pullProgress * bowProps.getForce() / arrowProps.getWeight();
+		float inaccuracy = 1.0F - arrowProps.getStability();
 		projectile.setVelocity(shooter, shooter.getPitch(), shooter.getYaw(), 0.0F, launchVelocity * 3.0F, inaccuracy);
 		return projectile;
 	}

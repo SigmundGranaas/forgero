@@ -1,0 +1,30 @@
+{
+  "type": "ARROW",
+  "name": "stone-arrow",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:arrow"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "type": "STABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 20
+      },
+      {
+        "type": "WEIGHT",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 3
+      }
+    ]
+  }
+}

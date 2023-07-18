@@ -11,7 +11,7 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 
 public class Flexibility implements Attribute {
 
-	public static final String KEY = "FLEXIBLITY";
+	public static final String KEY = "FLEXIBILITY";
 	private final float value;
 
 	public Flexibility(ContainerTargetPair pair) {
