@@ -57,7 +57,7 @@
           {
             "id": "wood-force-composite",
             "type": "FORCE",
-            "value": 10
+            "value": 30
           }
         ]
       },

@@ -42,10 +42,11 @@ public class StateToItemConverter {
 	public Item convert() {
 		var context = MatchContext.of();
 		var state = provider.get();
+		if (state.type().test(Type.ARROW)) {
+			return new DynamicArrowItem(getItemSettings(state), provider);
+		}
 		if (state.type().test(Type.of("WEAPON"), context) || state.type().test(Type.of("TOOL"), context)) {
 			return createTool();
-		} else if (state.type().test(Type.ARROW)) {
-			return new DynamicArrowItem(getItemSettings(state), provider);
 		} else if (state.type().test(Type.GEM)) {
 			return new GemItem(getItemSettings(state), state, StateService.INSTANCE);
 		}

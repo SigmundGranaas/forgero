@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -8,10 +9,13 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -23,6 +27,17 @@ public class DynamicArrowItem extends ArrowItem implements StateItem, State {
 	public DynamicArrowItem(Settings settings, StateProvider defaultState) {
 		super(settings);
 		this.DEFAULT = defaultState;
+	}
+
+	@Override
+	public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
+		Optional<State> arrow = StateService.INSTANCE.convert(stack);
+		if (arrow.isPresent()) {
+			return new DynamicArrowEntity(world, shooter, arrow.get());
+		} else {
+			return super.createArrow(world, stack, shooter);
+		}
+
 	}
 
 	@Override
