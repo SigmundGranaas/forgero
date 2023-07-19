@@ -47,7 +47,7 @@
           {
             "id": "mineral-attack-speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 1.2
+            "value": 1
           }
         ]
       },

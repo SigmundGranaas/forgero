@@ -1,104 +1,101 @@
 {
-  "type": "MINERAL",
-  "name": "diamond",
-  "parent": "mineral_base",
-  "container": {
-    "type": "HOST",
-    "id": "minecraft:diamond"
-  },
+  "type": "METAL",
+  "name": "metal_base",
+  "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
         "order": "BASE",
+        "operation": "ADDITION",
         "attributes": [
           {
-            "id": "mineral-rarity-composite",
+            "id": "metal-rarity-composite",
             "type": "RARITY",
-            "value": 80
+            "value": 30
           },
           {
-            "id": "mineral-mining-level-composite",
+            "id": "metal-mining_level-composite",
             "type": "MINING_LEVEL",
-            "value": 3.0
+            "value": 2.0
           },
           {
-            "id": "mineral-mining-speed-composite",
+            "id": "metal-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 8
+            "value": 6
           },
           {
-            "id": "mineral-durability-composite",
+            "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 1551
+            "value": 241
           },
           {
-            "id": "mineral-attack-damage-composite",
+            "id": "metal-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 5
+            "value": 4
           },
           {
-            "id": "mineral-armor-composite",
+            "id": "metal-armor-composite",
             "type": "ARMOR",
             "value": 0
           },
           {
-            "id": "mineral-weight-composite",
+            "id": "metal-weight-composite",
             "type": "WEIGHT",
             "value": 0
           },
           {
-            "id": "mineral-attack-speed-composite",
+            "id": "metal-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 1.2
+            "value": 1
           }
         ]
       },
       {
         "context": "UPGRADE",
         "order": "BASE",
+        "operation": "ADDITION",
         "attributes": [
           {
+            "id": "metal-rarity-upgrade",
             "type": "RARITY",
-            "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 10
           },
           {
+            "id": "metal-weight-upgrade",
             "type": "WEIGHT",
-            "operation": "ADDITION",
             "category": "ALL",
             "value": 3
           },
           {
-            "type": "MINING_SPEED",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 1.2
-          },
-          {
+            "id": "metal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.5
+            "value": 1
           },
           {
-            "type": "DURABILITY",
-            "operation": "ADDITION",
+            "id": "metal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
             "category": "OFFENSIVE",
-            "value": 600
+            "value": 1.0
           },
           {
+            "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
-            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 70
+          },
+          {
+            "id": "metal-durability-utility-upgrade",
+            "type": "DURABILITY",
             "category": "UTILITY",
-            "value": 300
+            "value": 50
           }
         ]
       }
+    ],
+    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "diamond"
   }
 }

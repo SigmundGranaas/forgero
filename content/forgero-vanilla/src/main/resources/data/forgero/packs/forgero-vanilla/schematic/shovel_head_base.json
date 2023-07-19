@@ -15,8 +15,8 @@
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0
+        "operation": "ADDITION",
+        "value": 0.5
       }
     ],
     "features": [
