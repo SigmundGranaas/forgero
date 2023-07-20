@@ -27,6 +27,6 @@ public class DynamicArrowEntity extends ArrowEntity {
 	}
 
 	private double getGravity() {
-		return 0.005 * (Weight.apply(state));
+		return 0.001 * (Weight.apply(state));
 	}
 }

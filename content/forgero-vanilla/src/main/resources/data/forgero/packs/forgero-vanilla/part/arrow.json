@@ -23,7 +23,7 @@
         "type": "WEIGHT",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 3
+        "value": 20
       }
     ]
   }
