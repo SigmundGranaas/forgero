@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.packages.FilePackageLoader;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.ForgeroStateRegistry.*;
@@ -15,7 +16,7 @@ public class ForgeroPipeLineSetup {
 
 	public static void setup() {
 		if (ForgeroStateRegistry.COMPOSITES == null) {
-			ForgeroConfigurationLoader.load();
+			ForgeroConfigurationLoader.load(Path.of("config"));
 			PipelineBuilder
 					.builder()
 					.register(() -> List.of(new FilePackageLoader(MINECRAFT_PACKAGE).get(), new FilePackageLoader(VANILLA_PACKAGE).get()))
