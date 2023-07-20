@@ -4,36 +4,47 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.sigmundgranaas.forgero.core.texture.utils.Offset;
+import java.util.Optional;
 
 public class MatchContext implements Matchable {
+	private final Map<String, Object> metadata;
 	private final List<Matchable> matches;
-	private final Map<String, Object> metatata;
+
 
 	public MatchContext() {
+		this.metadata = new HashMap<>();
 		this.matches = new ArrayList<>();
-		this.metatata = new HashMap<>();
 	}
 
-	public MatchContext(List<Matchable> matchable) {
-		this.matches = new ArrayList<>(matchable);
-		this.metatata = new HashMap<>();
+	public MatchContext(Map<String, Object> metadata, List<Matchable> matches) {
+		this.metadata = new HashMap<>(metadata);
+		this.matches = matches;
 	}
+
+	public MatchContext(List<Matchable> matches) {
+		this.metadata = new HashMap<>();
+		this.matches = matches;
+	}
+
 
 	public static MatchContext of() {
 		return new MatchContext();
 	}
 
-	public static MatchContext of(List<Matchable> matchable) {
-		return new MatchContext(matchable);
+	public static MatchContext of(List<Matchable> matches) {
+		return new MatchContext(matches);
+	}
+
+	public MatchContext put(String key, Object value) {
+		metadata.put(key, value);
+		return new MatchContext(new HashMap<>(metadata), new ArrayList<>(matches));
 	}
 
 	public MatchContext add(Matchable matchable) {
 		if (!matches.contains(matchable)) {
 			this.matches.add(matchable);
 		}
-		return this;
+		return new MatchContext(new HashMap<>(metadata), new ArrayList<>(matches));
 	}
 
 	@Override
@@ -41,15 +52,12 @@ public class MatchContext implements Matchable {
 		return matches.stream().anyMatch(matchable -> matchable.test(match, context));
 	}
 
-	public Map<String, Object> metaData() {
-		return this.metatata;
+	public <T> Optional<T> get(String key, Class<T> type) {
+		Object value = metadata.get(key);
+		if (type.isInstance(value)) {
+			return Optional.of(type.cast(value));
+		}
+		return Optional.empty();
 	}
 
-	public void applyMetadata(String id, Object data) {
-		if (this.metatata.containsKey(id)) {
-			if (this.metatata.get(id) instanceof Offset offset && data instanceof Offset offset1) {
-				this.metatata.put(id, offset1.apply(offset));
-			}
-		}
-	}
 }
