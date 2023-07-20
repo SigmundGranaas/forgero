@@ -6,7 +6,7 @@
       "template": "refined_arrow_head.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 50
+      "order": 5
     },
     {
       "target": [
