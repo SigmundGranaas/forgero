@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgerofabric.nbt.v2;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
@@ -17,16 +20,18 @@ import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeParser;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateParser;
-import com.sigmundgranaas.forgerofabric.testutil.*;
-
-import net.minecraft.nbt.NbtCompound;
-
+import com.sigmundgranaas.forgerofabric.testutil.Materials;
+import com.sigmundgranaas.forgerofabric.testutil.ToolParts;
+import com.sigmundgranaas.forgerofabric.testutil.Tools;
+import com.sigmundgranaas.forgerofabric.testutil.Types;
+import com.sigmundgranaas.forgerofabric.testutil.Upgrades;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Set;
+import net.minecraft.nbt.NbtCompound;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 public class StateNbtConversionTest {
 	private static final CompoundEncoder<State> encoder = new CompositeEncoder();
@@ -34,7 +39,7 @@ public class StateNbtConversionTest {
 
 	@BeforeEach
 	void genData() {
-		ForgeroConfigurationLoader.load();
+		ForgeroConfigurationLoader.load(FabricLoader.getInstance().getConfigDir());
 		PipelineBuilder
 				.builder()
 				.register(FabricPackFinder.supplier())
