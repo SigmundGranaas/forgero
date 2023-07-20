@@ -1,6 +1,7 @@
 {
   "type": "STRING",
   "name": "string",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "HOST",
     "id": "minecraft:string"
