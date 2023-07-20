@@ -48,6 +48,16 @@
             "id": "wood-weight-composite",
             "type": "WEIGHT",
             "value": 5
+          },
+          {
+            "id": "wood-flexibility-composite",
+            "type": "FLEXIBILITY",
+            "value": 50
+          },
+          {
+            "id": "wood-force-composite",
+            "type": "FORCE",
+            "value": 30
           }
         ]
       },

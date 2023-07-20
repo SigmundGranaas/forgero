@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
 public class NameCompositor {
@@ -32,6 +33,12 @@ public class NameCompositor {
 	private Optional<String> mapper(State ingredient) {
 		if (ingredient.test(TOOL_PART_HEAD, MatchContext.of()) || ingredient.test(ARROW_HEAD, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_head", ""));
+		}
+		if (ingredient.test(BOW_LIMB)) {
+			return Optional.of(ingredient.name().replace("_limb", ""));
+		}
+		if (ingredient.test(Type.of("FEATHER"))) {
+			return Optional.of("");
 		}
 		if (ingredient.test(SWORD_BLADE, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_blade", ""));

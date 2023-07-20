@@ -22,6 +22,12 @@
         "value": 5
       },
       {
+        "type": "STABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 20
+      },
+      {
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",

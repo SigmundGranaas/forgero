@@ -65,27 +65,35 @@
       },
       {
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 2.4
       },
       {
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "type": "FLEXIBILITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "type": "FORCE",
+        "order": "BASE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
       },
       {
         "type": "MINING_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 1.0
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -3.0
       }
     ]
   },
