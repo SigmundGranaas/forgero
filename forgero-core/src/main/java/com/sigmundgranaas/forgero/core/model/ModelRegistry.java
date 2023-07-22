@@ -76,8 +76,7 @@ public class ModelRegistry {
 		return this;
 	}
 
-	public Optional<ModelTemplate> find(State state) {
-		var context = MatchContext.of();
+	public Optional<ModelTemplate> find(State state, MatchContext context) {
 		if (modelMap.containsKey(state.identifier())) {
 			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of());
 		} else {

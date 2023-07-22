@@ -7,10 +7,10 @@ import com.google.gson.JsonObject;
 
 public class ElementParser {
 
-	public static Optional<JsonObject> fromIdentifiedElement(JsonElement element) {
+	public static Optional<JsonObject> fromIdentifiedElement(JsonElement element, String type) {
 		if (element.isJsonObject()) {
 			var object = element.getAsJsonObject();
-			return Optional.of(object).filter(jsonObject -> jsonObject.has("type"));
+			return Optional.of(object).filter(jsonObject -> jsonObject.has("type") && jsonObject.get("type").getAsString().equals(type));
 		}
 		return Optional.empty();
 	}

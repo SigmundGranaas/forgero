@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.model.v1.match;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -14,6 +15,10 @@ public class PredicateFactory {
 
 	public static void register(PredicateBuilder builder) {
 		builders.add(builder);
+	}
+
+	public static void register(Supplier<PredicateBuilder> builder) {
+		builders.add(builder.get());
 	}
 
 	public Matchable create(JsonElement element) {

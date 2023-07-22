@@ -23,6 +23,7 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
+import com.sigmundgranaas.forgero.minecraft.common.match.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 
@@ -56,7 +57,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(new StringSlotBuilder());
 		PredicateFactory.register(new StringTypeBuilder());
 		PredicateFactory.register(new StringNameBuilder());
-
+		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
 	}
 
 	private void soulLevelPropertyReloader() {

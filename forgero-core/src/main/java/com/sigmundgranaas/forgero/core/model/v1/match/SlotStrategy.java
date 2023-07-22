@@ -24,7 +24,6 @@ public class SlotStrategy implements Matchable {
 			if (slotContentOpt.isPresent()) {
 				return predicates.stream().allMatch(pred -> pred.test(slot, context));
 			}
-
 		}
 		return false;
 	}
