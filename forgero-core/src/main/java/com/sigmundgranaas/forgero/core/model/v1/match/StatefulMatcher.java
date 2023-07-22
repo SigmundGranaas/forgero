@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.core.state.Slot;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 /**
@@ -25,26 +22,12 @@ public abstract class StatefulMatcher implements Matchable {
 				.collect(Collectors.toList());
 	}
 
-	public static StatefulMatcher of(List<JsonElement> predicates, String matchType, PredicateFactory factory) {
-		return switch (matchType) {
-			case "UPGRADE" -> new UpgradeMatcher(predicates, factory);
-			case "COMPOSITE" -> new CompositeMatcher(predicates, factory);
-			default -> new DefaultMatcher(predicates, factory);
-		};
+	public static StatefulMatcher of(List<JsonElement> predicates, PredicateFactory factory) {
+		return new DefaultMatcher(predicates, factory);
 	}
 
 	public List<Matchable> getPredicates() {
 		return predicates;
 	}
 
-	protected boolean testSlot(Slot upgrade, Matchable matchable, MatchContext context) {
-		if (upgrade.filled()) {
-			return matchable.test(upgrade, context);
-		}
-		return false;
-	}
-
-	private boolean ingredientTest(State ingredient, Matchable predicate, MatchContext context) {
-		return predicate.test(ingredient, context);
-	}
 }

@@ -54,7 +54,7 @@ public class ModelConverter {
 		}
 		if (data.getName().equals(EMPTY_IDENTIFIER)) {
 			ModelMatcher model;
-			var match = StatefulMatcher.of(data.getPredicates(), type, new PredicateFactory());
+			var match = StatefulMatcher.of(data.getPredicates(), new PredicateFactory());
 			if (data.getModelType().equals("BASED_COMPOSITE")) {
 				model = new ModelMatchPairing(match, new TemplatedModelEntry(data.getTemplate()));
 			} else if (data.getModelType().equals("COMPOSITE")) {
@@ -136,6 +136,6 @@ public class ModelConverter {
 		var model = new PaletteTemplateModel(palette.getTarget(), template, order, offset, resolution, displayOverrides);
 		textures.put(model.identifier(), model);
 		predicates.add(new JsonPrimitive("name:" + model.palette()));
-		return new ModelMatchPairing(StatefulMatcher.of(predicates, "", new PredicateFactory()), model);
+		return new ModelMatchPairing(StatefulMatcher.of(predicates, new PredicateFactory()), model);
 	}
 }

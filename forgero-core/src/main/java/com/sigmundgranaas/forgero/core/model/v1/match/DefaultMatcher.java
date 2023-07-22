@@ -18,6 +18,8 @@ public class DefaultMatcher extends StatefulMatcher {
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		return false;
+		return new CompositeStrategy(getPredicates()).test(match, context)
+				|| predicates.stream().allMatch(pred -> pred.test(match, context))
+				|| new SlotStrategy(getPredicates()).test(match, context);
 	}
 }
