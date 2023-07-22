@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.model.v1.match;
 
 import java.util.List;
 
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.FilledSlot;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -11,10 +11,10 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 /**
  * This class is responsible for testing matches of type UPGRADE.
  */
-public class UpgradeMatcher extends Matcher {
+public class UpgradeMatcher extends StatefulMatcher {
 
-	public UpgradeMatcher(List<JsonObject> criteria, ModelPredicateFactory predicateFactory) {
-		super(criteria, predicateFactory);
+	public UpgradeMatcher(List<JsonElement> predicates, PredicateFactory predicateFactory) {
+		super(predicates, predicateFactory);
 	}
 
 	@Override

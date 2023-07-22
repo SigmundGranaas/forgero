@@ -2,11 +2,12 @@ package com.sigmundgranaas.forgero.core.model;
 
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.core.model.v1.match.StatefulMatcher;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
-public record ModelMatchPairing(ModelMatch match, ModelMatcher model) implements ModelMatcher {
+public record ModelMatchPairing(Matchable match, ModelMatcher model) implements ModelMatcher {
 
 	@Override
 	public boolean match(Matchable state, MatchContext context) {
@@ -23,8 +24,8 @@ public record ModelMatchPairing(ModelMatch match, ModelMatcher model) implements
 
 	@Override
 	public int compareTo(@NotNull ModelMatcher o) {
-		if (o instanceof ModelMatchPairing pairing) {
-			return pairing.match().criteria().size() - match().criteria().size();
+		if (o instanceof StatefulMatcher comparer && match instanceof StatefulMatcher matcher) {
+			return comparer.getPredicates().size() - matcher.getPredicates().size();
 		}
 		return 0;
 	}

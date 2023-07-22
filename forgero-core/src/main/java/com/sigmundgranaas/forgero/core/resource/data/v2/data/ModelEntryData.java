@@ -6,13 +6,16 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
 @Builder
 public class ModelEntryData {
-	private List<String> target;
+	@SerializedName(value = "target", alternate = {"predicate", "criteria", "predicates"})
+	private List<JsonElement> predicates;
 	private String template;
 	@Builder.Default
 	@Nullable
@@ -35,8 +38,8 @@ public class ModelEntryData {
 	}
 
 	@NotNull
-	public List<String> getTarget() {
-		return target;
+	public List<JsonElement> getTarget() {
+		return predicates;
 	}
 
 	@NotNull

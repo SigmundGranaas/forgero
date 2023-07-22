@@ -8,6 +8,12 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.model.v1.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.model.v1.match.builders.string.StringIdentifierBuilder;
+import com.sigmundgranaas.forgero.core.model.v1.match.builders.string.StringModelBuilder;
+import com.sigmundgranaas.forgero.core.model.v1.match.builders.string.StringNameBuilder;
+import com.sigmundgranaas.forgero.core.model.v1.match.builders.string.StringSlotBuilder;
+import com.sigmundgranaas.forgero.core.model.v1.match.builders.string.StringTypeBuilder;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
@@ -40,6 +46,17 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		soulLevelPropertyReloader();
 		DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);
 		Entities.register();
+		registerPredicateBuilders();
+	}
+
+	private void registerPredicateBuilders() {
+		PredicateFactory.register(new StringModelBuilder());
+		PredicateFactory.register(new StringIdentifierBuilder());
+		PredicateFactory.register(new StringModelBuilder());
+		PredicateFactory.register(new StringSlotBuilder());
+		PredicateFactory.register(new StringTypeBuilder());
+		PredicateFactory.register(new StringNameBuilder());
+
 	}
 
 	private void soulLevelPropertyReloader() {
