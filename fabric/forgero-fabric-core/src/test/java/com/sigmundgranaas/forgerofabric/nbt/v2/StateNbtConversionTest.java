@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
@@ -31,20 +30,16 @@ import org.junit.jupiter.api.Test;
 
 import net.minecraft.nbt.NbtCompound;
 
-import net.fabricmc.loader.api.FabricLoader;
-
 public class StateNbtConversionTest {
 	private static final CompoundEncoder<State> encoder = new CompositeEncoder();
 	private static final CompositeParser parser = new CompositeParser(NbtToStateTest::ingredientSupplier);
 
 	@BeforeEach
 	void genData() {
-		ForgeroConfigurationLoader.load(FabricLoader.getInstance().getConfigDir());
 		PipelineBuilder
 				.builder()
 				.register(FabricPackFinder.supplier())
 				.state(ForgeroStateRegistry.stateListener())
-				.state(ForgeroStateRegistry.compositeListener())
 				.inflated(ForgeroStateRegistry.constructListener())
 				.inflated(ForgeroStateRegistry.containerListener())
 				.recipes(ForgeroStateRegistry.recipeListener())

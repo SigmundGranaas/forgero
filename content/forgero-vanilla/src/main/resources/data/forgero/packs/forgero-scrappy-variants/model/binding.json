@@ -11,7 +11,7 @@
     },
     {
       "target": [
-        "id:string-scrappy_binding"
+        "id:leather-scrappy_binding"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "binding"
