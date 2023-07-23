@@ -9,6 +9,9 @@ import com.sigmundgranaas.forgero.core.model.v1.match.predicate.TypePredicate;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
+/**
+ * Attempts to create a Matchable of type TypePredicate from a JsonElement if the element contains "type:".
+ */
 public class StringTypeBuilder implements PredicateBuilder {
 	@Override
 	public Optional<Matchable> create(JsonElement element) {

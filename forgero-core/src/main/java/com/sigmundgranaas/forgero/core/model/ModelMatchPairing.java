@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.model;
 
-import java.util.Optional;
-
-import com.sigmundgranaas.forgero.core.model.v1.match.StatefulMatcher;
+import com.sigmundgranaas.forgero.core.model.v1.match.PredicateMatcher;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public record ModelMatchPairing(Matchable match, ModelMatcher model) implements ModelMatcher {
 
@@ -24,7 +24,7 @@ public record ModelMatchPairing(Matchable match, ModelMatcher model) implements 
 
 	@Override
 	public int compareTo(@NotNull ModelMatcher o) {
-		if (o instanceof StatefulMatcher comparer && match instanceof StatefulMatcher matcher) {
+		if (o instanceof PredicateMatcher comparer && match instanceof PredicateMatcher matcher) {
 			return comparer.getPredicates().size() - matcher.getPredicates().size();
 		}
 		return 0;

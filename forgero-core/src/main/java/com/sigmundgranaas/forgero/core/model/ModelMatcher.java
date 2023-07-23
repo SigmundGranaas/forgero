@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.model;
 
 import java.util.Optional;
 
-import com.sigmundgranaas.forgero.core.model.v1.match.StatefulMatcher;
+import com.sigmundgranaas.forgero.core.model.v1.match.PredicateMatcher;
 import com.sigmundgranaas.forgero.core.model.v1.match.predicate.IdPredicate;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -28,7 +28,7 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 
 	static int comparator(ModelMatcher match1, ModelMatcher match2) {
 		if (match1 instanceof ModelMatchPairing entry1 && match2 instanceof ModelMatchPairing entry2) {
-			if (entry1.match() instanceof StatefulMatcher matcher1 && entry2.match() instanceof StatefulMatcher matcher2) {
+			if (entry1.match() instanceof PredicateMatcher matcher1 && entry2.match() instanceof PredicateMatcher matcher2) {
 				var match1Identifier = matcher1.getPredicates().stream().anyMatch(match -> match instanceof IdPredicate);
 				var match2Identifier = matcher2.getPredicates().stream().anyMatch(match -> match instanceof IdPredicate);
 

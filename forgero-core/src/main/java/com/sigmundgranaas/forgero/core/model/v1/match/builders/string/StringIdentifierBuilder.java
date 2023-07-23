@@ -8,6 +8,9 @@ import com.sigmundgranaas.forgero.core.model.v1.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.model.v1.match.predicate.IdPredicate;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
+/**
+ * Attempts to create a Matchable of type IdPredicate from a JsonElement if the element contains "id:".
+ */
 public class StringIdentifierBuilder implements PredicateBuilder {
 	@Override
 	public Optional<Matchable> create(JsonElement element) {

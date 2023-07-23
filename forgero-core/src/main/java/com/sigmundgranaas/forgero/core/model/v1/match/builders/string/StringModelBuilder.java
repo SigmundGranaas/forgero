@@ -8,6 +8,9 @@ import com.sigmundgranaas.forgero.core.model.v1.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.model.v1.match.predicate.ModelPredicate;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
+/**
+ * Attempts to create a Matchable of type ModelPredicate from a JsonElement if the element contains "model:".
+ */
 public class StringModelBuilder implements PredicateBuilder {
 	@Override
 	public Optional<Matchable> create(JsonElement element) {

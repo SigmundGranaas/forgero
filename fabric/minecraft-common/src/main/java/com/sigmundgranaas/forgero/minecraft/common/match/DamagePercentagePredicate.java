@@ -10,6 +10,9 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 import net.minecraft.item.ItemStack;
 
+/**
+ * Matches if the damage percentage of an ItemStack within the context is greater than or equal to the given percentage.
+ */
 public record DamagePercentagePredicate(float percentage) implements Matchable {
 	public static String ID = "forgero:damage_percentage";
 
@@ -23,6 +26,9 @@ public record DamagePercentagePredicate(float percentage) implements Matchable {
 		}
 	}
 
+	/**
+	 * Attempts to create a Matchable of type DamagePercentagePredicate from a JsonElement if the element is identified as a "DamagePercentagePredicate".
+	 */
 	public static class DamagePercentagePredicateBuilder implements PredicateBuilder {
 		@Override
 		public Optional<Matchable> create(JsonElement element) {
