@@ -1,17 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation;
 
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.core.state.composite.NameCompositor;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.core.state.composite.NameCompositor;
 
 public class RecipeDataMapper implements Function<RecipeData, RecipeData> {
 	private final RecipeDataHelper helper;
@@ -40,10 +41,10 @@ public class RecipeDataMapper implements Function<RecipeData, RecipeData> {
 			}
 			builder.id(id);
 		} else if (!data.id().equals(EMPTY_IDENTIFIER)) {
-			builder.id(ForgeroStateRegistry.stateFinder().find(ForgeroStateRegistry.ID_MAPPER.get(data.id())).get().type().typeName().toLowerCase());
+			builder.id(ForgeroStateRegistry.stateFinder().find(ForgeroStateRegistry.ID_MAPPER.get(data.id())).get().type().typeName().toLowerCase(Locale.ENGLISH));
 
 		} else {
-			builder.type(data.type().toLowerCase());
+			builder.type(data.type().toLowerCase(Locale.ENGLISH));
 		}
 		return builder.build();
 	}

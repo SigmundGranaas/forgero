@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -165,7 +166,7 @@ public class CompositeRecipeOptimiser {
 				return Optional.empty();
 			}
 			var elements = data.id().split(ELEMENT_SEPARATOR);
-			Optional<String> type = StateService.INSTANCE.find(data.id()).map(State::type).map(Type::typeName).map(String::toLowerCase);
+			Optional<String> type = StateService.INSTANCE.find(data.id()).map(State::type).map(Type::typeName).map(name -> name.toLowerCase(Locale.ENGLISH));
 			if (elements.length > 1 && type.isPresent()) {
 				return Optional.of(String.format("%s-%s", elements[0].split(":")[1], type.get()));
 			}

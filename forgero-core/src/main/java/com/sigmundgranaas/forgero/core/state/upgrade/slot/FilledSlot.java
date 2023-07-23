@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import java.util.stream.Stream;
-
-import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
@@ -52,6 +49,10 @@ public class FilledSlot extends AbstractTypedSlot {
 	@Override
 	public Optional<State> get() {
 		return Optional.of(upgrade);
+	}
+
+	public State content() {
+		return upgrade;
 	}
 
 	@Override
