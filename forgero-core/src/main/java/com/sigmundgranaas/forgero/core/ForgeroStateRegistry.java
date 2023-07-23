@@ -131,7 +131,7 @@ public class ForgeroStateRegistry {
 
 	public static ResourceListener<Map<String, State>> compositeListener() {
 		return (resources, tree, idMapper) -> {
-			if (COMPOSITES == null) {
+			if (COMPOSITES == null && resources != null && tree != null && idMapper != null) {
 				COMPOSITES = resources.values()
 						.stream()
 						.filter(Composite.class::isInstance)
