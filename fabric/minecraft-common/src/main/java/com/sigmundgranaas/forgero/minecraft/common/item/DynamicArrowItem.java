@@ -33,7 +33,8 @@ public class DynamicArrowItem extends ArrowItem implements StateItem, State {
 	public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
 		Optional<State> arrow = StateService.INSTANCE.convert(stack);
 		if (arrow.isPresent()) {
-			return new DynamicArrowEntity(world, shooter, arrow.get());
+			var entity = new DynamicArrowEntity(world, shooter, stack);
+			return entity;
 		} else {
 			return super.createArrow(world, stack, shooter);
 		}

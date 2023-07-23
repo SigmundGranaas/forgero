@@ -101,6 +101,9 @@ public class ForgeroInstanceRegistry implements StateService {
 
 	@Override
 	public Optional<ItemStack> convert(State state) {
+		if (state == null) {
+			return Optional.empty();
+		}
 		Function<String, Optional<Identifier>> mapFn = (String id) -> Optional.of(mapper.stateToContainer(id));
 		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, mapFn).convert(state);
 		return Optional.ofNullable(stack);

@@ -48,6 +48,7 @@ public class ForgeroClient implements ClientModInitializer {
 	public static Map<String, PaletteTemplateModel> TEXTURES = new HashMap<>();
 	public static Map<String, String> PALETTE_REMAP = new HashMap<>();
 
+
 	@Override
 	public void onInitializeClient() {
 		initializeItemModels();
@@ -74,6 +75,7 @@ public class ForgeroClient implements ClientModInitializer {
 		var modelProvider = new ForgeroModelVariantProvider(modelRegistry);
 		ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
 		EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
+		EntityRendererRegistry.register(Entities.DYNAMIC_ARROW_ENTITY, DynamicArrowEntityRenderer::new);
 		EntityModelLayerRegistry.registerModelLayer(SOUL_ENTITY_MODEL_LAYER, SoulEntityModel::getTexturedModelData);
 	}
 
