@@ -26,7 +26,7 @@ import net.fabricmc.api.Environment;
  * 'arrow-sprites' mod, which can be found at: <a href="https://modrinth.com/mod/sprite-arrows">...</a>.
  * <p>
  * The original implementation can be accessed in 'agnor99's' GitHub repository at:
- * <a href="https://github.com/SigmundGranaas/arrow-sprites/blob/1.20.x/common/src/main/java/dev/agnor/spritearrows/SpriteArrowRenderer.java">SpriteArrowRenderer</a>.
+ * <a href="https://github.com/agnor99/arrow-sprites/blob/1.20.x/common/src/main/java/dev/agnor/spritearrows/SpriteArrowRenderer.java">SpriteArrowRenderer</a>.
  * <p>
  * This code is shared under the terms of the MIT License. This license permits use, alteration, and distribution, given that the
  * original copyright notice is included.
