@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.fabric.modmenu;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationEntry;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationListWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.OptionEntryFactory;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
@@ -16,9 +17,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroConfigurationScreen extends GameOptionsScreen {
@@ -76,7 +77,7 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 		}
 
 		this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - 28, 150, 20, Text.translatable("forgero.menu.options.reload_config"), button -> {
-			ForgeroConfigurationLoader.load();
+			ForgeroConfigurationLoader.load(FabricLoader.getInstance().getConfigDir());
 			RebuildConfigScreen();
 		}));
 		this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 28, 150, 20, ScreenTexts.DONE, button -> {

@@ -31,13 +31,15 @@ import org.junit.jupiter.api.Test;
 
 import net.minecraft.nbt.NbtCompound;
 
+import net.fabricmc.loader.api.FabricLoader;
+
 public class StateNbtConversionTest {
 	private static final CompoundEncoder<State> encoder = new CompositeEncoder();
 	private static final CompositeParser parser = new CompositeParser(NbtToStateTest::ingredientSupplier);
 
 	@BeforeEach
 	void genData() {
-		ForgeroConfigurationLoader.load();
+		ForgeroConfigurationLoader.load(FabricLoader.getInstance().getConfigDir());
 		PipelineBuilder
 				.builder()
 				.register(FabricPackFinder.supplier())
