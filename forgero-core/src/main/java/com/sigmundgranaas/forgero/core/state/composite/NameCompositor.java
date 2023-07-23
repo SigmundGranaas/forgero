@@ -37,6 +37,9 @@ public class NameCompositor {
 		if (ingredient.test(BOW_LIMB)) {
 			return Optional.of(ingredient.name().replace("_limb", ""));
 		}
+		if (ingredient.test(STRING)) {
+			return Optional.empty();
+		}
 		if (ingredient.test(Type.of("FEATHER"))) {
 			return Optional.of("");
 		}

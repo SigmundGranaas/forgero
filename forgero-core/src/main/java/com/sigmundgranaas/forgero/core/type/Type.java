@@ -40,7 +40,8 @@ public interface Type extends Matchable {
 	Type OAK = new SimpleType("OAK", Optional.of(WOOD), new TypeMatcher());
 	Type METAL = new SimpleType("METAL", Optional.of(TOOL_MATERIAL), new TypeMatcher());
 	Type STONE = new SimpleType("STONE", Optional.of(TOOL_MATERIAL), new TypeMatcher());
-
+	Type SECONDARY_MATERIAL = new SimpleType("SECONDARY_MATERIAL", Optional.of(MATERIAL), new TypeMatcher());
+	Type STRING = new SimpleType("STRING", Optional.of(SECONDARY_MATERIAL), new TypeMatcher());
 	Type BOW_LIMB = new SimpleType("BOW_LIMB", Optional.of(PART), new TypeMatcher());
 	Type BOW = new SimpleType("BOW", Optional.of(WEAPON), new TypeMatcher());
 	Type ARROW = new SimpleType("ARROW", Optional.empty(), new TypeMatcher());

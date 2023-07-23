@@ -6,7 +6,36 @@
       "template": "bow_limb.png",
       "type": "GENERATE",
       "palette": "WOOD",
-      "order": 20
+      "order": 20,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "shovel_head.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "pickaxe_head.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.01
+            }
+          ],
+          "template": "axe_head.png"
+        }
+      ]
     },
     {
       "name": "bow_handle",
