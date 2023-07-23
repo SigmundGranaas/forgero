@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.match;
 
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
+
 import java.util.Optional;
 
 import com.google.gson.JsonElement;
@@ -18,7 +20,7 @@ public record DamagePercentagePredicate(float percentage) implements Matchable {
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		var stackOpt = context.get("stack", ItemStack.class);
+		Optional<ItemStack> stackOpt = context.get(STACK);
 		if (percentage > 1) {
 			return stackOpt.filter(stack -> ((float) stack.getDamage() / (float) stack.getMaxDamage() * 100) >= percentage).isPresent();
 		} else {

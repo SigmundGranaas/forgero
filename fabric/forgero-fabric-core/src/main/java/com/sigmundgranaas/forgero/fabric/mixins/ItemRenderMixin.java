@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.CompositeModelVariant;
 import org.jetbrains.annotations.Nullable;
@@ -34,9 +36,9 @@ public abstract class ItemRenderMixin {
 	public void getModelMixin(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
 		if (this.models.getModel(stack) instanceof CompositeModelVariant variant) {
 			var context = new MatchContext();
-			context.put("entity", entity);
-			context.put("world", world);
-			context.put("stack", stack);
+			context.put(ENTITY, entity);
+			context.put(WORLD, world);
+			context.put(STACK, stack);
 			var model = variant.getModel(stack, context);
 			ClientWorld clientWorld = world instanceof ClientWorld ? (ClientWorld) world : null;
 			ci.setReturnValue(model.getOverrides().apply(model, stack, clientWorld, entity, seed));

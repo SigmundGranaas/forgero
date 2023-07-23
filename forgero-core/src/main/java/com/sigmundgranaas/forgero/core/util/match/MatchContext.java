@@ -52,6 +52,7 @@ public class MatchContext implements Matchable {
 		return matches.stream().anyMatch(matchable -> matchable.test(match, context));
 	}
 
+
 	public <T> Optional<T> get(String key, Class<T> type) {
 		Object value = metadata.get(key);
 		if (type.isInstance(value)) {
@@ -60,4 +61,12 @@ public class MatchContext implements Matchable {
 		return Optional.empty();
 	}
 
+
+	public <T> Optional<T> get(ContextKey<T> key) {
+		return get(key.getKey(), key.getClazz());
+	}
+
+	public MatchContext put(ContextKey<?> key, Object value) {
+		return put(key.getKey(), value);
+	}
 }
