@@ -85,6 +85,10 @@ public class ModelRegistry {
 		}
 	}
 
+	public Optional<ModelTemplate> find(State state) {
+		return find(state, MatchContext.of());
+	}
+
 
 	public Optional<ModelMatcher> provider(Identifiable id) {
 		if (modelMap.containsKey(id.identifier())) {
