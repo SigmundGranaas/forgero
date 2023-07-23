@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.model.v1.match;
+package com.sigmundgranaas.forgero.core.model.match;
 
 import java.util.List;
 

@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.core.model;
 
 import java.util.Optional;
 
-import com.sigmundgranaas.forgero.core.model.v1.match.PredicateMatcher;
-import com.sigmundgranaas.forgero.core.model.v1.match.predicate.IdPredicate;
+import com.sigmundgranaas.forgero.core.model.match.PredicateMatcher;
+import com.sigmundgranaas.forgero.core.model.match.predicate.IdPredicate;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;

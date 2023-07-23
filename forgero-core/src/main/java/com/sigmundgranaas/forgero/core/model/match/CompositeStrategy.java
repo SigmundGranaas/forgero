@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.model.v1.match;
+package com.sigmundgranaas.forgero.core.model.match;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +67,14 @@ public class CompositeStrategy implements Matchable {
 
 		// Check the type of match and use appropriate strategy
 		if (match instanceof Composite) {
-			return compositeStrategy.test(match, compositeContext);
-		} else if (match instanceof Constructed) {
-			return constructedStrategy.test(match, compositeContext);
+			var compositeSuccess = compositeStrategy.test(match, compositeContext);
+			if (compositeSuccess) {
+				return true;
+			}
+			if (match instanceof Constructed) {
+				return constructedStrategy.test(match, compositeContext);
+			}
 		}
-
 		// If the match is neither Composite nor Constructed, return false
 		return false;
 	}

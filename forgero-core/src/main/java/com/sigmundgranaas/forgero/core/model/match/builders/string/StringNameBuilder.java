@@ -1,10 +1,10 @@
-package com.sigmundgranaas.forgero.core.model.v1.match.builders.string;
+package com.sigmundgranaas.forgero.core.model.match.builders.string;
 
 import java.util.Optional;
 
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.core.model.v1.match.builders.ElementParser;
-import com.sigmundgranaas.forgero.core.model.v1.match.builders.PredicateBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.ElementParser;
+import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.model.v1.match;
+package com.sigmundgranaas.forgero.core.model.match;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.model.v1.match.builders.PredicateBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 /**

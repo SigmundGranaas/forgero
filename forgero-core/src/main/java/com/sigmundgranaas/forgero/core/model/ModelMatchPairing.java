@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.model;
 
-import com.sigmundgranaas.forgero.core.model.v1.match.PredicateMatcher;
+import java.util.Optional;
+
+import com.sigmundgranaas.forgero.core.model.match.PredicateMatcher;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public record ModelMatchPairing(Matchable match, ModelMatcher model) implements ModelMatcher {
 

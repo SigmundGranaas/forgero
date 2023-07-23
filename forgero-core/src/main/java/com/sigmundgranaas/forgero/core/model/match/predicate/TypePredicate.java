@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.model.v1.match.predicate;
+package com.sigmundgranaas.forgero.core.model.match.predicate;
 
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.FilledSlot;
 import com.sigmundgranaas.forgero.core.type.Type;

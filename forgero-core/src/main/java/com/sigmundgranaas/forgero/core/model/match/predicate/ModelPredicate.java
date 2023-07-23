@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.model.v1.match.predicate;
+package com.sigmundgranaas.forgero.core.model.match.predicate;
 
 import com.sigmundgranaas.forgero.core.model.ModelMatchEntry;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;

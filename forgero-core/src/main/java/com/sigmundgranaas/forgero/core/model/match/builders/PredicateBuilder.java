@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.model.v1.match.builders;
+package com.sigmundgranaas.forgero.core.model.match.builders;
 
 import java.util.Optional;
 
