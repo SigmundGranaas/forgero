@@ -54,6 +54,8 @@ public record BaseAttribute(String attribute,
 			return (current) -> current + leveledValue();
 		} else if (operation == NumericOperation.MULTIPLICATION) {
 			return (current) -> current * leveledValue();
+		} else if (operation == NumericOperation.FORCE) {
+			return (current) -> leveledValue();
 		}
 		return (current) -> current;
 	}
