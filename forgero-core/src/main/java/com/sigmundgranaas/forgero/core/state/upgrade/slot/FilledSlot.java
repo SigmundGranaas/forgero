@@ -67,7 +67,9 @@ public class FilledSlot extends AbstractTypedSlot {
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		if (type().test(match, context)) {
+		if (match instanceof State state) {
+			return state.type().test(type(), context);
+		} else if (type().test(match, context)) {
 			return true;
 		} else {
 			return upgrade.test(match, context);
