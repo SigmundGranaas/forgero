@@ -116,17 +116,19 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 
 	private InventoryChangedListener createPartSlotFn(PositionedSlot slot) {
 		return (Inventory partInventory) -> this.context.run((world, pos) -> {
-			if (!isBuildingTree && compositeSlot.state != null && entity instanceof ServerPlayerEntity) {
-				isBuildingTree = true;
-				ItemStack stack = partInventory.getStack(0).copy();
-				var component = service.convert(stack);
-				if (component.isPresent()) {
-					slot.slot = slot.container.set(component.get(), slot.slot);
-				} else if (slot.container != null) {
-					slot.slot = slot.container.empty(slot.getSlot());
+			if (!world.isClient()) {
+				if (!isBuildingTree && compositeSlot.state != null && entity instanceof ServerPlayerEntity) {
+					isBuildingTree = true;
+					ItemStack stack = partInventory.getStack(0).copy();
+					var component = service.convert(stack);
+					if (component.isPresent()) {
+						slot.slot = slot.container.set(component.get(), slot.slot);
+					} else if (slot.container != null) {
+						slot.slot = slot.container.empty(slot.getSlot());
+					}
+					isBuildingTree = false;
+					compositeSlot.setStack(service.convert(compositeSlot.state).get());
 				}
-				isBuildingTree = false;
-				compositeSlot.setStack(service.convert(compositeSlot.state).get());
 			}
 		});
 	}
@@ -352,7 +354,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		}
 	}
 
-	public class PositionedSlot extends Slot {
+	public static class PositionedSlot extends Slot {
 		public int xPosition;
 		public int yPosition;
 		@Nullable
@@ -390,7 +392,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		@Override
 		public boolean canInsert(ItemStack stack) {
 			var stateOpt = StateService.INSTANCE.convert(stack);
-			return slot != null && stateOpt.isPresent() && slot.test(stateOpt.get(), MatchContext.of());
+			return slot != null && stateOpt.isPresent() && slot.empty().test(stateOpt.get(), MatchContext.of());
 		}
 
 
@@ -407,6 +409,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		public boolean isEnabled() {
 			return this.slot != null || this.container != null || this.parent != null;
 		}
+
 	}
 
 	public static ScreenHandlerType<UpgradeStationScreenHandler> UPGRADE_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(UpgradeStationScreenHandler::new);
