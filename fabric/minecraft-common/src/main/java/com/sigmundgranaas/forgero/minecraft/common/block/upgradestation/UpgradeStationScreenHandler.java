@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,7 +129,11 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 						slot.slot = slot.container.empty(slot.getSlot());
 					}
 					isBuildingTree = false;
-					compositeSlot.setStack(service.convert(compositeSlot.state).get());
+					ItemStack newState = service.convert(compositeSlot.state).get();
+					var nbt = compositeSlot.inventory.getStack(0).copy().getOrCreateNbt();
+					nbt.put(FORGERO_IDENTIFIER, newState.getOrCreateNbt().get(FORGERO_IDENTIFIER));
+					newState.setNbt(nbt);
+					compositeSlot.setStack(newState);
 				}
 			}
 		});
