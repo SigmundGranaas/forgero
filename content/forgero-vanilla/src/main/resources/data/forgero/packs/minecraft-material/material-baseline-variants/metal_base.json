@@ -47,7 +47,7 @@
           {
             "id": "metal-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 1
+            "value": 1.6
           }
         ]
       },

@@ -48,11 +48,6 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "schematic-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 2
-          },
-          {
             "id": "schematic-mining_level-composite",
             "type": "MINING_LEVEL",
             "value": 0

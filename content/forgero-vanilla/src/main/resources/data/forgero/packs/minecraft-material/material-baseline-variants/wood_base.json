@@ -37,7 +37,7 @@
           {
             "id": "wood-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 1
+            "value": 2
           },
           {
             "id": "wood-armor-composite",
@@ -47,7 +47,7 @@
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 0
           }
         ]
       },

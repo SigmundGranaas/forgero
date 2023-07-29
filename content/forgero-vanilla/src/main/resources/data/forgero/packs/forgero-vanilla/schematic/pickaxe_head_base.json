@@ -9,7 +9,7 @@
         "type": "ATTACK_SPEED",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -3.66
+        "value": -4
       }
     ],
     "features": [
