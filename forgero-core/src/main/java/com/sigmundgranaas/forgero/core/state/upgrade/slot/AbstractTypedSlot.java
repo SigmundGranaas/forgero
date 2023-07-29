@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
+import java.util.Locale;
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
@@ -35,7 +36,7 @@ public abstract class AbstractTypedSlot implements Slot {
 
 	@Override
 	public String description() {
-		return description.equals(EMPTY_IDENTIFIER) ? type().typeName().toLowerCase() : description;
+		return description.equals(EMPTY_IDENTIFIER) ? type().typeName().toLowerCase(Locale.ENGLISH) : description;
 	}
 
 	@Override

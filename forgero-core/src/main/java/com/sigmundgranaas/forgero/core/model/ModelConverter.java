@@ -11,7 +11,11 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.model.match.PredicateMatcher;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelEntryData;
@@ -50,13 +54,13 @@ public class ModelConverter {
 		}
 		if (data.getName().equals(EMPTY_IDENTIFIER)) {
 			ModelMatcher model;
-			var match = new ModelMatch(data.getTarget(), "");
+			var match = PredicateMatcher.of(data.getPredicates(), new PredicateFactory());
 			if (data.getModelType().equals("BASED_COMPOSITE")) {
 				model = new ModelMatchPairing(match, new TemplatedModelEntry(data.getTemplate()));
 			} else if (data.getModelType().equals("COMPOSITE")) {
 				model = new ModelMatchPairing(match, new CompositeModelEntry());
 			} else if (data.getModelType().equals("UPGRADE")) {
-				model = new ModelMatchPairing(new ModelMatch(data.getTarget(), "UPGRADE"), new TemplatedModelEntry(data.getTemplate()));
+				model = new ModelMatchPairing(match, new TemplatedModelEntry(data.getTemplate()));
 			} else {
 				model = ModelMatcher.EMPTY;
 			}
@@ -112,7 +116,7 @@ public class ModelConverter {
 			var variants = data.getVariants().stream()
 					.map(variant -> data.toBuilder()
 							.template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() : variant.getTemplate())
-							.target(variant.getTarget())
+							.predicate(variant.getTarget())
 							.offset(variant.getOffset())
 							.resolution(variant.getResolution())
 							.order(data.order())
@@ -121,17 +125,17 @@ public class ModelConverter {
 			variants.add(data);
 			return palettes.stream()
 					.map(palette -> variants.stream()
-							.map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getTarget()), Offset.of(entry.getOffset()), entry.getResolution(), data.displayOverrides().orElse(null)))
+							.map(entry -> generate(palette, entry.getTemplate(), entry.order(), new ArrayList<>(entry.getPredicates()), Offset.of(entry.getOffset()), entry.getResolution(), data.displayOverrides().orElse(null)))
 							.toList())
 					.flatMap(List::stream)
 					.toList();
 		}
 	}
 
-	private ModelMatchPairing generate(PaletteData palette, String template, int order, List<String> criteria, Offset offset, Integer resolution, @Nullable JsonObject displayOverrides) {
+	private ModelMatchPairing generate(PaletteData palette, String template, int order, List<JsonElement> predicates, Offset offset, Integer resolution, @Nullable JsonObject displayOverrides) {
 		var model = new PaletteTemplateModel(palette.getTarget(), template, order, offset, resolution, displayOverrides);
 		textures.put(model.identifier(), model);
-		criteria.add(model.palette());
-		return new ModelMatchPairing(new ModelMatch(criteria, ""), model);
+		predicates.add(new JsonPrimitive("name:" + model.palette()));
+		return new ModelMatchPairing(PredicateMatcher.of(predicates, new PredicateFactory()), model);
 	}
 }

@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import java.util.stream.Stream;
-
-import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
@@ -54,6 +51,10 @@ public class FilledSlot extends AbstractTypedSlot {
 		return Optional.of(upgrade);
 	}
 
+	public State content() {
+		return upgrade;
+	}
+
 	@Override
 	public Slot empty() {
 		return new EmptySlot(index(), type(), description(), categories);
@@ -66,7 +67,9 @@ public class FilledSlot extends AbstractTypedSlot {
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		if (type().test(match, context)) {
+		if (match instanceof State state) {
+			return state.type().test(type(), context);
+		} else if (type().test(match, context)) {
 			return true;
 		} else {
 			return upgrade.test(match, context);

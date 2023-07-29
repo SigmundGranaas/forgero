@@ -5,6 +5,7 @@ import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
@@ -131,7 +132,7 @@ public class AttributeWriter implements Writer {
 	private void intAttribute(AttributeType type, List<Text> tooltip) {
 		int result = (int) helper.attribute(type);
 		if (result != 0) {
-			MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString().toLowerCase()))).append(": ").formatted(Formatting.GRAY);
+			MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString().toLowerCase(Locale.ENGLISH)))).append(": ").formatted(Formatting.GRAY);
 			miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
 			tooltip.add(miningLevel);
 		}
@@ -144,7 +145,7 @@ public class AttributeWriter implements Writer {
 		}
 		result = roundFloat(result);
 		if (result != 0f) {
-			MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString().toLowerCase()))).append(": ").formatted(Formatting.GRAY);
+			MutableText miningLevel = Text.literal("  ").append(Text.translatable(Writer.toTranslationKey(type.toString().toLowerCase(Locale.ENGLISH)))).append(": ").formatted(Formatting.GRAY);
 			miningLevel.append(Text.literal(String.format("%s", result)).formatted(Formatting.WHITE));
 			tooltip.add(miningLevel);
 		}

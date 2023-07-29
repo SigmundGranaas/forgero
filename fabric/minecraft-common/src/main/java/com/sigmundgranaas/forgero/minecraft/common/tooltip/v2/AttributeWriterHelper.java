@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -165,7 +166,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writeTranslatableAttributeType(String type) {
-		return Text.translatable(String.format("tooltip.forgero.attribute.%s", type.toLowerCase()));
+		return Text.translatable(String.format("tooltip.forgero.attribute.%s", type.toLowerCase(Locale.ENGLISH)));
 	}
 
 	public Stream<Attribute> attributesOfType(String type) {

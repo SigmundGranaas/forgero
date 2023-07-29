@@ -20,7 +20,7 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 public class DataPipeLineReloader implements SimpleSynchronousResourceReloadListener {
 	@Override
 	public void reload(ResourceManager manager) {
-		var config = ForgeroConfigurationLoader.load();
+		var config = ForgeroConfigurationLoader.load(FabricLoader.getInstance().getConfigDir());
 		Set<String> availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 		PipelineBuilder.builder()
 				.register(() -> config)

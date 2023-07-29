@@ -5,6 +5,7 @@ import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATO
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -42,7 +43,7 @@ public class MaterialPartTagGenerator implements DynamicResourceGenerator {
 	private void mapTags(Composite construct) {
 		var elements = construct.name().split(ELEMENT_SEPARATOR);
 		if (elements.length > 1) {
-			var tag = String.format("%s-%s", elements[0], construct.type().typeName().toLowerCase());
+			var tag = String.format("%s-%s", elements[0], construct.type().typeName().toLowerCase(Locale.ENGLISH));
 			if (idTagEntries.containsKey(tag)) {
 				idTagEntries.get(tag).add(construct.identifier());
 			} else {

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -61,7 +62,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		if (slot.getSlot() != null) {
 			com.sigmundgranaas.forgero.core.state.Slot slot1 = slot.getSlot();
 
-			Identifier id = new Identifier("forgero", slot1.typeName().toLowerCase());
+			Identifier id = new Identifier("forgero", slot1.typeName().toLowerCase(Locale.ENGLISH));
 
 			renderCycledTag(id, mouseX, mouseY);
 		}
