@@ -24,11 +24,7 @@ public interface Attribute extends Property, Comparable<Attribute> {
 	default int compareTo(@NotNull Attribute o) {
 		int order = getOrder().getValue() - o.getOrder().getValue();
 		if (order == 0) {
-			if (getOperation() == NumericOperation.ADDITION) {
-				return -1;
-			} else {
-				return 1;
-			}
+			return getOperation().ordinal() - o.getOperation().ordinal();
 		}
 		return order;
 	}

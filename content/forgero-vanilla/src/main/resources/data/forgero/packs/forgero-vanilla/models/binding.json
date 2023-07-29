@@ -107,6 +107,10 @@
       "type": "GENERATE",
       "palette": "TRINKET",
       "template": "square_gem_center.png",
+      "offset": [
+        -1,
+        -1
+      ],
       "order": 90,
       "variants": [
         {

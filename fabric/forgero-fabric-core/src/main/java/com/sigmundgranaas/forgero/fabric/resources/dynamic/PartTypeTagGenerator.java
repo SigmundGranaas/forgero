@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric.resources.dynamic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -39,7 +40,7 @@ public class PartTypeTagGenerator implements DynamicResourceGenerator {
 	}
 
 	private void mapTags(State construct) {
-		var type = construct.type().typeName().toLowerCase();
+		var type = construct.type().typeName().toLowerCase(Locale.ENGLISH);
 		if (idTagEntries.containsKey(type)) {
 			convertId(construct).ifPresent(id -> idTagEntries.get(type).add(id));
 		} else {
