@@ -40,6 +40,8 @@ public interface StateService extends StateFinder {
 
 	Optional<ItemStack> convert(State state);
 
+	ItemStack update(State state, ItemStack stack);
+
 	boolean isInitialized();
 
 	StateMapper getMapper();
