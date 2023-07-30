@@ -48,9 +48,10 @@ public class SchematicPartParser extends CompositeParser {
 				var builder = optBuilder.get();
 				builder.id(id);
 				if (stateOpt.isPresent() && stateOpt.get() instanceof Composite upgradeable) {
-					builder.addSlotContainer(upgradeable.getSlotContainer().copy());
+					new SlotContainerParser(upgradeable, new SlotParser(new StateParser(supplier)), new CompositeParser(supplier))
+							.parse(compound)
+							.ifPresent(builder::addSlotContainer);
 				}
-				parseUpgrades(builder::addUpgrade, compound);
 				if (compound.contains(TYPE_IDENTIFIER)) {
 					builder.type(Type.of(compound.getString(TYPE_IDENTIFIER)));
 				}
