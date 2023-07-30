@@ -137,7 +137,7 @@ public class SlotContainerParser implements CompoundParser<SlotContainer> {
 				.map(NbtCompound.class::cast)
 				.map(slotParser::parse)
 				.flatMap(Optional::stream)
-				.sorted(Comparator.comparingInt(Slot::index).reversed())
+				.sorted(Comparator.comparingInt(Slot::index))
 				.collect(Collectors.toList());
 		return Optional.of(new SlotContainer(slots));
 	}
