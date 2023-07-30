@@ -1,17 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.core.registry.StateFinder;
-import com.sigmundgranaas.forgero.core.state.State;
-
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.registry.StateFinder;
+import com.sigmundgranaas.forgero.core.state.State;
+
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 
 
 public class CompositeParser implements CompoundParser<State> {
@@ -37,7 +37,7 @@ public class CompositeParser implements CompoundParser<State> {
 		return new ConstructParser(supplier).parse(compound);
 	}
 
-	protected void parseParts(Consumer<State> partConsumer, NbtCompound compound) {
+	public void parseParts(Consumer<State> partConsumer, NbtCompound compound) {
 		if (compound.contains(NbtConstants.INGREDIENTS_IDENTIFIER)) {
 			parseEntries(compound.getList(NbtConstants.INGREDIENTS_IDENTIFIER, NbtElement.COMPOUND_TYPE)).forEach(partConsumer);
 		}
@@ -46,7 +46,7 @@ public class CompositeParser implements CompoundParser<State> {
 		}
 	}
 
-	protected void parseUpgrades(Consumer<State> partConsumer, NbtCompound compound) {
+	public void parseUpgrades(Consumer<State> partConsumer, NbtCompound compound) {
 		if (compound.contains(NbtConstants.UPGRADES_IDENTIFIER)) {
 			parseEntries(compound.getList(NbtConstants.UPGRADES_IDENTIFIER, NbtElement.COMPOUND_TYPE)).forEach(partConsumer);
 		}
@@ -55,7 +55,7 @@ public class CompositeParser implements CompoundParser<State> {
 		}
 	}
 
-	private List<State> parseEntries(List<NbtElement> elements) {
+	public List<State> parseEntries(List<NbtElement> elements) {
 		return elements
 				.stream()
 				.map(this::parseEntry)
@@ -63,7 +63,7 @@ public class CompositeParser implements CompoundParser<State> {
 				.toList();
 	}
 
-	private Optional<State> parseEntry(NbtElement element) {
+	public Optional<State> parseEntry(NbtElement element) {
 		if (element.getType() == NbtElement.STRING_TYPE) {
 			return supplier.find(element.asString());
 		} else if (element.getType() == NbtElement.COMPOUND_TYPE) {
@@ -76,7 +76,7 @@ public class CompositeParser implements CompoundParser<State> {
 		return Optional.empty();
 	}
 
-	private Optional<State> parseCompound(NbtCompound compound, Function<String, Optional<State>> supplier) {
+	public Optional<State> parseCompound(NbtCompound compound, Function<String, Optional<State>> supplier) {
 		if (compound.contains(NbtConstants.STATE_TYPE_IDENTIFIER)) {
 			if (compound.getString(NbtConstants.STATE_TYPE_IDENTIFIER).equals(NbtConstants.STATE_IDENTIFIER) && !compound.contains(CONDITIONS_IDENTIFIER)) {
 				return supplier.apply(compound.getString(NbtConstants.ID_IDENTIFIER));

@@ -47,6 +47,11 @@ class MutableStateService implements StateService {
 	}
 
 	@Override
+	public ItemStack update(State state, ItemStack stack) {
+		return stateService.update(state, stack);
+	}
+
+	@Override
 	public boolean isInitialized() {
 		return stateService.isInitialized();
 	}

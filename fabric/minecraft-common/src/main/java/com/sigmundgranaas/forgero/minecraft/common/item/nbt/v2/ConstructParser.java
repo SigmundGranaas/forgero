@@ -25,8 +25,11 @@ public class ConstructParser extends CompositeParser {
 		if (compound.contains(NbtConstants.ID_IDENTIFIER)) {
 			var id = compound.getString(NbtConstants.ID_IDENTIFIER);
 			var stateOpt = supplier.find(id);
+
 			if (stateOpt.isPresent() && stateOpt.get() instanceof Construct construct) {
-				builder = Construct.builder(construct.getSlotContainer().copy());
+				var container = new SlotContainerParser(construct, new SlotParser(new StateParser(supplier)), new CompositeParser(supplier))
+						.parse(compound);
+				builder = Construct.builder(container.get());
 			} else if (ForgeroStateRegistry.CONTAINER_TO_STATE.containsKey(id)) {
 				return supplier.find(ForgeroStateRegistry.CONTAINER_TO_STATE.get(id));
 			} else {
@@ -48,8 +51,6 @@ public class ConstructParser extends CompositeParser {
 		}
 
 		parseParts(builder::addIngredient, compound);
-
-		parseUpgrades(builder::addUpgrade, compound);
 
 		return Optional.of(builder.build());
 	}

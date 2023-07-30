@@ -42,6 +42,11 @@ public class UninitializedStateService implements StateService {
 	}
 
 	@Override
+	public ItemStack update(State state, ItemStack stack) {
+		return stack;
+	}
+
+	@Override
 	public boolean isInitialized() {
 		return false;
 	}
