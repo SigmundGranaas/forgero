@@ -8,8 +8,8 @@
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 4
+        "operation": "MULTIPLICATION",
+        "value": 2
       },
       {
         "id": "schematic-attack_speed-composite",

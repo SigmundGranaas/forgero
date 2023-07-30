@@ -62,14 +62,6 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
-      },
-      {
-        "id": "schematic-attack_speed-composite",
-        "type": "ATTACK_SPEED",
-        "order": "END",
-        "context": "COMPOSITE",
-        "operation": "FORCE",
-        "value": -3
       }
     ]
   },

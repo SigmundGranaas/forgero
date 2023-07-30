@@ -9,7 +9,7 @@
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 0
       },
       {
         "id": "schematic-attack_speed-composite",
