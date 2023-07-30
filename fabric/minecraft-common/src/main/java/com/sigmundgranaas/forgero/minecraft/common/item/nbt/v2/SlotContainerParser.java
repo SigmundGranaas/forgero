@@ -88,10 +88,8 @@ public class SlotContainerParser implements CompoundParser<SlotContainer> {
 		}
 		boolean isLegacy = false;
 		if (compound.contains(NbtConstants.UPGRADES_IDENTIFIER)) {
-			isLegacy = compound.getList(NbtConstants.UPGRADES_IDENTIFIER, NbtElement.COMPOUND_TYPE).stream().anyMatch(this::isLegacy);
-		}
-		if (compound.contains(NbtConstants.UPGRADES_IDENTIFIER)) {
-			isLegacy = compound.getList(NbtConstants.UPGRADES_IDENTIFIER, NbtElement.STRING_TYPE).stream().anyMatch(this::isLegacy);
+			isLegacy = compound.getList(NbtConstants.UPGRADES_IDENTIFIER, NbtElement.COMPOUND_TYPE).stream().anyMatch(this::isLegacy)
+					|| compound.getList(NbtConstants.UPGRADES_IDENTIFIER, NbtElement.STRING_TYPE).stream().anyMatch(this::isLegacy);
 		}
 		return isLegacy;
 	}
