@@ -5,13 +5,6 @@
   "properties": {
     "attributes": [
       {
-        "id": "schematic-rarity-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0
-      },
-      {
         "id": "schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "context": "COMPOSITE",

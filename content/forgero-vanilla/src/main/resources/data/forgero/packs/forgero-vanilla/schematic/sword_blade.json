@@ -54,13 +54,6 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
-      },
-      {
-        "id": "schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2
       }
     ]
   },

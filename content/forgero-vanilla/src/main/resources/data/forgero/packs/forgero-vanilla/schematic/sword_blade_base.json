@@ -71,6 +71,11 @@
             "id": "schematic-attack_speed-composite",
             "type": "ATTACK_SPEED",
             "value": -4
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2
           }
         ]
       }
