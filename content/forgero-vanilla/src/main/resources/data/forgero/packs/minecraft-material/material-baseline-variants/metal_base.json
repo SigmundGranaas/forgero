@@ -42,12 +42,12 @@
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 0
+            "value": 50
           },
           {
             "id": "metal-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 1.6
+            "value": 2
           }
         ]
       },
@@ -66,7 +66,7 @@
             "id": "metal-weight-upgrade",
             "type": "WEIGHT",
             "category": "ALL",
-            "value": 3
+            "value": 10
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",
@@ -78,7 +78,7 @@
             "id": "metal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "category": "OFFENSIVE",
-            "value": 1.0
+            "value": 0.5
           },
           {
             "id": "metal-durability-offensive-upgrade",

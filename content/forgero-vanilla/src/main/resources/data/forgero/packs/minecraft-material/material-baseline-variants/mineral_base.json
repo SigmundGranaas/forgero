@@ -27,7 +27,7 @@
           {
             "id": "mineral-durability-composite",
             "type": "DURABILITY",
-            "value": 4783
+            "value": 1551
           },
           {
             "id": "mineral-attack-damage-composite",
@@ -42,12 +42,12 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 40
           },
           {
             "id": "mineral-attack-speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 1
+            "value": 2
           }
         ]
       },

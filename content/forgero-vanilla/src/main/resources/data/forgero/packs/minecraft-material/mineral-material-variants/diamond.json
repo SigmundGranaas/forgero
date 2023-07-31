@@ -12,41 +12,6 @@
         "context": "COMPOSITE",
         "order": "BASE",
         "attributes": [
-          {
-            "id": "mineral-rarity-composite",
-            "type": "RARITY",
-            "value": 80
-          },
-          {
-            "id": "mineral-mining-level-composite",
-            "type": "MINING_LEVEL",
-            "value": 3.0
-          },
-          {
-            "id": "mineral-mining-speed-composite",
-            "type": "MINING_SPEED",
-            "value": 8
-          },
-          {
-            "id": "mineral-durability-composite",
-            "type": "DURABILITY",
-            "value": 1551
-          },
-          {
-            "id": "mineral-attack-damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 5
-          },
-          {
-            "id": "mineral-armor-composite",
-            "type": "ARMOR",
-            "value": 0
-          },
-          {
-            "id": "mineral-weight-composite",
-            "type": "WEIGHT",
-            "value": 0
-          }
         ]
       },
       {

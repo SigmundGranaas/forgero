@@ -37,7 +37,7 @@
           {
             "id": "stone-weight-composite",
             "type": "WEIGHT",
-            "value": 0
+            "value": 30
           },
           {
             "id": "stone-armor-composite",
@@ -47,50 +47,55 @@
           {
             "id": "stone-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": 1.8
+            "value": 2
           }
         ]
       },
       {
         "context": "UPGRADE",
         "order": "BASE",
-        "operation": "ADDITION",
         "attributes": [
           {
             "id": "stone-rarity-upgrade",
             "type": "RARITY",
+            "operation": "ADDITION",
             "category": "ALL",
             "value": 2
           },
           {
             "id": "stone-weight-upgrade",
             "type": "WEIGHT",
+            "operation": "ADDITION",
             "category": "ALL",
-            "value": 3
+            "value": 6
           },
           {
             "id": "stone-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.3
           },
           {
             "id": "stone_mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.5
+            "value": 0
           },
           {
             "id": "stone-durability-offensive-upgrade",
             "type": "DURABILITY",
+            "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": 30
+            "value": 0.3
           },
           {
             "id": "stone-durability-utility-upgrade",
             "type": "DURABILITY",
+            "operation": "MULTIPLICATION",
             "category": "UTILITY",
-            "value": 10
+            "value": 0.1
           }
         ]
       }
