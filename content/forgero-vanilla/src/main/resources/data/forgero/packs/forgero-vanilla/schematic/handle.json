@@ -51,14 +51,14 @@
         "type": "RARITY",
         "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 25
+        "value": 10
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 0
       },
       {
         "id": "schematic-durability-composite",
@@ -72,7 +72,7 @@
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0
+        "value": 0.5
       }
     ]
   },

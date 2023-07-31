@@ -90,7 +90,7 @@
             "id": "metal-durability-utility-upgrade",
             "type": "DURABILITY",
             "category": "UTILITY",
-            "value": 50
+            "value": 60
           }
         ]
       }

@@ -42,7 +42,7 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 40
+            "value": 50
           },
           {
             "id": "mineral-attack-speed-composite",

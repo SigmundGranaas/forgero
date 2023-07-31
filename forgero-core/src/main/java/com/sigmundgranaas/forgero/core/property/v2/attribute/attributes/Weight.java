@@ -47,16 +47,7 @@ public class Weight implements Attribute {
 	}
 
 	public float reduceAttackSpeed(float speed) {
-		if (ForgeroConfigurationLoader.configuration.weightReducesAttackSpeed && ForgeroConfigurationLoader.configuration.weightAttackSpeedReductionScaler != 0) {
-			float scaler = Math.max(0, Math.min(ForgeroConfigurationLoader.configuration.weightAttackSpeedReductionScaler, 100)); // Clamp scaler value between 0 and 100
-			long negatedValue = Math.abs((int) this.value - 100);
-			var percentage = (float) (Math.min(Math.max(0.1, (float) negatedValue / 100), 1));
-			percentage = 1 - ((1 - percentage) * (scaler / 100)); // Apply scaler to reduction
-			return (percentage * (speed + 4)) - 4;
-		} else {
-			return speed;
-		}
-
+		return speed - (this.value / 100);
 	}
 
 	public float reduceMiningSpeed(float speed) {
