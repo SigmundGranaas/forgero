@@ -54,6 +54,14 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 15
       }
     ]
   },

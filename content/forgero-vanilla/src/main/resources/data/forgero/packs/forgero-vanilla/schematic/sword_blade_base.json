@@ -8,11 +8,6 @@
         "operation": "ADDITION",
         "order": "BASE",
         "attributes": [
-          {
-            "id": "schematic-rarity-local",
-            "type": "RARITY",
-            "value": 10
-          }
         ]
       },
       {

@@ -64,6 +64,14 @@
         "value": 25
       },
       {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 15
+      },
+      {
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "END",
