@@ -30,6 +30,9 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	private final Identifier id;
 	private final StateService service;
 
+	private final Integer baseIndex = 1;
+	private final Integer additionIndex = 2;
+
 	public GemUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result, StateService service) {
 		this.id = id;
 		this.base = base;
@@ -41,7 +44,7 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 
 	@Override
 	public boolean matches(Inventory inventory, World world) {
-		if (this.base.test(inventory.getStack(0)) && this.addition.test(inventory.getStack(1))) {
+		if (this.base.test(inventory.getStack(baseIndex)) && this.addition.test(inventory.getStack(additionIndex))) {
 			var base = base(inventory);
 			var addition = addition(inventory);
 			if (base.isPresent() && addition.isPresent()) {
@@ -53,12 +56,12 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	}
 
 	private Optional<LeveledState> base(Inventory inventory) {
-		var target = service.convert(inventory.getStack(0));
+		var target = service.convert(inventory.getStack(baseIndex));
 		return target.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
 	}
 
 	private Optional<LeveledState> addition(Inventory inventory) {
-		var addition = service.convert(inventory.getStack(1));
+		var addition = service.convert(inventory.getStack(additionIndex));
 		return addition.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
 	}
 
