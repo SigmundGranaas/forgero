@@ -31,6 +31,9 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 	private final StateService service;
 	private final Identifier id;
 
+	private final Integer baseIndex = 1;
+	private final Integer additionIndex = 2;
+
 	public StateUpgradeRecipe(StateService service, Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
 		this.service = service;
 		this.id = id;
@@ -41,14 +44,11 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 
 	@Override
 	public boolean matches(Inventory inventory, World world) {
-		if (inventory.containsAny(ItemStack::isEmpty)) {
-			return false;
-		}
-		if (this.base.test(inventory.getStack(0)) && this.addition.test(inventory.getStack(1))) {
-			var originStateOpt = service.convert(inventory.getStack(0))
+		if (this.base.test(inventory.getStack(baseIndex)) && this.addition.test(inventory.getStack(additionIndex))) {
+			var originStateOpt = service.convert(inventory.getStack(baseIndex))
 					.filter(Composite.class::isInstance)
 					.map(Composite.class::cast);
-			var upgradeOpt = service.convert(inventory.getStack(1));
+			var upgradeOpt = service.convert(inventory.getStack(additionIndex));
 			if (originStateOpt.isPresent() && upgradeOpt.isPresent()) {
 				return originStateOpt.get().canUpgrade(upgradeOpt.get());
 			}
@@ -58,16 +58,16 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 
 	@Override
 	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
-		var originStateOpt = service.convert(inventory.getStack(0));
-		var upgradeOpt = service.convert(inventory.getStack(1));
+		var originStateOpt = service.convert(inventory.getStack(baseIndex));
+		var upgradeOpt = service.convert(inventory.getStack(additionIndex));
 		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
 			var output = getOutput(registryManager).copy();
-			output.setNbt(inventory.getStack(0).getOrCreateNbt().copy());
+			output.setNbt(inventory.getStack(baseIndex).getOrCreateNbt().copy());
 			output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
 			return output;
 		}
-		return inventory.getStack(0);
+		return inventory.getStack(baseIndex);
 	}
 
 
