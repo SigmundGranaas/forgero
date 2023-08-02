@@ -1,27 +1,27 @@
 {
   "type": "STONE",
   "name": "diorite",
-  "parent": "default_stone",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:diorite"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "stone-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 14
+        "attributes": [
+        ]
       },
       {
-        "id": "stone-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 120.0
+        "context": "UPGRADE",
+        "attributes": [
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

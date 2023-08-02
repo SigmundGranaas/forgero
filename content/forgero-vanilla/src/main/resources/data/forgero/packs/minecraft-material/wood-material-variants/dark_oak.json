@@ -1,77 +1,27 @@
 {
   "type": "WOOD",
   "name": "dark_oak",
-  "parent": "wood",
+  "parent": "wood_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:dark_oak_planks"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "wood-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 15
-      },
-      {
-        "id": "wood-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2.2
-      },
-      {
-        "id": "wood-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 80.0
-      },
-      {
-        "id": "wood-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2.2
-      },
-      {
-        "id": "wood-attack_speed-utility-upgrade",
-        "context": "UPGRADE",
-        "type": "ATTACK_DAMAGE",
         "order": "BASE",
-        "category": "OFFENSIVE",
         "operation": "ADDITION",
-        "value": 0.3
+        "attributes": [
+        ]
       },
       {
-        "id": "wood-mining_speed-offensive-upgrade",
         "context": "UPGRADE",
-        "type": "MINING_SPEED",
-        "order": "BASE",
-        "category": "OFFENSIVE",
-        "operation": "ADDITION",
-        "value": 0.1
-      },
-      {
-        "id": "wood-attack_speed-utility-upgrade",
-        "context": "UPGRADE",
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "ADDITION",
-        "value": 0.1
-      },
-      {
-        "id": "wood-durability-utility-upgrade",
-        "context": "UPGRADE",
-        "type": "DURABILITY",
-        "order": "BASE",
-        "category": "UTILITY",
-        "operation": "MULTIPLICATION",
-        "value": 1.05
+        "attributes": [
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

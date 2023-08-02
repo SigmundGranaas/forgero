@@ -59,21 +59,24 @@
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
+        "order": "BASE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.2
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0
+        "value": 0.3
       },
       {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0
+        "value": 0.2
       }
     ]
   },

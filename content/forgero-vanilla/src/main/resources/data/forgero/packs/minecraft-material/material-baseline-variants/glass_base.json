@@ -10,48 +10,110 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "type": "DURABILITY",
-            "value": 10
+            "id": "glass-rarity-composite",
+            "type": "RARITY",
+            "value": 20
           },
           {
+            "id": "glass-durability-composite",
+            "type": "DURABILITY",
+            "value": 20
+          },
+          {
+            "id": "glass-weight-composite",
             "type": "WEIGHT",
-            "value": 5
+            "value": 10
           }
         ]
       },
       {
         "context": "UPGRADE",
-        "order": "BASE",
         "attributes": [
           {
+            "id": "glass-rarity-upgrade",
             "type": "RARITY",
+            "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
             "value": 40
           },
           {
+            "id": "glass-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "glass-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "glass-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.5
+            "value": 0
           },
           {
-            "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
+            "id": "glass-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.9
+            "value": 0
           },
           {
+            "id": "glass-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "glass-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 100
+            "value": 0
           },
           {
+            "id": "glass-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.2
+            "value": 0
+          },
+          {
+            "id": "glass-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "glass-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "glass-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "glass-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "MULTIPLICATION",
+            "category": "UTILITY",
+            "value": 0
           }
         ]
       }

@@ -26,9 +26,14 @@
             "value": 1
           },
           {
+            "id": "schematic-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 0
+          },
+          {
             "id": "schematic-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 1
+            "value": 0
           },
           {
             "id": "schematic-attack_speed-composite",

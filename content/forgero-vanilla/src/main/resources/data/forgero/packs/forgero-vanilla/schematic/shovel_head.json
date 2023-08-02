@@ -68,8 +68,8 @@
         "type": "RARITY",
         "order": "BASE",
         "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 15
+        "operation": "MULTIPLICATION",
+        "value": 0.2
       }
     ]
   },

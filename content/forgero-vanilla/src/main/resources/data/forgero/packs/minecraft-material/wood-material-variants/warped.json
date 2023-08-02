@@ -1,20 +1,27 @@
 {
   "type": "WOOD",
   "name": "warped",
-  "parent": "wood",
+  "parent": "wood_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:warped_planks"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "wood-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 20
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

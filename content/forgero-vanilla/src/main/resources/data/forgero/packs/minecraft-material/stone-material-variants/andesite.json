@@ -1,41 +1,27 @@
 {
   "type": "STONE",
   "name": "andesite",
-  "parent": "default_stone",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:andesite"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "stone-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 13
+        "attributes": [
+        ]
       },
       {
-        "id": "stone-mining-speed-composite",
-        "type": "MINING_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "id": "stone-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 80.0
-      },
-      {
-        "id": "stone-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2.7
+        "context": "UPGRADE",
+        "attributes": [
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

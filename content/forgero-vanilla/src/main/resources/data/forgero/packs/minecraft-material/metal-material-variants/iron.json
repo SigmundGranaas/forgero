@@ -8,13 +8,6 @@
   },
   "properties": {
     "attributes": [
-      {
-        "id": "metal-rarity-composite",
-        "type": "RARITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 40
-      }
     ]
   },
   "palette": {

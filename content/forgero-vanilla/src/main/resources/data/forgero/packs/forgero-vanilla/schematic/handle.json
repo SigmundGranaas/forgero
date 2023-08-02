@@ -58,8 +58,8 @@
         "type": "RARITY",
         "order": "BASE",
         "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 10
+        "operation": "MULTIPLICATION",
+        "value": 0.2
       },
       {
         "id": "schematic-durability-composite",
@@ -73,7 +73,7 @@
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 0.8
       }
     ]
   },

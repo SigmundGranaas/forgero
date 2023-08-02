@@ -52,11 +52,7 @@
         "operation": "ADDITION",
         "order": "BASE",
         "attributes": [
-          {
-            "id": "schematic-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "value": 0
-          }
+
         ]
       }
     ]

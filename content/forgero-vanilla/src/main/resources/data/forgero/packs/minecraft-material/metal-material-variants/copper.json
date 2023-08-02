@@ -17,26 +17,6 @@
             "id": "metal-rarity-composite",
             "type": "RARITY",
             "value": 30
-          },
-          {
-            "id": "metal-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "value": 2.0
-          },
-          {
-            "id": "metal-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "value": 5
-          },
-          {
-            "id": "metal-durability-composite",
-            "type": "DURABILITY",
-            "value": 200
-          },
-          {
-            "id": "metal-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 2.7
           }
         ]
       }

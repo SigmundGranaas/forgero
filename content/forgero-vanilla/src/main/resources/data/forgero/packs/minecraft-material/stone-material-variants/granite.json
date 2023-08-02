@@ -1,41 +1,27 @@
 {
   "type": "STONE",
   "name": "granite",
-  "parent": "default_stone",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:granite"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "stone-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 12
+        "attributes": [
+        ]
       },
       {
-        "id": "stone-mining-speed-composite",
-        "type": "MINING_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.8
-      },
-      {
-        "id": "stone-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 120.0
-      },
-      {
-        "id": "stone-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2.7
+        "context": "UPGRADE",
+        "attributes": [
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

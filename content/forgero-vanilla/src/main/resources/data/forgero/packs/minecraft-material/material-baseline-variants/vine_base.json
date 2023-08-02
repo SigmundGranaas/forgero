@@ -1,6 +1,6 @@
 {
   "type": "PLANT",
-  "name": "vines_base",
+  "name": "vine_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -12,17 +12,17 @@
           {
             "id": "vine-rarity-composite",
             "type": "RARITY",
-            "value": 5
+            "value": 15
           },
           {
             "id": "vine-durability-composite",
             "type": "DURABILITY",
-            "value": 20
+            "value": 50
           },
           {
             "id": "vine-weight-composite",
             "type": "WEIGHT",
-            "value": 2
+            "value": 30
           }
         ]
       },
@@ -35,39 +35,85 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 40
           },
           {
-            "id": "vine-durability-offensive",
-            "type": "DURABILITY",
+            "id": "vine-weight-upgrade",
+            "type": "WEIGHT",
             "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "vine-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "vine-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "vine-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "vine-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
             "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": 0.4
+            "value": 0
           },
           {
-            "id": "vine-durability-utility",
+            "id": "vine-durability-offensive-upgrade",
             "type": "DURABILITY",
-            "order": "BASE",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 50
+            "value": 0
           },
           {
-            "id": "vine-attack_speed-utility",
+            "id": "vine-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
-            "order": "BASE",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.2
+            "value": 0
           },
           {
-            "id": "vine-mining_speed-utility",
+            "id": "vine-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "vine-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
-            "order": "MIDDLE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "vine-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "vine-durability-utility-upgrade",
+            "type": "DURABILITY",
             "operation": "MULTIPLICATION",
             "category": "UTILITY",
-            "value": 1.02
+            "value": 0
           }
         ]
       }

@@ -14,14 +14,9 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "metal-rarity-composite",
-            "type": "RARITY",
-            "value": 100
-          },
-          {
-            "id": "metal-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "value": 4.0
+            "id": "metal-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 6
           },
           {
             "id": "metal-mining_speed-composite",
@@ -29,68 +24,35 @@
             "value": 9.0
           },
           {
+            "id": "metal-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 4.0
+          },
+          {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
             "value": 2021
           },
           {
-            "id": "metal-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 6
-          },
-          {
-            "id": "metal-armor-composite",
-            "type": "ARMOR",
-            "value": 6
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "value": 100
           },
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
             "value": 70
+          },
+          {
+            "id": "metal-armor-composite",
+            "type": "ARMOR",
+            "value": 6
           }
         ]
       },
       {
         "context": "UPGRADE",
-        "order": "BASE",
-        "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "metal-rarity-upgrade",
-            "type": "RARITY",
-            "category": "ALL",
-            "value": 50
-          },
-          {
-            "id": "metal-weight-upgrade",
-            "type": "WEIGHT",
-            "category": "ALL",
-            "value": 4
-          },
-          {
-            "id": "metal-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "category": "OFFENSIVE",
-            "value": 2
-          },
-          {
-            "id": "metal-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "category": "OFFENSIVE",
-            "value": 3
-          },
-          {
-            "id": "metal-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "category": "OFFENSIVE",
-            "value": 1000
-          },
-          {
-            "id": "metal-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "category": "UTILITY",
-            "value": 500
-          }
         ]
       }
     ],

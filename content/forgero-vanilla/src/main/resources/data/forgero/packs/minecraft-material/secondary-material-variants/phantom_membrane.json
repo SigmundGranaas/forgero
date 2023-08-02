@@ -1,6 +1,7 @@
 {
   "type": "LEATHER",
   "name": "phantom_membrane",
+  "parent": "leather_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:phantom_membrane"
@@ -12,48 +13,11 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "type": "RARITY",
-            "value": 40
-          },
-          {
-            "type": "DURABILITY",
-            "value": 100
-          },
-          {
-            "type": "WEIGHT",
-            "value": 1
-          }
         ]
       },
       {
         "context": "UPGRADE",
-        "order": "BASE",
         "attributes": [
-          {
-            "type": "RARITY",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 20
-          },
-          {
-            "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 0.2
-          },
-          {
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 200
-          },
-          {
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0.4
-          }
         ]
       }
     ],

@@ -7,21 +7,21 @@
     "id": "minecraft:birch_planks"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "wood-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 5
+        "attributes": [
+        ]
       },
       {
-        "id": "wood-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 35
+        "context": "UPGRADE",
+        "attributes": [
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

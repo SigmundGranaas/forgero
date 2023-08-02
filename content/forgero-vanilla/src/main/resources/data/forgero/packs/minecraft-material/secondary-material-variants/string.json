@@ -1,6 +1,7 @@
 {
   "type": "STRING",
   "name": "string",
+  "parent": "string_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:string"
@@ -12,58 +13,12 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "type": "RARITY",
-            "value": 5
-          },
-          {
-            "type": "DURABILITY",
-            "value": 10
-          },
-          {
-            "type": "WEIGHT",
-            "value": 2
-          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
-          {
-            "type": "RARITY",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 5
-          },
-          {
-            "type": "DURABILITY",
-            "order": "BASE",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 0.4
-          },
-          {
-            "type": "DURABILITY",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 50
-          },
-          {
-            "type": "ATTACK_SPEED",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0.2
-          },
-          {
-            "type": "MINING_SPEED",
-            "order": "MIDDLE",
-            "operation": "MULTIPLICATION",
-            "category": "UTILITY",
-            "value": 1.05
-          }
+
         ]
       }
     ],
