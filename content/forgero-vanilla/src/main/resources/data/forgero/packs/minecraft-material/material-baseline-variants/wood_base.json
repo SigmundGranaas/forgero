@@ -37,12 +37,12 @@
           {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 5
+            "value": 10
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 30
+            "value": 20
           },
           {
             "id": "wood-armor-composite",
@@ -60,7 +60,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 10
           },
           {
             "id": "wood-weight-upgrade",
@@ -68,7 +68,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 10
           },
           {
             "id": "wood-attack_speed-offensive-upgrade",
@@ -82,14 +82,14 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 1
           },
           {
             "id": "wood-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 5
+            "value": 1
           },
           {
             "id": "wood-mining_level-offensive-upgrade",
@@ -102,8 +102,8 @@
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
+            "category": "OFFENSIVE",
+            "value": 25
           },
           {
             "id": "wood-attack_speed-utility-upgrade",
@@ -136,9 +136,9 @@
           {
             "id": "wood-durability-utility-upgrade",
             "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 25
           }
         ]
       }

@@ -13,11 +13,57 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "vine-rarity-composite",
+            "type": "RARITY",
+            "value": 30
+          },
+          {
+            "id": "vine-durability-composite",
+            "type": "DURABILITY",
+            "value": 80
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "vine-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 30
+          },
+          {
+            "id": "vine-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 40
+          },
+          {
+            "id": "vine-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "vine-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.5
+          },
+          {
+            "id": "vine-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 40
+          }
         ]
       }
     ],

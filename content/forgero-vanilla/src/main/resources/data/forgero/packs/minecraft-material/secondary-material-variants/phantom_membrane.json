@@ -13,11 +13,62 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "leather-rarity-composite",
+            "type": "RARITY",
+            "value": 50
+          },
+          {
+            "id": "leather-durability-composite",
+            "type": "DURABILITY",
+            "value": 150
+          },
+          {
+            "id": "leather-weight-composite",
+            "type": "WEIGHT",
+            "value": -20
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "leather-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": -10
+          },
+          {
+            "id": "leather-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 75
+          },
+          {
+            "id": "leather-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.5
+          },
+          {
+            "id": "leather-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "leather-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 75
+          }
         ]
       }
     ],

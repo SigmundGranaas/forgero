@@ -38,7 +38,7 @@
         "upgrade_type": "SMITHING",
         "description": "grip",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
         "type": "MATERIAL",
         "tier": 1

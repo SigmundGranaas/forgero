@@ -12,17 +12,17 @@
           {
             "id": "string-rarity-composite",
             "type": "RARITY",
-            "value": 20
+            "value": 10
           },
           {
             "id": "string-durability-composite",
             "type": "DURABILITY",
-            "value": 20
+            "value": 50
           },
           {
             "id": "string-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 6
           }
         ]
       },
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 15
           },
           {
             "id": "string-weight-upgrade",
@@ -43,7 +43,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 3
           },
           {
             "id": "string-attack_speed-offensive-upgrade",
@@ -57,7 +57,7 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": -1
           },
           {
             "id": "string-mining_speed-offensive-upgrade",
@@ -77,15 +77,15 @@
             "id": "string-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
+            "category": "OFFENSIVE",
+            "value": 25
           },
           {
             "id": "string-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 0.1
           },
           {
             "id": "string-attack_damage-utility-upgrade",
@@ -99,7 +99,7 @@
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 0.1
           },
           {
             "id": "string-mining_level-utility-upgrade",
@@ -111,9 +111,9 @@
           {
             "id": "string-durability-utility-upgrade",
             "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 25
           }
         ]
       }

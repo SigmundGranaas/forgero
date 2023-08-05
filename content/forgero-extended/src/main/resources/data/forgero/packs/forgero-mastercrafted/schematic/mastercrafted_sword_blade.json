@@ -49,14 +49,6 @@
         ],
         "description": "scabbard",
         "type": "SECONDARY_MATERIAL"
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "trinket",
-        "type": "LEATHER"
       }
     ]
   },
@@ -93,13 +85,6 @@
         "operation": "ADDITION",
         "category": "LOCAL",
         "value": 75
-      },
-      {
-        "id": "mastercrafted_sword_blade_schematic-attack_speed-composite",
-        "type": "ATTACK_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0.15
       }
     ]
   },

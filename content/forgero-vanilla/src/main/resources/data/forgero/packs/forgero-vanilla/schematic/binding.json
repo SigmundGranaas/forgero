@@ -74,14 +74,20 @@
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 0.5
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 0.75
+      },
+      {
+        "id": "schematic-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "operation": "ADDITION",
+        "value": -1
       }
     ]
   },

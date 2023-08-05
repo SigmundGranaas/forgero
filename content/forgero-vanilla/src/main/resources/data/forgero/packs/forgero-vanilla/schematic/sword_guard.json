@@ -67,14 +67,14 @@
         "order": "BASE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.1
+        "value": 0.2
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.25
       },
       {
         "id": "schematic-armor-composite",
@@ -88,7 +88,7 @@
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.25
       }
     ]
   },

@@ -32,7 +32,7 @@
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 241
+            "value": 240
           },
           {
             "id": "metal-rarity-composite",
@@ -42,7 +42,7 @@
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 60
+            "value": 50
           },
           {
             "id": "metal-armor-composite",
@@ -68,7 +68,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 25
           },
           {
             "id": "metal-attack_speed-offensive-upgrade",
@@ -82,14 +82,14 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 2
           },
           {
             "id": "metal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 3
           },
           {
             "id": "metal-mining_level-offensive-upgrade",
@@ -102,8 +102,8 @@
             "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
+            "category": "OFFENSIVE",
+            "value": 120
           },
           {
             "id": "metal-attack_speed-utility-upgrade",
@@ -136,9 +136,9 @@
           {
             "id": "metal-durability-utility-upgrade",
             "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 120
           }
         ]
       }

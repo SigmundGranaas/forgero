@@ -26,16 +26,6 @@
             "value": 1
           },
           {
-            "id": "schematic-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "value": 0
-          },
-          {
-            "id": "schematic-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "value": 0
-          },
-          {
             "id": "schematic-attack_speed-composite",
             "type": "ATTACK_SPEED",
             "value": 1
@@ -58,16 +48,6 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "schematic-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "value": 0
-          },
-          {
-            "id": "schematic-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "value": 0
-          },
-          {
             "id": "schematic-attack_speed-composite",
             "type": "ATTACK_SPEED",
             "value": -4
@@ -76,6 +56,22 @@
             "id": "schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
             "value": 2
+          }
+        ]
+      },
+      {
+        "operation": "FORCE",
+        "order": "END",
+        "attributes": [
+          {
+            "id": "schematic-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 0
+          },
+          {
+            "id": "schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 0
           }
         ]
       }

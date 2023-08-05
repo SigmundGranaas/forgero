@@ -32,7 +32,7 @@
           {
             "id": "mineral-durability-composite",
             "type": "DURABILITY",
-            "value": 1551
+            "value": 1550
           },
           {
             "id": "mineral-rarity-composite",
@@ -42,7 +42,7 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 50
+            "value": 40
           },
           {
             "id": "mineral-armor-composite",
@@ -60,7 +60,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 80
           },
           {
             "id": "mineral-weight-upgrade",
@@ -68,7 +68,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 20
           },
           {
             "id": "mineral-attack_speed-offensive-upgrade",
@@ -82,28 +82,28 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 2.5
           },
           {
             "id": "mineral-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 4
           },
           {
             "id": "mineral-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 1
           },
           {
             "id": "mineral-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
+            "category": "OFFENSIVE",
+            "value": 775
           },
           {
             "id": "mineral-attack_speed-utility-upgrade",
@@ -136,9 +136,9 @@
           {
             "id": "mineral-durability-utility-upgrade",
             "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 775
           }
         ]
       }

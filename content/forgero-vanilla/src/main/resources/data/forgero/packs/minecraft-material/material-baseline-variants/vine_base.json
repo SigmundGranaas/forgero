@@ -17,12 +17,12 @@
           {
             "id": "vine-durability-composite",
             "type": "DURABILITY",
-            "value": 50
+            "value": 120
           },
           {
             "id": "vine-weight-composite",
             "type": "WEIGHT",
-            "value": 30
+            "value": 10
           }
         ]
       },
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 15
           },
           {
             "id": "vine-weight-upgrade",
@@ -43,7 +43,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 5
           },
           {
             "id": "vine-attack_speed-offensive-upgrade",
@@ -57,14 +57,14 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": -1
           },
           {
             "id": "vine-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 0.1
           },
           {
             "id": "vine-mining_level-offensive-upgrade",
@@ -77,15 +77,15 @@
             "id": "vine-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
+            "category": "OFFENSIVE",
+            "value": 60
           },
           {
             "id": "vine-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 0.1
           },
           {
             "id": "vine-attack_damage-utility-upgrade",
@@ -111,9 +111,9 @@
           {
             "id": "vine-durability-utility-upgrade",
             "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 60
           }
         ]
       }

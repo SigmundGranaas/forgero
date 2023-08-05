@@ -14,11 +14,6 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "metal-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2
-          },
-          {
             "id": "metal-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
             "value": 2
@@ -31,12 +26,12 @@
           {
             "id": "metal-mining_level-composite",
             "type": "MINING_LEVEL",
-            "value": 2
+            "value": 1
           },
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 23
+            "value": 24
           },
           {
             "id": "metal-rarity-composite",
@@ -46,7 +41,7 @@
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 90
+            "value": 80
           },
           {
             "id": "metal-armor-composite",
@@ -58,6 +53,50 @@
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "metal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 60
+          },
+          {
+            "id": "metal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "metal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "metal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 6
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 12
+          },
+          {
+            "id": "metal-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 12
+          }
         ]
       }
     ],

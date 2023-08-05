@@ -12,17 +12,17 @@
           {
             "id": "glass-rarity-composite",
             "type": "RARITY",
-            "value": 20
+            "value": 50
           },
           {
             "id": "glass-durability-composite",
             "type": "DURABILITY",
-            "value": 20
+            "value": 30
           },
           {
             "id": "glass-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 20
           }
         ]
       },
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 25
           },
           {
             "id": "glass-weight-upgrade",
@@ -43,7 +43,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 10
           },
           {
             "id": "glass-attack_speed-offensive-upgrade",
@@ -77,8 +77,8 @@
             "id": "glass-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
+            "category": "OFFENSIVE",
+            "value": 15
           },
           {
             "id": "glass-attack_speed-utility-upgrade",
@@ -111,9 +111,9 @@
           {
             "id": "glass-durability-utility-upgrade",
             "type": "DURABILITY",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 15
           }
         ]
       }
