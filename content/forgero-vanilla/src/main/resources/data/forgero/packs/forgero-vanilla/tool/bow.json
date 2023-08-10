@@ -32,14 +32,6 @@
       }
     ],
     "slots": [
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "UTILITY"
-        ],
-        "type": "STRING",
-        "tier": 1
-      }
     ]
   },
   "model": {

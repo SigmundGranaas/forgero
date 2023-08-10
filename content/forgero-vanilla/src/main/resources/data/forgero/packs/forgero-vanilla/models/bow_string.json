@@ -1,0 +1,20 @@
+ {
+  "type": "STRING",
+  "models": [
+    {
+      "name": "bow_string",
+      "template": "bow_string.png",
+      "type": "GENERATE",
+      "palette": "STRING",
+      "order": 10
+    },
+    {
+      "target": [
+        "type:BOW_LIMB",
+        "type:STRING"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "bow_string"
+    }
+  ]
+}

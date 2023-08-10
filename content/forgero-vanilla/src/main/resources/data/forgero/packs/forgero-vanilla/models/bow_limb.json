@@ -15,7 +15,7 @@
               "pull": 0.9
             }
           ],
-          "template": "shovel_head.png"
+          "template": "bow_pull_2.png"
         },
         {
           "predicate": [
@@ -24,16 +24,16 @@
               "pull": 0.6
             }
           ],
-          "template": "pickaxe_head.png"
+          "template": "bow_pull_1.png"
         },
         {
           "predicate": [
             {
               "type": "forgero:bow_pull",
-              "pull": 0.01
+              "pull": 0.1
             }
           ],
-          "template": "axe_head.png"
+          "template": "bow_pull_0.png"
         }
       ]
     },
@@ -43,13 +43,6 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "order": 25
-    },
-    {
-      "name": "bow_string",
-      "template": "bow_string.png",
-      "type": "GENERATE",
-      "palette": "STRING",
-      "order": 10
     },
     {
       "target": [
@@ -66,14 +59,6 @@
       ],
       "modelType": "UPGRADE",
       "template": "bow_handle"
-    },
-    {
-      "target": [
-        "type:STRING",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "bow_string"
     }
   ]
 }

@@ -2,25 +2,10 @@
   "type": "BOW",
   "models": [
     {
-      "name": "bow_string",
-      "type": "GENERATE",
-      "template": "bow_string.png",
-      "palette": "STRING",
-      "order": 10
-    },
-    {
       "target": [
         "type:BOW"
       ],
       "modelType": "COMPOSITE"
-    },
-    {
-      "target": [
-        "type:STRING",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "bow_string"
     }
   ]
 }
