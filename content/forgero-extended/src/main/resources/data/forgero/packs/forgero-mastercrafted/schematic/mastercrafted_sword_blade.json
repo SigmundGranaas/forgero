@@ -48,7 +48,7 @@
           "UTILITY"
         ],
         "description": "scabbard",
-        "type": "SECONDARY_MATERIAL"
+        "type": "SOFT_MATERIAL"
       }
     ]
   },
