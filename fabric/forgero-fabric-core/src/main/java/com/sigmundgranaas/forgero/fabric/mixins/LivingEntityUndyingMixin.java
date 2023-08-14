@@ -35,7 +35,7 @@ public abstract class LivingEntityUndyingMixin {
 	public abstract boolean addStatusEffect(StatusEffectInstance effect);
 
 	@Shadow
-	public abstract boolean shouldDisplaySoulSpeedEffects();
+	public abstract boolean shouldDropXp();
 
 	@Inject(method = "tryUseTotem", at = @At("HEAD"), cancellable = true)
 	public void undyingStateItem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
@@ -43,7 +43,9 @@ public abstract class LivingEntityUndyingMixin {
 			Hand[] hands = Hand.values();
 			for (Hand hand : hands) {
 				ItemStack stack = this.getStackInHand(hand);
-				var handler = StateService.INSTANCE.convert(stack).flatMap(container -> UndyingHandler.of(container, stack));
+				var handler = StateService.INSTANCE.convert(stack)
+						.filter(state -> !state.identifier().contains("totem"))
+						.flatMap(container -> UndyingHandler.of(container, stack));
 				if (handler.isPresent()) {
 					executeUndyingEffect(stack);
 					handler.get().handle();
