@@ -1,0 +1,36 @@
+{
+  "type": "GLASS",
+  "name": "obsidian",
+  "parent": "glass_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:obsidian"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "EMISSIVE",
+        "value": 4
+      }
+    ]
+  },
+  "palette": {
+    "name": "obsidian"
+  }
+}

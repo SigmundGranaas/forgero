@@ -1,0 +1,27 @@
+{
+  "type": "MINERAL",
+  "name": "echo",
+  "parent": "mineral_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:echo_shard"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "echo"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "type": "PLANT",
-  "name": "vine_base",
+  "name": "plant_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -10,17 +10,17 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "vine-rarity-composite",
+            "id": "plant-rarity-composite",
             "type": "RARITY",
             "value": 15
           },
           {
-            "id": "vine-durability-composite",
+            "id": "plant-durability-composite",
             "type": "DURABILITY",
             "value": 120
           },
           {
-            "id": "vine-weight-composite",
+            "id": "plant-weight-composite",
             "type": "WEIGHT",
             "value": 10
           }
@@ -30,7 +30,7 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "vine-rarity-upgrade",
+            "id": "plant-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -38,7 +38,7 @@
             "value": 15
           },
           {
-            "id": "vine-weight-upgrade",
+            "id": "plant-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
@@ -46,70 +46,70 @@
             "value": 5
           },
           {
-            "id": "vine-attack_speed-offensive-upgrade",
+            "id": "plant-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "vine-attack_damage-offensive-upgrade",
+            "id": "plant-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": -1
           },
           {
-            "id": "vine-mining_speed-offensive-upgrade",
+            "id": "plant-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.1
-          },
-          {
-            "id": "vine-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "vine-durability-offensive-upgrade",
+            "id": "plant-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": -1
+          },
+          {
+            "id": "plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 60
           },
           {
-            "id": "vine-attack_speed-utility-upgrade",
+            "id": "plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
           },
           {
-            "id": "vine-attack_damage-utility-upgrade",
+            "id": "plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "vine-mining_speed-utility-upgrade",
+            "id": "plant-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "vine-mining_level-utility-upgrade",
+            "id": "plant-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "vine-durability-utility-upgrade",
+            "id": "plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",

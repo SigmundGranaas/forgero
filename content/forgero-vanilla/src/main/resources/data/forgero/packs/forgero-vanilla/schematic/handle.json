@@ -38,7 +38,7 @@
         "category": [
           "UTILITY"
         ],
-        "type": "SECONDARY_MATERIAL",
+        "type": "SOFT_MATERIAL",
         "description": "grip",
         "tier": 1
       }

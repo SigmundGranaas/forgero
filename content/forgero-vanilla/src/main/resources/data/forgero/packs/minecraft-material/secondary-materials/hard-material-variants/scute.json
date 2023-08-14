@@ -1,0 +1,30 @@
+{
+  "type": "SCALE",
+  "name": "scute",
+  "parent": "leather_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:scute"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "scute"
+  }
+}

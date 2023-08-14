@@ -1,7 +1,7 @@
 {
   "type": "PLANT",
   "name": "twisting_vines",
-  "parent": "vine_base",
+  "parent": "plant_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:twisting_vines"
@@ -14,12 +14,12 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "vine-rarity-composite",
+            "id": "plant-rarity-composite",
             "type": "RARITY",
             "value": 30
           },
           {
-            "id": "vine-durability-composite",
+            "id": "plant-durability-composite",
             "type": "DURABILITY",
             "value": 80
           }
@@ -29,7 +29,7 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "vine-rarity-upgrade",
+            "id": "plant-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -37,28 +37,28 @@
             "value": 30
           },
           {
-            "id": "vine-durability-offensive-upgrade",
+            "id": "plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 40
           },
           {
-            "id": "vine-attack_speed-utility-upgrade",
+            "id": "plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.25
           },
           {
-            "id": "vine-attack_damage-utility-upgrade",
+            "id": "plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.5
           },
           {
-            "id": "vine-durability-utility-upgrade",
+            "id": "plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",

@@ -1,0 +1,36 @@
+{
+  "type": "GLASS",
+  "name": "crying_obsidian",
+  "parent": "glass_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:crying_obsidian"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "EMISSIVE",
+        "value": 4
+      }
+    ]
+  },
+  "palette": {
+    "name": "crying_obsidian"
+  }
+}

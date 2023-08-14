@@ -1,10 +1,10 @@
 {
-  "type": "PLANT",
-  "name": "vines",
-  "parent": "vine_base",
+  "type": "STONE",
+  "name": "blackstone",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:vine"
+    "id": "minecraft:blackstone"
   },
   "properties": {
     "grouped_attributes": [
@@ -25,6 +25,6 @@
     ]
   },
   "palette": {
-    "name": "vines"
+    "name": "blackstone"
   }
 }

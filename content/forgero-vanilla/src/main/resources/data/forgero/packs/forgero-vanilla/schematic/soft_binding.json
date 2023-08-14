@@ -16,7 +16,7 @@
             "id": "this"
           },
           {
-            "type": "SECONDARY_MATERIAL",
+            "type": "SOFT_MATERIAL",
             "unique": true,
             "amount": 1
           }
@@ -28,7 +28,7 @@
         "id": "this"
       },
       {
-        "type": "SECONDARY_MATERIAL",
+        "type": "SOFT_MATERIAL",
         "unique": true
       }
     ],

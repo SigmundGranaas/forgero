@@ -1,7 +1,7 @@
 {
   "type": "PLANT",
   "name": "weeping_vines",
-  "parent": "vines",
+  "parent": "plant_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:weeping_vines"
@@ -14,12 +14,12 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "vine-rarity-composite",
+            "id": "plant-rarity-composite",
             "type": "RARITY",
             "value": 30
           },
           {
-            "id": "vine-durability-composite",
+            "id": "plant-durability-composite",
             "type": "DURABILITY",
             "value": 110
           }
@@ -29,7 +29,7 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "vine-rarity-upgrade",
+            "id": "plant-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -37,35 +37,35 @@
             "value": 30
           },
           {
-            "id": "vine-mining_speed-utility-upgrade",
+            "id": "plant-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.25
           },
           {
-            "id": "vine-mining_level-utility-upgrade",
+            "id": "plant-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 1
           },
           {
-            "id": "vine-durability-offensive-upgrade",
+            "id": "plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 55
           },
           {
-            "id": "vine-attack_speed-utility-upgrade",
+            "id": "plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
           },
           {
-            "id": "vine-durability-utility-upgrade",
+            "id": "plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",

@@ -1,0 +1,21 @@
+{
+  "parent": "SECONDARY_MATERIAL",
+  "name": "HARD_MATERIAL",
+  "children": [
+    {
+      "name": "GLASS"
+    },
+    {
+      "name": "DUST"
+    },
+    {
+      "name": "SCALE"
+    },
+    {
+      "name": "BONE"
+    },
+    {
+      "name": "CRYSTALS"
+    }
+  ]
+}

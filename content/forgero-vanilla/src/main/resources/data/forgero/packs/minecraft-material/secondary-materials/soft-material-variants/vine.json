@@ -1,0 +1,30 @@
+{
+  "type": "PLANT",
+  "name": "vines",
+  "parent": "plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:vine"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "vines"
+  }
+}

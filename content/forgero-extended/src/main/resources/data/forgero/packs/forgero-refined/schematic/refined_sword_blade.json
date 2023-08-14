@@ -40,7 +40,7 @@
           "OFFENSIVE"
         ],
         "description": "sword_tip",
-        "type": "TOOL_MATERIAL",
+        "type": "MATERIAL",
         "tier": 1
       },
       {

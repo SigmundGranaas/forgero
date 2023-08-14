@@ -1,0 +1,18 @@
+{
+  "parent": "SECONDARY_MATERIAL",
+  "name": "SOFT_MATERIAL",
+  "children": [
+    {
+      "name": "LEATHER"
+    },
+    {
+      "name": "PLANT"
+    },
+    {
+      "name": "STRING"
+    },
+    {
+      "name": "SLIME"
+    }
+  ]
+}

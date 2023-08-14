@@ -1,10 +1,10 @@
 {
-  "type": "GLASS",
-  "name": "glowstone",
-  "parent": "glass_base",
+  "type": "PLANT",
+  "name": "kelp",
+  "parent": "plant_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:glowstone_dust"
+    "id": "minecraft:kelp"
   },
   "properties": {
     "grouped_attributes": [
@@ -22,15 +22,9 @@
       }
     ],
     "attributes": [
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
-      }
     ]
   },
   "palette": {
-    "name": "glowstone"
+    "name": "kelp"
   }
 }
