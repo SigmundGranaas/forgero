@@ -40,4 +40,9 @@ public interface StateItem extends State {
 	default DataContainer customData() {
 		return defaultState().customData();
 	}
+
+	@Override
+	default State strip() {
+		return defaultState();
+	}
 }

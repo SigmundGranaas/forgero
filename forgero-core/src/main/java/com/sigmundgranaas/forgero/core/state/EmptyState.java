@@ -28,4 +28,9 @@ public class EmptyState implements State {
 	public DataContainer customData(Target target) {
 		return DataContainer.empty();
 	}
+
+	@Override
+	public State strip() {
+		return this;
+	}
 }

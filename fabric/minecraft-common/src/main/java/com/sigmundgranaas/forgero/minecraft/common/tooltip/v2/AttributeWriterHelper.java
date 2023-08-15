@@ -162,7 +162,11 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writeAttributeType(String attribute) {
-		return indented(configuration.baseIndent() + 1).append(writeTranslatableAttributeType(attribute).formatted(neutral())).append(sectionSeparator().formatted(neutral()));
+		return indented(configuration.baseIndent() + 1)
+				.append(writeTranslatableAttributeType(attribute)
+						.formatted(neutral()))
+				.append(sectionSeparator()
+						.formatted(neutral()));
 	}
 
 	public MutableText writeTranslatableAttributeType(String type) {

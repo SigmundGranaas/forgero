@@ -77,6 +77,11 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	}
 
 	@Override
+	public State strip() {
+		return new SimpleState(name(), nameSpace(), type(), properties);
+	}
+
+	@Override
 	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof NameMatch matcher) {
 			return matcher.name().equals(id.name());

@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
-import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 
@@ -25,9 +25,8 @@ public class AttributeSectionWriter extends SectionWriter {
 		super(configuration);
 		this.container = container;
 		this.helper = new AttributeWriterHelper(container, configuration);
-		if (container instanceof Identifiable identifiable && ForgeroStateRegistry.STATES != null) {
-			var baseContainer = ForgeroStateRegistry.STATES.find(identifiable.identifier());
-			baseContainer.ifPresent(stateSupplier -> this.helper.setComparativeContainer(stateSupplier.get()));
+		if (container instanceof State state && ForgeroStateRegistry.STATES != null) {
+			this.helper.setComparativeContainer(state.strip());
 		}
 	}
 

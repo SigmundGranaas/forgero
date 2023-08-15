@@ -163,6 +163,17 @@ public class Construct implements Composite, ConstructedState {
 	}
 
 	@Override
+	public State strip() {
+		var builder = builder();
+		parts().stream().map(State::strip).forEach(builder::addIngredient);
+		builder.id(identifier());
+		builder.type(type());
+		builder.addSlotContainer(getSlotContainer().strip());
+
+		return builder.build();
+	}
+
+	@Override
 	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {
