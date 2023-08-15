@@ -16,17 +16,6 @@
       "order": 30
     },
     {
-      "name": "sword_blade_material_scabbard",
-      "type": "GENERATE",
-      "palette": "LEATHER",
-      "template": "sword_blade_guard.png",
-      "order": 35,
-      "offset": [
-        -2,
-        -2
-      ]
-    },
-    {
       "name": "sword_blade_dye",
       "template": "sword_blade.png",
       "type": "GENERATE",
@@ -51,16 +40,8 @@
     },
     {
       "target": [
-        "type:MATERIAL",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "sword_blade_material_scabbard"
-    },
-    {
-      "target": [
         "type:DYE",
-        "slot:2"
+        "slot:1"
       ],
       "modelType": "UPGRADE",
       "template": "sword_blade_dye"
