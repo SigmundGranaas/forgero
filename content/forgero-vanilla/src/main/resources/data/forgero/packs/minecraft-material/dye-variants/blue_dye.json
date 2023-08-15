@@ -1,0 +1,15 @@
+{
+  "type": "DYE",
+  "name": "blue_dye",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:blue_dye"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "blue_dye"
+  }
+}

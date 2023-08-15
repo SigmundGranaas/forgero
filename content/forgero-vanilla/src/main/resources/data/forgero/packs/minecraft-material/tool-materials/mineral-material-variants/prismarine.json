@@ -1,6 +1,6 @@
 {
   "type": "MINERAL",
-  "name": "prismarine",
+  "name": "prismarine_shard",
   "parent": "mineral_base",
   "container": {
     "type": "HOST",

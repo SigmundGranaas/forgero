@@ -43,7 +43,7 @@
       "type": "GENERATE",
       "palette": "TRINKET",
       "template": "sword_gem_center.png",
-      "order": 90,
+      "order": 50,
       "variants": [
         {
           "target": [
@@ -84,6 +84,43 @@
       ]
     },
     {
+      "name": "soft_binding_dye",
+      "template": "soft_binding.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 45,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ],
+          "template": "soft_axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "soft_pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "soft_hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "soft_shovel_binding.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:MATERIAL",
         "id:soft_binding-schematic"
@@ -106,6 +143,14 @@
       ],
       "modelType": "UPGRADE",
       "template": "soft_binding_gem"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "soft_binding_dye"
     }
   ]
 }

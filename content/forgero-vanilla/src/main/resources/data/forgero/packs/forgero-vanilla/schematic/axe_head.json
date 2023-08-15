@@ -46,9 +46,9 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "TRINKET",
+        "type": "DYE",
         "tier": 1
       }
     ]

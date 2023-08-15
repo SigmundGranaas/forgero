@@ -48,6 +48,14 @@
         ],
         "type": "TRINKET",
         "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "type": "DYE",
+        "tier": 1
       }
     ]
   },

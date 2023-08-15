@@ -1,7 +1,7 @@
 {
   "type": "BONE",
-  "name": "bone",
   "parent": "bone_base",
+  "name": "bone",
   "container": {
     "type": "HOST",
     "id": "minecraft:bone"

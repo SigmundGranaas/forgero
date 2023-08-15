@@ -42,14 +42,6 @@
         "description": "sword_tip",
         "type": "MATERIAL",
         "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "trinket",
-        "type": "TRINKET"
       }
     ]
   },

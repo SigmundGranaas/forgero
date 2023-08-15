@@ -39,6 +39,43 @@
       ]
     },
     {
+      "name": "binding_dye",
+      "template": "binding.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 45,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ],
+          "template": "axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding.png"
+        }
+      ]
+    },
+    {
       "name": "spiked_binding",
       "template": "spiked_binding.png",
       "type": "GENERATE",
@@ -199,6 +236,14 @@
       ],
       "modelType": "UPGRADE",
       "template": "binding_gem"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_dye"
     }
   ]
 }

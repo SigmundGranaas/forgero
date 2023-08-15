@@ -1,9 +1,4 @@
 {
   "parent": "MATERIAL",
-  "name": "SECONDARY_MATERIAL",
-  "children": [
-    {
-      "name": "DYE"
-    }
-  ]
+  "name": "SECONDARY_MATERIAL"
 }

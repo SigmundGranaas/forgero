@@ -40,13 +40,6 @@
           "OFFENSIVE"
         ],
         "type": "MATERIAL"
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "type": "TRINKET"
       }
     ]
   },

@@ -1,0 +1,15 @@
+{
+  "type": "DYE",
+  "name": "pink_dye",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:pink_dye"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "pink_dye"
+  }
+}

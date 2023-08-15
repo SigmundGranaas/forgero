@@ -51,15 +51,6 @@
         "description": "scabbard",
         "type": "LEATHER",
         "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "trinket",
-        "type": "TRINKET",
-        "tier": 1
       }
     ]
   },
