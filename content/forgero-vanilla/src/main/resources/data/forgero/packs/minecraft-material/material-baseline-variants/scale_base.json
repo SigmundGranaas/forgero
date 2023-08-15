@@ -12,17 +12,17 @@
           {
             "id": "scale-rarity-composite",
             "type": "RARITY",
-            "value": 15
+            "value": 40
           },
           {
             "id": "scale-durability-composite",
             "type": "DURABILITY",
-            "value": 120
+            "value": 70
           },
           {
             "id": "scale-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 20
           }
         ]
       },
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 40
           },
           {
             "id": "scale-weight-upgrade",
@@ -43,7 +43,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 10
           },
           {
             "id": "scale-attack_speed-offensive-upgrade",
@@ -57,35 +57,35 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": -1
+            "value": 0.5
           },
           {
             "id": "scale-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 0.5
           },
           {
             "id": "scale-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": -1
+            "value": 0
           },
           {
             "id": "scale-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 60
+            "value": 35
           },
           {
             "id": "scale-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.1
+            "value": 0
           },
           {
             "id": "scale-attack_damage-utility-upgrade",
@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 60
+            "value": 35
           }
         ]
       }

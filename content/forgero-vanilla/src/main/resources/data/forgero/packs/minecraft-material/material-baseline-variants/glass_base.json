@@ -12,17 +12,17 @@
           {
             "id": "glass-rarity-composite",
             "type": "RARITY",
-            "value": 50
+            "value": 60
           },
           {
             "id": "glass-durability-composite",
             "type": "DURABILITY",
-            "value": 30
+            "value": 1750
           },
           {
             "id": "glass-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 30
           }
         ]
       },
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 25
+            "value": 60
           },
           {
             "id": "glass-weight-upgrade",
@@ -43,7 +43,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 15
           },
           {
             "id": "glass-attack_speed-offensive-upgrade",
@@ -57,14 +57,14 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 1
           },
           {
             "id": "glass-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 1
           },
           {
             "id": "glass-mining_level-offensive-upgrade",
@@ -78,7 +78,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 15
+            "value": 875
           },
           {
             "id": "glass-attack_speed-utility-upgrade",
@@ -113,15 +113,9 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 15
+            "value": 875
           }
         ]
-      }
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
       }
     ]
   }

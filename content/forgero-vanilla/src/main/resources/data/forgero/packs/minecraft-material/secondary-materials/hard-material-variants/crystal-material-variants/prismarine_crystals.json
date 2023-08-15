@@ -19,9 +19,15 @@
         "attributes": [
         ]
       }
-    ]
-  },
-  "palette": {
-    "name": "prismarine_crystals"
+    ],
+    "features": [
+      {
+        "type": "EMISSIVE",
+        "value": 4
+      }
+    ],
+    "palette": {
+      "name": "prismarine_crystals"
+    }
   }
 }

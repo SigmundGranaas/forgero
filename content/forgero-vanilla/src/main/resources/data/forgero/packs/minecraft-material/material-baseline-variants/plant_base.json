@@ -64,7 +64,7 @@
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": -1
           },
           {
             "id": "plant-mining_level-offensive-upgrade",

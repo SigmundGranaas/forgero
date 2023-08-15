@@ -12,12 +12,12 @@
           {
             "id": "slime-rarity-composite",
             "type": "RARITY",
-            "value": 15
+            "value": 50
           },
           {
             "id": "slime-durability-composite",
             "type": "DURABILITY",
-            "value": 120
+            "value": 300
           },
           {
             "id": "slime-weight-composite",
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 25
           },
           {
             "id": "slime-weight-upgrade",
@@ -64,7 +64,7 @@
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": -1
           },
           {
             "id": "slime-mining_level-offensive-upgrade",
@@ -78,7 +78,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 60
+            "value": 150
           },
           {
             "id": "slime-attack_speed-utility-upgrade",
@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 60
+            "value": 150
           }
         ]
       }

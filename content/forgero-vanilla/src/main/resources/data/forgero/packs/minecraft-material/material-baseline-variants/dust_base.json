@@ -117,14 +117,6 @@
           }
         ]
       }
-    ],
-    "attributes": [
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
-      }
     ]
   }
 }
