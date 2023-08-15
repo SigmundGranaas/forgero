@@ -4,7 +4,7 @@
   "parent": "bone_base",
   "container": {
     "type": "HOST",
-    "tag": "minecraft:bone"
+    "id": "minecraft:bone"
   },
   "properties": {
     "attributes": [
