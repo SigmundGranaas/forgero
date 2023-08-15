@@ -80,21 +80,38 @@ public class HungerHandler {
 	 * @param weight The weight of the tool.
 	 */
 	private void adjustHungerBasedOnWeight(ServerPlayerEntity player, int weight) {
-		float centerPoint = ForgeroConfigurationLoader.configuration.WeightIncreasesHungerCenterPoint;
-		float scaler = ForgeroConfigurationLoader.configuration.WeightIncreasesHungerScaler;
-		float baseChance = ForgeroConfigurationLoader.configuration.WeightIncreasesHungerBaseChance;
+		ConfigurationValues config = getConfigurationValues();
+		float z = calculateZScore(weight, config.centerPoint, config.scaler);
+		double adjustedProb = calculateAdjustedProbability(z, config.baseChance);
 
-		// Calculate the z-score
-		float z = (weight - centerPoint) / scaler;
+		adjustedProb = adjustProbabilityForSaturation(adjustedProb, player.getHungerManager().getSaturationLevel());
+		applyHungerReductionBasedOnProbability(player, adjustedProb);
+	}
 
-		// Get the probability from z-score using a basic approximation of the error function for the CDF of the normal distribution
+	private ConfigurationValues getConfigurationValues() {
+		return new ConfigurationValues(
+				ForgeroConfigurationLoader.configuration.WeightIncreasesHungerCenterPoint,
+				ForgeroConfigurationLoader.configuration.WeightIncreasesHungerScaler,
+				ForgeroConfigurationLoader.configuration.WeightIncreasesHungerBaseChance
+		);
+	}
+
+	private float calculateZScore(int weight, float centerPoint, float scaler) {
+		return (weight - centerPoint) / scaler;
+	}
+
+	private double calculateAdjustedProbability(float z, float baseChance) {
 		double prob = 0.5 * (1.0 + erf(z / Math.sqrt(2.0)));
+		return baseChance + (prob - 0.5);
+	}
 
-		// Adjust the probability with the base chance
-		double adjustedProb = baseChance + (prob - 0.5);
+	private double adjustProbabilityForSaturation(double probability, float saturation) {
+		double saturationAdjustment = 1 - Math.min(saturation / 20.0, 1.0);  // Assuming max saturation is typically 20
+		return probability * saturationAdjustment;
+	}
 
-		// Compare the adjusted probability to a random value to decide whether to reduce hunger
-		if (new Random().nextDouble() < adjustedProb) {
+	private void applyHungerReductionBasedOnProbability(ServerPlayerEntity player, double probability) {
+		if (new Random().nextDouble() < probability) {
 			int foodLevel = player.getHungerManager().getFoodLevel();
 			player.getHungerManager().setFoodLevel(Math.max(foodLevel - 1, 0));
 		}
@@ -112,6 +129,9 @@ public class HungerHandler {
 		double t = 1.0 / (1.0 + 0.47047 * Math.abs(z));
 		double poly = t * (0.3480242 - 0.0958798 * t + 0.7478556 * t * t);
 		return z >= 0 ? 1 - poly * Math.exp(-z * z) : poly * Math.exp(-z * z) - 1;
+	}
+
+	private record ConfigurationValues(float centerPoint, float scaler, float baseChance) {
 	}
 
 }
