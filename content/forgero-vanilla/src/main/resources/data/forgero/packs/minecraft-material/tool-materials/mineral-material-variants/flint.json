@@ -12,11 +12,95 @@
         "context": "COMPOSITE",
         "order": "BASE",
         "attributes": [
+          {
+            "id": "mineral-attack-speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 3.5
+          },
+          {
+            "id": "mineral-attack-damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2.5
+          },
+          {
+            "id": "mineral-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 4
+          },
+          {
+            "id": "mineral-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 1
+          },
+          {
+            "id": "mineral-durability-composite",
+            "type": "DURABILITY",
+            "value": 120
+          },
+          {
+            "id": "mineral-rarity-composite",
+            "type": "RARITY",
+            "value": 20
+          },
+          {
+            "id": "mineral-weight-composite",
+            "type": "WEIGHT",
+            "value": 30
+          },
+          {
+            "id": "mineral-armor-composite",
+            "type": "ARMOR",
+            "value": 2
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "mineral-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "mineral-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "mineral-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.25
+          },
+          {
+            "id": "mineral-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 60
+          },
+          {
+            "id": "mineral-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 60
+          }
         ]
       }
     ]
