@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 public interface State extends PropertyContainer, Matchable, Identifiable, Comparable<Object>, Typed, Visitable, DataSupplier {
+
 	static State of(Construct construct) {
 		return new CompositeIngredient(construct);
 	}
@@ -31,6 +32,8 @@ public interface State extends PropertyContainer, Matchable, Identifiable, Compa
 	static State of(String name, String nameSpace, Type type, List<Property> properties, DataContainer custom) {
 		return new SimpleState(name, nameSpace, type, properties, custom);
 	}
+
+	State strip();
 
 	default boolean equals(State s) {
 		return false;

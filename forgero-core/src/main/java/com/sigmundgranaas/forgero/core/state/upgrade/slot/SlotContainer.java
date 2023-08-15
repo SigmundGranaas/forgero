@@ -107,4 +107,8 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 		}
 		return slot;
 	}
+
+	public SlotContainer strip() {
+		return new SlotContainer(slots().stream().map(Slot::empty).toList());
+	}
 }

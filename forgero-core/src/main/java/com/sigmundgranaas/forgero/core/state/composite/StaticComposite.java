@@ -63,6 +63,12 @@ public class StaticComposite implements Composite {
 	}
 
 	@Override
+	public State strip() {
+		return new StaticComposite(getSlotContainer().strip(), name(), nameSpace(), type(), properties);
+
+	}
+
+	@Override
 	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {

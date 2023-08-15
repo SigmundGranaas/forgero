@@ -71,6 +71,11 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	}
 
 	@Override
+	public State strip() {
+		return this;
+	}
+
+	@Override
 	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof NameMatch matcher) {
 			return matcher.name().equals(name);
