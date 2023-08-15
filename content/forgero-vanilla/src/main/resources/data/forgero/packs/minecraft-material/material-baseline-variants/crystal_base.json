@@ -1,6 +1,6 @@
 {
-  "type": "BONE",
-  "name": "bone_base",
+  "type": "CRYSTAL",
+  "name": "crystal_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -10,44 +10,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "bone-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2
-          },
-          {
-            "id": "bone-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 2.5
-          },
-          {
-            "id": "bone-mining-speed-composite",
-            "type": "MINING_SPEED",
-            "value": 3
-          },
-          {
-            "id": "bone-mining-level-composite",
-            "type": "MINING_LEVEL",
-            "value": 1
-          },
-          {
-            "id": "bone-durability-composite",
-            "type": "DURABILITY",
-            "value": 80
-          },
-          {
-            "id": "bone-rarity-composite",
+            "id": "crystal-rarity-composite",
             "type": "RARITY",
-            "value": 30
+            "value": 15
           },
           {
-            "id": "bone-weight-composite",
+            "id": "crystal-durability-composite",
+            "type": "DURABILITY",
+            "value": 120
+          },
+          {
+            "id": "crystal-weight-composite",
             "type": "WEIGHT",
-            "value": 25
-          },
-          {
-            "id": "bone-armor-composite",
-            "type": "ARMOR",
-            "value": 3
+            "value": 10
           }
         ]
       },
@@ -55,90 +30,90 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "bone-rarity-upgrade",
+            "id": "crystal-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 15
           },
           {
-            "id": "bone-weight-upgrade",
+            "id": "crystal-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 12.5
+            "value": 5
           },
           {
-            "id": "bone-attack_speed-offensive-upgrade",
+            "id": "crystal-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "bone-attack_damage-offensive-upgrade",
+            "id": "crystal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.25
+            "value": -1
           },
           {
-            "id": "bone-mining_speed-offensive-upgrade",
+            "id": "crystal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1.5
-          },
-          {
-            "id": "bone-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "bone-durability-offensive-upgrade",
+            "id": "crystal-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": -1
+          },
+          {
+            "id": "crystal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 40
+            "value": 60
           },
           {
-            "id": "bone-attack_speed-utility-upgrade",
+            "id": "crystal-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 0.1
           },
           {
-            "id": "bone-attack_damage-utility-upgrade",
+            "id": "crystal-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "bone-mining_speed-utility-upgrade",
+            "id": "crystal-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "bone-mining_level-utility-upgrade",
+            "id": "crystal-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "bone-durability-utility-upgrade",
+            "id": "crystal-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 40
+            "value": 60
           }
         ]
       }

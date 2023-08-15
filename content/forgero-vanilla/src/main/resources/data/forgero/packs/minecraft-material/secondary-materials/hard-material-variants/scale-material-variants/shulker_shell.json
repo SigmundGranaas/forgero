@@ -1,10 +1,10 @@
 {
   "type": "SCALE",
-  "name": "scute",
-  "parent": "leather_base",
+  "name": "shulker_shell",
+  "parent": "scale_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:scute"
+    "id": "minecraft:shulker_shell"
   },
   "properties": {
     "grouped_attributes": [
@@ -25,6 +25,6 @@
     ]
   },
   "palette": {
-    "name": "scute"
+    "name": "shulker_shell"
   }
 }

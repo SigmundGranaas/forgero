@@ -1,16 +1,17 @@
 {
-  "type": "MINERAL",
-  "name": "prismarine_shard",
-  "parent": "mineral_base",
+  "type": "SLIME",
+  "name": "slime_ball",
+  "parent": "slime_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:prismarine_shard"
+    "id": "minecraft:slime_ball"
   },
   "properties": {
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
         "order": "BASE",
+        "operation": "ADDITION",
         "attributes": [
         ]
       },
@@ -19,9 +20,11 @@
         "attributes": [
         ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {
-    "name": "prismarine_shard"
+    "name": "slime"
   }
 }

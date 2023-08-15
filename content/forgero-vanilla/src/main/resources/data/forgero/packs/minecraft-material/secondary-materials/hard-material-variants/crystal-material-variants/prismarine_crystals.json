@@ -1,10 +1,10 @@
 {
-  "type": "MINERAL",
-  "name": "prismarine_shard",
-  "parent": "mineral_base",
+  "type": "CRYSTAL",
+  "name": "prismarine_crystals",
+  "parent": "crystal_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:prismarine_shard"
+    "id": "minecraft:prismarine_crystals"
   },
   "properties": {
     "grouped_attributes": [
@@ -22,6 +22,6 @@
     ]
   },
   "palette": {
-    "name": "prismarine_shard"
+    "name": "prismarine_crystals"
   }
 }

@@ -1,16 +1,17 @@
 {
-  "type": "MINERAL",
-  "name": "prismarine_shard",
-  "parent": "mineral_base",
+  "type": "SCALE",
+  "name": "nautilus_shell",
+  "parent": "scale_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:prismarine_shard"
+    "id": "minecraft:nautilus_shell"
   },
   "properties": {
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
         "order": "BASE",
+        "operation": "ADDITION",
         "attributes": [
         ]
       },
@@ -19,9 +20,11 @@
         "attributes": [
         ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {
-    "name": "prismarine_shard"
+    "name": "nautilus_shell"
   }
 }
