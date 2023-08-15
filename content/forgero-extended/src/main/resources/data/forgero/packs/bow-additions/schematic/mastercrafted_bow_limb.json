@@ -39,17 +39,8 @@
         "category": [
           "UTILITY"
         ],
-        "type": "SECONDARY_MATERIAL",
+        "type": "LEATHER",
         "description": "grip",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "UTILITY"
-        ],
-        "type": "SECONDARY_MATERIAL",
-        "description": "string",
         "tier": 1
       },
       {

@@ -129,6 +129,9 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 		}
 
 		public static Optional<SchematicPartBuilder> builder(List<State> parts) {
+			if (parts.stream().anyMatch(part -> part.test(Type.PART))) {
+				return Optional.empty();
+			}
 			var schematic = parts.stream().filter(part -> part.test(Type.SCHEMATIC)).findFirst();
 			var material = parts.stream().filter(part -> part.test(Type.MATERIAL)).findFirst();
 			if (schematic.isPresent() && material.isPresent()) {

@@ -1,17 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
-import com.sigmundgranaas.forgero.core.registry.StateFinder;
-import com.sigmundgranaas.forgero.core.state.State;
-
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.CONDITIONS_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.registry.StateFinder;
+import com.sigmundgranaas.forgero.core.state.State;
+
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 
 
 public class CompositeParser implements CompoundParser<State> {
@@ -30,6 +30,7 @@ public class CompositeParser implements CompoundParser<State> {
 		if (tool.isPresent()) {
 			return tool;
 		}
+
 		var part = new SchematicPartParser(supplier).parse(compound);
 		if (part.isPresent()) {
 			return part;
