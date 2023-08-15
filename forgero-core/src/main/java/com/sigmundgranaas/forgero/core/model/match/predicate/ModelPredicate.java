@@ -10,6 +10,10 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 public record ModelPredicate(String model) implements Matchable {
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		return match instanceof ModelMatchEntry entry && entry.entry().equals(model);
+		if (match instanceof ModelMatchEntry entry && entry.entry().equals(model)) {
+			return true;
+		} else {
+			return context.test(new ModelMatchEntry(model));
+		}
 	}
 }
