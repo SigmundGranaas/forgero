@@ -76,9 +76,11 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		List<Item> acceptedItems = entries.stream().map(RegistryEntry::value).toList();
 
 		// Select an item to display based on the current game tick
-		Item itemToShow = acceptedItems.get((this.tickCounter / 40) % acceptedItems.size());
-
-		this.itemRenderer.renderInGuiWithOverrides(itemToShow.getDefaultStack(), mouseX, mouseY);
+		try {
+			Item itemToShow = acceptedItems.get((this.tickCounter / 40) % acceptedItems.size());
+			this.itemRenderer.renderInGuiWithOverrides(itemToShow.getDefaultStack(), mouseX, mouseY);
+		} catch (Exception ignored) {
+		}
 	}
 
 

@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
@@ -7,10 +12,6 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature.FeatureWri
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class FeatureSectionWriter extends SectionWriter {
 	private final PropertyContainer container;
@@ -66,7 +67,15 @@ public class FeatureSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return container.stream().features().filter(feature -> !configuration.hiddenFeatureTypes().contains(feature.getType())).map(this::entry).flatMap(List::stream).toList();
+		return container.stream().features()
+				.collect(Collectors.groupingBy(PropertyData::type))
+				.values()
+				.stream()
+				.map(list -> list.get(0))
+				.filter(feature -> !configuration.hiddenFeatureTypes().contains(feature.getType()))
+				.map(this::entry)
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	public List<Text> entry(PropertyData data) {
