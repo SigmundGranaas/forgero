@@ -70,4 +70,14 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean enableUpgradeInCraftingTable = true;
+
+	@NotNull
+	public Integer WeightIncreasesHungerCenterPoint = 20;
+	@NotNull
+	public Integer WeightIncreasesHungerScaler = 10;
+
+	@NotNull
+	public Float WeightIncreasesHungerBaseChance = 0.01f;
+	@NotNull
+	public Boolean weightIncreasesHunger = false;
 }

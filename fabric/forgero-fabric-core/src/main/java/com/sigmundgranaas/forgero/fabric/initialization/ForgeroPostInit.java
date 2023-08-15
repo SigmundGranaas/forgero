@@ -26,12 +26,15 @@ import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Attributes
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.registry.Registry;
 
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 
 /**
@@ -66,6 +69,13 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerLootConditionReloadListener();
 		registerRecipeSerializers();
 		registerAARPRecipes(stateService);
+		registerHungerCallbacks(stateService);
+	}
+
+	private void registerHungerCallbacks(StateService stateService) {
+		HungerHandler handler = new HungerHandler(stateService);
+		PlayerBlockBreakEvents.AFTER.register(handler::handle);
+		AttackEntityCallback.EVENT.register(handler::handle);
 	}
 
 	private void registerBlocks() {
