@@ -110,6 +110,16 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	}
 
 	@Override
+	public State strip() {
+		var builder = builder();
+		builder.addSlotContainer(getSlotContainer().strip());
+		parts().stream().map(State::strip).forEach(builder::addIngredient);
+		builder.type(type());
+		builder.id(identifier());
+		return builder.build();
+	}
+
+	@Override
 	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof Type typeMatch) {
 			if (this.type().test(typeMatch, context)) {

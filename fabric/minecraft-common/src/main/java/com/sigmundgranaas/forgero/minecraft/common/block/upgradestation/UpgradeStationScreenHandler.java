@@ -319,6 +319,11 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		public Type type() {
 			return Type.of("EMPTY");
 		}
+
+		@Override
+		public State strip() {
+			return this;
+		}
 	}
 
 	// Empty state representing an unfilled slot
