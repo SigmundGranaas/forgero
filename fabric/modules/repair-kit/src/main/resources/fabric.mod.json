@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-repair-kits",
+  "version": "${version}",
+  "name": "Forgero repair kits",
+  "description": "Repair kit expansion for Forgero",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contributors": [
+    "Aulluna",
+    "Rad233",
+    "identithree",
+    "macaroni0423",
+    "Steveplays28"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "forgeroInitialized": [
+      "com.sigmundgranaas.forgero.repairkit.RepairKitInitializer"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.19.x",
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      }
+    }
+  }
+}

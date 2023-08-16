@@ -30,9 +30,12 @@ dependencies {
 	runtimeOnly project(':content:forgero-compat')
 	runtimeOnly project(':content:forgero-structures')
 
+
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	implementation project(path: ':fabric:modules:repair-kit', configuration: 'namedElements')
+
 
 	modImplementation "vazkii.patchouli:Patchouli:1.19.2-77-FABRIC"
 
