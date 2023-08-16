@@ -1,10 +1,10 @@
 {
   "type": "PLANT",
-  "name": "weeping_vines",
+  "name": "chorus_fruit",
   "parent": "plant_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:weeping_vines"
+    "id": "minecraft:chorus_fruit"
   },
   "properties": {
     "grouped_attributes": [
@@ -16,12 +16,17 @@
           {
             "id": "plant-rarity-composite",
             "type": "RARITY",
-            "value": 30
+            "value": 50
           },
           {
             "id": "plant-durability-composite",
             "type": "DURABILITY",
-            "value": 110
+            "value": 200
+          },
+          {
+            "id": "plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
           }
         ]
       },
@@ -34,49 +39,57 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 50
+          },
+          {
+            "id": "plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
           },
           {
             "id": "plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 55
+            "value": 100
           },
           {
             "id": "plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.1
+            "value": 0.25
           },
           {
             "id": "plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 0.5
           },
           {
             "id": "plant-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.25
+            "value": 0.5
           },
           {
             "id": "plant-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 1
+            "value": 2
           },
           {
             "id": "plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 55
+            "value": 100
           }
         ]
       }
@@ -85,6 +98,6 @@
     ]
   },
   "palette": {
-    "name": "weeping_vines"
+    "name": "chorus_fruit"
   }
 }

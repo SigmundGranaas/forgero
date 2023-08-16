@@ -12,17 +12,17 @@
           {
             "id": "crystal-rarity-composite",
             "type": "RARITY",
-            "value": 90
+            "value": 75
           },
           {
             "id": "crystal-durability-composite",
             "type": "DURABILITY",
-            "value": 1200
+            "value": 575
           },
           {
             "id": "crystal-weight-composite",
             "type": "WEIGHT",
-            "value": 30
+            "value": 20
           }
         ]
       },
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 90
+            "value": 75
           },
           {
             "id": "crystal-weight-upgrade",
@@ -43,42 +43,42 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 10
           },
           {
             "id": "crystal-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 0.2
           },
           {
             "id": "crystal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 1
           },
           {
             "id": "crystal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 2
+            "value": 0
           },
           {
             "id": "crystal-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 0
           },
           {
             "id": "crystal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 600
+            "value": 287.5
           },
           {
             "id": "crystal-attack_speed-utility-upgrade",
@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 600
+            "value": 287.5
           }
         ]
       }

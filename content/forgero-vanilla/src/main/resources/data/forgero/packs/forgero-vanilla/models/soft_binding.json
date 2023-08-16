@@ -5,7 +5,7 @@
       "name": "soft_binding",
       "template": "soft_binding.png",
       "type": "GENERATE",
-      "palette": "MATERIAL",
+      "palette": "SOFT_MATERIAL",
       "order": 40,
       "variants": [
         {

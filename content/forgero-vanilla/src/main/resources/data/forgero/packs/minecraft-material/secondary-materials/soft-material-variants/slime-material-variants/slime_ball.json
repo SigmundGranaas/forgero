@@ -1,6 +1,6 @@
 {
   "type": "SLIME",
-  "name": "slime_ball",
+  "name": "slimeball",
   "parent": "slime_base",
   "container": {
     "type": "HOST",

@@ -13,11 +13,84 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "plant-rarity-composite",
+            "type": "RARITY",
+            "value": 20
+          },
+          {
+            "id": "plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 140
+          },
+          {
+            "id": "plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "plant-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 70
+          },
+          {
+            "id": "plant-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.1
+          },
+          {
+            "id": "plant-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "plant-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "plant-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "plant-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 70
+          }
         ]
       }
     ],

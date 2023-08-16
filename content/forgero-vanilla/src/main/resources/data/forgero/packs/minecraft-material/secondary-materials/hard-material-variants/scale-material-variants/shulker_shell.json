@@ -16,17 +16,17 @@
           {
             "id": "scale-rarity-composite",
             "type": "RARITY",
-            "value": 90
+            "value": 80
           },
           {
             "id": "scale-durability-composite",
             "type": "DURABILITY",
-            "value": 460
+            "value": 520
           },
           {
             "id": "scale-weight-composite",
             "type": "WEIGHT",
-            "value": 40
+            "value": 30
           }
         ]
       },
@@ -39,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 90
+            "value": 80
           },
           {
             "id": "scale-weight-upgrade",
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 15
           },
           {
             "id": "scale-attack_speed-offensive-upgrade",
@@ -75,14 +75,14 @@
             "type": "MINING_LEVEL",
             "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": 1.5
+            "value": 0
           },
           {
             "id": "scale-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 230
+            "value": 260
           },
           {
             "id": "scale-attack_speed-utility-upgrade",
@@ -117,7 +117,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 230
+            "value": 260
           }
         ]
       }

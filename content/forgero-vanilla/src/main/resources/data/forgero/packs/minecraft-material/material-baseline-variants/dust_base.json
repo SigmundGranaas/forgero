@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 25
+            "value": 50
           },
           {
             "id": "dust-weight-upgrade",
