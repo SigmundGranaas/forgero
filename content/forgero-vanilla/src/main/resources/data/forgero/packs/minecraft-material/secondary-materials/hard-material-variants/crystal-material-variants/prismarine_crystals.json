@@ -25,9 +25,9 @@
         "type": "EMISSIVE",
         "value": 4
       }
-    ],
+    ]
+  },
     "palette": {
       "name": "prismarine_crystals"
     }
-  }
 }
