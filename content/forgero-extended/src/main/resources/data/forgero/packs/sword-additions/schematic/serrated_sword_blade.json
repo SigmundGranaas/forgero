@@ -41,6 +41,14 @@
         ],
         "description": "sword_tip",
         "type": "MATERIAL"
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "type": "DYE",
+        "tier": 1
       }
     ]
   },

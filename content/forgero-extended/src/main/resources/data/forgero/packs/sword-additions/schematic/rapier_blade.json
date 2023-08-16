@@ -34,6 +34,14 @@
       }
     ],
     "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "type": "DYE",
+        "tier": 1
+      }
     ]
   },
   "properties": {
