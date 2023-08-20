@@ -64,7 +64,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
-          arguments: fabric:build --stacktrace
+          arguments: build --stacktrace
 
       - name: Upload Gradle artifacts
         uses: actions/upload-artifact@v3
