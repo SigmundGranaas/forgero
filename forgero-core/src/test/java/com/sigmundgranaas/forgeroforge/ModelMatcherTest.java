@@ -11,12 +11,19 @@ import java.util.List;
 import com.google.gson.JsonPrimitive;
 import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.PaletteData;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ModelMatcherTest {
@@ -25,6 +32,16 @@ public class ModelMatcherTest {
 		createDataList().forEach(tree::addNode);
 		tree.resolve();
 		return tree;
+	}
+
+	@BeforeEach
+	void setupModelHandlers() {
+		PredicateFactory.register(new StringModelBuilder());
+		PredicateFactory.register(new StringIdentifierBuilder());
+		PredicateFactory.register(new StringModelBuilder());
+		PredicateFactory.register(new StringSlotBuilder());
+		PredicateFactory.register(new StringTypeBuilder());
+		PredicateFactory.register(new StringNameBuilder());
 	}
 
 	@Test
