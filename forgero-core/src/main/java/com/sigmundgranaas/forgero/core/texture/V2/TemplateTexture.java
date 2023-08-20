@@ -1,9 +1,5 @@
 package com.sigmundgranaas.forgero.core.texture.V2;
 
-import com.sigmundgranaas.forgero.core.texture.V2.recolor.RecolorStrategy;
-import com.sigmundgranaas.forgero.core.texture.template.PixelInformation;
-import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +7,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.sigmundgranaas.forgero.core.texture.V2.recolor.RecolorStrategy;
+import com.sigmundgranaas.forgero.core.texture.template.PixelInformation;
+import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 
 public class TemplateTexture implements Texture {
 	private final BufferedImage template;
@@ -22,6 +22,7 @@ public class TemplateTexture implements Texture {
 		this.template = template;
 		this.strategy = strategy;
 		setTemplateValues();
+
 	}
 
 	public List<PixelInformation> getPixelValues() {
