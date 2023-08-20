@@ -27,6 +27,6 @@ public record ModelMatchPairing(Matchable match, ModelMatcher model) implements 
 		if (o instanceof PredicateMatcher comparer && match instanceof PredicateMatcher matcher) {
 			return comparer.getPredicates().size() - matcher.getPredicates().size();
 		}
-		return 0;
+		return ModelMatcher.comparator(this, o);
 	}
 }

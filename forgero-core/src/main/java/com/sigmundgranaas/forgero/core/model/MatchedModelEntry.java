@@ -9,8 +9,8 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
 public class MatchedModelEntry implements ModelMatcher {
-	private List<ModelMatchPairing> models;
 	private final String id;
+	private List<ModelMatchPairing> models;
 
 	public MatchedModelEntry(List<ModelMatchPairing> models, String id) {
 		this.models = models;
@@ -20,7 +20,6 @@ public class MatchedModelEntry implements ModelMatcher {
 	@Override
 	public boolean match(Matchable state, MatchContext context) {
 		return models.stream().anyMatch(pair -> pair.match().test(state, context));
-
 	}
 
 	@Override
