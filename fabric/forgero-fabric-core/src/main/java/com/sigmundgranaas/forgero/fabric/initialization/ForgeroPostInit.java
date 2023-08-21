@@ -94,6 +94,11 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY);
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD_BLADE).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD).register();
+
+		if (!ForgeroConfigurationLoader.configuration.hideRarity) {
+			TooltipAttributeRegistry.filterBuilder().attributes(List.of("RARITY")).type(Type.SWORD_BLADE).register();
+			TooltipAttributeRegistry.filterBuilder().attributes(List.of("RARITY")).type(Type.SWORD).register();
+		}
 		registerAttributeModifications();
 	}
 
