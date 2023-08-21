@@ -61,12 +61,12 @@ public class AttributeSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return configuration.writableAttributes().stream().map(this::entry).flatMap(Optional::stream).toList();
+		return configuration.writableAttributes(container).stream().map(this::entry).flatMap(Optional::stream).toList();
 	}
 
 	protected Optional<Text> entry(String attributeType) {
 		Attribute attribute = helper.attributeOfType(attributeType);
-		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.asFloat() == 0) {
+		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.asFloat().equals(0f)) {
 			return Optional.empty();
 		} else {
 			return Optional.of(helper.writeBaseNumber(attribute));
