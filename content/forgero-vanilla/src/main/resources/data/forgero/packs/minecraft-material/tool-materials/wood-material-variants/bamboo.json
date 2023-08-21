@@ -1,0 +1,67 @@
+{
+  "type": "WOOD",
+  "name": "bamboo",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "tag": "c:bamboo_planks"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 25
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "value": 5
+          },
+          {
+            "id": "wood-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 2.4
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 2.5
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 12.5
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 12.5
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "bamboo"
+  }
+}
