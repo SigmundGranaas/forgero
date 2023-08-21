@@ -38,7 +38,7 @@ public class ToolWriter implements Writer {
 			IngredientSectionWriter.of(state).ifPresent(writer -> writer.write(tooltip, context));
 			ConditionSectionWriter.of(state).ifPresent(writer -> writer.write(tooltip, context));
 		}
-		AttributeSectionWriter.of(state, TooltipConfiguration.builder().hideZeroValues(true).writableAttributes(writableAttributes()).build()).ifPresent(sectionWriter -> sectionWriter.write(tooltip, context));
+		AttributeSectionWriter.of(state, TooltipConfiguration.builder().hideZeroValues(true).build()).ifPresent(sectionWriter -> sectionWriter.write(tooltip, context));
 		FeatureSectionWriter.of(state, TooltipConfiguration.builder().hideSectionTitle(true).build()).ifPresent(writer -> writer.write(tooltip, context));
 	}
 
