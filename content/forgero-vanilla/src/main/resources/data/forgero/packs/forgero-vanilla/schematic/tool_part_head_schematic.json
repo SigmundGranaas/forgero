@@ -56,6 +56,13 @@
             "id": "schematic-mining_level-composite",
             "type": "MINING_LEVEL",
             "value": 0
+          },
+          {
+            "id": "schematic-attack_speed-composite-baseline",
+            "type": "ATTACK_SPEED",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 0.2
           }
         ]
       }

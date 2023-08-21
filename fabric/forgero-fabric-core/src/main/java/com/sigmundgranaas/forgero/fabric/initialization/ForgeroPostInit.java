@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
+import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.*;
@@ -11,6 +12,7 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.BrokenToolAttributeModification;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
@@ -92,6 +94,41 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY);
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD_BLADE).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD).register();
+		registerAttributeModifications();
+	}
+
+	private void registerAttributeModifications() {
+		modificationBuilder()
+				.attributeKey(AttackDamage.KEY)
+				.modification(new BrokenToolAttributeModification(0f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(MiningSpeed.KEY)
+				.modification(new BrokenToolAttributeModification(1f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(MiningLevel.KEY)
+				.modification(new BrokenToolAttributeModification(0f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(Armor.KEY)
+				.modification(new BrokenToolAttributeModification(0f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(AttackSpeed.KEY)
+				.modification(AttackSpeed.clampMinimumAttackSpeed())
+				.register();
+
+		if (ForgeroConfigurationLoader.configuration.weightReducesAttackSpeed) {
+			modificationBuilder()
+					.attributeKey(AttackSpeed.KEY)
+					.modification(Weight.reduceAttackSpeedByWeight())
+					.register();
+		}
 	}
 
 	private void registerHungerCallbacks(StateService stateService) {
