@@ -47,7 +47,7 @@ public interface Attribute {
 
 	static Attribute compute(ContainerTargetPair pair, String key) {
 		Attribute attribute = new ComputedAttribute(key, pair);
-		AttributeModificationRegistry.INSTANCE.get(key).forEach(attribute::modify);
+		AttributeModificationRegistry.getModifications(key).forEach(attribute::modify);
 		return attribute;
 	}
 
