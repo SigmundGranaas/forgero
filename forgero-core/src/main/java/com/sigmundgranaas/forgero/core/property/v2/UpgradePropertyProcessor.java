@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 public class UpgradePropertyProcessor implements PropertyProcessor {
 	private final Set<Category> categories;
@@ -41,6 +42,7 @@ public class UpgradePropertyProcessor implements PropertyProcessor {
 		return AttributeBuilder.createAttributeBuilderFromAttribute(attribute)
 				.applyCategory(Category.PASS)
 				.applyContext(Contexts.UNDEFINED)
+				.applyId(Identifiers.EMPTY_IDENTIFIER)
 				.build();
 	}
 
