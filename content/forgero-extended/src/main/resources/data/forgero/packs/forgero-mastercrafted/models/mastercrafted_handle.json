@@ -41,11 +41,50 @@
       ]
     },
     {
+      "name": "mastercrafted_handle_dye",
+      "template": "mastercrafted_handle.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 15,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "mastercrafted_tool_handle_long.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "mastercrafted_tool_handle_long.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "mastercrafted_tool_handle_short.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "mastercrafted_tool_handle_short.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "mastercrafted_short_handle.png"
+        }
+      ]
+    },
+    {
       "name": "handle_reinforcement",
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "handle_reinforcement.png",
-      "order": 15,
+      "order": 25,
       "variants": [
         {
           "target": [
@@ -69,7 +108,7 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "handle_grip.png",
-      "order": 11,
+      "order": 20,
       "variants": [
         {
           "target": [
@@ -94,6 +133,14 @@
       ],
       "modelType": "UPGRADE",
       "template": "handle_reinforcement"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:3"
+      ],
+      "modelType": "UPGRADE",
+      "template": "mastercrafted_handle_dye"
     }
   ]
 }

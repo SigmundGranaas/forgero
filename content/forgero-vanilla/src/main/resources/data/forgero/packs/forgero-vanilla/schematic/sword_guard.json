@@ -38,8 +38,8 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
-        "tier": 1
+        "description": "reinforcement",
+        "type": "MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",

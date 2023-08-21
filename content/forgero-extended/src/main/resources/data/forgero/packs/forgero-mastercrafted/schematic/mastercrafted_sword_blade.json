@@ -47,14 +47,6 @@
         "category": [
           "UTILITY"
         ],
-        "description": "scabbard",
-        "type": "SOFT_MATERIAL"
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "UTILITY"
-        ],
         "type": "DYE",
         "tier": 1
       }

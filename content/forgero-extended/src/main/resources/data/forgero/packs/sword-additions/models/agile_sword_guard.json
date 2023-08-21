@@ -9,6 +9,17 @@
       "order": 60
     },
     {
+      "name": "sword_guard_dye",
+      "variants": [
+        {
+          "target": [
+            "model:agile_sword_guard.png"
+          ],
+          "template": "agile_sword_guard.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:agile_sword_guard-schematic"

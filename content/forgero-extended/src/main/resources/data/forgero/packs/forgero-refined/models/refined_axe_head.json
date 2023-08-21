@@ -13,11 +13,22 @@
       ]
     },
     {
+      "name": "axe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:refined_axe_head.png"
+          ],
+          "template": "refined_axe_head.png"
+        }
+      ]
+    },
+    {
       "name": "refined_axe_head",
       "modelType": "GENERATE",
       "template": "refined_axe_head.png",
       "palette": "TOOL_MATERIAL",
-      "order": 30
+      "order": 20
     },
     {
       "target": [

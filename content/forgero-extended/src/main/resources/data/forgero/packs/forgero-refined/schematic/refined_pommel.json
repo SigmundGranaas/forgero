@@ -1,13 +1,13 @@
 {
-  "type": "PUMMEL_SCHEMATIC",
-  "name": "refined_pummel-schematic",
-  "parent": "pummel-schematic",
+  "type": "POMMEL_SCHEMATIC",
+  "name": "refined_pommel-schematic",
+  "parent": "pommel-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "PUMMEL",
+    "type": "POMMEL",
     "target": "CREATE",
     "recipes": [
       {

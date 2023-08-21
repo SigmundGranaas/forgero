@@ -32,7 +32,7 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
+        "type:MATERIAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",

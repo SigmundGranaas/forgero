@@ -1,13 +1,12 @@
 {
-  "type": "PUMMEL_SCHEMATIC",
-  "name": "mastercrafted_pummel-schematic",
-  "parent": "pummel-schematic",
+  "type": "POMMEL_SCHEMATIC",
+  "name": "pommel-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "PUMMEL",
+    "type": "POMMEL",
     "target": "CREATE",
     "recipes": [
       {
@@ -45,37 +44,42 @@
     ]
   },
   "properties": {
-    "grouped_attributes": [
-      {
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "order": "BASE",
-        "attributes": [
-          {
-            "id": "refined-schematic-rarity-composite",
-            "type": "RARITY",
-            "value": 1.5
-          },
-          {
-            "id": "refined-schematic-durability-composite",
-            "type": "DURABILITY",
-            "value": 1.5
-          }
-        ]
-      }
-    ],
     "attributes": [
       {
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 75
+        "context": "LOCAL",
+        "value": 25
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
+      },
+      {
+        "id": "schematic-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.2
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "1"
+    "ingredient_count": {
+      "value": 1,
+      "context": "LOCAL"
+    }
   }
 }

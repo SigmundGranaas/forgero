@@ -121,9 +121,9 @@
           }
         ]
       }
-    ],
-    "palette": {
-      "name": "dragon_scale"
-    }
+    ]
+  },
+  "palette": {
+    "name": "dragon_scale_palette"
   }
 }

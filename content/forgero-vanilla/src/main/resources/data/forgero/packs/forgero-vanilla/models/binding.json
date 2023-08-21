@@ -76,33 +76,6 @@
       ]
     },
     {
-      "name": "spiked_binding",
-      "template": "spiked_binding.png",
-      "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": 40,
-      "variants": [
-        {
-          "target": [
-            "type:AXE"
-          ],
-          "template": "spiked_binding.png"
-        },
-        {
-          "target": [
-            "type:PICKAXE"
-          ],
-          "template": "spiked_binding.png"
-        },
-        {
-          "target": [
-            "type:SHOVEL"
-          ],
-          "template": "shovel_binding.png"
-        }
-      ]
-    },
-    {
       "name": "binding_material",
       "type": "GENERATE",
       "palette": "MATERIAL",
@@ -179,15 +152,6 @@
         },
         {
           "target": [
-            "model:spiked_binding.png"
-          ],
-          "offset": [
-            2,
-            2
-          ]
-        },
-        {
-          "target": [
             "model:binding.png"
           ],
           "offset": [
@@ -204,14 +168,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "binding"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "id:spiked_binding-schematic"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "spiked_binding"
     },
     {
       "target": [
