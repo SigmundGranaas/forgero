@@ -104,9 +104,15 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 
 		modificationBuilder()
 				.attributeKey(AttackSpeed.KEY)
-				.modification(Weight.reduceAttackSpeedByWeight())
 				.modification(AttackSpeed.clampMinimumAttackSpeed())
 				.register();
+
+		if (ForgeroConfigurationLoader.configuration.weightReducesAttackSpeed) {
+			modificationBuilder()
+					.attributeKey(AttackSpeed.KEY)
+					.modification(Weight.reduceAttackSpeedByWeight())
+					.register();
+		}
 	}
 
 	private void registerHungerCallbacks(StateService stateService) {
