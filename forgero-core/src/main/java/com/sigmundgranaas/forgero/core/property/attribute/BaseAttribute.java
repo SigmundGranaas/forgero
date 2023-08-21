@@ -10,7 +10,6 @@ import java.util.function.Predicate;
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -20,13 +19,13 @@ import com.sigmundgranaas.forgero.core.property.Target;
  * Special attribute classes will likely deal with special scenarios like MINING level.
  */
 public record BaseAttribute(String attribute,
-							NumericOperation operation,
-							float value,
-							Predicate<Target> condition,
-							CalculationOrder order, int level, Category category, String id,
-							List<String> targets,
-							String targetType,
-							int priority, Context context) implements Attribute {
+                            NumericOperation operation,
+                            float value,
+                            Predicate<Target> condition,
+                            CalculationOrder order, int level, Category category, String id,
+                            List<String> targets,
+                            String targetType,
+                            int priority, Context context) implements Attribute {
 
 	@Override
 	public CalculationOrder getOrder() {
@@ -40,16 +39,6 @@ public record BaseAttribute(String attribute,
 
 	@Override
 	public Function<Float, Float> getCalculation() {
-		if (attribute.equals(AttributeType.MINING_LEVEL.toString())) {
-			return (current) -> {
-				if (current > value) {
-					return current;
-				} else {
-					return value;
-				}
-			};
-		}
-
 		if (operation == NumericOperation.ADDITION) {
 			return (current) -> current + leveledValue();
 		} else if (operation == NumericOperation.MULTIPLICATION) {

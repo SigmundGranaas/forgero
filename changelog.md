@@ -7,10 +7,15 @@ versions of Forgero without losing slot data.**
 
 # Changelog
 
-* Added the upgrade station
+* **Added the upgrade station**
+* **Rewrote logic for encoding and parsing slots**
+* Fixed override models not being sorted correctly
+* Disabled upgrades in crafting table by default
+* Made the mining level attribute work like all other attributes
+* Fixed broken system tests
+* Added a new CI/CD pipeline (Steveplays28)
 * Fixed some item being converted to the wrong variant
 * Fixed totem of undying staying in inventory when dying
-* Rewrote logic for encoding and parsing slots
 * Added a new force attribute
 * Updated uncrafting exceptions
 * Simplified disassembly station recipe

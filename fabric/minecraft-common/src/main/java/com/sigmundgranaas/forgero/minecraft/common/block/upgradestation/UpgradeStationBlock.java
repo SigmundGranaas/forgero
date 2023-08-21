@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
-import static net.minecraft.block.Blocks.DEEPSLATE;
-
 import com.sigmundgranaas.forgero.core.Forgero;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +8,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
@@ -40,7 +40,7 @@ import net.minecraft.world.WorldView;
 public class UpgradeStationBlock extends HorizontalFacingBlock {
 
 	public static final EnumProperty<UpgradeStationBlockPart> PART = EnumProperty.of("part", UpgradeStationBlockPart.class);
-	public static final Block UPGRADE_STATION_BLOCK = new UpgradeStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
+	public static final Block UPGRADE_STATION_BLOCK = new UpgradeStationBlock(Settings.of(Material.WOOD).strength(2.5F).sounds(BlockSoundGroup.WOOD));
 	public static final BlockItem UPGRADE_STATION_ITEM = new BlockItem(UPGRADE_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
 	// a public identifier for multiple parts of our bigger chest
 	public static final Identifier UPGRADE_STATION = new Identifier(Forgero.NAMESPACE, "upgrade_station");

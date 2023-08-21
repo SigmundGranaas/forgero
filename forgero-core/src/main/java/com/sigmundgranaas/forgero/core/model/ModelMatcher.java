@@ -34,7 +34,7 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 
 				//If both reference an identifier, the one with the most criteria is preferred
 				if (match1Identifier && match2Identifier) {
-					return Integer.compare(matcher1.getPredicates().size(), matcher2.getPredicates().size());
+					return Integer.compare(matcher2.getPredicates().size(), matcher1.getPredicates().size());
 				}
 
 				//If one references an identifier, it is preferred
@@ -45,7 +45,7 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 				}
 
 				//If neither references an identifier, the one with the most criteria is preferred
-				return Integer.compare(matcher1.getPredicates().size(), matcher2.getPredicates().size());
+				return Integer.compare(matcher2.getPredicates().size(), matcher1.getPredicates().size());
 			}
 
 		}
