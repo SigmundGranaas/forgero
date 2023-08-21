@@ -63,7 +63,7 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return configuration.writableAttributes().stream().map(this::entry).flatMap(List::stream).toList();
+		return configuration.writableAttributes(container).stream().map(this::entry).flatMap(List::stream).toList();
 	}
 
 	protected List<Text> entry(String attributeType) {
