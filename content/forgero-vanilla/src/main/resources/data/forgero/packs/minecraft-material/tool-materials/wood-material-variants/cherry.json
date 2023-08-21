@@ -1,0 +1,62 @@
+{
+  "type": "WOOD",
+  "name": "cherry",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "tag": "c:cherry_planks"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 45
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 22.5
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 22.5
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "cherry"
+  }
+}
