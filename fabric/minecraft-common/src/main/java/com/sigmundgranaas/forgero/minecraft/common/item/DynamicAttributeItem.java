@@ -83,12 +83,12 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
 	@Override
 	default int getMiningLevel(ItemStack stack) {
-		return MiningLevel.apply(dynamicProperties(stack));
+		return Attribute.of(dynamicProperties(stack), MiningLevel.KEY).asInt();
 	}
 
 	@Override
 	default int getMiningLevel() {
-		return MiningLevel.apply(defaultProperties());
+		return Attribute.of(defaultProperties(), MiningLevel.KEY).asInt();
 	}
 
 
@@ -109,7 +109,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		Target target = Target.createEmptyTarget();
 		ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
 		//Doing -1 to match vanilla
-		float currentToolDamage = AttackDamage.apply(dynamicProperties(stack), target) - 1;
+		float currentToolDamage = Attribute.apply(dynamicProperties(stack), AttackDamage.KEY, target) - 1;
 		//Base attack damage
 		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ItemUUIDMixin.getAttackDamageModifierID(), "Tool modifier", currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
@@ -121,7 +121,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		builder.put(EntityAttributes.GENERIC_LUCK, new EntityAttributeModifier(ADDITION_LUCK_MODIFIER_ID, "Luck addition", luck, EntityAttributeModifier.Operation.ADDITION));
 
 		//Additional armor
-		float armor = Armor.of(dynamicProperties(stack)).asFloat();
+		float armor = Attribute.of(dynamicProperties(stack), Armor.KEY).asFloat();
 		builder.put(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(ADDITION_ARMOR_MODIFIER_ID, "Armor addition", armor, EntityAttributeModifier.Operation.ADDITION));
 
 		//Additional health
@@ -129,8 +129,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(ADDITION_HEALTH_MODIFIER_ID, "Health addition", additionalHealth, EntityAttributeModifier.Operation.ADDITION));
 
 		//Attack speed
-		float currentAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
-		float baseAttackSpeed = AttackSpeed.apply(defaultProperties());
+		float currentAttackSpeed = Attribute.apply(dynamicProperties(stack), AttackSpeed.KEY, target);
+		float baseAttackSpeed = Attribute.apply(defaultProperties(), AttackSpeed.KEY);
 		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
 		if (currentAttackSpeed != baseAttackSpeed) {
 			//builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
@@ -142,11 +142,11 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 			builder.put(MINING_SPEED, new EntityAttributeModifier(BASE_MINING_SPEED_ID, "Tool modifier", miningSpeed, EntityAttributeModifier.Operation.ADDITION));
 
 			// Durability
-			int durability = Durability.apply(dynamicProperties(stack));
+			int durability = Attribute.of(dynamicProperties(stack), Durability.KEY).asInt();
 			builder.put(DURABILITY, new EntityAttributeModifier(BASE_DURABILITY_ID, "Tool modifier", durability, EntityAttributeModifier.Operation.ADDITION));
 
 			// Mining Level
-			int miningLevel = MiningLevel.apply(dynamicProperties(stack));
+			int miningLevel = Attribute.of(dynamicProperties(stack), Durability.KEY).asInt();
 			if (miningLevel != 0) {
 				builder.put(MINING_LEVEL, new EntityAttributeModifier(BASE_MINING_LEVEL_ID, "Tool modifier", miningLevel, EntityAttributeModifier.Operation.ADDITION));
 
@@ -157,7 +157,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
 	@Override
 	default int getDurability(ItemStack stack) {
-		return Durability.apply(dynamicProperties(stack));
+		return Attribute.of(dynamicProperties(stack), Durability.KEY).asInt();
 	}
 
 	default int getItemBarStep(ItemStack stack) {

@@ -80,4 +80,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Float WeightIncreasesHungerBaseChance = 0.01f;
 	@NotNull
 	public Boolean weightIncreasesHunger = false;
+
+	@NotNull
+	public Float minimumAttackSpeed = 0.5f;
 }

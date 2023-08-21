@@ -1,5 +1,17 @@
 package com.sigmundgranaas.forgero.core.property.v2;
 
+import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_KEY;
+
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModification;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.ComputedAttribute;
+import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
+import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+
 public interface Attribute {
 
 	static Attribute of(float value, String key) {
@@ -13,7 +25,39 @@ public interface Attribute {
 			public Float asFloat() {
 				return value;
 			}
+
+			@Override
+			public Attribute modify(AttributeModification mod) {
+				return this;
+			}
 		};
+	}
+
+	static Attribute of(PropertyContainer container, String key) {
+		var pair = ContainerTargetPair.of(container);
+		return of(pair, key);
+	}
+
+	static Attribute of(ContainerTargetPair pair, String key) {
+		if (ContainsFeatureCache.check(PropertyTargetCacheKey.of(pair.container(), BROKEN_TYPE_KEY))) {
+			return Attribute.of(0f, key);
+		}
+		return AttributeCache.computeIfAbsent(pair, () -> compute(pair, key), key);
+	}
+
+	static Attribute compute(ContainerTargetPair pair, String key) {
+		Attribute attribute = new ComputedAttribute(key, pair);
+		AttributeModificationRegistry.INSTANCE.get(key).forEach(attribute::modify);
+		return attribute;
+	}
+
+	static Float apply(PropertyContainer container, String key) {
+		return of(container, key).asFloat();
+	}
+
+	static Float apply(PropertyContainer container, String key, Target target) {
+		var pair = ContainerTargetPair.of(container);
+		return of(pair, key).asFloat();
 	}
 
 	String key();
@@ -27,5 +71,7 @@ public interface Attribute {
 	default Double asDouble() {
 		return asFloat().doubleValue();
 	}
+
+	Attribute modify(AttributeModification mod);
 
 }
