@@ -5,6 +5,8 @@ import static com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator.RESOURCE
 
 import net.devtech.arrp.json.tags.JTag;
 
+import net.fabricmc.loader.api.SemanticVersion;
+
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -35,7 +37,7 @@ public class BlockTagCompatRegistration {
 
 		var minecraftVersion = minecraftModContainer.get().getMetadata().getVersion();
 		try {
-			return minecraftVersion.compareTo(new SemanticVersionImpl(version, true));
+			return minecraftVersion.compareTo(SemanticVersion.parse(version));
 		} catch (VersionParsingException e) {
 			LOGGER.error("Couldn't parse Minecraft version: {}. See stacktrace below:\n{}", minecraftVersion, e);
 			return -1;
@@ -64,7 +66,9 @@ public class BlockTagCompatRegistration {
 		var bambooPlanksTag = new JTag();
 
 		if (checkIfMinecraftVersionIsEqualOrNewer("1.20") >= 0) {
-			RESOURCE_PACK.addTag(new Identifier(COMMON_NAMESPACE, BAMBOO_PLANKS), bambooPlanksTag);
+			bambooPlanksTag.add(new Identifier(MINECRAFT_NAMESPACE, BAMBOO_PLANKS));
 		}
+
+		RESOURCE_PACK.addTag(new Identifier(COMMON_NAMESPACE, CHERRY_PLANKS), bambooPlanksTag);
 	}
 }
