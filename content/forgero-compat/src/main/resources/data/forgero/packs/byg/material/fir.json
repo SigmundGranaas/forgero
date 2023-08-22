@@ -1,0 +1,18 @@
+{
+  "type": "WOOD",
+  "name": "fir",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "byg:fir"
+  },
+  "properties": {
+    "grouped_attributes": [
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "byg/fir"
+  }
+}
