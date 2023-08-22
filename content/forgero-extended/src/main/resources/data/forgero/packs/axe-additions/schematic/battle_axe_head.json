@@ -62,28 +62,28 @@
         "order": "BASE",
         "category": "LOCAL",
         "context": "ADDITION",
-        "value": 30
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.3
+        "value": 1.25
       },
       {
         "id": "schematic-mining_speed-composite",
         "type": "MINING_SPEED",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0.25
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 1.25
       },
       {
         "id": "schematic-attack_damage-composite",
@@ -93,18 +93,11 @@
         "value": 3
       },
       {
-        "id": "battleaxe-schematic-attack_speed-composite",
-        "type": "ATTACK_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -0.3
-      },
-      {
         "id": "battleaxe-schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.2
+        "value": 1.5
       }
     ]
   },

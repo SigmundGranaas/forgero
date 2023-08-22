@@ -76,14 +76,14 @@
         "type": "MINING_SPEED",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 0.85
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 1
       }
     ],
     "features": [

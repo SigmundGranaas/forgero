@@ -62,28 +62,28 @@
         "order": "BASE",
         "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 66
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.27
+        "value": 1.25
       },
       {
         "id": "schematic-mining_speed-composite",
         "type": "MINING_SPEED",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 0.85
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 1
       }
     ],
     "features": [

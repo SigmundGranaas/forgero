@@ -61,7 +61,7 @@
         "order": "BASE",
         "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 66
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
@@ -75,21 +75,14 @@
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
-      },
-      {
-        "id": "schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.4
+        "value": 0.75
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.6
+        "value": 0.75
       }
     ]
   },

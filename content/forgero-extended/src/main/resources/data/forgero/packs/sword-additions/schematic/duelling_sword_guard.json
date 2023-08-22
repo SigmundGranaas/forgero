@@ -70,28 +70,28 @@
         "order": "BASE",
         "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 44
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.43
+        "value": 1.25
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.3
+        "value": 0.85
       },
       {
         "id": "schematic-armor-composite",
         "type": "ARMOR",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.6
+        "value": 1
       }
     ]
   },
