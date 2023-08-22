@@ -46,6 +46,7 @@
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }
@@ -70,7 +71,7 @@
         "order": "BASE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 1
       },
       {
         "id": "schematic-durability-composite",

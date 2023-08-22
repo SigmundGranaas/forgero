@@ -39,7 +39,7 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
+        "description": "reinforcement",
         "type": "MATERIAL"
       },
       {
@@ -47,6 +47,7 @@
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }

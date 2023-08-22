@@ -60,7 +60,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 5
           },
           {
             "id": "wood-weight-upgrade",

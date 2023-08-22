@@ -34,7 +34,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 15
           },
           {
             "id": "plant-durability-offensive-upgrade",

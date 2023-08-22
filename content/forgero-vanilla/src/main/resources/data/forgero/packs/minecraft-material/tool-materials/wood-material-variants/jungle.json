@@ -14,11 +14,6 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2.1
-          },
-          {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
             "value": 30
@@ -44,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 35
+            "value": 17.5
           },
           {
             "id": "wood-weight-upgrade",

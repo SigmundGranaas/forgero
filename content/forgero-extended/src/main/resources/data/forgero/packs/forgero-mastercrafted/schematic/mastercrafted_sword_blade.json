@@ -39,14 +39,15 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
-        "type": "TOOL_MATERIAL"
+        "description": "reinforcement",
+        "type": "MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }

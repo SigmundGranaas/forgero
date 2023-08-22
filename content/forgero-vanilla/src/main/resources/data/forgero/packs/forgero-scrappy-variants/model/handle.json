@@ -7,13 +7,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
-    },
-    {
-      "target": [
-        "id:bamboo-simple_handle"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "handle"
     }
   ]
 }

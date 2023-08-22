@@ -1,6 +1,7 @@
 {
   "item.forgero.pommel": "Pommel",
   "item.forgero.reinforcement": "Reinforcement",
+  "item.forgero.cosmetic": "Cosmetic",
   "item.forgero.scrappy_binding": "Scrappy Binding",
   "item.forgero.simple_handle": "Simple Handle",
   "item.forgero.string": "String",
@@ -19,7 +20,7 @@
   "item.forgero.jungle": "Jungle",
   "item.forgero.mangrove": "Mangrove",
   "item.forgero.dark_oak": "Dark Oak",
-  "item.forgero.stone": "Stone",
+  "item.forgero.cobblestone": "Cobblestone",
   "item.forgero.iron": "Iron",
   "item.forgero.gold": "Gold",
   "item.forgero.copper": "Copper",

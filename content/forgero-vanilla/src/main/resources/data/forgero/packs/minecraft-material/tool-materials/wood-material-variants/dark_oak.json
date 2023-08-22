@@ -39,19 +39,12 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "wood-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1.15
-          },
-          {
             "id": "wood-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 25
+            "value": 12.5
           },
           {
             "id": "wood-weight-upgrade",
@@ -60,6 +53,13 @@
             "operation": "ADDITION",
             "category": "ALL",
             "value": 15
+          },
+          {
+            "id": "wood-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.15
           },
           {
             "id": "wood-durability-offensive-upgrade",

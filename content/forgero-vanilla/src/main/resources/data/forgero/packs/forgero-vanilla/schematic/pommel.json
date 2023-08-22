@@ -38,6 +38,7 @@
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }
@@ -58,7 +59,7 @@
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 1
       },
       {
         "id": "schematic-durability-composite",

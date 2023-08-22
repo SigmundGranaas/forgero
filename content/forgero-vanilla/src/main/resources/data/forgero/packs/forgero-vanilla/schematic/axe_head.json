@@ -36,18 +36,18 @@
     ],
     "slots": [
       {
-        "upgrade_type": "SMITHING",
         "category": [
           "OFFENSIVE"
         ],
+        "description": "reinforcement",
         "type": "MATERIAL",
         "tier": 1
       },
       {
-        "upgrade_type": "SMITHING",
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }
@@ -69,7 +69,7 @@
         "order": "BASE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 1
       }
     ]
   },

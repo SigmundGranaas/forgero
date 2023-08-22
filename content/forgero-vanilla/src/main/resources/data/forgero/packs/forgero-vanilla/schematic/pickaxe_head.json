@@ -40,7 +40,7 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "tip_reinforcement",
+        "description": "reinforcement",
         "type": "MATERIAL",
         "tier": 1
       },
@@ -49,6 +49,7 @@
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }
@@ -70,7 +71,7 @@
         "order": "BASE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 1
       }
     ]
   },

@@ -39,6 +39,7 @@
         "category": [
           "OFFENSIVE"
         ],
+        "description": "reinforcement",
         "type": "MATERIAL"
       },
       {
@@ -46,6 +47,7 @@
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }

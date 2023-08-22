@@ -54,11 +54,11 @@
       },
       {
         "upgrade_type": "SMITHING",
-        "description": "reinforcement",
         "category": [
           "OFFENSIVE"
         ],
-        "type": "TOOL_MATERIAL",
+        "description": "reinforcement",
+        "type": "MATERIAL",
         "tier": 1
       },
       {
@@ -66,6 +66,7 @@
         "category": [
           "UTILITY"
         ],
+        "description": "cosmetic",
         "type": "DYE",
         "tier": 1
       }

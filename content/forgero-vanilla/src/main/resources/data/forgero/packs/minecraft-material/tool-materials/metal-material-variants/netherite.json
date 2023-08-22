@@ -59,7 +59,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 100
+            "value": 50
           },
           {
             "id": "metal-weight-upgrade",
