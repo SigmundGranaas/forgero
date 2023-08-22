@@ -58,6 +58,12 @@ jobs:
         with:
           arguments: build
 
+      - name: Publish to Modrinth and CurseForge
+        run: ./gradlew publishToModrinthAndCurseForge
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN  }}
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY  }}
+
       # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
       - name: Publish to GitHub Packages
@@ -68,9 +74,3 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to Modrinth and CurseForge
-        run: ./gradlew publishToModrinthAndCurseForge
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN  }}
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY  }}
