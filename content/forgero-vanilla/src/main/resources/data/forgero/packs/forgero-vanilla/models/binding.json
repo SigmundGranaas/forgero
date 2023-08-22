@@ -179,7 +179,7 @@
     },
     {
       "target": [
-        "type:GEM",
+        "type:TOTEM",
         "slot:1"
       ],
       "modelType": "UPGRADE",
@@ -187,7 +187,7 @@
     },
     {
       "target": [
-        "type:TOTEM",
+        "type:GEM",
         "slot:1"
       ],
       "modelType": "UPGRADE",

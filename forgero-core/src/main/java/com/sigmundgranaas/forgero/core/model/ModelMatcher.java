@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.model.match.PredicateMatcher;
 import com.sigmundgranaas.forgero.core.model.match.predicate.IdPredicate;
+import com.sigmundgranaas.forgero.core.model.match.predicate.ModelPredicate;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
@@ -32,15 +33,21 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 				var match1Identifier = matcher1.getPredicates().stream().anyMatch(match -> match instanceof IdPredicate);
 				var match2Identifier = matcher2.getPredicates().stream().anyMatch(match -> match instanceof IdPredicate);
 
-				//If both reference an identifier, the one with the most criteria is preferred
-				if (match1Identifier && match2Identifier) {
-					return Integer.compare(matcher2.getPredicates().size(), matcher1.getPredicates().size());
-				}
+				var match1Model = matcher1.getPredicates().stream().anyMatch(match -> match instanceof ModelPredicate);
+				var match2Model = matcher2.getPredicates().stream().anyMatch(match -> match instanceof ModelPredicate);
+
 
 				//If one references an identifier, it is preferred
-				if (match1Identifier) {
+				if (match1Identifier && !match2Identifier) {
 					return -1;
-				} else if (match2Identifier) {
+				} else if (match2Identifier && !match1Identifier) {
+					return 1;
+				}
+
+				//If one references a model, it is preferred
+				if (match1Model && !match2Model) {
+					return -1;
+				} else if (match2Model && !match1Model) {
 					return 1;
 				}
 

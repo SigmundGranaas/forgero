@@ -45,17 +45,17 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "UTILITY"
+          "OFFENSIVE"
         ],
-        "type": "DYE",
+        "type": "TRINKET",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "TRINKET",
+        "type": "DYE",
         "tier": 1
       }
     ]
