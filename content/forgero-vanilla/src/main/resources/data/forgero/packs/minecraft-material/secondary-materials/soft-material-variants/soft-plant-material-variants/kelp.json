@@ -1,10 +1,10 @@
 {
-  "type": "PLANT",
-  "name": "chorus_fruit",
-  "parent": "plant_base",
+  "type": "SOFT_PLANT",
+  "name": "kelp",
+  "parent": "soft_plant_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:chorus_fruit"
+    "id": "minecraft:kelp"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,19 +14,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "plant-rarity-composite",
+            "id": "soft_plant-rarity-composite",
             "type": "RARITY",
-            "value": 50
-          },
-          {
-            "id": "plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 200
-          },
-          {
-            "id": "plant-weight-composite",
-            "type": "WEIGHT",
             "value": 20
+          },
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 140
+          },
+          {
+            "id": "soft_plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
           }
         ]
       },
@@ -34,62 +34,62 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "plant-rarity-upgrade",
+            "id": "soft_plant-rarity-upgrade",
             "type": "RARITY",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 25
-          },
-          {
-            "id": "plant-weight-upgrade",
-            "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
             "value": 10
           },
           {
-            "id": "plant-durability-offensive-upgrade",
+            "id": "soft_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "soft_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 100
+            "value": 70
           },
           {
-            "id": "plant-attack_speed-utility-upgrade",
+            "id": "soft_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.25
+            "value": 0.1
           },
           {
-            "id": "plant-attack_damage-utility-upgrade",
+            "id": "soft_plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.5
+            "value": 0
           },
           {
-            "id": "plant-mining_speed-utility-upgrade",
+            "id": "soft_plant-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.5
+            "value": 0
           },
           {
-            "id": "plant-mining_level-utility-upgrade",
+            "id": "soft_plant-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 2
+            "value": 0
           },
           {
-            "id": "plant-durability-utility-upgrade",
+            "id": "soft_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 100
+            "value": 70
           }
         ]
       }
@@ -98,6 +98,6 @@
     ]
   },
   "palette": {
-    "name": "chorus_fruit"
+    "name": "kelp"
   }
 }

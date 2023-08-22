@@ -1,7 +1,7 @@
 {
-  "type": "WOOD",
+  "type": "HARD_PLANT",
   "name": "bamboo",
-  "parent": "wood_base",
+  "parent": "hard_plant_base",
   "container": {
     "type": "HOST",
     "tag": "c:bamboo_planks"
@@ -33,28 +33,7 @@
       {
         "context": "UPGRADE",
         "attributes": [
-          {
-            "id": "wood-weight-upgrade",
-            "type": "WEIGHT",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 2.5
-          },
-          {
-            "id": "wood-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 12.5
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 12.5
-          }
+
         ]
       }
     ],

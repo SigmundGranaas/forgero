@@ -1,7 +1,7 @@
 {
-  "type": "PLANT",
+  "type": "SOFT_PLANT",
   "name": "vines",
-  "parent": "plant_base",
+  "parent": "soft_plant_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:vine"

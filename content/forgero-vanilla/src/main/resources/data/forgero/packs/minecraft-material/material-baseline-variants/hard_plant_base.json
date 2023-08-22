@@ -1,6 +1,6 @@
 {
-  "type": "PLANT",
-  "name": "plant_base",
+  "type": "HARD_PLANT",
+  "name": "hard_plant_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -10,19 +10,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "plant-rarity-composite",
+            "id": "hard_plant-rarity-composite",
             "type": "RARITY",
             "value": 15
           },
           {
-            "id": "plant-durability-composite",
+            "id": "hard_plant-durability-composite",
             "type": "DURABILITY",
-            "value": 120
+            "value": 25
           },
           {
-            "id": "plant-weight-composite",
+            "id": "hard_plant-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 5
           }
         ]
       },
@@ -30,90 +30,90 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "plant-rarity-upgrade",
+            "id": "hard_plant-rarity-upgrade",
             "type": "RARITY",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 7.5
-          },
-          {
-            "id": "plant-weight-upgrade",
-            "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
             "value": 5
           },
           {
-            "id": "plant-attack_speed-offensive-upgrade",
+            "id": "hard_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 2.5
+          },
+          {
+            "id": "hard_plant-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "plant-attack_damage-offensive-upgrade",
+            "id": "hard_plant-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": -1
+            "value": 0
           },
           {
-            "id": "plant-mining_speed-offensive-upgrade",
+            "id": "hard_plant-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": -1
+            "value": 0
           },
           {
-            "id": "plant-mining_level-offensive-upgrade",
+            "id": "hard_plant-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": -1
+            "value": 0
           },
           {
-            "id": "plant-durability-offensive-upgrade",
+            "id": "hard_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 60
+            "value": 25
           },
           {
-            "id": "plant-attack_speed-utility-upgrade",
+            "id": "hard_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.1
+            "value": 0
           },
           {
-            "id": "plant-attack_damage-utility-upgrade",
+            "id": "hard_plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "plant-mining_speed-utility-upgrade",
+            "id": "hard_plant-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "plant-mining_level-utility-upgrade",
+            "id": "hard_plant-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "plant-durability-utility-upgrade",
+            "id": "hard_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 60
+            "value": 25
           }
         ]
       }
