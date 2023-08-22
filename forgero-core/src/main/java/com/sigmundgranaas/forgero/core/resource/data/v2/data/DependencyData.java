@@ -21,7 +21,7 @@ import lombok.Builder;
 public class DependencyData {
 
 	@Builder.Default
-	@SerializedName(value = "dependencies", alternate = "dependency")
+	@SerializedName(value = "dependencies", alternate = "all")
 	private Set<String> dependencies = Collections.emptySet();
 
 	@Builder.Default

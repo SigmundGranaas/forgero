@@ -1,13 +1,18 @@
 {
   "type": "METAL",
   "parent": "metal",
-  "name": "silver",
+  "name": "steel",
+  "dependencies": {
+    "any": [
+      "mythicmetals"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "mythicmetals:silver_ingot"
+    "tag": "c:steel_ingot"
   },
   "palette": {
-    "name": "silver"
+    "name": "steel"
   },
   "properties": {
     "attributes": [
@@ -16,58 +21,58 @@
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 57
+        "value": 38
       },
       {
         "id": "metal-mining_level-composite",
         "type": "MINING_LEVEL",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3
+        "value": 2.0
       },
       {
         "id": "metal-mining_speed-composite",
         "type": "MINING_SPEED",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 7
+        "value": 6.5
       },
       {
         "id": "metal-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 658.0
+        "value": 600.0
       },
       {
         "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.7
+        "value": 1.9
       },
       {
         "id": "metal-armor-composite",
         "type": "ARMOR",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 3
+        "value": 4
       },
       {
         "id": "metal-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 45
+        "value": 37
       },
       {
         "id": "metal-rarity-upgrade",
         "context": "UPGRADE",
         "type": "RARITY",
-        "order": "BASE",
+        "context": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
-        "value": 25
+        "value": 17
       }
     ]
   }
