@@ -19,9 +19,14 @@
             "value": 45
           },
           {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 25
+          },
+          {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 15
           }
         ]
       },
@@ -29,12 +34,20 @@
         "context": "UPGRADE",
         "attributes": [
           {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 17.5
+          },
+          {
             "id": "wood-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 7.5
           },
           {
             "id": "wood-durability-offensive-upgrade",

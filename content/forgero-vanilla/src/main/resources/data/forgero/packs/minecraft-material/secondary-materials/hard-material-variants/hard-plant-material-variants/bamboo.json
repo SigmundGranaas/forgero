@@ -13,21 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 25
-          },
-          {
-            "id": "wood-weight-composite",
-            "type": "WEIGHT",
-            "value": 5
-          },
-          {
-            "id": "wood-mining-speed-composite",
-            "type": "MINING_SPEED",
-            "value": 2.4
-          }
         ]
       },
       {
