@@ -1,0 +1,30 @@
+{
+  "type": "HARD_PLANT",
+  "name": "warped_fungus",
+  "parent": "hard_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:warped_fungus"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "warped_fungus"
+  }
+}

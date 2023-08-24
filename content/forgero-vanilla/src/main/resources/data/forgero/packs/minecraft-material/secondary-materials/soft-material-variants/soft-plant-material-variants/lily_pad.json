@@ -1,0 +1,30 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "lily_pad",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:lily_pad"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "lily_pad"
+  }
+}

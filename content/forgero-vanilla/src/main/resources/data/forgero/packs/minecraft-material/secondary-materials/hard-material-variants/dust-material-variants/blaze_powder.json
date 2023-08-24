@@ -1,0 +1,28 @@
+{
+  "type": "DUST",
+  "name": "blaze_powder",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:blaze_powder"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "blaze_powder"
+  }
+}

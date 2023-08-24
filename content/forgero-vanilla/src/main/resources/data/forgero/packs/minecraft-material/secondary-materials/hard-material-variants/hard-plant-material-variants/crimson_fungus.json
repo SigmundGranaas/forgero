@@ -1,0 +1,30 @@
+{
+  "type": "HARD_PLANT",
+  "name": "crimson_fungus",
+  "parent": "hard_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:crimson_fungus"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "crimson_fungus"
+  }
+}

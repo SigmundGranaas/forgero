@@ -1,0 +1,28 @@
+{
+  "type": "DUST",
+  "name": "fire_charge",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:fire_charge"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "fire_charge"
+  }
+}
