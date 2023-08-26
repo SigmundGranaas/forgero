@@ -1,0 +1,30 @@
+{
+  "type": "GOO",
+  "name": "magma_cream",
+  "parent": "goo_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:magma_cream"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "magma_cream"
+  }
+}

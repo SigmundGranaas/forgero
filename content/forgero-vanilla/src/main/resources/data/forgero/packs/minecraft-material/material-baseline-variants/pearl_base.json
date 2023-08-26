@@ -1,6 +1,6 @@
 {
-  "type": "SLIME",
-  "name": "slime_base",
+  "type": "PEARL",
+  "name": "pearl_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -10,19 +10,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "slime-rarity-composite",
+            "id": "pearl-rarity-composite",
             "type": "RARITY",
-            "value": 60
+            "value": 75
           },
           {
-            "id": "slime-durability-composite",
+            "id": "pearl-durability-composite",
             "type": "DURABILITY",
-            "value": 210
+            "value": 575
           },
           {
-            "id": "slime-weight-composite",
+            "id": "pearl-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 20
           }
         ]
       },
@@ -30,90 +30,90 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "slime-rarity-upgrade",
+            "id": "pearl-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 37.5
           },
           {
-            "id": "slime-weight-upgrade",
+            "id": "pearl-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 10
           },
           {
-            "id": "slime-attack_speed-offensive-upgrade",
+            "id": "pearl-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "slime-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": -1
-          },
-          {
-            "id": "slime-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": -1
-          },
-          {
-            "id": "slime-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": -1
-          },
-          {
-            "id": "slime-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 105
-          },
-          {
-            "id": "slime-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 0.2
           },
           {
-            "id": "slime-attack_damage-utility-upgrade",
+            "id": "pearl-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "pearl-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "pearl-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "pearl-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 287.5
+          },
+          {
+            "id": "pearl-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "pearl-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "slime-mining_speed-utility-upgrade",
+            "id": "pearl-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "slime-mining_level-utility-upgrade",
+            "id": "pearl-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "slime-durability-utility-upgrade",
+            "id": "pearl-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 105
+            "value": 287.5
           }
         ]
       }

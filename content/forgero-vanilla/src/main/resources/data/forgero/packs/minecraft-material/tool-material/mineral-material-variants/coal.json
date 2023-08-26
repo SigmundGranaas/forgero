@@ -1,0 +1,27 @@
+{
+  "type": "MINERAL",
+  "name": "coal",
+  "parent": "mineral_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:coal"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "coal"
+  }
+}

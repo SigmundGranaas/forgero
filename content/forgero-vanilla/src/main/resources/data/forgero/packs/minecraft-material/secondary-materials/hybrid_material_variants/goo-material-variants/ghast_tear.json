@@ -1,10 +1,10 @@
 {
-  "type": "DUST",
-  "name": "fire_charge",
-  "parent": "dust_base",
+  "type": "GOO",
+  "name": "ghast_tear",
+  "parent": "goo_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:fire_charge"
+    "id": "minecraft:ghast_tear"
   },
   "properties": {
     "grouped_attributes": [
@@ -20,9 +20,11 @@
         "attributes": [
         ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {
-    "name": "fire_charge"
+    "name": "ghast_tear"
   }
 }

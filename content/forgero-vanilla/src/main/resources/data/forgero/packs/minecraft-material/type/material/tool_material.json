@@ -1,5 +1,5 @@
 {
-  "parent": "MATERIAL",
+  "parent": "UPGRADE_MATERIAL",
   "name": "TOOL_MATERIAL",
   "children": [
     {

@@ -1,6 +1,6 @@
 {
-  "type": "LEATHER",
-  "name": "leather_base",
+  "type": "MAKESHIFT",
+  "name": "makeshift_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -10,19 +10,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "leather-rarity-composite",
+            "id": "makeshift-rarity-composite",
             "type": "RARITY",
-            "value": 25
+            "value": 60
           },
           {
-            "id": "leather-durability-composite",
+            "id": "makeshift-durability-composite",
             "type": "DURABILITY",
-            "value": 160
+            "value": 1750
           },
           {
-            "id": "leather-weight-composite",
+            "id": "makeshift-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 30
           }
         ]
       },
@@ -30,95 +30,93 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "leather-rarity-upgrade",
+            "id": "makeshift-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 12.5
+            "value": 30
           },
           {
-            "id": "leather-weight-upgrade",
+            "id": "makeshift-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 15
           },
           {
-            "id": "leather-attack_speed-offensive-upgrade",
+            "id": "makeshift-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "leather-attack_damage-offensive-upgrade",
+            "id": "makeshift-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": -1
+            "value": 1
           },
           {
-            "id": "leather-mining_speed-offensive-upgrade",
+            "id": "makeshift-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 1
           },
           {
-            "id": "leather-mining_level-offensive-upgrade",
+            "id": "makeshift-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "leather-durability-offensive-upgrade",
+            "id": "makeshift-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 80
+            "value": 875
           },
           {
-            "id": "leather-attack_speed-utility-upgrade",
+            "id": "makeshift-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.1
+            "value": 0
           },
           {
-            "id": "leather-attack_damage-utility-upgrade",
+            "id": "makeshift-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "leather-mining_speed-utility-upgrade",
+            "id": "makeshift-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.1
+            "value": 0
           },
           {
-            "id": "leather-mining_level-utility-upgrade",
+            "id": "makeshift-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "leather-durability-utility-upgrade",
+            "id": "makeshift-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 80
+            "value": 875
           }
         ]
       }
-    ],
-    "attributes": [
     ]
   }
 }

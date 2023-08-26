@@ -6,9 +6,6 @@
       "name": "GLASS"
     },
     {
-      "name": "DUST"
-    },
-    {
       "name": "SCALE"
     },
     {
@@ -16,6 +13,9 @@
     },
     {
       "name": "HARD_PLANT"
+    },
+    {
+      "name": "PEARL"
     }
   ]
 }

@@ -1,0 +1,28 @@
+{
+  "type": "MAKESHIFT",
+  "name": "fermented_spider_eye",
+  "parent": "makeshift_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:fermented_spider_eye"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "fermented_spider_eye"
+  }
+}

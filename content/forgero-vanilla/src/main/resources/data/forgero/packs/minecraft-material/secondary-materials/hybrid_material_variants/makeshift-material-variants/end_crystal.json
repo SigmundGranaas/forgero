@@ -1,10 +1,10 @@
 {
-  "type": "SLIME",
-  "name": "slimeball",
-  "parent": "slime_base",
+  "type": "MAKESHIFT",
+  "name": "end_crystal",
+  "parent": "makeshift_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:slime_ball"
+    "id": "minecraft:end_crystal"
   },
   "properties": {
     "grouped_attributes": [
@@ -20,11 +20,9 @@
         "attributes": [
         ]
       }
-    ],
-    "attributes": [
     ]
   },
   "palette": {
-    "name": "slime"
+    "name": "end_crystal"
   }
 }

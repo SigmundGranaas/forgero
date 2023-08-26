@@ -1,7 +1,7 @@
 {
-  "type": "LEATHER",
+  "type": "HIDE",
   "name": "leather",
-  "parent": "leather_base",
+  "parent": "hide_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:leather"

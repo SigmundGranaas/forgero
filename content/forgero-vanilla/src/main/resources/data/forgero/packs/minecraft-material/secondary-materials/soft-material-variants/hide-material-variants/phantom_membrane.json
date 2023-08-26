@@ -1,7 +1,7 @@
 {
-  "type": "LEATHER",
+  "type": "HIDE",
   "name": "phantom_membrane",
-  "parent": "leather_base",
+  "parent": "hide_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:phantom_membrane"

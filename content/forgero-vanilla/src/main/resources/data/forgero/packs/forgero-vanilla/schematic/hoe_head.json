@@ -41,7 +41,7 @@
           "OFFENSIVE"
         ],
         "description": "reinforcement",
-        "type": "MATERIAL",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
