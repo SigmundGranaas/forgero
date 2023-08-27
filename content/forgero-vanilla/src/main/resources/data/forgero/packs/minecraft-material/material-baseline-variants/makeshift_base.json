@@ -12,12 +12,12 @@
           {
             "id": "makeshift-rarity-composite",
             "type": "RARITY",
-            "value": 60
+            "value": 50
           },
           {
             "id": "makeshift-durability-composite",
             "type": "DURABILITY",
-            "value": 1750
+            "value": 680
           },
           {
             "id": "makeshift-weight-composite",
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 25
           },
           {
             "id": "makeshift-weight-upgrade",
@@ -57,14 +57,14 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 0
           },
           {
             "id": "makeshift-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 0
           },
           {
             "id": "makeshift-mining_level-offensive-upgrade",
@@ -78,7 +78,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 875
+            "value": 340
           },
           {
             "id": "makeshift-attack_speed-utility-upgrade",
@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 875
+            "value": 340
           }
         ]
       }

@@ -85,7 +85,7 @@
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.2
+            "value": 0.1
           },
           {
             "id": "goo-attack_damage-utility-upgrade",
