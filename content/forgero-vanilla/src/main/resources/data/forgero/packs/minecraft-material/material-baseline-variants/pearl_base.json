@@ -12,17 +12,17 @@
           {
             "id": "pearl-rarity-composite",
             "type": "RARITY",
-            "value": 75
+            "value": 40
           },
           {
             "id": "pearl-durability-composite",
             "type": "DURABILITY",
-            "value": 575
+            "value": 210
           },
           {
             "id": "pearl-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 10
           }
         ]
       },
@@ -35,7 +35,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 37.5
+            "value": 20
           },
           {
             "id": "pearl-weight-upgrade",
@@ -43,21 +43,21 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 5
           },
           {
             "id": "pearl-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.2
+            "value": 0
           },
           {
             "id": "pearl-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 0
           },
           {
             "id": "pearl-mining_speed-offensive-upgrade",
@@ -78,7 +78,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 287.5
+            "value": 105
           },
           {
             "id": "pearl-attack_speed-utility-upgrade",
@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 287.5
+            "value": 105
           }
         ]
       }

@@ -17,7 +17,7 @@
           {
             "id": "hard_plant-durability-composite",
             "type": "DURABILITY",
-            "value": 160
+            "value": 180
           },
           {
             "id": "hard_plant-weight-composite",
@@ -64,7 +64,7 @@
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.1
+            "value": 0
           },
           {
             "id": "hard_plant-mining_level-offensive-upgrade",
@@ -78,7 +78,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 80
+            "value": 90
           },
           {
             "id": "hard_plant-attack_speed-utility-upgrade",
@@ -92,28 +92,28 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": -1
+            "value": 0
           },
           {
             "id": "hard_plant-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": -1
+            "value": 0
           },
           {
             "id": "hard_plant-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": -1
+            "value": 0
           },
           {
             "id": "hard_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 80
+            "value": 90
           }
         ]
       }

@@ -39,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 60
+            "value": 30
           },
           {
             "id": "dust-weight-upgrade",
@@ -54,7 +54,14 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.4
+            "value": 0.5
+          },
+          {
+            "id": "scale-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
           },
           {
             "id": "dust-durability-offensive-upgrade",

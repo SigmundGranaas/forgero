@@ -1,10 +1,10 @@
 {
-  "type": "GLASS",
-  "name": "crying_obsidian",
-  "parent": "glass_base",
+  "type": "MAKESHIFT",
+  "name": "ender_eye",
+  "parent": "makeshift_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:crying_obsidian"
+    "id": "minecraft:ender_eye"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,14 +14,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "glass-rarity-composite",
+            "id": "makeshift-rarity-composite",
             "type": "RARITY",
-            "value": 70
+            "value": 75
           },
           {
-            "id": "glass-durability-composite",
+            "id": "makeshift-durability-composite",
             "type": "DURABILITY",
-            "value": 1880
+            "value": 490
+          },
+          {
+            "id": "makeshift-weight-composite",
+            "type": "WEIGHT",
+            "value": 40
           }
         ]
       },
@@ -29,94 +34,96 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "glass-rarity-upgrade",
+            "id": "makeshift-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 35
-          }
+            "value": 37.5
+          },
           {
-            "id": "glass-attack_speed-offensive-upgrade",
+            "id": "makeshift-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "makeshift-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "glass-attack_damage-offensive-upgrade",
+            "id": "makeshift-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.5
+            "value": 0
           },
           {
-            "id": "glass-mining_speed-offensive-upgrade",
+            "id": "makeshift-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.5
+            "value": 0
           },
           {
-            "id": "glass-mining_level-offensive-upgrade",
+            "id": "makeshift-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 0
           },
           {
-            "id": "glass-durability-offensive-upgrade",
+            "id": "makeshift-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 940
+            "value": 245
           },
           {
-            "id": "glass-attack_speed-utility-upgrade",
+            "id": "makeshift-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-attack_damage-utility-upgrade",
+            "id": "makeshift-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-mining_speed-utility-upgrade",
+            "id": "makeshift-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-mining_level-utility-upgrade",
+            "id": "makeshift-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-durability-utility-upgrade",
+            "id": "makeshift-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 940
+            "value": 245
           }
         ]
-      }
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
       }
     ]
   },
   "palette": {
-    "name": "crying_obsidian"
+    "name": "ender_eye"
   }
 }

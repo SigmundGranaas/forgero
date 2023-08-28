@@ -34,7 +34,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 85
+            "value": 42.5
           },
           {
             "id": "goo-durability-offensive-upgrade",

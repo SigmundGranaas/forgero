@@ -82,7 +82,7 @@
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 2
+            "value": 1
           },
           {
             "id": "soft_plant-durability-utility-upgrade",
