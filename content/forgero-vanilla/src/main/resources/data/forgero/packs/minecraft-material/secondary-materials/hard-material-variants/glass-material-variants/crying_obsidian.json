@@ -35,7 +35,7 @@
             "operation": "ADDITION",
             "category": "ALL",
             "value": 35
-          }
+          },
           {
             "id": "glass-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
