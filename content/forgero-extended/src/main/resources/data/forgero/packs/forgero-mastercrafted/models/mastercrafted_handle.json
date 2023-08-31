@@ -100,7 +100,6 @@
             "type:HANDLE"
           ]
         }
-
       ]
     },
     {
@@ -128,7 +127,7 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
+        "type:MATERIAL",
         "slot:2"
       ],
       "modelType": "UPGRADE",
