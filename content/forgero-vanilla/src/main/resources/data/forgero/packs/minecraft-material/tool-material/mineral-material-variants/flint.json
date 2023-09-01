@@ -40,7 +40,7 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 30
+            "value": 20
           }
         ]
       },
@@ -61,7 +61,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 10
           },
           {
             "id": "mineral-attack_speed-offensive-upgrade",
