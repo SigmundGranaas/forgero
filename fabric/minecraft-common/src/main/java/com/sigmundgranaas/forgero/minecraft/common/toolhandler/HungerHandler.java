@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+
 import java.util.Random;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -50,8 +52,8 @@ public class HungerHandler {
 		if (player instanceof ServerPlayerEntity serverPlayerEntity && ForgeroConfigurationLoader.configuration.weightIncreasesHunger) {
 			service.convert(stack)
 					.filter(state -> state.test(Type.TOOL) || state.test(Type.WEAPON))
-					.map(Weight::of)
-					.map(Weight::asInt)
+					.map(state -> Attribute.of(state, Weight.KEY))
+					.map(Attribute::asInt)
 					.ifPresent(weight -> adjustHungerBasedOnWeight(serverPlayerEntity, weight));
 		}
 	}

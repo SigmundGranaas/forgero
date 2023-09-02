@@ -53,7 +53,7 @@ public class DataResource implements Identifiable {
 
 	@Nullable
 	@SerializedName(value = "dependencies", alternate = "dependency")
-	private List<String> dependencies;
+	private DependencyData dependencies;
 
 	@Nullable
 	private ConstructData construct;
@@ -137,11 +137,11 @@ public class DataResource implements Identifiable {
 	}
 
 	@NotNull
-	public ImmutableList<String> dependencies() {
+	public DependencyData dependencies() {
 		if (dependencies == null) {
-			return ImmutableList.<String>builder().build();
+			return DependencyData.empty();
 		}
-		return ImmutableList.<String>builder().addAll(dependencies).build();
+		return dependencies;
 	}
 
 	@NotNull

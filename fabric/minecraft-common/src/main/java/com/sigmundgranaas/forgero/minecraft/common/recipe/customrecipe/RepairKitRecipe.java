@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
+import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
@@ -51,7 +52,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 				.findFirst();
 		if (state.isPresent() && originalStack.isPresent() && state.get() instanceof ConstructedTool tool) {
 			var unbrokenState = tool.removeCondition(Conditions.BROKEN.name());
-			int durability = Durability.of(unbrokenState).asInt();
+			int durability = Attribute.of(unbrokenState, Durability.KEY).asInt();
 			var stack = originalStack.get();
 			stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompositeEncoder.ENCODER.encode(unbrokenState));
 			var newDamage = stack.getDamage() - (durability / 3);

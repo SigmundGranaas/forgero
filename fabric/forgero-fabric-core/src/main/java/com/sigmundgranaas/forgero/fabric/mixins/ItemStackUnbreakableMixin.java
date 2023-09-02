@@ -5,6 +5,7 @@ import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_K
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.condition.Conditions;
+import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
@@ -41,7 +42,7 @@ public abstract class ItemStackUnbreakableMixin {
 			Optional<State> tool = service.convert(stack);
 			if (tool.isPresent() && tool.map(UnbreakableHandler::isUnbreakable).filter(bol -> bol).isPresent()) {
 				if (tool.get() instanceof ConstructedTool conditional && !ContainsFeatureCache.check(PropertyTargetCacheKey.of(conditional, BROKEN_TYPE_KEY))) {
-					stack.setDamage(Durability.apply(conditional));
+					stack.setDamage(Attribute.of(conditional, Durability.KEY).asInt());
 					player.world.playSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_BREAK, player.getSoundCategory(), 0.8f, 0.8f + player.world.random.nextFloat() * 0.4f, false);
 					State brokenTool = conditional.applyCondition(Conditions.BROKEN);
 					player.getInventory().setStack(player.getInventory().selectedSlot, service.update(brokenTool, stack));

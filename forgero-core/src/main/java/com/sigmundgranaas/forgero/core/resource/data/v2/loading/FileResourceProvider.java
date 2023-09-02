@@ -18,6 +18,7 @@ import com.sigmundgranaas.forgero.core.resource.data.deserializer.ContextDeseria
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataResourceProvider;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ContextData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DependencyData;
 import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
 import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
 
@@ -46,6 +47,7 @@ public class FileResourceProvider implements DataResourceProvider {
 				JsonReader reader = new JsonReader(new InputStreamReader(stream));
 				var context = createContextFromPath(path);
 				GsonBuilder builder = new GsonBuilder();
+				builder.registerTypeAdapter(DependencyData.class, new DependencyData.DependencyDataDeserializer());
 				builder.registerTypeAdapter(new TypeToken<List<PropertyPojo.Attribute>>() {
 				}.getType(), new AttributeGroupDeserializer());
 				builder.registerTypeAdapter(new TypeToken<Context>() {

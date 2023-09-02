@@ -1,11 +1,23 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
+import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.BrokenToolAttributeModification;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DataPipeLineReloader;
@@ -27,6 +39,7 @@ import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.DynamicIte
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,10 +64,10 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_NAMESPACE);
 
 	/**
-	 * The onInitialized method is called after all mods have been loaded.
+	 * The onInitialized method is called after core Forgero Systems have been loaded.
 	 * This method initiates the registration of various game elements.
 	 *
-	 * @param stateService The state service provides services related to game states.
+	 * @param stateService The state service provides services related to Forgero states.
 	 */
 	@Override
 	public void onInitialized(StateService stateService) {
@@ -70,6 +83,52 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerRecipeSerializers();
 		registerAARPRecipes(stateService);
 		registerHungerCallbacks(stateService);
+		registerToolTipFilters();
+	}
+
+	private void registerToolTipFilters() {
+		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY);
+		defaults.stream().map(TooltipAttributeRegistry.attributeBuilder()::attribute).forEach(TooltipAttributeRegistry.AttributeBuilder::register);
+		TooltipAttributeRegistry.attributeBuilder().attribute("RARITY").condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
+
+		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY);
+		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD_BLADE).register();
+		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD).register();
+		registerAttributeModifications();
+	}
+
+	private void registerAttributeModifications() {
+		modificationBuilder()
+				.attributeKey(AttackDamage.KEY)
+				.modification(new BrokenToolAttributeModification(0f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(MiningSpeed.KEY)
+				.modification(new BrokenToolAttributeModification(1f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(MiningLevel.KEY)
+				.modification(new BrokenToolAttributeModification(0f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(Armor.KEY)
+				.modification(new BrokenToolAttributeModification(0f))
+				.register();
+
+		modificationBuilder()
+				.attributeKey(AttackSpeed.KEY)
+				.modification(AttackSpeed.clampMinimumAttackSpeed())
+				.register();
+
+		if (ForgeroConfigurationLoader.configuration.weightReducesAttackSpeed) {
+			modificationBuilder()
+					.attributeKey(AttackSpeed.KEY)
+					.modification(Weight.reduceAttackSpeedByWeight())
+					.register();
+		}
 	}
 
 	private void registerHungerCallbacks(StateService stateService) {

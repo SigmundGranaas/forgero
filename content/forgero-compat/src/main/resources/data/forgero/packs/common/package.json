@@ -1,10 +1,15 @@
 {
-  "name": "common",
+  "name": "compat_common",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",
-  "dependencies": [
-    "minecraft",
-    "forgero"
-  ]
+  "dependencies": {
+    "all": [
+      "minecraft",
+      "forgero"
+    ],
+    "any": [
+      "mythicmetals"
+    ]
+  }
 }

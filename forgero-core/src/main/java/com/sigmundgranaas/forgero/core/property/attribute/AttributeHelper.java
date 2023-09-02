@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.state.State;
-
-import java.util.List;
 
 public class AttributeHelper {
 	private final State state;
@@ -38,7 +39,7 @@ public class AttributeHelper {
 	}
 
 	public int durability() {
-		return Durability.apply(state);
+		return Attribute.of(state, Durability.KEY).asInt();
 	}
 
 	public List<Property> attributes() {
