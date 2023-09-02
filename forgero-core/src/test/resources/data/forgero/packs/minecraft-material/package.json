@@ -1,5 +1,5 @@
 {
-  "name": "minecraft-vanilla",
+  "name": "minecraft-material",
   "resource_type": "PACKAGE",
   "priority": 5,
   "namespace": "minecraft",

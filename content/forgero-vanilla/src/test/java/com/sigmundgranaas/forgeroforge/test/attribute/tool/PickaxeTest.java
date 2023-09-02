@@ -78,9 +78,9 @@ public class PickaxeTest extends ForgeroPackageTest {
 		AttributeTester.tester(pickaxe)
 				.add(DURABILITY, 1600, 200)
 				.add(MINING_SPEED, 9, 1)
-				.add(RARITY, 88, 10)
+				.add(RARITY, 100, 20)
 				.add(ATTACK_DAMAGE, 6, 1.5)
-				.add(ATTACK_SPEED, -2.8, 0.4)
+				.add(ATTACK_SPEED, -2.0, 0.4)
 				.run();
 	}
 }
