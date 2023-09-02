@@ -17,7 +17,7 @@ public class SwordTest extends ForgeroPackageTest {
 		AttributeTester.tester(state("forgero:oak-sword"))
 				.add(DURABILITY, 50, 10)
 				.add(MINING_SPEED, 2, 1)
-				.add(RARITY, 6, 5)
+				.add(RARITY, 20, 5)
 				.add(ATTACK_DAMAGE, 3.5, 0.5)
 				.add(ATTACK_SPEED, -2.1, 0.5)
 				.run();
