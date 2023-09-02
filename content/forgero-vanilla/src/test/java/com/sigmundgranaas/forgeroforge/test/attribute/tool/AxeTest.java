@@ -17,8 +17,8 @@ public class AxeTest extends ForgeroPackageTest {
 		AttributeTester.tester(state("forgero:oak-axe"))
 				.add(DURABILITY, 50, 10)
 				.add(MINING_SPEED, 2, 1)
-				.add(RARITY, 6, 5)
-				.add(ATTACK_DAMAGE, 5, 0.5)
+				.add(RARITY, 20, 5)
+				.add(ATTACK_DAMAGE, 6, 0.5)
 				.add(ATTACK_SPEED, -3.0, 0.5)
 				.run();
 	}
@@ -29,7 +29,7 @@ public class AxeTest extends ForgeroPackageTest {
 				.add(DURABILITY, 250, 50)
 				.add(MINING_SPEED, 6, 1)
 				.add(RARITY, 40, 10)
-				.add(ATTACK_DAMAGE, 7, 0.5)
+				.add(ATTACK_DAMAGE, 8, 0.5)
 				.add(ATTACK_SPEED, -3.0, 0.5)
 				.run();
 	}
@@ -40,7 +40,7 @@ public class AxeTest extends ForgeroPackageTest {
 				.add(DURABILITY, 41, 10)
 				.add(MINING_SPEED, 12, 1)
 				.add(RARITY, 60, 10)
-				.add(ATTACK_DAMAGE, 5, 0.5)
+				.add(ATTACK_DAMAGE, 6, 0.5)
 				.add(ATTACK_SPEED, -3.0, 0.5)
 				.run();
 	}
@@ -51,7 +51,7 @@ public class AxeTest extends ForgeroPackageTest {
 				.add(DURABILITY, 1500, 300)
 				.add(MINING_SPEED, 8, 1)
 				.add(RARITY, 80, 10)
-				.add(ATTACK_DAMAGE, 8, 0.5)
+				.add(ATTACK_DAMAGE, 9, 0.5)
 				.add(ATTACK_SPEED, -3.0, 0.5)
 				.run();
 	}
