@@ -1,6 +1,7 @@
 {
   "type": "MINERAL",
   "name": "nether_ruby",
+  "parent": "mineral_base",
   "container": {
     "type": "HOST",
     "id": "betternether:nether_ruby"

@@ -1,6 +1,6 @@
 {
   "type": "WOOD",
-  "parent": "wood",
+  "parent": "wood_base",
   "name": "essence_planks",
   "container": {
     "type": "HOST",

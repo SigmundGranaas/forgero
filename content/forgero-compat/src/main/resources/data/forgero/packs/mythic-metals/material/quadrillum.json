@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "quadrillum",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:quadrillum_ingot"

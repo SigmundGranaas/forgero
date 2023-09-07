@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "name": "aquarium",
-  "parent": "metal",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:aquarium_ingot"

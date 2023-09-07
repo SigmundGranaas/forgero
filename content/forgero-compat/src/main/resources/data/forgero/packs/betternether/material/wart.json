@@ -1,7 +1,7 @@
 {
   "type": "WOOD",
   "name": "wart",
-  "parent": "wood",
+  "parent": "wood_base",
   "container": {
     "type": "HOST",
     "id": "betternether:wart_planks"

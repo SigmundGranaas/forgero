@@ -1,7 +1,7 @@
 {
   "type": "WOOD",
   "name": "nether_reed",
-  "parent": "wood",
+  "parent": "wood_base",
   "container": {
     "type": "HOST",
     "id": "betternether:nether_reed_stem"

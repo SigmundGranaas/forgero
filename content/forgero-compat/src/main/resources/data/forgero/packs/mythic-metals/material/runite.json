@@ -1,6 +1,6 @@
 {
   "type": "METAL",
-  "parent": "metal",
+  "parent": "metal_base",
   "name": "runite",
   "container": {
     "type": "HOST",

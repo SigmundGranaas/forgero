@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "hallowed",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:hallowed_ingot"

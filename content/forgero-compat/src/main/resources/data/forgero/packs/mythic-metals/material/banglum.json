@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "name": "banglum",
-  "parent": "metal",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:banglum_ingot"

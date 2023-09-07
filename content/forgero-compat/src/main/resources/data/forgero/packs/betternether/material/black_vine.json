@@ -1,7 +1,7 @@
 {
   "type": "PLANT",
   "name": "black_vine",
-  "parent": "vines",
+  "parent": "vines_base",
   "container": {
     "type": "HOST",
     "id": "betternether:black_vine"

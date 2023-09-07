@@ -1,7 +1,7 @@
 {
   "type": "WOOD",
   "name": "rubeus",
-  "parent": "wood",
+  "parent": "wood_base",
   "container": {
     "type": "HOST",
     "id": "betternether:rubeus_planks"

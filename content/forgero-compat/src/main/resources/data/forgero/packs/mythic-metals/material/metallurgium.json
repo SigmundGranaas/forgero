@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "name": "metallurgium",
-  "parent": "metal",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:metallurgium_ingot"

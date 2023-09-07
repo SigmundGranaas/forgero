@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "name": "palladium",
-  "parent": "metal",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:palladium_ingot"

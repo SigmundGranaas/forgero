@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "cincinnasite",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "betternether:cincinnasite_ingot"
