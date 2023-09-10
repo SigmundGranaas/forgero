@@ -6,53 +6,58 @@
     "id": "minecraft:phantom_membrane"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 40
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 100
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1
-      },
-      {
-        "type": "RARITY",
+        "context": "COMPOSITE",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 20
+        "attributes": [
+          {
+            "type": "RARITY",
+            "value": 40
+          },
+          {
+            "type": "DURABILITY",
+            "value": 100
+          },
+          {
+            "type": "WEIGHT",
+            "value": 1
+          }
+        ]
       },
       {
-        "type": "DURABILITY",
+        "context": "UPGRADE",
         "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "category": "OFFENSIVE",
-        "value": 0.2
-      },
-      {
-        "type": "DURABILITY",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 200
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "category": "UTILITY",
-        "value": 0.4
+        "attributes": [
+          {
+            "type": "RARITY",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 0.2
+          },
+          {
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 200
+          },
+          {
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.4
+          }
+        ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {

@@ -16,6 +16,7 @@ import com.sigmundgranaas.forgero.core.resource.data.DataBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.StateConverter;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DependencyData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.factory.TypeFactory;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -51,6 +52,38 @@ public class ResourcePipeline {
 		this.silent = silent;
 	}
 
+	public static boolean filterDependencies(Set<String> availableDependencies, DependencyData dependencyData, String id, boolean silent, ForgeroConfiguration configuration) {
+		if (availableDependencies.isEmpty()) {
+			return true;
+		}
+		boolean hasAllDependencies = availableDependencies.containsAll(dependencyData.getDependencies());
+		boolean hasAnyOfDependencies = availableDependencies.stream().anyMatch(dependencyData.getAny_of()::contains) || dependencyData.getAny_of().isEmpty();
+		boolean hasNoneOf = availableDependencies.stream().noneMatch(dependencyData.getNone_of()::contains) || dependencyData.getNone_of().isEmpty();
+		if (hasAllDependencies && hasAnyOfDependencies && hasNoneOf) {
+			return true;
+
+		} else {
+			if (configuration.logDisabledPackages) {
+				if (!hasAllDependencies) {
+					var missingDependencies = dependencyData.getDependencies().stream().filter(depend -> !availableDependencies.contains(depend)).toList();
+					if (!silent) {
+						Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", id, missingDependencies);
+					}
+				} else if (!hasAnyOfDependencies) {
+					if (!silent) {
+						Forgero.LOGGER.info("{} was disabled due to missing any of these dependencies: {}", id, dependencyData.getAny_of());
+					}
+				} else {
+					if (!silent) {
+						Forgero.LOGGER.info("{} was disabled due to the presence of any of these dependencies: {}", id, dependencyData.getNone_of());
+					}
+				}
+
+			}
+			return false;
+		}
+
+	}
 
 	public void execute() {
 		List<DataPackage> validatedPackages = validatePackages(packages);
@@ -106,17 +139,7 @@ public class ResourcePipeline {
 		if (!filterPacks(dataPackage)) {
 			return false;
 		}
-		if (!dependencies.containsAll(dataPackage.dependencies())) {
-			if (configuration.logDisabledPackages) {
-				var missingDependencies = dataPackage.dependencies().stream().filter(depend -> !dependencies.contains(depend)).toList();
-				if (!silent) {
-					Forgero.LOGGER.info("{} was disabled due to lacking dependencies: {}", dataPackage.identifier(), missingDependencies);
-				}
-			}
-			return false;
-		}
-
-		return true;
+		return filterDependencies(dependencies, dataPackage.dependencies(), dataPackage.identifier(), silent, configuration);
 	}
 
 	private List<DataResource> validateResources(List<DataPackage> resources) {
@@ -133,7 +156,7 @@ public class ResourcePipeline {
 			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration, located at {1}", resource.identifier(), ForgeroConfigurationLoader.configurationFilePath));
 		}
 
-		return filter;
+		return filterDependencies(dependencies, resource.dependencies(), resource.identifier(), silent, configuration);
 	}
 
 	private boolean filterPacks(DataPackage dataPackage) {

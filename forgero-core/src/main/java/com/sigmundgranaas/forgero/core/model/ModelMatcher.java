@@ -1,10 +1,12 @@
 package com.sigmundgranaas.forgero.core.model;
 
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import java.util.Optional;
+
+import com.sigmundgranaas.forgero.core.model.match.PredicateMatcher;
+import com.sigmundgranaas.forgero.core.model.match.predicate.IdPredicate;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public interface ModelMatcher extends Comparable<ModelMatcher> {
 	ModelMatcher EMPTY = new ModelMatcher() {
@@ -14,42 +16,45 @@ public interface ModelMatcher extends Comparable<ModelMatcher> {
 		}
 
 		@Override
-		public boolean match(Matchable state, Context context) {
+		public boolean match(Matchable state, MatchContext context) {
 			return false;
 		}
 
 		@Override
-		public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
+		public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
 			return Optional.empty();
 		}
 	};
 
-	static int comparator(ModelMatcher match1, ModelMatcher matcher2) {
-		if (match1 instanceof ModelMatchPairing entry1 && matcher2 instanceof ModelMatchPairing entry2) {
-			var match1Identifier = entry1.match().criteria().stream().anyMatch(match -> match.contains("id:"));
-			var match2Identifier = entry2.match().criteria().stream().anyMatch(match -> match.contains("id:"));
+	static int comparator(ModelMatcher match1, ModelMatcher match2) {
+		if (match1 instanceof ModelMatchPairing entry1 && match2 instanceof ModelMatchPairing entry2) {
+			if (entry1.match() instanceof PredicateMatcher matcher1 && entry2.match() instanceof PredicateMatcher matcher2) {
+				var match1Identifier = matcher1.getPredicates().stream().anyMatch(match -> match instanceof IdPredicate);
+				var match2Identifier = matcher2.getPredicates().stream().anyMatch(match -> match instanceof IdPredicate);
 
-			//If both reference an identifier, the one with the most criteria is preferred
-			if(match1Identifier && match2Identifier){
-				return Integer.compare(entry1.match().criteria().size(), entry2.match().criteria().size());
+				//If both reference an identifier, the one with the most criteria is preferred
+				if (match1Identifier && match2Identifier) {
+					return Integer.compare(matcher2.getPredicates().size(), matcher1.getPredicates().size());
+				}
+
+				//If one references an identifier, it is preferred
+				if (match1Identifier) {
+					return -1;
+				} else if (match2Identifier) {
+					return 1;
+				}
+
+				//If neither references an identifier, the one with the most criteria is preferred
+				return Integer.compare(matcher2.getPredicates().size(), matcher1.getPredicates().size());
 			}
 
-			//If one references an identifier, it is preferred
-			if (match1Identifier) {
-				return -1;
-			} else if (match2Identifier) {
-				return 1;
-			}
-
-			//If neither references an identifier, the one with the most criteria is preferred
-			return Integer.compare(entry1.match().criteria().size(), entry2.match().criteria().size());
 		}
 		return 0;
 	}
 
-	boolean match(Matchable state, Context context);
+	boolean match(Matchable state, MatchContext context);
 
-	Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context);
+	Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context);
 
 	@Override
 	default int compareTo(@NotNull ModelMatcher o) {

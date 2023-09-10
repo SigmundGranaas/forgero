@@ -5,9 +5,10 @@ import java.util.List;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgrade;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +41,12 @@ public class SimpleUpgrade implements Upgrade {
 
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public State strip() {
+		return this;
+	}
+
+	@Override
+	public boolean test(Matchable match, MatchContext context) {
 		return type.test(match, context);
 	}
 

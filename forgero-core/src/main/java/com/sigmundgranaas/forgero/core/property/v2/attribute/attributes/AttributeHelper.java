@@ -5,31 +5,39 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 
 public class AttributeHelper {
 	private final PropertyContainer container;
-	private final Map<String, BiFunction<PropertyContainer, Target, Attribute>> map;
+	private final Map<String, BiFunction<ContainerTargetPair, String, Attribute>> map;
 
 	public AttributeHelper(PropertyContainer container) {
 		this.container = container;
 		this.map = attributeStringMap();
 	}
 
-	public static Map<String, BiFunction<PropertyContainer, Target, Attribute>> attributeStringMap() {
-		Map<String, BiFunction<PropertyContainer, Target, Attribute>> map = new HashMap<>();
-		map.put(AttackDamage.KEY, AttackDamage::of);
-		map.put(Durability.KEY, Durability::of);
-		map.put(AttackSpeed.KEY, AttackSpeed::of);
-		map.put(MiningSpeed.KEY, MiningSpeed::of);
-		map.put(MiningLevel.KEY, MiningLevel::of);
-		map.put(Weight.KEY, Weight::of);
+	public static Map<String, BiFunction<ContainerTargetPair, String, Attribute>> attributeStringMap() {
+		Map<String, BiFunction<ContainerTargetPair, String, Attribute>> map = new HashMap<>();
+		map.put(AttackDamage.KEY, Attribute::of);
+		map.put(Durability.KEY, Attribute::of);
+		map.put(AttackSpeed.KEY, Attribute::of);
+		map.put(MiningSpeed.KEY, Attribute::of);
+		map.put(MiningLevel.KEY, Attribute::of);
+		map.put(Weight.KEY, Attribute::of);
 		return map;
 	}
 
+	private static BiFunction<ContainerTargetPair, String, Attribute> defaultAttributeFn(String type) {
+		return (container, target) -> Attribute.of(container.container().stream().applyAttribute(container.target(), type), type);
+	}
+
 	public Attribute apply(String type) {
-		return map.getOrDefault(type, (container, target) -> Attribute.of(container.stream().applyAttribute(target, type), type))
-				.apply(container, Target.EMPTY);
+		return map.getOrDefault(type, defaultAttributeFn(type))
+				.apply(ContainerTargetPair.of(container), type);
+	}
+
+	public Attribute apply(Attribute type) {
+		return apply(type.key());
 	}
 }

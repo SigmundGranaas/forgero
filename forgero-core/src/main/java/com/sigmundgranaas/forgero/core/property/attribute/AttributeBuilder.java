@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
-import com.sigmundgranaas.forgero.core.property.*;
-import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,7 +8,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.context.Context;
+import com.sigmundgranaas.forgero.core.context.Contexts;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.TargetTypes;
+import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
 /**
  * Builder for building attributes. You can create fresh ones, from POJO or from an existing attribute.
@@ -29,6 +36,9 @@ public class AttributeBuilder {
 	private String targetType = EMPTY_IDENTIFIER;
 	private String id = EMPTY_IDENTIFIER;
 	private int priority = 0;
+
+	private Context context;
+
 
 	public AttributeBuilder(String type) {
 		this.type = type;
@@ -85,6 +95,8 @@ public class AttributeBuilder {
 		builder.applyValue(attributePOJO.value);
 		builder.applyOperation(attributePOJO.operation);
 
+		builder.applyContext(Objects.requireNonNullElse(attributePOJO.context, Contexts.UNDEFINED));
+
 		if (!attributePOJO.id.equals(EMPTY_IDENTIFIER)) {
 			builder.applyId(attributePOJO.id);
 		}
@@ -109,7 +121,13 @@ public class AttributeBuilder {
 		builder.applyCategory(attribute.getCategory());
 		builder.applyId(attribute.getId());
 		builder.applyPriority(attribute.getPriority());
+		builder.applyContext(attribute.getContext());
 		return builder;
+	}
+
+	public AttributeBuilder applyContext(Context context) {
+		this.context = context;
+		return this;
 	}
 
 	public AttributeBuilder applyCondition(Predicate<Target> condition) {
@@ -170,6 +188,6 @@ public class AttributeBuilder {
 
 
 	public Attribute build() {
-		return new BaseAttribute(type, operation, value, condition, order, level, category, id, targets, targetType, priority);
+		return new BaseAttribute(type, operation, value, condition, order, level, category, id, targets, targetType, priority, context);
 	}
 }

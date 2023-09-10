@@ -52,5 +52,7 @@ public class DynamicHoeItem extends HoeItem implements ToolStateItem {
 	public State defaultState() {
 		return DEFAULT.get();
 	}
+
+
 }
 

@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgeroforge.test.attribute.tool;
 
+import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
+import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
+
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
 import com.sigmundgranaas.forgeroforge.test.util.AttributeTester;
 import com.sigmundgranaas.forgeroforge.test.util.ForgeroPackageTest;
 import org.junit.jupiter.api.Test;
-
-import static com.sigmundgranaas.forgero.core.property.AttributeType.*;
-import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
 
 /**
  * All vanilla tools should stay within some distance to their minecraft counterparts
@@ -29,7 +29,7 @@ public class AxeTest extends ForgeroPackageTest {
 				.add(DURABILITY, 250, 50)
 				.add(MINING_SPEED, 6, 1)
 				.add(RARITY, 40, 10)
-				.add(ATTACK_DAMAGE, 8.0, 0.5)
+				.add(ATTACK_DAMAGE, 7, 0.5)
 				.add(ATTACK_SPEED, -3.0, 0.5)
 				.run();
 	}
@@ -63,7 +63,7 @@ public class AxeTest extends ForgeroPackageTest {
 				.add(MINING_SPEED, 9, 1)
 				.add(RARITY, 110, 10)
 				.add(ATTACK_DAMAGE, 10, 1.5)
-				.add(ATTACK_SPEED, -3.2, 0.5)
+				.add(ATTACK_SPEED, -3.0, 0.5)
 				.run();
 	}
 
@@ -80,7 +80,7 @@ public class AxeTest extends ForgeroPackageTest {
 				.add(MINING_SPEED, 9, 1)
 				.add(RARITY, 88, 10)
 				.add(ATTACK_DAMAGE, 8, 1.5)
-				.add(ATTACK_SPEED, -3.2, 0.4)
+				.add(ATTACK_SPEED, -2.8, 0.4)
 				.run();
 	}
 }

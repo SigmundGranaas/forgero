@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +77,12 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public State strip() {
+		return new SimpleState(name(), nameSpace(), type(), properties);
+	}
+
+	@Override
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof NameMatch matcher) {
 			return matcher.name().equals(id.name());
 		}

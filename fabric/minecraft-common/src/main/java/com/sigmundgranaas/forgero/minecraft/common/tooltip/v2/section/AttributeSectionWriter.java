@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
-import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 
@@ -25,9 +25,8 @@ public class AttributeSectionWriter extends SectionWriter {
 		super(configuration);
 		this.container = container;
 		this.helper = new AttributeWriterHelper(container, configuration);
-		if (container instanceof Identifiable identifiable && ForgeroStateRegistry.STATES != null) {
-			var baseContainer = ForgeroStateRegistry.STATES.find(identifiable.identifier());
-			baseContainer.ifPresent(stateSupplier -> this.helper.setComparativeContainer(stateSupplier.get()));
+		if (container instanceof State state && ForgeroStateRegistry.STATES != null) {
+			this.helper.setComparativeContainer(state.strip());
 		}
 	}
 
@@ -52,7 +51,7 @@ public class AttributeSectionWriter extends SectionWriter {
 
 	@Override
 	public boolean shouldWrite() {
-		return entries().size() > 0 && container.stream().getAttributes().noneMatch(attribute -> attribute.getOrder() == CalculationOrder.COMPOSITE);
+		return entries().size() > 0 && container.stream().getAttributes().noneMatch(attribute -> attribute.getContext().test(Contexts.COMPOSITE));
 	}
 
 	@Override
@@ -62,12 +61,12 @@ public class AttributeSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return configuration.writableAttributes().stream().map(this::entry).flatMap(Optional::stream).toList();
+		return configuration.writableAttributes(container).stream().map(this::entry).flatMap(Optional::stream).toList();
 	}
 
 	protected Optional<Text> entry(String attributeType) {
 		Attribute attribute = helper.attributeOfType(attributeType);
-		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.asFloat() == 0) {
+		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.asFloat().equals(0f)) {
 			return Optional.empty();
 		} else {
 			return Optional.of(helper.writeBaseNumber(attribute));

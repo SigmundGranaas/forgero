@@ -14,7 +14,7 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.PaletteData;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
 public class ModelRegistry {
 	private final HashMap<String, ModelMatcher> modelMap;
@@ -76,14 +76,17 @@ public class ModelRegistry {
 		return this;
 	}
 
-	public Optional<ModelTemplate> find(State state) {
-		var context = Context.of();
+	public Optional<ModelTemplate> find(State state, MatchContext context) {
 		if (modelMap.containsKey(state.identifier())) {
-			return modelMap.get(state.identifier()).get(state, this::provider, Context.of());
+			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of());
 		} else {
 			var modelEntries = tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build());
 			return modelEntries.stream().sorted(ModelMatcher::comparator).filter(entry -> entry.match(state, context)).map(modelMatcher -> modelMatcher.get(state, this::provider, context)).flatMap(Optional::stream).findFirst();
 		}
+	}
+
+	public Optional<ModelTemplate> find(State state) {
+		return find(state, MatchContext.of());
 	}
 
 

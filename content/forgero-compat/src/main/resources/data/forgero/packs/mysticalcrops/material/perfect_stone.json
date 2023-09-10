@@ -11,28 +11,35 @@
       {
         "id": "stone-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 34
       },
       {
+        "id": "stone-mining-level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3.0
+      },
+      {
         "id": "stone-mining-speed-composite",
         "type": "MINING_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 5
       },
       {
         "id": "stone-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 3.4
       },
       {
         "id": "stone-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 250
       },
@@ -45,18 +52,12 @@
       },
       {
         "id": "stone-attack_damage-offensive-upgrade",
+        "context": "UPGRADE",
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "OFFENSIVE",
         "value": 1
-      },
-      {
-        "id": "stone-mining-level-composite",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.0
       }
     ]
   },

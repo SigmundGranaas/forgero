@@ -9,6 +9,7 @@
     "attributes": [
       {
         "type": "RARITY",
+        "context": "UPGRADE",
         "order": "BASE",
         "category": "ALL",
         "operation": "ADDITION",
@@ -16,6 +17,7 @@
       },
       {
         "type": "DURABILITY",
+        "context": "UPGRADE",
         "order": "BASE",
         "category": "ALL",
         "operation": "ADDITION",

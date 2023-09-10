@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.texture.V2.recolor.DefaultRecolorStrategy;
 
 public class TextureService {
@@ -30,9 +31,18 @@ public class TextureService {
 		if (paletteCache.containsKey(name)) {
 			return Optional.ofNullable(paletteCache.get(name));
 		}
-		var template = loader.load(PALETTE_PATH + name);
-		template.ifPresent(palette -> paletteCache.put(name, new Palette(palette)));
-		return template.map(Palette::new);
+		var paletteTexture = loader.load(PALETTE_PATH + name);
+		var paletteOpt = paletteTexture.map(Palette::new);
+		if (paletteOpt.isPresent()) {
+			var palette = paletteOpt.get();
+			if (palette.getColourValues().size() >= 2) {
+				paletteCache.put(name, palette);
+				return Optional.of(palette);
+			} else {
+				Forgero.LOGGER.error("Encountered Palette texture: {} with a limited number of color values: {}. This palette will not be processed.", PALETTE_PATH + name, palette.getColourValues().size());
+			}
+		}
+		return Optional.empty();
 	}
 
 	public void clear() {
@@ -47,8 +57,11 @@ public class TextureService {
 		var templateOpt = loader.load(TEMPLATE_PATH + name);
 		if (templateOpt.isPresent()) {
 			var texture = new TemplateTexture(templateOpt.get(), new DefaultRecolorStrategy());
-			templateCache.put(name, texture);
-			return Optional.of(texture);
+			if (texture.getGreyScaleValues().size() >= 2) {
+				templateCache.put(name, texture);
+				return Optional.of(texture);
+			}
+			Forgero.LOGGER.error("Encountered template texture: {} with a limited number of grayscale values: {}. This texture will not be processed.", TEMPLATE_PATH + name, texture.getGreyScaleValues().size());
 		}
 		return Optional.empty();
 	}

@@ -140,10 +140,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		return newStack;
 	}
 
-	@Override
-	public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
-		return false;
-	}
 
 	public void onCompositeSlotChanged(Inventory compositeInventory) {
 		boolean isEmpty = compositeInventory.isEmpty();

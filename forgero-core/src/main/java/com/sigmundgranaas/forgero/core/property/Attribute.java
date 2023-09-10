@@ -1,11 +1,12 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import com.sigmundgranaas.forgero.core.context.Context;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface for attributes which can affect the attributes of tools.
@@ -23,11 +24,7 @@ public interface Attribute extends Property, Comparable<Attribute> {
 	default int compareTo(@NotNull Attribute o) {
 		int order = getOrder().getValue() - o.getOrder().getValue();
 		if (order == 0) {
-			if (getOperation() == NumericOperation.ADDITION) {
-				return -1;
-			} else {
-				return 1;
-			}
+			return getOperation().ordinal() - o.getOperation().ordinal();
 		}
 		return order;
 	}
@@ -53,6 +50,8 @@ public interface Attribute extends Property, Comparable<Attribute> {
 	List<String> targets();
 
 	String targetType();
+
+	Context getContext();
 
 	int getPriority();
 

@@ -9,12 +9,15 @@
   "properties": {
     "attributes": [
       {
+        "id": "vine-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 15
       },
       {
+        "id": "vine-rarity-upgrade",
+        "context": "UPGRADE",
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
@@ -22,6 +25,7 @@
         "value": 5
       },
       {
+        "id": "vine-durability-offensive",
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "MULTIPLICATION",
@@ -29,6 +33,7 @@
         "value": 0.8
       },
       {
+        "id": "vine-durability-utility",
         "type": "DURABILITY",
         "order": "BASE",
         "operation": "ADDITION",
@@ -36,13 +41,15 @@
         "value": 90
       },
       {
+        "id": "vine-attack_speed-utility",
         "type": "ATTACK_SPEED",
         "order": "BASE",
         "operation": "ADDITION",
         "category": "UTILITY",
-        "value": 0.5
+        "value": 0.25
       },
       {
+        "id": "vine-mining_speed-utility",
         "type": "MINING_SPEED",
         "order": "MIDDLE",
         "operation": "MULTIPLICATION",

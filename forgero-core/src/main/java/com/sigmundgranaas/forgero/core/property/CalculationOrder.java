@@ -5,7 +5,6 @@ package com.sigmundgranaas.forgero.core.property;
  */
 public enum CalculationOrder {
 	BASE(0),
-	COMPOSITE(1),
 	BASE_MULTIPLICATION(2),
 	MIDDLE(5),
 	END(10);

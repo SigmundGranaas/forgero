@@ -1,9 +1,14 @@
 package com.sigmundgranaas.forgero.core.util.match;
 
+@FunctionalInterface
 public interface Matchable {
-	boolean test(Matchable match, Context context);
+	Matchable DEFAULT_FALSE = (match, context) -> false;
+	Matchable DEFAULT_TRUE = (match, context) -> false;
+
+
+	boolean test(Matchable match, MatchContext context);
 
 	default boolean test(Matchable matchable) {
-		return test(matchable, Context.of());
+		return test(matchable, MatchContext.of());
 	}
 }
