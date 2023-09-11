@@ -5,7 +5,7 @@ public final class NbtConstants {
 	public static final String KEY_INDEX = "index";
 	public static final String KEY_DESCRIPTION = "description";
 
-	public static final String KEY_TYPE = "description";
+	public static final String KEY_TYPE = "type";
 	public static final String KEY_CATEGORIES = "categories";
 	public static final String KEY_UPGRADE = "upgrade";
 	public static final String VALUE_EMPTY_SLOT_TYPE = "forgero:empty_slot";

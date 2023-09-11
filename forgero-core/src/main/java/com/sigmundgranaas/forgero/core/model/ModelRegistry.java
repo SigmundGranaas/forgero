@@ -21,6 +21,7 @@ public class ModelRegistry {
 	private final Map<String, PaletteTemplateModel> textures;
 
 	private final Map<String, String> paletteRemapper;
+	private final Map<String, PaletteData> palettes;
 
 	private final HashMap<String, ArrayList<ModelData>> delayedModels;
 
@@ -29,6 +30,7 @@ public class ModelRegistry {
 
 	public ModelRegistry(TypeTree tree) {
 		this.tree = tree;
+		this.palettes = new HashMap<>();
 		this.modelMap = new HashMap<>();
 		this.paletteRemapper = new HashMap<>();
 		this.textures = new HashMap<>();
@@ -38,6 +40,7 @@ public class ModelRegistry {
 
 	public ModelRegistry() {
 		this.tree = new TypeTree();
+		this.palettes = new HashMap<>();
 		this.modelMap = new HashMap<>();
 		this.textures = new HashMap<>();
 		this.delayedModels = new HashMap<>();
@@ -59,7 +62,9 @@ public class ModelRegistry {
 	private void paletteHandler(DataResource resource, TypeTree tree) {
 		var paletteData = resource.palette();
 		if (paletteData.isPresent()) {
-			tree.find(resource.type()).ifPresent(node -> node.addResource(paletteData.get().toBuilder().target(resource.name()).build(), PaletteData.class));
+			PaletteData palette = paletteData.get().toBuilder().target(resource.name()).build();
+			tree.find(resource.type()).ifPresent(node -> node.addResource(palette, PaletteData.class));
+			palettes.put(palette.getName(), palette);
 			if (!paletteData.get().getName().equals(resource.name())) {
 				paletteRemapper.put(resource.name() + ".png", paletteData.get().getName() + ".png");
 			}
@@ -71,7 +76,7 @@ public class ModelRegistry {
 	}
 
 	public ModelRegistry register(DataResource data) {
-		var converter = new ModelConverter(tree, modelMap, textures, delayedModels, generationModels);
+		var converter = new ModelConverter(tree, palettes, modelMap, textures, delayedModels, generationModels);
 		converter.register(data);
 		return this;
 	}

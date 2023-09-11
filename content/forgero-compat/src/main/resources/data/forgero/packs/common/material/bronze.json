@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "bronze",
+  "parent": "metal_base",
   "dependencies": {
     "any": [
       "mythicmetals"

@@ -13,11 +13,22 @@
       ]
     },
     {
+      "name": "shovel_dye",
+      "variants": [
+        {
+          "target": [
+            "model:pointy_shovel_head.png"
+          ],
+          "template": "pointy_shovel_head.png"
+        }
+      ]
+    },
+    {
       "name": "pointy_shovel_head",
       "modelType": "GENERATE",
       "template": "pointy_shovel_head.png",
       "palette": "TOOL_MATERIAL",
-      "order": 30
+      "order": 20
     },
     {
       "target": [

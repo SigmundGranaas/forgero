@@ -1,0 +1,73 @@
+{
+  "type": "MAKESHIFT",
+  "name": "fermented_spider_eye",
+  "parent": "makeshift_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:fermented_spider_eye"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "makeshift-rarity-composite",
+            "type": "RARITY",
+            "value": 40
+          },
+          {
+            "id": "makeshift-durability-composite",
+            "type": "DURABILITY",
+            "value": 450
+          },
+          {
+            "id": "makeshift-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "makeshift-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "makeshift-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "makeshift-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 225
+          },
+          {
+            "id": "makeshift-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 225
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "fermented_spider_eye"
+  }
+}

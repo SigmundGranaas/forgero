@@ -15,6 +15,17 @@
       ]
     },
     {
+      "name": "pickaxe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:lightweight_pickaxe_head.png"
+          ],
+          "template": "lightweight_pickaxe_head.png"
+        }
+      ]
+    },
+    {
       "name": "lightweight_pickaxe_head",
       "type": "GENERATE",
       "template": "lightweight_pickaxe_head.png",

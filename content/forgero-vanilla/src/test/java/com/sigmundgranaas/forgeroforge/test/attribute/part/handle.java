@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgeroforge.test.attribute.part;
 
+import static com.sigmundgranaas.forgero.core.property.AttributeType.DURABILITY;
+import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
+
 import com.sigmundgranaas.forgeroforge.test.util.ForgeroPackageTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static com.sigmundgranaas.forgero.core.property.AttributeType.DURABILITY;
-import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
 
 public class handle extends ForgeroPackageTest {
 	@Test
@@ -19,7 +19,7 @@ public class handle extends ForgeroPackageTest {
 	void testIronHandle() {
 		var state = state("forgero:iron-handle");
 		var durability = state.stream().applyAttribute(DURABILITY);
-		Assertions.assertEquals(150, durability, 50);
+		Assertions.assertEquals(47, durability, 50);
 	}
 
 	@Test
@@ -33,6 +33,6 @@ public class handle extends ForgeroPackageTest {
 	void testNetheriteHandle() {
 		var state = state("forgero:netherite-handle");
 		var durability = state.stream().applyAttribute(DURABILITY);
-		Assertions.assertEquals(1000, durability, 200);
+		Assertions.assertEquals(400, durability, 200);
 	}
 }

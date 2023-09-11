@@ -1,58 +1,82 @@
 {
   "type": "PLANT",
   "name": "golden_vine",
-  "parent": "vines",
+  "parent": "vines_base",
   "container": {
     "type": "HOST",
     "id": "betternether:golden_vine"
   },
   "properties": {
-    "attributes": [
-      {
-        "type": "RARITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 20
-      }
-    ],
     "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-composite",
+            "type": "RARITY",
+            "value": 35
+          },
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 130
+          }
+        ]
+      },
       {
         "context": "UPGRADE",
         "attributes": [
           {
+            "id": "soft_plant-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 17.5
           },
           {
+            "id": "soft_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
-            "order": "BASE",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 0.9
-          },
-          {
-            "type": "DURABILITY",
-            "order": "BASE",
             "operation": "ADDITION",
-            "category": "UTILITY",
+            "category": "OFFENSIVE",
             "value": 65
           },
           {
+            "id": "soft_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
-            "order": "BASE",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.3
+            "value": 0.1
           },
           {
-            "type": "MINING_SPEED",
-            "order": "MIDDLE",
-            "operation": "MULTIPLICATION",
+            "id": "soft_plant-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 1.05
+            "value": 0
+          },
+          {
+            "id": "soft_plant-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "soft_plant-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 1
+          },
+          {
+            "id": "soft_plant-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 65
           }
         ]
       }

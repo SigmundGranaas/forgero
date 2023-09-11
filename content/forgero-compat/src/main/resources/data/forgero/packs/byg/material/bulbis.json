@@ -1,0 +1,18 @@
+{
+  "type": "WOOD",
+  "name": "bulbis",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "byg:bulbis"
+  },
+  "properties": {
+    "grouped_attributes": [
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "byg/bulbis"
+  }
+}

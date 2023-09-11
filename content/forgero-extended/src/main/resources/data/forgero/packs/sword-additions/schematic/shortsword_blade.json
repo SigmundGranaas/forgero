@@ -39,8 +39,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -53,42 +62,42 @@
         "order": "BASE",
         "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 25
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 1.25
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.7
+        "value": 0.75
       },
       {
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.4
+        "value": 1.5
       },
       {
         "id": "short_sword-schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.4
+        "value": 1.5
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0.75
       }
     ]
   },

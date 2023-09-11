@@ -16,7 +16,7 @@
             "id": "this"
           },
           {
-            "type": "SECONDARY_MATERIAL",
+            "type": "SOFT_MATERIAL",
             "unique": true,
             "amount": 1
           }
@@ -28,7 +28,7 @@
         "id": "this"
       },
       {
-        "type": "SECONDARY_MATERIAL",
+        "type": "SOFT_MATERIAL",
         "unique": true
       }
     ],
@@ -39,6 +39,15 @@
           "OFFENSIVE"
         ],
         "type": "TRINKET",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ],
@@ -59,21 +68,24 @@
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
+        "order": "BASE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
       },
       {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.75
       }
     ]
   },

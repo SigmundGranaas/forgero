@@ -20,6 +20,17 @@
       ]
     },
     {
+      "name": "sword_guard_dye",
+      "variants": [
+        {
+          "target": [
+            "model:refined_sword_guard.png"
+          ],
+          "template": "refined_sword_guard.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:refined_sword_guard-schematic"

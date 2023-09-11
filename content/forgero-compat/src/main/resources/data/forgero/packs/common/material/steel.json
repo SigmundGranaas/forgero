@@ -1,6 +1,6 @@
 {
   "type": "METAL",
-  "parent": "metal",
+  "parent": "metal_base",
   "name": "steel",
   "dependencies": {
     "any": [
@@ -69,7 +69,6 @@
         "id": "metal-rarity-upgrade",
         "context": "UPGRADE",
         "type": "RARITY",
-        "context": "BASE",
         "operation": "ADDITION",
         "category": "ALL",
         "value": 17
