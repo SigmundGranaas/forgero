@@ -44,7 +44,7 @@
             "id": "metal-rarity-upgrade",
             "type": "RARITY",
             "category": "ALL",
-            "value": 25
+            "value": 35
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",
@@ -57,7 +57,21 @@
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 2.0
+            "value": 3.75
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 200
+          },
+          {
+            "id": "metal-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 200
           }
         ]
       }

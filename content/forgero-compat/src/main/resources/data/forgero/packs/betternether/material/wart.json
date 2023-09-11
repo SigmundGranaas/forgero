@@ -7,24 +7,52 @@
     "id": "betternether:wart_planks"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "wood-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 25
+        "attributes": [
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 70
+          },
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 25
+          }
+        ]
       },
       {
-        "id": "wood-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 50
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 12.5
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 35
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 35
+          }
+        ]
       }
-    ],
-    "passive": [],
-    "active": []
+    ]
   },
   "palette": {
     "name": "wart"
