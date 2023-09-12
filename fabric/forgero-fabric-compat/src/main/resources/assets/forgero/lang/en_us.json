@@ -28,7 +28,9 @@
   "forgero.menu.options.WeightIncreasesHungerScaler": "Weight Hunger reduction scaler",
   "forgero.menu.options.WeightIncreasesHungerBaseChance": "Weight Hunger reduction base chance",
   "forgero.menu.options.weightIncreasesHunger": "Weight increases hunger",
-  "forgero.menu.options.minimumAttackSpeed": "Minimum attack speed"
+  "forgero.menu.options.minimumAttackSpeed": "Minimum attack speed",
+  "forgero.menu.options.enableCustomRecipeDeletion": "Enable custom recipe deletion"
+
 
 
 
