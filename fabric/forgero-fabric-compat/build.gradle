@@ -25,6 +25,11 @@ repositories {
 }
 
 dependencies {
+	runtimeOnly project(':content:forgero-vanilla')
+	runtimeOnly project(':content:forgero-extended')
+	runtimeOnly project(':content:forgero-compat')
+	runtimeOnly project(':content:forgero-structures')
+
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
@@ -161,22 +166,11 @@ loom {
 			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 			runDir "build/gametest"
 		}
-		clientExtendedCompatOptimised {
-			name "Client Extended Compat Optimised"
-
-			dependencies {
-				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
-			}
-			client()
-			ideConfigGenerated(true)
-		}
 		clientExtendedCompatOptimisedJustLoad {
 			name "Client Extended Compat Optimised Just Load"
 
 			dependencies {
-				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
+				modRuntimeOnly "maven.modrinth:lazydfu:0.1.3"
 				modRuntimeOnly "maven.modrinth:just-load:${project.justload_version}"
 			}
 
