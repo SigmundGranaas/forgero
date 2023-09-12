@@ -1,12 +1,10 @@
-# Forgero Beta release 0.10.9.4
+# Forgero Beta release 0.11.1
 
 ## ! Warning !
 
-**This version is not compatible with earlier versions of Forgero: 0.9 and below, do not upgrade to this version unless
-you have backed up your save.**
+**This version is not fully backwards compatible. Gems placed on sword blades and tool heads will disappear when used
+with this version of Forgero**
 
 # Changelog
 
-* Fixed gem upgrades recipes in smithing table
-* Fixed normal upgrades ni the smithing table
-
+* Fixed mythic metals compatability crash

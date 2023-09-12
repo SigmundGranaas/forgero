@@ -3,10 +3,9 @@ package com.sigmundgranaas.forgero.fabric;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
+import com.sigmundgranaas.forgero.fabric.mythicmetals.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
-//import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
-//import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -17,9 +16,12 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> patchouli;
 	public static final Supplier<Boolean> modmenu;
 	public static final Supplier<Boolean> bettercombat;
+	public static final Supplier<Boolean> mythicmetals;
+
 
 	static {
 		toolstats = () -> isModLoaded("toolstats");
+		mythicmetals = () -> isModLoaded("mythicmetals");
 		patchouli = () -> isModLoaded("patchouli");
 		modmenu = () -> isModLoaded("modmenu");
 		bettercombat = () -> isModLoaded("bettercombat");
@@ -35,9 +37,13 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 			ToolStatTagGenerator.generateTags();
 		}
 
-		//if (patchouli.get()) {
-		//	BookDropOnAdvancement.registerBookDrop();
-		//	GuideBookGenerator.registerGuideBookRecipes();
-		//}
+		if (patchouli.get()) {
+			BookDropOnAdvancement.registerBookDrop();
+			GuideBookGenerator.registerGuideBookRecipes();
+		}
+
+		if (mythicmetals.get()) {
+			MythicMetalsCommons.generateTags();
+		}
 	}
 }

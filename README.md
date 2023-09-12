@@ -44,7 +44,7 @@
 ## About
 
 <a href="https://www.curseforge.com/minecraft/mc-mods/forgero">
-    <img align="center" src="assets/Banner.png" alt="Logo" >
+    <img align="center" src="assets/banner.png" alt="Logo" >
 </a>
 
 **Forgero was created to fill a gap in the mods available for Fabric. The aim of the mod is to give tool creation and
@@ -58,7 +58,6 @@ Key features:
 * Gems, which can further enhance tools and weapons through an expansive upgrade path
 * Enchanting support
 * Support for adding and customizing materials, schematics and gems entirely trough config files
-
 
 <!-- ROADMAP -->
 
@@ -144,7 +143,6 @@ prerequisites out of the box:
    ./gradlew runClient
    ```
 
-
 <!-- LICENSE -->
 
 ## License
@@ -161,7 +159,6 @@ Sigmund Granaas Sandring:
 
 - [GitHub](https://github.com/SigmundGranaas)
 - [Discord](https://discord.gg/3vK7ZwEDex)
-
 
 <!-- ACKNOWLEDGMENTS -->
 

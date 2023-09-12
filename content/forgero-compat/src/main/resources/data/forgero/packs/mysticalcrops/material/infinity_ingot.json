@@ -1,6 +1,6 @@
 {
   "type": "METAL",
-  "parent": "metal",
+  "parent": "metal_base",
   "name": "infinity_ingot",
   "container": {
     "type": "HOST",
@@ -11,48 +11,35 @@
       {
         "id": "metal-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 65
       },
       {
         "id": "metal-mining_speed-composite",
         "type": "MINING_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 7.3
       },
       {
         "id": "metal-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 777
       },
       {
         "id": "metal-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 5
       },
       {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 4.3,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
-      },
-      {
         "id": "metal-mining_level-composite",
         "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 4.0
       }

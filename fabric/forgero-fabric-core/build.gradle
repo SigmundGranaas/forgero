@@ -1,18 +1,12 @@
-//file:noinspection GroovyAssignabilityCheck
-
 dependencies {
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation ("net.fabricmc:fabric-loader:${project.loader_version}")
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"){
-		exclude group: "net.fabricmc", module: "fabric-loader"
-	}
 
-	modImplementation("net.devtech:arrp:${project.aarp_version}"){
-		exclude group: "net.fabricmc", module: "fabric-loader"
-	}
+	modImplementation("net.devtech:arrp:${project.aarp_version}")
 }
 
 sourceSets {
@@ -24,6 +18,18 @@ sourceSets {
 
 loom {
 	runs {
+		runClient {
+			client()
+			ideConfigGenerated(true)
+
+			dependencies {
+				runtimeOnly project(':content:forgero-vanilla')
+				runtimeOnly project(':content:forgero-extended')
+				runtimeOnly project(':content:forgero-compat')
+				runtimeOnly project(':content:forgero-structures')
+			}
+		}
+
 		testmodServer {
 			server()
 			ideConfigGenerated project.rootProject == project

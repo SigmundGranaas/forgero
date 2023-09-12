@@ -9,10 +9,19 @@
     "attributes": [
       {
         "type": "RARITY",
+        "context": "UPGRADE",
         "order": "BASE",
         "category": "ALL",
         "operation": "ADDITION",
         "value": 30
+      },
+      {
+        "type": "WEIGHT",
+        "context": "UPGRADE",
+        "order": "END",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": -10
       }
     ]
   },

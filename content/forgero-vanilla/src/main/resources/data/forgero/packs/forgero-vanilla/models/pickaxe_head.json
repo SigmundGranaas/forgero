@@ -16,11 +16,11 @@
       "order": 30
     },
     {
-      "name": "pickaxe_head_gem",
-      "modelType": "GENERATE",
-      "template": "diagonal_gem_high.png",
-      "palette": "TRINKET",
-      "order": 50
+      "name": "pickaxe_dye",
+      "template": "pickaxe_head.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
     },
     {
       "target": [
@@ -40,11 +40,11 @@
     },
     {
       "target": [
-        "type:GEM",
+        "type:DYE",
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "pickaxe_head_gem"
+      "template": "pickaxe_dye"
     }
   ]
 }

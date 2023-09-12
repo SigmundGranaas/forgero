@@ -1,15 +1,16 @@
 package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
+import java.util.Locale;
+import java.util.Set;
+
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-
-import java.util.Set;
-
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 public abstract class AbstractTypedSlot implements Slot {
 	protected final Set<Category> categories;
@@ -35,7 +36,7 @@ public abstract class AbstractTypedSlot implements Slot {
 
 	@Override
 	public String description() {
-		return description.equals(EMPTY_IDENTIFIER) ? type().typeName().toLowerCase() : description;
+		return description.equals(EMPTY_IDENTIFIER) ? type().typeName().toLowerCase(Locale.ENGLISH) : description;
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public abstract class AbstractTypedSlot implements Slot {
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof State state) {
 			return state.type().test(this.type, context);
 		} else if (match instanceof Type type) {

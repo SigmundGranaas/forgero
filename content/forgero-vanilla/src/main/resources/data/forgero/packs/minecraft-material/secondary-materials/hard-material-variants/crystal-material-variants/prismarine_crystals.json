@@ -1,0 +1,33 @@
+{
+  "type": "CRYSTAL",
+  "name": "prismarine_crystals",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:prismarine_crystals"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "features": [
+      {
+        "type": "EMISSIVE",
+        "value": 4
+      }
+    ]
+  },
+    "palette": {
+      "name": "prismarine_crystals"
+    }
+}

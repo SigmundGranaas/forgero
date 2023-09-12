@@ -1,5 +1,6 @@
 {
   "block.forgero.assembly_station": "Disassembly Station",
+  "block.forgero.upgrade_station": "Upgrade Station",
   "itemGroup.forgero.forgero": "Forgero",
   "util.forgero.name_separator": " ",
   "advancements.forgero.root.title": "A world of possibilities",
@@ -119,7 +120,7 @@
   "tooltip.forgero.section.ingredients": "Ingredients",
   "tooltip.forgero.section.features": "Features",
   "tooltip.forgero.section.conditions": "Conditions",
-  "tooltip.forgero.material_count": "Materials: %s",
+  "tooltip.forgero.material_count": "Materials: ",
   "tooltip.forgero.hold": "Hold [",
   "tooltip.forgero.shift": "Shift",
   "tooltip.forgero.to_show_attributes": "] to show attributes",

@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgeroforge;
 
+import static com.sigmundgranaas.forgeroforge.testutil.Tools.IRON_PICKAXE;
+import static com.sigmundgranaas.forgeroforge.testutil.Upgrades.BINDING;
+
 import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgeroforge.testutil.Types;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static com.sigmundgranaas.forgeroforge.testutil.Tools.IRON_PICKAXE;
-import static com.sigmundgranaas.forgeroforge.testutil.Upgrades.BINDING;
 
 public class PickaxeStateTest {
 	@Test
@@ -48,6 +48,6 @@ public class PickaxeStateTest {
 	@Test
 	void testUpgradesApply() {
 		var pick = IRON_PICKAXE.upgrade(BINDING);
-		Assertions.assertEquals(0, pick.stream().applyAttribute(AttributeType.DURABILITY), 100);
+		Assertions.assertTrue(pick.stream().applyAttribute(AttributeType.DURABILITY) > IRON_PICKAXE.stream().applyAttribute(AttributeType.DURABILITY));
 	}
 }

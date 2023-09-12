@@ -22,6 +22,7 @@ import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 public class StateUpgradeRecipe implements SmithingRecipe {
@@ -31,8 +32,8 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 	private final StateService service;
 	private final Identifier id;
 
-	private final Integer baseIndex = 1;
-	private final Integer additionIndex = 2;
+	public static final Integer baseIndex = 1;
+	public static final Integer additionIndex = 2;
 
 	public StateUpgradeRecipe(StateService service, Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
 		this.service = service;
@@ -93,6 +94,14 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 
 	public Identifier getId() {
 		return this.id;
+	}
+
+	@Override
+	public DefaultedList<Ingredient> getIngredients() {
+		DefaultedList<Ingredient> list = DefaultedList.ofSize(3, Ingredient.EMPTY);
+		list.set(baseIndex, base);
+		list.set(additionIndex, addition);
+		return list;
 	}
 
 	public boolean isEmpty() {

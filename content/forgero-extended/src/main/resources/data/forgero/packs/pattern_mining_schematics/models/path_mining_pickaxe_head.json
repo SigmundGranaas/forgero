@@ -15,6 +15,17 @@
       ]
     },
     {
+      "name": "pickaxe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:clumpy_pickaxe_head.png"
+          ],
+          "template": "clumpy_pickaxe_head.png"
+        }
+      ]
+    },
+    {
       "name": "clumpy_pickaxe_head",
       "modelType": "GENERATE",
       "template": "clumpy_pickaxe_head.png",

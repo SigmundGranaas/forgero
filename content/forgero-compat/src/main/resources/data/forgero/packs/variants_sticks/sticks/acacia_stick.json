@@ -1,0 +1,13 @@
+{
+  "type": "HANDLE",
+  "name": "acacia-stick",
+  "parent": "oak-simple_handle",
+  "container": {
+    "type": "HOST",
+    "id": "vsas:sticks/acacia_stick"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  }
+}

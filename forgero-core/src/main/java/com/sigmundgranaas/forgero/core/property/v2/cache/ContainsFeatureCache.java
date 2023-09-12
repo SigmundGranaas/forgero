@@ -23,7 +23,11 @@ public class ContainsFeatureCache {
 			});
 
 	public static boolean check(PropertyTargetCacheKey key) {
-		return containsFeatureCache.getUnchecked(key);
+		try {
+			return containsFeatureCache.get(key);
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public static boolean check(Set<String> keys, Function<String, PropertyTargetCacheKey> keyMapper) {

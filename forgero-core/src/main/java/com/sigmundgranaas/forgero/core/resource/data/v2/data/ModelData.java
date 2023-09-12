@@ -1,20 +1,25 @@
 package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 
-import com.google.gson.annotations.SerializedName;
-import com.sigmundgranaas.forgero.core.util.Identifiers;
-import lombok.Builder;
-
-import javax.annotation.Nullable;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
+import lombok.Builder;
+import org.jetbrains.annotations.NotNull;
 
 @Builder(toBuilder = true)
 public class ModelData {
 	@Builder.Default
 	@Nullable
-	private List<String> target = Collections.emptyList();
+	@SerializedName(value = "target", alternate = {"criteria", "predicate", "predicates"})
+	private List<JsonElement> predicate = Collections.emptyList();
 
 	@Builder.Default
 	private int order = 0;
@@ -39,8 +44,16 @@ public class ModelData {
 	@Nullable
 	private String palette = Identifiers.EMPTY_IDENTIFIER;
 
-	public List<String> getTarget() {
-		return Objects.requireNonNullElse(target, Collections.emptyList());
+	@Nullable
+	@SerializedName(value = "display_overrides", alternate = "display")
+	private JsonObject displayOverrides;
+
+	@Builder.Default
+	@Nullable
+	private Integer resolution = 16;
+
+	public List<JsonElement> getPredicates() {
+		return Objects.requireNonNullElse(predicate, Collections.emptyList());
 	}
 
 	public String getModelType() {
@@ -70,6 +83,15 @@ public class ModelData {
 
 	public List<Float> getOffset() {
 		return Objects.requireNonNullElse(offset, Collections.emptyList());
+	}
+
+	public Optional<JsonObject> displayOverrides() {
+		return Optional.ofNullable(displayOverrides);
+	}
+
+	@NotNull
+	public Integer getResolution() {
+		return Objects.requireNonNullElse(resolution, 16);
 
 	}
 

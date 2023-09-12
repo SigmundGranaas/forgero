@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.core.model;
 
-import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.util.match.Context;
-import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Optional;
 
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
+
 public class MatchedModelEntry implements ModelMatcher {
+	private final String id;
 	private List<ModelMatchPairing> models;
-	private String id;
 
 	public MatchedModelEntry(List<ModelMatchPairing> models, String id) {
 		this.models = models;
@@ -18,13 +18,12 @@ public class MatchedModelEntry implements ModelMatcher {
 	}
 
 	@Override
-	public boolean match(Matchable state, Context context) {
+	public boolean match(Matchable state, MatchContext context) {
 		return models.stream().anyMatch(pair -> pair.match().test(state, context));
-
 	}
 
 	@Override
-	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, Context context) {
+	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
 		return models.stream()
 				.filter(pairing -> pairing.match().test(state, context))
 				.sorted()

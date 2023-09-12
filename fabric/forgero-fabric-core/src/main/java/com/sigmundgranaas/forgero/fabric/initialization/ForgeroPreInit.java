@@ -8,6 +8,12 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
 import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
@@ -17,6 +23,7 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
+import com.sigmundgranaas.forgero.minecraft.common.match.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 
@@ -40,6 +47,17 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		soulLevelPropertyReloader();
 		DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);
 		Entities.register();
+		registerPredicateBuilders();
+	}
+
+	private void registerPredicateBuilders() {
+		PredicateFactory.register(new StringModelBuilder());
+		PredicateFactory.register(new StringIdentifierBuilder());
+		PredicateFactory.register(new StringModelBuilder());
+		PredicateFactory.register(new StringSlotBuilder());
+		PredicateFactory.register(new StringTypeBuilder());
+		PredicateFactory.register(new StringNameBuilder());
+		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
 	}
 
 	private void soulLevelPropertyReloader() {

@@ -1,4 +1,4 @@
-{
+ {
   "type": "BINDING_SCHEMATIC",
   "name": "binding-schematic",
   "container": {
@@ -38,7 +38,8 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
@@ -48,10 +49,16 @@
         ],
         "type": "TRINKET",
         "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
       }
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
@@ -60,30 +67,37 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
+        "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "order": "BASE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 1
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.5
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.75
+      },
+      {
+        "id": "schematic-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "operation": "ADDITION",
+        "value": -1
       }
     ]
   },

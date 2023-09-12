@@ -1,0 +1,18 @@
+{
+  "type": "WOOD",
+  "name": "cika",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "byg:cika"
+  },
+  "properties": {
+    "grouped_attributes": [
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "byg/cika"
+  }
+}

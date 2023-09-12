@@ -39,15 +39,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "TRINKET",
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -58,30 +60,30 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 66
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.27
+        "value": 1.25
       },
       {
         "id": "schematic-mining_speed-composite",
         "type": "MINING_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 0.85
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 1
       }
     ],
     "features": [

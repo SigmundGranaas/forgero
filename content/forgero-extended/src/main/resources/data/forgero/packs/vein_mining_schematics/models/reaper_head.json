@@ -13,16 +13,22 @@
       ]
     },
     {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:reaper_head.png"
+          ],
+          "template": "reaper_head.png"
+        }
+      ]
+    },
+    {
       "name": "reaper_head",
       "modelType": "GENERATE",
       "template": "reaper_head.png",
       "palette": "TOOL_MATERIAL",
-      "order": 20,
-      "offset": [
-        0,
-        0
-      ]
-
+      "order": 20
     },
     {
       "target": [
