@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.StateUpgradeRecipe;
+
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -83,9 +85,9 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 	}
 
 	public static RecipeTester<Inventory, SmithingRecipe> smithingUpgrade(String target, String upgrade, TestContext context) {
-		SimpleInventory inventory = new SimpleInventory(2);
-		inventory.setStack(0, new ItemStack(itemFromString(target)));
-		inventory.setStack(1, new ItemStack(itemFromString(upgrade)));
+		SimpleInventory inventory = new SimpleInventory(3);
+		inventory.setStack(StateUpgradeRecipe.baseIndex, new ItemStack(itemFromString(target)));
+		inventory.setStack(StateUpgradeRecipe.additionIndex, new ItemStack(itemFromString(upgrade)));
 
 		Item outcome = itemFromString(target);
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
