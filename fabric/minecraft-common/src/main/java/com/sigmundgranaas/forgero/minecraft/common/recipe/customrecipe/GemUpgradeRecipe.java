@@ -30,8 +30,8 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	private final Identifier id;
 	private final StateService service;
 
-	private final Integer baseIndex = 1;
-	private final Integer additionIndex = 2;
+	public static final Integer baseIndex = 1;
+	public static final Integer additionIndex = 2;
 
 	public GemUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result, StateService service) {
 		this.id = id;

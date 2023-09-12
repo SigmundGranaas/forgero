@@ -31,8 +31,8 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 	private final StateService service;
 	private final Identifier id;
 
-	private final Integer baseIndex = 1;
-	private final Integer additionIndex = 2;
+	public static final Integer baseIndex = 1;
+	public static final Integer additionIndex = 2;
 
 	public StateUpgradeRecipe(StateService service, Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
 		this.service = service;
