@@ -25,11 +25,6 @@ repositories {
 }
 
 dependencies {
-	runtimeOnly project(':content:forgero-vanilla')
-	runtimeOnly project(':content:forgero-extended')
-	runtimeOnly project(':content:forgero-compat')
-	runtimeOnly project(':content:forgero-structures')
-
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
@@ -140,6 +135,17 @@ sourceSets {
 loom {
 	accessWidenerPath = file("src/main/resources/forgero-fabric-compat.accesswidener")
 	runs {
+		runClient {
+			client()
+			ideConfigGenerated(true)
+
+			dependencies {
+				runtimeOnly project(':content:forgero-vanilla')
+				runtimeOnly project(':content:forgero-extended')
+				runtimeOnly project(':content:forgero-compat')
+				runtimeOnly project(':content:forgero-structures')
+			}
+		}
 		testmodServer {
 			server()
 			ideConfigGenerated project.rootProject == project
