@@ -2,65 +2,70 @@
   "name": "sword_blade_base",
   "resource_type": "ABSTRACT",
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "schematic-rarity-local",
-        "type": "RARITY",
+        "context": "LOCAL",
+        "operation": "ADDITION",
         "order": "BASE",
-        "category": "LOCAL",
-        "operation": "ADDITION",
-        "value": 10
+        "attributes": [
+        ]
       },
       {
-        "id": "schematic-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1
+          },
+          {
+            "id": "schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1
+          }
+        ]
       },
       {
-        "id": "schematic-mining_level-composite",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 0
-      },
-      {
-        "id": "schematic-durability-composite",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "id": "schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 2
-      },
-      {
-        "id": "schematic-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0.5
-      },
-      {
-        "id": "schematic-attack_speed-composite",
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.1
-      },
-      {
-        "id": "schematic-weight-composite",
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": -4
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2
+          }
+        ]
       }
     ],
+    "attributes": [],
     "features": [
       {
         "type": "EFFECTIVE_BLOCKS",

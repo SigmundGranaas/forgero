@@ -1,15 +1,24 @@
 package com.sigmundgranaas.forgero.core.resource.data.processor;
 
-import com.sigmundgranaas.forgero.core.identifier.Common;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.*;
-import com.sigmundgranaas.forgero.core.util.Identifiers;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.THIS_IDENTIFIER;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
-import static com.sigmundgranaas.forgero.core.util.Identifiers.THIS_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.identifier.Common;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConstructData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 public class RecipeInflater {
 	private final DataResource resource;
@@ -95,7 +104,7 @@ public class RecipeInflater {
 
 	private String ingredientToName(IngredientData data) {
 		if (data.id().equals(EMPTY_IDENTIFIER)) {
-			return typeFinder.apply(data.type()).stream().filter(res -> res.resourceType() == ResourceType.DEFAULT).findFirst().map(DataResource::name).orElse(data.type().toLowerCase());
+			return typeFinder.apply(data.type()).stream().filter(res -> res.resourceType() == ResourceType.DEFAULT).findFirst().map(DataResource::name).orElse(data.type().toLowerCase(Locale.ENGLISH));
 		} else {
 			return idToName(data.id());
 		}

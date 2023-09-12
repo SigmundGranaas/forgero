@@ -1,13 +1,18 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
-import com.sigmundgranaas.forgero.core.property.*;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.context.Context;
+import com.sigmundgranaas.forgero.core.context.Contexts;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.Target;
 
 /**
  * Base attribute class. This class is opinionated when it comes to how some attributes should be calculated, like MINING level.
@@ -20,7 +25,7 @@ public record BaseAttribute(String attribute,
                             CalculationOrder order, int level, Category category, String id,
                             List<String> targets,
                             String targetType,
-                            int priority) implements Attribute {
+                            int priority, Context context) implements Attribute {
 
 	@Override
 	public CalculationOrder getOrder() {
@@ -34,20 +39,12 @@ public record BaseAttribute(String attribute,
 
 	@Override
 	public Function<Float, Float> getCalculation() {
-		if (attribute.equals(AttributeType.MINING_LEVEL.toString())) {
-			return (current) -> {
-				if (current > value) {
-					return current;
-				} else {
-					return value;
-				}
-			};
-		}
-
 		if (operation == NumericOperation.ADDITION) {
 			return (current) -> current + leveledValue();
 		} else if (operation == NumericOperation.MULTIPLICATION) {
 			return (current) -> current * leveledValue();
+		} else if (operation == NumericOperation.FORCE) {
+			return (current) -> leveledValue();
 		}
 		return (current) -> current;
 	}
@@ -90,6 +87,11 @@ public record BaseAttribute(String attribute,
 	}
 
 	@Override
+	public Context getContext() {
+		return Objects.requireNonNullElse(context, Contexts.UNDEFINED);
+	}
+
+	@Override
 	public int getPriority() {
 		return priority;
 	}
@@ -112,7 +114,7 @@ public record BaseAttribute(String attribute,
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority);
+		return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority, context);
 	}
 
 	@Override

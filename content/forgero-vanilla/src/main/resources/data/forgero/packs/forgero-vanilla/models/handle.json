@@ -45,13 +45,52 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "handle_grip.png",
-      "order": 11,
+      "order": 25,
       "variants": [
         {
           "target": [
             "model:short_handle.png"
           ],
           "template": "short_handle_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "template": "handle.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 15,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_handle.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_handle.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "axe_handle.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "medium_handle.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "short_handle.png"
         }
       ]
     },
@@ -65,18 +104,19 @@
     },
     {
       "target": [
-        "id:oak-simple_handle"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "handle"
-    },
-    {
-      "target": [
         "type:MATERIAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",
       "template": "grip"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "handle_dye"
     }
   ]
 }

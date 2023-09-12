@@ -6,7 +6,7 @@
       "template": "broadsword_blade.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 40
+      "order": 20
     },
     {
       "name": "sword_blade_material",
@@ -16,6 +16,17 @@
             "model:broadsword_blade.png"
           ],
           "template": "broadsword_blade_tip_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:broadsword_blade.png"
+          ],
+          "template": "broadsword_blade.png"
         }
       ]
     },

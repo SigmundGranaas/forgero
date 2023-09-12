@@ -49,7 +49,7 @@ public class ForgeroInitializer implements ModInitializer {
 
 		Set<String> availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
-		var configuration = ForgeroConfigurationLoader.load();
+		var configuration = ForgeroConfigurationLoader.load(FabricLoader.getInstance().getConfigDir());
 
 		PipelineBuilder
 				.builder()

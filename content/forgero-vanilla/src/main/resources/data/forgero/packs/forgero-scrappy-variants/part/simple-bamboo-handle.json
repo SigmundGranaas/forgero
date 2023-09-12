@@ -1,0 +1,24 @@
+{
+  "type": "HANDLE",
+  "name": "bamboo-simple_handle",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:bamboo"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 10
+      },
+      {
+        "type": "DURABILITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 10
+      }
+    ]
+  }
+}

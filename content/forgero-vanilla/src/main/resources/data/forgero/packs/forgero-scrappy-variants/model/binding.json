@@ -4,7 +4,14 @@
   "models": [
     {
       "target": [
-        "type:TOOL_BINDING"
+        "id:string-scrappy_binding"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "binding"
+    },
+    {
+      "target": [
+        "id:leather-scrappy_binding"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "binding"

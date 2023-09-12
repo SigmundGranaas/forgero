@@ -12,19 +12,15 @@
       "name": "shovel_head_material",
       "template": "shovel_head_tip_reinforcement.png",
       "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": 40
+      "palette": "MATERIAL",
+      "order": 30
     },
     {
-      "name": "shovel_head_trinket",
-      "modelType": "GENERATE",
-      "template": "axe_head_gem.png",
-      "palette": "TRINKET",
-      "order": 90,
-      "offset": [
-        4,
-        -1
-      ]
+      "name": "shovel_dye",
+      "template": "shovel_head.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
     },
     {
       "target": [
@@ -45,11 +41,11 @@
     },
     {
       "target": [
-        "type:TRINKET",
+        "type:DYE",
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "shovel_head_trinket"
+      "template": "shovel_dye"
     }
   ]
 }

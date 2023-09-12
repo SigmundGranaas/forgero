@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,16 +9,14 @@ import java.util.function.Supplier;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelTemplate;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.model.TextureBasedModel;
-import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,10 +33,10 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
-	private final LoadingCache<ItemStack, BakedModel> cache;
-	private final LoadingCache<String, BakedModel> defaultCache;
+	private final LoadingCache<Pair<ItemStack, MatchContext>, BakedModel> cache;
 	private final ModelRegistry registry;
 	private final StateService stateService;
 	private Baker loader;
@@ -52,44 +48,19 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		this.cache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
 			@Override
 			public @NotNull
-			BakedModel load(@NotNull ItemStack stack) {
-				return converter(stack).flatMap((model) -> convertModel(model)).orElse(new EmptyBakedModel());
-			}
-		});
-		this.defaultCache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
-			@Override
-			public @NotNull
-			BakedModel load(@NotNull String value) {
-				return StateService.INSTANCE
-						.find(value)
-						.flatMap(modelRegistry::find)
-						.flatMap(modelTemplate -> convertModel(modelTemplate))
-						.orElse(new EmptyBakedModel());
+			BakedModel load(@NotNull Pair<ItemStack, MatchContext> pair) {
+				return converter(pair.getLeft(), pair.getRight()).flatMap((model) -> convertModel(model)).orElse(new EmptyBakedModel());
 			}
 		});
 	}
 
 
-	public BakedModel getModel(ItemStack stack) {
-		if (stack.hasNbt() && stack.getOrCreateNbt().contains(FORGERO_IDENTIFIER)) {
-			return cache.getUnchecked(stack);
-		} else if (stack.getItem() instanceof StateItem stateItem) {
-			try {
-				return defaultCache.get(stateItem.identifier(), () -> getDefaultModel(stateItem));
-			} catch (Exception e) {
-				return new EmptyBakedModel();
-			}
+	public BakedModel getModel(ItemStack stack, MatchContext context) {
+		try {
+			return cache.getUnchecked(new Pair<>(stack, context));
+		} catch (Exception e) {
+			return new EmptyBakedModel();
 		}
-		return new EmptyBakedModel();
-	}
-
-	private BakedModel getDefaultModel(State state) {
-		return ForgeroStateRegistry
-				.stateFinder()
-				.find(state.identifier())
-				.flatMap(registry::find)
-				.flatMap(this::convertModel)
-				.orElse(new EmptyBakedModel());
 	}
 
 
@@ -101,11 +72,11 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		return Optional.empty();
 	}
 
-	private Optional<ModelTemplate> converter(ItemStack stack) {
+	private Optional<ModelTemplate> converter(ItemStack stack, MatchContext context) {
 		var compositeOpt = stateService.convert(stack);
 		if (compositeOpt.isPresent()) {
 			var composite = compositeOpt.get();
-			return registry.find(composite);
+			return registry.find(composite, context);
 		}
 		return Optional.empty();
 	}
@@ -152,7 +123,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			this.loader = baker;
 			this.textureGetter = textureGetter;
 			cache.invalidateAll();
-			defaultCache.invalidateAll();
 		}
 		return this;
 	}

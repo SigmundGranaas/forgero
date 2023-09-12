@@ -1,5 +1,3 @@
-//file:noinspection GroovyAssignabilityCheck
-
 plugins {
 	id "idea"
 	id "fabric-loom" version "1.2.5" apply true
@@ -21,7 +19,6 @@ dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	include "net.devtech:arrp:0.6.7"
 	include project(':forgero-core')
 
 	include project(':fabric:forgero-fabric-core')
@@ -40,7 +37,7 @@ subprojects {
 	dependencies {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
 
 		annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -60,7 +57,7 @@ curseforge {
 		changelog = file('../changelog.md')
 
 		releaseType = project.release_type
-		addGameVersion "1.20-Snapshot"
+		addGameVersion project.minecraft_version
 		addGameVersion 'Fabric'
 		addGameVersion 'Quilt'
 		addGameVersion "Java 17"

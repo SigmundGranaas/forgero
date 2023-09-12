@@ -10,14 +10,12 @@
       {
         "type": "RARITY",
         "order": "BASE",
-        "category": "PASS",
         "operation": "ADDITION",
         "value": 5
       },
       {
         "type": "DURABILITY",
         "order": "BASE",
-        "category": "PASS",
         "operation": "ADDITION",
         "value": 80
       }

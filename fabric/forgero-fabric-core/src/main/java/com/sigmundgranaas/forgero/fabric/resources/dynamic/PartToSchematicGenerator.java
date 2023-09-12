@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric.resources.dynamic;
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -130,8 +131,8 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		 */
 		@Override
 		public boolean shouldKeep(ConstructedState state) {
-			String name = state.name().toLowerCase();
-			String type = state.type().typeName().toLowerCase();
+			String name = state.name().toLowerCase(Locale.ENGLISH);
+			String type = state.type().typeName().toLowerCase(Locale.ENGLISH);
 
 			String[] nameComponents = name.split(ELEMENT_SEPARATOR);
 

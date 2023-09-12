@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.core.type;
 
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.core.util.TypeMatcher;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-
-import java.util.Optional;
 
 public interface Type extends Matchable {
 	Type HOLDABLE = new SimpleType("HOLDABLE", Optional.empty(), new TypeMatcher());
@@ -28,12 +28,12 @@ public interface Type extends Matchable {
 	Type SWORD_BLADE = new SimpleType("SWORD_BLADE", Optional.of(BLADE), new TypeMatcher());
 
 	Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
+	Type SWORD_BLADE_SCHEMATIC = new SimpleType("SWORD_BLADE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
+	Type TOOL_PART_HEAD_SCHEMATIC = new SimpleType("SWORD_PART_HEAD_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
 
 	Type TRINKET = new SimpleType("TRINKET", Optional.empty(), new SchematicMatcher());
 	Type GEM = new SimpleType("GEM", Optional.of(TRINKET), new SchematicMatcher());
 	Type UNDEFINED = new SimpleType("UNDEFINED", Optional.empty(), new TypeMatcher());
-
-
 	Type MATERIAL = new SimpleType("MATERIAL", Optional.empty(), new TypeMatcher());
 	Type TOOL_MATERIAL = new SimpleType("TOOL_MATERIAL", Optional.of(MATERIAL), new TypeMatcher());
 	Type WOOD = new SimpleType("WOOD", Optional.of(TOOL_MATERIAL), new TypeMatcher());
@@ -50,7 +50,7 @@ public interface Type extends Matchable {
 		}
 
 		var type = new SimpleType(name.toUpperCase(), Optional.empty(), new TypeMatcher());
-		if (type.test(SCHEMATIC, Context.of())) {
+		if (type.test(SCHEMATIC, MatchContext.of())) {
 			return new SimpleType(name.toUpperCase(), Optional.empty(), new SchematicMatcher());
 		}
 		return type;
@@ -58,8 +58,8 @@ public interface Type extends Matchable {
 
 	static Type of(String name, Type parent) {
 		var type = new SimpleType(name.toUpperCase(), Optional.of(parent), new TypeMatcher());
-		if (type.test(SCHEMATIC, Context.of())) {
-			return new SimpleType(name.toUpperCase(), Optional.of(parent), new SchematicMatcher());
+		if (type.test(SCHEMATIC, MatchContext.of())) {
+			return new SimpleType(name.toUpperCase(), Optional.of(parent), new TypeMatcher());
 		}
 		return type;
 	}

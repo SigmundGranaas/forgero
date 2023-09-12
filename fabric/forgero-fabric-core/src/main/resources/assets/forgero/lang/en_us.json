@@ -1,5 +1,6 @@
 {
   "block.forgero.assembly_station": "Disassembly Station",
+  "block.forgero.upgrade_station": "Upgrade Station",
   "itemGroup.forgero.forgero": "Forgero",
   "util.forgero.name_separator": " ",
   "advancements.forgero.root.title": "A world of possibilities",

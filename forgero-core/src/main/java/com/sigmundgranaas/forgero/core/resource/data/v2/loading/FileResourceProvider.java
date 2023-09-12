@@ -1,19 +1,26 @@
 package com.sigmundgranaas.forgero.core.resource.data.v2.loading;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.resource.data.v2.DataResourceProvider;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.ContextData;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
-import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Optional;
+
+import com.google.common.reflect.TypeToken;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.JsonReader;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.context.Context;
+import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
+import com.sigmundgranaas.forgero.core.resource.data.deserializer.AttributeGroupDeserializer;
+import com.sigmundgranaas.forgero.core.resource.data.deserializer.ContextDeserializer;
+import com.sigmundgranaas.forgero.core.resource.data.v2.DataResourceProvider;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.ContextData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DependencyData;
+import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
+import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
 
 public class FileResourceProvider implements DataResourceProvider {
 
@@ -39,7 +46,13 @@ public class FileResourceProvider implements DataResourceProvider {
 				InputStream stream = optDataStream.get();
 				JsonReader reader = new JsonReader(new InputStreamReader(stream));
 				var context = createContextFromPath(path);
-				DataResource gson = new Gson().fromJson(reader, DataResource.class);
+				GsonBuilder builder = new GsonBuilder();
+				builder.registerTypeAdapter(DependencyData.class, new DependencyData.DependencyDataDeserializer());
+				builder.registerTypeAdapter(new TypeToken<List<PropertyPojo.Attribute>>() {
+				}.getType(), new AttributeGroupDeserializer());
+				builder.registerTypeAdapter(new TypeToken<Context>() {
+				}.getType(), new ContextDeserializer());
+				DataResource gson = builder.create().fromJson(reader, DataResource.class);
 				if (gson != null) {
 					var resource = gson.toBuilder().context(context).build();
 					if (resource == null) {

@@ -34,8 +34,7 @@ dependencies {
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	// Patchouli compat, disabled until it's updated to 1.19.4
-	//modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
+	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
 	modImplementation("net.devtech:arrp:${project.aarp_version}")
 

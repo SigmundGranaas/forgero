@@ -1,0 +1,30 @@
+{
+  "type": "GOO",
+  "name": "slimeball",
+  "parent": "goo_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:slime_ball"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "slime"
+  }
+}

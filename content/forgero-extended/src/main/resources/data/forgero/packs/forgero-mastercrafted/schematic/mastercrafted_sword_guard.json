@@ -39,8 +39,8 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
-        "tier": 1
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
@@ -49,10 +49,43 @@
         ],
         "type": "TRINKET",
         "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
       }
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "refined-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-mining_speed-composite",
+            "type": "ARMOR",
+            "value": 1.5
+          }
+        ]
+      }
+    ],
     "attributes": [
       {
         "id": "schematic-rarity-local",
@@ -61,27 +94,6 @@
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 75
-      },
-      {
-        "id": "mastercrafted-schematic-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "mastercrafted-schematic-durability-composite",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "mastercrafted-schematic-armor-composite",
-        "type": "ARMOR",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
       }
     ]
   },

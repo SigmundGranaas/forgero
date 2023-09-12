@@ -1,0 +1,149 @@
+{
+  "type": "METAL",
+  "name": "metal_base",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "metal-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 2
+          },
+          {
+            "id": "metal-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 4
+          },
+          {
+            "id": "metal-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 6
+          },
+          {
+            "id": "metal-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 2
+          },
+          {
+            "id": "metal-durability-composite",
+            "type": "DURABILITY",
+            "value": 240
+          },
+          {
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "value": 40
+          },
+          {
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "value": 50
+          },
+          {
+            "id": "metal-armor-composite",
+            "type": "ARMOR",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "metal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "metal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "metal-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "metal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "metal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 3
+          },
+          {
+            "id": "metal-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 120
+          },
+          {
+            "id": "metal-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 120
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  }
+}

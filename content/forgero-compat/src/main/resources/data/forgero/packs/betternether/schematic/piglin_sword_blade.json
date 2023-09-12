@@ -57,36 +57,41 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 60
-      },
+      }
+    ],
+    "grouped_attributes": [
       {
-        "id": "schematic_base_rarity_multiplication",
-        "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.2
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.2
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.2
-      },
-      {
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.2
+          },
+          {
+            "id": "schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.2
+          },
+          {
+            "id": "schematic-attack_damage-composite-piglin",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.2
+          }
+        ]
       }
     ]
   },

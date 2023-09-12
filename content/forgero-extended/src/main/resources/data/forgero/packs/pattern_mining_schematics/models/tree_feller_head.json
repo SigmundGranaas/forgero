@@ -13,6 +13,17 @@
       ]
     },
     {
+      "name": "axe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:pointy_axe_head.png"
+          ],
+          "template": "pointy_axe_head.png"
+        }
+      ]
+    },
+    {
       "name": "tree_feller_head",
       "type": "GENERATE",
       "template": "pointy_axe_head.png",

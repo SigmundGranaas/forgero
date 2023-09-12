@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +71,12 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public State strip() {
+		return this;
+	}
+
+	@Override
+	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof NameMatch matcher) {
 			return matcher.name().equals(name);
 		}

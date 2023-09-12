@@ -1,19 +1,23 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.*;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.AttributeSectionWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.ConditionSectionWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.FeatureSectionWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.IngredientSectionWriter;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.SlotSectionWriter;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.Collections;
-import java.util.List;
 
 public class ToolWriter implements Writer {
 	private final State state;
@@ -34,7 +38,7 @@ public class ToolWriter implements Writer {
 			IngredientSectionWriter.of(state).ifPresent(writer -> writer.write(tooltip, context));
 			ConditionSectionWriter.of(state).ifPresent(writer -> writer.write(tooltip, context));
 		}
-		AttributeSectionWriter.of(state, TooltipConfiguration.builder().hideZeroValues(false).writableAttributes(writableAttributes()).build()).ifPresent(sectionWriter -> sectionWriter.write(tooltip, context));
+		AttributeSectionWriter.of(state, TooltipConfiguration.builder().hideZeroValues(true).build()).ifPresent(sectionWriter -> sectionWriter.write(tooltip, context));
 		FeatureSectionWriter.of(state, TooltipConfiguration.builder().hideSectionTitle(true).build()).ifPresent(writer -> writer.write(tooltip, context));
 	}
 

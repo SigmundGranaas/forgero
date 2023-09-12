@@ -1,22 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " x ",
-    "yyy",
-    "yzy"
+    "   ",
+    "xxx",
+    "xyx"
   ],
   "key": {
     "x": {
-      "tag": "forgero:schematic"
+      "tag": "minecraft:stone_tool_materials"
     },
     "y": {
-      "item": "minecraft:deepslate"
-    },
-    "z": {
-      "item": "minecraft:crafting_table"
+      "tag": "c:workbenches"
     }
   },
   "result": {
-    "item": "forgero:assembly_station"
+    "item": "forgero:assembly_station",
+    "count": 1
   }
 }

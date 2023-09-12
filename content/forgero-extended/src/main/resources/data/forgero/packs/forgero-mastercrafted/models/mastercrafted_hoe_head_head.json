@@ -13,6 +13,17 @@
       ]
     },
     {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_hoe_head.png"
+          ],
+          "template": "mastercrafted_hoe_head.png"
+        }
+      ]
+    },
+    {
       "name": "mastercrafted_hoe_head",
       "modelType": "GENERATE",
       "template": "mastercrafted_hoe_head.png",

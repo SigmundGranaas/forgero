@@ -24,6 +24,7 @@ import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
 import org.spongepowered.asm.mixin.Dynamic;
 
@@ -33,6 +34,20 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	public StateUpgradeShapelessRecipe(ShapelessRecipe recipe, StateService service) {
 		super(recipe.getId(), recipe.getGroup(), CraftingRecipeCategory.EQUIPMENT, recipe.getOutput(null), recipe.getIngredients());
 		this.service = service;
+	}
+
+	@Override
+	public boolean matches(CraftingInventory craftingInventory, World world) {
+		if (super.matches(craftingInventory, world)) {
+			var root = findRoot(craftingInventory)
+					.filter(Composite.class::isInstance)
+					.map(Composite.class::cast);
+			var upgrade = findUpgrade(craftingInventory);
+			if (root.isPresent() && upgrade.isPresent()) {
+				return root.get().canUpgrade(upgrade.get());
+			}
+		}
+		return false;
 	}
 
 	private Optional<State> findUpgrade(Inventory inventory, DynamicRegistryManager manager) {

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.fabric.client;
 
 import static com.sigmundgranaas.forgero.fabric.client.SoulEntityModel.SOUL_ENTITY_MODEL_LAYER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ import com.sigmundgranaas.forgero.fabric.client.texture.Generator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
+import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import net.devtech.arrp.api.RRPCallback;
 
@@ -56,6 +58,7 @@ public class ForgeroClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		initializeItemModels();
 		HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
+		HandledScreens.register(UPGRADE_STATION_SCREEN_HANDLER, UpgradeStationScreen::new);
 	}
 
 	private void initializeItemModels() {
@@ -85,7 +88,7 @@ public class ForgeroClient implements ClientModInitializer {
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder().build());
 		for (State material : materials) {
-			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null));
+			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null));
 		}
 
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());

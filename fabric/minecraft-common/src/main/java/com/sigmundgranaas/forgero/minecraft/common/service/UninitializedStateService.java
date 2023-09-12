@@ -42,6 +42,11 @@ public class UninitializedStateService implements StateService {
 	}
 
 	@Override
+	public ItemStack update(State state, ItemStack stack) {
+		return stack;
+	}
+
+	@Override
 	public boolean isInitialized() {
 		return false;
 	}
@@ -49,6 +54,11 @@ public class UninitializedStateService implements StateService {
 	@Override
 	public StateMapper getMapper() {
 		return new StateMapper();
+	}
+
+	@Override
+	public StateService uncached() {
+		return this;
 	}
 
 	@Override

@@ -1,9 +1,12 @@
 package com.sigmundgranaas.forgero.fabric.registry;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.registry.StateCollection;
@@ -15,7 +18,6 @@ import com.sigmundgranaas.forgero.minecraft.common.conversion.StateToStackConver
 import com.sigmundgranaas.forgero.minecraft.common.service.StateMapper;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.utils.ItemUtils;
-import com.sigmundgranaas.forgero.minecraft.common.utils.StateUtils;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 
@@ -103,8 +107,26 @@ public class ForgeroInstanceRegistry implements StateService {
 
 	@Override
 	public Optional<ItemStack> convert(State state) {
-		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, StateUtils::containerMapper).convert(state);
+		Function<String, Optional<Identifier>> mapFn = (String id) -> Optional.of(mapper.stateToContainer(id));
+		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, mapFn).convert(state);
 		return Optional.ofNullable(stack);
+	}
+
+	@Override
+	public ItemStack update(State updated, ItemStack stack) {
+		ItemStack copy = stack.copy();
+		Optional<State> stackConverted = convert(stack);
+		Optional<ItemStack> updatedStack = convert(updated);
+		// Checking if both can be converted successfully
+		if (updatedStack.isPresent() && stackConverted.isPresent()) {
+			// Checking if the updated stack has any changes to the default one
+			// Checking that the stack to update has the same base state as the target ItemStack
+			if (updatedStack.get().hasNbt() && stackConverted.get().identifier().equals(updated.identifier())) {
+				NbtCompound forgeroCompound = updatedStack.get().getOrCreateNbt().getCompound(FORGERO_IDENTIFIER);
+				copy.getOrCreateNbt().put(FORGERO_IDENTIFIER, forgeroCompound);
+			}
+		}
+		return copy;
 	}
 
 	@Override
@@ -115,5 +137,10 @@ public class ForgeroInstanceRegistry implements StateService {
 	@Override
 	public StateMapper getMapper() {
 		return mapper;
+	}
+
+	@Override
+	public StateService uncached() {
+		return new UncachedStateService(this);
 	}
 }

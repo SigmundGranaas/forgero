@@ -5,17 +5,27 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Forgero comes with tables to make creating and upgrading tools easier. There is currently one one table available, but more are being added"
+      "text": "Forgero comes with tables to make creating and upgrading tools easier. There are currently two tables available, the upgrade station and the disassembly station."
     },
     {
       "type": "patchouli:spotlight",
       "title": "Assembly station",
       "item": "forgero:assembly_station",
-      "text": "The assembly table is a multi block table which allows you to disassemble and assemble tools. Placing tools or parts in the singular slot, will disassemble it into its components. Be aware, breaking parts into their materials will only yield 1 material. Only tools with 100% durability can be disassembled."
+      "text": "The assembly table is a multi block table which allows you to disassemble tools and parts. Placing tools or parts in the singular slot, will disassemble it into its components. Be aware, breaking parts into their materials will only yield 1 material. Only tools with 100% durability can be disassembled."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "forgero:assembly_table"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Assembly station",
+      "item": "forgero:upgrade_station",
+      "text": "The upgrade station is a multi block table that makes it possible to upgrade everything on you tools and parts. Placing a tool in the upgrade station will create a complete overview of all the different parts, as well as their slots, so you can upgrade them in place."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forgero:upgrade_station"
     }
   ]
 }
