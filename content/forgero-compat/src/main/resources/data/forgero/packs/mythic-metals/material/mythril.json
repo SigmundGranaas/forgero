@@ -39,15 +39,15 @@
           },
           {
             "id": "metal-durability-composite",
-            "context": "DURABILITY",
-            "order": "COMPOSITE",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
             "operation": "ADDITION",
             "value": 1500
           },
           {
             "id": "metal-attack_damage-composite",
-            "context": "ATTACK_DAMAGE",
-            "order": "COMPOSITE",
+            "type": "ATTACK_DAMAGE",
+            "context": "COMPOSITE",
             "operation": "ADDITION",
             "value": 5
           },
