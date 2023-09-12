@@ -21,6 +21,7 @@ import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 public class GemUpgradeRecipe implements SmithingRecipe {
@@ -101,6 +102,14 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 
 	public Identifier getId() {
 		return this.id;
+	}
+
+	@Override
+	public DefaultedList<Ingredient> getIngredients() {
+		DefaultedList<Ingredient> list = DefaultedList.ofSize(3, Ingredient.EMPTY);
+		list.set(baseIndex, base);
+		list.set(additionIndex, addition);
+		return list;
 	}
 
 	public boolean isEmpty() {
