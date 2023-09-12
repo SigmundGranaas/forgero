@@ -27,4 +27,11 @@ public class Context implements Matchable {
 	public boolean test(Matchable matchable) {
 		return matchable instanceof Context context && context.value().equals(this.value());
 	}
+
+	@Override
+	public String toString() {
+		return "Context{" +
+				"context='" + context + '\'' +
+				'}';
+	}
 }
