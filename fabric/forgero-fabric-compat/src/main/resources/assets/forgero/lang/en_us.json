@@ -17,5 +17,20 @@
   "forgero.menu.options.resourceLogging": "Resource logging",
   "forgero.menu.options.logDisabledPackages": "Log disabled packages",
   "forgero.menu.options.useEntityAttributes": "Entity attributes",
-  "forgero.menu.options.baseSoulLevelRequirement": "Base soul level"
+  "forgero.menu.options.baseSoulLevelRequirement": "Base soul level",
+  "forgero.menu.options.hideRarity": "Hide rarity",
+  "forgero.menu.options.exportGeneratedTextures": "Export generated textures",
+  "forgero.menu.options.showAttributeDifference": "Show attribute difference",
+  "forgero.menu.options.enableRecipesForAllSchematics": "Enable recipes for all schematics",
+  "forgero.menu.options.weightReducesAttackSpeed": "Weight reduces attack speed",
+  "forgero.menu.options.enableUpgradeInCraftingTable": "Enable upgrade in crafting table",
+  "forgero.menu.options.WeightIncreasesHungerCenterPoint": "Weight Hunger reduction center point",
+  "forgero.menu.options.WeightIncreasesHungerScaler": "Weight Hunger reduction scaler",
+  "forgero.menu.options.WeightIncreasesHungerBaseChance": "Weight Hunger reduction base chance",
+  "forgero.menu.options.weightIncreasesHunger": "Weight increases hunger",
+  "forgero.menu.options.minimumAttackSpeed": "Minimum attack speed"
+
+
+
+
 }
