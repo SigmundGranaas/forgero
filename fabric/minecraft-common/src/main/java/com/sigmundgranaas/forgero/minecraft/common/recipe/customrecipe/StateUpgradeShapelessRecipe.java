@@ -37,18 +37,19 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
+	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		if (super.matches(craftingInventory, world)) {
-			var root = findRoot(craftingInventory)
+			var root = findRoot(craftingInventory, world.getRegistryManager())
 					.filter(Composite.class::isInstance)
 					.map(Composite.class::cast);
-			var upgrade = findUpgrade(craftingInventory);
+			var upgrade = findUpgrade(craftingInventory, world.getRegistryManager());
 			if (root.isPresent() && upgrade.isPresent()) {
 				return root.get().canUpgrade(upgrade.get());
 			}
 		}
 		return false;
 	}
+
 
 	private Optional<State> findUpgrade(Inventory inventory, DynamicRegistryManager manager) {
 		for (int i = 0; i < inventory.size(); i++) {

@@ -26,9 +26,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-
 
 public class ForgeroInstanceRegistry implements StateService {
 	private final List<Identifier> tags;

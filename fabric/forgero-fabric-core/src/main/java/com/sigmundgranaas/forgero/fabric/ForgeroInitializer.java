@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.fabric;
 
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.ASSEMBLY_STATION_ITEM;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.UPGRADE_STATION_ITEM;
 
 import java.util.List;
 import java.util.Set;
@@ -23,7 +24,6 @@ import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 
 import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.Registries;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -41,6 +41,7 @@ public class ForgeroInitializer implements ModInitializer {
 
 	static {
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(UPGRADE_STATION_ITEM));
 	}
 
 	@Override
