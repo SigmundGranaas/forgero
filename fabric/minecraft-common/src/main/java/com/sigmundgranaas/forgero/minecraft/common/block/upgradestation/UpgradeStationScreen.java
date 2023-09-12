@@ -9,13 +9,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.SlotSectionWriter;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -31,7 +28,6 @@ import net.minecraft.util.Identifier;
 
 public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/container/upgrade_table_ui.png");
-	private static final Identifier textureId = new Identifier("minecraft", "textures/gui/advancements/widgets.png");
 	private final int backgroundHeight = 220;
 	private final int backgroundWidth = 176;
 
@@ -85,10 +81,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		}
 	}
 
-	private void drawSlot(MatrixStack matrices, Slot slot, DrawContext context) {
-		// You'll want to render your slot here. I'll use default slot rendering as an example,
-		// but you might have your own custom slot rendering.
-
+	private void drawDynamicSlot(DrawContext context, Slot slot) {
 		int x = slot.x - 1;
 		int y = slot.y - 1;
 
@@ -102,8 +95,6 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 	public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
 		super.render(matrices, mouseX, mouseY, delta);
 		this.tickCounter++;
-
-		// Add this line to your render method
 
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
 		if (this.handler.compositeSlot.hasStack()) {
@@ -175,7 +166,6 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 	}
 
 
-	// This method draws a line from start point (startLineX, startLineY) to end point (endLineX, endLineY)
 	private void renderLineBetweenSlots(DrawContext context, int startLineX, int startLineY, int endLineX, int endLineY, int thickness, int color, float opacity) {
 		// Calculate the line parameters
 		float deltaX = endLineX - startLineX;
@@ -191,7 +181,6 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 				int currentLineY = (int) (startLineY + ratio * deltaY);
 
 				// Draw a dot on the line, offset by the thickness
-
 				context.fill( currentLineX + t, currentLineY, currentLineX + t + 1, currentLineY + 1, rgbaColor);
 			}
 		}
@@ -215,17 +204,14 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		int centerY = (this.height - this.backgroundHeight) / 2;
 		context.drawTexture(TEXTURE, centerX, centerY, 0, 0, backgroundWidth, backgroundHeight);
 
-
 		if (this.handler.compositeSlot.hasStack()) {
 			this.renderLinesBetweenSlots(context);
 			for (Slot slot : handler.slotPool) {
-				// Render your slots here
 				if (slot instanceof UpgradeStationScreenHandler.PositionedSlot positioned && slot.isEnabled() && positioned.slot != null) {
-					this.drawSlot(context, slot);
+					this.drawDynamicSlot(context, slot);
 				}
 			}
 		}
-		this.drawSlot(context, handler.compositeSlot);
+		this.drawDynamicSlot(context, handler.compositeSlot);
 	}
-
 }
