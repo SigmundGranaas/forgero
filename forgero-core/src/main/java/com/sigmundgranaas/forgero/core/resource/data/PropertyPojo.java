@@ -66,6 +66,21 @@ public class PropertyPojo {
 		public Context context = Contexts.UNDEFINED;
 		public float max;
 		public float min;
+
+		@Override
+		public String toString() {
+			return "Attribute{" +
+					"priority=" + priority +
+					", id='" + id + '\'' +
+					", type='" + type + '\'' +
+					", order=" + order +
+					", operation=" + operation +
+					", value=" + value +
+					", condition=" + condition +
+					", category=" + category +
+					", context=" + context +
+					'}';
+		}
 	}
 
 	public static class Feature {
