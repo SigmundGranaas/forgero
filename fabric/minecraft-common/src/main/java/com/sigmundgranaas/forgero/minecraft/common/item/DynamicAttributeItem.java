@@ -17,11 +17,7 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.*;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -159,10 +155,9 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 			builder.put(DURABILITY, new EntityAttributeModifier(BASE_DURABILITY_ID, "Tool modifier", durability, EntityAttributeModifier.Operation.ADDITION));
 
 			// Mining Level
-			int miningLevel = Attribute.of(dynamicProperties(stack), Durability.KEY).asInt();
+			int miningLevel = Attribute.of(dynamicProperties(stack), MiningLevel.KEY).asInt();
 			if (miningLevel != 0) {
 				builder.put(MINING_LEVEL, new EntityAttributeModifier(BASE_MINING_LEVEL_ID, "Tool modifier", miningLevel, EntityAttributeModifier.Operation.ADDITION));
-
 			}
 		}
 		return builder.build();
