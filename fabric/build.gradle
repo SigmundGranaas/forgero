@@ -60,7 +60,7 @@ curseforge {
 		changelog = file('../changelog.md')
 
 		releaseType = project.release_type
-		addGameVersion project.minecraft_version
+		addGameVersion "1.20-Snapshot"
 		addGameVersion 'Fabric'
 		addGameVersion 'Quilt'
 		addGameVersion "Java 17"
