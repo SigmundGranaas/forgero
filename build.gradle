@@ -5,16 +5,21 @@ plugins {
 }
 
 def getGitVersion = { ->
-	def stdout = new ByteArrayOutputStream()
-	exec {
-		commandLine "git", "describe", "--tags"
-		standardOutput = stdout
+	try{
+		def stdout = new ByteArrayOutputStream()
+		exec {
+			commandLine "git", "describe", "--tags"
+			standardOutput = stdout
+		}
+
+		def gitVersionString = stdout.toString().trim()
+		def gitVersionStringParsed = gitVersionString.startsWith("v") ? gitVersionString.substring(1) : gitVersionString
+
+		return gitVersionStringParsed}
+	catch (Exception ignored){
+		return project.forgero_version + "+" + project.minecraft_version
 	}
 
-	def gitVersionString = stdout.toString().trim()
-	def gitVersionStringParsed = gitVersionString.startsWith("v") ? gitVersionString.substring(1) : gitVersionString
-
-	return gitVersionStringParsed
 }
 
 println("Forgero version: ${getGitVersion()}")
