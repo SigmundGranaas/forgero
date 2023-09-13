@@ -1,4 +1,4 @@
-name: Gradle Package
+name: Publish snapshots
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
         with:
           arguments: build
 
-      - name: Publish to GitHub Packages
+      - name: Publish to maven repositories
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: publish
