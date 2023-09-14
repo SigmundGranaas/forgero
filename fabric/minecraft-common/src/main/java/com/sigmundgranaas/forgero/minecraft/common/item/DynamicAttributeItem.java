@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
@@ -23,6 +22,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.AdditionalHealthHandler;
@@ -32,7 +32,6 @@ import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveN
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningLevel;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LuckHandler;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockBreakingEfficiencyTarget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -106,7 +105,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	}
 
 	private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack) {
-		Target target = Target.createEmptyTarget();
+		Matchable target = Matchable.DEFAULT_TRUE;
 		ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
 		//Doing -1 to match vanilla
 		float currentToolDamage = Attribute.apply(dynamicProperties(stack), AttackDamage.KEY, target) - 1;
@@ -188,7 +187,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	}
 
 	private float mingSpeedCalculation(PropertyContainer dynamic, BlockState state) {
-		Target target = new BlockBreakingEfficiencyTarget(state);
-		return MiningSpeed.apply(dynamic, target);
+		// Todo Fix the BlockBreaking predicate
+		//Target target = new BlockBreakingEfficiencyTarget(state);
+		return MiningSpeed.apply(dynamic, Matchable.DEFAULT_TRUE);
 	}
 }

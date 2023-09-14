@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference.DifferenceHelper;
 import org.jetbrains.annotations.Nullable;
@@ -132,7 +132,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public Optional<MutableText> writeTarget(Attribute attribute) {
-		if (attribute.applyCondition(Target.EMPTY) || attribute.targets().isEmpty()) {
+		if (attribute.applyCondition(Matchable.DEFAULT_TRUE, MatchContext.of()) || attribute.targets().isEmpty()) {
 			return Optional.empty();
 		} else {
 			MutableText against = indented(configuration.baseIndent() + 2).append(Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY));

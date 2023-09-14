@@ -9,28 +9,22 @@ import com.sigmundgranaas.forgero.core.condition.ConditionContainer;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.SchematicBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 public class ConstructedSchematicPart extends ConstructedComposite implements MaterialBased, SchematicBased, Conditional<ConstructedSchematicPart> {
 	private final State schematic;
 	private final State baseMaterial;
-
 	private final ConditionContainer conditions;
 
-	public ConstructedSchematicPart(State schematic, State baseMaterial, SlotContainer slots, IdentifiableContainer id) {
-		super(slots, id, List.of(schematic, baseMaterial));
-		this.schematic = schematic;
-		this.baseMaterial = baseMaterial;
-		this.conditions = EMPTY;
-	}
 
 	public ConstructedSchematicPart(State schematic, State baseMaterial, SlotContainer slots, IdentifiableContainer id, ConditionContainer conditions) {
 		super(slots, id, List.of(schematic, baseMaterial));
@@ -41,8 +35,8 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		return Stream.of(super.applyProperty(target), conditionProperties())
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		return Stream.of(super.applyProperty(target, context), conditionProperties())
 				.flatMap(List::stream)
 				.toList();
 	}

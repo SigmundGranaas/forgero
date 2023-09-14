@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.property.v2.cache;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
-public record ContainerTargetPair(PropertyContainer container, Target target) {
+public record ContainerTargetPair(PropertyContainer container, Matchable target) {
 	public static ContainerTargetPair of(PropertyContainer container) {
-		return new ContainerTargetPair(container, Target.EMPTY);
+		return new ContainerTargetPair(container, Matchable.DEFAULT_TRUE);
 	}
 
 	@Override

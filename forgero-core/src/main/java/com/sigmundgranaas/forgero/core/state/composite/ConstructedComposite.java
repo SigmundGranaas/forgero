@@ -46,15 +46,15 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		var newTarget = target.combineTarget(new TypeTarget(Set.of(id.type().typeName())));
-		return compositeProperties(newTarget);
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		var newContext = context.add(id.type());
+		return compositeProperties(target, newContext);
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return compositeProperties(Target.EMPTY);
+		return compositeProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 
 
@@ -64,12 +64,12 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	}
 
 	@Override
-	public List<Property> compositeProperties(Target target) {
+	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		var propertyProcessor = new CompositePropertyProcessor();
-		var props = new ArrayList<>(super.compositeProperties(target));
+		var props = new ArrayList<>(super.compositeProperties(target, context));
 
 		var partProps = parts().stream()
-				.map(part -> part.applyProperty(target))
+				.map(part -> part.applyProperty(target, context))
 				.flatMap(List::stream)
 				.toList();
 

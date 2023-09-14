@@ -11,6 +11,8 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,9 +66,9 @@ public class LeveledState implements State {
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
+	List<Property> applyProperty(Matchable target, MatchContext context) {
 		return leveledProperties(properties).stream()
-				.filter(prop -> prop.applyCondition(target))
+				.filter(prop -> prop.applyCondition(target, context))
 				.toList();
 	}
 

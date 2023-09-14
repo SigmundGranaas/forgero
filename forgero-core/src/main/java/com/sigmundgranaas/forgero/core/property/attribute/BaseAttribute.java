@@ -11,7 +11,7 @@ import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
-import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 /**
@@ -50,7 +50,7 @@ public record BaseAttribute(String attribute,
 	}
 
 	@Override
-	public Matchable getCondition() {
+	public Matchable getPredicate() {
 		return condition;
 	}
 
@@ -107,11 +107,10 @@ public record BaseAttribute(String attribute,
 	}
 
 	@Override
-	public boolean applyCondition(Target target) {
+	public boolean applyCondition(Matchable target, MatchContext context) {
 		return condition.test(target);
 	}
-
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority, context);

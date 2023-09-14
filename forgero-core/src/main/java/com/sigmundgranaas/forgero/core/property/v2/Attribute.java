@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.core.property.v2;
 import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_KEY;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModification;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.ComputedAttribute;
@@ -11,6 +10,7 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public interface Attribute {
 
@@ -55,7 +55,7 @@ public interface Attribute {
 		return of(container, key).asFloat();
 	}
 
-	static Float apply(PropertyContainer container, String key, Target target) {
+	static Float apply(PropertyContainer container, String key, Matchable target) {
 		var pair = ContainerTargetPair.of(container);
 		return of(pair, key).asFloat();
 	}

@@ -87,7 +87,7 @@ public class Construct implements Composite, ConstructedState {
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return compositeProperties(Target.EMPTY);
+		return compositeProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 
 	@Override
@@ -107,26 +107,29 @@ public class Construct implements Composite, ConstructedState {
 
 		var upgradeProps = ingredients()
 				.stream()
-				.map(state -> state.applyProperty(target))
+				.map(state -> state.applyProperty(target, context))
 				.flatMap(List::stream)
 				.filter(this::filterAttribute)
 				.toList();
 
-		var compositeAttributes = Property.stream(props)
+		List<Property> compositeAttributes = Property.stream(props)
 				.getAttributes()
 				.collect(Collectors.toMap(Attribute::toString, attribute -> attribute, (attribute1, attribute2) -> attribute1.getPriority() > attribute2.getPriority() ? attribute1 : attribute2))
 				.values()
 				.stream()
 				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
-				.map(Property.class::cast)
-				.toList();
+				.collect(Collectors.toList());
 
 		var newValues = new ArrayList<Property>();
-		for (AttributeType type : AttributeType.values()) {
-			var newBaseAttribute = new AttributeBuilder(type.toString()).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
+		Set<String> types = compositeAttributes.stream()
+				.map(Property::type)
+				.collect(Collectors.toUnmodifiableSet());
+
+		for (String type : types) {
+			var newBaseAttribute = new AttributeBuilder(type).applyOperation(NumericOperation.ADDITION).applyOrder(CalculationOrder.BASE);
 			newBaseAttribute.applyValue(Property.stream(compositeAttributes).applyAttribute(type)).applyCategory(Category.UNDEFINED);
 			var attribute = newBaseAttribute.build();
-			if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1) {
+			if (attribute.getValue() != 0 && compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type)).toList().size() > 1) {
 				newValues.add(newBaseAttribute.build());
 			}
 		}

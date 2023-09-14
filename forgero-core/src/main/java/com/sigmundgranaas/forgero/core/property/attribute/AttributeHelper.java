@@ -3,12 +3,13 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public class AttributeHelper {
 	private final State state;
@@ -44,6 +45,6 @@ public class AttributeHelper {
 	}
 
 	public List<Property> attributes() {
-		return state.applyProperty(Target.EMPTY);
+		return state.applyProperty(Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 }

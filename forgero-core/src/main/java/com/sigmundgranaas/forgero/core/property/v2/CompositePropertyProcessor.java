@@ -4,6 +4,7 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,8 +30,9 @@ public class CompositePropertyProcessor implements PropertyProcessor {
 				.collect(Collectors.toList());
 
 		var newValues = new ArrayList<Property>();
-		for (AttributeType type : AttributeType.values()) {
-			boolean isMoreThanOne = compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type.toString())).toList().size() > 1;
+		Set<String> types = compositeAttributes.stream().map(Property::type).collect(Collectors.toUnmodifiableSet());
+		for (String type : types) {
+			boolean isMoreThanOne = compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type)).toList().size() > 1;
 			if (!isMoreThanOne) {
 				continue;
 			}
@@ -46,7 +48,7 @@ public class CompositePropertyProcessor implements PropertyProcessor {
 
 
 			String combinedId = compositeAttributes.stream()
-					.filter(attr -> attr.type().equals(type.toString()))
+					.filter(attr -> attr.type().equals(type))
 					.map(com.sigmundgranaas.forgero.core.property.Attribute.class::cast)
 					.map(com.sigmundgranaas.forgero.core.property.Attribute::getId)
 					.reduce(EMPTY_IDENTIFIER, String::join);

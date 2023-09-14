@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import lombok.Builder;
@@ -56,11 +57,11 @@ public class StateFilter {
 	}
 
 	private boolean filter(State state) {
-		if (state.stream().applyAttribute(AttributeType.RARITY) < lowerRarity) {
+		if (state.stream().applyAttribute(Rarity.KEY) < lowerRarity) {
 			return false;
 		}
 
-		if (state.stream().applyAttribute(AttributeType.RARITY) > upperRarity) {
+		if (state.stream().applyAttribute(Rarity.KEY) > upperRarity) {
 			return false;
 		}
 

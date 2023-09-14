@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -98,7 +99,7 @@ public class StateItemRegistrar implements Registrar {
 		 * @return The rarity value.
 		 */
 		static int getRarity(State state) {
-			return (int) state.stream().applyAttribute(AttributeType.RARITY);
+			return (int) state.stream().applyAttribute(Rarity.KEY);
 		}
 	}
 

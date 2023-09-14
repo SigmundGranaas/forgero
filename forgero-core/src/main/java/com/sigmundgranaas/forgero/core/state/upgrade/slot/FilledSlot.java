@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.v2.UpgradePropertyProcessor;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -27,17 +26,17 @@ public class FilledSlot extends AbstractTypedSlot {
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return filterProperties(Target.EMPTY);
+		return filterProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		return filterProperties(target);
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		return filterProperties(target, context);
 	}
 
-	private List<Property> filterProperties(Target target) {
-		var properties = upgrade.applyProperty(target);
+	private List<Property> filterProperties(Matchable target, MatchContext context) {
+		var properties = upgrade.applyProperty(target, context);
 		return new UpgradePropertyProcessor(categories).process(properties);
 	}
 

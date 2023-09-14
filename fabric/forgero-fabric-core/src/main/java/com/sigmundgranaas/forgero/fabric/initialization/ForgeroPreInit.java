@@ -14,8 +14,6 @@ import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBu
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
-import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
-import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
@@ -24,8 +22,6 @@ import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.match.DamagePercentagePredicate;
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -39,10 +35,6 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
 	public void onPreInitialization() {
-		ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(PatternBreaking.predicate, PatternBreaking.factory));
-		ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
-		ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
-
 		FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
 		soulLevelPropertyReloader();
 		DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);

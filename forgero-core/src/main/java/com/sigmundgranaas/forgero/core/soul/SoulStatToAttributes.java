@@ -1,13 +1,16 @@
 package com.sigmundgranaas.forgero.core.soul;
 
-import com.sigmundgranaas.forgero.core.property.*;
-import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
+
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 public class SoulStatToAttributes implements PropertyContainer {
 
@@ -39,8 +42,9 @@ public class SoulStatToAttributes implements PropertyContainer {
 				.applyOrder(CalculationOrder.MIDDLE)
 				.applyOperation(NumericOperation.MULTIPLICATION)
 				.applyValue(1f + (float) percent / 100)
-				.applyCondition((target) ->
-						target.isApplicable(Set.of(targetBlock), TargetTypes.BLOCK))
+				.applyPredicate(Matchable.DEFAULT_TRUE)
+				// Todo! Implement proper predicates here
+				//target.isApplicable(Set.of(targetBlock), TargetTypes.BLOCK))
 				.build());
 	}
 
@@ -53,8 +57,10 @@ public class SoulStatToAttributes implements PropertyContainer {
 				.applyOrder(CalculationOrder.MIDDLE)
 				.applyOperation(NumericOperation.MULTIPLICATION)
 				.applyValue(1f + (float) percent / 100)
-				.applyCondition((target) ->
-						target.isApplicable(Set.of(targetBlock), TargetTypes.ENTITY))
+				.applyPredicate(Matchable.DEFAULT_TRUE)
+				// Todo! Implement proper predicates here
+				//(target) ->
+				//target.isApplicable(Set.of(targetBlock), TargetTypes.ENTITY))
 				.build());
 	}
 

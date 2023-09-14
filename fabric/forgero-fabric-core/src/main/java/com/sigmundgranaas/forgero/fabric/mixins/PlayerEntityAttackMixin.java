@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityTarget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -17,8 +17,9 @@ public abstract class PlayerEntityAttackMixin {
 		if (((PlayerEntity) (Object) this).getMainHandStack().getItem() instanceof StateItem item) {
 			var stack = ((PlayerEntity) (Object) this).getMainHandStack();
 			var tool = item.dynamicState(stack);
-			float initialAttackDamage = tool.stream().applyAttribute(AttributeType.ATTACK_DAMAGE);
-			float attackDamageTarget = AttackDamage.apply(tool, new EntityTarget(target.getType()));
+			float initialAttackDamage = tool.stream().applyAttribute(AttackDamage.KEY);
+			// Todo fix actual property here
+			float attackDamageTarget = AttackDamage.apply(tool, MatchContext.of());
 			if (initialAttackDamage != attackDamageTarget) {
 				return x + attackDamageTarget - initialAttackDamage;
 			}
