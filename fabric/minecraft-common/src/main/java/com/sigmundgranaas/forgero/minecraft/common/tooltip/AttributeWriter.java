@@ -9,7 +9,6 @@ import java.util.Locale;
 
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;

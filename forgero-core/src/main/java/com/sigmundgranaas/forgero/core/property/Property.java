@@ -2,6 +2,9 @@ package com.sigmundgranaas.forgero.core.property;
 
 import java.util.List;
 
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+
 /**
  * Base interface for properties which will change attributes, create passive buffs and enabling special actions
  * Properties are designed to be pooled together and filtered every time they are used.
@@ -16,12 +19,11 @@ public interface Property {
 
 	String type();
 
-	default float applyAttribute(Target target, float currentAttribute) {
+	default float applyAttribute(Matchable target, MatchContext context, float currentAttribute) {
 		return currentAttribute;
 	}
 
-	default boolean applyCondition(Target target) {
+	default boolean applyCondition(Matchable target, MatchContext context) {
 		return true;
 	}
-
 }

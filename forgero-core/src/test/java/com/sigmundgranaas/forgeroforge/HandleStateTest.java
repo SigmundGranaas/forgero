@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgeroforge;
 import static com.sigmundgranaas.forgeroforge.testutil.ToolParts.HANDLE;
 import static com.sigmundgranaas.forgeroforge.testutil.Upgrades.REDSTONE_GEM;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgeroforge.testutil.Types;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.fabric.item;
 
 import java.util.Optional;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;

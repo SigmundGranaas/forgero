@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Property;

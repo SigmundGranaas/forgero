@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import lombok.Builder;
@@ -68,7 +67,7 @@ public class StateFilter {
 		if (exclusion.stream().anyMatch(exclusion -> stringMatch(exclusion, state))) {
 			return false;
 		}
-		
+
 		return include.size() == 0 || include.stream().anyMatch(include -> stringMatch(include, state));
 	}
 

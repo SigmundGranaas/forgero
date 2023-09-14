@@ -6,6 +6,8 @@ import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,8 +37,8 @@ public interface Attribute extends Property, Comparable<Attribute> {
 		return DEFAULT_ATTRIBUTE_CALCULATION;
 	}
 
-	default Predicate<Target> getCondition() {
-		return DEFAULT_CONDITION;
+	default Matchable getPredicate() {
+		return Matchable.DEFAULT_TRUE;
 	}
 
 	NumericOperation getOperation();
@@ -61,16 +63,16 @@ public interface Attribute extends Property, Comparable<Attribute> {
 	float leveledValue();
 
 
-	default float applyAttribute(Target target, float currentAttribute) {
-		if (this.getCondition().test(target)) {
+	default float applyAttribute(Matchable target, MatchContext context, float currentAttribute) {
+		if (this.getPredicate().test(target, context)) {
 			return this.getCalculation().apply(currentAttribute);
 		}
 		return currentAttribute;
 	}
 
 	@Override
-	default boolean applyCondition(Target target) {
-		return this.getCondition().test(target);
+	default boolean applyCondition(Matchable target, MatchContext context) {
+		return this.getPredicate().test(target, context);
 	}
 
 }

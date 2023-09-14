@@ -5,7 +5,6 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
@@ -13,6 +12,7 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 /**
  * Base attribute class. This class is opinionated when it comes to how some attributes should be calculated, like MINING level.
@@ -21,7 +21,7 @@ import com.sigmundgranaas.forgero.core.property.Target;
 public record BaseAttribute(String attribute,
                             NumericOperation operation,
                             float value,
-                            Predicate<Target> condition,
+                            Matchable condition,
                             CalculationOrder order, int level, Category category, String id,
                             List<String> targets,
                             String targetType,
@@ -50,7 +50,7 @@ public record BaseAttribute(String attribute,
 	}
 
 	@Override
-	public Predicate<Target> getCondition() {
+	public Matchable getCondition() {
 		return condition;
 	}
 

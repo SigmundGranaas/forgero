@@ -1,16 +1,14 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityTarget;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityAttackMixin {

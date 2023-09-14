@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.Slot;

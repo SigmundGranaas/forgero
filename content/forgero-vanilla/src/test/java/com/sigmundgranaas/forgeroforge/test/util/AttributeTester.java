@@ -1,12 +1,9 @@
 package com.sigmundgranaas.forgeroforge.test.util;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
-import com.sigmundgranaas.forgero.core.state.State;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.sigmundgranaas.forgero.core.state.State;
 
 public class AttributeTester {
 	private final List<TestInfo> tests;
@@ -24,6 +21,10 @@ public class AttributeTester {
 
 	public static AttributeTester tester(State state) {
 		return new AttributeTester(state);
+	}
+
+	public static TestInfo of(AttributeType attribute, float target, float flex) {
+		return new TestInfo(attribute, target, flex);
 	}
 
 	public AttributeTester add(TestInfo info) {
@@ -51,21 +52,14 @@ public class AttributeTester {
 		return this;
 	}
 
-
 	public void run() {
 		tests.forEach(test -> {
 			assertEquals(test.target, state.stream().applyAttribute(test.attribute), test.flex, test.attribute.toString());
 		});
 	}
 
-	public static TestInfo of(AttributeType attribute, float target, float flex) {
-		return new TestInfo(attribute, target, flex);
-	}
-
 	record TestInfo(AttributeType attribute, float target, float flex) {
 
 	}
-
-	;
 
 }

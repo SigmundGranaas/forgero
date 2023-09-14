@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;

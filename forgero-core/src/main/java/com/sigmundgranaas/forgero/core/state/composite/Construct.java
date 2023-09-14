@@ -13,7 +13,6 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -93,15 +92,15 @@ public class Construct implements Composite, ConstructedState {
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		var newTarget = target.combineTarget(new TypeTarget(Set.of(type.typeName())));
-		return compositeProperties(newTarget);
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		var newTarget = context.add(type);
+		return compositeProperties(target, newTarget);
 	}
 
-	public List<Property> compositeProperties(Target target) {
+	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		var props = Stream.of(ingredients(), slots())
 				.flatMap(List::stream)
-				.map(prop -> prop.applyProperty(target))
+				.map(prop -> prop.applyProperty(target, context))
 				.flatMap(List::stream)
 				.filter(prop -> !(prop instanceof Attribute attribute && attribute.getContext().test(Contexts.LOCAL)))
 				.collect(Collectors.toList());

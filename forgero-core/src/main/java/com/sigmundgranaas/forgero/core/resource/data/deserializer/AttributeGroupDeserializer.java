@@ -13,7 +13,6 @@ import com.google.gson.JsonParseException;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
@@ -48,7 +47,7 @@ public class AttributeGroupDeserializer implements JsonDeserializer<List<Propert
 					attribute.category = groupObject.has("category") ? Category.valueOf(categoryValue) : attribute.category;
 					attribute.priority = priorityValue;
 
-					if(attribute.type == null ){
+					if (attribute.type == null) {
 						Forgero.LOGGER.error("Attribute type cannot be null!: {}", attribute.toString());
 						throw new JsonParseException("Attribute type cannot be null!");
 					}
@@ -56,7 +55,7 @@ public class AttributeGroupDeserializer implements JsonDeserializer<List<Propert
 				}
 			} else {
 				PropertyPojo.Attribute attribute = context.deserialize(groupElement, PropertyPojo.Attribute.class);
-				if(attribute.type == null ){
+				if (attribute.type == null) {
 					Forgero.LOGGER.error("Attribute type cannot be null!: {}", attribute.toString());
 					throw new JsonParseException("Attribute type cannot be null!");
 				}
