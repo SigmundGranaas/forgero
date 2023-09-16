@@ -71,8 +71,9 @@ public class MatchContext implements Matchable {
 	 * @return A new MatchContext instance with the updated metadata.
 	 */
 	public MatchContext put(String key, Object value) {
+		Map<String, Object> metadata = new HashMap<>(this.metadata);
 		metadata.put(key, value);
-		return new MatchContext(new HashMap<>(metadata), new ArrayList<>(matches));
+		return new MatchContext(metadata, new ArrayList<>(matches));
 	}
 
 	/**
@@ -82,10 +83,11 @@ public class MatchContext implements Matchable {
 	 * @return A new MatchContext instance with the updated matches.
 	 */
 	public MatchContext add(Matchable matchable) {
+		List<Matchable> matches = new ArrayList<>(this.matches);
 		if (!matches.contains(matchable)) {
-			this.matches.add(matchable);
+			matches.add(matchable);
 		}
-		return new MatchContext(new HashMap<>(metadata), new ArrayList<>(matches));
+		return new MatchContext(new HashMap<>(metadata), matches);
 	}
 
 	/**

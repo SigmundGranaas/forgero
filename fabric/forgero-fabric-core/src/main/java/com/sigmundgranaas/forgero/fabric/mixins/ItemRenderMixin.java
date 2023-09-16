@@ -27,8 +27,6 @@ import net.minecraft.world.World;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRenderMixin {
-
-
 	@Shadow
 	@Final
 	private ItemModels models;
@@ -39,7 +37,7 @@ public abstract class ItemRenderMixin {
 	@Inject(at = @At("HEAD"), method = "getModel", cancellable = true)
 	public void getModelMixin(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
 		if (this.models.getModel(stack) instanceof CompositeModelVariant variant) {
-			if (this.context.get(ENTITY).filter(e -> e != entity).isEmpty()) {
+			if (this.context.get(ENTITY).filter(e -> e == entity).isEmpty()) {
 				this.context = new MatchContext()
 						.put(ENTITY, entity)
 						.put(WORLD, world)
