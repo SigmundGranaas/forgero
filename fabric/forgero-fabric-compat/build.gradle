@@ -38,6 +38,7 @@ dependencies {
 
 	modImplementation("net.devtech:arrp:${project.aarp_version}")
 
+
 	//dynamiclights compat
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lambd_version}")
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")

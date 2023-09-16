@@ -1,4 +1,4 @@
-# Forgero Beta release 0.11.1
+# Forgero Beta release 0.11.2
 
 ## ! Warning !
 
@@ -7,4 +7,5 @@ with this version of Forgero**
 
 # Changelog
 
-* Fixed mythic metals compatability crash
+* Fixed model cache being invalidated, causing massive performance issues
+* Added tags to support farmers delight

@@ -1,7 +1,8 @@
-//file:noinspection GroovyAssignabilityCheck
-
 plugins {
 	id "maven-publish"
+}
+def isSnapshotVersion = { versionString ->
+	return versionString.contains("-g")
 }
 
 def getGitVersion = { ->
@@ -15,6 +16,11 @@ def getGitVersion = { ->
 
 		def gitVersionString = stdout.toString().trim()
 		def gitVersionStringParsed = gitVersionString.startsWith("v") ? gitVersionString.substring(1) : gitVersionString
+
+		// If it's a snapshot version, append '-SNAPSHOT'
+		if (isSnapshotVersion(gitVersionStringParsed)) {
+			gitVersionStringParsed += "-SNAPSHOT"
+		}
 
 		def parts = gitVersionStringParsed.split("-")
 
@@ -44,8 +50,8 @@ subprojects {
 	}
 }
 
-subprojects {
-	if (it.name != 'content') {
+subprojects { project ->
+	if (project.name != 'content' && project.name != 'fabric') {
 		apply plugin: "maven-publish"
 		apply plugin: "java-library"
 		repositories {
@@ -63,18 +69,27 @@ subprojects {
 						password = System.getenv("GPR_API_KEY")
 					}
 				}
-			}
-
-
-			publishing {
-				publications {
-					gpr(MavenPublication) {
-						groupId = group // Replace with your groupId
-						artifactId = archivesBaseName // Replace with your module's name
-						from components.java
+				maven {
+					name = "ArchivaMavenRepo"
+					// Determine if it's a snapshot and adjust the URL accordingly.
+					url = isSnapshotVersion(project.version) ?
+						"https://maven.sigmundgranaas.com/repository/snapshots/" :
+						"https://maven.sigmundgranaas.com/repository/internal/"
+					credentials {
+						username 'admin'
+						password System.getenv("ARCHIVA_ADMIN_KEY")
 					}
 				}
 			}
+
+			publications {
+				mavenJava(MavenPublication) {
+					groupId = group
+					artifactId = archivesBaseName
+					from components.java
+				}
+			}
+
 		}
 	}
 }

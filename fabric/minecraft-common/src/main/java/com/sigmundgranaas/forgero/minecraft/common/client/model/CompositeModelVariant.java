@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelTemplate;
@@ -33,10 +34,9 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
-	private final LoadingCache<Pair<ItemStack, MatchContext>, BakedModel> cache;
+	private final LoadingCache<StackContextKey, BakedModel> cache;
 	private final ModelRegistry registry;
 	private final StateService stateService;
 	private Baker loader;
@@ -45,19 +45,21 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public CompositeModelVariant(ModelRegistry modelRegistry, StateService stateService) {
 		this.registry = modelRegistry;
 		this.stateService = stateService;
-		this.cache = CacheBuilder.newBuilder().maximumSize(600).build(new CacheLoader<>() {
-			@Override
-			public @NotNull
-			BakedModel load(@NotNull Pair<ItemStack, MatchContext> pair) {
-				return converter(pair.getLeft(), pair.getRight()).flatMap((model) -> convertModel(model)).orElse(new EmptyBakedModel());
-			}
-		});
+		this.cache = CacheBuilder.newBuilder()
+				.maximumSize(600)
+				.build(new CacheLoader<>() {
+					@Override
+					public @NotNull
+					BakedModel load(@NotNull StackContextKey pair) {
+						return converter(pair.stack(), pair.context()).flatMap((model) -> convertModel(model)).orElse(new EmptyBakedModel());
+					}
+				});
 	}
 
 
 	public BakedModel getModel(ItemStack stack, MatchContext context) {
 		try {
-			return cache.getUnchecked(new Pair<>(stack, context));
+			return cache.getUnchecked(new StackContextKey(stack, context));
 		} catch (Exception e) {
 			return new EmptyBakedModel();
 		}
