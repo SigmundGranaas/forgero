@@ -21,15 +21,19 @@ public record TemplatedModelEntry(String template) implements ModelMatcher {
 		var templateModel = provider.find(Identifiable.of(template))
 				.filter(matcher -> matcher.match(state, context))
 				.flatMap(matcher -> matcher.get(state, provider, context));
+
 		if (state instanceof Composite construct) {
-			context.add(construct.type()).add(new NameMatch(construct.name()));
+			MatchContext newContext = templateModel
+					.map(model -> addModelToContext(model, context))
+					.orElse(context)
+					.add(construct.type()).add(new NameMatch(construct.name()));
+			
 			var compositeModelTemplate = new CompositeModelTemplate();
 			templateModel.ifPresent(compositeModelTemplate::add);
-			templateModel.ifPresent(model -> addModelToContext(model, context));
 			construct.slots().stream()
 					.filter(Slot::filled)
 					.map(slot ->
-							CompositeModelEntry.findUpgradeModel(slot, construct, context, provider)
+							CompositeModelEntry.findUpgradeModel(slot, construct, newContext, provider)
 					).flatMap(Optional::stream)
 					.forEach(compositeModelTemplate::add);
 			return Optional.of(compositeModelTemplate);
@@ -38,9 +42,10 @@ public record TemplatedModelEntry(String template) implements ModelMatcher {
 		}
 	}
 
-	private void addModelToContext(ModelTemplate template, MatchContext context) {
+	private MatchContext addModelToContext(ModelTemplate template, MatchContext context) {
 		if (template instanceof PaletteTemplateModel templateModel) {
-			context.add((new ModelMatchEntry(templateModel.template())));
+			return context.add((new ModelMatchEntry(templateModel.template())));
 		}
+		return context;
 	}
 }
