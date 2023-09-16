@@ -1,9 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.match;
 
-import javax.swing.text.html.parser.Entity;
-
 import com.sigmundgranaas.forgero.core.util.match.ContextKey;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
