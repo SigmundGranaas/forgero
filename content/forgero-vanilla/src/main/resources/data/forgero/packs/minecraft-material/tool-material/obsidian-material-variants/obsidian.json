@@ -1,7 +1,7 @@
 {
-  "type": "GLASS",
+  "type": "OBSIDIAN",
   "name": "obsidian",
-  "parent": "glass_base",
+  "parent": "obsidian_base",
   "container": {
     "type": "HOST",
     "id": "minecraft:obsidian"
