@@ -3,9 +3,6 @@
   "name": "HARD_MATERIAL",
   "children": [
     {
-      "name": "GLASS"
-    },
-    {
       "name": "SCALE"
     },
     {

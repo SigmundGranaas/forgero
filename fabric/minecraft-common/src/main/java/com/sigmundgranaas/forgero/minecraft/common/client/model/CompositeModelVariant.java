@@ -78,7 +78,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		var compositeOpt = stateService.convert(stack);
 		if (compositeOpt.isPresent()) {
 			var composite = compositeOpt.get();
-			return registry.find(composite, context);
+			return registry.find(composite, MatchContext.mutable(context));
 		}
 		return Optional.empty();
 	}
