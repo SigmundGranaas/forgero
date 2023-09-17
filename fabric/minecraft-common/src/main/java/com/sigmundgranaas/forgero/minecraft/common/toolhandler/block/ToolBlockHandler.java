@@ -44,6 +44,10 @@ public class ToolBlockHandler {
 		return BlockHandlerFactory.create(container, world, pos, player);
 	}
 
+	public Set<BlockPos> getAvailableBlocks() {
+		return availableBlocks;
+	}
+
 	public float getHardness() {
 		return hardness;
 	}
