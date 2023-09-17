@@ -1,11 +1,7 @@
 {
-  "type": "GLASS",
-  "name": "crying_obsidian",
-  "parent": "glass_base",
-  "container": {
-    "type": "HOST",
-    "id": "minecraft:crying_obsidian"
-  },
+  "type": "OBSIDIAN",
+  "name": "obsidian_base",
+  "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
       {
@@ -14,14 +10,39 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "glass-rarity-composite",
-            "type": "RARITY",
-            "value": 70
+            "id": "obsidian-attack-speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 2
           },
           {
-            "id": "glass-durability-composite",
+            "id": "obsidian-attack-damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 4
+          },
+          {
+            "id": "obsidian-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 6
+          },
+          {
+            "id": "obsidian-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 3
+          },
+          {
+            "id": "obsidian-durability-composite",
             "type": "DURABILITY",
-            "value": 1880
+            "value": 1750
+          },
+          {
+            "id": "obsidian-rarity-composite",
+            "type": "RARITY",
+            "value": 60
+          },
+          {
+            "id": "obsidian-weight-composite",
+            "type": "WEIGHT",
+            "value": 50
           }
         ]
       },
@@ -29,94 +50,93 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "glass-rarity-upgrade",
+            "id": "obsidian-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 35
+            "value": 30
           },
           {
-            "id": "glass-attack_speed-offensive-upgrade",
+            "id": "obsidian-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "obsidian-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "glass-attack_damage-offensive-upgrade",
+            "id": "obsidian-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.5
+            "value": 2
           },
           {
-            "id": "glass-mining_speed-offensive-upgrade",
+            "id": "obsidian-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.5
+            "value": 3.5
           },
           {
-            "id": "glass-mining_level-offensive-upgrade",
+            "id": "obsidian-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 1.5
           },
           {
-            "id": "glass-durability-offensive-upgrade",
+            "id": "obsidian-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 940
+            "value": 875
           },
           {
-            "id": "glass-attack_speed-utility-upgrade",
+            "id": "obsidian-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-attack_damage-utility-upgrade",
+            "id": "obsidian-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-mining_speed-utility-upgrade",
+            "id": "obsidian-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-mining_level-utility-upgrade",
+            "id": "obsidian-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "glass-durability-utility-upgrade",
+            "id": "obsidian-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 940
+            "value": 875
           }
         ]
       }
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
-      }
     ]
-  },
-  "palette": {
-    "name": "crying_obsidian"
   }
 }
