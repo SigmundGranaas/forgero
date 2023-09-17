@@ -51,7 +51,7 @@ public class BlockHandlerFactory {
 		}
 		var key = new BlockHandlerCache.BlockStateCacheKey(new ToolBlockHandler.BlockInfo(pos), container, Direction.getEntityFacingOrder(player));
 		var handler = BlockHandlerCache.computeIfAbsent(key, () -> new BlockHandlerFactory(container, view, player).createHandler(pos, key));
-		return Optional.of(handler);
+		return Optional.of(handler).filter(h -> h.getAvailableBlocks().size() > 1);
 	}
 
 	/**
