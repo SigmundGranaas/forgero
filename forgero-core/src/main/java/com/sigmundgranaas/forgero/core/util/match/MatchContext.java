@@ -12,8 +12,8 @@ import java.util.Optional;
  * tested against other Matchable instances.
  */
 public class MatchContext implements Matchable {
-	private final Map<String, Object> metadata;
-	private final List<Matchable> matches;
+	protected final Map<String, Object> metadata;
+	protected final List<Matchable> matches;
 
 	/**
 	 * Default constructor. Initializes metadata as an empty HashMap and matches as an empty ArrayList.
@@ -42,6 +42,10 @@ public class MatchContext implements Matchable {
 	public MatchContext(List<Matchable> matches) {
 		this.metadata = new HashMap<>();
 		this.matches = matches;
+	}
+
+	public static MatchContext mutable(MatchContext context) {
+		return new MutableMatchContext(new HashMap<>(context.metadata), new ArrayList<>(context.matches));
 	}
 
 	/**

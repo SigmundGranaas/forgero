@@ -35,11 +35,11 @@ public class CompositeModelEntry implements ModelMatcher {
 	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
 		if (state instanceof Composite composite) {
 			var compositeModelTemplate = new CompositeModelTemplate();
-			var compositeContext = context.add(composite.type()).add(new NameMatch(composite.name()));
-			var filledContext = compositeContext;
+			context.add(composite.type())
+					.add(new NameMatch(composite.name()));
 			if (composite instanceof Constructed construct) {
 				construct.parts().stream()
-						.map(stateEntry -> convert(stateEntry, provider, compositeContext))
+						.map(stateEntry -> convert(stateEntry, provider, context))
 						.flatMap(Optional::stream)
 						.forEach(compositeModelTemplate::add);
 
@@ -49,13 +49,12 @@ public class CompositeModelEntry implements ModelMatcher {
 						.toList();
 
 				for (PaletteTemplateModel model : models) {
-					filledContext = filledContext.add(new ModelMatchEntry(model.template()));
+					context.add(new ModelMatchEntry(model.template()));
 				}
 			}
 
-			MatchContext finalFilledContext = filledContext;
 			composite.slots().stream()
-					.map(slot -> findUpgradeModel(slot, composite, finalFilledContext, provider))
+					.map(slot -> findUpgradeModel(slot, composite, context, provider))
 					.flatMap(Optional::stream)
 					.forEach(compositeModelTemplate::add);
 
