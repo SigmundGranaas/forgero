@@ -85,8 +85,16 @@ public class ModelRegistry {
 		if (modelMap.containsKey(state.identifier())) {
 			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of());
 		} else {
-			var modelEntries = tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build());
-			return modelEntries.stream().sorted(ModelMatcher::comparator).filter(entry -> entry.match(state, context)).map(modelMatcher -> modelMatcher.get(state, this::provider, context)).flatMap(Optional::stream).findFirst();
+			var modelEntries = tree.find(state.type().typeName())
+					.map(node -> node.getResources(ModelMatcher.class))
+					.orElse(ImmutableList.<ModelMatcher>builder().build());
+			
+			return modelEntries.stream()
+					.sorted(ModelMatcher::comparator)
+					.filter(entry -> entry.match(state, context))
+					.map(modelMatcher -> modelMatcher.get(state, this::provider, context))
+					.flatMap(Optional::stream)
+					.findFirst();
 		}
 	}
 

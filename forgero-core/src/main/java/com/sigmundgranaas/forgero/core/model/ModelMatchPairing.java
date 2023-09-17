@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
-public record ModelMatchPairing(Matchable match, ModelMatcher model) implements ModelMatcher {
+public record ModelMatchPairing(PredicateMatcher match, ModelMatcher model) implements ModelMatcher {
 
 	@Override
 	public boolean match(Matchable state, MatchContext context) {
@@ -24,8 +24,8 @@ public record ModelMatchPairing(Matchable match, ModelMatcher model) implements 
 
 	@Override
 	public int compareTo(@NotNull ModelMatcher o) {
-		if (o instanceof PredicateMatcher comparer && match instanceof PredicateMatcher matcher) {
-			return comparer.getPredicates().size() - matcher.getPredicates().size();
+		if (o instanceof PredicateMatcher comparer) {
+			return comparer.getPredicates().size() - match.getPredicates().size();
 		}
 		return ModelMatcher.comparator(this, o);
 	}
