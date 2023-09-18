@@ -9,6 +9,8 @@ import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationEntry;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.ConfigurationListWidget;
 import com.sigmundgranaas.forgero.fabric.modmenu.gui.OptionEntryFactory;
 
+import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
@@ -76,7 +78,7 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 			e.printStackTrace();
 		}
 		ButtonWidget reload = ButtonWidget.builder(Text.translatable("forgero.menu.options.reload_config"), button -> {
-			ForgeroConfigurationLoader.load();
+			ForgeroConfigurationLoader.load(FabricLoader.getInstance().getConfigDir());
 			RebuildConfigScreen();
 		}).width(150).build();
 		reload.setX(this.width / 2 - 154);

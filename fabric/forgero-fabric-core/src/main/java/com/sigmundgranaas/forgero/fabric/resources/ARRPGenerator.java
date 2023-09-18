@@ -6,6 +6,7 @@ import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATO
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -75,7 +76,7 @@ public class ARRPGenerator {
 			states.stream()
 					.map(State::identifier)
 					.forEach(id -> add(id, typeTag));
-			RESOURCE_PACK_BUILTIN.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase()), typeTag);
+			RESOURCE_PACK_BUILTIN.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase(Locale.ENGLISH)), typeTag);
 		}
 	}
 

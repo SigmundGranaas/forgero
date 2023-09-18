@@ -38,8 +38,8 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
-        "tier": 1
+        "description": "reinforcement",
+        "type": "MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
@@ -47,6 +47,15 @@
           "OFFENSIVE"
         ],
         "type": "TRINKET",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -57,37 +66,38 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
+        "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "order": "BASE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 1
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0.25
       },
       {
         "id": "schematic-armor-composite",
         "type": "ARMOR",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0.25
       }
     ]
   },

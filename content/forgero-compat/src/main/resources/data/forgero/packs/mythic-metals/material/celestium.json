@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "name": "celestium",
-  "parent": "metal",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:celestium_ingot"
@@ -10,76 +10,146 @@
     "name": "celestium"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "metal-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 95
-      },
-      {
-        "id": "metal-mining_level-composite",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "id": "metal-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 20
-      },
-      {
-        "id": "metal-durability-composite",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2270.0
-      },
-      {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.0
-      },
-      {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.5,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
-      },
-      {
-        "id": "metal-armor-composite",
-        "type": "ARMOR",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "id": "metal-weight-composite",
-        "type": "WEIGHT",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 22
-      },
-      {
-        "id": "metal-rarity-upgrade",
-        "type": "RARITY",
+        "context": "COMPOSITE",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 35
+        "attributes": [
+          {
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 90
+          },
+          {
+            "id": "metal-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "id": "metal-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 10
+          },
+          {
+            "id": "metal-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 2100
+          },
+          {
+            "id": "metal-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 3.0
+          },
+          {
+            "id": "metal-armor-composite",
+            "type": "ARMOR",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 50
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "metal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 45
+          },
+          {
+            "id": "metal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "metal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.5
+          },
+          {
+            "id": "metal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 6
+          },
+          {
+            "id": "metal-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1050
+          },
+          {
+            "id": "metal-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 1050
+          }
+        ]
       }
     ]
   }

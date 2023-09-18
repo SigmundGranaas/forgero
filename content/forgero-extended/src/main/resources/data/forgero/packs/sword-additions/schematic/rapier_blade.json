@@ -34,6 +34,24 @@
       }
     ],
     "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
     ]
   },
   "properties": {
@@ -41,38 +59,38 @@
       {
         "id": "schematic-rarity-local",
         "type": "RARITY",
-        "order": "BASE",
+        "context": "BASE",
         "category": "LOCAL",
         "operation": "ADDITION",
-        "value": 46
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.3
+        "value": 1.25
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 0.85
       },
       {
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1.5
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.4
+        "value": 0.75
       }
     ]
   },

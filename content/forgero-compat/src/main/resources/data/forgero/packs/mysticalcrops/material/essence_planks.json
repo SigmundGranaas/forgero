@@ -1,6 +1,6 @@
 {
   "type": "WOOD",
-  "parent": "wood",
+  "parent": "wood_base",
   "name": "essence_planks",
   "container": {
     "type": "HOST",
@@ -11,21 +11,21 @@
       {
         "id": "wood-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 7
       },
       {
         "id": "wood-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 45
       },
       {
         "id": "wood-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.3
       }

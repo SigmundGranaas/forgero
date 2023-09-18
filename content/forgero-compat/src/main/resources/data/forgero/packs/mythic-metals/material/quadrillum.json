@@ -1,6 +1,7 @@
 {
   "type": "METAL",
   "name": "quadrillum",
+  "parent": "metal_base",
   "container": {
     "type": "HOST",
     "id": "mythicmetals:quadrillum_ingot"
@@ -9,54 +10,144 @@
     "name": "quadrillum"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "metal-rarity-composite",
-        "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 24
+        "attributes": [
+          {
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 25
+          },
+          {
+            "id": "metal-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 2.0
+          },
+          {
+            "id": "metal-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 5
+          },
+          {
+            "id": "metal-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 400
+          },
+          {
+            "id": "metal-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 4
+          },
+          {
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "value": 30
+          }
+        ]
       },
       {
-        "id": "metal-mining_level-composite",
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2.0
-      },
-      {
-        "id": "metal-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "id": "metal-durability-composite",
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 321.0
-      },
-      {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.3
-      },
-      {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 2,
-        "condition": {
-          "target": "TYPE",
-          "tag": [
-            "AXE_HEAD"
-          ]
-        }
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "metal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 12.5
+          },
+          {
+            "id": "metal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "metal-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "metal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "metal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "id": "metal-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 200
+          },
+          {
+            "id": "metal-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "metal-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 200
+          }
+        ]
       }
     ]
   }

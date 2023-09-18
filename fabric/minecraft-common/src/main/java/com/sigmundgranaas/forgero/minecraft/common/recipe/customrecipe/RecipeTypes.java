@@ -36,6 +36,6 @@ public enum RecipeTypes {
 	}
 
 	public String getName() {
-		return this.name().toLowerCase(Locale.ROOT);
+		return this.name().toLowerCase(Locale.ENGLISH);
 	}
 }

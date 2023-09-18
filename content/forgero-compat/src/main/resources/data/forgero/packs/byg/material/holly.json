@@ -1,0 +1,18 @@
+{
+  "type": "WOOD",
+  "name": "holly",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "byg:holly_planks"
+  },
+  "properties": {
+    "grouped_attributes": [
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "byg/holly"
+  }
+}

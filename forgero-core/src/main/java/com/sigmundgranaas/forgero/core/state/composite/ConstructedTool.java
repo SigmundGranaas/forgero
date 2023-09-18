@@ -1,5 +1,13 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -14,14 +22,6 @@ import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
 
 public class ConstructedTool extends ConstructedComposite implements SoulBindable, Conditional<ConstructedTool> {
 	private final State head;
@@ -97,7 +97,16 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	}
 
 	public ToolBuilder toolBuilder() {
-		return ToolBuilder.builder(getHead(), getHandle())
+		var head = getHead();
+		if (head instanceof Composite composite) {
+			head = composite.copy();
+		}
+
+		var handle = getHandle();
+		if (handle instanceof Composite composite) {
+			handle = composite.copy();
+		}
+		return ToolBuilder.builder(head, handle)
 				.addSlotContainer(slotContainer.copy())
 				.conditions(conditions)
 				.type(type())

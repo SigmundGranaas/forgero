@@ -3,18 +3,12 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 import static com.sigmundgranaas.forgero.core.property.attribute.Category.UPGRADE_CATEGORIES;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
+import com.sigmundgranaas.forgero.core.state.State;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -24,8 +18,6 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 public class TooltipConfiguration {
-	public static final List<String> WRITABLE_ATTRIBUTES = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY);
-
 	@Builder.Default
 	private boolean hideSectionTitle = false;
 	@Builder.Default
@@ -38,8 +30,7 @@ public class TooltipConfiguration {
 	private boolean showExtendedInfo = false;
 	@Builder.Default
 	private boolean showDetailedInfo = false;
-	@Builder.Default
-	private List<String> writableAttributes = WRITABLE_ATTRIBUTES;
+
 	@Builder.Default
 	private Set<Category> upgradeCategories = UPGRADE_CATEGORIES;
 	@Builder.Default
@@ -47,11 +38,15 @@ public class TooltipConfiguration {
 	@Builder.Default
 	private boolean padded = false;
 
-	public List<String> writableAttributes() {
-		if (ForgeroConfigurationLoader.configuration.hideRarity) {
-			return writableAttributes;
-		} else {
-			return ImmutableList.<String>builder().addAll(writableAttributes).add("RARITY").build();
+
+	public List<String> writableAttributes(PropertyContainer container) {
+		return filteredAttributes(container).orElseGet(() -> TooltipAttributeRegistry.getWritableAttributes(container));
+	}
+
+	public Optional<List<String>> filteredAttributes(PropertyContainer container) {
+		if (container instanceof State state) {
+			return Optional.of(TooltipAttributeRegistry.getFilterForType(state.type())).filter(collection -> !collection.isEmpty());
 		}
+		return Optional.empty();
 	}
 }

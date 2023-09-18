@@ -1,6 +1,6 @@
 {
   "type": "STONE",
-  "parent": "default_stone",
+  "parent": "stone_base",
   "name": "uncommon_stone",
   "container": {
     "type": "HOST",
@@ -11,40 +11,41 @@
       {
         "id": "stone-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 20
       },
       {
         "id": "stone-mining-speed-composite",
         "type": "MINING_SPEED",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 4.5
       },
       {
         "id": "stone-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 2.7
       },
       {
         "id": "stone-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 175.0
       },
       {
         "id": "stone-weight-composite",
         "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 25
       },
       {
         "id": "stone-attack_damage-offensive-upgrade",
+        "context": "UPGRADE",
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",

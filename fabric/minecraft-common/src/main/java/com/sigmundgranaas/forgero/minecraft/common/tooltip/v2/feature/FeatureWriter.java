@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
+import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.number;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.BaseWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TagWriter;
@@ -9,11 +15,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.Collections;
-import java.util.List;
-
-import static com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper.number;
 
 public class FeatureWriter extends BaseWriter {
 	protected final PropertyData data;
@@ -50,7 +51,7 @@ public class FeatureWriter extends BaseWriter {
 	}
 
 	protected MutableText writeDataHeader() {
-		return indented(config.baseIndent()).append(Text.translatable(String.format("tooltip.forgero.feature.%s", data.type().toLowerCase()))).formatted(neutral());
+		return indented(config.baseIndent()).append(Text.translatable(String.format("tooltip.forgero.feature.%s", data.type().toLowerCase(Locale.ENGLISH)))).formatted(neutral());
 	}
 
 	protected MutableText separator() {

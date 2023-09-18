@@ -33,38 +33,39 @@
       }
     ],
     "slots": [
-    ],
-    "models": [
-      {}
     ]
   },
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "LOCAL",
+        "context": "LOCAL",
         "value": 60
       },
       {
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.2
+        "value": 1
       },
       {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "category": "UTILITY",
         "operation": "MULTIPLICATION",
         "value": 1.2
       },
       {
+        "id": "schematic-weight-composite",
         "type": "WEIGHT",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.2
       }
     ]
   },

@@ -2,75 +2,35 @@
   "replace": false,
   "values": [
     {
-      "id": "#forgero:axes",
+      "id": "#forgero:axe",
       "required": false
     },
     {
-      "id": "#forgero:pickaxes",
+      "id": "#forgero:pickaxe",
       "required": false
     },
     {
-      "id": "#forgero:hoes",
+      "id": "#forgero:hoe",
       "required": false
     },
     {
-      "id": "#forgero:shovels",
+      "id": "#forgero:shovel",
       "required": false
     },
     {
-      "id": "#forgero:swords",
+      "id": "#forgero:sword",
       "required": false
     },
     {
-      "id": "#forgero:axeheads",
+      "id": "#forgero:part",
       "required": false
     },
     {
-      "id": "#forgero:pickaxeheads",
+      "id": "#forgero:schematic",
       "required": false
     },
     {
-      "id": "#forgero:hoeheads",
-      "required": false
-    },
-    {
-      "id": "#forgero:shovelheads",
-      "required": false
-    },
-    {
-      "id": "#forgero:swordheads",
-      "required": false
-    },
-    {
-      "id": "#forgero:heads",
-      "required": false
-    },
-    {
-      "id": "#forgero:handles",
-      "required": false
-    },
-    {
-      "id": "#forgero:bindings",
-      "required": false
-    },
-    {
-      "id": "#forgero:schematics",
-      "required": false
-    },
-    {
-      "id": "#forgero:gems",
-      "required": false
-    },
-    {
-      "id": "#forgero:handle_schematics",
-      "required": false
-    },
-    {
-      "id": "#forgero:head_schematics",
-      "required": false
-    },
-    {
-      "id": "#forgero:binding_schematics",
+      "id": "#forgero:gem",
       "required": false
     }
   ]

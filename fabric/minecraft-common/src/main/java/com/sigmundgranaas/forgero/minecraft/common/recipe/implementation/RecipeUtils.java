@@ -4,6 +4,7 @@ import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATO
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
@@ -20,7 +21,7 @@ public class RecipeUtils {
 				object.addProperty("item", data.id());
 			}
 		} else {
-			object.addProperty("tag", "forgero:" + data.type().toLowerCase());
+			object.addProperty("tag", "forgero:" + data.type().toLowerCase(Locale.ENGLISH));
 		}
 		return object;
 	}
@@ -29,7 +30,7 @@ public class RecipeUtils {
 		if (!data.id().equals(EMPTY_IDENTIFIER)) {
 			return data.id();
 		} else {
-			return data.type().toLowerCase();
+			return data.type().toLowerCase(Locale.ENGLISH);
 		}
 	}
 

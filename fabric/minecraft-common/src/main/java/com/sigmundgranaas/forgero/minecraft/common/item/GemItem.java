@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.Context;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
@@ -72,7 +72,7 @@ public class GemItem extends Item implements StateItem {
 	}
 
 	@Override
-	public boolean test(Matchable match, Context context) {
+	public boolean test(Matchable match, MatchContext context) {
 		return DEFAULT.test(match, context);
 	}
 
