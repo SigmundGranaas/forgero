@@ -12,8 +12,8 @@ import java.util.Optional;
  * tested against other Matchable instances.
  */
 public class MatchContext implements Matchable {
-	private final Map<String, Object> metadata;
-	private final List<Matchable> matches;
+	protected final Map<String, Object> metadata;
+	protected final List<Matchable> matches;
 
 	/**
 	 * Default constructor. Initializes metadata as an empty HashMap and matches as an empty ArrayList.
@@ -44,6 +44,10 @@ public class MatchContext implements Matchable {
 		this.matches = matches;
 	}
 
+	public static MatchContext mutable(MatchContext context) {
+		return new MutableMatchContext(new HashMap<>(context.metadata), new ArrayList<>(context.matches));
+	}
+
 	/**
 	 * Creates a new MatchContext with empty metadata and matches.
 	 *
@@ -71,8 +75,9 @@ public class MatchContext implements Matchable {
 	 * @return A new MatchContext instance with the updated metadata.
 	 */
 	public MatchContext put(String key, Object value) {
+		Map<String, Object> metadata = new HashMap<>(this.metadata);
 		metadata.put(key, value);
-		return new MatchContext(new HashMap<>(metadata), new ArrayList<>(matches));
+		return new MatchContext(metadata, new ArrayList<>(matches));
 	}
 
 	/**
@@ -82,10 +87,11 @@ public class MatchContext implements Matchable {
 	 * @return A new MatchContext instance with the updated matches.
 	 */
 	public MatchContext add(Matchable matchable) {
+		List<Matchable> matches = new ArrayList<>(this.matches);
 		if (!matches.contains(matchable)) {
-			this.matches.add(matchable);
+			matches.add(matchable);
 		}
-		return new MatchContext(new HashMap<>(metadata), new ArrayList<>(matches));
+		return new MatchContext(new HashMap<>(metadata), matches);
 	}
 
 	/**
