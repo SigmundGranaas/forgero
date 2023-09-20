@@ -1,19 +1,10 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
-import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.*;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
@@ -22,15 +13,20 @@ import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.match.DamagePercentagePredicate;
-
+import com.sigmundgranaas.forgero.minecraft.common.match.EntityPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.match.WeatherPredicate;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
@@ -50,6 +46,9 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(new StringTypeBuilder());
 		PredicateFactory.register(new StringNameBuilder());
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
+		PredicateFactory.register(EntityPredicateMatcher.EntityPredicateBuilder::new);
+		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
+
 	}
 
 	private void soulLevelPropertyReloader() {

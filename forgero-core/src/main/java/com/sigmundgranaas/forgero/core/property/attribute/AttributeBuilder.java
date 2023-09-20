@@ -1,12 +1,5 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
@@ -16,6 +9,13 @@ import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
 /**
  * Builder for building attributes. You can create fresh ones, from POJO or from an existing attribute.
  * Use this to modify or create custom attributes.
@@ -24,7 +24,7 @@ public class AttributeBuilder {
 	private final String type;
 	private Category category;
 	private CalculationOrder order = CalculationOrder.BASE;
-	private Matchable condition = Matchable.DEFAULT_FALSE;
+	private Matchable condition = Matchable.DEFAULT_TRUE;
 	private NumericOperation operation = NumericOperation.ADDITION;
 	private float value = 1;
 	private int level = 1;

@@ -1,9 +1,5 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
@@ -20,6 +16,10 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class StaticComposite implements Composite {
 	private final SlotContainer upgrades;
@@ -53,7 +53,7 @@ public class StaticComposite implements Composite {
 	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		var props = Stream.of(slots(), List.of(properties))
 				.flatMap(List::stream)
-				.map(prop -> prop.applyProperty(target, context))
+				.map(PropertyContainer::getRootProperties)
 				.flatMap(List::stream)
 				.filter(prop -> !(prop instanceof Attribute attribute && attribute.getContext().test(Contexts.LOCAL)))
 				.toList();

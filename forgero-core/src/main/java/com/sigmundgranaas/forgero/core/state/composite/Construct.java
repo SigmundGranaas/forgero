@@ -1,22 +1,10 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
-import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.CalculationOrder;
-import com.sigmundgranaas.forgero.core.property.NumericOperation;
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.*;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
@@ -29,6 +17,10 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class Construct implements Composite, ConstructedState {
@@ -100,14 +92,14 @@ public class Construct implements Composite, ConstructedState {
 	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		var props = Stream.of(ingredients(), slots())
 				.flatMap(List::stream)
-				.map(prop -> prop.applyProperty(target, context))
+				.map(PropertyContainer::getRootProperties)
 				.flatMap(List::stream)
 				.filter(prop -> !(prop instanceof Attribute attribute && attribute.getContext().test(Contexts.LOCAL)))
 				.collect(Collectors.toList());
 
 		var upgradeProps = ingredients()
 				.stream()
-				.map(state -> state.applyProperty(target, context))
+				.map(State::getRootProperties)
 				.flatMap(List::stream)
 				.filter(this::filterAttribute)
 				.toList();

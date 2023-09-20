@@ -7,21 +7,23 @@
     "id": "minecraft:oak_planks"
   },
   "properties": {
-    "grouped_attributes": [
+    "attributes": [
       {
-        "context": "COMPOSITE",
+        "id": "oak-pig-attack-boost",
+        "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "attributes": [
-        ]
-      },
-      {
-        "context": "UPGRADE",
-        "attributes": [
-        ]
+        "value": 10,
+        "predicate": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "targeted_entity": {
+              "type": "minecraft:pig"
+            }
+          }
+        }
       }
-    ],
-    "attributes": [
     ]
   },
   "palette": {

@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.util.match;
 @FunctionalInterface
 public interface Matchable {
 	Matchable DEFAULT_FALSE = (match, context) -> false;
-	Matchable DEFAULT_TRUE = (match, context) -> false;
+	Matchable DEFAULT_TRUE = (match, context) -> true;
 
 
 	boolean test(Matchable match, MatchContext context);
