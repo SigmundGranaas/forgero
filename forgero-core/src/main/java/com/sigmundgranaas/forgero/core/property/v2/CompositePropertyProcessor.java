@@ -15,18 +15,21 @@ import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public class CompositePropertyProcessor implements PropertyProcessor {
 	@Override
-	public List<Property> process(List<Property> propertyList) {
-		return combineCompositeProperties(propertyList);
+	public List<Property> process(List<Property> propertyList, Matchable target, MatchContext context) {
+		return combineCompositeProperties(propertyList, target, context);
 	}
 
 
-	private List<Property> combineCompositeProperties(List<Property> props) {
+	private List<Property> combineCompositeProperties(List<Property> props, Matchable target, MatchContext context) {
 		List<Property> compositeAttributes = Property.stream(props)
 				.getAttributes()
 				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
+				.filter(attribute -> attribute.applyCondition(target, context))
 				.collect(Collectors.toList());
 
 		var newValues = new ArrayList<Property>();

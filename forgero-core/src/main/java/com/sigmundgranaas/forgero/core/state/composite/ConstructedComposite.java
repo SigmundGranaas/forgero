@@ -78,7 +78,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 				.flatMap(List::stream)
 				.toList();
 
-		props.addAll(propertyProcessor.process(partProps));
+		props.addAll(propertyProcessor.process(partProps, target, context));
 
 		var otherProps = partProps.stream()
 				.filter(this::filterNormalProperties)
