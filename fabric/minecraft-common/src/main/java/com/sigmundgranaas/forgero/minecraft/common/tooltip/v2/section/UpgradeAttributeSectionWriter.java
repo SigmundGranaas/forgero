@@ -66,7 +66,7 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 
 	protected List<Text> category(Category category) {
 		List<Text> entries = configuration.writableAttributes(container).stream().map(attribute -> entry(attribute, category)).flatMap(List::stream).toList();
-		if (entries.size() > 0) {
+		if (!entries.isEmpty()) {
 			var builder = ImmutableList.<Text>builder();
 			Text section = indented(1).append(createSection(category.toString().toLowerCase(Locale.ENGLISH)));
 			if (category != Category.ALL) {
@@ -87,10 +87,10 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 			var builder = ImmutableList.<Text>builder();
 			if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
 				builder.add(helper.writePercentageAttribute(attribute));
-				helper.writeTarget(attribute).ifPresent(builder::add);
+				builder.addAll(helper.writeTarget(attribute));
 			} else {
 				builder.add(helper.writeAdditionAttribute(attribute));
-				helper.writeTarget(attribute).ifPresent(builder::add);
+				builder.addAll(helper.writeTarget(attribute));
 			}
 			return builder.build();
 		}

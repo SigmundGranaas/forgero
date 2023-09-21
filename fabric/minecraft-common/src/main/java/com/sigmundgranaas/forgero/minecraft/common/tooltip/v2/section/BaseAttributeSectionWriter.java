@@ -63,7 +63,10 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return configuration.writableAttributes(container).stream().map(this::entry).flatMap(List::stream).toList();
+		return configuration.writableAttributes(container).stream()
+				.map(this::entry)
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	protected List<Text> entry(String attributeType) {
@@ -73,12 +76,12 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 			if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
 				var builder = ImmutableList.<Text>builder();
 				builder.add(helper.writeMultiplicativeAttribute(attribute));
-				helper.writeTarget(attribute).ifPresent(builder::add);
+				builder.addAll(helper.writeTarget(attribute));
 				return builder.build();
 			} else {
 				var builder = ImmutableList.<Text>builder();
 				builder.add(helper.writeBaseNumber(attribute));
-				helper.writeTarget(attribute).ifPresent(builder::add);
+				builder.addAll(helper.writeTarget(attribute));
 				return builder.build();
 			}
 		}

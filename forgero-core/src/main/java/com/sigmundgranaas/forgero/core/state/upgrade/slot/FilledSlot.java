@@ -30,6 +30,11 @@ public class FilledSlot extends AbstractTypedSlot {
 	}
 
 	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return filterProperties(target, context);
+	}
+
+	@Override
 	public @NotNull
 	List<Property> applyProperty(Matchable target, MatchContext context) {
 		return filterProperties(target, context);

@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.property.Attribute;
@@ -11,7 +11,6 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference.DifferenceHelper;
 import org.jetbrains.annotations.Nullable;
@@ -131,13 +130,16 @@ public class AttributeWriterHelper extends BaseWriter {
 				.append(Text.literal(percentage + "%"));
 	}
 
-	public Optional<MutableText> writeTarget(Attribute attribute) {
-		if (attribute.applyCondition(Matchable.DEFAULT_TRUE, MatchContext.of()) || attribute.targets().isEmpty()) {
-			return Optional.empty();
+	public List<MutableText> writeTarget(Attribute attribute) {
+		var writer = new PredicateWriterFactory().build(attribute.getPredicate(), configuration);
+		if (attribute.getPredicate() == Matchable.DEFAULT_TRUE) {
+			return Collections.emptyList();
+		} else if (writer.isPresent()) {
+			return writer.get().write(attribute.getPredicate());
 		} else {
 			MutableText against = indented(configuration.baseIndent() + 2).append(Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY));
 			against.append(TagWriter.writeTagList(attribute.targets()));
-			return Optional.of(against);
+			return List.of(against);
 		}
 	}
 

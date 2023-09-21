@@ -51,6 +51,11 @@ public class LeveledState implements State {
 		return leveledProperties(properties);
 	}
 
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return applyProperty(target, context);
+	}
+
 	private List<Property> leveledProperties(List<Property> props) {
 		List<Property> otherProperties = props.stream().filter(property -> !(property instanceof Attribute)).toList();
 		List<Attribute> attributes = props

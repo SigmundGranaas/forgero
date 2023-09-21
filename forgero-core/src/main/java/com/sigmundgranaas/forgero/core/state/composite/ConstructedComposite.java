@@ -1,9 +1,16 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.property.v2.CompositePropertyProcessor;
@@ -16,14 +23,6 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposite.ConstructBuilder.builder;
 
 public class ConstructedComposite extends BaseComposite implements ConstructedState {
 	private final List<State> parts;
@@ -55,9 +54,14 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return compositeProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
+		return compositeProperties(Matchable.DEFAULT_TRUE, MatchContext.of().add(id.type()));
 	}
 
+	@Override
+	public @NotNull
+	List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return compositeProperties(target, context.add(id.type()));
+	}
 
 	@Override
 	public ConstructedComposite removeUpgrade(String id) {
@@ -70,7 +74,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 		var props = new ArrayList<>(super.compositeProperties(target, context));
 
 		var partProps = parts().stream()
-				.map(PropertyContainer::getRootProperties)
+				.map(part -> part.getRootProperties(target, context))
 				.flatMap(List::stream)
 				.toList();
 

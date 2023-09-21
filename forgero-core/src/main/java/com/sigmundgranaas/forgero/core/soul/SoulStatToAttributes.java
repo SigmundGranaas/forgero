@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,11 @@ public class SoulStatToAttributes implements PropertyContainer {
 	public @NotNull
 	List<Property> getRootProperties() {
 		return Stream.of(mobAttributes(), blockAttributes()).flatMap(List::stream).toList();
+	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return getRootProperties();
 	}
 
 	private List<Property> blockAttributes() {
