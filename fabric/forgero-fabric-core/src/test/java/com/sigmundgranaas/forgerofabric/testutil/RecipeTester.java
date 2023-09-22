@@ -106,7 +106,7 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return context.getWorld()
 				.getRecipeManager()
 				.getFirstMatch(type, inventory, context.getWorld())
-				.map(recipe -> recipe.craft(inventory, context.getWorld().getRegistryManager()))
+				.map(recipe -> recipe.value().craft(inventory, context.getWorld().getRegistryManager()))
 				.filter(stack -> stack.isOf(expectedResult))
 				.stream()
 				.findAny();

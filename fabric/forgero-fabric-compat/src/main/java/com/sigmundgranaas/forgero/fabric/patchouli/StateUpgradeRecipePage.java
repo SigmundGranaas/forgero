@@ -50,7 +50,7 @@ public class StateUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRec
 
 	@Override
 	protected ItemStack getRecipeOutput(World level, SmithingRecipe recipe) {
-		return recipe.getOutput(level.getRegistryManager());
+		return recipe.getResult(level.getRegistryManager());
 	}
 
 	private CraftingInventory createCraftingInventory(SmithingRecipe recipe) {

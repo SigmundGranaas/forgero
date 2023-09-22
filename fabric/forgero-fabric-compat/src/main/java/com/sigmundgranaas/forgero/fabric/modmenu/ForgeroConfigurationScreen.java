@@ -46,7 +46,7 @@ public class ForgeroConfigurationScreen extends GameOptionsScreen {
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		// Render background texture with vOffset -100 to match Mod Menu's vOffset
-		this.renderBackground(context);
+		this.renderBackground(context, mouseX, mouseY, delta);
 		this.controlsList.render(context, mouseX, mouseY, delta);
 
 		//drawCenteredTextWithShadow(context, this.textRenderer, this.title, this.width / 2, 8, 16777215);

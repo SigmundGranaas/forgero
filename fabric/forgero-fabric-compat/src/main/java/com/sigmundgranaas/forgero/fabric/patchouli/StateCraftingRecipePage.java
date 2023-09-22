@@ -95,7 +95,7 @@ public class StateCraftingRecipePage extends PageCrafting {
 		if (recipe instanceof CraftingRecipe craftingRecipe) {
 			return craftingRecipe.craft(createCraftingInventory(craftingRecipe), level.getRegistryManager());
 		}
-		return recipe.getOutput(level.getRegistryManager());
+		return recipe.getResult(level.getRegistryManager());
 	}
 
 	@Override

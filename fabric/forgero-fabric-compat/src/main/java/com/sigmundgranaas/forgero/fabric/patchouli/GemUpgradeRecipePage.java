@@ -50,14 +50,14 @@ public class GemUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRecip
 			return ItemStack.EMPTY;
 		}
 
-		var gemState = StateService.INSTANCE.convert(recipe.getOutput(level.getRegistryManager()));
+		var gemState = StateService.INSTANCE.convert(recipe.getResult(level.getRegistryManager()));
 		if (gemState.isPresent() && gemState.get() instanceof LeveledState leveledState) {
 			var leveled = leveledState.levelUp();
 
-			return StateService.INSTANCE.convert(leveled).orElseGet(() -> recipe.getOutput(level.getRegistryManager()));
+			return StateService.INSTANCE.convert(leveled).orElseGet(() -> recipe.getResult(level.getRegistryManager()));
 		}
 
-		return recipe.getOutput(level.getRegistryManager());
+		return recipe.getResult(level.getRegistryManager());
 	}
 
 
