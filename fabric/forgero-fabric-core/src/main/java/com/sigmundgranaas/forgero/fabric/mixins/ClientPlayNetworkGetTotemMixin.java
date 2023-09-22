@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulLevelUpHandle
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.TotemEffectHandler;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -28,13 +29,12 @@ public abstract class ClientPlayNetworkGetTotemMixin {
 	@Shadow
 	private ClientWorld world;
 
-	@Shadow
-	@Final
-	private MinecraftClient client;
 
 	@Inject(at = @At("HEAD"), method = "onEntityStatus")
 	private void getTotem(EntityStatusS2CPacket packet, CallbackInfo indo) {
-		NetworkThreadUtils.forceMainThread(packet, (ClientPlayNetworkHandler) (Object) this, client);
+		ClientPlayNetworkHandler handler = (ClientPlayNetworkHandler) (Object) this;
+		MinecraftClient client = ((ClientCommonNetworkHandler)handler).client;
+		NetworkThreadUtils.forceMainThread(packet, handler , client);
 		Entity entity = packet.getEntity(world);
 		if (entity instanceof PlayerEntity player) {
 			if (packet.getStatus() == ENTITY_STATUS_TOTEM) {

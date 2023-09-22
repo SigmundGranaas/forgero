@@ -38,7 +38,7 @@ public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHa
 
 	@Override
 	public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
-		renderBackground(matrices);
+		renderBackground(matrices, mouseX, mouseY, delta);
 		super.render(matrices, mouseX, mouseY, delta);
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
 	}

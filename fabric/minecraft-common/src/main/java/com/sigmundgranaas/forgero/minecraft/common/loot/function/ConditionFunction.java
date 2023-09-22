@@ -4,10 +4,10 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstan
 import static com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar.CONDITION_LOOT_FUNCTION_TYPE;
 
 import java.util.Comparator;
+import java.util.List;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
@@ -23,14 +23,18 @@ import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 
 public class ConditionFunction extends ConditionalLootFunction {
+	public static Codec<ConditionFunction> CODEC = RecordCodecBuilder
+			.create((instance) -> method_53344(instance)
+					.apply(instance, ConditionFunction::of));
+
 	private final StateService service;
 
-	protected ConditionFunction(LootCondition[] conditions, StateService service) {
+	protected ConditionFunction(List<LootCondition> conditions, StateService service) {
 		super(conditions);
 		this.service = service;
 	}
 
-	public static ConditionFunction of(LootCondition[] conditions) {
+	public static ConditionFunction of(List<LootCondition> conditions) {
 		return new ConditionFunction(conditions, StateService.INSTANCE);
 	}
 
@@ -47,7 +51,7 @@ public class ConditionFunction extends ConditionalLootFunction {
 			for (NamedCondition container : conditions) {
 				conditioned = (Conditional<?>) conditioned.applyCondition(container);
 			}
-			if (conditioned instanceof PropertyContainer container && conditions.size() > 0) {
+			if (conditioned instanceof PropertyContainer container && !conditions.isEmpty()) {
 				stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(container));
 			}
 		}
@@ -71,19 +75,6 @@ public class ConditionFunction extends ConditionalLootFunction {
 
 		public LootFunction build() {
 			return new ConditionFunction(this.getConditions(), StateService.INSTANCE);
-		}
-	}
-
-	public static class Serializer extends ConditionalLootFunction.Serializer<ConditionFunction> {
-		public Serializer() {
-		}
-
-		public void toJson(JsonObject jsonObject, ConditionFunction function, JsonSerializationContext jsonSerializationContext) {
-			super.toJson(jsonObject, function, jsonSerializationContext);
-		}
-
-		public ConditionFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {
-			return new ConditionFunction(lootConditions, StateService.INSTANCE);
 		}
 	}
 }

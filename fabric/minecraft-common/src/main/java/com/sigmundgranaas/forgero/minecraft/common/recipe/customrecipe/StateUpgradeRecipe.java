@@ -5,6 +5,8 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstan
 import java.util.stream.Stream;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -15,10 +17,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -30,14 +29,12 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 	public final Ingredient addition;
 	final ItemStack result;
 	private final StateService service;
-	private final Identifier id;
 
 	public static final Integer baseIndex = 1;
 	public static final Integer additionIndex = 2;
 
-	public StateUpgradeRecipe(StateService service, Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
-		this.service = service;
-		this.id = id;
+	public StateUpgradeRecipe( Ingredient base, Ingredient addition, ItemStack result) {
+		this.service = StateService.INSTANCE;
 		this.base = base;
 		this.addition = addition;
 		this.result = result;
@@ -63,7 +60,7 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 		var upgradeOpt = service.convert(inventory.getStack(additionIndex));
 		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
-			var output = getOutput(registryManager).copy();
+			var output = getResult(registryManager).copy();
 			output.setNbt(inventory.getStack(baseIndex).getOrCreateNbt().copy());
 			output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
 			return output;
@@ -76,7 +73,7 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 		return width * height >= 2;
 	}
 
-	public ItemStack getOutput(DynamicRegistryManager registryManager) {
+	public ItemStack getResult(DynamicRegistryManager registryManager) {
 		return this.result;
 	}
 
@@ -92,9 +89,7 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 		return this.addition.test(stack);
 	}
 
-	public Identifier getId() {
-		return this.id;
-	}
+
 
 	@Override
 	public DefaultedList<Ingredient> getIngredients() {
@@ -116,19 +111,27 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 	public static class Serializer implements RecipeSerializer<StateUpgradeRecipe>, ForgeroRecipeSerializer {
 		public static final Serializer INSTANCE = new Serializer();
 
-		public StateUpgradeRecipe read(Identifier identifier, JsonObject jsonObject) {
-			Ingredient ingredient = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "base"));
-			Ingredient ingredient2 = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "addition"));
-			ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
-			return new StateUpgradeRecipe(StateService.INSTANCE, identifier, ingredient, ingredient2, itemStack);
+		private static final Codec<StateUpgradeRecipe> CODEC = RecordCodecBuilder.create((instance) -> {
+			return instance.group( Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter((recipe) -> {
+				return recipe.base;
+			}), Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter((recipe) -> {
+				return recipe.addition;
+			}), RecipeCodecs.CRAFTING_RESULT.fieldOf("result").forGetter((recipe) -> {
+				return recipe.result;
+			})).apply(instance,StateUpgradeRecipe::new);
+		});
+
+		@Override
+		public Codec<StateUpgradeRecipe> codec() {
+			return CODEC;
 		}
 
 		@Override
-		public StateUpgradeRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+		public StateUpgradeRecipe read( PacketByteBuf packetByteBuf) {
 			Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);
 			Ingredient ingredient2 = Ingredient.fromPacket(packetByteBuf);
 			ItemStack itemStack = packetByteBuf.readItemStack();
-			return new StateUpgradeRecipe(StateService.INSTANCE, identifier, ingredient, ingredient2, itemStack);
+			return new StateUpgradeRecipe( ingredient, ingredient2, itemStack);
 		}
 
 

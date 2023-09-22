@@ -36,7 +36,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	private final StateService service;
 
 	public StateCraftingRecipe(ShapedRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput(null));
+		super( recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResult(null));
 		this.service = service;
 	}
 
@@ -94,11 +94,11 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	@Override
 	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
-		var target = service.convert(this.getOutput(null));
+		var target = service.convert(this.getResult(registryManager));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
-			var upgrades = upgradesFromCraftingInventory(craftingInventory, null);
+			var upgrades = upgradesFromCraftingInventory(craftingInventory, registryManager);
 			var toolBuilderOpt = ConstructedTool.ToolBuilder.builder(parts);
 			BaseComposite.BaseCompositeBuilder<?> builder;
 			if (toolBuilderOpt.isPresent()) {
@@ -124,7 +124,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 			var state = builder.build();
 			var nbt = new CompositeEncoder().encode(state);
-			var output = getOutput(registryManager).copy();
+			var output = getResult(registryManager).copy();
 			output.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, nbt);
 			if (toolBuilderOpt.isPresent()) {
 				state.accept(VISITOR)
@@ -134,11 +134,11 @@ public class StateCraftingRecipe extends ShapedRecipe {
 			}
 			return output;
 		}
-		return getOutput(registryManager).copy();
+		return getResult(registryManager).copy();
 	}
 
 	private Optional<State> result() {
-		return service.convert(getOutput(null));
+		return service.convert(getResult(null));
 	}
 
 	@Override
@@ -149,14 +149,10 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	public static class StateCraftingRecipeSerializer extends Serializer implements ForgeroRecipeSerializer {
 		public static final StateCraftingRecipeSerializer INSTANCE = new StateCraftingRecipeSerializer();
 
-		@Override
-		public StateCraftingRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new StateCraftingRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
-		}
 
 		@Override
-		public StateCraftingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new StateCraftingRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
+		public StateCraftingRecipe read( PacketByteBuf packetByteBuf) {
+			return new StateCraftingRecipe(super.read( packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

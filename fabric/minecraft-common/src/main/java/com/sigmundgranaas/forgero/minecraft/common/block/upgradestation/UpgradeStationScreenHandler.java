@@ -134,7 +134,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 					var nbt = compositeSlot.inventory.getStack(0).copy().getOrCreateNbt();
 					nbt.put(FORGERO_IDENTIFIER, newState.getOrCreateNbt().get(FORGERO_IDENTIFIER));
 					newState.setNbt(nbt);
-					compositeSlot.setStack(newState);
+					compositeSlot.setStackNoCallbacks(newState);
 				}
 			}
 		});
@@ -230,7 +230,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 
 				// If the original stack is empty after moving, clear the slot; otherwise, handle any leftovers
 				if (originalStack.isEmpty()) {
-					slot.setStack(ItemStack.EMPTY);
+					slot.setStackNoCallbacks(ItemStack.EMPTY);
 				} else {
 					slot.onQuickTransfer(originalStack, newStack);
 				}

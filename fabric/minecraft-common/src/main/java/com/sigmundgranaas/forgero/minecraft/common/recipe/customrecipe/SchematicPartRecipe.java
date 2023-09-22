@@ -25,7 +25,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public SchematicPartRecipe(ShapelessRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(),recipe.getCategory(), recipe.getOutput(null), recipe.getIngredients());
+		super( recipe.getGroup(),recipe.getCategory(), recipe.getResult(null), recipe.getIngredients());
 		this.service = service;
 	}
 
@@ -45,7 +45,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 
 	@Override
 	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
-		var target = service.convert(this.getOutput(null));
+		var target = service.convert(this.getResult(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -59,7 +59,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 			}
 
 		}
-		return getOutput(registryManager).copy();
+		return getResult(registryManager).copy();
 	}
 
 	@Override
@@ -76,13 +76,8 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 		}
 
 		@Override
-		public SchematicPartRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new SchematicPartRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
-		}
-
-		@Override
-		public SchematicPartRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new SchematicPartRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
+		public SchematicPartRecipe read( PacketByteBuf packetByteBuf) {
+			return new SchematicPartRecipe(super.read( packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

@@ -8,6 +8,12 @@ import static java.lang.Math.exp;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import com.mojang.datafixers.util.Function3;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 
@@ -17,13 +23,21 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.loot.function.SetDamageLootFunction;
+import net.minecraft.loot.provider.number.LootNumberProviderTypes;
+
+import java.util.List;
 
 public class GemLevelFunction extends ConditionalLootFunction {
-	protected GemLevelFunction(LootCondition[] conditions) {
+	public static Codec<GemLevelFunction> CODEC = RecordCodecBuilder
+			.create((instance) -> method_53344(instance)
+					.apply(instance,(GemLevelFunction::new)));
+
+	protected GemLevelFunction(List<LootCondition> conditions) {
 		super(conditions);
 	}
 
-	public static GemLevelFunction of(LootCondition[] conditions) {
+	public static GemLevelFunction of(List<LootCondition> conditions) {
 		return new GemLevelFunction(conditions);
 	}
 
@@ -64,19 +78,6 @@ public class GemLevelFunction extends ConditionalLootFunction {
 
 		public LootFunction build() {
 			return new GemLevelFunction(this.getConditions());
-		}
-	}
-
-	public static class Serializer extends ConditionalLootFunction.Serializer<GemLevelFunction> {
-		public Serializer() {
-		}
-
-		public void toJson(JsonObject jsonObject, GemLevelFunction function, JsonSerializationContext jsonSerializationContext) {
-			super.toJson(jsonObject, function, jsonSerializationContext);
-		}
-
-		public GemLevelFunction fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext, LootCondition[] lootConditions) {
-			return new GemLevelFunction(lootConditions);
 		}
 	}
 }

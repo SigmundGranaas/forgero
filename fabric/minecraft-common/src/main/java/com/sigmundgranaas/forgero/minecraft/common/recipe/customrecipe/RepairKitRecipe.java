@@ -29,7 +29,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public RepairKitRecipe(ShapelessRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(),recipe.getCategory(), recipe.getOutput(null), recipe.getIngredients());
+		super(recipe.getGroup(),recipe.getCategory(), recipe.getResult(null), recipe.getIngredients());
 		this.service = service;
 	}
 
@@ -63,7 +63,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 			return newStack;
 		}
 
-		return getOutput(null).copy();
+		return getResult(null).copy();
 	}
 
 
@@ -80,14 +80,10 @@ public class RepairKitRecipe extends ShapelessRecipe {
 			return INSTANCE;
 		}
 
-		@Override
-		public RepairKitRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new RepairKitRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
-		}
 
 		@Override
-		public RepairKitRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new RepairKitRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
+		public RepairKitRecipe read( PacketByteBuf packetByteBuf) {
+			return new RepairKitRecipe(super.read( packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

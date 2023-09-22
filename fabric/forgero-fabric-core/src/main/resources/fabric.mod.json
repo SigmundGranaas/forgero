@@ -39,6 +39,8 @@
   "mixins": [
     "forgero.mixins.json"
   ],
+  "accessWidener": "forgero-fabric-core.accesswidener",
+
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric-api": "*",

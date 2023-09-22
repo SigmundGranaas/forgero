@@ -32,7 +32,7 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public StateUpgradeShapelessRecipe(ShapelessRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(), CraftingRecipeCategory.EQUIPMENT, recipe.getOutput(null), recipe.getIngredients());
+		super( recipe.getGroup(), CraftingRecipeCategory.EQUIPMENT, recipe.getResult(null), recipe.getIngredients());
 		this.service = service;
 	}
 
@@ -55,7 +55,7 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 		for (int i = 0; i < inventory.size(); i++) {
 			ItemStack stack = inventory.getStack(i);
 			var state = service.convert(stack);
-			if (state.isPresent() && !isSameStateShallow(stack, getOutput(manager))) {
+			if (state.isPresent() && !isSameStateShallow(stack, getResult(manager))) {
 				return state;
 			}
 		}
@@ -75,7 +75,7 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 		for (int i = 0; i < inventory.size(); i++) {
 			ItemStack stack = inventory.getStack(i);
 			var state = service.convert(stack);
-			if (state.isPresent() && isSameStateShallow(stack, getOutput(manager))) {
+			if (state.isPresent() && isSameStateShallow(stack, getResult(manager))) {
 				return Optional.of(i);
 			}
 		}
@@ -89,14 +89,14 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 		var originIndex = findRootIndex(craftingInventory, manager);
 		if (originStateOpt.isPresent() && upgradeOpt.isPresent() && originIndex.isPresent() && originStateOpt.get() instanceof Composite state) {
 			State upgraded = state.upgrade(upgradeOpt.get());
-			var output = getOutput(manager).copy();
+			var output = getResult(manager).copy();
 			if (craftingInventory.getStack(originIndex.get()).hasNbt()) {
 				output.setNbt(craftingInventory.getStack(originIndex.get()).getOrCreateNbt().copy());
 			}
 			output.getOrCreateNbt().put(FORGERO_IDENTIFIER, CompoundEncoder.ENCODER.encode(upgraded));
 			return output;
 		}
-		return getOutput(manager).copy();
+		return getResult(manager).copy();
 	}
 
 	@Override
@@ -112,14 +112,11 @@ public class StateUpgradeShapelessRecipe extends ShapelessRecipe {
 			return INSTANCE;
 		}
 
-		@Override
-		public StateUpgradeShapelessRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new StateUpgradeShapelessRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
-		}
+
 
 		@Override
-		public StateUpgradeShapelessRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new StateUpgradeShapelessRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
+		public StateUpgradeShapelessRecipe read( PacketByteBuf packetByteBuf) {
+			return new StateUpgradeShapelessRecipe(super.read( packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override

@@ -14,7 +14,7 @@ public class LootFunctionRegistrar implements Registrar {
 	public static LootFunctionType CONDITION_LOOT_FUNCTION_TYPE;
 
 	public void register() {
-		GEM_LOOT_FUNCTION_TYPE = Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(new GemLevelFunction.Serializer()));
-		CONDITION_LOOT_FUNCTION_TYPE = Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("condition_loot_function"), new LootFunctionType(new ConditionFunction.Serializer()));
+		GEM_LOOT_FUNCTION_TYPE = Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("gem_level_function"), new LootFunctionType(GemLevelFunction.CODEC));
+		CONDITION_LOOT_FUNCTION_TYPE = Registry.register(Registries.LOOT_FUNCTION_TYPE, new Identifier("condition_loot_function"), new LootFunctionType( ConditionFunction.CODEC));
 	}
 }

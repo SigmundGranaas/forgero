@@ -4,6 +4,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Function4;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
@@ -14,10 +17,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -28,18 +28,16 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	public final Ingredient base;
 	public final Ingredient addition;
 	final ItemStack result;
-	private final Identifier id;
 	private final StateService service;
 
 	public static final Integer baseIndex = 1;
 	public static final Integer additionIndex = 2;
 
-	public GemUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result, StateService service) {
-		this.id = id;
+	public GemUpgradeRecipe(Ingredient base, Ingredient addition, ItemStack result) {
 		this.base = base;
 		this.addition = addition;
 		this.result = result;
-		this.service = service;
+		this.service = StateService.INSTANCE;
 	}
 
 
@@ -69,7 +67,7 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	@Override
 	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
 		var base = base(inventory);
-		var output = getOutput(registryManager).copy();
+		var output = getResult(registryManager).copy();
 		if (base.isPresent()) {
 			var newBase = base.get().levelUp();
 			var nbt = CompoundEncoder.ENCODER.encode(newBase);
@@ -84,7 +82,7 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 		return width * height >= 2;
 	}
 
-	public ItemStack getOutput(DynamicRegistryManager registryManager) {
+	public ItemStack getResult(DynamicRegistryManager registryManager) {
 		return this.result;
 	}
 
@@ -100,9 +98,6 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 		return this.addition.test(stack);
 	}
 
-	public Identifier getId() {
-		return this.id;
-	}
 
 	@Override
 	public DefaultedList<Ingredient> getIngredients() {
@@ -124,18 +119,25 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	public static class Serializer implements RecipeSerializer<GemUpgradeRecipe>, ForgeroRecipeSerializer {
 		public static final Serializer INSTANCE = new Serializer();
 
-		public GemUpgradeRecipe read(Identifier identifier, JsonObject jsonObject) {
-			Ingredient ingredient = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "base"));
-			Ingredient ingredient2 = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "addition"));
-			ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
-			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack, StateService.INSTANCE);
+		private static final Codec<GemUpgradeRecipe> CODEC = RecordCodecBuilder.create((instance) -> {
+			return instance.group( Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter((recipe) -> {
+				return recipe.base;
+			}), Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter((recipe) -> {
+				return recipe.addition;
+			}), RecipeCodecs.CRAFTING_RESULT.fieldOf("result").forGetter((recipe) -> {
+				return recipe.result;
+			})).apply(instance,GemUpgradeRecipe::new);
+		});
+		@Override
+		public Codec<GemUpgradeRecipe> codec() {
+			return CODEC;
 		}
 
-		public GemUpgradeRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+		public GemUpgradeRecipe read(PacketByteBuf packetByteBuf) {
 			Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);
 			Ingredient ingredient2 = Ingredient.fromPacket(packetByteBuf);
 			ItemStack itemStack = packetByteBuf.readItemStack();
-			return new GemUpgradeRecipe(identifier, ingredient, ingredient2, itemStack, StateService.INSTANCE);
+			return new GemUpgradeRecipe( ingredient, ingredient2, itemStack);
 		}
 
 		public void write(PacketByteBuf packetByteBuf, GemUpgradeRecipe smithingRecipe) {
