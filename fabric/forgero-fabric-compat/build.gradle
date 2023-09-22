@@ -36,12 +36,14 @@ dependencies {
 
 	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
-	modImplementation("net.devtech:arrp:${project.aarp_version}")
+	modImplementation("net.devtech:arrp:${project.aarp_version}") {
+		exclude group: "net.fabricmc",  module: "fabric-loader"
+	}
 
 
 	//dynamiclights compat
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lambd_version}")
-	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
+	//modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
 	//better combat
 	modCompileOnly("maven.modrinth:better-combat:${project.better_combat_version}")
@@ -60,7 +62,7 @@ dependencies {
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"
+	//modCompileOnly "maven.modrinth:jei:${project.jei_version}"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
@@ -119,15 +121,16 @@ dependencies {
 
 	//modImplementation 'com.ptsmods:devlogin:2.1'
 
-	modCompileOnlyApi ("net.fabricmc:fabric-loader:${project.loader_version}")
-
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
 
 	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
 
 	// Mod Menu API
-	modImplementation("com.terraformersmc:modmenu:${this.modmenu_version}")
+	modCompileOnly("com.terraformersmc:modmenu:${this.modmenu_version}")
 
 }
 
