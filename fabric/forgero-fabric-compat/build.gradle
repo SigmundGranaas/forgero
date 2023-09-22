@@ -34,7 +34,7 @@ dependencies {
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
+	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
 	modImplementation("net.devtech:arrp:${project.aarp_version}")
 

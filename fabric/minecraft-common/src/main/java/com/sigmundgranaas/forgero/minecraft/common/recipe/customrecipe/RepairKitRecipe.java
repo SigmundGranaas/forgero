@@ -6,10 +6,15 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Function4;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
@@ -19,10 +24,15 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeCodecs;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 public class RepairKitRecipe extends ShapelessRecipe {
@@ -63,7 +73,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 			return newStack;
 		}
 
-		return getResult(null).copy();
+		return getResult(registryManager).copy();
 	}
 
 
@@ -72,7 +82,21 @@ public class RepairKitRecipe extends ShapelessRecipe {
 		return RepairKitRecipeSerializer.INSTANCE;
 	}
 
-	public static class RepairKitRecipeSerializer extends Serializer implements ForgeroRecipeSerializer {
+	public static class RepairKitRecipeSerializer implements ForgeroRecipeSerializer, RecipeSerializer<RepairKitRecipe> {
+		private static Codec<RepairKitRecipe> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codecs.createStrictOptionalFieldCodec(Codec.STRING, "group", "").forGetter(ShapelessRecipe::getGroup), CraftingRecipeCategory.CODEC.fieldOf("category").orElse(CraftingRecipeCategory.MISC).forGetter(ShapelessRecipe::getCategory), RecipeCodecs.CRAFTING_RESULT.fieldOf("result").forGetter((recipe) -> recipe.getResult(null)), Ingredient.DISALLOW_EMPTY_CODEC.listOf().fieldOf("ingredients").flatXmap((ingredients) -> {
+			Ingredient[] ingredients2 = ingredients.stream().filter((ingredient) -> !ingredient.isEmpty()).toArray(Ingredient[]::new);
+			if (ingredients2.length == 0) {
+				return DataResult.error(() -> "No ingredients for shapeless recipe");
+			} else {
+				return ingredients2.length > 9 ? DataResult.error(() -> "Too many ingredients for shapeless recipe") : DataResult.success(DefaultedList.copyOf(Ingredient.EMPTY, ingredients2));
+			}
+		}, DataResult::success).forGetter(ShapelessRecipe::getIngredients)).apply(instance, (i, l, k, j) -> new RepairKitRecipe(new ShapelessRecipe(i,l,k,j), StateService.INSTANCE)));
+
+		@Override
+		public Codec<RepairKitRecipe> codec() {
+			return CODEC;
+		}
+
 		public static final RepairKitRecipeSerializer INSTANCE = new RepairKitRecipeSerializer();
 
 		@Override
@@ -80,10 +104,14 @@ public class RepairKitRecipe extends ShapelessRecipe {
 			return INSTANCE;
 		}
 
+		@Override
+		public RepairKitRecipe read(PacketByteBuf packetByteBuf) {
+			return new RepairKitRecipe(new ShapelessRecipe.Serializer().read(packetByteBuf), StateService.INSTANCE);
+		}
 
 		@Override
-		public RepairKitRecipe read( PacketByteBuf packetByteBuf) {
-			return new RepairKitRecipe(super.read( packetByteBuf), StateService.INSTANCE);
+		public void write(PacketByteBuf buf, RepairKitRecipe recipe) {
+
 		}
 
 		@Override
