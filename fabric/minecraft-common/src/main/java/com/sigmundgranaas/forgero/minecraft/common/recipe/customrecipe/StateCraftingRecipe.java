@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -31,6 +33,8 @@ import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 public class StateCraftingRecipe extends ShapedRecipe {
 	private final StateService service;
@@ -146,13 +150,24 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		return StateCraftingRecipeSerializer.INSTANCE;
 	}
 
-	public static class StateCraftingRecipeSerializer extends Serializer implements ForgeroRecipeSerializer {
+	public static class StateCraftingRecipeSerializer implements RecipeSerializer<StateCraftingRecipe> , ForgeroRecipeSerializer {
 		public static final StateCraftingRecipeSerializer INSTANCE = new StateCraftingRecipeSerializer();
-
+		private final ShapedRecipe.Serializer rootSerializer = new ShapedRecipe.Serializer();
+		@Override
+		public Codec<StateCraftingRecipe> codec() {
+			return rootSerializer.codec().flatXmap(recipe -> DataResult.success(new StateCraftingRecipe(recipe, StateService.INSTANCE)) ,(recipe) -> {
+				throw new NotImplementedException("Serializing ShapedRecipe is not implemented yet.");
+			} );
+		}
 
 		@Override
 		public StateCraftingRecipe read( PacketByteBuf packetByteBuf) {
-			return new StateCraftingRecipe(super.read( packetByteBuf), StateService.INSTANCE);
+			return new StateCraftingRecipe(rootSerializer.read( packetByteBuf), StateService.INSTANCE);
+		}
+
+		@Override
+		public void write(PacketByteBuf buf, StateCraftingRecipe recipe) {
+			rootSerializer.write(buf, recipe);
 		}
 
 		@Override

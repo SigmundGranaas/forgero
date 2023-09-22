@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Function4;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
@@ -18,10 +19,12 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 public class GemUpgradeRecipe implements SmithingRecipe {
@@ -55,6 +58,7 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	}
 
 	private Optional<LeveledState> base(Inventory inventory) {
+
 		var target = service.convert(inventory.getStack(baseIndex));
 		return target.filter(LeveledState.class::isInstance).map(LeveledState.class::cast);
 	}
@@ -119,15 +123,7 @@ public class GemUpgradeRecipe implements SmithingRecipe {
 	public static class Serializer implements RecipeSerializer<GemUpgradeRecipe>, ForgeroRecipeSerializer {
 		public static final Serializer INSTANCE = new Serializer();
 
-		private static final Codec<GemUpgradeRecipe> CODEC = RecordCodecBuilder.create((instance) -> {
-			return instance.group( Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter((recipe) -> {
-				return recipe.base;
-			}), Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter((recipe) -> {
-				return recipe.addition;
-			}), RecipeCodecs.CRAFTING_RESULT.fieldOf("result").forGetter((recipe) -> {
-				return recipe.result;
-			})).apply(instance,GemUpgradeRecipe::new);
-		});
+		private static final Codec<GemUpgradeRecipe> CODEC = RecordCodecBuilder.create((instance) -> instance.group( Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter((recipe) -> recipe.base), Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter((recipe) -> recipe.addition), RecipeCodecs.CRAFTING_RESULT.fieldOf("result").forGetter((recipe) -> recipe.result)).apply(instance,GemUpgradeRecipe::new));
 		@Override
 		public Codec<GemUpgradeRecipe> codec() {
 			return CODEC;

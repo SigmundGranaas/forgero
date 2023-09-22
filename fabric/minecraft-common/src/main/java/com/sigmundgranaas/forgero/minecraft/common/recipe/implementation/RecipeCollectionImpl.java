@@ -40,7 +40,6 @@ public class RecipeCollectionImpl implements RecipeCollection {
 				StateCraftingRecipe.StateCraftingRecipeSerializer.INSTANCE,
 				StateUpgradeRecipe.Serializer.INSTANCE,
 				SchematicPartRecipe.SchematicPartRecipeSerializer.INSTANCE,
-				RepairKitRecipe.RepairKitRecipeSerializer.INSTANCE,
-				StateUpgradeShapelessRecipe.StateUpgradeShapelessRecipeSerializer.INSTANCE);
+				RepairKitRecipe.RepairKitRecipeSerializer.INSTANCE);
 	}
 }

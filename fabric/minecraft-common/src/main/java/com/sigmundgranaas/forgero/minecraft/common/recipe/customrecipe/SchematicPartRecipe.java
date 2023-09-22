@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
@@ -17,9 +19,12 @@ import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 public class SchematicPartRecipe extends ShapelessRecipe {
 	private final StateService service;
@@ -67,8 +72,15 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 		return SchematicPartRecipeSerializer.INSTANCE;
 	}
 
-	public static class SchematicPartRecipeSerializer extends Serializer implements ForgeroRecipeSerializer {
+	public static class SchematicPartRecipeSerializer implements RecipeSerializer<SchematicPartRecipe> , ForgeroRecipeSerializer {
 		public static final SchematicPartRecipeSerializer INSTANCE = new SchematicPartRecipeSerializer();
+		private final ShapelessRecipe.Serializer rootSerializer = new ShapelessRecipe.Serializer();
+		@Override
+		public Codec<SchematicPartRecipe> codec() {
+			return rootSerializer.codec().flatXmap(recipe -> DataResult.success(new SchematicPartRecipe(recipe, StateService.INSTANCE)) ,(recipe) -> {
+				throw new NotImplementedException("Serializing ShapedRecipe is not implemented yet.");
+			} );
+		}
 
 		@Override
 		public RecipeSerializer<?> getSerializer() {
@@ -77,7 +89,12 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 
 		@Override
 		public SchematicPartRecipe read( PacketByteBuf packetByteBuf) {
-			return new SchematicPartRecipe(super.read( packetByteBuf), StateService.INSTANCE);
+			return new SchematicPartRecipe(rootSerializer.read( packetByteBuf), StateService.INSTANCE);
+		}
+
+		@Override
+		public void write(PacketByteBuf buf, SchematicPartRecipe recipe) {
+			rootSerializer.write(buf, recipe);
 		}
 
 		@Override

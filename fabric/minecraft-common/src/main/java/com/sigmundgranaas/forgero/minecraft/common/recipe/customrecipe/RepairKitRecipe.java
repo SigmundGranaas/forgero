@@ -35,6 +35,8 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 public class RepairKitRecipe extends ShapelessRecipe {
 	private final StateService service;
 
@@ -83,18 +85,12 @@ public class RepairKitRecipe extends ShapelessRecipe {
 	}
 
 	public static class RepairKitRecipeSerializer implements ForgeroRecipeSerializer, RecipeSerializer<RepairKitRecipe> {
-		private static Codec<RepairKitRecipe> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codecs.createStrictOptionalFieldCodec(Codec.STRING, "group", "").forGetter(ShapelessRecipe::getGroup), CraftingRecipeCategory.CODEC.fieldOf("category").orElse(CraftingRecipeCategory.MISC).forGetter(ShapelessRecipe::getCategory), RecipeCodecs.CRAFTING_RESULT.fieldOf("result").forGetter((recipe) -> recipe.getResult(null)), Ingredient.DISALLOW_EMPTY_CODEC.listOf().fieldOf("ingredients").flatXmap((ingredients) -> {
-			Ingredient[] ingredients2 = ingredients.stream().filter((ingredient) -> !ingredient.isEmpty()).toArray(Ingredient[]::new);
-			if (ingredients2.length == 0) {
-				return DataResult.error(() -> "No ingredients for shapeless recipe");
-			} else {
-				return ingredients2.length > 9 ? DataResult.error(() -> "Too many ingredients for shapeless recipe") : DataResult.success(DefaultedList.copyOf(Ingredient.EMPTY, ingredients2));
-			}
-		}, DataResult::success).forGetter(ShapelessRecipe::getIngredients)).apply(instance, (i, l, k, j) -> new RepairKitRecipe(new ShapelessRecipe(i,l,k,j), StateService.INSTANCE)));
-
+		private final ShapelessRecipe.Serializer rootSerializer = new ShapelessRecipe.Serializer();
 		@Override
 		public Codec<RepairKitRecipe> codec() {
-			return CODEC;
+			return rootSerializer.codec().flatXmap(recipe -> DataResult.success(new RepairKitRecipe(recipe, StateService.INSTANCE)) ,(recipe) -> {
+				throw new NotImplementedException("Serializing ShapedRecipe is not implemented yet.");
+			} );
 		}
 
 		public static final RepairKitRecipeSerializer INSTANCE = new RepairKitRecipeSerializer();
@@ -106,12 +102,12 @@ public class RepairKitRecipe extends ShapelessRecipe {
 
 		@Override
 		public RepairKitRecipe read(PacketByteBuf packetByteBuf) {
-			return new RepairKitRecipe(new ShapelessRecipe.Serializer().read(packetByteBuf), StateService.INSTANCE);
+			return new RepairKitRecipe(rootSerializer.read(packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override
 		public void write(PacketByteBuf buf, RepairKitRecipe recipe) {
-
+			rootSerializer.write(buf, recipe);
 		}
 
 		@Override

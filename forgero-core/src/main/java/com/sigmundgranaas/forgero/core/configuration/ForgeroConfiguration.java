@@ -64,9 +64,6 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Boolean weightReducesAttackSpeed = true;
 
 	@NotNull
-	public Boolean enableUpgradeInCraftingTable = false;
-
-	@NotNull
 	public Integer WeightIncreasesHungerCenterPoint = 50;
 	@NotNull
 	public Integer WeightIncreasesHungerScaler = 10;
