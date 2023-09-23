@@ -21,6 +21,10 @@ public record ItemWorldEntityKey(ItemStack stack, @Nullable World world, @Nullab
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(stack, world, entity);
+		if (stack.hasNbt()) {
+			return Objects.hash(stack, world, entity);
+		} else {
+			return Objects.hash(stack.getItem(), world, entity);
+		}
 	}
 }

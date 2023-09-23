@@ -44,7 +44,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		this.registry = modelRegistry;
 		this.stateService = stateService;
 		this.cache = CacheBuilder.newBuilder()
-				.maximumSize(1000)
+				.maximumSize(4000)
 				.expireAfterAccess(Duration.ofSeconds(10))
 				.build(new CacheLoader<>() {
 					@Override

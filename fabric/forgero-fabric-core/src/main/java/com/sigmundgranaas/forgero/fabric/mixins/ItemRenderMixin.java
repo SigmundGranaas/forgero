@@ -38,7 +38,7 @@ import net.minecraft.world.World;
 public abstract class ItemRenderMixin {
 	@Unique
 	private final LoadingCache<ItemWorldEntityKey, MatchContext> contextCache = CacheBuilder.newBuilder()
-			.maximumSize(1000)
+			.maximumSize(3000)
 			.expireAfterAccess(Duration.ofSeconds(1))
 			.build(new CacheLoader<>() {
 				@Override
