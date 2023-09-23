@@ -58,7 +58,7 @@ public class CompositePropertyProcessor implements PropertyProcessor {
 					.applyCategory(Category.PASS);
 
 			newBaseAttribute
-					.applyValue(Property.stream(compositeAttributes).applyAttribute(type));
+					.applyValue(Property.stream(compositeAttributes, target, context).applyAttribute(type));
 
 
 			String combinedId = compositeAttributes.stream()

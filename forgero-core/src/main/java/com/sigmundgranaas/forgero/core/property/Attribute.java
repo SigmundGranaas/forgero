@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.core.property;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
  * Attributes are designed to be pooled together and calculated in a chain.
  */
 public interface Attribute extends Property, Comparable<Attribute> {
-	Predicate<Target> DEFAULT_CONDITION = (target) -> true;
 	Function<Float, Float> DEFAULT_ATTRIBUTE_CALCULATION = (currentFloat) -> currentFloat;
 
 	default CalculationOrder getOrder() {

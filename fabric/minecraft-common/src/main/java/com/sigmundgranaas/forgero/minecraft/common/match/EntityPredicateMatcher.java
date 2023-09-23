@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.match;
 
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY_TARGET;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,15 +23,33 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-public record EntityPredicateMatcher(EntityPredicate predicate) implements Matchable {
+public record EntityPredicateMatcher(EntityPredicate predicate, String variant) implements Matchable {
 	public static String ID = "minecraft:entity_properties";
+	public static String ID_TARGET = "minecraft:target_entity_properties";
+
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		var entity = context.get(ENTITY);
-		if (entity.isPresent() && entity.get() instanceof ServerPlayerEntity player) {
-			return predicate.test(player, player);
+		Optional<ServerPlayerEntity> playerOpt = context.get(ENTITY)
+				.filter(ServerPlayerEntity.class::isInstance)
+				.map(ServerPlayerEntity.class::cast);
+
+		if (playerOpt.isEmpty()) {
+			return false;
 		}
+
+		ServerPlayerEntity player = playerOpt.get();
+
+		if (variant.equals(ID) && predicate.test(player, player)) {
+			return true;
+		}
+
+		if (variant.equals(ID_TARGET)) {
+			return context.get(ENTITY_TARGET)
+					.map(target -> predicate.test(player.getWorld(), target.getPos(), target))
+					.orElse(false);
+		}
+
 		return false;
 	}
 
@@ -38,6 +57,7 @@ public record EntityPredicateMatcher(EntityPredicate predicate) implements Match
 		@Override
 		public Optional<Matchable> create(JsonElement element) {
 			return ElementParser.fromIdentifiedElement(element, ID)
+					.or(() -> ElementParser.fromIdentifiedElement(element, ID_TARGET))
 					.map(json -> {
 						if (json.isJsonObject() && json.getAsJsonObject().has("predicate")) {
 							return json.getAsJsonObject("predicate");
@@ -46,7 +66,7 @@ public record EntityPredicateMatcher(EntityPredicate predicate) implements Match
 						}
 					})
 					.map(EntityPredicate::fromJson)
-					.map(EntityPredicateMatcher::new);
+					.map(entity -> new EntityPredicateMatcher(entity, element.getAsJsonObject().get("condition").getAsString()));
 		}
 	}
 

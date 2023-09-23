@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
@@ -15,19 +14,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.stat.Stat;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityAttackMixin {
-	@Shadow
-	public abstract boolean shouldDamagePlayer(PlayerEntity player);
-
-	@Shadow
-	public abstract void playSound(SoundEvent sound, float volume, float pitch);
-
-	@Shadow
-	public abstract void increaseStat(Stat<?> stat, int amount);
 
 	@ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 0)
 	private float injected(float x, Entity target) {
