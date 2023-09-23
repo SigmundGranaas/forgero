@@ -14,7 +14,11 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public interface Property {
 	static PropertyStream stream(List<Property> properties) {
-		return new PropertyStream(properties.stream());
+		return new PropertyStream(properties.stream(), Matchable.DEFAULT_TRUE, MatchContext.of());
+	}
+
+	static PropertyStream stream(List<Property> properties, Matchable match, MatchContext context) {
+		return new PropertyStream(properties.stream(), match, context);
 	}
 
 	String type();

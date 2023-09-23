@@ -12,6 +12,7 @@
         "id": "oak-pig-attack-boost",
         "type": "ATTACK_DAMAGE",
         "order": "BASE",
+        "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 10,
         "predicate": {

@@ -16,25 +16,16 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
  * This will make it easier to use this stream of properties by providing convenience methods like applyAttribute for reducing a specific attribute to a desired number.
  */
 public record PropertyStream(
-		Stream<Property> stream) implements ForwardingStream<Property> {
+		Stream<Property> stream, Matchable target, MatchContext context) implements ForwardingStream<Property> {
 
 	@Override
 	public Stream<Property> getStream() {
 		return stream;
 	}
 
-	public float applyAttribute(Matchable target, MatchContext context, String attributeType) {
+	public float applyAttribute(String attributeType) {
 		return getAttributeOfType(attributeType)
 				.reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, context, collector), (a, b) -> b);
-	}
-
-	public float applyAttribute(Matchable target, String attributeType) {
-		return getAttributeOfType(attributeType)
-				.reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, MatchContext.of(), collector), (a, b) -> b);
-	}
-
-	public float applyAttribute(String attributeType) {
-		return applyAttribute(Matchable.DEFAULT_TRUE, MatchContext.of(), attributeType);
 	}
 
 	public Stream<Attribute> getAttributeOfType(String attributeType) {

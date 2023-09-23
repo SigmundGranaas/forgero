@@ -31,12 +31,26 @@ public interface PropertyContainer extends Comparable<Object> {
 
 	@NotNull
 	default PropertyStream stream() {
-		return Property.stream(getRootProperties());
+		return Property.stream(getRootProperties(), Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 
 	@NotNull
 	default PropertyStream stream(Matchable target, MatchContext context) {
-		return Property.stream(applyProperty(target, context));
+		return Property.stream(getRootProperties(target, context));
+	}
+
+	@NotNull
+	default PropertyStream stream(Matchable target) {
+		return Property.stream(getRootProperties(target, MatchContext.of()));
+	}
+
+
+	default Property applySource(Property property) {
+		if (property instanceof Attribute attribute) {
+			return attribute.setSource(this);
+		} else {
+			return property;
+		}
 	}
 
 

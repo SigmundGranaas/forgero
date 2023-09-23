@@ -29,7 +29,7 @@ public class ComputedAttribute implements Attribute {
 
 	@Override
 	public Float asFloat() {
-		float value = container.stream().applyAttribute(target, key());
+		float value = container.stream(target).applyAttribute(key());
 		if (modifications.isEmpty()) {
 			return value;
 		}

@@ -74,8 +74,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 		var props = new ArrayList<>(super.compositeProperties(target, context));
 
 		var partProps = parts().stream()
-				.map(part -> part.getRootProperties(target, context))
-				.flatMap(List::stream)
+				.flatMap(part -> part.getRootProperties(target, context).stream().map(part::applySource))
 				.toList();
 
 		props.addAll(propertyProcessor.process(partProps, target, context));
@@ -87,6 +86,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 		return props;
 	}
+
 
 	private boolean filterNormalProperties(Property property) {
 		if (property instanceof com.sigmundgranaas.forgero.core.property.Attribute attribute) {

@@ -1,10 +1,12 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.context.Context;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -24,6 +26,15 @@ public interface Attribute extends Property, Comparable<Attribute> {
 
 	@Override
 	default int compareTo(@NotNull Attribute o) {
+		if (o.getAttributeType().equals(getAttributeType())) {
+			boolean hasDefaultPredicate = getPredicate() == Matchable.DEFAULT_TRUE;
+			boolean hasTargetDefaultPredicate = o.getPredicate() == Matchable.DEFAULT_TRUE;
+			if (hasDefaultPredicate && !hasTargetDefaultPredicate) {
+				return -1;
+			} else if (hasTargetDefaultPredicate && !hasDefaultPredicate) {
+				return 1;
+			}
+		}
 		int order = getOrder().getValue() - o.getOrder().getValue();
 		if (order == 0) {
 			return getOperation().ordinal() - o.getOperation().ordinal();
@@ -59,9 +70,15 @@ public interface Attribute extends Property, Comparable<Attribute> {
 
 	String getId();
 
-
 	float leveledValue();
 
+	default Optional<PropertyContainer> source() {
+		return Optional.empty();
+	}
+
+	default Attribute setSource(PropertyContainer source) {
+		return AttributeBuilder.createAttributeBuilderFromAttribute(this).applySource(source).build();
+	}
 
 	default float applyAttribute(Matchable target, MatchContext context, float currentAttribute) {
 		if (this.getPredicate().test(target, context)) {

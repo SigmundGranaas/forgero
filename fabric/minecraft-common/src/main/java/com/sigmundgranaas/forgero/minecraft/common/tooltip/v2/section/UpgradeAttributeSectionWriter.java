@@ -78,22 +78,27 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 	}
 
 	protected List<Text> entry(String attributeType, Category category) {
-		Optional<Attribute> attributeOpt = helper.attributesOfType(attributeType).filter(attribute -> category.equals(attribute.getCategory())).findFirst();
-		if (attributeOpt.isPresent()) {
-			Attribute attribute = attributeOpt.get();
-			if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.getValue() == 0) {
-				return Collections.emptyList();
-			}
-			var builder = ImmutableList.<Text>builder();
-			if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
-				builder.add(helper.writePercentageAttribute(attribute));
-				builder.addAll(helper.writeTarget(attribute));
-			} else {
-				builder.add(helper.writeAdditionAttribute(attribute));
-				builder.addAll(helper.writeTarget(attribute));
-			}
-			return builder.build();
+		return helper.attributesOfType(attributeType)
+				.filter(attribute -> category.equals(attribute.getCategory()))
+				.filter(att -> att.leveledValue() != 0)
+				.sorted(Attribute::compareTo)
+				.map(this::attributeEntry)
+				.flatMap(List::stream)
+				.toList();
+	}
+
+	protected List<Text> attributeEntry(Attribute attribute) {
+		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.getValue() == 0) {
+			return Collections.emptyList();
 		}
-		return Collections.emptyList();
+		var builder = ImmutableList.<Text>builder();
+		if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
+			builder.add(helper.writePercentageAttribute(attribute));
+			builder.addAll(helper.writeTarget(attribute));
+		} else {
+			builder.add(helper.writeAdditionAttribute(attribute));
+			builder.addAll(helper.writeTarget(attribute));
+		}
+		return builder.build();
 	}
 }

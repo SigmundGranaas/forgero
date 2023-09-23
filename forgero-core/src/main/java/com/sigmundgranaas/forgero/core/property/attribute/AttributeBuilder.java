@@ -1,20 +1,23 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
-import com.sigmundgranaas.forgero.core.context.Context;
-import com.sigmundgranaas.forgero.core.context.Contexts;
-import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
-import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.CalculationOrder;
-import com.sigmundgranaas.forgero.core.property.NumericOperation;
-import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
-import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import javax.annotation.Nullable;
+
+import com.sigmundgranaas.forgero.core.context.Context;
+import com.sigmundgranaas.forgero.core.context.Contexts;
+import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.CalculationOrder;
+import com.sigmundgranaas.forgero.core.property.NumericOperation;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 /**
  * Builder for building attributes. You can create fresh ones, from POJO or from an existing attribute.
@@ -28,6 +31,9 @@ public class AttributeBuilder {
 	private NumericOperation operation = NumericOperation.ADDITION;
 	private float value = 1;
 	private int level = 1;
+
+	@Nullable
+	private PropertyContainer source = null;
 
 	private List<String> targets = Collections.emptyList();
 
@@ -154,6 +160,11 @@ public class AttributeBuilder {
 
 
 	public Attribute build() {
-		return new BaseAttribute(type, operation, value, condition, order, level, category, id, targets, targetType, priority, context);
+		return new BaseAttribute(type, operation, value, condition, order, level, category, id, targets, targetType, priority, context, source);
+	}
+
+	public AttributeBuilder applySource(PropertyContainer source) {
+		this.source = source;
+		return this;
 	}
 }

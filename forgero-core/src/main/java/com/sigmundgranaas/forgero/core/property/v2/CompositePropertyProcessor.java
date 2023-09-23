@@ -4,6 +4,7 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,8 +36,18 @@ public class CompositePropertyProcessor implements PropertyProcessor {
 		var newValues = new ArrayList<Property>();
 		Set<String> types = compositeAttributes.stream().map(Property::type).collect(Collectors.toUnmodifiableSet());
 		for (String type : types) {
-			boolean isMoreThanOne = compositeAttributes.stream().filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type)).toList().size() > 1;
-			if (!isMoreThanOne) {
+			List<Attribute> compAttributes = compositeAttributes.stream()
+					.filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type))
+					.map(Attribute.class::cast)
+					.toList();
+			boolean lessThanTwo = compAttributes.size() < 2;
+
+			boolean onlyFromSameSource = compAttributes.stream()
+					.map(Attribute::source)
+					.flatMap(Optional::stream)
+					.collect(Collectors.toUnmodifiableSet())
+					.size() < 2;
+			if (lessThanTwo || onlyFromSameSource) {
 				continue;
 			}
 
