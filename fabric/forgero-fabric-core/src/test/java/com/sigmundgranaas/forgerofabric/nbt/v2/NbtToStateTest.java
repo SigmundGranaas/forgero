@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Ingredient;
@@ -82,6 +83,6 @@ public class NbtToStateTest {
 	@Test
 	void assertPropertiesParsed() {
 		var pickaxe = StateParser.STATE_PARSER.parse(PICKAXE_NBT).orElseThrow();
-		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
+		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttackDamage.KEY));
 	}
 }
