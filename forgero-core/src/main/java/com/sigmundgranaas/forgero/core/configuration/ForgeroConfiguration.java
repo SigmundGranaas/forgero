@@ -80,5 +80,5 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public Float minimumAttackSpeed = 0.5f;
 
 	@NotNull
-	public Boolean buildModelsAsync = false;
+	public Boolean buildModelsAsync = true;
 }
