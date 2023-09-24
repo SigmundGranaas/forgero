@@ -10,7 +10,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.CompositeModelVariant;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.match.ItemWorldEntityKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,9 +36,8 @@ import net.minecraft.world.World;
 @Mixin(ItemRenderer.class)
 public abstract class ItemRenderMixin {
 	@Unique
-	private final LoadingCache<ItemWorldEntityKey, MatchContext> contextCache = CacheBuilder.newBuilder()
-			.maximumSize(3000)
-			.expireAfterAccess(Duration.ofSeconds(1))
+	private static final LoadingCache<ItemWorldEntityKey, MatchContext> contextCache = CacheBuilder.newBuilder()
+			.expireAfterAccess(Duration.ofMinutes(1))
 			.build(new CacheLoader<>() {
 				@Override
 				public @NotNull MatchContext load(@NotNull ItemWorldEntityKey key) {
@@ -55,16 +53,15 @@ public abstract class ItemRenderMixin {
 
 	@Inject(at = @At("HEAD"), method = "getModel", cancellable = true)
 	public void getModelMixin(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
-		if (stack.getItem() instanceof StateItem) {
+		if (this.models.getModel(stack) instanceof CompositeModelVariant variant) {
 			try {
 				ItemWorldEntityKey key = new ItemWorldEntityKey(stack, world, entity);
 				MatchContext context = contextCache.get(key);
 
-				if (this.models.getModel(stack) instanceof CompositeModelVariant variant) {
-					BakedModel model = variant.getModel(stack, context);
-					ClientWorld clientWorld = world instanceof ClientWorld ? (ClientWorld) world : null;
-					ci.setReturnValue(model.getOverrides().apply(model, stack, clientWorld, entity, seed));
-				}
+				BakedModel model = variant.getModel(stack, context);
+				ClientWorld clientWorld = world instanceof ClientWorld ? (ClientWorld) world : null;
+				ci.setReturnValue(model.getOverrides().apply(model, stack, clientWorld, entity, seed));
+
 			} catch (ExecutionException ignored) {
 			}
 		}

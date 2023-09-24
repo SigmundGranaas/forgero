@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelTemplate;
@@ -32,11 +33,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
-	private static final BakedModel EMPTY = new EmptyBakedModel();
+	public static final BakedModel EMPTY = new EmptyBakedModel();
 	private final LoadingCache<StackContextKey, BakedModel> cache;
 	private final ModelRegistry registry;
 	private final StateService stateService;
-	private final ConcurrentHashMap<StackContextKey, CompletableFuture<BakedModel>> futureCache = new ConcurrentHashMap<>();
 	private ModelLoader loader;
 	private Function<SpriteIdentifier, Sprite> textureGetter;
 
@@ -44,8 +44,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		this.registry = modelRegistry;
 		this.stateService = stateService;
 		this.cache = CacheBuilder.newBuilder()
-				.maximumSize(4000)
-				.expireAfterAccess(Duration.ofSeconds(10))
+				.expireAfterAccess(Duration.ofMinutes(1))
 				.build(new CacheLoader<>() {
 					@Override
 					public @NotNull
@@ -55,31 +54,41 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 				});
 	}
 
-
 	public BakedModel getModel(ItemStack stack, MatchContext context) {
+		if (ForgeroConfigurationLoader.configuration.buildModelsAsync) {
+			return getModelAsync(stack, context);
+		} else {
+			StackContextKey key = new StackContextKey(stack, context);
+			try {
+				return cache.get(key);
+			} catch (ExecutionException e) {
+				return EMPTY;
+			}
+		}
+	}
+
+	public BakedModel getModelAsync(ItemStack stack, MatchContext context) {
 		StackContextKey key = new StackContextKey(stack, context);
 		BakedModel model = cache.getIfPresent(key);
 		if (model != null) {
 			return model;
 		}
 
-		// Return existing future or compute a new one
-		CompletableFuture<BakedModel> future = futureCache.computeIfAbsent(key, k -> CompletableFuture.supplyAsync(() -> {
+		DynamicBakedModel dynamicModel = new DynamicBakedModel(); // Will initially be an EmptyBakedModel
+		cache.put(key, dynamicModel);  // Cache the dynamic model
+
+		// Compute the model data asynchronously
+		CompletableFuture.supplyAsync(() -> {
 			try {
-				return cache.getUnchecked(k);
+				return converter(key.stack(), key.context())
+						.flatMap(this::convertModel)
+						.orElse(EMPTY);
 			} catch (Exception e) {
 				return EMPTY;
 			}
-		}));
+		}).thenAccept(dynamicModel::updateModel);
 
-		// Attach callback to future to update the main cache when model is built
-		future.thenAccept(bakedModel -> {
-			cache.put(key, bakedModel);
-			futureCache.remove(key); // cleanup future from map once done
-		});
-
-		return EMPTY;
-
+		return dynamicModel;
 	}
 
 	@Nullable
