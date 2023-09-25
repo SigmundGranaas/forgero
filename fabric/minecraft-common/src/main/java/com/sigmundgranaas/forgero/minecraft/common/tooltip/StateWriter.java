@@ -51,7 +51,5 @@ public class StateWriter implements Writer {
 			new ConditionWriter(conditional).write(tooltip, context);
 		}
 
-
 	}
-
 }

@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
