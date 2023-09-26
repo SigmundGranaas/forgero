@@ -11,4 +11,8 @@ public interface Matchable {
 	default boolean test(Matchable matchable) {
 		return test(matchable, MatchContext.of());
 	}
+
+	default boolean isDynamic() {
+		return false;
+	}
 }

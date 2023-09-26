@@ -45,7 +45,10 @@ public class MatchContext implements Matchable {
 		this.matches = matches;
 	}
 
-	public static MatchContext mutable(MatchContext context) {
+	public static MutableMatchContext mutable(MatchContext context) {
+		if (context instanceof MutableMatchContext mut) {
+			return mut;
+		}
 		return new MutableMatchContext(new HashMap<>(context.metadata), new ArrayList<>(context.matches));
 	}
 

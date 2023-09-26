@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import static com.sigmundgranaas.forgero.core.model.ModelResult.MODEL_RESULT;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,7 @@ public class ModelRegistry {
 	public ResourceListener<List<DataResource>> modelListener() {
 		return (resources, tree, idMapper) -> {
 			this.tree = tree;
-			resources.stream().filter(resource -> resource.models().size() > 0).forEach(this::register);
+			resources.stream().filter(resource -> !resource.models().isEmpty()).forEach(this::register);
 		};
 	}
 
@@ -81,24 +83,27 @@ public class ModelRegistry {
 		return this;
 	}
 
-	public Optional<ModelTemplate> find(State state, MatchContext context) {
+	public Optional<ModelResult> find(State state, MatchContext context) {
 		if (modelMap.containsKey(state.identifier())) {
-			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of());
+			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of()).map(model -> new ModelResult().setTemplate(model));
 		} else {
+			var result = new ModelResult();
+			context.put(MODEL_RESULT, result);
 			var modelEntries = tree.find(state.type().typeName())
 					.map(node -> node.getResources(ModelMatcher.class))
 					.orElse(ImmutableList.<ModelMatcher>builder().build());
-			
+
 			return modelEntries.stream()
 					.sorted(ModelMatcher::comparator)
 					.filter(entry -> entry.match(state, context))
 					.map(modelMatcher -> modelMatcher.get(state, this::provider, context))
 					.flatMap(Optional::stream)
-					.findFirst();
+					.findFirst()
+					.map(result::setTemplate);
 		}
 	}
 
-	public Optional<ModelTemplate> find(State state) {
+	public Optional<ModelResult> find(State state) {
 		return find(state, MatchContext.of());
 	}
 

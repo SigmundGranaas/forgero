@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.match;
+package com.sigmundgranaas.forgero.minecraft.common.match.predicate;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -8,9 +8,9 @@ import com.sigmundgranaas.forgero.core.model.match.builders.ElementParser;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.JsonSerializer;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -19,7 +19,6 @@ import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContext
 
 public class WeatherPredicate implements Matchable {
 	public static String ID = "minecraft:weather_check";
-
 	@Nullable
 	final Boolean raining;
 	@Nullable
@@ -30,13 +29,19 @@ public class WeatherPredicate implements Matchable {
 		this.thundering = thundering;
 	}
 
+	@Override
+	public boolean isDynamic() {
+		return true;
+	}
+
 	public boolean test(Matchable target, MatchContext context) {
 		var worldOpt = context.get(WORLD);
-		if (worldOpt.isPresent() && worldOpt.get() instanceof ServerWorld serverWorld) {
-			if (this.raining != null && this.raining != serverWorld.isRaining()) {
+		if (worldOpt.isPresent()) {
+			World world = worldOpt.get();
+			if (this.raining != null && this.raining != world.isRaining()) {
 				return false;
 			} else {
-				return this.thundering == null || this.thundering == serverWorld.isThundering();
+				return this.thundering == null || this.thundering == world.isThundering();
 			}
 		}
 		return false;

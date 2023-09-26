@@ -2,9 +2,12 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -14,10 +17,13 @@ import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.model.ModelResult;
 import com.sigmundgranaas.forgero.core.model.ModelTemplate;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.model.TextureBasedModel;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.core.util.match.MutableMatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -34,7 +40,8 @@ import net.minecraft.util.Identifier;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public static final BakedModel EMPTY = new EmptyBakedModel();
-	private final LoadingCache<StackContextKey, BakedModel> cache;
+	private static final Set<StackContextKey> currentlyBuilding = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private final LoadingCache<StackContextKey, BakedModelResult> cache;
 	private final ModelRegistry registry;
 	private final StateService stateService;
 	private ModelLoader loader;
@@ -48,8 +55,8 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 				.build(new CacheLoader<>() {
 					@Override
 					public @NotNull
-					BakedModel load(@NotNull StackContextKey pair) {
-						return converter(pair.stack(), pair.context()).flatMap((model) -> convertModel(model)).orElse(new EmptyBakedModel());
+					BakedModelResult load(@NotNull StackContextKey pair) {
+						return converter(pair.stack(), MatchContext.mutable(pair.context())).flatMap((model) -> convertModel(model)).orElse(new BakedModelResult(new ModelResult(), EMPTY));
 					}
 				});
 	}
@@ -60,7 +67,13 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		} else {
 			StackContextKey key = new StackContextKey(stack, context);
 			try {
-				return cache.get(key);
+				BakedModelResult result = cache.get(key);
+				if (result.result().isValid(Matchable.DEFAULT_TRUE, context)) {
+					return result.model();
+				} else {
+					cache.refresh(key);
+					return cache.get(key).model();
+				}
 			} catch (ExecutionException e) {
 				return EMPTY;
 			}
@@ -69,26 +82,54 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 
 	public BakedModel getModelAsync(ItemStack stack, MatchContext context) {
 		StackContextKey key = new StackContextKey(stack, context);
-		BakedModel model = cache.getIfPresent(key);
-		if (model != null) {
-			return model;
+		BakedModelResult model = cache.getIfPresent(key);
+
+		// If the model exists and is valid, return it
+		if (model != null && model.result().isValid(Matchable.DEFAULT_TRUE, context)) {
+			return model.model();
 		}
 
-		DynamicBakedModel dynamicModel = new DynamicBakedModel(); // Will initially be an EmptyBakedModel
-		cache.put(key, dynamicModel);  // Cache the dynamic model
+		// If the model is currently being built, or if it's invalid (but not currently being built),
+		// return the existing (possibly invalid) model but trigger a rebuild if it's not already rebuilding
+		if (model != null) {
+			if (!currentlyBuilding.contains(key)) {
+				currentlyBuilding.add(key);
+				triggerAsyncRebuild(key, model);
+			}
+			return model.model();
+		}
+
+		// If there's no model at all (first time fetching for this key)
+		DynamicBakedModel dynamicModel = new DynamicBakedModel();
+		ModelResult result = new ModelResult();
+		BakedModelResult baked = new BakedModelResult(result, dynamicModel);
+
+		// Cache the dynamic model temporarily
+		cache.put(key, baked);
+
+		if (!currentlyBuilding.contains(key)) {
+			currentlyBuilding.add(key);
+			triggerAsyncRebuild(key, baked);
+		}
+		return dynamicModel;
+	}
+
+	private void triggerAsyncRebuild(StackContextKey key, BakedModelResult currentModel) {
+		MutableMatchContext ctx = MatchContext.mutable(key.context().put(ModelResult.MODEL_RESULT, new ModelResult()));
 
 		// Compute the model data asynchronously
 		CompletableFuture.supplyAsync(() -> {
 			try {
-				return converter(key.stack(), key.context())
+				return converter(key.stack(), ctx)
 						.flatMap(this::convertModel)
-						.orElse(EMPTY);
+						.orElse(currentModel);
 			} catch (Exception e) {
-				return EMPTY;
+				return currentModel;
 			}
-		}).thenAccept(dynamicModel::updateModel);
-
-		return dynamicModel;
+		}).thenAccept((m) -> {
+			cache.put(key, m);
+			currentlyBuilding.remove(key);  // Model has been built, remove from tracking set
+		});
 	}
 
 	@Nullable
@@ -102,15 +143,16 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		return this;
 	}
 
-	private Optional<BakedModel> convertModel(ModelTemplate template) {
-		var unbakedModel = template.convert(this::modelConverter);
+	private Optional<BakedModelResult> convertModel(ModelResult template) {
+		var unbakedModel = template.getTemplate().convert(this::modelConverter);
 		if (unbakedModel.isPresent()) {
-			return unbakedModel.map(UnbakedDynamicModel::bake);
+			return unbakedModel.map(UnbakedDynamicModel::bake)
+					.map(baked -> new BakedModelResult(template, baked));
 		}
 		return Optional.empty();
 	}
 
-	private Optional<ModelTemplate> converter(ItemStack stack, MatchContext context) {
+	private Optional<ModelResult> converter(ItemStack stack, MatchContext context) {
 		var compositeOpt = stateService.convert(stack);
 		if (compositeOpt.isPresent()) {
 			var composite = compositeOpt.get();
