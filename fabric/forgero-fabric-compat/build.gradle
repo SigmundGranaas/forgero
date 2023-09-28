@@ -36,7 +36,7 @@ dependencies {
 
 	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
-	modImplementation("net.devtech:arrp:${project.aarp_version}") {
+	modImplementation("maven.modrinth:arrp:${project.aarp_version}") {
 		exclude group: "net.fabricmc",  module: "fabric-loader"
 	}
 

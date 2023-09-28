@@ -6,7 +6,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 
-	modImplementation("net.devtech:arrp:${project.aarp_version}")
+	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
 }
 
 sourceSets {
