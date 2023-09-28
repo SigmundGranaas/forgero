@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero.core.resource.data.v2.factory;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.util.Identifiers;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.namedElement;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 public class TypeFactory {
 	public static List<TypeData> convert(List<DataResource> resources) {
@@ -18,10 +18,8 @@ public class TypeFactory {
 
 
 	public List<TypeData> convertJsonToData(List<DataResource> resources) {
-		var typeResources = resources.stream()
+		return resources.stream()
 				.filter(resource -> resource.resourceType() == ResourceType.TYPE_DEFINITION)
-				.toList();
-		return typeResources.stream()
 				.map(this::handleTypeResource)
 				.flatMap(List::stream)
 				.toList();
@@ -38,7 +36,7 @@ public class TypeFactory {
 		} else {
 			data = new TypeData(name, Optional.of(type.parent()), Collections.emptyList());
 		}
-		if (type.children().size() > 0) {
+		if (!type.children().isEmpty()) {
 			return ImmutableList.<TypeData>builder()
 					.add(data)
 					.addAll(createChildrenResources(type.children(), data.name()))

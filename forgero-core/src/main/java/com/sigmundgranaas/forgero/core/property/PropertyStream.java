@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
 import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
-import com.sigmundgranaas.forgero.core.property.passive.Static;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
@@ -78,15 +76,5 @@ public record PropertyStream(
 	public Stream<PropertyData> features() {
 		return stream.filter(property -> property instanceof PropertyData)
 				.map(PropertyData.class::cast);
-	}
-
-	public Stream<Static> getStaticPassiveProperties() {
-		return getPassiveProperties().filter(property -> property instanceof Static)
-				.map(Static.class::cast);
-	}
-
-	public Stream<LeveledProperty> getLeveledPassiveProperties() {
-		return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
-				.map(LeveledProperty.class::cast);
 	}
 }

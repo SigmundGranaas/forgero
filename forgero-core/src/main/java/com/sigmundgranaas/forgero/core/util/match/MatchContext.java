@@ -12,6 +12,7 @@ import java.util.Optional;
  * tested against other Matchable instances.
  */
 public class MatchContext implements Matchable {
+	private static final MatchContext DEFAULT = new MatchContext();
 	protected final Map<String, Object> metadata;
 	protected final List<Matchable> matches;
 
@@ -54,7 +55,7 @@ public class MatchContext implements Matchable {
 	 * @return A new instance of MatchContext.
 	 */
 	public static MatchContext of() {
-		return new MatchContext();
+		return DEFAULT;
 	}
 
 	/**
@@ -142,5 +143,10 @@ public class MatchContext implements Matchable {
 	 */
 	public MatchContext put(ContextKey<?> key, Object value) {
 		return put(key.getKey(), value);
+	}
+
+	@Override
+	public int hashCode() {
+		return matches.hashCode() + metadata.hashCode();
 	}
 }
