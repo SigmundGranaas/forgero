@@ -30,7 +30,7 @@ dependencies {
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
 
-	include "net.devtech:arrp:${project.aarp_version}"
+	include "maven.modrinth:arrp:${project.aarp_version}"
 }
 
 subprojects {
