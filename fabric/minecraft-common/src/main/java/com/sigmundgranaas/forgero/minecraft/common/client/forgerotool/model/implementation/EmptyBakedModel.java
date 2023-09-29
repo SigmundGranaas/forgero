@@ -1,18 +1,21 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collections;
-import java.util.List;
 
 
 public class EmptyBakedModel implements BakedModel {
@@ -45,7 +48,7 @@ public class EmptyBakedModel implements BakedModel {
 
 	@Override
 	public Sprite getParticleSprite() {
-		return null;
+		return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(new Identifier("block/cobblestone"));
 	}
 
 	@Override
