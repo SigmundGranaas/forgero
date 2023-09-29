@@ -1,4 +1,4 @@
-# Forgero Beta release 0.11.4
+# Forgero Beta release 0.11.5
 
 ## ! Warning !
 
@@ -7,5 +7,4 @@ with this version of Forgero**
 
 # Changelog
 
-* [Patch]: Revamped dissesambly table textures by @JorisDeBeer in https://github.com/SigmundGranaas/forgero/pull/729
-* [Feature]: Async model and tooltip building by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/732
+* [Patch]: Fixed crash from missing particle sprite in empty model
