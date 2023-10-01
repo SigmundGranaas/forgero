@@ -2,14 +2,10 @@ package com.sigmundgranaas.forgerofabric.gametest;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
-import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.CalculationOrder;
-import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -120,11 +116,6 @@ public class AttributeApplicationTest {
 		Matchable pigPredicate = new PredicateFactory().create(object);
 		Attribute attribute = AttributeBuilder.builder(AttackDamage.KEY)
 				.applyPredicate(pigPredicate)
-				.applyCategory(Category.UNDEFINED)
-				.applyContext(Contexts.UNDEFINED)
-				.applyValue(1f)
-				.applyOperation(NumericOperation.ADDITION)
-				.applyOrder(CalculationOrder.BASE)
 				.build();
 
 		ConstructedTool sword = (ConstructedTool) StateService.INSTANCE.find(new Identifier("forgero:diamond-sword")).get();
@@ -137,11 +128,12 @@ public class AttributeApplicationTest {
 				.put(ENTITY, entity);
 
 		float damage = sword.stream(Matchable.DEFAULT_TRUE, matchContext).applyAttribute(AttackDamage.KEY);
-		if (damage == EXPECTED_DIAMOND_SWORD_DAMAGE + 1f) {
+		float damageNotPig = sword.stream(Matchable.DEFAULT_TRUE, MatchContext.of()).applyAttribute(AttackDamage.KEY);
+
+		if (damage == EXPECTED_DIAMOND_SWORD_DAMAGE + 1f && damageNotPig == EXPECTED_DIAMOND_SWORD_DAMAGE) {
 			context.complete();
 		} else {
 			throw new GameTestException("Expected damage to be " + EXPECTED_DIAMOND_SWORD_DAMAGE + 1f + " but was " + damage);
 		}
-
 	}
 }
