@@ -54,7 +54,7 @@ public class ModelMatcherTest {
 		var pickaxe = IRON_PICKAXE;
 		var pickaxeModel = registry.find(pickaxe, MatchContext.of());
 		Assertions.assertTrue(pickaxeModel.isPresent());
-		Assertions.assertEquals(2, ((CompositeModelTemplate) pickaxeModel.get()).getModels().size());
+		Assertions.assertEquals(2, ((CompositeModelTemplate) pickaxeModel.get().getTemplate()).getModels().size());
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class ModelMatcherTest {
 		var pickaxe = IRON_PICKAXE.upgrade(BINDING);
 		var pickaxeModel = registry.find(pickaxe, MatchContext.of());
 		Assertions.assertTrue(pickaxeModel.isPresent());
-		Assertions.assertEquals(3, ((CompositeModelTemplate) pickaxeModel.get()).getModels().size());
+		Assertions.assertEquals(3, ((CompositeModelTemplate) pickaxeModel.get().getTemplate()).getModels().size());
 	}
 
 	@Test
