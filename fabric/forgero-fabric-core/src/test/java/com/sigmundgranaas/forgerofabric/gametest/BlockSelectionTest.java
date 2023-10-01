@@ -1,17 +1,9 @@
 package com.sigmundgranaas.forgerofabric.gametest;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isBreakableBlock;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelector;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.RadiusVeinSelector;
-
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.test.GameTest;
@@ -20,10 +12,47 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isBreakableBlock;
 
 @SuppressWarnings("unused")
 public class BlockSelectionTest {
+
+	public static Set<BlockPos> createSquare(BlockPos root, int height, int width, int depth) {
+		Set<BlockPos> square = new HashSet<>();
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				for (int k = 0; k < depth; k++) {
+					square.add(root.add(j, i, k));
+				}
+			}
+		}
+		return square;
+	}
+
+	public static Set<BlockPos> insert(Set<BlockPos> blocks, TestContext context, BlockState state) {
+		for (BlockPos pos : blocks) {
+			context.setBlockState(pos, state);
+		}
+		return blocks;
+	}
+
+	public static Set<BlockPos> insert(Set<BlockPos> blocks, TestContext context) {
+		return insert(blocks, context, Blocks.STONE.getDefaultState());
+	}
+
+	public static List<String> pattern3x3() {
+		List<String> pattern = new ArrayList<>();
+		pattern.add("xxx");
+		pattern.add("xxx");
+		pattern.add("xxx");
+		return pattern;
+	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
 	public void test3x3PatternSelectionNorth(TestContext context) {
@@ -106,38 +135,6 @@ public class BlockSelectionTest {
 		} else {
 			throw new GameTestException("selected blocks did not match expected blocks");
 		}
-	}
-
-	private Set<BlockPos> createSquare(BlockPos root, int height, int width, int depth) {
-		Set<BlockPos> square = new HashSet<>();
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				for (int k = 0; k < depth; k++) {
-					square.add(root.add(j, i, k));
-				}
-			}
-		}
-		return square;
-	}
-
-
-	private Set<BlockPos> insert(Set<BlockPos> blocks, TestContext context, BlockState state) {
-		for (BlockPos pos : blocks) {
-			context.setBlockState(pos, state);
-		}
-		return blocks;
-	}
-
-	private Set<BlockPos> insert(Set<BlockPos> blocks, TestContext context) {
-		return insert(blocks, context, Blocks.STONE.getDefaultState());
-	}
-
-	private List<String> pattern3x3() {
-		List<String> pattern = new ArrayList<>();
-		pattern.add("xxx");
-		pattern.add("xxx");
-		pattern.add("xxx");
-		return pattern;
 	}
 
 	private Predicate<BlockPos> relativePredicate(BlockPos absolute, TestContext context) {

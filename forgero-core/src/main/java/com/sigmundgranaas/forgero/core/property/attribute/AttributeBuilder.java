@@ -1,14 +1,5 @@
 package com.sigmundgranaas.forgero.core.property.attribute;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
@@ -18,6 +9,14 @@ import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 /**
  * Builder for building attributes. You can create fresh ones, from POJO or from an existing attribute.
@@ -95,6 +94,10 @@ public class AttributeBuilder {
 		builder.applyPriority(attribute.getPriority());
 		builder.applyContext(attribute.getContext());
 		return builder;
+	}
+
+	public static AttributeBuilder builder(String type) {
+		return new AttributeBuilder(type);
 	}
 
 	public AttributeBuilder applyContext(Context context) {

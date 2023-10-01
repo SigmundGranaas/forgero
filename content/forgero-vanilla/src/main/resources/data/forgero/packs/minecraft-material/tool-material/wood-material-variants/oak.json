@@ -8,21 +8,6 @@
   },
   "properties": {
     "attributes": [
-      {
-        "id": "oak-pig-attack-boost",
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 10,
-        "predicate": {
-          "condition": "minecraft:target_entity_properties",
-          "entity": "this",
-          "predicate": {
-            "type": "minecraft:pig"
-          }
-        }
-      }
     ]
   },
   "palette": {

@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
-
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
 
 public interface PropertyContainer extends Comparable<Object> {
 	Function<PropertyContainer, Float> ATTACK_DAMAGE = (PropertyContainer container) -> Property.stream(container.getProperties()).applyAttribute(AttackDamage.KEY);
@@ -36,7 +36,7 @@ public interface PropertyContainer extends Comparable<Object> {
 
 	@NotNull
 	default PropertyStream stream(Matchable target, MatchContext context) {
-		return Property.stream(getRootProperties(target, context));
+		return Property.stream(getRootProperties(target, context), target, context);
 	}
 
 	@NotNull
