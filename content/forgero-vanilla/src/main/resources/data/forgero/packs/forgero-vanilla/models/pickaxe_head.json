@@ -6,23 +6,7 @@
       "template": "pickaxe_head.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 20,
-      "variants": [
-        {
-          "predicate": [
-            {
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "location": {
-                  "biome": "minecraft:plains"
-                }
-              }
-            }
-          ],
-          "template": "axe_head.png"
-        }
-      ]
+      "order": 20
     },
     {
       "name": "pickaxe_head_material",
