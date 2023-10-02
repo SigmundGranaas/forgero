@@ -19,11 +19,12 @@
         "order": "BASE",
         "operation": "ADDITION",
         "value": 5,
-        "condition": {
-          "target": "ENTITY",
-          "tag": [
-            "minecraft:pig"
-          ]
+        "predicate": {
+          "condition": "minecraft:target_entity_properties",
+          "entity": "this",
+          "predicate": {
+            "type": "minecraft:pig"
+          }
         }
       }
     ],
