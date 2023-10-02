@@ -7,20 +7,6 @@
     "id": "minecraft:oak_planks"
   },
   "properties": {
-    "grouped_attributes": [
-      {
-        "context": "COMPOSITE",
-        "order": "BASE",
-        "operation": "ADDITION",
-        "attributes": [
-        ]
-      },
-      {
-        "context": "UPGRADE",
-        "attributes": [
-        ]
-      }
-    ],
     "attributes": [
     ]
   },

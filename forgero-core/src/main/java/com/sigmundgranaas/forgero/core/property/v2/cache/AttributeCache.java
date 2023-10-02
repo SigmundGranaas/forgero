@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class AttributeCache {
 	public static final LoadingCache<PropertyTargetCacheKey, Attribute> attributeCache = CacheBuilder.newBuilder()
-			.maximumSize(600)
 			.expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
 			.build(new CacheLoader<>() {
 				@Override

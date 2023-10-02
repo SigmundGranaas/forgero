@@ -1,11 +1,13 @@
 package com.sigmundgranaas.forgero.core.condition;
 
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 public class ConditionContainer implements Conditional<ConditionContainer>, PropertyContainer {
 	private final List<PropertyContainer> conditions;
@@ -39,6 +41,17 @@ public class ConditionContainer implements Conditional<ConditionContainer>, Prop
 	@Override
 	public @NotNull
 	List<Property> getProperties() {
-		return conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList();
+		return conditions().stream()
+				.map(PropertyContainer::getRootProperties)
+				.flatMap(List::stream)
+				.toList();
+	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return conditions().stream()
+				.map(cond -> cond.getRootProperties(target, context))
+				.flatMap(List::stream)
+				.toList();
 	}
 }

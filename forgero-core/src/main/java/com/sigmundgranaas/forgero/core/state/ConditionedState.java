@@ -58,7 +58,20 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(properties.stream().toList(), conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList()).flatMap(List::stream).toList();
+		return Stream.of(properties.stream().toList(), conditions().stream()
+						.map(PropertyContainer::getRootProperties)
+						.flatMap(List::stream).toList())
+				.flatMap(List::stream)
+				.toList();
+	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return Stream.of(properties.stream().toList(), conditions().stream()
+						.map(state -> state.getRootProperties(target, context))
+						.flatMap(List::stream).toList())
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	@Override

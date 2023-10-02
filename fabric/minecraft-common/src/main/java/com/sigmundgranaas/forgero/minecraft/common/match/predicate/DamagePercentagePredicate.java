@@ -1,22 +1,26 @@
-package com.sigmundgranaas.forgero.minecraft.common.match;
-
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
-
-import java.util.Optional;
+package com.sigmundgranaas.forgero.minecraft.common.match.predicate;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.model.match.builders.ElementParser;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.Optional;
+
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
 
 /**
  * Matches if the damage percentage of an ItemStack within the context is greater than or equal to the given percentage.
  */
 public record DamagePercentagePredicate(float percentage) implements Matchable {
 	public static String ID = "forgero:damage_percentage";
+
+	@Override
+	public boolean isDynamic() {
+		return true;
+	}
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {

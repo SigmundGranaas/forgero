@@ -30,6 +30,11 @@ public class SimpleUpgrade implements Upgrade {
 	}
 
 	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return getRootProperties();
+	}
+
+	@Override
 	public String name() {
 		return name;
 	}

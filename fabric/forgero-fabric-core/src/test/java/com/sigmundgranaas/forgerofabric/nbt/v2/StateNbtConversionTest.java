@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -76,8 +77,8 @@ public class StateNbtConversionTest {
 	void encodeCompoundParseCompoundWithProperties() {
 		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.upgrade(Upgrades.BINDING));
 		var pickaxe = parser.parse(compound).map(ConstructedState.class::cast).orElseThrow();
-		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
-		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttributeType.DURABILITY));
+		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttackDamage.KEY));
+		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(Durability.KEY));
 	}
 
 	@Test

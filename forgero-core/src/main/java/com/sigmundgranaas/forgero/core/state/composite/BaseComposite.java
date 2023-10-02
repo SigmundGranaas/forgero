@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.Slot;
@@ -38,21 +35,21 @@ public abstract class BaseComposite implements Composite {
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		var newTarget = target.combineTarget(new TypeTarget(Set.of(id.type().typeName())));
-		return compositeProperties(newTarget);
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		var newContext = context.add(id.type());
+		return compositeProperties(target, context);
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return compositeProperties(Target.EMPTY);
+		return compositeProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 
 	@Override
-	public List<Property> compositeProperties(Target target) {
+	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		List<Property> upgradeProps = slots().stream()
-				.map(state -> state.applyProperty(target))
+				.map(state -> state.getRootProperties(target, context))
 				.flatMap(List::stream)
 				.collect(Collectors.toList());
 
@@ -64,7 +61,10 @@ public abstract class BaseComposite implements Composite {
 
 	@Override
 	public Optional<State> has(String id) {
-		return components().stream().map(comp -> recursiveComponentHas(comp, id)).flatMap(Optional::stream).findFirst();
+		return components().stream()
+				.map(comp -> recursiveComponentHas(comp, id))
+				.flatMap(Optional::stream)
+				.findFirst();
 	}
 
 	private Optional<State> recursiveComponentHas(State target, String id) {

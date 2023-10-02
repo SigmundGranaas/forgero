@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.v2.cache;
 
+import java.util.Objects;
+
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 
 public record PropertyTargetCacheKey(ContainerTargetPair pair, String key) {
@@ -9,7 +11,15 @@ public record PropertyTargetCacheKey(ContainerTargetPair pair, String key) {
 
 	@Override
 	public int hashCode() {
-		return toString().hashCode();
+		return Objects.hash(pair, key);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PropertyTargetCacheKey that = (PropertyTargetCacheKey) o;
+		return Objects.equals(pair, that.pair) && Objects.equals(key, that.key);
 	}
 
 	@Override

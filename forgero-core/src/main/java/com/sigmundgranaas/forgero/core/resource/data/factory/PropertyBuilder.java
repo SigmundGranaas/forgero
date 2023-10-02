@@ -2,12 +2,9 @@ package com.sigmundgranaas.forgero.core.resource.data.factory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.active.ActivePropertyBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyDataBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
@@ -20,14 +17,6 @@ public class PropertyBuilder {
 
 		if (pojo.getAttributes() != null) {
 			properties.addAll(pojo.getAttributes().stream().map(AttributeBuilder::createAttributeFromPojo).toList());
-		}
-
-		if (pojo.active != null) {
-			properties.addAll(pojo.active.stream().map(ActivePropertyBuilder::createAttributeFromPojo).flatMap(Optional::stream).toList());
-		}
-
-		if (pojo.passiveProperties != null && !pojo.passiveProperties.isEmpty()) {
-			properties.addAll(pojo.passiveProperties.stream().map(PassivePropertyBuilder::createPassivePropertyFromPojo).toList());
 		}
 
 		if (pojo.features != null) {

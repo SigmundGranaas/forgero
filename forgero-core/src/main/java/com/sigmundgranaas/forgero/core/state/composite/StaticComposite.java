@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.state.composite;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
@@ -12,7 +11,6 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -45,21 +43,25 @@ public class StaticComposite implements Composite {
 	}
 
 	@Override
-	public @NotNull
-	List<Property> applyProperty(Target target) {
-		var newTarget = target.combineTarget(new TypeTarget(Set.of(type.typeName())));
-		return compositeProperties(newTarget);
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return compositeProperties(target, context);
 	}
 
 	@Override
-	public List<Property> compositeProperties(Target target) {
-		var props = Stream.of(slots(), List.of(properties))
+	public @NotNull
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		var newContext = context.add(type);
+		return compositeProperties(target, newContext);
+	}
+
+	@Override
+	public List<Property> compositeProperties(Matchable target, MatchContext context) {
+		return Stream.of(slots(), List.of(properties))
 				.flatMap(List::stream)
-				.map(prop -> prop.applyProperty(target))
+				.map(container -> container.getRootProperties(target, context))
 				.flatMap(List::stream)
 				.filter(prop -> !(prop instanceof Attribute attribute && attribute.getContext().test(Contexts.LOCAL)))
 				.toList();
-		return props;
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,25 +62,33 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return configuration.writableAttributes(container).stream().map(this::entry).flatMap(List::stream).toList();
+		return configuration.writableAttributes(container).stream()
+				.map(this::entry)
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	protected List<Text> entry(String attributeType) {
-		Optional<Attribute> attributeOpt = helper.attributesOfType(attributeType).filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE)).findFirst();
-		if (attributeOpt.isPresent() && attributeOpt.get().leveledValue() != 0) {
-			Attribute attribute = attributeOpt.get();
-			if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
-				var builder = ImmutableList.<Text>builder();
-				builder.add(helper.writeMultiplicativeAttribute(attribute));
-				helper.writeTarget(attribute).ifPresent(builder::add);
-				return builder.build();
-			} else {
-				var builder = ImmutableList.<Text>builder();
-				builder.add(helper.writeBaseNumber(attribute));
-				helper.writeTarget(attribute).ifPresent(builder::add);
-				return builder.build();
-			}
+		return helper.attributesOfType(attributeType)
+				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
+				.filter(att -> att.leveledValue() != 0)
+				.sorted(Attribute::compareTo)
+				.map(this::attributeEntry)
+				.flatMap(List::stream)
+				.toList();
+	}
+
+	protected List<Text> attributeEntry(Attribute attribute) {
+		if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
+			var builder = ImmutableList.<Text>builder();
+			builder.add(helper.writeMultiplicativeAttribute(attribute));
+			builder.addAll(helper.writeTarget(attribute));
+			return builder.build();
+		} else {
+			var builder = ImmutableList.<Text>builder();
+			builder.add(helper.writeBaseNumber(attribute));
+			builder.addAll(helper.writeTarget(attribute));
+			return builder.build();
 		}
-		return Collections.emptyList();
 	}
 }

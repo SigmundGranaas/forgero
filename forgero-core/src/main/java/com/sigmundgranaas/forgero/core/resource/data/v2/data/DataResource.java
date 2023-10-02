@@ -193,9 +193,7 @@ public class DataResource implements Identifiable {
 		var properties = properties().orElse(new PropertyPojo());
 		var mergeProperties = resource.properties().orElse(new PropertyPojo());
 		var newProps = new PropertyPojo();
-
-		newProps.active = mergeProperty(mergeProperties.active, properties.active).stream().distinct().toList();
-		newProps.passiveProperties = mergeProperty(mergeProperties.passiveProperties, properties.passiveProperties).stream().distinct().toList();
+		
 		newProps.setAttributes(mergeAttributes(properties.getAttributes(), mergeProperties.getAttributes()).stream().distinct().toList());
 		newProps.features = mergeProperty(mergeProperties.features, properties.features).stream().distinct().toList();
 
