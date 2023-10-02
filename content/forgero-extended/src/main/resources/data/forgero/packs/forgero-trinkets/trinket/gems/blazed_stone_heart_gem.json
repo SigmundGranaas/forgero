@@ -22,11 +22,9 @@
         "category": "ALL",
         "operation": "MULTIPLICATION",
         "value": 1.2,
-        "condition": {
-          "target": "BLOCK",
-          "tag": [
-            "minecraft:base_stone_nether"
-          ]
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "minecraft:base_stone_nether"
         }
       }
     ]

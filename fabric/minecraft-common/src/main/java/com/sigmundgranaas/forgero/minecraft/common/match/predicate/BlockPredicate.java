@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @NoArgsConstructor
+@Getter
 @AllArgsConstructor
 @Builder
 public class BlockPredicate {

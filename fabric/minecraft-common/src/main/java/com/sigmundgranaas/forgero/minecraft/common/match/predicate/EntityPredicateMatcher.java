@@ -97,6 +97,10 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 			};
 		}
 
+		public static String formatTag(String base, Identifier id) {
+			return base + "." + id.getNamespace() + "." + id.getPath();
+		}
+
 		public List<MutableText> write(Matchable matchable) {
 			List<MutableText> tooltips = new ArrayList<>();
 
@@ -233,10 +237,6 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 						).append(Text.translatable(tag))
 				);
 			}
-		}
-
-		private String formatTag(String base, Identifier id) {
-			return base + "." + id.getNamespace() + "." + id.getPath();
 		}
 	}
 }

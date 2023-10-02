@@ -22,6 +22,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -106,9 +107,10 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
 	private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack) {
 		Matchable target = Matchable.DEFAULT_TRUE;
+		MatchContext context = MatchContext.of();
 		ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
 		//Doing -1 to match vanilla
-		float currentToolDamage = Attribute.apply(dynamicProperties(stack), AttackDamage.KEY, target) - 1;
+		float currentToolDamage = Attribute.apply(dynamicProperties(stack), AttackDamage.KEY, target, context) - 1;
 		//Base attack damage
 		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ItemUUIDMixin.getAttackDamageModifierID(), "Tool modifier", currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
@@ -128,7 +130,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(ADDITION_HEALTH_MODIFIER_ID, "Health addition", additionalHealth, EntityAttributeModifier.Operation.ADDITION));
 
 		//Attack speed
-		float currentAttackSpeed = Attribute.apply(dynamicProperties(stack), AttackSpeed.KEY, target);
+		float currentAttackSpeed = Attribute.apply(dynamicProperties(stack), AttackSpeed.KEY, target, context);
 		float baseAttackSpeed = Attribute.apply(defaultProperties(), AttackSpeed.KEY);
 		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
 		if (currentAttackSpeed != baseAttackSpeed) {
@@ -189,6 +191,6 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	private float mingSpeedCalculation(PropertyContainer dynamic, BlockState state) {
 		// Todo Fix the BlockBreaking predicate
 		//Target target = new BlockBreakingEfficiencyTarget(state);
-		return MiningSpeed.apply(dynamic, Matchable.DEFAULT_TRUE);
+		return MiningSpeed.apply(dynamic, Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 }

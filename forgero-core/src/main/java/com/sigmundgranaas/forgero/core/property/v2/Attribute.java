@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public interface Attribute {
@@ -55,8 +56,8 @@ public interface Attribute {
 		return of(container, key).asFloat();
 	}
 
-	static Float apply(PropertyContainer container, String key, Matchable target) {
-		var pair = ContainerTargetPair.of(container);
+	static Float apply(PropertyContainer container, String key, Matchable target, MatchContext context) {
+		var pair = ContainerTargetPair.of(container, target, context);
 		return of(pair, key).asFloat();
 	}
 
