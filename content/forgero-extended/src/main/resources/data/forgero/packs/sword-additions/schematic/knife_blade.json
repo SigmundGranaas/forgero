@@ -116,6 +116,10 @@
       "value": 1,
       "context": "LOCAL"
     },
+    "name_replacement": {
+      "from": "sword",
+      "to": "knife"
+    },
     "better_compat_attribute_container": "bettercombat:dagger"
   }
 }
