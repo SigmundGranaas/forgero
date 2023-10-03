@@ -89,6 +89,13 @@ public abstract class DynamicToolItemStackMixin {
 		return new MultiMapMergeHandler().modifyAttributeModifiersMap(multimap, slot, stack, contextEntity);
 	}
 
+	@Inject(method = "getMaxDamage", at = @At("HEAD"), cancellable = true)
+	public void getCustomDurability(CallbackInfoReturnable<Integer> cir) {
+		if (this.getItem() instanceof DynamicDurability tool) {
+			cir.setReturnValue(tool.getDurability((ItemStack) (Object) this));
+		}
+	}
+
 	@Inject(method = "getItemBarStep", at = @At("HEAD"), cancellable = true)
 	public void getItemBarStep(CallbackInfoReturnable<Integer> cir) {
 		if (this.getItem() instanceof DynamicDurability) {
