@@ -55,6 +55,7 @@ public abstract class DynamicToolItemStackMixin {
 	public abstract int getMaxDamage();
 
 	@Inject(at = @At("RETURN"), method = "isSuitableFor", cancellable = true)
+	@SuppressWarnings("DataFlowIssue")
 	public void isEffectiveOn(BlockState state, CallbackInfoReturnable<Boolean> info) {
 		if (this.getItem() instanceof DynamicAttributeItem holder) {
 			info.setReturnValue(holder.isEffectiveOn(state, (ItemStack) (Object) this));
@@ -62,6 +63,7 @@ public abstract class DynamicToolItemStackMixin {
 	}
 
 	@Inject(at = @At("RETURN"), method = "getMiningSpeedMultiplier", cancellable = true)
+	@SuppressWarnings("DataFlowIssue")
 	public void getMiningSpeedMultiplier(BlockState state, CallbackInfoReturnable<Float> info) {
 		if (this.getItem() instanceof DynamicMiningSpeed holder) {
 			float customSpeed = holder.getMiningSpeedMultiplier(state, (ItemStack) (Object) this);
@@ -85,6 +87,7 @@ public abstract class DynamicToolItemStackMixin {
 	}
 
 	@ModifyVariable(method = "getAttributeModifiers", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
+	@SuppressWarnings("DataFlowIssue")
 	public Multimap<EntityAttribute, EntityAttributeModifier> modifyAttributeModifiersMap(Multimap<EntityAttribute, EntityAttributeModifier> multimap, EquipmentSlot slot) {
 		ItemStack stack = (ItemStack) (Object) this;
 		return new MultiMapMergeHandler().modifyAttributeModifiersMap(multimap, slot, stack, contextEntity);
@@ -97,21 +100,34 @@ public abstract class DynamicToolItemStackMixin {
 			ItemStack stack = (ItemStack) (Object) this;
 			int durability = tool.getDurability(stack);
 
-			if (durability > 0) {
-				cir.setReturnValue(durability);
-			} else {
+			if (durability < 0) {
 				Forgero.LOGGER.error(
-						"Somehow tried to set the Durability of tool {} to {}. This should never happen, please report this issue to the Forgero developers on GitHub.",
+						"Somehow tried to set the durability of tool {} to a negative value: {}. This should never happen, please report this issue to the Forgero developers on GitHub.",
 						stack, durability
 				);
+				return;
 			}
+
+			cir.setReturnValue(durability);
 		}
 	}
 
 	@Inject(method = "getItemBarStep", at = @At("HEAD"), cancellable = true)
+	@SuppressWarnings("DataFlowIssue")
 	public void getItemBarStep(CallbackInfoReturnable<Integer> cir) {
 		if (this.getItem() instanceof DynamicDurability) {
-			cir.setReturnValue(Math.round(13.0f - (float) getDamage() * 13.0f / getMaxDamage()));
+			var durability = this.getMaxDamage();
+
+			if (durability < 0) {
+				ItemStack stack = (ItemStack) (Object) this;
+				Forgero.LOGGER.error(
+						"Somehow tried to set the durability of tool {} to a negative value: {}. This should never happen, please report this issue to the Forgero developers on GitHub.",
+						stack, durability
+				);
+				return;
+			}
+
+			cir.setReturnValue(durability == 0 ? 0 : Math.round(13.0f - (float) this.getDamage() * 13.0f / durability));
 		}
 	}
 }
