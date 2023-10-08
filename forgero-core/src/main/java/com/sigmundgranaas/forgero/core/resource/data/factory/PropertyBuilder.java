@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyDataBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 
 public class PropertyBuilder {

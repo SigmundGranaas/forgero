@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 
 public class FeatureWriterSelector {

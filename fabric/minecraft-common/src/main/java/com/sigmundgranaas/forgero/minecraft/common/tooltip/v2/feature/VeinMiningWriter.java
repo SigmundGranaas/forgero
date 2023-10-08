@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
-
-import net.minecraft.text.Text;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.text.Text;
 
 public class VeinMiningWriter extends FeatureWriter {
 	public VeinMiningWriter(PropertyData data) {

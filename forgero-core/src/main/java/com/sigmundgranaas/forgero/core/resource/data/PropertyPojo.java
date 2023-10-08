@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
-import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 
@@ -20,7 +20,7 @@ import com.sigmundgranaas.forgero.core.util.Identifiers;
  */
 public class PropertyPojo {
 	@SerializedName(value = "features")
-	public List<PropertyPojo.Feature> features;
+	public List<JsonObject> features;
 	@SerializedName("attributes")
 	private List<PropertyPojo.Attribute> attributes;
 	@SerializedName("grouped_attributes")
@@ -66,18 +66,5 @@ public class PropertyPojo {
 					", context=" + context +
 					'}';
 		}
-	}
-
-	public static class Feature {
-		public int priority = 0;
-		public String id = Identifiers.EMPTY_IDENTIFIER;
-		public String type;
-		public String name;
-		public float value;
-		public int level;
-		public List<String> tags;
-		public BreakingDirection direction;
-		public String[] pattern;
-		public String description;
 	}
 }

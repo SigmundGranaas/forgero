@@ -18,8 +18,13 @@
     ],
     "features": [
       {
-        "type": "UNDYING_REVIVAL",
-        "value": 1
+        "type": "forgero:undying_revival",
+        "on_use": {
+          "effect": "minecraft:undying_totem_effect"
+        },
+        "after_activation": {
+          "consume": "forgero:source"
+        }
       }
     ]
   },

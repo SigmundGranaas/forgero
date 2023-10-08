@@ -1,15 +1,14 @@
 package com.sigmundgranaas.forgero.core.condition;
 
-import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.ResourceRegistry;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
-import com.sigmundgranaas.forgero.core.type.Type;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.ResourceRegistry;
+import com.sigmundgranaas.forgero.core.type.Type;
 
 public class Conditions implements ResourceRegistry<LootCondition> {
 

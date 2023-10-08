@@ -88,11 +88,25 @@
     ],
     "features": [
       {
-        "type": "VEIN_MINING",
-        "value": 8,
-        "tags": [
-          "forgero:plants"
-        ]
+        "type": "forgero:block_breaking",
+        "selection": {
+          "type": "forgero:vein_mining",
+          "predicate": {
+            "type": "minecraft:block",
+            "tag": "forgero:plants"
+          },
+          "strategy": "forgero:radius",
+          "parameters": {
+            "radius": 8
+          }
+        },
+        "hardness_calculation": {
+          "type": "forgero:combined_hardness"
+        },
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:plants"
+        }
       }
     ]
   },

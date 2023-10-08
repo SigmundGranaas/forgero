@@ -11,7 +11,6 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.hardness.HardnessProvider;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelector;
 

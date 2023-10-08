@@ -88,12 +88,22 @@
     ],
     "features": [
       {
-        "type": "COLUMN_MINING",
-        "value": 1,
-        "level": 20,
-        "tags": [
-          "forgero:vein_mining_logs"
-        ]
+        "type": "forgero:block_breaking",
+        "selection": {
+          "type": "forgero:pattern_mining",
+          "strategy": "forgero:columns",
+          "predicate": "forgero:same_block",
+          "parameters": {
+            "columns": 1,
+            "height": 20
+          }
+        },
+        "hardness_calculation": {
+          "type": "forgero:hardness_composite"
+        },
+        "predicate": {
+          "type": "forgero:tool_proficiency"
+        }
       }
     ]
   },

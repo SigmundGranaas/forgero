@@ -88,12 +88,18 @@
     ],
     "features": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
-        "pattern": [
-          "xxx",
-          "xxx",
-          "xxx"
-        ]
+        "type": "forgero:block_breaking",
+        "selection": {
+          "type": "forgero:block_breaking_pattern",
+          "pattern": [
+            "xxx",
+            "xxx",
+            "xxx"
+          ]
+        },
+        "predicate": {
+          "type": "forgero:tool_proficiency"
+        }
       }
     ]
   },

@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature;
 
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
-
 import net.minecraft.text.MutableText;
 
 public class BlockEffectivenessWriter extends FeatureWriter {

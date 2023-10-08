@@ -88,11 +88,24 @@
     ],
     "features": [
       {
-        "type": "VEIN_MINING",
-        "value": 3,
-        "tags": [
-          "forgero:vein_mining_dirt"
-        ]
+        "type": "forgero:block_breaking",
+        "selection": {
+          "type": "forgero:vein_mining",
+          "predicate": {
+            "type": "forgero:same_block"
+          },
+          "strategy": "forgero:radius",
+          "parameters": {
+            "depth": 3
+          }
+        },
+        "hardness_calculation": {
+          "type": "forgero:hardness_composite"
+        },
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_dirt"
+        }
       }
     ]
   },

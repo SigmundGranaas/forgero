@@ -1,22 +1,21 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.RunnableHandler;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
 import com.sigmundgranaas.forgero.core.property.v2.cache.RunnableHandlerCache;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * Copyright 2021 Luligabi

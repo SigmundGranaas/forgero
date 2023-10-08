@@ -18,8 +18,12 @@
     ],
     "features": [
       {
-        "type": "MAGNETIC",
-        "value": 1
+        "type": "forgero:pull_entity",
+        "entity_selection": {
+          "type": "minecraft:item"
+        },
+        "range": 5,
+        "force": 0.5
       }
     ]
   },

@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.BaseWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TagWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;

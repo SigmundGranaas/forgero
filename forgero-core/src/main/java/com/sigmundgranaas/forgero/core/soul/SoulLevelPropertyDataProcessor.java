@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyDataBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 

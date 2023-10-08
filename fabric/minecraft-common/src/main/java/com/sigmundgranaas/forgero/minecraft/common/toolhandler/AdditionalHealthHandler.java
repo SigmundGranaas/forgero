@@ -1,13 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
-
-import java.util.Optional;
 
 public class AdditionalHealthHandler {
 	public static String HEALTH_ADDITION_TYPE = "HEALTH_ADDITION";

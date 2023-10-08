@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric.mixins;
 import java.util.List;
 
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.minecraft.common.item.DynamicAttributeItem;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicDurability;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
@@ -92,7 +93,14 @@ public abstract class DynamicToolItemStackMixin {
 	@Inject(method = "getMaxDamage", at = @At("HEAD"), cancellable = true)
 	public void getCustomDurability(CallbackInfoReturnable<Integer> cir) {
 		if (this.getItem() instanceof DynamicDurability tool) {
-			cir.setReturnValue(tool.getDurability((ItemStack) (Object) this));
+			@SuppressWarnings("DataFlowIssue")
+			ItemStack stack = (ItemStack) (Object) this;
+			int durability = tool.getDurability(stack);
+			if (durability > 0) {
+				cir.setReturnValue(durability);
+			} else {
+				Forgero.LOGGER.error("Somehow the Durability of the tool {}, was {}. This should never happen", stack, durability);
+			}
 		}
 	}
 
