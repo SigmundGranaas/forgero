@@ -13,11 +13,22 @@
       ]
     },
     {
+      "name": "shovel_dye",
+      "variants": [
+        {
+          "target": [
+            "model:refined_shovel_head.png"
+          ],
+          "template": "refined_shovel_head.png"
+        }
+      ]
+    },
+    {
       "name": "refined_shovel_head",
       "modelType": "GENERATE",
       "template": "refined_shovel_head.png",
       "palette": "TOOL_MATERIAL",
-      "order": 30
+      "order": 20
     },
     {
       "target": [

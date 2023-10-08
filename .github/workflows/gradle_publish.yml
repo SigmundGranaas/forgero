@@ -66,7 +66,7 @@ jobs:
 
       # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
-      - name: Publish to GitHub Packages
+      - name: Publish to Artifacts
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: publish
@@ -74,3 +74,4 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+          ARCHIVA_ADMIN_KEY: ${{secrets.ARCHIVA_ADMIN_KEY}}

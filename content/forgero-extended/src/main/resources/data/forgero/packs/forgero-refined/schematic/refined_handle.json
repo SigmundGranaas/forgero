@@ -38,9 +38,9 @@
         "upgrade_type": "SMITHING",
         "description": "grip",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "MATERIAL",
+        "type": "SOFT_MATERIAL",
         "tier": 1
       },
       {
@@ -49,7 +49,16 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "PUMMEL",
+        "type": "POMMEL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]

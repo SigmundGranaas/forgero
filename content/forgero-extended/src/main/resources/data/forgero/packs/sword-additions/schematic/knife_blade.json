@@ -39,8 +39,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -53,35 +62,52 @@
         "order": "BASE",
         "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 20
+        "value": 50
+      },
+      {
+        "id": "sneaking-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_sneaking": true
+            }
+          }
+        }
       },
       {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 1.25
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 0.75
       },
       {
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.2
+        "value": 1.25
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.25
       }
     ]
   },
@@ -89,6 +115,10 @@
     "ingredient_count": {
       "value": 1,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "sword",
+      "to": "knife"
     },
     "better_compat_attribute_container": "bettercombat:dagger"
   }

@@ -1,6 +1,6 @@
 {
   "type": "WOOD",
-  "parent": "wood",
+  "parent": "wood_base",
   "name": "perfect_planks",
   "container": {
     "type": "HOST",

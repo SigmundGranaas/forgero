@@ -39,23 +39,33 @@
       ]
     },
     {
-      "name": "spiked_binding",
-      "template": "spiked_binding.png",
+      "name": "binding_dye",
+      "template": "binding.png",
       "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": 40,
+      "palette": "DYE",
+      "order": 45,
       "variants": [
         {
           "target": [
             "type:AXE"
           ],
-          "template": "spiked_binding.png"
+          "offset": [
+            1,
+            1
+          ],
+          "template": "axe_binding.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "spiked_binding.png"
+          "template": "pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding.png"
         },
         {
           "target": [
@@ -142,15 +152,6 @@
         },
         {
           "target": [
-            "model:spiked_binding.png"
-          ],
-          "offset": [
-            2,
-            2
-          ]
-        },
-        {
-          "target": [
             "model:binding.png"
           ],
           "offset": [
@@ -171,18 +172,18 @@
     {
       "target": [
         "type:MATERIAL",
-        "id:spiked_binding-schematic"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "spiked_binding"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",
       "template": "binding_material"
+    },
+    {
+      "target": [
+        "type:TOTEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
     },
     {
       "target": [
@@ -194,11 +195,11 @@
     },
     {
       "target": [
-        "type:TOTEM",
-        "slot:1"
+        "type:DYE",
+        "slot:2"
       ],
       "modelType": "UPGRADE",
-      "template": "binding_gem"
+      "template": "binding_dye"
     }
   ]
 }

@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgeroforge;
 import static com.sigmundgranaas.forgeroforge.testutil.ToolParts.HANDLE;
 import static com.sigmundgranaas.forgeroforge.testutil.Upgrades.REDSTONE_GEM;
 
-import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgeroforge.testutil.Types;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -43,6 +43,6 @@ public class HandleStateTest {
 	@Test
 	void testHandleUpgradeAppliesProperty() {
 		var handle = HANDLE.upgrade(REDSTONE_GEM);
-		Assertions.assertTrue(handle.stream().applyAttribute(AttributeType.ATTACK_DAMAGE) > HANDLE.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
+		Assertions.assertTrue(handle.stream().applyAttribute(AttackDamage.KEY) > HANDLE.stream().applyAttribute(AttackDamage.KEY));
 	}
 }

@@ -13,6 +13,17 @@
       ]
     },
     {
+      "name": "axe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:double_headed_axe_head.png"
+          ],
+          "template": "double_headed_axe_head.png"
+        }
+      ]
+    },
+    {
       "name": "double_headed_axe_head",
       "type": "GENERATE",
       "template": "double_headed_axe_head.png",

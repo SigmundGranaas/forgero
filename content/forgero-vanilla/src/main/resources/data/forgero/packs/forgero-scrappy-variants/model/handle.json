@@ -2,11 +2,55 @@
   "type": "HANDLE",
   "models": [
     {
+      "name": "bamboo_handle",
+      "template": "handle.png",
+      "palette": "dye/green_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_handle.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_handle.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "axe_handle.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "medium_handle.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "short_handle.png"
+        }
+      ]
+    },
+    {
       "target": [
         "id:oak-simple_handle"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
+    },
+    {
+      "target": [
+        "id:bamboo-simple_handle"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "bamboo_handle"
     }
   ]
 }

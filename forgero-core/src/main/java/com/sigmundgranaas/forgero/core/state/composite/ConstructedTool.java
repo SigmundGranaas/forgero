@@ -1,18 +1,9 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
-import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulBindable;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -20,8 +11,18 @@ import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
 
 public class ConstructedTool extends ConstructedComposite implements SoulBindable, Conditional<ConstructedTool> {
 	private final State head;
@@ -115,20 +116,29 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		return Stream.of(super.applyProperty(target), conditionProperties()).flatMap(List::stream).toList();
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		return Stream.of(super.applyProperty(target, context), conditionProperties(target, context))
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(super.getRootProperties(), conditionProperties()).flatMap(List::stream).toList();
+		return Stream.of(super.getRootProperties(), conditionProperties(Matchable.DEFAULT_TRUE, MatchContext.of())).flatMap(List::stream).toList();
 	}
 
 	@Override
 	public @NotNull
-	List<Property> conditionProperties() {
-		return Conditional.super.conditionProperties();
+	List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+	}
+
+
+	@Override
+	public @NotNull
+	List<Property> conditionProperties(Matchable target, MatchContext context) {
+		return Conditional.super.conditionProperties(target, context);
 	}
 
 	@Override

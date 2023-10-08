@@ -15,7 +15,8 @@
       "com.sigmundgranaas.forgerofabric.gametest.RepairKitTest",
       "com.sigmundgranaas.forgerofabric.gametest.UpgradeTest",
       "com.sigmundgranaas.forgerofabric.gametest.BlockSelectionTest",
-      "com.sigmundgranaas.forgerofabric.gametest.MiningLevelTest"
+      "com.sigmundgranaas.forgerofabric.gametest.MiningLevelTest",
+      "com.sigmundgranaas.forgerofabric.gametest.AttributeApplicationTest"
     ]
   }
 }

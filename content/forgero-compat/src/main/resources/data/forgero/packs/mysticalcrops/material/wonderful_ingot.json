@@ -1,6 +1,6 @@
 {
   "type": "METAL",
-  "parent": "metal",
+  "parent": "metal_base",
   "name": "wonderful_ingot",
   "container": {
     "type": "HOST",

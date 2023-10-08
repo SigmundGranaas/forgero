@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -61,7 +62,7 @@ public class FileResourceProvider implements DataResourceProvider {
 					return Optional.ofNullable(resource);
 				}
 				return Optional.empty();
-			} catch (JsonSyntaxException e) {
+			} catch ( JsonParseException e) {
 				Forgero.LOGGER.error("Unable to parse: {}, check if the file is valid", path);
 				Forgero.LOGGER.error(e);
 				return Optional.empty();

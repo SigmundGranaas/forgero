@@ -8,11 +8,6 @@
         "operation": "ADDITION",
         "order": "BASE",
         "attributes": [
-          {
-            "id": "schematic-rarity-local",
-            "type": "RARITY",
-            "value": 10
-          }
         ]
       },
       {
@@ -36,9 +31,19 @@
             "value": 1
           },
           {
+            "id": "schematic-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 1
+          },
+          {
             "id": "schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 1.2
+            "value": 1
           },
           {
             "id": "schematic-weight-composite",
@@ -52,18 +57,7 @@
         "operation": "ADDITION",
         "order": "BASE",
         "attributes": [
-          {
-            "id": "schematic-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "value": 0
-          },
-          {
-            "id": "schematic-attack_speed-composite-baseline",
-            "type": "ATTACK_SPEED",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 0.2
-          }
+
         ]
       }
     ]

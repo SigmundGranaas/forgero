@@ -1,14 +1,16 @@
 package com.sigmundgranaas.forgero.core.soul;
 
-import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.state.Identifiable;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
+
+import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 public class Soul implements Identifiable, PropertyContainer {
 
@@ -112,5 +114,10 @@ public class Soul implements Identifiable, PropertyContainer {
 		}
 		var trackerProps = new SoulStatToAttributes(tracker).getRootProperties();
 		return Stream.of(levelProps, trackerProps).flatMap(List::stream).toList();
+	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return getRootProperties();
 	}
 }

@@ -1,0 +1,75 @@
+{
+  "type": "POMMEL",
+  "models": [
+    {
+      "target": [
+        "type:METAL",
+        "id:pommel-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "handle_pommel"
+    },
+    {
+      "name": "handle_pommel",
+      "template": "pommel.png",
+      "type": "GENERATE",
+      "palette": "METAL",
+      "order": 60,
+      "offset": [
+        5,
+        5
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "offset": [
+            -1,
+            -1
+          ]
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pommel_dye",
+      "template": "pommel.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 65,
+      "offset": [
+        5,
+        5
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "offset": [
+            -1,
+            -1
+          ]
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ]
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "pommel_dye"
+    }
+  ]
+}

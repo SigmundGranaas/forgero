@@ -5,26 +5,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
-import com.sigmundgranaas.forgero.core.property.ActivePropertyType;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
-import com.sigmundgranaas.forgero.core.property.TargetTypes;
 import com.sigmundgranaas.forgero.core.property.active.BreakingDirection;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
-import com.sigmundgranaas.forgero.core.property.passive.PassivePropertyType;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 /**
  * POJO used for parsing all properties from JSON files.
  */
 public class PropertyPojo {
-	@SerializedName(value = "passiveProperties", alternate = {"passive", "passive_properties"})
-	public List<PropertyPojo.Passive> passiveProperties;
-	@SerializedName(value = "active")
-	public List<PropertyPojo.Active> active;
 	@SerializedName(value = "features")
 	public List<PropertyPojo.Feature> features;
 	@SerializedName("attributes")
@@ -45,15 +39,6 @@ public class PropertyPojo {
 		this.groupedAttributes = Collections.emptyList();
 	}
 
-	public static class Active {
-		public ActivePropertyType type;
-		public int depth;
-		public String tag;
-		public String description;
-		public BreakingDirection direction;
-		public String[] pattern;
-	}
-
 	public static class Attribute {
 		public int priority = 0;
 		public String id = Identifiers.EMPTY_IDENTIFIER;
@@ -61,11 +46,26 @@ public class PropertyPojo {
 		public CalculationOrder order = CalculationOrder.BASE;
 		public NumericOperation operation = NumericOperation.ADDITION;
 		public float value;
-		public PropertyPojo.Condition condition;
+		public JsonElement predicate;
 		public Category category = Category.UNDEFINED;
 		public Context context = Contexts.UNDEFINED;
 		public float max;
 		public float min;
+
+		@Override
+		public String toString() {
+			return "Attribute{" +
+					"priority=" + priority +
+					", id='" + id + '\'' +
+					", type='" + type + '\'' +
+					", order=" + order +
+					", operation=" + operation +
+					", value=" + value +
+					", predicate=" + predicate +
+					", category=" + category +
+					", context=" + context +
+					'}';
+		}
 	}
 
 	public static class Feature {
@@ -79,15 +79,5 @@ public class PropertyPojo {
 		public BreakingDirection direction;
 		public String[] pattern;
 		public String description;
-	}
-
-	public static class Passive {
-		public PassivePropertyType type;
-		public String tag;
-	}
-
-	public static class Condition {
-		public TargetTypes target;
-		public List<String> tag;
 	}
 }

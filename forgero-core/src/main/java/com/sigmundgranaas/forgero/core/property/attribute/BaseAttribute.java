@@ -4,15 +4,17 @@ import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
-import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base attribute class. This class is opinionated when it comes to how some attributes should be calculated, like MINING level.
@@ -21,11 +23,14 @@ import com.sigmundgranaas.forgero.core.property.Target;
 public record BaseAttribute(String attribute,
                             NumericOperation operation,
                             float value,
-                            Predicate<Target> condition,
+                            Matchable condition,
                             CalculationOrder order, int level, Category category, String id,
                             List<String> targets,
                             String targetType,
-                            int priority, Context context) implements Attribute {
+                            int priority,
+                            Context context,
+                            @Nullable
+                            PropertyContainer attributeSource) implements Attribute {
 
 	@Override
 	public CalculationOrder getOrder() {
@@ -50,7 +55,7 @@ public record BaseAttribute(String attribute,
 	}
 
 	@Override
-	public Predicate<Target> getCondition() {
+	public Matchable getPredicate() {
 		return condition;
 	}
 
@@ -106,15 +111,15 @@ public record BaseAttribute(String attribute,
 		return getAttributeType();
 	}
 
-	@Override
-	public boolean applyCondition(Target target) {
-		return condition.test(target);
-	}
-
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority, context);
+	}
+
+	@Override
+	public Optional<PropertyContainer> source() {
+		return Optional.ofNullable(attributeSource());
 	}
 
 	@Override

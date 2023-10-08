@@ -1,6 +1,7 @@
 {
   "type": "MINERAL",
   "name": "nether_ruby",
+  "parent": "mineral_base",
   "container": {
     "type": "HOST",
     "id": "betternether:nether_ruby"
@@ -14,44 +15,31 @@
         "attributes": [
           {
             "type": "RARITY",
-            "operation": "ADDITION",
             "value": 110
           },
           {
             "type": "MINING_LEVEL",
-            "operation": "ADDITION",
             "value": 4
           },
           {
             "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "value": 9.5
+            "value": 10
           },
           {
             "type": "DURABILITY",
-            "operation": "ADDITION",
-            "value": 1900
+            "value": 2300
           },
           {
             "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
             "value": 5
           },
           {
             "type": "ARMOR",
-            "operation": "ADDITION",
             "value": 5
           },
           {
             "type": "WEIGHT",
-            "order": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 20
-          },
-          {
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "value": 0
+            "value": 40
           }
         ]
       },
@@ -63,13 +51,21 @@
             "type": "RARITY",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 50
+            "value": 55
+          },
+          {
+            "id": "mineral-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
           },
           {
             "type": "MINING_SPEED",
             "operation": "MULTIPLICATION",
             "category": "OFFENSIVE",
-            "value": 3.5
+            "value": 5
           },
           {
             "type": "ATTACK_DAMAGE",
@@ -80,14 +76,14 @@
           {
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 700
+            "category": "UTILITY",
+            "value": 1150
           },
           {
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 400
+            "category": "OFFENSIVE",
+            "value": 1150
           }
         ]
       }

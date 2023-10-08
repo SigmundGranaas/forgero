@@ -22,6 +22,14 @@ public class DefaultMatcher extends PredicateMatcher {
 		super(criteria, predicateFactory);
 	}
 
+	@Override
+	public boolean testDynamic(Matchable match, MatchContext context) {
+		var dynamicPredicates = getDynamicPredicates();
+		return new CompositeStrategy(dynamicPredicates).test(match, context)
+				|| dynamicPredicates.stream().allMatch(pred -> pred.test(match, context))
+				|| new SlotStrategy(dynamicPredicates).test(match, context);
+	}
+
 	/**
 	 * Tests the Matchable object against the specified set of criteria.
 	 * It checks whether the Matchable object matches with CompositeStrategy,
@@ -36,5 +44,10 @@ public class DefaultMatcher extends PredicateMatcher {
 		return new CompositeStrategy(getPredicates()).test(match, context)
 				|| predicates.stream().allMatch(pred -> pred.test(match, context))
 				|| new SlotStrategy(getPredicates()).test(match, context);
+	}
+
+	@Override
+	public boolean isDynamic() {
+		return getPredicates().stream().anyMatch(Matchable::isDynamic);
 	}
 }
