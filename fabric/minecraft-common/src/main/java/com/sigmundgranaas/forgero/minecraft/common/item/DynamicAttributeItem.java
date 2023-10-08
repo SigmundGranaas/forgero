@@ -12,6 +12,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.Target;
@@ -169,7 +170,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	}
 
 	default int getItemBarStep(ItemStack stack) {
-		return Math.round(13.0F - (float) stack.getDamage() * 13.0F / (float) getDurability(stack));
+		var durability = getDurability(stack);
+		return durability == 0 ? 0 : Math.round(13.0F - (float) stack.getDamage() * 13.0F / (float) durability);
 	}
 
 	default int getDurabilityColor(ItemStack stack) {
