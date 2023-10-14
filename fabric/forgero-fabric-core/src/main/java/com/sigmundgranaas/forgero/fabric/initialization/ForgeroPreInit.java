@@ -107,6 +107,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, FireHandler.TYPE, FireHandler.BUILDER);
+
 
 		// On entity tick
 		HandlerBuilderRegistry.register(EntityHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
@@ -116,7 +118,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// Block selectors
 
 		// Hardness calculators
-		
+
 	}
 
 	private void soulLevelPropertyReloader() {

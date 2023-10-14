@@ -3,10 +3,14 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -27,9 +31,9 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class FireHandler implements OnHitHandler {
+public class FireHandler implements OnHitHandler, OnHitBlockHandler {
 	public static final String TYPE = "minecraft:fire";
-	public static final JsonBuilder<OnHitHandler> BUILDER = HandlerBuilder.fromObject(OnHitHandler.KEY.clazz(), FireHandler::fromJson);
+	public static final JsonBuilder<FireHandler> BUILDER = HandlerBuilder.fromObject(FireHandler.class, FireHandler::fromJson);
 
 	private final String target;
 	private final int duration;
@@ -69,6 +73,26 @@ public class FireHandler implements OnHitHandler {
 	public void onHit(Entity source, World world, Entity targetEntity) {
 		if ("minecraft:targeted_entity".equals(target)) {
 			targetEntity.setOnFireFor(duration);
+		}
+	}
+
+	/**
+	 * This method is triggered upon hitting a block.
+	 * It checks the target specification and sets the entity on fire if conditions are met.
+	 *
+	 * @param source The source entity.
+	 * @param world  The world where the event occurred.
+	 * @param pos    The targeted entity.
+	 */
+	@Override
+	public void onHit(Entity source, World world, BlockPos pos) {
+		if ("minecraft:targeted_block".equals(target)) {
+			// Get the block state at the targeted position
+			BlockState blockState = world.getBlockState(pos);
+
+			if (blockState.getMaterial().isBurnable()) {
+				world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 3);
+			}
 		}
 	}
 }
