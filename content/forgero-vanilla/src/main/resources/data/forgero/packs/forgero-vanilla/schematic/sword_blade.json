@@ -72,6 +72,18 @@
         "operation": "MULTIPLICATION",
         "value": 1
       }
+    ],
+    "features": [
+      {
+        "type": "minecraft:entity_tick",
+        "handler": {
+          "type": "forgero:magnetic",
+          "power": 1.5,
+          "distance": 5,
+          "filter": "minecraft:item",
+          "pushAway": true
+        }
+      }
     ]
   },
   "custom_data": {

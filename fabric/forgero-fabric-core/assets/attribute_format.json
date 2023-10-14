@@ -88,6 +88,23 @@
         "type": "forgero:chance",
         "chance": 0.2
       }
+    },
+    {
+      "type": "forgero:block_breaking",
+      "selection": {
+        "type": "forgero:radius",
+        "filter": {
+          "type": "forgero:same_block"
+        },
+        "depth": 3
+      },
+      "hardness_calculation": {
+        "type": "forgero:combined_hardness"
+      },
+      "predicate": {
+        "type": "minecraft:block",
+        "tag": "forgero:vein_mining_ores"
+      }
     }
   ]
 }

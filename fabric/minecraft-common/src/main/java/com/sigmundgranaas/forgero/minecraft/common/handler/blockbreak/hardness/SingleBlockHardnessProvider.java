@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.hardness;
+package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;

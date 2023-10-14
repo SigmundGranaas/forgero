@@ -1,9 +1,16 @@
 package com.sigmundgranaas.forgerofabric.gametest;
 
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelector;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.PatternSelector;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.RadiusVeinSelector;
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isBreakableBlock;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.test.GameTest;
@@ -12,13 +19,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isBreakableBlock;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 @SuppressWarnings("unused")
 public class BlockSelectionTest {

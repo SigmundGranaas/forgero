@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.hardness;
+package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness;
 
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;

@@ -24,7 +24,7 @@ public class LumaHandler {
 		int value = container.stream()
 				.features()
 				.filter(feature -> feature.type().equals(EMISSIVE_TYPE))
-				.map(PropertyData::getValue)
+				.map(data -> 1f)
 				.reduce(0f, Float::sum)
 				.intValue();
 		return Math.min(value, 16);

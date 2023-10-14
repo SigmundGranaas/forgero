@@ -8,16 +8,17 @@ import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ResourceRegistry;
+import com.sigmundgranaas.forgero.core.property.v2.feature.ConstantFeature;
 import com.sigmundgranaas.forgero.core.type.Type;
 
 public class Conditions implements ResourceRegistry<LootCondition> {
 
 	public static final Conditions INSTANCE = new Conditions(new HashMap<>());
-	public static String BROKEN_TYPE_KEY = "BROKEN";
-	public static String UNBREAKABLE_TYPE_KEY = "UNBREAKABLE";
-
-	public static NamedCondition BROKEN = new NamedCondition("broken", Forgero.NAMESPACE, List.of(PropertyData.builder().type(BROKEN_TYPE_KEY).build()));
-	public static SimpleCondition UNBREAKABLE = new SimpleCondition(List.of(PropertyData.builder().type(UNBREAKABLE_TYPE_KEY).build()));
+	public static String BROKEN_TYPE_KEY = "forgero:broken";
+	public static String UNBREAKABLE_TYPE_KEY = "forgero:unbreakable";
+	
+	public static NamedCondition BROKEN = new NamedCondition("broken", Forgero.NAMESPACE, List.of(new ConstantFeature(BROKEN_TYPE_KEY)));
+	public static SimpleCondition UNBREAKABLE = new SimpleCondition(List.of(new ConstantFeature(UNBREAKABLE_TYPE_KEY)));
 	private final Map<String, LootCondition> conditionMap;
 
 	public Conditions(Map<String, LootCondition> conditionMap) {

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
+package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
 import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.*;
 
@@ -7,6 +7,11 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
@@ -20,7 +25,12 @@ import net.minecraft.world.BlockView;
  * <p>
  * Can be used to filter blocks based on if a player can harvest the block, or if the block is in a specific tag
  */
+@Getter
+@Accessors(fluent = true)
 public class FilteredSelector implements BlockSelector {
+	public static final String TYPE = "minecraft:explosion";
+	public static final JsonBuilder<FilteredSelector> BUILDER = HandlerBuilder.fromObject(FilteredSelector.class, FilteredSelector::fromJson);
+
 	private final BlockSelector blockFinder;
 	private final Predicate<BlockPos> blockFilter;
 
@@ -28,6 +38,17 @@ public class FilteredSelector implements BlockSelector {
 		this.blockFinder = blockFinder;
 		this.blockFilter = blockFilter;
 	}
+
+	/**
+	 * Constructs an {@link FilteredSelector} from a JSON object.
+	 *
+	 * @param json The JSON object.
+	 * @return A new instance of {@link FilteredSelector}.
+	 */
+	public static FilteredSelector fromJson(JsonObject json) {
+		return null;
+	}
+
 
 	/**
 	 * @return BlockSelector that filters out blocks that the player cannot harvest
@@ -67,13 +88,13 @@ public class FilteredSelector implements BlockSelector {
 	/**
 	 * Selects blocks based on the block selector and the block filter
 	 *
-	 * @param blockPos Origin for the block selector
+	 * @param rootPos Origin for the block selector
 	 * @return A filtered set of blocks
 	 */
 	@Override
 	@NotNull
-	public Set<BlockPos> select(BlockPos blockPos) {
-		return blockFinder.select(blockPos)
+	public Set<BlockPos> select(BlockPos rootPos) {
+		return blockFinder.select(rootPos)
 				.stream()
 				.filter(blockFilter)
 				.collect(Collectors.toUnmodifiableSet());

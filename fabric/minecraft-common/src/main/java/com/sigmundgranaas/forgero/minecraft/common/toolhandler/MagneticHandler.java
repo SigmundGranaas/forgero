@@ -67,8 +67,9 @@ public class MagneticHandler implements RunnableHandler {
 
 	public static RunnableHandler createMagneticHandler(PropertyContainer container, Entity rootEntity) {
 		var magnetic = container.stream().features().filter(prop -> prop.type().equals(MAGNETIC_TYPE)).toList();
-		var value = magnetic.stream().map(PropertyData::getValue).reduce(0f, Float::sum);
-		Optional<Integer> level = magnetic.stream().map(PropertyData::getLevel).reduce(Integer::sum);
+		var value = magnetic.stream().map(data -> 1f)
+				.reduce(0f, Float::sum);
+		Optional<Integer> level = magnetic.stream().map(data -> 1).findFirst();
 		return level.map(l -> (RunnableHandler) new MagneticHandler(rootEntity, value, l + 3)).orElse(RunnableHandler.EMPTY);
 	}
 

@@ -25,9 +25,7 @@ public class EffectivenessHandler {
 			return container.stream()
 					.features()
 					.filter(feature -> feature.type().equals(EFFECTIVENESS_KEY))
-					.map(PropertyData::getTags)
-					.flatMap(List::stream)
-					.map(tag -> TagKey.of(Registry.BLOCK_KEY, new Identifier(tag)))
+					.map(tag -> TagKey.of(Registry.BLOCK_KEY, new Identifier("minecraft:wood")))
 					.toList();
 		}
 		return Collections.emptyList();

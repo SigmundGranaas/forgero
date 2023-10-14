@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
+package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
 import java.util.HashSet;
 import java.util.List;

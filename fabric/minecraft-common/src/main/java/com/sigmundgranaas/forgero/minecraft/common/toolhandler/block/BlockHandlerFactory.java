@@ -1,18 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.canHarvest;
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isInTags;
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler.*;
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler.BLOCK_BREAKING_KEYS;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.hardness.HardnessProvider;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.HardnessProvider;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -61,37 +58,11 @@ public class BlockHandlerFactory {
 	 * @return the handler for the given block position and the properties of the tool
 	 */
 	public ToolBlockHandler createHandler(BlockPos pos, CacheAbleKey key) {
-		PropertyData data = data();
-		BlockSelector selector = selector(data);
+		Object data = null;
+		BlockSelector selector = null;
 		HardnessProvider hardness = HardnessProvider.of(view, player, selector);
 		return new ToolBlockHandler(pos, selector.select(pos), hardness.getHardnessAt(pos), key);
 	}
 
-	private PropertyData data() {
-		var blockMiningData = container.stream().features().filter(data -> BLOCK_BREAKING_KEYS.contains(data.type())).toList();
-		return blockMiningData.get(0);
-	}
 
-	/**
-	 * Creates a {@link BlockSelector} based on the properties of the tool.
-	 *
-	 * @param data the property data used to determine which selector to create.
-	 * @return A selector for all valid blocks.
-	 */
-	private BlockSelector selector(PropertyData data) {
-		BlockSelector selector = BlockSelector.EMPTY;
-		if (data.getPattern() != null && data.isOfType(BLOCK_BREAKING_PATTERN_KEY)) {
-			var patternSelector = BlockSelector.of(Arrays.asList(data.getPattern()), player);
-			selector = patternSelector.filter(canHarvest(view, player));
-			if (!data.getTags().isEmpty()) {
-				selector = selector.filter(isInTags(view, data.getTags()));
-			}
-		} else if (data.isOfType(VEIN_MINING_KEY) && data.getTags() != null) {
-			selector = BlockSelector.of((int) data.getValue(), view, player, data.getTags());
-		} else if (data.isOfType(COLUMN_MINING_KEY)) {
-			selector = BlockSelector.of((int) data.getValue(), data.getLevel(), view, player, data.getTags());
-		}
-
-		return selector;
-	}
 }

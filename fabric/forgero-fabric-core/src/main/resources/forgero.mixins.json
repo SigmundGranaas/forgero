@@ -17,6 +17,7 @@
     "LivingEntityUndyingMixin",
     "LootTableForgeroLootMixin",
     "MiningToolItemMixin",
+    "OnEntityHitMixin",
     "PiglinBrainMixin",
     "PlayerCritChanceMixin",
     "PlayerEntityAttackMixin",

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector;
+package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
 import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.getBlockPositionsAround;
 
@@ -7,18 +7,24 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.google.gson.JsonObject;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.util.math.BlockPos;
 
 /**
- * BlockSelector that selects chainedBlocks in a radius around the root position.
+ * BlockSelector that selects chained blocks in a radius around the root position.
  * <p>
  * Will exclude blocks that are not valid, and try to find valid diagonal blocks.
  *
  * @author Steveplays28
  */
+@Getter
+@Accessors(fluent = true)
 public class RadiusVeinSelector implements BlockSelector {
+	public static final String TYPE = "forgero:radius";
 	private final int depth;
 	private Predicate<BlockPos> isBlockValid;
 	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
@@ -35,6 +41,17 @@ public class RadiusVeinSelector implements BlockSelector {
 		this.depth = depth;
 		this.isBlockValid = isBlockValid;
 		this.rootPosValidator = rootPosValidator;
+	}
+
+	/**
+	 * Constructs an {@link RadiusVeinSelector} from a JSON object.
+	 *
+	 * @param json The JSON object.
+	 * @return A new instance of {@link RadiusVeinSelector}.
+	 */
+	public static RadiusVeinSelector fromJson(JsonObject json) {
+		int radius = json.get("depth").getAsInt();
+		return new RadiusVeinSelector(radius, (pos) -> true);
 	}
 
 	/**

@@ -24,7 +24,7 @@ public class AdditionalHealthHandler {
 		return container.stream()
 				.features()
 				.filter(feature -> feature.type().equals(HEALTH_ADDITION_TYPE))
-				.map(PropertyData::getValue)
+				.map(data -> 1f)
 				.reduce(0f, Float::sum)
 				.intValue();
 	}

@@ -1,11 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.v2.feature;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.property.Property;
 
-public interface Feature {
+public interface Feature extends Property {
 	String type();
-
-	default String id() {
-		return EMPTY_IDENTIFIER;
-	}
 }
