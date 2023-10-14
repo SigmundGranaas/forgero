@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.feature;
 
+import static com.sigmundgranaas.forgero.minecraft.common.handler.HandlerBuilder.buildHandlerFromJson;
+
+import java.util.List;
+
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateData;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
@@ -15,9 +19,9 @@ public class EntityTickFeature extends BasePredicateFeature implements EntityHan
 	public static final ClassKey<EntityTickFeature> KEY = new ClassKey<>(ENTITY_TICK_TYPE, EntityTickFeature.class);
 	public static final String HANDLER = "handler";
 	public static final FeatureBuilder<EntityTickFeature> BUILDER = FeatureBuilder.of(ENTITY_TICK_TYPE, EntityTickFeature::buildFromBase);
-	private final EntityHandler handler;
+	private final List<EntityHandler> handler;
 
-	public EntityTickFeature(BasePredicateData data, EntityHandler handler) {
+	public EntityTickFeature(BasePredicateData data, List<EntityHandler> handler) {
 		super(data);
 		this.handler = handler;
 		if (!data.type().equals(ENTITY_TICK_TYPE)) {
@@ -26,21 +30,12 @@ public class EntityTickFeature extends BasePredicateFeature implements EntityHan
 	}
 
 	private static EntityTickFeature buildFromBase(BasePredicateData data, JsonElement element) {
-		EntityHandler handler = DEFAULT;
-
-		if (element.isJsonObject() && element.getAsJsonObject().has(HANDLER)) {
-			var object = element.getAsJsonObject();
-			var handlerOpt = HandlerBuilder.DEFAULT.build(EntityHandler.KEY, object.get(HANDLER));
-			if (handlerOpt.isPresent()) {
-				handler = handlerOpt.get();
-			}
-		}
-
+		List<EntityHandler> handler = buildHandlerFromJson(element, HANDLER, obj -> HandlerBuilder.DEFAULT.build(EntityHandler.KEY, obj));
 		return new EntityTickFeature(data, handler);
 	}
 
 	@Override
 	public void handle(Entity entity) {
-		handler.handle(entity);
+		handler.forEach(sub -> sub.handle(entity));
 	}
 }

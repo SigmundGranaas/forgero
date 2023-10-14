@@ -1,17 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.feature;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import static com.sigmundgranaas.forgero.minecraft.common.handler.HandlerBuilder.buildHandlerFromJson;
 
-import com.google.gson.JsonArray;
+import java.util.List;
+
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateData;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.MultiOnHitHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
 
 import net.minecraft.entity.Entity;
@@ -22,9 +20,9 @@ public class OnHitEntityFeature extends BasePredicateFeature implements OnHitHan
 	public static final ClassKey<OnHitEntityFeature> KEY = new ClassKey<>(ON_HIT_TYPE, OnHitEntityFeature.class);
 	public static final String ON_HIT = "on_hit";
 	public static final FeatureBuilder<OnHitEntityFeature> BUILDER = FeatureBuilder.of(ON_HIT_TYPE, OnHitEntityFeature::buildFromBase);
-	private final OnHitHandler handler;
+	private final List<OnHitHandler> handler;
 
-	public OnHitEntityFeature(BasePredicateData data, OnHitHandler handler) {
+	public OnHitEntityFeature(BasePredicateData data, List<OnHitHandler> handler) {
 		super(data);
 		this.handler = handler;
 		if (!data.type().equals(ON_HIT_TYPE)) {
@@ -33,34 +31,8 @@ public class OnHitEntityFeature extends BasePredicateFeature implements OnHitHan
 	}
 
 	private static OnHitEntityFeature buildFromBase(BasePredicateData data, JsonElement element) {
-		OnHitHandler handler = DEFAULT;
-
-		if (element.isJsonObject()) {
-			JsonObject object = element.getAsJsonObject();
-			if (object.has(ON_HIT) && object.get(ON_HIT).isJsonObject()) {
-				Optional<OnHitHandler> handlerOpt = tryBuild(object.get(ON_HIT).getAsJsonObject());
-				if (handlerOpt.isPresent()) {
-					handler = handlerOpt.get();
-				}
-			} else if (object.has(ON_HIT) && object.get(ON_HIT).isJsonArray()) {
-				JsonArray array = object.get(ON_HIT).getAsJsonArray();
-				ArrayList<OnHitHandler> handlers = new ArrayList<>();
-				for (int i = 0; i < array.size(); i++) {
-					JsonElement entry = array.get(i);
-					if (entry.isJsonObject()) {
-						tryBuild(entry.getAsJsonObject()).ifPresent(handlers::add);
-					}
-					handler = new MultiOnHitHandler(handlers);
-				}
-			}
-		}
-
-
+		List<OnHitHandler> handler = buildHandlerFromJson(element, ON_HIT, obj -> HandlerBuilder.DEFAULT.build(OnHitHandler.KEY, obj));
 		return new OnHitEntityFeature(data, handler);
-	}
-
-	private static Optional<OnHitHandler> tryBuild(JsonObject element) {
-		return HandlerBuilder.DEFAULT.build(OnHitHandler.KEY, element);
 	}
 
 	@Override
@@ -70,6 +42,6 @@ public class OnHitEntityFeature extends BasePredicateFeature implements OnHitHan
 
 	@Override
 	public void onHit(Entity root, World world, Entity target) {
-		handler.onHit(root, world, target);
+		handler.forEach(sub -> sub.onHit(root, world, target));
 	}
 }

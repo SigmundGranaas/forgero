@@ -7,10 +7,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface OnHitBlockHandler {
-	String type = "forgero:on_hit_block";
+	String type = "minecraft:on_hit_block";
 	ClassKey<OnHitBlockHandler> KEY = new ClassKey<>(type, OnHitBlockHandler.class);
 	OnHitBlockHandler DEFAULT = (Entity root, World world, BlockPos pos) -> {
 	};
 
 	void onHit(Entity root, World world, BlockPos pos);
+
 }

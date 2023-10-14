@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.feature;
 
+import static com.sigmundgranaas.forgero.minecraft.common.handler.HandlerBuilder.buildHandlerFromJson;
+
+import java.util.List;
+
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateData;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
@@ -17,9 +21,9 @@ public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBloc
 	public static final ClassKey<OnHitBlockFeature> KEY = new ClassKey<>(ON_HIT_TYPE, OnHitBlockFeature.class);
 	public static final String ON_HIT = "on_hit";
 	public static final FeatureBuilder<OnHitBlockFeature> BUILDER = FeatureBuilder.of(ON_HIT_TYPE, OnHitBlockFeature::buildFromBase);
-	private final OnHitBlockHandler handler;
+	private final List<OnHitBlockHandler> handler;
 
-	public OnHitBlockFeature(BasePredicateData data, OnHitBlockHandler handler) {
+	public OnHitBlockFeature(BasePredicateData data, List<OnHitBlockHandler> handler) {
 		super(data);
 		this.handler = handler;
 		if (!data.type().equals(ON_HIT_TYPE)) {
@@ -28,16 +32,7 @@ public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBloc
 	}
 
 	private static OnHitBlockFeature buildFromBase(BasePredicateData data, JsonElement element) {
-		OnHitBlockHandler handler = DEFAULT;
-
-		if (element.isJsonObject() && element.getAsJsonObject().has(ON_HIT)) {
-			var object = element.getAsJsonObject();
-			var handlerOpt = HandlerBuilder.DEFAULT.build(OnHitBlockHandler.KEY, object.get(ON_HIT));
-			if (handlerOpt.isPresent()) {
-				handler = handlerOpt.get();
-			}
-		}
-
+		List<OnHitBlockHandler> handler = buildHandlerFromJson(element, ON_HIT, obj -> HandlerBuilder.DEFAULT.build(OnHitBlockHandler.KEY, obj));
 		return new OnHitBlockFeature(data, handler);
 	}
 
@@ -48,6 +43,6 @@ public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBloc
 
 	@Override
 	public void onHit(Entity root, World world, BlockPos target) {
-		handler.onHit(root, world, target);
+		handler.forEach(sub -> sub.onHit(root, world, target));
 	}
 }

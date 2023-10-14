@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 @FunctionalInterface
 public interface OnHitHandler {
-	String type = "forgero:on_hit";
+	String type = "minecraft:on_hit";
 	ClassKey<OnHitHandler> KEY = new ClassKey<>(type, OnHitHandler.class);
 	OnHitHandler DEFAULT = (Entity root, World world, Entity target) -> {
 	};

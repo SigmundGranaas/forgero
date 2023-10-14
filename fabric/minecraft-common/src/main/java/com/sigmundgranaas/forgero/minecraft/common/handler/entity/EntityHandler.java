@@ -8,7 +8,9 @@ import net.minecraft.entity.Entity;
 public interface EntityHandler {
 	EntityHandler DEFAULT = (entity) -> {
 	};
-	ClassKey<EntityHandler> KEY = new ClassKey<>("forgero:entity_handler", EntityHandler.class);
+	ClassKey<EntityHandler> KEY = new ClassKey<>("minecraft:entity_handler", EntityHandler.class);
 
 	void handle(Entity entity);
+
+
 }
