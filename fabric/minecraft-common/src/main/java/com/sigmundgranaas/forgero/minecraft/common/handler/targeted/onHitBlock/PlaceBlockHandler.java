@@ -30,9 +30,9 @@ import net.minecraft.world.World;
  * <p>Example JSON configuration:
  * <pre>
  * {
- *   "type": "forgero:on_hit_block",
- *   "on_hit_block": {
- *     "type": "forgero:place_block",
+ *   "type": "minecraft:on_hit_block",
+ *   "on_hit": {
+ *     "type": "minecraft:place_block",
  *     "block": "minecraft:torch",
  *     "state": {
  *         "facing": "north"
@@ -46,7 +46,7 @@ import net.minecraft.world.World;
 @Accessors(fluent = true)
 public class PlaceBlockHandler implements OnHitBlockHandler {
 
-	public static final String TYPE = "forgero:place_block";
+	public static final String TYPE = "minecraft:place_block";
 	public static final JsonBuilder<OnHitBlockHandler> BUILDER = HandlerBuilder.fromObject(KEY.clazz(), PlaceBlockHandler::fromJson);
 
 	private final Block block;
