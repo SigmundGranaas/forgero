@@ -31,6 +31,8 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.ParticleHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SoundHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SummonHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
@@ -101,6 +103,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
 
 		//On hit block
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
@@ -108,13 +112,16 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, FireHandler.TYPE, FireHandler.BUILDER);
-
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
 
 		// On entity tick
 		HandlerBuilderRegistry.register(EntityHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
-
+		HandlerBuilderRegistry.register(EntityHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
+		
 		// Block selectors
 
 		// Hardness calculators
