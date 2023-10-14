@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.v2.feature;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
@@ -12,7 +14,7 @@ public abstract class BasePredicateFeature implements Feature, Matchable {
 	protected final String type;
 	protected final Matchable predicate;
 	protected final String title;
-	protected final String description;
+	protected final List<String> description;
 
 	public BasePredicateFeature(BasePredicateData data) {
 		this.id = data.id();
@@ -20,7 +22,6 @@ public abstract class BasePredicateFeature implements Feature, Matchable {
 		this.predicate = data.predicate();
 		this.title = data.title();
 		this.description = data.description();
-
 	}
 
 	@Override

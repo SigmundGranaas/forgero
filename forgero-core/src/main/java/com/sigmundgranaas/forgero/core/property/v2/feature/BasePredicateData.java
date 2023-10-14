@@ -2,10 +2,13 @@ package com.sigmundgranaas.forgero.core.property.v2.feature;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -13,10 +16,12 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 public record BasePredicateData(String id,
                                 String type,
                                 Matchable predicate,
-                                @Nullable
                                 String title,
-                                @Nullable
-                                String description) {
+                                List<String> description) {
+
+	private static final Type typeOfList = new TypeToken<List<String>>() {
+	}.getType();
+	private static final Gson gson = new Gson();
 
 	public static Optional<BasePredicateData> of(JsonElement element) {
 		if (element.isJsonObject()) {
@@ -26,7 +31,7 @@ public record BasePredicateData(String id,
 				var predicate = new PredicateFactory().create(element);
 				String id = EMPTY_IDENTIFIER;
 				String title = EMPTY_IDENTIFIER;
-				String description = EMPTY_IDENTIFIER;
+				List<String> description = Collections.emptyList();
 				if (object.has("id")) {
 					id = object.get("id").getAsString();
 				}
@@ -34,7 +39,11 @@ public record BasePredicateData(String id,
 					title = object.get("title").getAsString();
 				}
 				if (object.has("description")) {
-					description = object.get("description").getAsString();
+					if (object.get("description").isJsonArray()) {
+						description = gson.fromJson(object.get("description").getAsJsonArray(), typeOfList);
+					} else {
+						description = List.of(object.get("description").getAsString());
+					}
 				}
 				return Optional.of(new BasePredicateData(id, type, predicate, title, description));
 			}

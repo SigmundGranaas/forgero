@@ -100,12 +100,15 @@ public class FeatureSectionWriter extends SectionWriter {
 					.append(Text.translatable(feature.title()))
 					.formatted(helper.neutral());
 			entries.add(title);
-			if (!feature.description().equals(EMPTY_IDENTIFIER)) {
-				Text description = helper.writeBase()
-						.append(" ")
-						.append(Text.translatable(feature.description()))
-						.formatted(helper.base());
-				entries.add(description);
+			if (!feature.description().isEmpty()) {
+				feature.description().stream()
+						.map(item ->
+								helper.writeBase()
+										.append(" ")
+										.append(Text.translatable(item))
+										.formatted(helper.base())
+						)
+						.forEach(entries::add);
 			}
 			return entries;
 		}

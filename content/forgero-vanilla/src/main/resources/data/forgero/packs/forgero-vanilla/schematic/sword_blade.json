@@ -83,7 +83,12 @@
           "filter": "minecraft:item"
         },
         "title": "feature.forgero.magnetic.title",
-        "description": "feature.forgero.magnetic.description"
+        "description": [
+          "feature.forgero.magnetic.description1",
+          "feature.forgero.magnetic.description2",
+          "feature.forgero.magnetic.description3",
+          "feature.forgero.magnetic.description4"
+        ]
       }
     ]
   },

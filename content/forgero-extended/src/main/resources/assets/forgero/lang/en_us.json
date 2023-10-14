@@ -99,6 +99,9 @@
   "item.forgero.constantan": "Constantan",
   "item.forgero.therrassium": "Therrassium",
   "feature.forgero.magnetic.title": "Magnetic",
-  "feature.forgero.magnetic.description": "Draws items towards you"
+  "feature.forgero.magnetic.description1": "Draws items towards you",
+  "feature.forgero.magnetic.description2": "Because more",
+  "feature.forgero.magnetic.description3": "lines are",
+  "feature.forgero.magnetic.description4": "COOOOOOOL"
 }
 
