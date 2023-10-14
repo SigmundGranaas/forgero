@@ -59,9 +59,16 @@ public class FeatureSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
+		TooltipConfiguration featureConfig;
+		if (!configuration.hideSectionTitle()) {
+			featureConfig = configuration.baseIndent(1);
+
+		} else {
+			featureConfig = configuration;
+		}
 		return container.stream()
 				.features()
-				.map(feature -> BaseFeatureWriter.of(feature, new WriterHelper(configuration)))
+				.map(feature -> BaseFeatureWriter.of(feature, new WriterHelper(featureConfig)))
 				.flatMap(Optional::stream)
 				.map(BaseFeatureWriter::write)
 				.flatMap(List::stream)
