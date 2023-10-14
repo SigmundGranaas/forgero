@@ -80,9 +80,10 @@
           "type": "forgero:magnetic",
           "power": 1.5,
           "distance": 5,
-          "filter": "minecraft:item",
-          "pushAway": true
-        }
+          "filter": "minecraft:item"
+        },
+        "title": "feature.forgero.magnetic.title",
+        "description": "feature.forgero.magnetic.description"
       }
     ]
   },

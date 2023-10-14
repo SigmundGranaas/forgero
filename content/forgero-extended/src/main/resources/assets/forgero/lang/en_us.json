@@ -97,6 +97,8 @@
   "item.forgero.titanium": "Titanium",
   "item.forgero.titanium_gold": "Titanium Gold",
   "item.forgero.constantan": "Constantan",
-  "item.forgero.therrassium": "Therrassium"
+  "item.forgero.therrassium": "Therrassium",
+  "feature.forgero.magnetic.title": "Magnetic",
+  "feature.forgero.magnetic.description": "Draws item towards you"
 }
 
