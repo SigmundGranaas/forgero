@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 public class BlockBreakFeature extends BasePredicateFeature implements BlockBreakHandler {
-	public static final String BLOCK_BREAK_TYPE = "forgero:block_breaking";
+	public static final String BLOCK_BREAK_TYPE = "minecraft:block_breaking";
 	public static final ClassKey<BlockBreakFeature> KEY = new ClassKey<>(BLOCK_BREAK_TYPE, BlockBreakFeature.class);
 	public static final String SELECTOR = "selector";
 	public static final String HARDNESS = "hardness";

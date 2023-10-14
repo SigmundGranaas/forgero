@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBlockHandler {
-	public static final String ON_HIT_TYPE = "forgero:on_hit_block";
+	public static final String ON_HIT_TYPE = "minecraft:on_hit_block";
 	public static final ClassKey<OnHitBlockFeature> KEY = new ClassKey<>(ON_HIT_TYPE, OnHitBlockFeature.class);
 	public static final String ON_HIT = "on_hit";
 	public static final FeatureBuilder<OnHitBlockFeature> BUILDER = FeatureBuilder.of(ON_HIT_TYPE, OnHitBlockFeature::buildFromBase);

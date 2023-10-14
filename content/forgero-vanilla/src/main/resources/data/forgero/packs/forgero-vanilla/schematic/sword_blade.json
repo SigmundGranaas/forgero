@@ -75,14 +75,12 @@
     ],
     "features": [
       {
-        "type": "minecraft:entity_tick",
-        "handler": {
-          "type": "forgero:magnetic",
-          "power": 1.5,
-          "distance": 5,
-          "filter": "minecraft:item"
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "power": 5
         },
-        "title": "feature.forgero.magnetic.title",
+        "title": "feature.forgero.boom_bang_bang.title",
         "description": [
           "feature.forgero.magnetic.description1",
           "feature.forgero.magnetic.description2",

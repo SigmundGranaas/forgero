@@ -24,7 +24,6 @@ import net.minecraft.world.explosion.Explosion;
  *   "on_hit": {
  *     "type": "minecraft:explosion",
  *     "target": "minecraft:targeted_entity",
- *     "radius": 5,
  *     "power": 3
  *   }
  * }
@@ -37,19 +36,16 @@ public class ExplosionHandler implements OnHitHandler, OnHitBlockHandler {
 	public static final String TYPE = "minecraft:explosion";
 	public static final JsonBuilder<ExplosionHandler> BUILDER = HandlerBuilder.fromObject(ExplosionHandler.class, ExplosionHandler::fromJson);
 
-	private final int radius;
 	private final float power;
 	private final String target;
 
 	/**
 	 * Constructs a new {@link ExplosionHandler} with the specified properties.
 	 *
-	 * @param radius The radius of the explosion effect.
 	 * @param power  The power of the explosion effect.
 	 * @param target The target entity.
 	 */
-	public ExplosionHandler(int radius, float power, String target) {
-		this.radius = radius;
+	public ExplosionHandler(float power, String target) {
 		this.power = power;
 		this.target = target;
 	}
@@ -61,10 +57,12 @@ public class ExplosionHandler implements OnHitHandler, OnHitBlockHandler {
 	 * @return A new instance of {@link ExplosionHandler}.
 	 */
 	public static ExplosionHandler fromJson(JsonObject json) {
-		int radius = json.get("radius").getAsInt();
 		float power = json.get("power").getAsFloat();
-		String target = json.get("target").getAsString();
-		return new ExplosionHandler(radius, power, target);
+		String target = "minecraft:targeted_entity";
+		if (json.has("target")) {
+			target = json.get("target").getAsString();
+		}
+		return new ExplosionHandler(power, target);
 	}
 
 	/**

@@ -18,7 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class OnHitEntityFeature extends BasePredicateFeature implements OnHitHandler {
-	public static final String ON_HIT_TYPE = "forgero:on_hit";
+	public static final String ON_HIT_TYPE = "minecraft:on_hit";
 	public static final ClassKey<OnHitEntityFeature> KEY = new ClassKey<>(ON_HIT_TYPE, OnHitEntityFeature.class);
 	public static final String ON_HIT = "on_hit";
 	public static final FeatureBuilder<OnHitEntityFeature> BUILDER = FeatureBuilder.of(ON_HIT_TYPE, OnHitEntityFeature::buildFromBase);
