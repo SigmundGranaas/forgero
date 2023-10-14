@@ -17,7 +17,9 @@ public interface DynamicEffectiveNess {
 	}
 
 	default List<TagKey<Block>> effectiveBlocks(ItemStack stack) {
-		return StateService.INSTANCE.convert(stack).map(EffectivenessHandler::of).orElse(Collections.emptyList());
+		return StateService.INSTANCE.convert(stack)
+				.map(EffectivenessHandler::of)
+				.orElse(Collections.emptyList());
 	}
 
 	boolean isEffectiveOn(BlockState state, ItemStack stack);

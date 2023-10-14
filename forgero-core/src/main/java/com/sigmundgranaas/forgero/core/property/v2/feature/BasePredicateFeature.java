@@ -34,4 +34,8 @@ public abstract class BasePredicateFeature implements Feature, Matchable {
 	public boolean test(Matchable match, MatchContext context) {
 		return match.test(match, context);
 	}
+
+	public BasePredicateData data() {
+		return new BasePredicateData(id, type, predicate, title, description);
+	}
 }
