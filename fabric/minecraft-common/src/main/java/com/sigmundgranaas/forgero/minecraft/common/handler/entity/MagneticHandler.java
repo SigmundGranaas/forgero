@@ -2,20 +2,25 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -68,6 +73,8 @@ import net.minecraft.world.World;
 @Accessors(fluent = true)
 public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler {
 	public static final String TYPE = "forgero:magnetic";
+	public static final String MAGNETIC_POWER_ATTRIBUTE_TYPE = "forgero:magnetic_power";
+	public static final String MAGNETIC_RANGE_ATTRIBUTE_TYPE = "forgero:magnetic_range";
 	public static final JsonBuilder<MagneticHandler> BUILDER = HandlerBuilder.fromObject(MagneticHandler.class, MagneticHandler::fromJson);
 
 	private final float power;
@@ -123,24 +130,45 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		entityFilters.add(type);
 	}
 
+	public static Optional<? extends PropertyContainer> propertyHelper(Entity entity) {
+		if (entity instanceof LivingEntity living) {
+			return StateService.INSTANCE.convert(living.getMainHandStack());
+		}
+		return Optional.empty();
+	}
+
 	@Override
 	public void handle(Entity rootEntity) {
 		Vec3d rootVec = rootEntity.getPos();
-		List<Entity> nearbyEntities = getNearbyEntities(rootEntity, distance, entity -> entity instanceof ItemEntity);
-		pullEntities(rootVec, nearbyEntities);
+
+		float calculatedRange = propertyHelper(rootEntity)
+				.map(container -> Attribute.of(container, MAGNETIC_RANGE_ATTRIBUTE_TYPE))
+				.map(Attribute::asFloat)
+				.orElse(0f) + distance;
+		List<Entity> nearbyEntities = getNearbyEntities(rootEntity, calculatedRange, entity -> entity instanceof ItemEntity);
+		pullEntities(rootVec, nearbyEntities, rootEntity);
 	}
 
-	private List<Entity> getNearbyEntities(Entity rootEntity, int range, Predicate<Entity> predicate) {
+	private List<Entity> getNearbyEntities(Entity rootEntity, float range, Predicate<Entity> predicate) {
 		Vec3d rootVec = rootEntity.getPos();
 		BlockPos pos1 = new BlockPos(rootVec.x + range, rootVec.y + range, rootVec.z + range);
 		BlockPos pos2 = new BlockPos(rootVec.x - range, rootVec.y - range, rootVec.z - range);
 		return rootEntity.getWorld().getOtherEntities(rootEntity, new Box(pos1, pos2), predicate);
 	}
 
-	public void pullEntities(Vec3d rootVec, List<Entity> entities) {
+	public void pullEntities(Vec3d rootVec, List<Entity> entities, Entity rootEntity) {
 		for (Entity nearbyEntity : entities) {
 			double dist = nearbyEntity.getPos().distanceTo(rootVec);
-			Vec3d velocity = nearbyEntity.getPos().relativize(rootVec).normalize().multiply(0.02f * power);
+
+			float calculatedPower = propertyHelper(rootEntity)
+					.map(container -> Attribute.of(container, MAGNETIC_POWER_ATTRIBUTE_TYPE))
+					.map(Attribute::asFloat)
+					.orElse(0f) + power;
+
+			Vec3d velocity = nearbyEntity.getPos()
+					.relativize(rootVec)
+					.normalize()
+					.multiply(0.02f * calculatedPower);
 
 			if (pushAway) {
 				velocity = velocity.multiply(-1); // Reverse the direction

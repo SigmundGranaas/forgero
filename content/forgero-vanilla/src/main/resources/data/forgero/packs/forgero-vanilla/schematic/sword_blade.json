@@ -71,13 +71,20 @@
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
+      },
+      {
+        "id": "magnetic-range-test",
+        "type": "forgero:magnetic_power",
+        "value": 10
       }
     ],
     "features": [
       {
-        "type": "minecraft:on_hit",
-        "on_hit": {
-          "type": "minecraft:explosion",
+        "type": "minecraft:entity_tick",
+        "handler": {
+          "type": "forgero:magnetic",
+          "filter": "minecraft:item",
+          "distance": 5,
           "power": 5
         },
         "title": "feature.forgero.boom_bang_bang.title",
