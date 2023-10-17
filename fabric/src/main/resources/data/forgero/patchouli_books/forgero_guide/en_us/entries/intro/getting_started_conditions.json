@@ -34,7 +34,7 @@
     {
       "title": "Available Conditions",
       "type": "patchouli:text",
-      "text": "$(li) Carved: Increases attack speed $(li) Durable: Increases durability $(li) Hardened: Increases durability $(li) Honed: Increase attack damage $(li) Light: Increases attack speed and reduces durability $(li) Lucky: Increases luck"
+      "text": "$(li) Carved: Increases attack speed $(li) Durable: Increases durability $(li) Hardened: Increases durability $(li) Honed: Increases attack damage $(li) Light: Increases attack speed and reduces durability $(li) Lucky: Increases luck"
     },
     {
       "title": "Available Conditions",
@@ -44,7 +44,7 @@
     {
       "title": "Available Conditions",
       "type": "patchouli:text",
-      "text": "$(li) Rare: Increases rarity $(li) Sharp: Increases attack damage $(li) Sturdy: Increases durability $(li) Swift: Increases mining speed $(li) tempered: Increases durability $(li) tough: Increases armor"
+      "text": "$(li) Rare: Increases rarity $(li) Sharp: Increases attack damage $(li) Sturdy: Increases durability $(li) Swift: Increases mining speed $(li) Tempered: Increases durability $(li) Tough: Increases armor"
     },
     {
       "title": "Available Conditions",
