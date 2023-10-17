@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The crimson fungus, is only found in the nether, and has a distinctive red color. The trunk of this mushroom is actually hard enough to be used in construction of tools."
+      "text": "The crimson fungus is only found in the nether, identiefied by its a distinctive red color. The trunk of this mushroom is actually hard enough to be used in construction of tools."
     },
     {
       "type": "patchouli:spotlight",

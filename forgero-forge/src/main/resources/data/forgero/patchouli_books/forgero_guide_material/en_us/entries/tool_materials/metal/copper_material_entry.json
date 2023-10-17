@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Copper is a unique material, as it oxidises over time. It's more rare than iron, and not as hard, making it less useful, but still a good option"
+      "text": "Copper is a unique material, as it oxidises over time. It's more rare than iron, and not as hard, making it less useful but still a good option"
     },
     {
       "type": "patchouli:spotlight",

@@ -1,6 +1,6 @@
 {
   "name": "Forgero Reference",
-  "landing_text": "Welcome to Forgero $(playername), crafting awaits you.$(br)Forgero is all about crafting, customization and exploring. Sounds fun? Let's get started!",
+  "landing_text": "Welcome to Forgero, $(playername), crafting awaits you.$(br)Forgero is all about crafting, customization and exploring. Sounds fun? Let's get started!",
   "subtitle": "Forgero Complete Reference",
   "creative_tab": "toolparts",
   "version": "0.10.0",

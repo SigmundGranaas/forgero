@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The default axehead schematic creates a basic axe head. The look is very close the it's vanilla tool representation and exceeds at mining logs and other wooden materials."
+      "text": "The default axehead schematic creates a basic axe head. It looks very similar to its vanilla tool representation and excels at chopping logs and other wooden materials."
     },
     {
       "type": "patchouli:crafting",
