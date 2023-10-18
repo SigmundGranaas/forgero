@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -33,7 +34,7 @@ public class PatternSelector implements BlockSelector {
 
 	@NotNull
 	@Override
-	public Set<BlockPos> select(BlockPos rootPos) {
+	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
 		Set<BlockPos> blocks = new HashSet<>();
 		//iterate through the pattern list, and find all the blocks that match the pattern
 

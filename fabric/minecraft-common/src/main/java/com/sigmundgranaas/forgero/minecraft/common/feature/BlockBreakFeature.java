@@ -57,7 +57,7 @@ public class BlockBreakFeature extends BasePredicateFeature implements BlockBrea
 
 	@Override
 	public Set<BlockPos> selectBlocks(Entity source, BlockPos target) {
-		return selector.select(target);
+		return selector.select(target, source);
 	}
 
 	@Override

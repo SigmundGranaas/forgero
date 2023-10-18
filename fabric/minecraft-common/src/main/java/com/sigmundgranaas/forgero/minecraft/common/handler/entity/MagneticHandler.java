@@ -1,26 +1,25 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 
+import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.stream;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -41,7 +40,7 @@ import net.minecraft.world.World;
  * {
  *   "type": "forgero:magnetic",
  *   "power": 1.5,
- *   "distance": 5,
+ *   "range": 5,
  *   "filter": "minecraft:item",
  *   "pushAway": false
  * }
@@ -50,7 +49,7 @@ import net.minecraft.world.World;
  * {
  *   "type": "forgero:magnetic",
  *   "power": 2.0,
- *   "distance": 6,
+ *   "range": 6,
  *   "filter": "minecraft:zombie",
  *   "pushAway": true
  * }
@@ -59,7 +58,7 @@ import net.minecraft.world.World;
  * {
  *   "type": "forgero:magnetic",
  *   "power": 1.8,
- *   "distance": 7,
+ *   "range": 7,
  *   "filter": ["minecraft:item", "minecraft:skeleton", "minecraft:creeper"],
  *   "pushAway": false
  * }
@@ -77,8 +76,8 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	public static final String MAGNETIC_RANGE_ATTRIBUTE_TYPE = "forgero:magnetic_range";
 	public static final JsonBuilder<MagneticHandler> BUILDER = HandlerBuilder.fromObject(MagneticHandler.class, MagneticHandler::fromJson);
 
-	private final float power;
-	private final int distance;
+	private final Attribute power;
+	private final Attribute distance;
 	private final boolean pushAway; // True if pushing entities away, false if pulling them
 	private final List<EntityType<?>> entityFilters;
 
@@ -88,7 +87,7 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	 * @param power    The strength of the magnetic pull effect.
 	 * @param distance The range to search for items to pull.
 	 */
-	public MagneticHandler(float power, int distance, List<EntityType<?>> entityFilters, boolean pushAway) {
+	public MagneticHandler(Attribute power, Attribute distance, List<EntityType<?>> entityFilters, boolean pushAway) {
 		this.power = power;
 		this.distance = distance;
 		this.entityFilters = entityFilters;
@@ -102,8 +101,8 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	 * @return A new instance of {@link MagneticHandler}.
 	 */
 	public static MagneticHandler fromJson(JsonObject json) {
-		float power = json.get("power").getAsFloat();
-		int distance = json.get("distance").getAsInt();
+		float power = json.has("power") ? json.get("power").getAsFloat() : 0;
+		float distance = json.has("range") ? json.get("range").getAsFloat() : 0;
 		boolean pushAway = false;
 
 		if (json.has("pushAway")) {
@@ -122,7 +121,7 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 			}
 		}
 
-		return new MagneticHandler(power, distance, entityFilters, pushAway);
+		return new MagneticHandler(BaseAttribute.of(power, MAGNETIC_POWER_ATTRIBUTE_TYPE), BaseAttribute.of(distance, MAGNETIC_RANGE_ATTRIBUTE_TYPE), entityFilters, pushAway);
 	}
 
 	private static void addEntityTypeFromIdentifier(List<EntityType<?>> entityFilters, String identifier) {
@@ -130,22 +129,16 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		entityFilters.add(type);
 	}
 
-	public static Optional<? extends PropertyContainer> propertyHelper(Entity entity) {
-		if (entity instanceof LivingEntity living) {
-			return StateService.INSTANCE.convert(living.getMainHandStack());
-		}
-		return Optional.empty();
-	}
-
 	@Override
 	public void handle(Entity rootEntity) {
 		Vec3d rootVec = rootEntity.getPos();
 
-		float calculatedRange = propertyHelper(rootEntity)
-				.map(container -> Attribute.of(container, MAGNETIC_RANGE_ATTRIBUTE_TYPE))
-				.map(Attribute::asFloat)
-				.orElse(0f) + distance;
-		List<Entity> nearbyEntities = getNearbyEntities(rootEntity, calculatedRange, entity -> entity instanceof ItemEntity);
+		float range = stream(rootEntity)
+				.with(distance)
+				.compute(MAGNETIC_RANGE_ATTRIBUTE_TYPE)
+				.asFloat();
+
+		List<Entity> nearbyEntities = getNearbyEntities(rootEntity, range, entity -> entity instanceof ItemEntity);
 		pullEntities(rootVec, nearbyEntities, rootEntity);
 	}
 
@@ -157,18 +150,18 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	}
 
 	public void pullEntities(Vec3d rootVec, List<Entity> entities, Entity rootEntity) {
+		float computedPower = stream(rootEntity)
+				.with(power)
+				.compute(MAGNETIC_POWER_ATTRIBUTE_TYPE)
+				.asFloat();
+
 		for (Entity nearbyEntity : entities) {
 			double dist = nearbyEntity.getPos().distanceTo(rootVec);
-
-			float calculatedPower = propertyHelper(rootEntity)
-					.map(container -> Attribute.of(container, MAGNETIC_POWER_ATTRIBUTE_TYPE))
-					.map(Attribute::asFloat)
-					.orElse(0f) + power;
 
 			Vec3d velocity = nearbyEntity.getPos()
 					.relativize(rootVec)
 					.normalize()
-					.multiply(0.02f * calculatedPower);
+					.multiply(0.02f * computedPower);
 
 			if (pushAway) {
 				velocity = velocity.multiply(-1); // Reverse the direction

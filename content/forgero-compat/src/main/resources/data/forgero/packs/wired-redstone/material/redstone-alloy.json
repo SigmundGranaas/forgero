@@ -7,6 +7,12 @@
     "id": "wiredredstone:redstone_alloy_ingot"
   },
   "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
@@ -98,12 +104,6 @@
             "value": 110
           }
         ]
-      }
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 2
       }
     ]
   },

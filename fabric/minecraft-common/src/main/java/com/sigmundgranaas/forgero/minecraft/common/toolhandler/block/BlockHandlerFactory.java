@@ -61,8 +61,6 @@ public class BlockHandlerFactory {
 		Object data = null;
 		BlockSelector selector = null;
 		HardnessProvider hardness = HardnessProvider.of(view, player, selector);
-		return new ToolBlockHandler(pos, selector.select(pos), hardness.getHardnessAt(pos), key);
+		return new ToolBlockHandler(pos, selector.select(pos, null), hardness.getHardnessAt(pos), key);
 	}
-
-
 }

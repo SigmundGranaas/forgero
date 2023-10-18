@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -32,9 +33,9 @@ public class CachedSelector implements BlockSelector {
 	 */
 	@Override
 	@NotNull
-	public Set<BlockPos> select(BlockPos rootPos) {
+	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
 		if (cachedBlocks == null || cachedBlocks.isEmpty()) {
-			cachedBlocks = blockFinder.select(rootPos);
+			cachedBlocks = blockFinder.select(rootPos, source);
 		}
 		return cachedBlocks;
 	}

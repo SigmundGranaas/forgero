@@ -7,6 +7,12 @@
     "id": "minecraft:glowstone_dust"
   },
   "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
@@ -19,12 +25,6 @@
         "context": "UPGRADE",
         "attributes": [
         ]
-      }
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
       }
     ]
   },

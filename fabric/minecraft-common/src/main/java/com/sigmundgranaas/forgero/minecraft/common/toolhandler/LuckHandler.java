@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
@@ -11,11 +11,11 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
 public class LuckHandler {
 	public static String LUCK_TYPE = "LUCK";
 
-	public static Optional<Attribute> of(PropertyContainer container) {
+	public static Optional<ComputedAttribute> of(PropertyContainer container) {
 		var key = PropertyTargetCacheKey.of(container, LUCK_TYPE);
 		boolean has = ContainsFeatureCache.check(key);
 		if (has) {
-			return Optional.of(AttributeCache.computeIfAbsent(key, () -> Attribute.of(compute(container), LUCK_TYPE)));
+			return Optional.of(AttributeCache.computeIfAbsent(key, () -> ComputedAttribute.of(compute(container), LUCK_TYPE)));
 		}
 		return Optional.empty();
 	}

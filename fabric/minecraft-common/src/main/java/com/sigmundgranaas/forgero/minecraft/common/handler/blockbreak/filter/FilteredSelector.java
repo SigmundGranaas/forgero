@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
+package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter;
 
 import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.*;
 
@@ -10,11 +10,13 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
@@ -93,8 +95,8 @@ public class FilteredSelector implements BlockSelector {
 	 */
 	@Override
 	@NotNull
-	public Set<BlockPos> select(BlockPos rootPos) {
-		return blockFinder.select(rootPos)
+	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
+		return blockFinder.select(rootPos, source)
 				.stream()
 				.filter(blockFilter)
 				.collect(Collectors.toUnmodifiableSet());

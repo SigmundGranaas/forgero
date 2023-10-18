@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
 import com.sigmundgranaas.forgero.core.type.Type;
@@ -80,7 +81,7 @@ public class AttributeWriterHelper extends BaseWriter {
 		return o instanceof Matchable matchable && matchable.test(Type.SCHEMATIC);
 	}
 
-	public MutableText writeBaseNumber(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute) {
+	public MutableText writeBaseNumber(ComputedAttribute attribute) {
 		float value = attribute.asFloat();
 		if (attribute.key().equals(AttackSpeed.KEY) && isPartHead(container)) {
 			value = 4 + value;
@@ -179,7 +180,7 @@ public class AttributeWriterHelper extends BaseWriter {
 		return container.stream().getAttributes().filter(attribute -> attribute.type().equals(type));
 	}
 
-	public com.sigmundgranaas.forgero.core.property.v2.Attribute attributeOfType(String type) {
+	public ComputedAttribute attributeOfType(String type) {
 		return helper.apply(type);
 	}
 

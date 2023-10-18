@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
-public class ComputedAttribute implements Attribute {
+public class ComputedAttribute implements com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute {
 	private final String key;
 	private final PropertyContainer container;
 	private final Matchable target;
@@ -33,7 +32,7 @@ public class ComputedAttribute implements Attribute {
 		if (modifications.isEmpty()) {
 			return value;
 		}
-		Attribute computed = Attribute.of(value, key());
+		com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute computed = com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute.of(value, key());
 		for (AttributeModification mod : modifications) {
 			computed = mod.apply(computed, container);
 		}
@@ -41,7 +40,7 @@ public class ComputedAttribute implements Attribute {
 	}
 
 	@Override
-	public Attribute modify(AttributeModification mod) {
+	public com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute modify(AttributeModification mod) {
 		modifications.add(mod);
 		return this;
 	}

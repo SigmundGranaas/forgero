@@ -7,33 +7,33 @@ import java.util.concurrent.Callable;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import org.jetbrains.annotations.NotNull;
 
 public class AttributeCache {
-	public static final LoadingCache<PropertyTargetCacheKey, Attribute> attributeCache = CacheBuilder.newBuilder()
+	public static final LoadingCache<PropertyTargetCacheKey, ComputedAttribute> attributeCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
 			.build(new CacheLoader<>() {
 				@Override
 				public @NotNull
-				Attribute load(@NotNull PropertyTargetCacheKey stack) {
-					return Attribute.of(1f, "UNDEFINED");
+				ComputedAttribute load(@NotNull PropertyTargetCacheKey stack) {
+					return ComputedAttribute.of(1f, "UNDEFINED");
 				}
 			});
 
-	public static Attribute computeIfAbsent(ContainerTargetPair pair, Callable<Attribute> compute, String key) {
+	public static ComputedAttribute computeIfAbsent(ContainerTargetPair pair, Callable<ComputedAttribute> compute, String key) {
 		try {
 			return attributeCache.get(new PropertyTargetCacheKey(pair, key), compute);
 		} catch (Exception e) {
-			return Attribute.of(1f, "UNDEFINED");
+			return ComputedAttribute.of(1f, "UNDEFINED");
 		}
 	}
 
-	public static Attribute computeIfAbsent(PropertyTargetCacheKey key, Callable<Attribute> compute) {
+	public static ComputedAttribute computeIfAbsent(PropertyTargetCacheKey key, Callable<ComputedAttribute> compute) {
 		try {
 			return attributeCache.get(key, compute);
 		} catch (Exception e) {
-			return Attribute.of(1f, "UNDEFINED");
+			return ComputedAttribute.of(1f, "UNDEFINED");
 		}
 	}
 }

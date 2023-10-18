@@ -8,8 +8,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -17,6 +21,9 @@ import net.minecraft.util.math.Direction;
  * Block selector that selects block in a straight column.
  */
 public class ColumnSelector implements BlockSelector {
+	public static final String TYPE = "minecraft:function";
+	public static final JsonBuilder<FunctionExecuteHandler> BUILDER = HandlerBuilder.fromObject(FunctionExecuteHandler.class, FunctionExecuteHandler::fromJson);
+
 	private final int depth;
 	private final int maxHeight;
 	private final Predicate<BlockPos> isBlockValid;
@@ -36,7 +43,7 @@ public class ColumnSelector implements BlockSelector {
 	 */
 	@NotNull
 	@Override
-	public Set<BlockPos> select(BlockPos rootPos) {
+	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
 		if (!isBlockValid.test(rootPos)) {
 			return new HashSet<>();
 		}

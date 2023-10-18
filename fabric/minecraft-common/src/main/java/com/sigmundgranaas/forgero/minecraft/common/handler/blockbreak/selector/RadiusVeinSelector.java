@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -63,7 +64,7 @@ public class RadiusVeinSelector implements BlockSelector {
 	 */
 	@NotNull
 	@Override
-	public Set<BlockPos> select(BlockPos rootPos) {
+	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
 		// return early if the root block is not a valid selection
 		if (!isBlockValid.test(rootPos)) {
 			return new HashSet<>();

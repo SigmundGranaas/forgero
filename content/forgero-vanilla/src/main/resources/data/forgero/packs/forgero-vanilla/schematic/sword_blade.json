@@ -73,9 +73,15 @@
         "value": 1
       },
       {
-        "id": "magnetic-range-test",
+        "id": "magnetic-power-test",
         "type": "forgero:magnetic_power",
-        "value": 10
+        "value": 1
+      },
+      {
+        "id": "magnetic-range-test",
+        "type": "forgero:magnetic_range",
+        "value": 2,
+        "operation": "MULTIPLICATION"
       }
     ],
     "features": [
@@ -84,15 +90,12 @@
         "handler": {
           "type": "forgero:magnetic",
           "filter": "minecraft:item",
-          "distance": 5,
+          "range": 5,
           "power": 5
         },
-        "title": "feature.forgero.boom_bang_bang.title",
+        "title": "feature.forgero.magnetic.title",
         "description": [
-          "feature.forgero.magnetic.description1",
-          "feature.forgero.magnetic.description2",
-          "feature.forgero.magnetic.description3",
-          "feature.forgero.magnetic.description4"
+          "feature.forgero.magnetic.description1"
         ]
       }
     ]

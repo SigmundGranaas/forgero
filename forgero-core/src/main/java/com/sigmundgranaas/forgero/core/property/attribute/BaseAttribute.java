@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +39,22 @@ public record BaseAttribute(String attribute,
 
 
 	public static BaseAttribute of(int value, String type) {
+		return new BaseAttribute(type,
+				NumericOperation.ADDITION,
+				value,
+				Matchable.DEFAULT_TRUE,
+				CalculationOrder.BASE,
+				1,
+				Category.UNDEFINED,
+				"",
+				Collections.emptyList(),
+				"",
+				1,
+				Contexts.UNDEFINED,
+				null);
+	}
+
+	public static BaseAttribute of(float value, String type) {
 		return new BaseAttribute(type,
 				NumericOperation.ADDITION,
 				value,
@@ -141,6 +158,11 @@ public record BaseAttribute(String attribute,
 	@Override
 	public Optional<PropertyContainer> source() {
 		return Optional.ofNullable(attributeSource());
+	}
+
+	@Override
+	public ComputedAttribute compute() {
+		return ComputedAttribute.of(leveledValue(), type());
 	}
 
 	@Override

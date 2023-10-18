@@ -7,6 +7,12 @@
     "id": "minecraft:prismarine_crystals"
   },
   "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
@@ -19,15 +25,9 @@
         "attributes": [
         ]
       }
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
-      }
     ]
   },
-    "palette": {
-      "name": "prismarine_crystals"
-    }
+  "palette": {
+    "name": "prismarine_crystals"
+  }
 }

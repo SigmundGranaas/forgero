@@ -35,7 +35,7 @@ public class MultiBlockHardnessCalculator implements HardnessProvider {
 
 		float breakingSpeed = 0.0f;
 		float totalHardness = 0.0f;
-		var availableBlocks = selector.select(rootPos);
+		var availableBlocks = selector.select(rootPos, null);
 		if (availableBlocks.size() < 2) {
 			return singleBlockHardness;
 		}

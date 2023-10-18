@@ -7,6 +7,7 @@ import java.util.function.Function;
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
@@ -90,4 +91,5 @@ public interface Attribute extends Property, Comparable<Attribute> {
 		return this.getPredicate().test(target, context);
 	}
 
+	ComputedAttribute compute();
 }
