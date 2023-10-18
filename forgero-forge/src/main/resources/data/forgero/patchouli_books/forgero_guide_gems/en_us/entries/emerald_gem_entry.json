@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The emerald gem increases your tool's durability by 100"
+      "text": "The emerald gem increases your tool's durability by 100."
     },
     {
       "type": "patchouli:crafting",
