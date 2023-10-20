@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:end_crystal-gem"
+  },
+  "addition": {
+    "item": "forgero:end_crystal-gem"
+  },
+  "result": {
+    "item": "forgero:end_crystal-gem"
+  }
+}
+

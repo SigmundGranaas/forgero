@@ -1,0 +1,13 @@
+{
+  "type": "forgero:gem_upgrade_recipe",
+  "base": {
+    "item": "forgero:conduit-gem"
+  },
+  "addition": {
+    "item": "forgero:conduit-gem"
+  },
+  "result": {
+    "item": "forgero:conduit-gem"
+  }
+}
+
