@@ -4,7 +4,7 @@
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "byg:ebony"
+    "id": "byg:ebony_planks"
   },
   "properties": {
     "grouped_attributes": [
