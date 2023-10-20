@@ -1,19 +1,19 @@
 package com.sigmundgranaas.forgero.core.resource.data.v2.loading;
 
 
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.resource.data.ResourceLoader;
-import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceCollectionMapper;
-import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
-import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
-import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.resource.data.ResourceLoader;
+import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceCollectionMapper;
+import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
+import com.sigmundgranaas.forgero.core.util.loader.SwitchableMultiLoader;
 
 public class FileResourceLoader implements ResourceLoader {
 	private final String folder;
@@ -33,13 +33,13 @@ public class FileResourceLoader implements ResourceLoader {
 		this.folder = folderPath;
 		this.walker = walker;
 		this.mapper = mapper;
-		this.streamLoader = new ClassLoader();
+		this.streamLoader = new SwitchableMultiLoader();
 	}
 
 	public static FileResourceLoader of(String folderPath, ResourceLocator walker, List<ResourceCollectionMapper> mappers) {
 		var mapper = mappers.stream().reduce(ResourceCollectionMapper.DEFAULT, (mapper1, mapper2) -> mapper1.andThen(mapper2));
 
-		return new FileResourceLoader(folderPath, walker, mapper, new ClassLoader());
+		return new FileResourceLoader(folderPath, walker, mapper, new SwitchableMultiLoader());
 	}
 
 	@Override

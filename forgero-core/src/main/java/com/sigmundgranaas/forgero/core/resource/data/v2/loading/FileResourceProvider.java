@@ -9,7 +9,6 @@ import java.util.Optional;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.context.Context;
@@ -20,8 +19,8 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.DataResourceProvider;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ContextData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DependencyData;
-import com.sigmundgranaas.forgero.core.util.loader.ClassLoader;
 import com.sigmundgranaas.forgero.core.util.loader.InputStreamLoader;
+import com.sigmundgranaas.forgero.core.util.loader.SwitchableMultiLoader;
 
 public class FileResourceProvider implements DataResourceProvider {
 
@@ -36,7 +35,7 @@ public class FileResourceProvider implements DataResourceProvider {
 
 	public FileResourceProvider(String path) {
 		this.path = path;
-		this.streamLoader = new ClassLoader();
+		this.streamLoader = new SwitchableMultiLoader();
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class FileResourceProvider implements DataResourceProvider {
 					return Optional.ofNullable(resource);
 				}
 				return Optional.empty();
-			} catch ( JsonParseException e) {
+			} catch (JsonParseException e) {
 				Forgero.LOGGER.error("Unable to parse: {}, check if the file is valid", path);
 				Forgero.LOGGER.error(e);
 				return Optional.empty();
