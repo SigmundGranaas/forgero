@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Axes exceeds at cutting down trees, and other wooden structures, and can be created by combining a handle and an axe head diagonally in the crafting table. Although the axe is a tool, it can deal massive amounts of damage when used as a weapon."
+      "text": "Axes excel at cutting down trees and other wooden structures, and can be created by combining a handle and an axe head diagonally in the crafting table. Although the axe is a tool, it can deal massive amounts of damage when used as a weapon."
     },
     {
       "type": "forgero:state_crafting_recipe",

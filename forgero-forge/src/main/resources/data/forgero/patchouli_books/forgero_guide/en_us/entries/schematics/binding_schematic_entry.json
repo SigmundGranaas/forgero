@@ -9,11 +9,11 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:netherite-binding-schematic_recipe"
+      "recipe": "forgero:netherite-binding"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:copper-spiked_binding-schematic_recipe"
+      "recipe": "forgero:spiked_binding-schematic_recipe"
     }
   ]
 }
