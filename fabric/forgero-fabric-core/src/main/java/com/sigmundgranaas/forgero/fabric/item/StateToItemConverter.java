@@ -43,8 +43,6 @@ public class StateToItemConverter {
 		var state = provider.get();
 		if (state.type().test(Type.of("SWORD"), context) || state.type().test(Type.of("TOOL"), context)) {
 			return createTool();
-		} else if (state.type().test(Type.GEM)) {
-			return new GemItem(getItemSettings(state), state, StateService.INSTANCE);
 		}
 		return defaultStateItem();
 	}

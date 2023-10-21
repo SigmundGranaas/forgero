@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 public class GemItem extends Item implements StateItem {
 	private final State DEFAULT;
 
-	public GemItem(Settings settings, State defaultState, StateService service) {
+	public GemItem(Settings settings, State defaultState) {
 		super(settings);
 		this.DEFAULT = defaultState;
 	}
