@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.ForgeroMaterial;
-import com.sigmundgranaas.forgero.minecraft.common.item.GemItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicAxeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicHoeItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicPickaxeItem;
