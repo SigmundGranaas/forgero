@@ -19,12 +19,10 @@ import net.minecraft.world.World;
 
 public class GemItem extends Item implements StateItem {
 	private final State DEFAULT;
-	private final StateService service;
 
 	public GemItem(Settings settings, State defaultState, StateService service) {
 		super(settings);
 		this.DEFAULT = defaultState;
-		this.service = service;
 	}
 
 	@Override
