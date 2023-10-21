@@ -46,11 +46,7 @@ public class GemItem extends Item implements StateItem {
 
 	@Override
 	public Text getName(ItemStack stack) {
-		var state = service.convert(stack).orElse(DEFAULT);
 		var text = Text.empty();
-		if (state instanceof LeveledState leveledState) {
-			text.append(Text.literal(String.format("Level %s ", leveledState.level())));
-		}
 		text.append(Writer.nameToTranslatableText(DEFAULT));
 		return text;
 	}

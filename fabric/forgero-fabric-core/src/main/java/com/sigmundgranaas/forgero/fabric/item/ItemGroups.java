@@ -34,6 +34,6 @@ public class ItemGroups {
 	}
 
 	private static ItemStack createTrinketIcon() {
-		return new ItemStack(Registry.ITEM.get(new Identifier("forgero:redstone-gem")));
+		return new ItemStack(Registry.ITEM.get(new Identifier("forgero:amethyst_gem_5")));
 	}
 }
