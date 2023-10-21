@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.minecraft.common.item;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
-import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;

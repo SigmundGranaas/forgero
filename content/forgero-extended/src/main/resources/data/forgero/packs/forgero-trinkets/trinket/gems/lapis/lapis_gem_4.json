@@ -1,6 +1,6 @@
 {
   "type": "GEM",
-  "name": "diamond_gem_5",
+  "name": "lapis_gem_4",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -14,18 +14,10 @@
         "category": "ALL",
         "operation": "ADDITION",
         "value": 30
-      },
-      {
-        "type": "DURABILITY",
-        "context": "UPGRADE",
-        "order": "BASE",
-        "category": "ALL",
-        "operation": "ADDITION",
-        "value": 200.0
       }
     ]
   },
   "palette": {
-    "name": "diamond_gem"
+    "name": "lapis_gem"
   }
 }
