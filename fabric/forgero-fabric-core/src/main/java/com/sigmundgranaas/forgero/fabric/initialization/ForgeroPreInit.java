@@ -28,6 +28,10 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
@@ -81,6 +85,9 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(EntityPredicateMatcher.EntityPredicateBuilder::new);
 		PredicateFactory.register(BlockPredicateMatcher.BlockPredicateBuilder::new);
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
+
+
+		//Writers
 		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);
 		PredicateWriterFactory.register(BlockPredicateMatcher.BlockPredicateWriter::builder);
 	}
@@ -121,11 +128,16 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(EntityHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
-		
+
 		// Block selectors
+		HandlerBuilderRegistry.register(BlockSelector.KEY, ColumnSelector.TYPE, ColumnSelector.BUILDER);
+		HandlerBuilderRegistry.register(BlockSelector.KEY, PatternSelector.TYPE, PatternSelector.BUILDER);
+		HandlerBuilderRegistry.register(BlockSelector.KEY, RadiusVeinSelector.TYPE, RadiusVeinSelector.BUILDER);
+
 
 		// Hardness calculators
 
+		// Block filters
 	}
 
 	private void soulLevelPropertyReloader() {

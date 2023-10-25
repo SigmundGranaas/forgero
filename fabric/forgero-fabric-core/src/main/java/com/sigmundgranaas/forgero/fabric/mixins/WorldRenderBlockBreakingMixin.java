@@ -63,7 +63,7 @@ public abstract class WorldRenderBlockBreakingMixin {
 			return;
 		}
 		PropertyHelper.ofPlayerHands(this.client.player)
-				.flatMap(container -> ToolBlockHandler.of(container, world, pos, this.client.player))
+				.flatMap(container -> ToolBlockHandler.of(container, pos, this.client.player))
 				.ifPresent(handler -> handler.handleExceptOrigin(info -> drawCuboidShapeOutline(matrices,
 						vertexConsumer,
 						world.getBlockState(info).getOutlineShape(this.world, info, ShapeContext.of(entity)),
@@ -83,7 +83,7 @@ public abstract class WorldRenderBlockBreakingMixin {
 		}
 
 		PropertyHelper.ofPlayerHands(this.client.player)
-				.flatMap(container -> ToolBlockHandler.of(container, world, pos, this.client.player))
+				.flatMap(container -> ToolBlockHandler.of(container, pos, this.client.player))
 				.ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
 					BlockBreakingInfo info = new BlockBreakingInfo(entityId, blockInfo);
 					info.setStage(stage);
@@ -100,7 +100,7 @@ public abstract class WorldRenderBlockBreakingMixin {
 			return;
 		}
 		PropertyHelper.ofPlayerHands(this.client.player)
-				.flatMap(container -> ToolBlockHandler.of(container, world, info.getPos(), this.client.player))
+				.flatMap(container -> ToolBlockHandler.of(container, info.getPos(), this.client.player))
 				.ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
 					this.blockBreakingProgressions.remove(blockInfo.asLong());
 				}));

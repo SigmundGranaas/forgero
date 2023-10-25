@@ -28,7 +28,11 @@ public record BasePredicateData(String id,
 			var object = element.getAsJsonObject();
 			if (object.has("type")) {
 				String type = object.get("type").getAsString();
-				var predicate = new PredicateFactory().create(element);
+				Matchable predicate = Matchable.DEFAULT_TRUE;
+				if (object.has("predicate")) {
+					predicate = new PredicateFactory().create(object.get("predicate"));
+				}
+
 				String id = EMPTY_IDENTIFIER;
 				String title = EMPTY_IDENTIFIER;
 				List<String> description = Collections.emptyList();

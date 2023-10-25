@@ -8,6 +8,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
@@ -26,23 +29,26 @@ import net.minecraft.util.math.BlockPos;
 @Accessors(fluent = true)
 public class RadiusVeinSelector implements BlockSelector {
 	public static final String TYPE = "forgero:radius";
+	public static final JsonBuilder<RadiusVeinSelector> BUILDER = HandlerBuilder.fromObject(RadiusVeinSelector.class, RadiusVeinSelector::fromJson);
+
 	private final int depth;
-	private Predicate<BlockPos> isBlockValid;
+	private final BlockFilter filter;
 	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
 	private Set<BlockPos> selectedBlocks = new HashSet<>();
 	private Set<BlockPos> newBlocksToScan = new HashSet<>();
 
-	public RadiusVeinSelector(int depth, Predicate<BlockPos> isBlockValid) {
+	public RadiusVeinSelector(int depth, BlockFilter filter) {
 		this.depth = depth;
-		this.isBlockValid = isBlockValid;
+		this.filter = filter;
 	}
 
-	public RadiusVeinSelector(int depth, Predicate<BlockPos> isBlockValid, Function<BlockPos, Predicate<BlockPos>> rootPosValidator) {
+	public RadiusVeinSelector(int depth, BlockFilter filter, Function<BlockPos, Predicate<BlockPos>> rootPosValidator) {
 		this.depth = depth;
-		this.isBlockValid = isBlockValid;
+		this.filter = filter;
 		this.rootPosValidator = rootPosValidator;
 	}
+
 
 	/**
 	 * Constructs an {@link RadiusVeinSelector} from a JSON object.
@@ -52,7 +58,8 @@ public class RadiusVeinSelector implements BlockSelector {
 	 */
 	public static RadiusVeinSelector fromJson(JsonObject json) {
 		int radius = json.get("depth").getAsInt();
-		return new RadiusVeinSelector(radius, (pos) -> true);
+		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
+		return new RadiusVeinSelector(radius, filter);
 	}
 
 	/**
@@ -66,12 +73,9 @@ public class RadiusVeinSelector implements BlockSelector {
 	@Override
 	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
 		// return early if the root block is not a valid selection
-		if (!isBlockValid.test(rootPos)) {
+		if (!filter.filter(source, rootPos, rootPos)) {
 			return new HashSet<>();
 		}
-
-		//Some validators require the root pos to be valid as well
-		this.isBlockValid = this.isBlockValid.or(rootPosValidator.apply(rootPos));
 
 		selectedBlocks = new HashSet<>();
 		selectedBlocks.add(rootPos);
@@ -93,7 +97,7 @@ public class RadiusVeinSelector implements BlockSelector {
 				}
 				//Check all blocks around the block to scan and add to selection if valid
 				Set<BlockPos> blocksAroundScannedBlock = getBlockPositionsAround(blockToScanPos);
-				blocksAroundScannedBlock.forEach(this::handleScannedBlock);
+				blocksAroundScannedBlock.forEach(pos -> handleScannedBlock(pos, rootPos, source));
 
 				scannedBlocks.add(blockToScanPos);
 			}
@@ -106,8 +110,8 @@ public class RadiusVeinSelector implements BlockSelector {
 	}
 
 	//Handling each block to see of it should propagate or stop the selection
-	protected void handleScannedBlock(BlockPos blockPos) {
-		if (isBlockValid.test(blockPos)) {
+	protected void handleScannedBlock(BlockPos blockPos, BlockPos root, Entity source) {
+		if (filter.filter(source, blockPos, root)) {
 			selectedBlocks.add(blockPos);
 			newBlocksToScan.add(blockPos);
 		}

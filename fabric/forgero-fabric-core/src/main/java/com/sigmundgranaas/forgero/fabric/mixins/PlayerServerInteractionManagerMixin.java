@@ -33,7 +33,7 @@ public abstract class PlayerServerInteractionManagerMixin {
 		var soulHandler = SoulHandler.of(player.getMainHandStack());
 		soulHandler.ifPresent(soul -> soul.processBlockBreak(pos, world, player));
 		PropertyHelper.ofPlayerHands(player)
-				.flatMap(container -> ToolBlockHandler.of(container, world, pos, player))
+				.flatMap(container -> ToolBlockHandler.of(container, pos, player))
 				.ifPresent(handler -> handler.handleExceptOrigin(info -> {
 					soulHandler.ifPresent(soul -> soul.processBlockBreak(info, world, player));
 					this.finishMining(info, sequence, "destroyed");

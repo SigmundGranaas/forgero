@@ -1,9 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.entity.Entity;
@@ -22,19 +29,31 @@ import net.minecraft.util.math.Direction;
  * The pattern is applied horizontally or vertically based on the player's facing direction.
  */
 public class PatternSelector implements BlockSelector {
+	public static final String TYPE = "forgero:pattern";
+	public static final JsonBuilder<PatternSelector> BUILDER = HandlerBuilder.fromObject(PatternSelector.class, PatternSelector::fromJson);
 	private final List<String> pattern;
-	private final Direction facingHorizontal;
-	private final Direction[] primaryFacing;
+	private final BlockFilter filter;
 
-	public PatternSelector(List<String> pattern, Direction[] primaryFacing, Direction facing) {
+
+	public PatternSelector(List<String> pattern, BlockFilter filter) {
 		this.pattern = pattern;
-		this.facingHorizontal = facing;
-		this.primaryFacing = primaryFacing;
+		this.filter = filter;
+	}
+
+	public static PatternSelector fromJson(JsonObject json) {
+		Type typeOfList = new TypeToken<List<String>>() {
+		}.getType();
+		Gson gson = new Gson();
+		List<String> pattern = json.has("pattern") ? gson.fromJson(json.get("pattern").getAsJsonArray(), typeOfList) : List.of("");
+		BlockFilter filter = BlockFilter.fromJson(json);
+		return new PatternSelector(pattern, filter);
 	}
 
 	@NotNull
 	@Override
 	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
+		Direction facingHorizontal = source.getHorizontalFacing();
+		Direction[] primaryFacing = Direction.getEntityFacingOrder(source);
 		Set<BlockPos> blocks = new HashSet<>();
 		//iterate through the pattern list, and find all the blocks that match the pattern
 
@@ -68,7 +87,9 @@ public class PatternSelector implements BlockSelector {
 
 					//Apply absolute position
 					pos = rootPos.add(pos);
-					blocks.add(pos);
+					if (filter.filter(source, pos, rootPos)) {
+						blocks.add(pos);
+					}
 				}
 			}
 		}

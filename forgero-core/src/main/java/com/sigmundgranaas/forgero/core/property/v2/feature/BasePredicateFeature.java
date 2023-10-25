@@ -32,7 +32,7 @@ public abstract class BasePredicateFeature implements Feature, Matchable {
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		return match.test(match, context);
+		return this.predicate.test(match, context);
 	}
 
 	public BasePredicateData data() {

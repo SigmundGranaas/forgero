@@ -8,9 +8,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.entity.Entity;
@@ -21,17 +22,24 @@ import net.minecraft.util.math.Direction;
  * Block selector that selects block in a straight column.
  */
 public class ColumnSelector implements BlockSelector {
-	public static final String TYPE = "minecraft:function";
-	public static final JsonBuilder<FunctionExecuteHandler> BUILDER = HandlerBuilder.fromObject(FunctionExecuteHandler.class, FunctionExecuteHandler::fromJson);
+	public static final String TYPE = "forgero:column";
+	public static final JsonBuilder<ColumnSelector> BUILDER = HandlerBuilder.fromObject(ColumnSelector.class, ColumnSelector::fromJson);
 
 	private final int depth;
 	private final int maxHeight;
-	private final Predicate<BlockPos> isBlockValid;
+	private final BlockFilter filter;
 
-	public ColumnSelector(int depth, int maxHeight, Predicate<BlockPos> isBlockValid) {
+	public ColumnSelector(int depth, int maxHeight, BlockFilter filter) {
 		this.depth = depth;
 		this.maxHeight = maxHeight;
-		this.isBlockValid = isBlockValid;
+		this.filter = filter;
+	}
+
+	public static ColumnSelector fromJson(JsonObject json) {
+		int depth = json.has("depth") ? json.get("depth").getAsInt() : 1;
+		int height = json.has("height") ? json.get("height").getAsInt() : 10;
+		BlockFilter filter = BlockFilter.fromJson(json);
+		return new ColumnSelector(depth, height, filter);
 	}
 
 	/**
@@ -44,7 +52,7 @@ public class ColumnSelector implements BlockSelector {
 	@NotNull
 	@Override
 	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
-		if (!isBlockValid.test(rootPos)) {
+		if (!filter.filter(source, rootPos, rootPos)) {
 			return new HashSet<>();
 		}
 
@@ -70,7 +78,7 @@ public class ColumnSelector implements BlockSelector {
 				}
 
 				testedRoots.add(root);
-				if (isBlockValid.test(root)) {
+				if (filter.filter(source, root, rootPos)) {
 					columnRoots.add(root);
 					//Find all the horizontal blocks from a valid root and add them to the blocks to test
 					horizontals(root)
@@ -83,7 +91,7 @@ public class ColumnSelector implements BlockSelector {
 		}
 
 		return columnRoots.stream()
-				.map(this::handleColumn)
+				.map(root -> handleColumn(root, source))
 				.flatMap(Set::stream)
 				.collect(Collectors.toUnmodifiableSet());
 	}
@@ -98,17 +106,17 @@ public class ColumnSelector implements BlockSelector {
 	 * @param root root position of the column
 	 * @return a set of all the blocks in the column
 	 */
-	private Set<BlockPos> handleColumn(BlockPos root) {
+	private Set<BlockPos> handleColumn(BlockPos root, Entity source) {
 		Set<BlockPos> positions = new HashSet<>();
 		var currentPos = root;
 		int current = 0;
-		while (isBlockValid.test(currentPos) && current < maxHeight) {
+		while (filter.filter(source, currentPos, root) && current < maxHeight) {
 			positions.add(currentPos);
 			currentPos = currentPos.up();
 			current++;
 		}
 		currentPos = root.down();
-		while (isBlockValid.test(currentPos) && current < maxHeight) {
+		while (filter.filter(source, currentPos, root) && current < maxHeight) {
 			positions.add(currentPos);
 			currentPos = currentPos.down();
 			current++;

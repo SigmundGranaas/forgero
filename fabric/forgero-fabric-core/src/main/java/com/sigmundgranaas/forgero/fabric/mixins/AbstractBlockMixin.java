@@ -18,8 +18,8 @@ public class AbstractBlockMixin {
 	@Inject(at = @At("HEAD"), method = "calcBlockBreakingDelta", cancellable = true)
 	public void calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
 		PropertyHelper.ofPlayerHands(player)
-				.flatMap(container -> ToolBlockHandler.of(container, world, pos, player))
-				.map(ToolBlockHandler::getHardness)
+				.flatMap(container -> ToolBlockHandler.of(container, pos, player))
+				.map(ToolBlockHandler::hardness)
 				.map(hardness -> hardness == -1.0f ? 0f : hardness)
 				.ifPresent(cir::setReturnValue);
 	}

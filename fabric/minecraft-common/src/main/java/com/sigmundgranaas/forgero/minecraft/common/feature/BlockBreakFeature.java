@@ -67,6 +67,6 @@ public class BlockBreakFeature extends BasePredicateFeature implements BlockBrea
 
 	@Override
 	public void onUsed(Entity source, BlockPos target, Set<BlockPos> selectedBlocks) {
-
+		
 	}
 }

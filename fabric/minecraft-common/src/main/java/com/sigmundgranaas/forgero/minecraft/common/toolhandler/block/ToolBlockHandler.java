@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
@@ -7,10 +9,14 @@ import java.util.function.Consumer;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
 
 /**
  * A handler for a block that is being mined.
@@ -18,15 +24,12 @@ import net.minecraft.world.BlockView;
  * Prefer cached handlers from {@link BlockHandlerCache} over creating new ones.
  * Calculating the blocks to mine is expensive, and should only be done once per block unless it is invalidated.
  * Caching is extremely short term, and should only be for actions that calls the handler multiple times in a row, like when calculating brok breaking deltas.
- * See {@link BlockHandlerFactory} for creating handlers from tools.
+ * See {@link BlockHandlerHelper} for creating handlers from tools.
  */
+@Getter
+@Accessors(fluent = true)
 public class ToolBlockHandler {
 	public static ToolBlockHandler EMPTY = new ToolBlockHandler(new BlockPos(0, 0, 0), Collections.emptySet(), 0f, CacheAbleKey.EMPTY);
-	public static String BLOCK_BREAKING_PATTERN_KEY = "BLOCK_BREAKING_PATTERN";
-	public static String VEIN_MINING_KEY = "VEIN_MINING";
-	public static String COLUMN_MINING_KEY = "COLUMN_MINING";
-
-	public static Set<String> BLOCK_BREAKING_KEYS = Set.of(BLOCK_BREAKING_PATTERN_KEY, VEIN_MINING_KEY, COLUMN_MINING_KEY);
 
 	private final Set<BlockPos> availableBlocks;
 	private final BlockPos originPos;
@@ -40,16 +43,18 @@ public class ToolBlockHandler {
 		this.hardness = hardness;
 	}
 
-	public static Optional<ToolBlockHandler> of(PropertyContainer container, BlockView world, BlockPos pos, PlayerEntity player) {
-		return BlockHandlerFactory.create(container, world, pos, player);
-	}
+	public static Optional<ToolBlockHandler> of(PropertyContainer container, BlockPos pos, PlayerEntity player) {
+		MatchContext ctx = MatchContext.of()
+				.put(WORLD, player.getWorld())
+				.put(ENTITY, player)
+				.put(BLOCK_TARGET, pos);
 
-	public Set<BlockPos> getAvailableBlocks() {
-		return availableBlocks;
-	}
 
-	public float getHardness() {
-		return hardness;
+		return container.stream()
+				.features(BlockBreakFeature.KEY)
+				.filter(feature -> feature.test(Matchable.DEFAULT_TRUE, ctx))
+				.findFirst()
+				.map(feature -> new ToolBlockHandler(pos, feature.selectBlocks(player, pos), feature.calculateBlockHardness(player, pos, feature.selectBlocks(player, pos)), CacheAbleKey.EMPTY));
 	}
 
 	/**
