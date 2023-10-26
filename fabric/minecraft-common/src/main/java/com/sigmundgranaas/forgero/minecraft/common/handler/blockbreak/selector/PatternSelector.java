@@ -35,6 +35,14 @@ import net.minecraft.util.math.Direction;
  *   <li><b>filter</b>: (Optional) The filter for further block selection. Can be a string, and array or an object.</li>
  * </ul>
  *
+ * <h3>Modifiers</h3>
+ *
+ * <p>The PatternSelector recognizes a special string value as a modifier:</p>
+ *
+ * <ul>
+ *   <li><b>"forgero:pattern_mining_depth"</b>: This string value acts as a key to dynamically modify the mining depth during based on attributes from the source entity</li>
+ * </ul>
+ *
  * <h3>Pattern Characters:</h3>
  *
  * <p>The pattern strings can contain the following characters:</p>
@@ -62,6 +70,7 @@ import net.minecraft.util.math.Direction;
  */
 public class PatternSelector implements BlockSelector {
 	public static final String TYPE = "forgero:pattern";
+	public static final String DEPTH_MODIFIER = "forgero:pattern_mining_depth";
 	public static final JsonBuilder<PatternSelector> BUILDER = HandlerBuilder.fromObject(PatternSelector.class, PatternSelector::fromJson);
 	public static String multiDirection = "multi";
 	public static String horizontalDirection = "horizontal";
@@ -85,7 +94,7 @@ public class PatternSelector implements BlockSelector {
 		Gson gson = new Gson();
 		List<String> pattern = json.has("pattern") ? gson.fromJson(json.get("pattern").getAsJsonArray(), typeOfList) : List.of("");
 		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
-		ModifiableFeatureAttribute depth = ModifiableFeatureAttribute.of(json, "depth", "forgero:pattern_mining_depth");
+		ModifiableFeatureAttribute depth = ModifiableFeatureAttribute.of(json, "depth", DEPTH_MODIFIER);
 		String direction = json.has("direction") ? json.get("direction").getAsString() : "multi"; // default direction
 
 		return new PatternSelector(pattern, filter, depth, direction);
