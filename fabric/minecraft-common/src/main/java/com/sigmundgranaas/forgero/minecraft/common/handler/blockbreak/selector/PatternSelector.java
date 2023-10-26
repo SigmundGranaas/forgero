@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttribute;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,11 +34,14 @@ public class PatternSelector implements BlockSelector {
 	public static final JsonBuilder<PatternSelector> BUILDER = HandlerBuilder.fromObject(PatternSelector.class, PatternSelector::fromJson);
 	private final List<String> pattern;
 	private final BlockFilter filter;
+	private final ModifiableFeatureAttribute depth;
+	private final String direction;
 
-
-	public PatternSelector(List<String> pattern, BlockFilter filter) {
+	public PatternSelector(List<String> pattern, BlockFilter filter, ModifiableFeatureAttribute depth, String direction) {
 		this.pattern = pattern;
 		this.filter = filter;
+		this.depth = depth;
+		this.direction = direction;
 	}
 
 	public static PatternSelector fromJson(JsonObject json) {
@@ -45,8 +49,11 @@ public class PatternSelector implements BlockSelector {
 		}.getType();
 		Gson gson = new Gson();
 		List<String> pattern = json.has("pattern") ? gson.fromJson(json.get("pattern").getAsJsonArray(), typeOfList) : List.of("");
-		BlockFilter filter = BlockFilter.fromJson(json);
-		return new PatternSelector(pattern, filter);
+		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
+		ModifiableFeatureAttribute depth = ModifiableFeatureAttribute.of(json, "depth", "forgero:pattern_mining_depth");
+		String direction = json.has("direction") ? json.get("direction").getAsString() : "multi"; // default direction
+
+		return new PatternSelector(pattern, filter, depth, direction);
 	}
 
 	@NotNull

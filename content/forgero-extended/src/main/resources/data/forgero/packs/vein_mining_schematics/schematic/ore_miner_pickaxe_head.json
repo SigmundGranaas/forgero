@@ -92,7 +92,11 @@
         "selector": {
           "type": "forgero:radius",
           "filter": [
-            "forgero:same_block"
+            "forgero:can_mine",
+            {
+              "type": "minecraft:block",
+              "tag": "forgero:vein_mining_ores"
+            }
           ],
           "depth": 1
         },

@@ -88,21 +88,19 @@
     ],
     "features": [
       {
-        "type": "forgero:block_breaking",
-        "selection": {
-          "type": "forgero:pattern_mining",
-          "strategy": "forgero:columns",
-          "predicate": "forgero:same_block",
-          "parameters": {
-            "columns": 1,
-            "height": 20
-          }
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:column",
+          "filter": "forgero:similar_block",
+          "depth": 1,
+          "height": 20
         },
-        "hardness_calculation": {
+        "hardness": {
           "type": "forgero:hardness_composite"
         },
         "predicate": {
-          "type": "forgero:tool_proficiency"
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_logs"
         }
       }
     ]

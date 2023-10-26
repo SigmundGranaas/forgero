@@ -88,18 +88,20 @@
     ],
     "features": [
       {
-        "type": "forgero:block_breaking",
-        "selection": {
-          "type": "forgero:block_breaking_pattern",
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:pattern",
           "pattern": [
             "xxx",
             "xxx",
             "xxx"
-          ]
+          ],
+          "filter": "forgero:can_mine"
         },
         "predicate": {
-          "type": "forgero:tool_proficiency"
-        }
+          "type": "forgero:can_mine"
+        },
+        "title": "feature.forgero.pattern_mining.title"
       }
     ]
   },

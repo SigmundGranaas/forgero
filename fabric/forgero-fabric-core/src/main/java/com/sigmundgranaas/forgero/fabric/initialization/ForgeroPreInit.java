@@ -25,9 +25,11 @@ import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
@@ -85,7 +87,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(EntityPredicateMatcher.EntityPredicateBuilder::new);
 		PredicateFactory.register(BlockPredicateMatcher.BlockPredicateBuilder::new);
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
-
+		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 
 		//Writers
 		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);
@@ -97,6 +99,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		FeatureRegistry.register(OnHitBlockFeature.KEY, OnHitBlockFeature.BUILDER);
 		FeatureRegistry.register(BlockBreakFeature.KEY, BlockBreakFeature.BUILDER);
 		FeatureRegistry.register(EntityTickFeature.KEY, EntityTickFeature.BUILDER);
+		FeatureRegistry.register(BlockEfficiencyFeature.KEY, BlockEfficiencyFeature.BUILDER);
 	}
 
 	private void registerHandlerBuilders() {

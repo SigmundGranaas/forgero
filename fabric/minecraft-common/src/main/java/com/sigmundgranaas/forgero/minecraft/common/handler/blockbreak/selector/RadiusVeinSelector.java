@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttribute;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -31,19 +32,19 @@ public class RadiusVeinSelector implements BlockSelector {
 	public static final String TYPE = "forgero:radius";
 	public static final JsonBuilder<RadiusVeinSelector> BUILDER = HandlerBuilder.fromObject(RadiusVeinSelector.class, RadiusVeinSelector::fromJson);
 
-	private final int depth;
+	private final ModifiableFeatureAttribute depth;
 	private final BlockFilter filter;
 	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
 	private Set<BlockPos> selectedBlocks = new HashSet<>();
 	private Set<BlockPos> newBlocksToScan = new HashSet<>();
 
-	public RadiusVeinSelector(int depth, BlockFilter filter) {
+	public RadiusVeinSelector(ModifiableFeatureAttribute depth, BlockFilter filter) {
 		this.depth = depth;
 		this.filter = filter;
 	}
 
-	public RadiusVeinSelector(int depth, BlockFilter filter, Function<BlockPos, Predicate<BlockPos>> rootPosValidator) {
+	public RadiusVeinSelector(ModifiableFeatureAttribute depth, BlockFilter filter, Function<BlockPos, Predicate<BlockPos>> rootPosValidator) {
 		this.depth = depth;
 		this.filter = filter;
 		this.rootPosValidator = rootPosValidator;
@@ -57,7 +58,7 @@ public class RadiusVeinSelector implements BlockSelector {
 	 * @return A new instance of {@link RadiusVeinSelector}.
 	 */
 	public static RadiusVeinSelector fromJson(JsonObject json) {
-		int radius = json.get("depth").getAsInt();
+		ModifiableFeatureAttribute radius = ModifiableFeatureAttribute.of(json, "radius", "forgero:vein_mining_radius");
 		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
 		return new RadiusVeinSelector(radius, filter);
 	}
@@ -85,9 +86,9 @@ public class RadiusVeinSelector implements BlockSelector {
 
 		//Scanned blocks is used to prevent infinite loops
 		Set<BlockPos> scannedBlocks = new HashSet<>();
-
+		int depth = this.depth.with(source).asInt();
 		//Continue checking blocks until depth <= 0
-		for (int i = this.depth; i > 0 && !blocksToScan.isEmpty(); i--) {
+		for (int i = depth; i > 0 && !blocksToScan.isEmpty(); i--) {
 			newBlocksToScan = new HashSet<>();
 
 			for (BlockPos blockToScanPos : blocksToScan) {

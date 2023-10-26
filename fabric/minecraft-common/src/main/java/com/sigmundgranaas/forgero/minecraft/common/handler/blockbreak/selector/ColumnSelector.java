@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttribute;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,20 +26,20 @@ public class ColumnSelector implements BlockSelector {
 	public static final String TYPE = "forgero:column";
 	public static final JsonBuilder<ColumnSelector> BUILDER = HandlerBuilder.fromObject(ColumnSelector.class, ColumnSelector::fromJson);
 
-	private final int depth;
-	private final int maxHeight;
+	private final ModifiableFeatureAttribute depth;
+	private final ModifiableFeatureAttribute maxHeight;
 	private final BlockFilter filter;
 
-	public ColumnSelector(int depth, int maxHeight, BlockFilter filter) {
+	public ColumnSelector(ModifiableFeatureAttribute depth, ModifiableFeatureAttribute maxHeight, BlockFilter filter) {
 		this.depth = depth;
 		this.maxHeight = maxHeight;
 		this.filter = filter;
 	}
 
 	public static ColumnSelector fromJson(JsonObject json) {
-		int depth = json.has("depth") ? json.get("depth").getAsInt() : 1;
-		int height = json.has("height") ? json.get("height").getAsInt() : 10;
-		BlockFilter filter = BlockFilter.fromJson(json);
+		ModifiableFeatureAttribute depth = ModifiableFeatureAttribute.of(json, "depth", "forgero:column_mining_depth");
+		ModifiableFeatureAttribute height = ModifiableFeatureAttribute.of(json, "height", "forgero:column_mining_height", 10);
+		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
 		return new ColumnSelector(depth, height, filter);
 	}
 
@@ -62,7 +63,7 @@ public class ColumnSelector implements BlockSelector {
 		Set<BlockPos> rootsToTest = new HashSet<>();
 		List<BlockPos> columnRoots = new ArrayList<>();
 		rootsToTest.add(rootPos);
-
+		int depth = this.depth.with(source).asInt();
 		//Iterates through the blocks to test and adds the blocks that are valid to the column roots
 		for (int i = 0; i < depth; i++) {
 			Set<BlockPos> nextRoots = new HashSet<>();
@@ -110,6 +111,7 @@ public class ColumnSelector implements BlockSelector {
 		Set<BlockPos> positions = new HashSet<>();
 		var currentPos = root;
 		int current = 0;
+		int maxHeight = this.maxHeight.with(source).asInt();
 		while (filter.filter(source, currentPos, root) && current < maxHeight) {
 			positions.add(currentPos);
 			currentPos = currentPos.up();

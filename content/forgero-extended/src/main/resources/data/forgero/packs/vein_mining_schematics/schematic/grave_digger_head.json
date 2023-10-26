@@ -89,17 +89,14 @@
     "features": [
       {
         "type": "forgero:block_breaking",
-        "selection": {
-          "type": "forgero:vein_mining",
-          "predicate": {
+        "selector": {
+          "type": "forgero:radius",
+          "filter": {
             "type": "forgero:same_block"
           },
-          "strategy": "forgero:radius",
-          "parameters": {
-            "depth": 3
-          }
+          "depth": 2
         },
-        "hardness_calculation": {
+        "hardness": {
           "type": "forgero:hardness_composite"
         },
         "predicate": {

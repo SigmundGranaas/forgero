@@ -88,23 +88,13 @@
     ],
     "features": [
       {
-        "type": "forgero:block_breaking",
-        "block_selection": {
-          "type": "forgero:vein_mining",
-          "strategy": {
-            "type": "forgero:radius",
-            "predicate": {
-              "type": "forgero:similar_block"
-            }
-          },
-          "parameters": {
-            "depth": 3
-          }
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "filter": "forgero:similar_block",
+          "radius": 2
         },
-        "hardness_calculation": {
-          "type": "forgero:combined_hardness"
-        },
-        "durability_calculation": {
+        "hardness": {
           "type": "forgero:every_block"
         },
         "predicate": {
