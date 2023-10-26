@@ -91,9 +91,9 @@
         "type": "minecraft:block_breaking",
         "selector": {
           "type": "forgero:radius",
-          "filter": {
-            "type": "forgero:same_block"
-          },
+          "filter": [
+            "forgero:same_block"
+          ],
           "depth": 1
         },
         "hardness_calculation": {
