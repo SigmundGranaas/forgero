@@ -96,6 +96,8 @@
             "xxx",
             "xxx"
           ],
+          "depth": 2,
+          "direction": "horizontal",
           "filter": "forgero:can_mine"
         },
         "predicate": {

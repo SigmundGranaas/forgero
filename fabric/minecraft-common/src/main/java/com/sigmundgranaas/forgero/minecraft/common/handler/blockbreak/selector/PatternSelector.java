@@ -32,10 +32,14 @@ import net.minecraft.util.math.Direction;
 public class PatternSelector implements BlockSelector {
 	public static final String TYPE = "forgero:pattern";
 	public static final JsonBuilder<PatternSelector> BUILDER = HandlerBuilder.fromObject(PatternSelector.class, PatternSelector::fromJson);
+	public static String multiDirection = "multi";
+	public static String horizontalDirection = "horizontal";
+	public static String verticalDirection = "vertical";
 	private final List<String> pattern;
 	private final BlockFilter filter;
 	private final ModifiableFeatureAttribute depth;
 	private final String direction;
+
 
 	public PatternSelector(List<String> pattern, BlockFilter filter, ModifiableFeatureAttribute depth, String direction) {
 		this.pattern = pattern;
@@ -56,23 +60,68 @@ public class PatternSelector implements BlockSelector {
 		return new PatternSelector(pattern, filter, depth, direction);
 	}
 
+	public Set<BlockPos> selectWithDepth(BlockPos rootPos, Entity source) {
+		Set<BlockPos> blocks = new HashSet<>();
+		Direction depthDirection = determineDepthDirection(source);
+		int depthValue = this.depth.with(source).asInt();
+
+		for (int d = 0; d < depthValue; d++) {
+			BlockPos offsetPos = rootPos.offset(depthDirection, d);
+			blocks.addAll(selectPattern(offsetPos, source));
+		}
+		return blocks;
+	}
+
+	private Direction determineDepthDirection(Entity source) {
+		Direction primaryFacing = Direction.getEntityFacingOrder(source)[0];
+		Direction secondaryFacing = Direction.getEntityFacingOrder(source)[1];
+		boolean primaryUpOrDown = primaryFacing == Direction.UP || primaryFacing == Direction.DOWN;
+		if (direction.equals(multiDirection)) {
+			return (primaryFacing != Direction.DOWN && primaryFacing != Direction.UP) ? primaryFacing : Direction.UP;
+		} else {
+			if (direction.equals(horizontalDirection)) {
+				if (primaryUpOrDown) {
+					return primaryFacing;
+				} else {
+					if (secondaryFacing == Direction.UP || secondaryFacing == Direction.DOWN) {
+						return secondaryFacing;
+					} else {
+						return Direction.DOWN;
+					}
+				}
+			} else {
+				return primaryUpOrDown ? secondaryFacing : primaryFacing;
+			}
+		}
+	}
+
 	@NotNull
 	@Override
 	public Set<BlockPos> select(BlockPos rootPos, Entity source) {
+		return selectWithDepth(rootPos, source);
+	}
+
+	@NotNull
+	public Set<BlockPos> selectPattern(BlockPos rootPos, Entity source) {
 		Direction facingHorizontal = source.getHorizontalFacing();
 		Direction[] primaryFacing = Direction.getEntityFacingOrder(source);
 		Set<BlockPos> blocks = new HashSet<>();
 		//iterate through the pattern list, and find all the blocks that match the pattern
 
-
-		//determine if the pattern should be applied horizontally or vertically based on player facing direction
-		boolean vertical = primaryFacing[0] != Direction.DOWN && primaryFacing[0] != Direction.UP;
+		boolean vertical;
+		//determine if the pattern should be applied horizontally or vertically based on player facing direction and direction variable
+		if (direction.equals(horizontalDirection)) {
+			vertical = false;
+		} else if (direction.equals(verticalDirection)) {
+			vertical = true;
+		} else {
+			vertical = primaryFacing[0] != Direction.DOWN && primaryFacing[0] != Direction.UP;
+		}
 
 		//iterate through the pattern and check if the blocks match the pattern
 		for (int i = 0; i < pattern.size(); i++) {
 			for (int j = 0; j < pattern.get(i).length(); j++) {
 				var slice = pattern.get(i);
-				var secondaryOffset = slice.length() == 1 ? -1 : -slice.length() / 2;
 				//If the pattern matches, add the block to the list of blocks that should be broken
 				if (isValidEntry(slice.charAt(j))) {
 
@@ -85,7 +134,7 @@ public class PatternSelector implements BlockSelector {
 					//Center the pattern
 					pos = centerOffset().subtract(pos);
 
-					//Flatten the pattern player is facing up or down
+					//Flatten the pattern player if facing up or down
 					if (!vertical) {
 						pos = rotate(pos, 1, Direction.Axis.X);
 					}
