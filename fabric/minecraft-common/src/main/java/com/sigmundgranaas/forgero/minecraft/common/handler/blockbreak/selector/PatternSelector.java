@@ -19,15 +19,46 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 /**
- * A block selector that selects blocks based on a String pattern.
- * The pattern is a list of strings, where each string represents a row in the pattern.
- * Each character in the string represents a block in the pattern.
- * <p>
- * X values represent blocks that should be selected, and empty spaces should be ignored.
- * A C value represents the root position of the pattern. If a c is not present, the root position is assumed to be the center of the pattern.
- * <p>
- * The pattern is rotated based on the player's facing direction.
- * The pattern is applied horizontally or vertically based on the player's facing direction.
+ * <h1>PatternSelector</h1>
+ *
+ * <p>The PatternSelector class is responsible for selecting blocks based on a pattern defined in strings.
+ * Each character in these strings represents a different instruction for block selection.</p>
+ *
+ * <h2>JSON Configuration</h2>
+ *
+ * <p>The PatternSelector uses a JSON object for configuration. The JSON object can contain the following keys:</p>
+ *
+ * <ul>
+ *   <li><b>pattern</b>: An array of strings that define the pattern. Each string represents a row in the pattern.</li>
+ *   <li><b>depth</b>: (Optional) An integer specifying how deep the pattern should be applied relative to the root position. Defaults to 1</li>
+ *   <li><b>direction</b>: (Optional) A string specifying how the pattern should be applied ("horizontal", "vertical", or "multi"). Default to "multi".</li>
+ *   <li><b>filter</b>: (Optional) The filter for further block selection. Can be a string, and array or an object.</li>
+ * </ul>
+ *
+ * <h3>Pattern Characters:</h3>
+ *
+ * <p>The pattern strings can contain the following characters:</p>
+ *
+ * <ul>
+ *   <li><b>"X"</b>: Specifies a block to be selected.</li>
+ *   <li><b>"C"</b>: Specifies the root position of the pattern. If not present, the center is considered the root.</li>
+ *   <li><b>" "</b> (Space): Specifies blocks that should be ignored.</li>
+ * </ul>
+ *
+ * <h4>3x3 Mining example:</h4>
+ *
+ * <pre>
+ * {
+ *   "type": "minecraft:block_breaking",
+ *   "selector": {
+ *     "type": "forgero:pattern",
+ *     "pattern": ["xxx", "xcx", "xxx"],
+ *     "depth": 2,
+ *     "direction": "horizontal",
+ *     "filter": "forgero:can_mine"
+ *   }
+ * }
+ * </pre>
  */
 public class PatternSelector implements BlockSelector {
 	public static final String TYPE = "forgero:pattern";
