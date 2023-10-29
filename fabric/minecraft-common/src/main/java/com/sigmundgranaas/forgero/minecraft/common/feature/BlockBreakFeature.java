@@ -9,7 +9,8 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.BlockBreakHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockHardnessCalculator;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 
 import net.minecraft.entity.Entity;
@@ -167,12 +168,12 @@ public class BlockBreakFeature extends BasePredicateFeature implements BlockBrea
 	public static final String BLOCK_BREAK_TYPE = "minecraft:block_breaking";
 	public static final ClassKey<BlockBreakFeature> KEY = new ClassKey<>(BLOCK_BREAK_TYPE, BlockBreakFeature.class);
 	public static final String SELECTOR = "selector";
-	public static final String HARDNESS = "hardness";
+	public static final String SPEED = "speed";
 	public static final FeatureBuilder<BlockBreakFeature> BUILDER = FeatureBuilder.of(BLOCK_BREAK_TYPE, BlockBreakFeature::buildFromBase);
 	private final BlockSelector selector;
-	private final BlockHardnessCalculator hardnessCalculator;
+	private final BlockBreakSpeedCalculator hardnessCalculator;
 
-	public BlockBreakFeature(BasePredicateData data, BlockSelector selector, BlockHardnessCalculator calculator) {
+	public BlockBreakFeature(BasePredicateData data, BlockSelector selector, BlockBreakSpeedCalculator calculator) {
 		super(data);
 		this.selector = selector;
 		this.hardnessCalculator = calculator;
@@ -183,7 +184,7 @@ public class BlockBreakFeature extends BasePredicateFeature implements BlockBrea
 
 	private static BlockBreakFeature buildFromBase(BasePredicateData data, JsonElement element) {
 		BlockSelector selector = BlockSelector.DEFAULT;
-		BlockHardnessCalculator blockHardnessCalculator = BlockHardnessCalculator.DEFAULT;
+		BlockBreakSpeedCalculator blockHardnessCalculator = Single.DEFAULT;
 		if (element.isJsonObject() && element.getAsJsonObject().has(SELECTOR)) {
 			var object = element.getAsJsonObject();
 			var handlerOpt = HandlerBuilder.DEFAULT.build(BlockSelector.KEY, object.get(SELECTOR));
@@ -192,9 +193,9 @@ public class BlockBreakFeature extends BasePredicateFeature implements BlockBrea
 			}
 		}
 
-		if (element.isJsonObject() && element.getAsJsonObject().has(HARDNESS)) {
+		if (element.isJsonObject() && element.getAsJsonObject().has(SPEED)) {
 			var object = element.getAsJsonObject();
-			var handlerOpt = HandlerBuilder.DEFAULT.build(BlockHardnessCalculator.KEY, object.get(HARDNESS));
+			var handlerOpt = HandlerBuilder.DEFAULT.build(BlockBreakSpeedCalculator.KEY, object.get(SPEED));
 			if (handlerOpt.isPresent()) {
 				blockHardnessCalculator = handlerOpt.get();
 			}
@@ -209,8 +210,8 @@ public class BlockBreakFeature extends BasePredicateFeature implements BlockBrea
 	}
 
 	@Override
-	public float calculateBlockHardness(Entity source, BlockPos target, Set<BlockPos> selectedBlocks) {
-		return hardnessCalculator.calculateBlockHardness(source, target, selectedBlocks);
+	public float calculateBlockBreakingDelta(Entity source, BlockPos target, Set<BlockPos> selectedBlocks) {
+		return hardnessCalculator.calculateBlockBreakingDelta(source, target, selectedBlocks);
 	}
 
 	@Override

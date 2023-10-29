@@ -8,11 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 @FunctionalInterface
-public interface BlockHardnessCalculator {
-	ClassKey<BlockHardnessCalculator> KEY = new ClassKey<>("forgero:hardness_calculator", BlockHardnessCalculator.class);
+public interface BlockBreakSpeedCalculator {
+	ClassKey<BlockBreakSpeedCalculator> KEY = new ClassKey<>("forgero:speed", BlockBreakSpeedCalculator.class);
 
-	BlockHardnessCalculator DEFAULT = (Entity source, BlockPos target, Set<BlockPos> selectedBlocks) ->
+	BlockBreakSpeedCalculator DEFAULT = (Entity source, BlockPos target, Set<BlockPos> selectedBlocks) ->
 			source.getWorld().getBlockState(target).getHardness(source.getWorld(), target);
 
-	float calculateBlockHardness(Entity source, BlockPos target, Set<BlockPos> selectedBlocks);
+	float calculateBlockBreakingDelta(Entity source, BlockPos target, Set<BlockPos> selectedBlocks);
 }

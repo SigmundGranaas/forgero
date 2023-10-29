@@ -14,6 +14,6 @@ public class BlockHandlerHelper {
 		return container.stream()
 				.features(BlockBreakFeature.KEY)
 				.findFirst()
-				.map(feature -> feature.calculateBlockHardness(player, pos, feature.selectBlocks(player, pos)));
+				.map(feature -> feature.calculateBlockBreakingDelta(player, pos, feature.selectBlocks(player, pos)));
 	}
 }

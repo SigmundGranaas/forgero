@@ -30,6 +30,12 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Diminishing;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
@@ -139,8 +145,14 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 
 		// Hardness calculators
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Average.TYPE, Average.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Diminishing.TYPE, Diminishing.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Instant.TYPE, Instant.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Single.TYPE, Single.BUILDER);
 
 		// Block filters
+		// Soonish
 	}
 
 	private void soulLevelPropertyReloader() {

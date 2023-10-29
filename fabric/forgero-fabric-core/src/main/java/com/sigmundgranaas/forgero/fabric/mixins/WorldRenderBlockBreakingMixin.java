@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 
 import com.google.common.collect.Sets;
@@ -101,8 +102,14 @@ public abstract class WorldRenderBlockBreakingMixin {
 		}
 		PropertyHelper.ofPlayerHands(this.client.player)
 				.flatMap(container -> ToolBlockHandler.of(container, info.getPos(), this.client.player))
-				.ifPresent(handler -> handler.handleExceptOrigin(blockInfo -> {
-					this.blockBreakingProgressions.remove(blockInfo.asLong());
-				}));
+				.ifPresent(handler -> {
+					Iterator<BlockPos> iterator = handler.availableBlocks().iterator();
+					while (iterator.hasNext()) {
+						BlockPos blockPos = iterator.next();
+						if (!blockPos.equals(handler.originPos())) {
+							this.blockBreakingProgressions.remove(blockPos.asLong());
+						}
+					}
+				});
 	}
 }

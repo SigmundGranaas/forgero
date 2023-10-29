@@ -100,9 +100,7 @@
           ],
           "depth": 1
         },
-        "hardness_calculation": {
-          "type": "forgero:hardness_composite"
-        },
+        "speed": "forgero:all",
         "predicate": {
           "type": "minecraft:block",
           "tag": "forgero:vein_mining_ores"

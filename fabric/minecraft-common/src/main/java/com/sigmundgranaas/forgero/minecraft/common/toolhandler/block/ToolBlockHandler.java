@@ -3,10 +3,12 @@ package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -38,7 +40,7 @@ public class ToolBlockHandler {
 
 	public ToolBlockHandler(BlockPos originPos, Set<BlockPos> blocks, float hardness, CacheAbleKey key) {
 		this.key = key;
-		this.availableBlocks = blocks;
+		this.availableBlocks = new HashSet<>(blocks);
 		this.originPos = originPos;
 		this.hardness = hardness;
 	}
@@ -50,11 +52,16 @@ public class ToolBlockHandler {
 				.put(BLOCK_TARGET, pos);
 
 
-		return container.stream()
+		var featureOpt = container.stream()
 				.features(BlockBreakFeature.KEY)
 				.filter(feature -> feature.test(Matchable.DEFAULT_TRUE, ctx))
-				.findFirst()
-				.map(feature -> new ToolBlockHandler(pos, feature.selectBlocks(player, pos), feature.calculateBlockHardness(player, pos, feature.selectBlocks(player, pos)), CacheAbleKey.EMPTY));
+				.findFirst();
+
+		if (featureOpt.isPresent()) {
+			Set<BlockPos> selected = ImmutableSet.copyOf(featureOpt.get().selectBlocks(player, pos));
+			return Optional.of(new ToolBlockHandler(pos, selected, featureOpt.get().calculateBlockBreakingDelta(player, pos, selected), CacheAbleKey.EMPTY));
+		}
+		return Optional.empty();
 	}
 
 	/**
@@ -64,9 +71,12 @@ public class ToolBlockHandler {
 	 * @return the handler for chaining.
 	 */
 	public ToolBlockHandler handle(Consumer<BlockPos> consumer) {
-		availableBlocks.forEach(consumer);
+		for (BlockPos blockPos : availableBlocks) {
+			consumer.accept(blockPos);
+		}
 		return this;
 	}
+
 
 	/**
 	 * Runs an action for every block in the handler except the origin block.
@@ -76,7 +86,11 @@ public class ToolBlockHandler {
 	 * @return the handler for chaining.
 	 */
 	public ToolBlockHandler handleExceptOrigin(Consumer<BlockPos> consumer) {
-		availableBlocks.stream().filter(info -> !info.equals(originPos)).forEach(consumer);
+		for (BlockPos blockPos : availableBlocks) {
+			if (!blockPos.equals(originPos)) {
+				consumer.accept(blockPos);
+			}
+		}
 		return this;
 	}
 
@@ -85,7 +99,7 @@ public class ToolBlockHandler {
 	 * This will remove the handled selection from the cache, preventing invalid selections results.
 	 */
 	public void cleanUp() {
-		BlockHandlerCache.remove(key);
+		//BlockHandlerCache.remove(key);
 	}
 
 	public record BlockInfo(BlockPos pos) implements CacheAbleKey {

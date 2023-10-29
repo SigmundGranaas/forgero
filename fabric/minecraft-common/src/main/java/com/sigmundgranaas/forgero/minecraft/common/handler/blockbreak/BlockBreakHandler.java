@@ -9,7 +9,7 @@ public interface BlockBreakHandler {
 
 	Set<BlockPos> selectBlocks(Entity source, BlockPos target);
 
-	float calculateBlockHardness(Entity source, BlockPos target, Set<BlockPos> selectedBlocks);
+	float calculateBlockBreakingDelta(Entity source, BlockPos target, Set<BlockPos> selectedBlocks);
 
 	void onUsed(Entity source, BlockPos target, Set<BlockPos> selectedBlocks);
 }
