@@ -1,11 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
-import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Stream;
-
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
@@ -14,12 +8,17 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Attribut
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference.DifferenceHelper;
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
+
+import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Stream;
 
 public class AttributeWriterHelper extends BaseWriter {
 	private final PropertyContainer container;
@@ -43,7 +42,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public static float roundFloat(float number) {
-		NumberFormat format = NumberFormat.getInstance();
+		NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
 		format.setMaximumFractionDigits(2);
 		try {
 			return Float.parseFloat(format.format(number));

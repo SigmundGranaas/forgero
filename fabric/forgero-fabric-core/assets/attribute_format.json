@@ -90,16 +90,16 @@
       }
     },
     {
-      "type": "forgero:block_breaking",
-      "selection": {
+      "type": "minecraft:block_breaking",
+      "selector": {
         "type": "forgero:radius",
         "filter": {
           "type": "forgero:same_block"
         },
         "depth": 3
       },
-      "hardness_calculation": {
-        "type": "forgero:combined_hardness"
+      "speed": {
+        "type": "forgero:all"
       },
       "predicate": {
         "type": "minecraft:block",

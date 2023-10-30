@@ -1,11 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
@@ -13,9 +7,10 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
-
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
+
+import java.util.*;
 
 public class UpgradeAttributeSectionWriter extends SectionWriter {
 	public static final Set<Category> UPGRADE_CATEGORIES = Set.of(Category.UTILITY, Category.DEFENSIVE, Category.OFFENSIVE, Category.ALL);
@@ -23,14 +18,18 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 	private final AttributeWriterHelper helper;
 	private final PropertyContainer container;
 
-	public UpgradeAttributeSectionWriter(PropertyContainer container) {
-		super(TooltipConfiguration.builder().build());
-		this.helper = new AttributeWriterHelper(container, configuration.toBuilder().baseIndent(configuration.baseIndent() + 1).build());
+	public UpgradeAttributeSectionWriter(PropertyContainer container, TooltipConfiguration configuration) {
+		super(configuration);
+		this.helper = new AttributeWriterHelper(container, configuration);
 		this.container = container;
 	}
 
 	public static Optional<SectionWriter> of(PropertyContainer container) {
-		SectionWriter writer = new UpgradeAttributeSectionWriter(container);
+		return of(container, TooltipConfiguration.builder().build());
+	}
+
+	public static Optional<SectionWriter> of(PropertyContainer container, TooltipConfiguration configuration) {
+		SectionWriter writer = new UpgradeAttributeSectionWriter(container, configuration);
 		if (writer.shouldWrite()) {
 			return Optional.of(writer);
 		}

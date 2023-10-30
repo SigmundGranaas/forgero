@@ -26,6 +26,9 @@ public class FeatureRegistry {
 						.flatMap(key -> Optional.ofNullable(builders.get(key)))
 						.flatMap(builder -> builder.build(object))
 						.map(clazz.get()::cast);
+
+			} else {
+				return BasePredicateData.of(object).map(DefaultPredicateFeature::new);
 			}
 		}
 		return Optional.empty();

@@ -24,7 +24,8 @@
         },
         "after_activation": {
           "consume": "forgero:source"
-        }
+        },
+        "description": "feature.forgero.undying_revival.description"
       }
     ]
   },

@@ -97,13 +97,15 @@
             "xxx"
           ],
           "depth": 2,
-          "direction": "horizontal",
+          "direction": "multi",
           "filter": "forgero:can_mine"
         },
+        "speed": "forgero:all",
         "predicate": {
           "type": "forgero:can_mine"
         },
-        "title": "feature.forgero.pattern_mining.title"
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.3x3-description"
       }
     ]
   },

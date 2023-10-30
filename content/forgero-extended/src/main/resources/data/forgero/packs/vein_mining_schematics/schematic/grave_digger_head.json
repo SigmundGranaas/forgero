@@ -88,7 +88,7 @@
     ],
     "features": [
       {
-        "type": "forgero:block_breaking",
+        "type": "minecraft:block_breaking",
         "selector": {
           "type": "forgero:radius",
           "filter": {
@@ -96,13 +96,13 @@
           },
           "depth": 2
         },
-        "hardness": {
-          "type": "forgero:hardness_composite"
-        },
+        "speed": "forgero:all",
         "predicate": {
           "type": "minecraft:block",
           "tag": "forgero:vein_mining_dirt"
-        }
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.vein_mining.dirt_in_area"
       }
     ]
   },

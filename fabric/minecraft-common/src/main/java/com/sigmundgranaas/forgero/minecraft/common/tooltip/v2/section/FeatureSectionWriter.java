@@ -1,19 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
 import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.WriterHelper;
-
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 public class FeatureSectionWriter extends SectionWriter {
 	private final PropertyContainer container;
@@ -39,7 +38,7 @@ public class FeatureSectionWriter extends SectionWriter {
 
 	@Override
 	public boolean shouldWrite() {
-		return !container.stream().features().toList().isEmpty();
+		return !container.stream().features().toList().isEmpty() && !entries().isEmpty();
 	}
 
 	@Override
