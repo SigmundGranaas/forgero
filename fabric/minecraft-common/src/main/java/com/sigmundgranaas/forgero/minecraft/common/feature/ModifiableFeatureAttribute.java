@@ -23,6 +23,10 @@ public class ModifiableFeatureAttribute implements ComputedAttribute {
 		return of(value.getAsJsonObject(), jsonKey, key, 1);
 	}
 
+	public static ModifiableFeatureAttribute of(String key, float value) {
+		return new ModifiableFeatureAttribute(BaseAttribute.of(value, key));
+	}
+
 	public static ModifiableFeatureAttribute of(JsonObject value, String jsonKey, String key, float defaultValue) {
 		if (value.has(jsonKey)) {
 			return new ModifiableFeatureAttribute(BaseAttribute.of(value.get(jsonKey).getAsFloat(), key));
