@@ -22,5 +22,20 @@ public class ExtendedLootTable {
 				tableBuilder.pool(poolBuilder);
 			}
 		});
+
+		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
+			if (source.isBuiltin() && id.equals(EntityType.ENDER_DRAGON.getLootTableId())) {
+				LootPool.Builder poolBuilder = LootPool.builder()
+						.with(ItemEntry.builder(Registry.ITEM.get(new Identifier("forgero:dragon_scale"))));
+				tableBuilder.pool(poolBuilder);
+			}
+		});
 	}
+
+
+
 }
+
+
+
+

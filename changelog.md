@@ -1,4 +1,4 @@
-# Forgero Beta release 0.11.5
+# Forgero Beta release 0.11.6
 
 ## ! Warning !
 
@@ -7,4 +7,7 @@ with this version of Forgero**
 
 # Changelog
 
-* [Patch]: Fixed crash from missing particle sprite in empty model
+* [Patch]: Fix negative tool durability by @Steveplays28
+* [Feature]: Added a NameVisitor to parse and inject custom names by @SigmundGranaas
+* [Feature]: Reworked Attribute predicates. by @SigmundGranaas
+* [Patch]: Added dragon scale to loottable by @JorisDeBeer
