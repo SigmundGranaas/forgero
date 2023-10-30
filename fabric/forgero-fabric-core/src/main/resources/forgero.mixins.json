@@ -8,7 +8,6 @@
     "AbstractFurnaceWoodPartsFuelMixin",
     "DisableVanillaToolsLootTableGeneration",
     "DynamicToolItemStackMixin",
-    "ItemEntityMagneticMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackUnbreakableMixin",
     "LivingEntityMagneticMixin",

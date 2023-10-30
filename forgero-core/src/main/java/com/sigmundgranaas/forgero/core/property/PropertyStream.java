@@ -1,10 +1,5 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
@@ -12,6 +7,11 @@ import com.sigmundgranaas.forgero.core.util.ForwardingStream;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The property stream is a special stream for handling property specific operations.
@@ -70,7 +70,9 @@ public record PropertyStream(
 	}
 
 	public <T extends Feature> Stream<T> features(ClassKey<T> key) {
-		return stream.filter(key.clazz()::isInstance)
+		return stream
+				.filter(property -> property.type().equals(key.type()))
+				.filter(key.clazz()::isInstance)
 				.map(key.clazz()::cast);
 	}
 

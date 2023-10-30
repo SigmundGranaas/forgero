@@ -1,24 +1,26 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
-
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableSet;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.CacheAbleKey;
+import com.sigmundgranaas.forgero.core.property.v2.cache.FeatureCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.FeatureContainerKey;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+
+import java.util.*;
+import java.util.function.Consumer;
+
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 /**
  * A handler for a block that is being mined.
@@ -31,6 +33,12 @@ import net.minecraft.util.math.BlockPos;
 @Getter
 @Accessors(fluent = true)
 public class ToolBlockHandler {
+	private static final Cache<CacheAbleKey, ToolBlockHandler> blockHandlerCache = CacheBuilder.newBuilder()
+			.maximumSize(10)
+			.softValues()
+			.build();
+	private static final Map<CacheAbleKey, Boolean> canMineCache = new HashMap<>();
+
 	public static ToolBlockHandler EMPTY = new ToolBlockHandler(new BlockPos(0, 0, 0), Collections.emptySet(), 0f, CacheAbleKey.EMPTY);
 
 	private final Set<BlockPos> availableBlocks;
@@ -46,6 +54,18 @@ public class ToolBlockHandler {
 	}
 
 	public static Optional<ToolBlockHandler> of(PropertyContainer container, BlockPos pos, PlayerEntity player) {
+		FeatureContainerKey featureKey = FeatureContainerKey.of(container, BlockBreakFeature.KEY);
+		CacheAbleKey cacheKey = new Key(player.getMainHandStack(), pos, Direction.getEntityFacingOrder(player)[0]);
+		if (!FeatureCache.check(featureKey) || (canMineCache.containsKey(cacheKey) && !canMineCache.get(cacheKey))) {
+			return Optional.empty();
+		}
+
+		ToolBlockHandler cachedHandler = blockHandlerCache.getIfPresent(cacheKey);
+
+		if (cachedHandler != null) {
+			return Optional.of(cachedHandler);
+		}
+
 		MatchContext ctx = MatchContext.of()
 				.put(WORLD, player.getWorld())
 				.put(ENTITY, player)
@@ -59,7 +79,11 @@ public class ToolBlockHandler {
 
 		if (featureOpt.isPresent()) {
 			Set<BlockPos> selected = ImmutableSet.copyOf(featureOpt.get().selectBlocks(player, pos));
-			return Optional.of(new ToolBlockHandler(pos, selected, featureOpt.get().calculateBlockBreakingDelta(player, pos, selected), CacheAbleKey.EMPTY));
+			var handler = new ToolBlockHandler(pos, selected, featureOpt.get().calculateBlockBreakingDelta(player, pos, selected), cacheKey);
+			blockHandlerCache.put(cacheKey, handler);
+			return Optional.of(handler);
+		} else {
+			canMineCache.put(cacheKey, false);
 		}
 		return Optional.empty();
 	}
@@ -99,13 +123,29 @@ public class ToolBlockHandler {
 	 * This will remove the handled selection from the cache, preventing invalid selections results.
 	 */
 	public void cleanUp() {
-		//BlockHandlerCache.remove(key);
+		BlockHandlerCache.remove(key);
+		canMineCache.clear();
 	}
 
-	public record BlockInfo(BlockPos pos) implements CacheAbleKey {
+
+	public record Key(ItemStack stack, BlockPos pos, Direction direction) implements CacheAbleKey {
+
 		@Override
 		public String key() {
-			return pos.asLong() + "";
+			return stack.hashCode() + ":" + pos.asLong() + ":" + direction.toString();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			Key key = (Key) o;
+			return key().equals(key.key());
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(key());
 		}
 	}
 }

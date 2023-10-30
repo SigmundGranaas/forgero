@@ -1,14 +1,10 @@
 package com.sigmundgranaas.forgero.core.property.v2;
 
-import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_KEY;
-
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModification;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
-import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
-import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
@@ -39,10 +35,11 @@ public interface ComputedAttribute {
 	}
 
 	static ComputedAttribute of(ContainerTargetPair pair, String key) {
-		if (ContainsFeatureCache.check(PropertyTargetCacheKey.of(pair.container(), BROKEN_TYPE_KEY))) {
+		var cacheKey = AttributeCache.AttributeContainerKey.of(pair.container(), key);
+		if (!AttributeCache.has(cacheKey)) {
 			return ComputedAttribute.of(0f, key);
 		}
-		return AttributeCache.computeIfAbsent(pair, () -> compute(pair, key), key);
+		return AttributeCache.computeIfAbsent(cacheKey, () -> compute(pair, key));
 	}
 
 	static ComputedAttribute compute(ContainerTargetPair pair, String key) {

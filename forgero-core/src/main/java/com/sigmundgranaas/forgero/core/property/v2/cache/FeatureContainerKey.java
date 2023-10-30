@@ -1,12 +1,14 @@
 package com.sigmundgranaas.forgero.core.property.v2.cache;
 
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
+import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
+
 import java.util.Objects;
 
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-
-public record PropertyTargetCacheKey(ContainerTargetPair pair, String key) {
-	public static PropertyTargetCacheKey of(PropertyContainer container, String key) {
-		return new PropertyTargetCacheKey(ContainerTargetPair.of(container), key);
+public record FeatureContainerKey(ContainerTargetPair pair, ClassKey<? extends Feature> key) {
+	public static FeatureContainerKey of(PropertyContainer container, ClassKey<? extends Feature> key) {
+		return new FeatureContainerKey(ContainerTargetPair.of(container), key);
 	}
 
 	@Override
@@ -18,7 +20,7 @@ public record PropertyTargetCacheKey(ContainerTargetPair pair, String key) {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		PropertyTargetCacheKey that = (PropertyTargetCacheKey) o;
+		FeatureContainerKey that = (FeatureContainerKey) o;
 		return Objects.equals(pair, that.pair) && Objects.equals(key, that.key);
 	}
 

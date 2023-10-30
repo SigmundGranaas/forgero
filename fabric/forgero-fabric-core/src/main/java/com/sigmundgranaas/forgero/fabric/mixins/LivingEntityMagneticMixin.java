@@ -1,23 +1,22 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
-
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMagneticMixin extends Entity {
@@ -38,6 +37,7 @@ public abstract class LivingEntityMagneticMixin extends Entity {
 	@Inject(method = "baseTick", at = @At("RETURN"))
 	public void forgero$entityBaseTick$EntityTickHandler(CallbackInfo callbackInfo) {
 		if (this.getMainHandStack().getItem() instanceof PropertyContainer) {
+
 			LivingEntity entity = (LivingEntity) (Object) this;
 			ItemStack main = entity.getMainHandStack();
 			MatchContext context = MatchContext.of()
@@ -45,6 +45,8 @@ public abstract class LivingEntityMagneticMixin extends Entity {
 					.put(WORLD, entity.world);
 			streamFeature(main, context, EntityTickFeature.KEY)
 					.forEach(handler -> handler.handle(entity));
+
+
 		}
 	}
 }

@@ -1,12 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.getBlockPositionsAround;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
@@ -14,10 +7,16 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttr
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.getBlockPositionsAround;
 
 /**
  * BlockSelector that selects chained blocks in a radius around the root position.
@@ -36,8 +35,6 @@ public class RadiusVeinSelector implements BlockSelector {
 	private final BlockFilter filter;
 	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
-	private Set<BlockPos> selectedBlocks = new HashSet<>();
-	private Set<BlockPos> newBlocksToScan = new HashSet<>();
 
 	public RadiusVeinSelector(ModifiableFeatureAttribute depth, BlockFilter filter) {
 		this.depth = depth;
@@ -77,11 +74,12 @@ public class RadiusVeinSelector implements BlockSelector {
 		if (!filter.filter(source, rootPos, rootPos)) {
 			return new HashSet<>();
 		}
+		Set<BlockPos> selectedBlocks = new HashSet<>();
 
-		selectedBlocks = new HashSet<>();
 		selectedBlocks.add(rootPos);
 
 		Set<BlockPos> blocksToScan = new HashSet<>();
+		Set<BlockPos> newBlocksToScan;
 		blocksToScan.add(rootPos);
 
 		//Scanned blocks is used to prevent infinite loops
@@ -98,8 +96,14 @@ public class RadiusVeinSelector implements BlockSelector {
 				}
 				//Check all blocks around the block to scan and add to selection if valid
 				Set<BlockPos> blocksAroundScannedBlock = getBlockPositionsAround(blockToScanPos);
-				blocksAroundScannedBlock.forEach(pos -> handleScannedBlock(pos, rootPos, source));
 
+
+				for (BlockPos pos : blocksAroundScannedBlock) {
+					if (filter.filter(source, pos, rootPos)) {
+						selectedBlocks.add(pos);
+						newBlocksToScan.add(pos);
+					}
+				}
 				scannedBlocks.add(blockToScanPos);
 			}
 			//Reset blocks to scan for a new depth
@@ -108,13 +112,5 @@ public class RadiusVeinSelector implements BlockSelector {
 		}
 
 		return selectedBlocks;
-	}
-
-	//Handling each block to see of it should propagate or stop the selection
-	protected void handleScannedBlock(BlockPos blockPos, BlockPos root, Entity source) {
-		if (filter.filter(source, blockPos, root)) {
-			selectedBlocks.add(blockPos);
-			newBlocksToScan.add(blockPos);
-		}
 	}
 }
