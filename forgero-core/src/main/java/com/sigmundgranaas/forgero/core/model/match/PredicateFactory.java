@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The PredicateFactory class serves as a factory for creating Matchable instances.
@@ -25,7 +26,7 @@ public class PredicateFactory {
 			.maximumSize(1000)
 			.build(
 					new CacheLoader<>() {
-						public Matchable load(JsonElement element) {
+						public @NotNull Matchable load(@NotNull JsonElement element) {
 							return builders.stream()
 									.map(builder -> builder.create(element))
 									.flatMap(Optional::stream)

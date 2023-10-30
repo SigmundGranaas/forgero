@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.RunnableHandler;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
-
 import net.minecraft.item.ItemStack;
 
 import java.util.Optional;
@@ -12,7 +11,7 @@ import java.util.Optional;
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 public class UndyingHandler implements RunnableHandler {
-	public static String UNDYING_TYPE = "UNDYING_REVIVAL";
+	public static String UNDYING_TYPE = "forgero:undying_revival";
 	private final PropertyContainer container;
 
 	private final ItemStack stack;
@@ -29,7 +28,7 @@ public class UndyingHandler implements RunnableHandler {
 
 	public void handle() {
 		if (container instanceof Composite composite) {
-			var newComposite = composite.removeUpgrade("undying-totem");
+			var newComposite = composite.removeUpgrade("forgero:undying-totem");
 			stack.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(newComposite));
 		}
 	}

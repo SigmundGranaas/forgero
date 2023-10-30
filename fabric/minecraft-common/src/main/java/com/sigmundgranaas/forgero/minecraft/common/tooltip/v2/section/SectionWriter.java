@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.ConditionalWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.BaseWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
-
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -19,10 +19,10 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
 	}
 
 	public Text createSection(String sectionName) {
-		return indented(sectionIndent())
-				.append(translatedSection(sectionName))
-				.append(sectionSeparator())
-				.formatted(sectionFormatting());
+		return translatedSection(sectionName)
+				.formatted(sectionFormatting())
+				.append(sectionSeparator());
+
 	}
 
 	@Override
@@ -43,12 +43,12 @@ public abstract class SectionWriter extends BaseWriter implements ConditionalWri
 		return sectionIndent() + 1;
 	}
 
-	public Text translatedSection(String sectionName) {
+	public MutableText translatedSection(String sectionName) {
 		return Text.translatable(translatableSectionElement(sectionName)).formatted(base());
 	}
 
 	public Formatting sectionFormatting() {
-		return Formatting.GRAY;
+		return Formatting.DARK_GRAY;
 	}
 
 	private String translatableSectionElement(String element) {

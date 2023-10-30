@@ -41,8 +41,10 @@ public class FilledSlot extends AbstractTypedSlot {
 	}
 
 	private List<Property> filterProperties(Matchable target, MatchContext context) {
-		var properties = upgrade.applyProperty(target, context).stream().map(upgrade::applySource).toList();
-		return new UpgradePropertyProcessor(categories).process(properties, target, context);
+		var properties = upgrade.applyProperty(target, context).stream()
+				.map(upgrade::applySource)
+				.toList();
+		return new UpgradePropertyProcessor(categories).process(properties, target, context.put(SLOT_CONTEXT_KEY, this));
 	}
 
 	@Override

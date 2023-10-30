@@ -71,7 +71,20 @@
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
+      },
+      {
+        "id": "magnetic-power-test",
+        "type": "forgero:magnetic_power",
+        "value": 1
+      },
+      {
+        "id": "magnetic-range-test",
+        "type": "forgero:magnetic_range",
+        "value": 2,
+        "operation": "MULTIPLICATION"
       }
+    ],
+    "features": [
     ]
   },
   "custom_data": {
