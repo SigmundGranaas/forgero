@@ -1,7 +1,7 @@
 {
   "type": "PICKAXE_HEAD_SCHEMATIC",
   "name": "pickaxe_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "pickaxe_head_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -40,8 +40,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "tip_reinforcement",
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -49,51 +58,27 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
+        "value": 25
       },
       {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      },
-      {
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "order": "BASE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.6
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "3"
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    }
   }
 }

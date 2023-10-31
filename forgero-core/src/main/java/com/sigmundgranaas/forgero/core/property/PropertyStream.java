@@ -1,17 +1,13 @@
 package com.sigmundgranaas.forgero.core.property;
 
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
-import com.sigmundgranaas.forgero.core.util.Identifiers;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The property stream is a special stream for handling property specific operations.
@@ -43,19 +39,8 @@ public record PropertyStream(
 	public Stream<Attribute> getAttributeOfType(String attributeType) {
 		var rootAttributes = getAttributes()
 				.filter(attribute -> attributeType.equals(attribute.getAttributeType())).toList();
-
-		Map<String, Attribute> idMap = rootAttributes
-				.stream()
-				.filter(attribute -> !attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
-				.collect(Collectors.toMap(Attribute::getId, attribute -> attribute, (existing, replacement) -> existing.getPriority() > replacement.getPriority() ? existing : replacement));
-
-		var nonIdAttributes = rootAttributes
-				.stream()
-				.filter(attribute -> attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
-				.toList();
-
-		return Stream.of(idMap.values(), nonIdAttributes)
-				.flatMap(Collection::stream)
+		
+		return rootAttributes.stream()
 				.sorted(Attribute::compareTo);
 	}
 

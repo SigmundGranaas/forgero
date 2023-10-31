@@ -5,8 +5,8 @@
       "name": "binding",
       "template": "binding.png",
       "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": "60",
+      "palette": "MATERIAL",
+      "order": 40,
       "variants": [
         {
           "target": [
@@ -23,27 +23,92 @@
             "type:PICKAXE"
           ],
           "template": "pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding.png"
         }
       ]
     },
     {
-      "name": "spiked_binding",
-      "template": "spiked_binding.png",
+      "name": "binding_dye",
+      "template": "binding.png",
       "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": "60",
+      "palette": "DYE",
+      "order": 45,
       "variants": [
         {
           "target": [
             "type:AXE"
           ],
-          "template": "spiked_binding.png"
+          "offset": [
+            1,
+            1
+          ],
+          "template": "axe_binding.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "spiked_binding.png"
+          "template": "pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "binding_reinforcement.png",
+      "order": 50,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ],
+          "template": "axe_binding_reinforced.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding_reinforced.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding_reinforced.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding_reinforced.png"
         }
       ]
     },
@@ -52,7 +117,11 @@
       "type": "GENERATE",
       "palette": "TRINKET",
       "template": "square_gem_center.png",
-      "order": 79,
+      "offset": [
+        -1,
+        -1
+      ],
+      "order": 90,
       "variants": [
         {
           "target": [
@@ -68,24 +137,33 @@
             "type:AXE"
           ],
           "offset": [
+            1,
+            1
+          ]
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "offset": [
             2,
             2
           ]
         },
         {
           "target": [
-            "model:spiked_binding.png"
+            "model:binding.png"
           ],
           "offset": [
-            2,
-            2
+            -1,
+            -1
           ]
         }
       ]
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
+        "type:MATERIAL",
         "type:BINDING_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
@@ -93,19 +171,19 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
-        "id:spiked_binding-schematic"
+        "type:MATERIAL",
+        "slot:0"
       ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "spiked_binding"
+      "modelType": "UPGRADE",
+      "template": "binding_material"
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
-        "id:spiked_binding-schematic"
+        "type:TOTEM",
+        "slot:1"
       ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "spiked_binding"
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
     },
     {
       "target": [
@@ -117,11 +195,11 @@
     },
     {
       "target": [
-        "type:TOTEM",
-        "slot:1"
+        "type:DYE",
+        "slot:2"
       ],
       "modelType": "UPGRADE",
-      "template": "binding_gem"
+      "template": "binding_dye"
     }
   ]
 }
