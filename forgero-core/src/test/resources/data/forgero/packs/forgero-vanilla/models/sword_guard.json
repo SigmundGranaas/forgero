@@ -12,8 +12,8 @@
       "name": "guard_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "square_gem_center.png",
-      "order": 66,
+      "template": "sword_gem_center.png",
+      "order": 75,
       "offset": [
         -3,
         -3
@@ -24,7 +24,16 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "sword_guard_reinforcement.png",
-      "order": 62
+      "order": 70,
+      "variants": [
+      ]
+    },
+    {
+      "name": "sword_guard_dye",
+      "template": "sword_guard.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 65
     },
     {
       "target": [
@@ -57,6 +66,14 @@
       ],
       "modelType": "UPGRADE",
       "template": "guard_gem"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "sword_guard_dye"
     }
   ]
 }

@@ -1,15 +1,4 @@
 {
-  "parent": "MATERIAL",
-  "name": "SECONDARY_MATERIAL",
-  "children": [
-    {
-      "name": "LEATHER"
-    },
-    {
-      "name": "PLANT"
-    },
-    {
-      "name": "STRING"
-    }
-  ]
+  "parent": "UPGRADE_MATERIAL",
+  "name": "SECONDARY_MATERIAL"
 }

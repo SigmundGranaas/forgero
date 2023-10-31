@@ -1,7 +1,7 @@
 {
   "type": "SHOVEL_HEAD_SCHEMATIC",
   "name": "shovel_head-schematic",
-  "parent": "tool_part_head_schematic",
+  "parent": "shovel_head_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -20,7 +20,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 2
+            "amount": 1
           }
         ]
       }
@@ -40,15 +40,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "TRINKET",
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -56,39 +58,27 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
+        "value": 25
       },
       {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.0
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -2.7
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "1"
+    "ingredient_count": {
+      "value": 1,
+      "context": "LOCAL"
+    }
   }
 }

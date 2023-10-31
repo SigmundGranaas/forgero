@@ -72,7 +72,8 @@ public record BaseAttribute(String attribute,
 
 	@Override
 	public CalculationOrder getOrder() {
-		return this.order;
+		return
+				Objects.requireNonNullElse(this.order, Attribute.super.getOrder());
 	}
 
 	@Override
