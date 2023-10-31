@@ -12,7 +12,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
@@ -148,7 +147,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 			builder.put(DURABILITY, new EntityAttributeModifier(BASE_DURABILITY_ID, "Tool modifier", durability, EntityAttributeModifier.Operation.ADDITION));
 
 			// Mining Level
-			int miningLevel = ComputedAttribute.of(dynamicProperties(stack), Durability.KEY).asInt();
+			int miningLevel = ComputedAttribute.of(dynamicProperties(stack), MiningLevel.KEY).asInt();
 			if (miningLevel != 0) {
 				builder.put(MINING_LEVEL, new EntityAttributeModifier(BASE_MINING_LEVEL_ID, "Tool modifier", miningLevel, EntityAttributeModifier.Operation.ADDITION));
 

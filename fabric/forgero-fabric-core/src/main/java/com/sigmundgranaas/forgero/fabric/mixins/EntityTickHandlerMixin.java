@@ -1,28 +1,29 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
+
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMagneticMixin extends Entity {
+public abstract class EntityTickHandlerMixin extends Entity {
 
 
-	public LivingEntityMagneticMixin(EntityType<?> type, World world) {
+	public EntityTickHandlerMixin(EntityType<?> type, World world) {
 		super(type, world);
 	}
 

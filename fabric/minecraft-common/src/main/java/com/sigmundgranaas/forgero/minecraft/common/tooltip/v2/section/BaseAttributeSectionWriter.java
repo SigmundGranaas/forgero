@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
@@ -10,13 +15,9 @@ import com.sigmundgranaas.forgero.core.state.composite.Constructed;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
+
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class BaseAttributeSectionWriter extends SectionWriter {
 
@@ -73,6 +74,7 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 
 	protected List<Text> entry(String attributeType) {
 		List<Attribute> compressible = helper.attributesOfType(attributeType)
+				.filter(attribute -> attribute.getContext().value().equals(Contexts.COMPOSITE.value()))
 				.sorted(Attribute::compareTo)
 				.filter(attribute -> attribute.getPredicate().equals(Matchable.DEFAULT_TRUE))
 				.reduce(this::combine)
@@ -80,6 +82,7 @@ public class BaseAttributeSectionWriter extends SectionWriter {
 				.orElse(Collections.emptyList());
 
 		List<Attribute> uniques = helper.attributesOfType(attributeType)
+				.filter(attribute -> attribute.getContext().value().equals(Contexts.COMPOSITE.value()))
 				.filter(attribute -> !attribute.getPredicate().equals(Matchable.DEFAULT_TRUE))
 				.sorted(Attribute::compareTo)
 				.toList();
