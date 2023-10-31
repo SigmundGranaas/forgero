@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +36,7 @@ import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -42,6 +44,8 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public static final BakedModel EMPTY = new EmptyBakedModel();
 	private static final Set<StackContextKey> currentlyBuilding = Collections.newSetFromMap(new ConcurrentHashMap<>());
 	private final LoadingCache<StackContextKey, BakedModelResult> cache;
+	private final LoadingCache<String, BakedModelResult> keyModelsCache;
+	private final LoadingCache<Item, BakedModelResult> vanillaModelCache;
 	private final ModelRegistry registry;
 	private final StateService stateService;
 	private ModelLoader loader;
@@ -57,6 +61,26 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 					public @NotNull
 					BakedModelResult load(@NotNull StackContextKey pair) {
 						return converter(pair.stack(), MatchContext.mutable(pair.context())).flatMap((model) -> convertModel(model)).orElse(new BakedModelResult(new ModelResult(), EMPTY));
+					}
+				});
+
+
+		this.keyModelsCache = CacheBuilder.newBuilder()
+				.softValues()
+				.maximumSize(100)
+				.build(new CacheLoader<>() {
+					@Override
+					public BakedModelResult load(String key) {
+						return new BakedModelResult(new ModelResult(), EMPTY);
+					}
+				});
+		this.vanillaModelCache = CacheBuilder.newBuilder()
+				.softValues()
+				.maximumSize(100)
+				.build(new CacheLoader<>() {
+					@Override
+					public BakedModelResult load(Item key) {
+						return new BakedModelResult(new ModelResult(), EMPTY);
 					}
 				});
 	}
@@ -84,6 +108,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		StackContextKey key = new StackContextKey(stack, context);
 		BakedModelResult model = cache.getIfPresent(key);
 
+
 		// If the model exists and is valid, return it
 		if (model != null && model.result().isValid(Matchable.DEFAULT_TRUE, context)) {
 			return model.model();
@@ -99,6 +124,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			return model.model();
 		}
 
+
 		// If there's no model at all (first time fetching for this key)
 		DynamicBakedModel dynamicModel = new DynamicBakedModel();
 		ModelResult result = new ModelResult();
@@ -111,6 +137,17 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			currentlyBuilding.add(key);
 			triggerAsyncRebuild(key, baked);
 		}
+
+		if (stack.hasNbt() && stack.getNbt().contains("ModelCacheKey")) {
+			if (keyModelsCache.asMap().containsKey(stack.getNbt().getString("ModelCacheKey"))) {
+				return keyModelsCache.getUnchecked(stack.getNbt().getString("ModelCacheKey")).model();
+			}
+		} else if (stack.hasNbt()) {
+			stack.getNbt().putString("ModelCacheKey", UUID.randomUUID().toString());
+		} else if (!stack.hasNbt() && vanillaModelCache.asMap().containsKey(stack.getItem())) {
+			return vanillaModelCache.getUnchecked(stack.getItem()).model();
+		}
+
 		return dynamicModel;
 	}
 
@@ -127,6 +164,13 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 				return currentModel;
 			}
 		}).thenAccept((m) -> {
+
+			if (key.stack().hasNbt() && key.stack().getNbt().contains("ModelCacheKey")) {
+				String cacheKey = key.stack().getNbt().getString("ModelCacheKey");
+				keyModelsCache.put(cacheKey, m);
+			} else {
+				vanillaModelCache.put(key.stack().getItem(), m);
+			}
 			cache.put(key, m);
 			currentlyBuilding.remove(key);  // Model has been built, remove from tracking set
 		});
