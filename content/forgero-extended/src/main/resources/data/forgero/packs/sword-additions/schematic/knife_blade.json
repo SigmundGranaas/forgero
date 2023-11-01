@@ -65,6 +65,11 @@
         "value": 50
       },
       {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 3.5
+      },
+      {
         "id": "sneaking-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "order": "BASE",

@@ -7,7 +7,7 @@
       {
         "id": "schematic-reach",
         "type": "forgero:reach",
-        "value": 4
+        "value": 4.5
       },
       {
         "id": "schematic-attack_damage-composite",
