@@ -1,0 +1,15 @@
+{
+  "type": "DYE",
+  "name": "light_gray_dye",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:light_gray_dye"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "dye/light_gray_dye"
+  }
+}

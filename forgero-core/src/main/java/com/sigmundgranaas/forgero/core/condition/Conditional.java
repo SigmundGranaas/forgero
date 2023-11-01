@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.core.condition;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,8 +29,11 @@ public interface Conditional<T extends PropertyContainer> {
 	T removeCondition(String identifier);
 
 	@NotNull
-	default List<Property> conditionProperties() {
-		return conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList();
+	default List<Property> conditionProperties(Matchable matchable, MatchContext context) {
+		return conditions().stream()
+				.map(props -> props.getRootProperties(matchable, context))
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	@NotNull

@@ -40,8 +40,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
-        "type": "TOOL_MATERIAL"
+        "description": "reinforcement",
+        "type": "MATERIAL"
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
       }
     ]
   },
@@ -54,7 +63,28 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "id": "magnetic-power-test",
+        "type": "forgero:magnetic_power",
+        "value": 1
+      },
+      {
+        "id": "magnetic-range-test",
+        "type": "forgero:magnetic_range",
+        "value": 2,
+        "operation": "MULTIPLICATION"
       }
+    ],
+    "features": [
     ]
   },
   "custom_data": {

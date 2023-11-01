@@ -1,71 +1,171 @@
 {
   "type": "MINERAL",
   "name": "fluix",
+  "parent": "mineral_base",
   "container": {
     "type": "HOST",
     "id": "ae2:fluix_crystal"
   },
-  "palette": {
-    "name": "fluix"
-  },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "type": "MINING_LEVEL",
         "context": "COMPOSITE",
+        "order": "BASE",
         "operation": "ADDITION",
-        "value": 2
-      },
-      {
-        "type": "MINING_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 6
-      },
-      {
-        "type": "RARITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 60
-      },
-      {
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "category": "ALL",
-        "value": 750.0
-      },
-      {
-        "id": "fluix-base-attack",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3.2
-      },
-      {
-        "id": "fluix-attack-speed-base",
-        "type": "ATTACK_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0
-      }
-    ]
-  },
-  "custom_data": {
-    "enchantment": [
-      {
-        "targets": [
-          "type:PICKAXE_HEAD"
+        "attributes": [
+          {
+            "id": "mineral-attack-speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 2
+          },
+          {
+            "id": "mineral-attack-damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 3.2
+          },
+          {
+            "id": "mineral-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 6
+          },
+          {
+            "id": "mineral-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 2
+          },
+          {
+            "id": "mineral-durability-composite",
+            "type": "DURABILITY",
+            "value": 750
+          },
+          {
+            "id": "mineral-rarity-composite",
+            "type": "RARITY",
+            "value": 60
+          },
+          {
+            "id": "mineral-weight-composite",
+            "type": "WEIGHT",
+            "value": 40
+          },
+          {
+            "id": "mineral-armor-composite",
+            "type": "ARMOR",
+            "value": 5
+          },
+          {
+            "context": "UPGRADE",
+            "attributes": [
+              {
+                "id": "mineral-rarity-upgrade",
+                "type": "RARITY",
+                "order": "BASE",
+                "operation": "ADDITION",
+                "category": "ALL",
+                "value": 60
+              },
+              {
+                "id": "mineral-weight-upgrade",
+                "type": "WEIGHT",
+                "order": "BASE",
+                "operation": "ADDITION",
+                "category": "ALL",
+                "value": 20
+              },
+              {
+                "id": "mineral-attack_speed-offensive-upgrade",
+                "type": "ATTACK_SPEED",
+                "operation": "ADDITION",
+                "category": "OFFENSIVE",
+                "value": 0
+              },
+              {
+                "id": "mineral-attack_damage-offensive-upgrade",
+                "type": "ATTACK_DAMAGE",
+                "operation": "ADDITION",
+                "category": "OFFENSIVE",
+                "value": 1.6
+              },
+              {
+                "id": "mineral-mining_speed-offensive-upgrade",
+                "type": "MINING_SPEED",
+                "operation": "ADDITION",
+                "category": "OFFENSIVE",
+                "value": 3
+              },
+              {
+                "id": "mineral-mining_level-offensive-upgrade",
+                "type": "MINING_LEVEL",
+                "operation": "ADDITION",
+                "category": "OFFENSIVE",
+                "value": 0
+              },
+              {
+                "id": "mineral-durability-offensive-upgrade",
+                "type": "DURABILITY",
+                "operation": "ADDITION",
+                "category": "OFFENSIVE",
+                "value": 375
+              },
+              {
+                "id": "mineral-attack_speed-utility-upgrade",
+                "type": "ATTACK_SPEED",
+                "operation": "ADDITION",
+                "category": "UTILITY",
+                "value": 0
+              },
+              {
+                "id": "mineral-attack_damage-utility-upgrade",
+                "type": "ATTACK_DAMAGE",
+                "operation": "ADDITION",
+                "category": "UTILITY",
+                "value": 0
+              },
+              {
+                "id": "mineral-mining_speed-utility-upgrade",
+                "type": "MINING_SPEED",
+                "operation": "ADDITION",
+                "category": "UTILITY",
+                "value": 0
+              },
+              {
+                "id": "mineral-mining_level-utility-upgrade",
+                "type": "MINING_LEVEL",
+                "operation": "ADDITION",
+                "category": "UTILITY",
+                "value": 0
+              },
+              {
+                "id": "mineral-durability-utility-upgrade",
+                "type": "DURABILITY",
+                "operation": "ADDITION",
+                "category": "UTILITY",
+                "value": 375
+              }
+            ]
+          }
         ],
-        "id": "minecraft:fortune",
-        "level": 1
-      },
-      {
-        "targets": [
-          "type:SWORD_BLADE"
-        ],
-        "id": "minecraft:looting",
-        "level": 1
+        "custom_data": {
+          "enchantment": [
+            {
+              "targets": [
+                "type:PICKAXE_HEAD"
+              ],
+              "id": "minecraft:fortune",
+              "level": 1
+            },
+            {
+              "targets": [
+                "type:SWORD_BLADE"
+              ],
+              "id": "minecraft:looting",
+              "level": 1
+            }
+          ]
+        },
+        "palette": {
+          "name": "fluix"
+        }
       }
     ]
   }

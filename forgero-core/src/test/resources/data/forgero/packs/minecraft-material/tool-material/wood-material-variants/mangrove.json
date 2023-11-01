@@ -1,0 +1,75 @@
+{
+  "type": "WOOD",
+  "name": "mangrove",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:mangrove_planks"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 65
+          },
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 40
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "value": 30
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "wood-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 32
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 32
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "mangrove"
+  }
+}

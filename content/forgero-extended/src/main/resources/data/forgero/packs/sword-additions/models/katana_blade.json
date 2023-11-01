@@ -20,6 +20,17 @@
       ]
     },
     {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:katana_blade.png"
+          ],
+          "template": "katana_blade.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:katana_blade-schematic"

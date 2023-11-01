@@ -1,8 +1,14 @@
 package com.sigmundgranaas.forgerofabric.nbt.v2;
 
+import static com.sigmundgranaas.forgerofabric.nbt.NBTs.PICKAXE_NBT;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.Ingredient;
@@ -13,18 +19,11 @@ import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateParser;
 import com.sigmundgranaas.forgerofabric.testutil.Materials;
 import com.sigmundgranaas.forgerofabric.testutil.Schematics;
 import com.sigmundgranaas.forgerofabric.testutil.ToolParts;
-
-import net.minecraft.nbt.NbtCompound;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgerofabric.nbt.NBTs.PICKAXE_NBT;
+import net.minecraft.nbt.NbtCompound;
 
 
 public class NbtToStateTest {
@@ -84,6 +83,6 @@ public class NbtToStateTest {
 	@Test
 	void assertPropertiesParsed() {
 		var pickaxe = StateParser.STATE_PARSER.parse(PICKAXE_NBT).orElseThrow();
-		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttributeType.ATTACK_DAMAGE));
+		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttackDamage.KEY));
 	}
 }

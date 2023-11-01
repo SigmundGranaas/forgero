@@ -9,6 +9,8 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public class UpgradePropertyProcessor implements PropertyProcessor {
 	private final Set<Category> categories;
@@ -18,11 +20,11 @@ public class UpgradePropertyProcessor implements PropertyProcessor {
 	}
 
 	@Override
-	public List<Property> process(List<Property> propertyList) {
+	public List<Property> process(List<Property> propertyList, Matchable target, MatchContext context) {
 		var otherProperties = propertyList.stream().filter(property -> !isAttribute(property)).toList();
 		var attributes = Property.stream(propertyList)
 				.getAttributes()
-				.filter(this::filterAttribute)
+				.filter(attribute -> filterAttribute(attribute, target, context))
 				.map(this::mapToUndefined).toList();
 
 		return Stream.of(otherProperties, attributes)
@@ -31,7 +33,10 @@ public class UpgradePropertyProcessor implements PropertyProcessor {
 				.toList();
 	}
 
-	private boolean filterAttribute(Attribute attribute) {
+	private boolean filterAttribute(Attribute attribute, Matchable target, MatchContext context) {
+		if (!attribute.applyCondition(target, context)) {
+			return false;
+		}
 		if (attribute.getContext().test(Contexts.UNDEFINED) || attribute.getCategory() == Category.ALL || attribute.getCategory() == Category.PASS) {
 			return true;
 		} else return categories.contains(attribute.getCategory());

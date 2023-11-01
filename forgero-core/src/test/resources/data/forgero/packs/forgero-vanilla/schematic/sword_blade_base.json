@@ -1,0 +1,78 @@
+{
+  "name": "sword_blade_base",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1
+          },
+          {
+            "id": "schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": -4
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "attributes": [],
+    "features": [
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/sword"
+        ]
+      }
+    ]
+  }
+}

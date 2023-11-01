@@ -74,7 +74,7 @@
           {
             "id": "schematic-rarity-composite",
             "type": "RARITY",
-            "value": 1.2
+            "value": 1
           },
           {
             "id": "schematic-mining_speed-composite",

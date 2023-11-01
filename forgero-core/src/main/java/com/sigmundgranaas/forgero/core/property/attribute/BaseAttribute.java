@@ -2,35 +2,78 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.AttributeType;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
-import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base attribute class. This class is opinionated when it comes to how some attributes should be calculated, like MINING level.
  * Special attribute classes will likely deal with special scenarios like MINING level.
  */
 public record BaseAttribute(String attribute,
-							NumericOperation operation,
-							float value,
-							Predicate<Target> condition,
-							CalculationOrder order, int level, Category category, String id,
-							List<String> targets,
-							String targetType,
-							int priority, Context context) implements Attribute {
+                            NumericOperation operation,
+                            float value,
+                            Matchable condition,
+                            CalculationOrder order,
+                            int level,
+                            Category category,
+                            String id,
+                            List<String> targets,
+                            String targetType,
+                            int priority,
+                            Context context,
+                            @Nullable
+                            PropertyContainer attributeSource) implements Attribute {
+
+
+	public static BaseAttribute of(int value, String type) {
+		return new BaseAttribute(type,
+				NumericOperation.ADDITION,
+				value,
+				Matchable.DEFAULT_TRUE,
+				CalculationOrder.BASE,
+				1,
+				Category.UNDEFINED,
+				"",
+				Collections.emptyList(),
+				"",
+				1,
+				Contexts.UNDEFINED,
+				null);
+	}
+
+	public static BaseAttribute of(float value, String type) {
+		return new BaseAttribute(type,
+				NumericOperation.ADDITION,
+				value,
+				Matchable.DEFAULT_TRUE,
+				CalculationOrder.BASE,
+				1,
+				Category.UNDEFINED,
+				"",
+				Collections.emptyList(),
+				"",
+				1,
+				Contexts.UNDEFINED,
+				null);
+	}
 
 	@Override
 	public CalculationOrder getOrder() {
-		return this.order;
+		return
+				Objects.requireNonNullElse(this.order, Attribute.super.getOrder());
 	}
 
 	@Override
@@ -40,16 +83,6 @@ public record BaseAttribute(String attribute,
 
 	@Override
 	public Function<Float, Float> getCalculation() {
-		if (attribute.equals(AttributeType.MINING_LEVEL.toString())) {
-			return (current) -> {
-				if (current > value) {
-					return current;
-				} else {
-					return value;
-				}
-			};
-		}
-
 		if (operation == NumericOperation.ADDITION) {
 			return (current) -> current + leveledValue();
 		} else if (operation == NumericOperation.MULTIPLICATION) {
@@ -61,7 +94,7 @@ public record BaseAttribute(String attribute,
 	}
 
 	@Override
-	public Predicate<Target> getCondition() {
+	public Matchable getPredicate() {
 		return condition;
 	}
 
@@ -117,15 +150,20 @@ public record BaseAttribute(String attribute,
 		return getAttributeType();
 	}
 
-	@Override
-	public boolean applyCondition(Target target) {
-		return condition.test(target);
-	}
-
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority, context);
+	}
+
+	@Override
+	public Optional<PropertyContainer> source() {
+		return Optional.ofNullable(attributeSource());
+	}
+
+	@Override
+	public ComputedAttribute compute() {
+		return ComputedAttribute.of(leveledValue(), type());
 	}
 
 	@Override

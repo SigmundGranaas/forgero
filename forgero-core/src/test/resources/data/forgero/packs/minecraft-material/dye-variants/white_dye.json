@@ -1,0 +1,15 @@
+{
+  "type": "DYE",
+  "name": "white_dye",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:white_dye"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "dye/white_dye"
+  }
+}

@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.core.type;
 
 
-import com.sigmundgranaas.forgero.core.util.Identifiers;
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	private final List<MutableTypeNode> rootNodes;
@@ -46,7 +46,10 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 			MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), name, null);
 			return Optional.of(parentOpt.get().addChild(node));
 		} else {
-			missingNodes.add(new TypeData(name, Optional.of(parent), Collections.emptyList()));
+			if (missingNodes.stream().noneMatch(node -> node.name().equals(name))) {
+				missingNodes.add(new TypeData(name, Optional.of(parent), Collections.emptyList()));
+
+			}
 		}
 		return Optional.empty();
 	}

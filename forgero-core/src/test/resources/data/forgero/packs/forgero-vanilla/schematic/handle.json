@@ -38,8 +38,17 @@
         "category": [
           "UTILITY"
         ],
-        "type": "MATERIAL",
+        "type": "SOFT_MATERIAL",
         "description": "grip",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -47,33 +56,40 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
-        "order": "BASE",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "category": "LOCAL",
         "value": 10
       },
       {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.5
-      },
-      {
+        "id": "schematic-rarity-composite",
         "type": "RARITY",
-        "order": "COMPOSITE",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.2
       },
       {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
+        "id": "schematic-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.2
+        "value": 0.75
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": "2"
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    }
   }
 }

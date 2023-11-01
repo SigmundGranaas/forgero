@@ -1,6 +1,6 @@
 {
   "type": "STONE",
-  "parent": "default_stone",
+  "parent": "stone_base",
   "name": "essence_cobble",
   "container": {
     "type": "HOST",

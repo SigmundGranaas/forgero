@@ -13,6 +13,17 @@
       ]
     },
     {
+      "name": "sword_guard_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_sword_guard.png"
+          ],
+          "template": "mastercrafted_sword_guard.png"
+        }
+      ]
+    },
+    {
       "name": "mastercrafted_sword_guard",
       "template": "mastercrafted_sword_guard.png",
       "type": "GENERATE",

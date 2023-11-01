@@ -1,0 +1,24 @@
+{
+  "parent": "UPGRADE_MATERIAL",
+  "name": "TOOL_MATERIAL",
+  "children": [
+    {
+      "name": "WOOD"
+    },
+    {
+      "name": "METAL"
+    },
+    {
+      "name": "STONE"
+    },
+    {
+      "name": "MINERAL"
+    },
+    {
+      "name": "BONE"
+    },
+    {
+      "name": "OBSIDIAN"
+    }
+  ]
+}

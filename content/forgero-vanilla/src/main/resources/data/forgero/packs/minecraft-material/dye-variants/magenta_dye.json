@@ -1,0 +1,15 @@
+{
+  "type": "DYE",
+  "name": "magenta_dye",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:magenta_dye"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "dye/magenta_dye"
+  }
+}

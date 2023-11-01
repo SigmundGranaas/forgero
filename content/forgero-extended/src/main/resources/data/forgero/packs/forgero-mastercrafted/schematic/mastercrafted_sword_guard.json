@@ -39,8 +39,8 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
-        "tier": 1
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
@@ -48,6 +48,15 @@
           "OFFENSIVE"
         ],
         "type": "TRINKET",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]

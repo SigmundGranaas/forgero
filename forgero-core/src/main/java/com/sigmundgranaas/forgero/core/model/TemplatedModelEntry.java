@@ -22,7 +22,10 @@ public record TemplatedModelEntry(String template) implements ModelMatcher {
 				.filter(matcher -> matcher.match(state, context))
 				.flatMap(matcher -> matcher.get(state, provider, context));
 		if (state instanceof Composite construct) {
-			context.add(construct.type()).add(new NameMatch(construct.name()));
+
+			context.add(construct.type())
+					.add(new NameMatch(construct.name()));
+
 			var compositeModelTemplate = new CompositeModelTemplate();
 			templateModel.ifPresent(compositeModelTemplate::add);
 			templateModel.ifPresent(model -> addModelToContext(model, context));

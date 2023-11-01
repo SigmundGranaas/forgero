@@ -6,7 +6,7 @@
   ],
   "textures": {
     "8": "forgero:block/upgrade_station",
-    "particle": "minecraft:block/deepslate"
+    "particle": "minecraft:block/spruce_planks"
   },
   "elements": [
     {

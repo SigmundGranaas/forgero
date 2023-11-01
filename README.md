@@ -67,13 +67,7 @@ Forgero is in active development, and features are being added frequently.
 We support [Semantic Versioning](https://semver.org/), which means we make sure to not introduce breaking changes unless
 we are moving to a new major version.
 
-- [x] Tool parts and materials
-- [x] Pickaxes, shovels and axes
-- [x] Swords and hoes
-- [x] Rework model system to avoid flickering textures
-- [x] Schematics
-- [x] Enhanced tool properties, for example golden, and veinmining, as well as area mining
-- [x] Gems
+- [ ] Gem overhaul
 - [ ] Progression and station overhaul
 - [ ] Bows and arrows
 - [ ] Armor sets

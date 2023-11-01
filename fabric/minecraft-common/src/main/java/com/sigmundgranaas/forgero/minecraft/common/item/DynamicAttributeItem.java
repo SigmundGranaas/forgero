@@ -14,8 +14,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
@@ -23,6 +22,8 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.ItemUUIDMixin;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.AdditionalHealthHandler;
@@ -32,7 +33,6 @@ import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveN
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningLevel;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LuckHandler;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockBreakingEfficiencyTarget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,12 +83,12 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
 	@Override
 	default int getMiningLevel(ItemStack stack) {
-		return MiningLevel.apply(dynamicProperties(stack));
+		return ComputedAttribute.of(dynamicProperties(stack), MiningLevel.KEY).asInt();
 	}
 
 	@Override
 	default int getMiningLevel() {
-		return MiningLevel.apply(defaultProperties());
+		return ComputedAttribute.of(defaultProperties(), MiningLevel.KEY).asInt();
 	}
 
 
@@ -106,10 +106,11 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	}
 
 	private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack) {
-		Target target = Target.createEmptyTarget();
+		Matchable target = Matchable.DEFAULT_TRUE;
+		MatchContext context = MatchContext.of();
 		ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
 		//Doing -1 to match vanilla
-		float currentToolDamage = AttackDamage.apply(dynamicProperties(stack), target) - 1;
+		float currentToolDamage = ComputedAttribute.apply(dynamicProperties(stack), AttackDamage.KEY, target, context) - 1;
 		//Base attack damage
 		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ItemUUIDMixin.getAttackDamageModifierID(), "Tool modifier", currentToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
@@ -117,20 +118,20 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		//builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ADDITION_ATTACK_DAMAGE_MODIFIER_ID, "Attack Damage Addition", currentToolDamage - baseToolDamage, EntityAttributeModifier.Operation.ADDITION));
 
 		//Additional luck
-		int luck = LuckHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
+		int luck = LuckHandler.of(dynamicProperties(stack)).map(ComputedAttribute::asInt).orElse(0);
 		builder.put(EntityAttributes.GENERIC_LUCK, new EntityAttributeModifier(ADDITION_LUCK_MODIFIER_ID, "Luck addition", luck, EntityAttributeModifier.Operation.ADDITION));
 
 		//Additional armor
-		float armor = Armor.of(dynamicProperties(stack)).asFloat();
+		float armor = ComputedAttribute.of(dynamicProperties(stack), Armor.KEY).asFloat();
 		builder.put(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(ADDITION_ARMOR_MODIFIER_ID, "Armor addition", armor, EntityAttributeModifier.Operation.ADDITION));
 
 		//Additional health
-		int additionalHealth = AdditionalHealthHandler.of(dynamicProperties(stack)).map(Attribute::asInt).orElse(0);
+		int additionalHealth = AdditionalHealthHandler.of(dynamicProperties(stack)).map(ComputedAttribute::asInt).orElse(0);
 		builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(ADDITION_HEALTH_MODIFIER_ID, "Health addition", additionalHealth, EntityAttributeModifier.Operation.ADDITION));
 
 		//Attack speed
-		float currentAttackSpeed = AttackSpeed.apply(dynamicProperties(stack), target);
-		float baseAttackSpeed = AttackSpeed.apply(defaultProperties());
+		float currentAttackSpeed = ComputedAttribute.apply(dynamicProperties(stack), AttackSpeed.KEY, target, context);
+		float baseAttackSpeed = ComputedAttribute.apply(defaultProperties(), AttackSpeed.KEY);
 		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
 		if (currentAttackSpeed != baseAttackSpeed) {
 			//builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(TEST_UUID, "Tool attack speed addition", baseAttackSpeed - currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
@@ -142,11 +143,11 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 			builder.put(MINING_SPEED, new EntityAttributeModifier(BASE_MINING_SPEED_ID, "Tool modifier", miningSpeed, EntityAttributeModifier.Operation.ADDITION));
 
 			// Durability
-			int durability = Durability.apply(dynamicProperties(stack));
+			int durability = ComputedAttribute.of(dynamicProperties(stack), Durability.KEY).asInt();
 			builder.put(DURABILITY, new EntityAttributeModifier(BASE_DURABILITY_ID, "Tool modifier", durability, EntityAttributeModifier.Operation.ADDITION));
 
 			// Mining Level
-			int miningLevel = MiningLevel.apply(dynamicProperties(stack));
+			int miningLevel = ComputedAttribute.of(dynamicProperties(stack), MiningLevel.KEY).asInt();
 			if (miningLevel != 0) {
 				builder.put(MINING_LEVEL, new EntityAttributeModifier(BASE_MINING_LEVEL_ID, "Tool modifier", miningLevel, EntityAttributeModifier.Operation.ADDITION));
 
@@ -157,11 +158,12 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 
 	@Override
 	default int getDurability(ItemStack stack) {
-		return Durability.apply(dynamicProperties(stack));
+		return ComputedAttribute.of(dynamicProperties(stack), Durability.KEY).asInt();
 	}
 
 	default int getItemBarStep(ItemStack stack) {
-		return Math.round(13.0F - (float) stack.getDamage() * 13.0F / (float) getDurability(stack));
+		var durability = getDurability(stack);
+		return durability == 0 ? 0 : Math.round(13.0F - (float) stack.getDamage() * 13.0F / (float) durability);
 	}
 
 	default int getDurabilityColor(ItemStack stack) {
@@ -188,7 +190,8 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	}
 
 	private float mingSpeedCalculation(PropertyContainer dynamic, BlockState state) {
-		Target target = new BlockBreakingEfficiencyTarget(state);
-		return MiningSpeed.apply(dynamic, target);
+		// Todo Fix the BlockBreaking predicate
+		//Target target = new BlockBreakingEfficiencyTarget(state);
+		return MiningSpeed.apply(dynamic, Matchable.DEFAULT_TRUE, MatchContext.of());
 	}
 }

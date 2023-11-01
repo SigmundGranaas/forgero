@@ -39,15 +39,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "type": "TRINKET",
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -74,23 +76,33 @@
         "type": "MINING_SPEED",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 0.85
       },
       {
         "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.8
+        "value": 1
       }
     ],
     "features": [
       {
-        "type": "VEIN_MINING",
-        "value": 3,
-        "tags": [
-          "forgero:vein_mining_dirt"
-        ]
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "filter": {
+            "type": "forgero:same_block"
+          },
+          "depth": 2
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_dirt"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.vein_mining.dirt_in_area"
       }
     ]
   },

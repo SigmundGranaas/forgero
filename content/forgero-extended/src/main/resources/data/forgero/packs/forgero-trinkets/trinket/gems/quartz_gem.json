@@ -14,6 +14,22 @@
         "category": "ALL",
         "operation": "ADDITION",
         "value": 30
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "context": "UPGRADE",
+        "order": "END",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 0.5
+      },
+      {
+        "type": "ARMOR",
+        "context": "UPGRADE",
+        "order": "END",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 0.5
       }
     ]
   },

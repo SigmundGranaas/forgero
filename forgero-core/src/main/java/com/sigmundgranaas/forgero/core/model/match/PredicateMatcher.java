@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 /**
@@ -48,4 +49,15 @@ public abstract class PredicateMatcher implements Matchable {
 	public List<Matchable> getPredicates() {
 		return predicates;
 	}
+
+	/**
+	 * Getter for the list of dynamic predicates.
+	 *
+	 * @return The list of predicates.
+	 */
+	public List<Matchable> getDynamicPredicates() {
+		return getPredicates().stream().filter(Matchable::isDynamic).toList();
+	}
+
+	public abstract boolean testDynamic(Matchable match, MatchContext context);
 }

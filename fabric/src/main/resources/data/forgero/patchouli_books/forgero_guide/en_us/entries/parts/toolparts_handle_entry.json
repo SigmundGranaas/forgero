@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The handle is an essential part of the tool, but it's stats are less significant than the head. Although the stats are less significant, choosing an unsuitable material for your handle, might affect the usability of your tool, as the weight of the tool might prove to much to be useful. Some handles also have an additional slot for a pommel"
+      "text": "The handle is an essential part of the tool, but its stats are less significant than the head. Although the stats are less significant, choosing an unsuitable material for your handle might affect the usability of your tool, as the weight of the tool might prove to much to be useful. Some handles also have an additional slot for a pommel."
     },
     {
       "type": "patchouli:crafting",
