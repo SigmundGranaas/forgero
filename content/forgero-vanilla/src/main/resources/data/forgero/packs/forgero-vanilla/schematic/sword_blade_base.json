@@ -65,7 +65,13 @@
         ]
       }
     ],
-    "attributes": [],
+    "attributes": [
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4
+      }
+    ],
     "features": [
       {
         "type": "minecraft:block_effectiveness",

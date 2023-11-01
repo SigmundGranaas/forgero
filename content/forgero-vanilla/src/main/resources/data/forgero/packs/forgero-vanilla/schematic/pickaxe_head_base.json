@@ -5,6 +5,11 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4
+      },
+      {
         "id": "schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "context": "COMPOSITE",
