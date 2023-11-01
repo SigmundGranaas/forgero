@@ -24,6 +24,7 @@
     "RecipeManagerMixin"
   ],
   "client": [
+    "ClientPlayerInteractionManagerReachMixin",
     "ClientPlayNetworkGetTotemMixin",
     "ItemDescriptionInjector",
     "ItemModelGeneratorMixin",

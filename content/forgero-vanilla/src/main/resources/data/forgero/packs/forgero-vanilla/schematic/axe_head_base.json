@@ -5,6 +5,11 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4
+      },
+      {
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
