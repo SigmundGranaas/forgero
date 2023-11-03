@@ -16,6 +16,6 @@ public class RepairKitInitializer implements ForgeroInitializedEntryPoint {
 
 	@Override
 	public void onInitialized(StateService service) {
-		REPAIR_KIT_SUPER = Registry.register(ITEM, new Identifier("forgero:super_repair"), new RepairKitItem(new Item.Settings().group(ItemGroup.TOOLS), service));
+		REPAIR_KIT_SUPER = Registry.register(ITEM, new Identifier("forgero:super_repair"), new RepairKitItem(new Item.Settings().group(ItemGroup.TOOLS)));
 	}
 }

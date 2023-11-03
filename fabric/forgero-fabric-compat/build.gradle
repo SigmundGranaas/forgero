@@ -36,12 +36,10 @@ dependencies {
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 	implementation project(path: ':fabric:modules:repair-kit', configuration: 'namedElements')
 
-
 	modImplementation "vazkii.patchouli:Patchouli:1.19.2-77-FABRIC"
 
 	modImplementation "curse.maven:arrp-463113:3901211"
-
-
+	
 	//dynamiclights compat
 	modCompileOnlyApi "curse.maven:modmenu-308702:4145207"
 	modCompileOnlyApi "curse.maven:lambdynamiclights-393442:3824820"
