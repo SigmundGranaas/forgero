@@ -26,7 +26,7 @@ public class RepairKitItem extends Item {
 	public static final int MAX_MATERIAL = 64;
 
 	public RepairKitItem(Settings settings) {
-		super(settings);
+		super(settings.maxCount(1));
 	}
 
 	private void addMaterial(ItemStack repairKit, Item material, int quantityToAdd) {
@@ -77,6 +77,12 @@ public class RepairKitItem extends Item {
 
 	void consumeMaterial(ItemStack repairKit) {
 		repairKit.getOrCreateNbt().putInt("Quantity", getMaterialAmount(repairKit) - 1);
+
+		if (getMaterialAmount(repairKit) == 0) {
+			repairKit.getOrCreateNbt().remove("Material");
+			repairKit.getOrCreateNbt().remove("Quantity");
+
+		}
 	}
 
 	boolean hasEnoughMaterials(ItemStack repairKit) {
