@@ -39,7 +39,7 @@ public record PropertyStream(
 	public Stream<Attribute> getAttributeOfType(String attributeType) {
 		var rootAttributes = getAttributes()
 				.filter(attribute -> attributeType.equals(attribute.getAttributeType())).toList();
-		
+
 		return rootAttributes.stream()
 				.sorted(Attribute::compareTo);
 	}
@@ -66,6 +66,10 @@ public record PropertyStream(
 	}
 
 	public PropertyStream with(Stream<Property> properties) {
+		return new PropertyStream(Stream.concat(stream, properties), target, context);
+	}
+
+	public PropertyStream with(PropertyStream properties) {
 		return new PropertyStream(Stream.concat(stream, properties), target, context);
 	}
 }
