@@ -43,7 +43,7 @@ public class DefaultStateItem extends Item implements StateItem, State {
 
 	@Override
 	public Text getName(ItemStack stack) {
-		return getName();
+		return Writer.nameToTranslatableText(dynamicState(stack));
 	}
 
 	@Override

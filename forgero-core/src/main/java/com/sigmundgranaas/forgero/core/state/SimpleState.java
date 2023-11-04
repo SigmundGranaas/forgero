@@ -89,7 +89,7 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
+	public List<PropertyContainer> localConditions() {
 		return Collections.emptyList();
 	}
 

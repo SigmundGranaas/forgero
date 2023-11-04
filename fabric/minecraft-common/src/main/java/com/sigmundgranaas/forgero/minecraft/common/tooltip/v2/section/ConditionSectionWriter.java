@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -7,9 +10,6 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfigurati
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.List;
-import java.util.Optional;
 
 public class ConditionSectionWriter extends SectionWriter {
 	private final Conditional<?> container;
@@ -35,7 +35,7 @@ public class ConditionSectionWriter extends SectionWriter {
 
 	@Override
 	public boolean shouldWrite() {
-		return container.namedConditions().size() > 0;
+		return !container.namedConditions(container.compoundedConditions()).isEmpty();
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class ConditionSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return container.namedConditions().stream().map(this::entry).toList();
+		return container.namedConditions(container.compoundedConditions()).stream().map(this::entry).toList();
 	}
 
 	public Text entry(NamedCondition data) {

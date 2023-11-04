@@ -21,13 +21,14 @@ public class ConditionContainer implements Conditional<ConditionContainer>, Prop
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
+	public List<PropertyContainer> localConditions() {
 		return conditions;
 	}
 
+
 	@Override
 	public ConditionContainer applyCondition(PropertyContainer container) {
-		var copy = new ArrayList<>(conditions());
+		var copy = new ArrayList<>(localConditions());
 		copy.add(container);
 		return new ConditionContainer(copy);
 	}
@@ -41,7 +42,7 @@ public class ConditionContainer implements Conditional<ConditionContainer>, Prop
 	@Override
 	public @NotNull
 	List<Property> getProperties() {
-		return conditions().stream()
+		return localConditions().stream()
 				.map(PropertyContainer::getRootProperties)
 				.flatMap(List::stream)
 				.toList();
@@ -49,7 +50,7 @@ public class ConditionContainer implements Conditional<ConditionContainer>, Prop
 
 	@Override
 	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
-		return conditions().stream()
+		return localConditions().stream()
 				.map(cond -> cond.getRootProperties(target, context))
 				.flatMap(List::stream)
 				.toList();

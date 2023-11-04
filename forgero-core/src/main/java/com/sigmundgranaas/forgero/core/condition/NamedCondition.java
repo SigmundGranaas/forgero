@@ -39,4 +39,5 @@ public class NamedCondition implements PropertyContainer, Identifiable {
 	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
 		return getRootProperties();
 	}
+	
 }
