@@ -92,4 +92,8 @@ public interface Attribute extends Property, Comparable<Attribute> {
 	}
 
 	ComputedAttribute compute();
+
+	default PropertyContainer container() {
+		return PropertyContainer.of(this);
+	}
 }

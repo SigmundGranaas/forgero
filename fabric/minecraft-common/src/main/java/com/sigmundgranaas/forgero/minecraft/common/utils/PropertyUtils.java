@@ -22,4 +22,13 @@ public class PropertyUtils {
 				.map(PropertyContainer::stream)
 				.orElseGet(PropertyStream::empty);
 	}
+
+	public static PropertyContainer container(Entity entity) {
+		Optional<? extends PropertyContainer> entityContainer = of(entity);
+		if (entityContainer.isPresent()) {
+			return entityContainer.get();
+		}
+		return PropertyContainer.EMPTY;
+	}
 }
+

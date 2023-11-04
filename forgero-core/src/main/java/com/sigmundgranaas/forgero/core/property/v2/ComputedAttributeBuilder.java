@@ -1,16 +1,11 @@
 package com.sigmundgranaas.forgero.core.property.v2;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
+import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.PropertyStream;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,36 +14,53 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(fluent = true)
 public class ComputedAttributeBuilder {
-	private List<PropertyContainer> sources;
+	private PropertyContainer source;
 	private MatchContext context;
 	private String attributeKey;
-	private Function<PropertyStream, ComputedAttribute> computeFunction;
-	private Function<Collection<PropertyContainer>, PropertyStream> streamFunction = (containers) -> containers.stream().reduce(PropertyStream.empty(), (c1, c2) -> c1.stream(Matchable.DEFAULT_TRUE, this.context()).with(c2.stream()));
-
-
-	public ComputedAttributeBuilder(List<PropertyContainer> sources, MatchContext context, String attributeKey, Function<PropertyStream, ComputedAttribute> computeFunction) {
-		this.sources = sources;
-		this.context = context;
-		this.attributeKey = attributeKey;
-		this.computeFunction = computeFunction;
-	}
 
 	public ComputedAttributeBuilder(String attributeKey) {
-		this.sources = new ArrayList<>();
+		this.source = PropertyContainer.EMPTY;
 		this.context = MatchContext.of();
 		this.attributeKey = attributeKey;
-		this.computeFunction = (propertyStream -> ComputedAttribute.of(propertyStream.applyAttribute(attributeKey), attributeKey));
+	}
+
+	public static ComputedAttributeBuilder of(String type) {
+		return new ComputedAttributeBuilder(type);
+	}
+
+	public ComputedAttributeBuilder addSource(PropertyContainer container) {
+		this.source = this.source.with(container);
+		return this;
+	}
+
+	public ComputedAttributeBuilder addSource(Attribute attribute) {
+		this.source = this.source.with(PropertyContainer.of(attribute));
+		return this;
+	}
+
+	public ComputedAttributeBuilder context(MatchContext context) {
+		this.context = context;
+		return this;
+	}
+
+	public ComputedAttributeBuilder attribute(String attributeKey) {
+		this.attributeKey = attributeKey;
+		return this;
+	}
+
+	public ComputedAttribute build() {
+		return ComputedAttribute.of(source, attributeKey);
 	}
 
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ComputedAttributeBuilder that = (ComputedAttributeBuilder) o;
-		return Objects.equals(sources, that.sources) && Objects.equals(context, that.context) && Objects.equals(attributeKey, that.attributeKey);
+		return Objects.equals(source, that.source) && Objects.equals(context, that.context) && Objects.equals(attributeKey, that.attributeKey);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(sources, context, attributeKey);
+		return Objects.hash(source, context, attributeKey);
 	}
 }

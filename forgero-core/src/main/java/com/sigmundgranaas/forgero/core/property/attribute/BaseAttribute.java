@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,37 +36,12 @@ public record BaseAttribute(String attribute,
                             @Nullable
                             PropertyContainer attributeSource) implements Attribute {
 
-
-	public static BaseAttribute of(int value, String type) {
-		return new BaseAttribute(type,
-				NumericOperation.ADDITION,
-				value,
-				Matchable.DEFAULT_TRUE,
-				CalculationOrder.BASE,
-				1,
-				Category.UNDEFINED,
-				"",
-				Collections.emptyList(),
-				"",
-				1,
-				Contexts.UNDEFINED,
-				null);
+	public static Attribute of(int value, String type) {
+		return new SimpleAttribute(type, value);
 	}
 
-	public static BaseAttribute of(float value, String type) {
-		return new BaseAttribute(type,
-				NumericOperation.ADDITION,
-				value,
-				Matchable.DEFAULT_TRUE,
-				CalculationOrder.BASE,
-				1,
-				Category.UNDEFINED,
-				"",
-				Collections.emptyList(),
-				"",
-				1,
-				Contexts.UNDEFINED,
-				null);
+	public static Attribute of(float value, String type) {
+		return new SimpleAttribute(type, value);
 	}
 
 	@Override

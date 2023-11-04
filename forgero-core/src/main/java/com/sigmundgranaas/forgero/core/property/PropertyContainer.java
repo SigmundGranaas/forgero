@@ -1,21 +1,30 @@
 package com.sigmundgranaas.forgero.core.property;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
+
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
-
 public interface PropertyContainer extends Comparable<Object> {
+	PropertyContainer EMPTY = new SimpleContainer(Collections.emptyList());
 	Function<PropertyContainer, Float> ATTACK_DAMAGE = (PropertyContainer container) -> Property.stream(container.getProperties()).applyAttribute(AttackDamage.KEY);
 	Function<PropertyContainer, Integer> RARITY = (PropertyContainer container) -> (int) Property.stream(container.getProperties()).applyAttribute(Rarity.KEY);
 
 	static PropertyContainer of(List<Property> properties) {
 		return new SimpleContainer(properties);
+	}
+	
+	static PropertyContainer of(Property properties) {
+		return new SingleContainer(properties);
+	}
+
+	default PropertyContainer with(PropertyContainer container) {
+		return new CompositeContainer(List.of(this, container));
 	}
 
 	@Deprecated
