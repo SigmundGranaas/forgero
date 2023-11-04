@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.condition.ConditionContainer;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -14,11 +19,6 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class ConstructedSchematicPart extends ConstructedComposite implements MaterialBased, SchematicBased, Conditional<ConstructedSchematicPart> {
 	private final State schematic;
@@ -59,6 +59,14 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 		return partBuilder().addUpgrade(upgrade).build();
 	}
 
+	@Override
+	public List<PropertyContainer> compoundedConditions() {
+		if (schematic instanceof Conditional<?> conditional) {
+			return Stream.concat(localConditions().stream(), conditional.compoundedConditions().stream())
+					.toList();
+		}
+		return localConditions();
+	}
 
 	@Override
 	public ConstructedSchematicPart removeUpgrade(String id) {
@@ -71,8 +79,8 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
-		return conditions.conditions();
+	public List<PropertyContainer> localConditions() {
+		return conditions.localConditions();
 	}
 
 	@Override
@@ -83,14 +91,14 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	public SchematicPartBuilder partBuilder() {
 		return SchematicPartBuilder.builder(schematic(), baseMaterial())
 				.addSlotContainer(slotContainer.copy())
-				.conditions(conditions())
+				.conditions(localConditions())
 				.type(type())
 				.id(identifier());
 	}
 
 	@Override
 	public ConstructedSchematicPart removeCondition(String identifier) {
-		return partBuilder().conditions(Conditional.removeConditions(conditions(), identifier)).build();
+		return partBuilder().conditions(Conditional.removeConditions(localConditions(), identifier)).build();
 	}
 
 	@Override
