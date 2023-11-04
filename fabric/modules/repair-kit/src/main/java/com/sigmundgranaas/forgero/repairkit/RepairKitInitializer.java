@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class RepairKitInitializer implements ForgeroInitializedEntryPoint {
-	private static Item REPAIR_KIT_SUPER;
+	public static Item REPAIR_KIT_SUPER;
 
 	@Override
 	public void onInitialized(StateService service) {
