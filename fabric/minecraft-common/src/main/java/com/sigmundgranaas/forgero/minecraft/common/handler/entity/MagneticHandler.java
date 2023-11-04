@@ -1,9 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 
-import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.stream;
-
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import com.google.gson.JsonElement;
@@ -19,7 +18,6 @@ import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -79,7 +77,7 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	private final Attribute power;
 	private final Attribute distance;
 	private final boolean pushAway; // True if pushing entities away, false if pulling them
-	private final List<EntityType<?>> entityFilters;
+	private final Set<EntityType<?>> entityFilters;
 
 	/**
 	 * Constructs a new {@link MagneticHandler} with the specified properties.
@@ -87,7 +85,7 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	 * @param power    The strength of the magnetic pull effect.
 	 * @param distance The range to search for items to pull.
 	 */
-	public MagneticHandler(Attribute power, Attribute distance, List<EntityType<?>> entityFilters, boolean pushAway) {
+	public MagneticHandler(Attribute power, Attribute distance, Set<EntityType<?>> entityFilters, boolean pushAway) {
 		this.power = power;
 		this.distance = distance;
 		this.entityFilters = entityFilters;
@@ -109,7 +107,7 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 			pushAway = json.get("pushAway").getAsBoolean();
 		}
 
-		List<EntityType<?>> entityFilters = new ArrayList<>();
+		Set<EntityType<?>> entityFilters = new HashSet<>();
 		if (json.has("filter")) {
 			JsonElement filterElement = json.get("filter");
 			if (filterElement.isJsonArray()) {
@@ -124,21 +122,26 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		return new MagneticHandler(BaseAttribute.of(power, MAGNETIC_POWER_ATTRIBUTE_TYPE), BaseAttribute.of(distance, MAGNETIC_RANGE_ATTRIBUTE_TYPE), entityFilters, pushAway);
 	}
 
-	private static void addEntityTypeFromIdentifier(List<EntityType<?>> entityFilters, String identifier) {
+	private static void addEntityTypeFromIdentifier(Set<EntityType<?>> entityFilters, String identifier) {
 		EntityType<?> type = Registry.ENTITY_TYPE.get(Identifier.tryParse(identifier));
 		entityFilters.add(type);
+	}
+
+	float range(Entity source) {
+		return compute(distance, source).asFloat();
+	}
+
+	float power(Entity source) {
+		return compute(power, source).asFloat();
 	}
 
 	@Override
 	public void handle(Entity rootEntity) {
 		Vec3d rootVec = rootEntity.getPos();
 
-		float range = stream(rootEntity)
-				.with(distance)
-				.compute(MAGNETIC_RANGE_ATTRIBUTE_TYPE)
-				.asFloat();
+		float range = range(rootEntity);
 
-		List<Entity> nearbyEntities = getNearbyEntities(rootEntity, range, entity -> entity instanceof ItemEntity);
+		List<Entity> nearbyEntities = getNearbyEntities(rootEntity, range, entity -> entityFilters.contains(entity.getType()));
 		pullEntities(rootVec, nearbyEntities, rootEntity);
 	}
 
@@ -150,10 +153,7 @@ public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	}
 
 	public void pullEntities(Vec3d rootVec, List<Entity> entities, Entity rootEntity) {
-		float computedPower = stream(rootEntity)
-				.with(power)
-				.compute(MAGNETIC_POWER_ATTRIBUTE_TYPE)
-				.asFloat();
+		float computedPower = power(rootEntity);
 
 		for (Entity nearbyEntity : entities) {
 			double dist = nearbyEntity.getPos().distanceTo(rootVec);

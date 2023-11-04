@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.core.property.v2.cache;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+import java.util.concurrent.Callable;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -7,14 +12,9 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
-import java.util.concurrent.Callable;
-
 public class AttributeCache {
 	public static final LoadingCache<AttributeContainerKey, ComputedAttribute> attributeCache = CacheBuilder.newBuilder()
-			.expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
+			.expireAfterAccess(Duration.of(10, ChronoUnit.SECONDS))
 			.softValues()
 			.build(new CacheLoader<>() {
 				@Override
