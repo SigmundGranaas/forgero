@@ -32,6 +32,14 @@
       }
     ],
     "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UNDEFINED"
+        ],
+        "type": "ARROW",
+        "tier": 1
+      }
     ]
   },
   "model": {

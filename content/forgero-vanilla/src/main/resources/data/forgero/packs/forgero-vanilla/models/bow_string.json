@@ -1,4 +1,4 @@
- {
+{
   "type": "STRING",
   "models": [
     {
@@ -6,7 +6,36 @@
       "template": "bow_string.png",
       "type": "GENERATE",
       "palette": "STRING",
-      "order": 10
+      "order": 5,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "bow_string_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "bow_string_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "bow_string_pull_0.png"
+        }
+      ]
     },
     {
       "target": [

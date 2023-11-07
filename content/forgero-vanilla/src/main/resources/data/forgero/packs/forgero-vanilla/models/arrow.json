@@ -8,11 +8,63 @@
       "modelType": "COMPOSITE"
     },
     {
+      "target": [
+        "slot:0"
+      ],
+      "modelType": "COMPOSITE"
+    },
+    {
       "name": "feather",
       "template": "arrow_feather.png",
       "type": "GENERATE",
       "palette": "MATERIAL",
-      "order": 20
+      "order": 20,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            },
+            "type:BOW"
+          ],
+          "template": "arrow_feather_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            },
+            "type:BOW"
+          ],
+          "template": "arrow_feather_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            },
+            "type:BOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_feather_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:BOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_feather_in_bow.png"
+        }
+      ]
     },
     {
       "target": [

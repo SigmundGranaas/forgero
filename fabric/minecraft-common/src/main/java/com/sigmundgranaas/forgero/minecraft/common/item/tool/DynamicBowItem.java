@@ -1,14 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.ArrowProperties;
 import com.sigmundgranaas.forgero.minecraft.common.item.BowProperties;
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
@@ -73,6 +77,7 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 		float pullProgress = getPullProgress(useTime, bowProps.getFlexibility());
 
 		if ((double) pullProgress >= 0.1) {
+			removeItemFromState(stack, playerEntity, playerEntity.getActiveHand());
 			fireArrow(stack, world, playerEntity, arrowStack, pullProgress, bowProps, arrowProps);
 		}
 	}
@@ -165,7 +170,31 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 			return TypedActionResult.fail(itemStack);
 		} else {
 			user.setCurrentHand(hand);
+			addArrowToState(itemStack, user, hand);
 			return TypedActionResult.consume(itemStack);
+		}
+	}
+
+	private void addArrowToState(ItemStack bow, PlayerEntity player, Hand hand) {
+		Optional<State> arrow = StateService.INSTANCE.convert(obtainArrowStack(player));
+		State bowState = dynamicState(bow);
+		if (arrow.isPresent() && bowState instanceof Composite composite) {
+			State converted = composite.upgrade(arrow.get());
+			ItemStack newBow = bow.copy();
+			newBow.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(converted));
+			player.setStackInHand(hand, newBow);
+
+		}
+	}
+
+	private void removeItemFromState(ItemStack bow, PlayerEntity player, Hand hand) {
+		Optional<State> arrow = StateService.INSTANCE.convert(obtainArrowStack(player));
+		State bowState = dynamicState(bow);
+		if (arrow.isPresent() && bowState instanceof Composite composite) {
+			State converted = composite.removeUpgrade(arrow.get().identifier());
+			ItemStack newBow = bow.copy();
+			newBow.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(converted));
+			player.setStackInHand(hand, newBow);
 		}
 	}
 
