@@ -88,6 +88,7 @@ public class RecipeInflater {
 					.ingredients(newComponents)
 					.craftingType(originalRecipe.type())
 					.target(resource.nameSpace() + ":" + name)
+					.count(originalRecipe.count())
 					.build());
 		}
 

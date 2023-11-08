@@ -73,6 +73,15 @@
           }
         ]
       }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:lightning_strike",
+          "target": "minecraft:targeted_entity"
+        }
+      }
     ]
   },
   "custom_data": {

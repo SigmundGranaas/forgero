@@ -130,6 +130,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 						.orElse(Collections.emptyList())
 						.forEach(enchantment -> enchantment.embed(output));
 			}
+			output.setCount(getOutput().getCount());
 			return output;
 		}
 		return getOutput().copy();

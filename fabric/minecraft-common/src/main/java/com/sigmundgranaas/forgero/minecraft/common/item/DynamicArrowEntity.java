@@ -1,10 +1,19 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
@@ -14,6 +23,10 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -62,6 +75,9 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 			this.discard();
 		} else {
 			super.tick();
+			streamFeature(this.getStack(), MatchContext.of(), EntityTickFeature.KEY)
+					.forEach(handler -> handler.handle(this));
+
 			// Then manually apply our own gravity
 			if (!this.noClip) {
 				Vec3d vec3d4 = this.getVelocity();
@@ -86,6 +102,30 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		return 0f;
 	}
 
+	@Override
+	protected void onBlockCollision(BlockState state) {
+		super.onBlockCollision(state);
+
+
+	}
+
+	@Override
+	protected void onCollision(HitResult hitResult) {
+		super.onCollision(hitResult);
+		MatchContext context = MatchContext.of()
+				.put(ENTITY, this.getOwner())
+				.put(WORLD, this.getWorld());
+
+		if (hitResult instanceof BlockHitResult blockHitResult && getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR) {
+			BlockPos pos = blockHitResult.getBlockPos();
+			streamFeature(this.getStack(), context.put(BLOCK_TARGET, this.getWorld().getBlockState(pos)), OnHitBlockFeature.KEY)
+					.forEach(handler -> handler.onHit(this.getOwner(), this.getWorld(), pos));
+			super.onCollision(hitResult);
+		} else if (hitResult instanceof EntityHitResult entityHitResult) {
+			streamFeature(this.getStack(), context.put(ENTITY_TARGET, entityHitResult.getEntity()), OnHitEntityFeature.KEY)
+					.forEach(handler -> handler.onHit(this.getOwner(), this.getWorld(), entityHitResult.getEntity()));
+		}
+	}
 
 	@Override
 	protected ItemStack asItemStack() {
