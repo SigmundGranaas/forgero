@@ -59,15 +59,26 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	@NotNull
 	public Boolean enableRecipesForAllSchematics = false;
-	@NotNull
-	public Integer weightMiningSpeedReductionScaler = 20;
-	@NotNull
-	public Integer weightAttackSpeedReductionScaler = 50;
-	@NotNull
-	public Boolean weightReducesAttackSpeed = true;
-	@NotNull
-	public Boolean weightReducesMiningSpeed = true;
 
 	@NotNull
-	public Boolean enableUpgradeInCraftingTable = true;
+	public Boolean weightReducesAttackSpeed = true;
+
+	@NotNull
+	public Boolean enableUpgradeInCraftingTable = false;
+
+	@NotNull
+	public Integer WeightIncreasesHungerCenterPoint = 50;
+	@NotNull
+	public Integer WeightIncreasesHungerScaler = 10;
+
+	@NotNull
+	public Float WeightIncreasesHungerBaseChance = 0.01f;
+	@NotNull
+	public Boolean weightIncreasesHunger = false;
+
+	@NotNull
+	public Float minimumAttackSpeed = 0.5f;
+
+	@NotNull
+	public Boolean buildModelsAsync = true;
 }

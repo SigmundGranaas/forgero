@@ -1,11 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.item.ItemStack;
 
@@ -39,5 +43,15 @@ public interface StateItem extends State {
 	@Override
 	default DataContainer customData() {
 		return defaultState().customData();
+	}
+
+	@Override
+	default State strip() {
+		return defaultState();
+	}
+
+	@Override
+	default @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return defaultState().getRootProperties(target, context);
 	}
 }

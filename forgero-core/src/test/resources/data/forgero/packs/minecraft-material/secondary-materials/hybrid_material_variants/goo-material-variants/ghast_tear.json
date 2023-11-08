@@ -1,0 +1,75 @@
+{
+  "type": "GOO",
+  "name": "ghast_tear",
+  "parent": "goo_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:ghast_tear"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "goo-rarity-composite",
+            "type": "RARITY",
+            "value": 90
+          },
+          {
+            "id": "goo-durability-composite",
+            "type": "DURABILITY",
+            "value": 380
+          },
+          {
+            "id": "goo-weight-composite",
+            "type": "WEIGHT",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "goo-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 45
+          },
+          {
+            "id": "goo-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 2.5
+          },
+          {
+            "id": "goo-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 190
+          },
+          {
+            "id": "goo-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 190
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "ghast_tear"
+  }
+}

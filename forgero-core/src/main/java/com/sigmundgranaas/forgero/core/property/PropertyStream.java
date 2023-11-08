@@ -1,30 +1,25 @@
 package com.sigmundgranaas.forgero.core.property;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.collect.ImmutableList;
-import com.sigmundgranaas.forgero.core.property.passive.LeveledProperty;
-import com.sigmundgranaas.forgero.core.property.passive.PassiveProperty;
-import com.sigmundgranaas.forgero.core.property.passive.Static;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
+import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
+import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.core.util.ForwardingStream;
-import com.sigmundgranaas.forgero.core.util.Identifiers;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 /**
  * The property stream is a special stream for handling property specific operations.
  * This will make it easier to use this stream of properties by providing convenience methods like applyAttribute for reducing a specific attribute to a desired number.
  */
 public record PropertyStream(
-		Stream<Property> stream) implements ForwardingStream<Property> {
+		Stream<Property> stream, Matchable target, MatchContext context) implements ForwardingStream<Property> {
 
-	public static <T extends PropertyContainer> ImmutableList<T> sortedByRarity(ImmutableList<T> list) {
-		return list.stream()
-				.sorted(Comparator.comparing(container -> (int) Property.stream(container.getProperties()).applyAttribute(AttributeType.RARITY)))
-				.collect(ImmutableList.toImmutableList());
+	private static final PropertyStream EMPTY = new PropertyStream(Stream.empty(), Matchable.DEFAULT_TRUE, MatchContext.of());
+
+	public static PropertyStream empty() {
+		return EMPTY;
 	}
 
 	@Override
@@ -32,36 +27,20 @@ public record PropertyStream(
 		return stream;
 	}
 
-	public float applyAttribute(Target target, AttributeType attributeType) {
-		return getAttributeOfType(attributeType.toString())
-				.reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
-	}
-
-	public float applyAttribute(Target target, String attributeType) {
+	public float applyAttribute(String attributeType) {
 		return getAttributeOfType(attributeType)
-				.reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, collector), (a, b) -> b);
+				.reduce(0f, (collector, attribute) -> attribute.applyAttribute(target, context, collector), (a, b) -> b);
 	}
 
-	public float applyAttribute(AttributeType attributeType) {
-		return applyAttribute(Target.createEmptyTarget(), attributeType);
+	public ComputedAttribute compute(String attributeType) {
+		return ComputedAttribute.of(applyAttribute(attributeType), attributeType);
 	}
 
 	public Stream<Attribute> getAttributeOfType(String attributeType) {
 		var rootAttributes = getAttributes()
 				.filter(attribute -> attributeType.equals(attribute.getAttributeType())).toList();
 
-		Map<String, Attribute> idMap = rootAttributes
-				.stream()
-				.filter(attribute -> !attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
-				.collect(Collectors.toMap(Attribute::getId, attribute -> attribute, (existing, replacement) -> existing.getPriority() > replacement.getPriority() ? existing : replacement));
-
-		var nonIdAttributes = rootAttributes
-				.stream()
-				.filter(attribute -> attribute.getId().equals(Identifiers.EMPTY_IDENTIFIER))
-				.toList();
-
-		return Stream.of(idMap.values(), nonIdAttributes)
-				.flatMap(Collection::stream)
+		return rootAttributes.stream()
 				.sorted(Attribute::compareTo);
 	}
 
@@ -70,23 +49,27 @@ public record PropertyStream(
 				.map(Attribute.class::cast);
 	}
 
-	public Stream<PassiveProperty> getPassiveProperties() {
-		return stream.filter(property -> property instanceof PassiveProperty)
-				.map(PassiveProperty.class::cast);
+	public Stream<Feature> features() {
+		return stream.filter(property -> property instanceof Feature)
+				.map(Feature.class::cast);
 	}
 
-	public Stream<PropertyData> features() {
-		return stream.filter(property -> property instanceof PropertyData)
-				.map(PropertyData.class::cast);
+	public <T extends Feature> Stream<T> features(ClassKey<T> key) {
+		return stream
+				.filter(property -> property.type().equals(key.type()))
+				.filter(key.clazz()::isInstance)
+				.map(key.clazz()::cast);
 	}
 
-	public Stream<Static> getStaticPassiveProperties() {
-		return getPassiveProperties().filter(property -> property instanceof Static)
-				.map(Static.class::cast);
+	public PropertyStream with(Property property) {
+		return new PropertyStream(Stream.concat(stream, Stream.of(property)), target, context);
 	}
 
-	public Stream<LeveledProperty> getLeveledPassiveProperties() {
-		return getPassiveProperties().filter(property -> property instanceof LeveledProperty)
-				.map(LeveledProperty.class::cast);
+	public PropertyStream with(Stream<Property> properties) {
+		return new PropertyStream(Stream.concat(stream, properties), target, context);
+	}
+
+	public PropertyStream with(PropertyStream properties) {
+		return new PropertyStream(Stream.concat(stream, properties), target, context);
 	}
 }

@@ -39,7 +39,17 @@
         "category": [
           "OFFENSIVE"
         ],
-        "type": "MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -86,12 +96,19 @@
     ],
     "active": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
-        "pattern": [
-          " x ",
-          "xxx",
-          " x "
-        ]
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [
+            " x ",
+            "xxx",
+            " x "
+          ],
+          "filter": "forgero:can_mine"
+        },
+        "speed": "forgero:single",
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.star-description"
       }
     ]
   },

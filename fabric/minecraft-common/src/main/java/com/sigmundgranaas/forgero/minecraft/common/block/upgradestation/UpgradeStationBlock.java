@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
-import static net.minecraft.block.Blocks.DEEPSLATE;
-
 import com.sigmundgranaas.forgero.core.Forgero;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +8,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
@@ -40,7 +40,7 @@ import net.minecraft.world.WorldView;
 public class UpgradeStationBlock extends HorizontalFacingBlock {
 
 	public static final EnumProperty<UpgradeStationBlockPart> PART = EnumProperty.of("part", UpgradeStationBlockPart.class);
-	public static final Block UPGRADE_STATION_BLOCK = new UpgradeStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
+	public static final Block UPGRADE_STATION_BLOCK = new UpgradeStationBlock(Settings.of(Material.WOOD).strength(2.5F).sounds(BlockSoundGroup.WOOD));
 	public static final BlockItem UPGRADE_STATION_ITEM = new BlockItem(UPGRADE_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
 	// a public identifier for multiple parts of our bigger chest
 	public static final Identifier UPGRADE_STATION = new Identifier(Forgero.NAMESPACE, "upgrade_station");
@@ -62,19 +62,27 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 
 	private static VoxelShape left() {
 		VoxelShape shape = VoxelShapes.empty();
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 1, 0, 1, 1, 1));
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.625, 0.0625, 1, 0.875, 0.9375));
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0.0625, 0.375, 0.625, 0.25));
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0.75, 0.375, 0.625, 0.9375));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.0625, 0.125, 0.0625, 0.25, 0.875, 0.25));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.0625, 0.125, 0.75, 0.25, 0.875, 0.9375));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 1));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0, 0.3125, 0.125, 0.3125));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0.6875, 0.3125, 0.125, 1));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.25, 0.5, 0.125, 1, 0.6875, 0.1875));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.25, 0.25, 0.1875, 0.6875, 0.875, 0.875));
+
 		return shape;
 	}
 
 	public static VoxelShape right() {
 		VoxelShape shape = VoxelShapes.empty();
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1, 1, 0, 2, 1, 1));
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
-		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.75, 0.125, 0.75, 1.9375, 0.875, 0.9375));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.75, 0.125, 0.0625, 1.9375, 0.875, 0.25));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1, 0.875, 0, 2, 1, 1));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.6875, 0, 0.6875, 2, 0.125, 1));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.6875, 0, 0, 2, 0.125, 0.3125));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1, 0.5, 0.125, 1.75, 0.6875, 0.1875));
+		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(1.3125, 0.25, 0.1875, 1.6875, 0.875, 0.8125));
+
 		return shape;
 	}
 

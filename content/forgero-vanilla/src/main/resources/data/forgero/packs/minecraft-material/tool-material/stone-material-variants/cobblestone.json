@@ -1,0 +1,30 @@
+{
+  "type": "STONE",
+  "name": "cobblestone",
+  "parent": "stone_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:cobblestone"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "cobblestone"
+  }
+}

@@ -46,17 +46,22 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		var newTarget = target.combineTarget(new TypeTarget(Set.of(id.type().typeName())));
-		return compositeProperties(newTarget);
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		var newContext = context.add(id.type());
+		return compositeProperties(target, newContext);
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return compositeProperties(Target.EMPTY);
+		return compositeProperties(Matchable.DEFAULT_TRUE, MatchContext.of().add(id.type()));
 	}
 
+	@Override
+	public @NotNull
+	List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return compositeProperties(target, context.add(id.type()));
+	}
 
 	@Override
 	public ConstructedComposite removeUpgrade(String id) {
@@ -64,16 +69,15 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	}
 
 	@Override
-	public List<Property> compositeProperties(Target target) {
+	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		var propertyProcessor = new CompositePropertyProcessor();
-		var props = new ArrayList<>(super.compositeProperties(target));
+		var props = new ArrayList<>(super.compositeProperties(target, context));
 
 		var partProps = parts().stream()
-				.map(part -> part.applyProperty(target))
-				.flatMap(List::stream)
+				.flatMap(part -> part.getRootProperties(target, context).stream().map(part::applySource))
 				.toList();
 
-		props.addAll(propertyProcessor.process(partProps));
+		props.addAll(propertyProcessor.process(partProps, target, context));
 
 		var otherProps = partProps.stream()
 				.filter(this::filterNormalProperties)
@@ -82,6 +86,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 
 		return props;
 	}
+
 
 	private boolean filterNormalProperties(Property property) {
 		if (property instanceof com.sigmundgranaas.forgero.core.property.Attribute attribute) {
@@ -107,6 +112,16 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 				.addSlotContainer(slotContainer.copy())
 				.type(type())
 				.id(identifier());
+	}
+
+	@Override
+	public State strip() {
+		var builder = builder();
+		builder.addSlotContainer(getSlotContainer().strip());
+		parts().stream().map(State::strip).forEach(builder::addIngredient);
+		builder.type(type());
+		builder.id(identifier());
+		return builder.build();
 	}
 
 	@Override

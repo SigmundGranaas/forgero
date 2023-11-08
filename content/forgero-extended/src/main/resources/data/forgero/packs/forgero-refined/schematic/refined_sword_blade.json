@@ -39,17 +39,18 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
-        "type": "TOOL_MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
+          "UTILITY"
         ],
-        "description": "trinket",
-        "type": "TRINKET"
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
       }
     ]
   },

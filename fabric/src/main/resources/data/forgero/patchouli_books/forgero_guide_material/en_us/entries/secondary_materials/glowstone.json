@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Glowstone is an extremely fragile material, making it unsuitable for constructing or reinforcing tools. However, its light emitting properties makes it light up areas if used to upgrade tools and parts."
+      "text": "Glowstone is an extremely fragile material, making it unsuitable for constructing or reinforcing tools. However, its light emitting properties make it light up areas if used to upgrade tools and parts."
     },
     {
       "type": "patchouli:spotlight",

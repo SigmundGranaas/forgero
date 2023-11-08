@@ -67,10 +67,7 @@ public class CompositeStrategy implements Matchable {
 
 		// Check the type of match and use appropriate strategy
 		if (match instanceof Composite) {
-			var compositeSuccess = compositeStrategy.test(match, compositeContext);
-			if (compositeSuccess) {
-				return true;
-			}
+			
 			if (match instanceof Constructed) {
 				return constructedStrategy.test(match, compositeContext);
 			}

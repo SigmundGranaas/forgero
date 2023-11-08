@@ -11,6 +11,8 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,6 +51,11 @@ public class LeveledState implements State {
 		return leveledProperties(properties);
 	}
 
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return applyProperty(target, context);
+	}
+
 	private List<Property> leveledProperties(List<Property> props) {
 		List<Property> otherProperties = props.stream().filter(property -> !(property instanceof Attribute)).toList();
 		List<Attribute> attributes = props
@@ -64,9 +71,9 @@ public class LeveledState implements State {
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
+	List<Property> applyProperty(Matchable target, MatchContext context) {
 		return leveledProperties(properties).stream()
-				.filter(prop -> prop.applyCondition(target))
+				.filter(prop -> prop.applyCondition(target, context))
 				.toList();
 	}
 
@@ -91,5 +98,10 @@ public class LeveledState implements State {
 	@Override
 	public DataContainer customData(Target target) {
 		return DataContainer.empty();
+	}
+
+	@Override
+	public State strip() {
+		return this;
 	}
 }

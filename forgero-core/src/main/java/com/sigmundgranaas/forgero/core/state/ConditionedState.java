@@ -36,8 +36,8 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
-		return conditions.conditions();
+	public List<PropertyContainer> localConditions() {
+		return conditions.localConditions();
 	}
 
 	@Override
@@ -58,7 +58,20 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(properties.stream().toList(), conditions().stream().map(PropertyContainer::getRootProperties).flatMap(List::stream).toList()).flatMap(List::stream).toList();
+		return Stream.of(properties.stream().toList(), localConditions().stream()
+						.map(PropertyContainer::getRootProperties)
+						.flatMap(List::stream).toList())
+				.flatMap(List::stream)
+				.toList();
+	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return Stream.of(properties.stream().toList(), localConditions().stream()
+						.map(state -> state.getRootProperties(target, context))
+						.flatMap(List::stream).toList())
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	@Override
@@ -74,6 +87,11 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	@Override
 	public Type type() {
 		return id.type();
+	}
+
+	@Override
+	public State strip() {
+		return new SimpleState(name(), nameSpace(), type(), properties);
 	}
 
 	@Override

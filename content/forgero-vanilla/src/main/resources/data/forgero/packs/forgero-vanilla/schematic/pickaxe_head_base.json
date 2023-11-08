@@ -5,23 +5,21 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4.5
+      },
+      {
         "id": "schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -2.7
-      },
-      {
-        "id": "schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
+        "value": -4
       }
     ],
     "features": [
       {
-        "type": "EFFECTIVE_BLOCKS",
+        "type": "minecraft:block_effectiveness",
         "tags": [
           "minecraft:mineable/pickaxe"
         ]

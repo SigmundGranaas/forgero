@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder.encodeConditions;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.*;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -8,9 +11,6 @@ import com.sigmundgranaas.forgero.core.state.LeveledState;
 import com.sigmundgranaas.forgero.core.state.State;
 
 import net.minecraft.nbt.NbtCompound;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder.encodeConditions;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.*;
 
 public class StateEncoder implements CompoundEncoder<State> {
 	private final IdentifiableEncoder identifiableEncoder;
@@ -27,7 +27,7 @@ public class StateEncoder implements CompoundEncoder<State> {
 			return new LeveledEncoder().encode(element);
 		}
 		var compound = identifiableEncoder.encode(element);
-		if (element instanceof Conditional<?> conditional && conditional.conditions().size() > 0) {
+		if (element instanceof Conditional<?> conditional && conditional.localConditions().size() > 0) {
 			compound.put(CONDITIONS_IDENTIFIER, encodeConditions(conditional));
 		}
 		compound.putString(STATE_TYPE_IDENTIFIER, STATE_IDENTIFIER);
@@ -42,7 +42,7 @@ public class StateEncoder implements CompoundEncoder<State> {
 		}
 		if (element instanceof Identifiable identifiable) {
 			var compound = identifiableEncoder.encode(identifiable);
-			if (element instanceof Conditional<?> conditional && conditional.conditions().size() > 0) {
+			if (element instanceof Conditional<?> conditional && conditional.localConditions().size() > 0) {
 				compound.put(CONDITIONS_IDENTIFIER, encodeConditions(conditional));
 			}
 			compound.putString(STATE_TYPE_IDENTIFIER, STATE_IDENTIFIER);

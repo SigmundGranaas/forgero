@@ -1,0 +1,46 @@
+name: Publish snapshots
+
+on:
+  push:
+    branches:
+      - 1.19
+      - 1.20
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Execute Gradle build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+
+      - name: Publish to maven repositories
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
+        with:
+          arguments: publish
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+          ARCHIVA_ADMIN_KEY: ${{secrets.ARCHIVA_ADMIN_KEY}}

@@ -1,21 +1,28 @@
 package com.sigmundgranaas.forgero.core.texture.V2.recolor;
 
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.texture.V2.Palette;
 import com.sigmundgranaas.forgero.core.texture.V2.TemplateTexture;
 import com.sigmundgranaas.forgero.core.texture.template.PixelInformation;
 import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
-
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DefaultRecolorStrategy implements RecolorStrategy {
 	@Override
 	public BufferedImage recolor(TemplateTexture template, Palette palette) {
 		int paletteSize = palette.getColourValues().size();
 		int greyScaleSize = template.getGreyScaleValues().size();
+		if (greyScaleSize < 2) {
+			Forgero.LOGGER.error("Template texture has a greyscaleSize of only {}, this can't be recolored!", greyScaleSize);
+		}
+		if (paletteSize < 2) {
+			Forgero.LOGGER.error("Palette texture has a size of only {}, this can't be used to recolor!", palette);
+		}
 		List<RgbColour> paletteValues = createUsableColourPalette(template, palette);
-		assert greyScaleSize >= 2 && paletteSize >= 2;
+
 
 		BufferedImage recolouredImage = new BufferedImage(template.getImage().getWidth(), template.getImage().getHeight(), BufferedImage.TYPE_INT_ARGB);
 		for (PixelInformation pixel : template.getPixelValues()) {

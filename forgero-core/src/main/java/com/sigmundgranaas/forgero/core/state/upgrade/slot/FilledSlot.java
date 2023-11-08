@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.property.Property;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.property.v2.UpgradePropertyProcessor;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -27,18 +26,25 @@ public class FilledSlot extends AbstractTypedSlot {
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return filterProperties(Target.EMPTY);
+		return filterProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
+	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return filterProperties(target, context);
 	}
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		return filterProperties(target);
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		return filterProperties(target, context);
 	}
 
-	private List<Property> filterProperties(Target target) {
-		var properties = upgrade.applyProperty(target);
-		return new UpgradePropertyProcessor(categories).process(properties);
+	private List<Property> filterProperties(Matchable target, MatchContext context) {
+		var properties = upgrade.applyProperty(target, context).stream()
+				.map(upgrade::applySource)
+				.toList();
+		return new UpgradePropertyProcessor(categories).process(properties, target, context.put(SLOT_CONTEXT_KEY, this));
 	}
 
 	@Override
@@ -67,7 +73,9 @@ public class FilledSlot extends AbstractTypedSlot {
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		if (type().test(match, context)) {
+		if (match instanceof State state) {
+			return state.type().test(type(), context);
+		} else if (type().test(match, context)) {
 			return true;
 		} else {
 			return upgrade.test(match, context);

@@ -5,23 +5,21 @@
   "properties": {
     "attributes": [
       {
-        "id": "schematic-rarity-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.3
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4.5
       },
       {
-        "id": "schematic-atack_speed-composite",
+        "id": "schematic-attack_speed-composite",
         "type": "ATTACK_SPEED",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": -1.5
+        "value": -4
       }
     ],
     "features": [
       {
-        "type": "EFFECTIVE_BLOCKS",
+        "type": "minecraft:block_effectiveness",
         "tags": [
           "minecraft:mineable/hoe"
         ]

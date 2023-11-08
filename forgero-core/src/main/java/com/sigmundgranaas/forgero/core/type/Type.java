@@ -62,7 +62,7 @@ public interface Type extends Matchable {
 	static Type of(String name, Type parent) {
 		var type = new SimpleType(name.toUpperCase(), Optional.of(parent), new TypeMatcher());
 		if (type.test(SCHEMATIC, MatchContext.of())) {
-			return new SimpleType(name.toUpperCase(), Optional.of(parent), new SchematicMatcher());
+			return new SimpleType(name.toUpperCase(), Optional.of(parent), new TypeMatcher());
 		}
 		return type;
 	}

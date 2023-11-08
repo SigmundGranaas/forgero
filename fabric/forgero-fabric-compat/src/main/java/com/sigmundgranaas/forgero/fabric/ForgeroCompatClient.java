@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric;
 import com.sigmundgranaas.forgero.fabric.patchouli.GemUpgradeRecipePage;
 import com.sigmundgranaas.forgero.fabric.patchouli.StateCraftingRecipe;
 import com.sigmundgranaas.forgero.fabric.patchouli.StateUpgradeRecipe;
+import com.sigmundgranaas.forgero.fabric.tag.BlockTagCompatRegistration;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -15,5 +16,7 @@ public class ForgeroCompatClient implements ClientModInitializer {
 			StateCraftingRecipe.register();
 			StateUpgradeRecipe.register();
 		}
+
+		BlockTagCompatRegistration.register();
 	}
 }

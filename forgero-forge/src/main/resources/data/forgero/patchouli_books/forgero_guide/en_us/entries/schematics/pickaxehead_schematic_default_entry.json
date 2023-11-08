@@ -5,11 +5,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The default pickaxe head schematic creates a basic pickaxe head very much like the vanilla pickaxe. The stats and material costs are mostly identical to the vanilla version, and serves as a starting point on your tool crafting adventure"
+      "text": "The default pickaxe head schematic creates a basic pickaxe head very much like the vanilla pickaxe. The stats and material costs are mostly identical to the vanilla version, and the pickaxe serves as a starting point on your tool crafting adventure"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:iron-pickaxe_head-schematic_recipe"
+      "recipe": "forgero:pickaxe_head-schematic_recipe"
     }
   ]
 }

@@ -8,11 +8,6 @@
         "operation": "ADDITION",
         "order": "BASE",
         "attributes": [
-          {
-            "id": "schematic-rarity-local",
-            "type": "RARITY",
-            "value": 10
-          }
         ]
       },
       {
@@ -31,9 +26,19 @@
             "value": 1
           },
           {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 1
+          },
+          {
             "id": "schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 2
+            "value": 1
+          },
+          {
+            "id": "schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1
           },
           {
             "id": "schematic-weight-composite",
@@ -48,27 +53,28 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "schematic-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "value": 0
-          },
-          {
-            "id": "schematic-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "value": 0.5
-          },
-          {
             "id": "schematic-attack_speed-composite",
             "type": "ATTACK_SPEED",
-            "value": -2.1
+            "value": -4
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2
           }
         ]
       }
     ],
-    "attributes": [],
+    "attributes": [
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4.5
+      }
+    ],
     "features": [
       {
-        "type": "EFFECTIVE_BLOCKS",
+        "type": "minecraft:block_effectiveness",
         "tags": [
           "minecraft:mineable/sword"
         ]

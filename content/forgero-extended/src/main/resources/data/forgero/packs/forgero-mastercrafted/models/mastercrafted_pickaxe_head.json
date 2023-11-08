@@ -22,6 +22,17 @@
       "order": 20
     },
     {
+      "name": "pickaxe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_pickaxe_head.png"
+          ],
+          "template": "mastercrafted_pickaxe_head.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:mastercrafted_pickaxe_head-schematic"

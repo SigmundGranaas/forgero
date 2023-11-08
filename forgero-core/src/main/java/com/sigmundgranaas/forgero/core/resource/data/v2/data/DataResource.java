@@ -53,7 +53,7 @@ public class DataResource implements Identifiable {
 
 	@Nullable
 	@SerializedName(value = "dependencies", alternate = "dependency")
-	private List<String> dependencies;
+	private DependencyData dependencies;
 
 	@Nullable
 	private ConstructData construct;
@@ -137,11 +137,11 @@ public class DataResource implements Identifiable {
 	}
 
 	@NotNull
-	public ImmutableList<String> dependencies() {
+	public DependencyData dependencies() {
 		if (dependencies == null) {
-			return ImmutableList.<String>builder().build();
+			return DependencyData.empty();
 		}
-		return ImmutableList.<String>builder().addAll(dependencies).build();
+		return dependencies;
 	}
 
 	@NotNull
@@ -193,9 +193,7 @@ public class DataResource implements Identifiable {
 		var properties = properties().orElse(new PropertyPojo());
 		var mergeProperties = resource.properties().orElse(new PropertyPojo());
 		var newProps = new PropertyPojo();
-
-		newProps.active = mergeProperty(mergeProperties.active, properties.active).stream().distinct().toList();
-		newProps.passiveProperties = mergeProperty(mergeProperties.passiveProperties, properties.passiveProperties).stream().distinct().toList();
+		
 		newProps.setAttributes(mergeAttributes(properties.getAttributes(), mergeProperties.getAttributes()).stream().distinct().toList());
 		newProps.features = mergeProperty(mergeProperties.features, properties.features).stream().distinct().toList();
 

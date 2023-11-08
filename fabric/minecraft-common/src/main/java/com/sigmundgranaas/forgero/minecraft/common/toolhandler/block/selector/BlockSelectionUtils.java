@@ -6,8 +6,6 @@ import java.util.function.Predicate;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.EightWayDirection;
 import net.minecraft.world.WorldView;
 
 /**
@@ -20,20 +18,18 @@ public class BlockSelectionUtils {
 	 * @return A set of all the blocks around the given block position
 	 */
 	public static Set<BlockPos> getBlockPositionsAround(BlockPos blockPos) {
-		var directions = Direction.values();
-		var eightWayDirections = EightWayDirection.values();
-		var offsetBlockPositions = new HashSet<BlockPos>();
+		Set<BlockPos> offsetBlockPositions = new HashSet<>();
 
-		for (Direction direction : directions) {
-			BlockPos offsetBlockPos = blockPos.offset(direction, 1);
-			offsetBlockPositions.add(offsetBlockPos);
-		}
-
-		for (EightWayDirection eightWayDirection : eightWayDirections) {
-			BlockPos offsetBlockPos = blockPos.add(eightWayDirection.getOffsetX(), 1, eightWayDirection.getOffsetZ());
-			BlockPos offsetBlockPos2 = blockPos.add(eightWayDirection.getOffsetX(), -1, eightWayDirection.getOffsetZ());
-			offsetBlockPositions.add(offsetBlockPos);
-			offsetBlockPositions.add(offsetBlockPos2);
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				for (int z = -1; z <= 1; z++) {
+					// Skip the center block
+					if (x == 0 && y == 0 && z == 0) {
+						continue;
+					}
+					offsetBlockPositions.add(blockPos.add(x, y, z));
+				}
+			}
 		}
 		return offsetBlockPositions;
 	}

@@ -51,6 +51,11 @@ public class UncachedStateService implements StateService {
 		return stateService.convert(state);
 	}
 
+	@Override
+	public ItemStack update(State state, ItemStack stack) {
+		return stateService.update(state, stack);
+	}
+
 	private State copy(State state) {
 		if (state instanceof Composite composite) {
 			return composite.copy();

@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.model.match.builders;
 
-import java.util.Optional;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.Optional;
 
 /**
  * Handles the extraction of certain types of values from JsonElements.
@@ -20,9 +20,15 @@ public class ElementParser {
 	public static Optional<JsonObject> fromIdentifiedElement(JsonElement element, String type) {
 		if (element.isJsonObject()) {
 			var object = element.getAsJsonObject();
-			return Optional.of(object).filter(jsonObject -> jsonObject.has("type") && jsonObject.get("type").getAsString().equals(type));
+			return Optional.of(object).filter(jsonObject -> checkIdOrType(jsonObject, type));
 		}
 		return Optional.empty();
+	}
+
+	public static boolean checkIdOrType(JsonObject jsonObject, String type) {
+		return (jsonObject.has("type") && jsonObject.get("type").getAsString().equals(type))
+				|| (jsonObject.has("id") && jsonObject.get("id").getAsString().equals(type))
+				|| (jsonObject.has("condition") && jsonObject.get("condition").getAsString().equals(type));
 	}
 
 	/**

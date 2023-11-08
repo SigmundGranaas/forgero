@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyData;
+import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
+import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.feature.FeatureWriterSelector;
-
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.WriterHelper;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 
@@ -12,22 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+
 public class FeatureSectionWriter extends SectionWriter {
 	private final PropertyContainer container;
 
-	private final FeatureWriterSelector selector;
 
 	public FeatureSectionWriter(PropertyContainer container, TooltipConfiguration configuration) {
 		super(configuration);
 		this.container = container;
-		this.selector = FeatureWriterSelector.defaultSelector();
 	}
 
-	public FeatureSectionWriter(PropertyContainer container, FeatureWriterSelector selector, TooltipConfiguration configuration) {
-		super(configuration);
-		this.container = container;
-		this.selector = selector;
-	}
 
 	public static Optional<SectionWriter> of(PropertyContainer container) {
 		return of(container, TooltipConfiguration.builder().build());
@@ -43,10 +38,7 @@ public class FeatureSectionWriter extends SectionWriter {
 
 	@Override
 	public boolean shouldWrite() {
-		if (container.stream().features().toList().size() > 0) {
-			return !container.stream().features().allMatch(feature -> configuration.hiddenFeatureTypes().contains(feature.getType()));
-		}
-		return false;
+		return !container.stream().features().toList().isEmpty() && !entries().isEmpty();
 	}
 
 	@Override
@@ -66,12 +58,58 @@ public class FeatureSectionWriter extends SectionWriter {
 
 	@Override
 	public List<Text> entries() {
-		return container.stream().features().filter(feature -> !configuration.hiddenFeatureTypes().contains(feature.getType())).map(this::entry).flatMap(List::stream).toList();
+		TooltipConfiguration featureConfig;
+		if (!configuration.hideSectionTitle()) {
+			featureConfig = configuration.baseIndent(1);
+
+		} else {
+			featureConfig = configuration;
+		}
+		return container.stream()
+				.features()
+				.map(feature -> BaseFeatureWriter.of(feature, new WriterHelper(featureConfig)))
+				.flatMap(Optional::stream)
+				.map(BaseFeatureWriter::write)
+				.flatMap(List::stream)
+				.toList();
 	}
 
-	public List<Text> entry(PropertyData data) {
-		List<Text> entries = new ArrayList<>();
-		selector.writer(data, configuration).write(entries, null);
-		return entries;
+	public static class BaseFeatureWriter {
+		private final BasePredicateFeature feature;
+		private final WriterHelper helper;
+
+		private BaseFeatureWriter(BasePredicateFeature feature, WriterHelper helper) {
+			this.feature = feature;
+			this.helper = helper;
+		}
+
+		public static Optional<BaseFeatureWriter> of(Feature feature, WriterHelper helper) {
+			if (feature instanceof BasePredicateFeature base) {
+				if (!base.title().equals(EMPTY_IDENTIFIER)) {
+					return Optional.of(new BaseFeatureWriter(base, helper));
+				}
+			}
+			return Optional.empty();
+		}
+
+		public List<Text> write() {
+			List<Text> entries = new ArrayList<>();
+
+			Text title = helper.writeBase()
+					.append(Text.translatable(feature.title()))
+					.formatted(helper.neutral());
+			entries.add(title);
+			if (!feature.description().isEmpty()) {
+				feature.description().stream()
+						.map(item ->
+								helper.writeBase()
+										.append(" ")
+										.append(Text.translatable(item))
+										.formatted(helper.base())
+						)
+						.forEach(entries::add);
+			}
+			return entries;
+		}
 	}
 }

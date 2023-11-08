@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.*;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.soul.SoulContainer;
@@ -13,20 +15,21 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.*;
-
 public class CompositeEncoder implements CompoundEncoder<State> {
 	private final IdentifiableEncoder identifiableEncoder;
+
+	private final SlotEncoder slotEncoder;
 	private final StateEncoder stateEncoder;
 
 	public CompositeEncoder() {
 		this.stateEncoder = new StateEncoder();
 		this.identifiableEncoder = new IdentifiableEncoder();
+		this.slotEncoder = new SlotEncoder(stateEncoder);
 	}
 
 	public static NbtList encodeConditions(Conditional<?> conditional) {
 		NbtList list = new NbtList();
-		conditional.namedConditions().stream()
+		conditional.namedConditions(conditional.localConditions()).stream()
 				.map(NamedCondition::identifier)
 				.map(NbtString::of)
 				.forEach(list::add);
@@ -61,7 +64,11 @@ public class CompositeEncoder implements CompoundEncoder<State> {
 		}
 		if (element instanceof Upgradeable<?> upgradeable) {
 			var upgrades = new NbtList();
-			upgradeable.upgrades().stream().map(stateEncoder::encode).forEach(upgrades::add);
+			// Use the SlotEncoder to encode each upgrade slot
+			upgradeable.slots().forEach(upgrade -> {
+				NbtCompound upgradeCompound = slotEncoder.encode(upgrade);
+				upgrades.add(upgradeCompound);
+			});
 			compound.put(UPGRADES_IDENTIFIER, upgrades);
 		}
 		return compound;

@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import static com.sigmundgranaas.forgero.core.model.ModelResult.MODEL_RESULT;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ public class ModelRegistry {
 	private final Map<String, PaletteTemplateModel> textures;
 
 	private final Map<String, String> paletteRemapper;
+	private final Map<String, PaletteData> palettes;
 
 	private final HashMap<String, ArrayList<ModelData>> delayedModels;
 
@@ -29,6 +32,7 @@ public class ModelRegistry {
 
 	public ModelRegistry(TypeTree tree) {
 		this.tree = tree;
+		this.palettes = new HashMap<>();
 		this.modelMap = new HashMap<>();
 		this.paletteRemapper = new HashMap<>();
 		this.textures = new HashMap<>();
@@ -38,6 +42,7 @@ public class ModelRegistry {
 
 	public ModelRegistry() {
 		this.tree = new TypeTree();
+		this.palettes = new HashMap<>();
 		this.modelMap = new HashMap<>();
 		this.textures = new HashMap<>();
 		this.delayedModels = new HashMap<>();
@@ -48,7 +53,7 @@ public class ModelRegistry {
 	public ResourceListener<List<DataResource>> modelListener() {
 		return (resources, tree, idMapper) -> {
 			this.tree = tree;
-			resources.stream().filter(resource -> resource.models().size() > 0).forEach(this::register);
+			resources.stream().filter(resource -> !resource.models().isEmpty()).forEach(this::register);
 		};
 	}
 
@@ -59,7 +64,9 @@ public class ModelRegistry {
 	private void paletteHandler(DataResource resource, TypeTree tree) {
 		var paletteData = resource.palette();
 		if (paletteData.isPresent()) {
-			tree.find(resource.type()).ifPresent(node -> node.addResource(paletteData.get().toBuilder().target(resource.name()).build(), PaletteData.class));
+			PaletteData palette = paletteData.get().toBuilder().target(resource.name()).build();
+			tree.find(resource.type()).ifPresent(node -> node.addResource(palette, PaletteData.class));
+			palettes.put(palette.getName(), palette);
 			if (!paletteData.get().getName().equals(resource.name())) {
 				paletteRemapper.put(resource.name() + ".png", paletteData.get().getName() + ".png");
 			}
@@ -71,21 +78,32 @@ public class ModelRegistry {
 	}
 
 	public ModelRegistry register(DataResource data) {
-		var converter = new ModelConverter(tree, modelMap, textures, delayedModels, generationModels);
+		var converter = new ModelConverter(tree, palettes, modelMap, textures, delayedModels, generationModels);
 		converter.register(data);
 		return this;
 	}
 
-	public Optional<ModelTemplate> find(State state, MatchContext context) {
+	public Optional<ModelResult> find(State state, MatchContext context) {
 		if (modelMap.containsKey(state.identifier())) {
-			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of());
+			return modelMap.get(state.identifier()).get(state, this::provider, MatchContext.of()).map(model -> new ModelResult().setTemplate(model));
 		} else {
-			var modelEntries = tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build());
-			return modelEntries.stream().sorted(ModelMatcher::comparator).filter(entry -> entry.match(state, context)).map(modelMatcher -> modelMatcher.get(state, this::provider, context)).flatMap(Optional::stream).findFirst();
+			var result = new ModelResult();
+			context.put(MODEL_RESULT, result);
+			var modelEntries = tree.find(state.type().typeName())
+					.map(node -> node.getResources(ModelMatcher.class))
+					.orElse(ImmutableList.<ModelMatcher>builder().build());
+
+			return modelEntries.stream()
+					.sorted(ModelMatcher::comparator)
+					.filter(entry -> entry.match(state, context))
+					.map(modelMatcher -> modelMatcher.get(state, this::provider, context))
+					.flatMap(Optional::stream)
+					.findFirst()
+					.map(result::setTemplate);
 		}
 	}
 
-	public Optional<ModelTemplate> find(State state) {
+	public Optional<ModelResult> find(State state) {
 		return find(state, MatchContext.of());
 	}
 

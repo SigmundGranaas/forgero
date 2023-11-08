@@ -41,6 +41,9 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 				Optional<Slot> mappedSlot = slot.fill(entry, slot.category());
 				if (mappedSlot.isPresent()) {
 					return Optional.of(this.set(mappedSlot.get()));
+				} else if (slot.filled()) {
+					var filledSlot = slot.empty().fill(entry, slot.category());
+					return Optional.of(this.set(filledSlot.orElse(slot)));
 				}
 			}
 		}
@@ -54,6 +57,10 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 				if (mappedSlot.isPresent()) {
 					this.slots.set(this.slots.indexOf(slot1), mappedSlot.get());
 					return mappedSlot.get();
+				} else if (slot.filled()) {
+					var filledSlot = slot.empty().fill(entry, slot.category()).orElse(slot);
+					this.slots.set(this.slots.indexOf(slot1), filledSlot);
+					return filledSlot;
 				}
 			}
 		}
@@ -99,5 +106,9 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 			return empty;
 		}
 		return slot;
+	}
+
+	public SlotContainer strip() {
+		return new SlotContainer(slots().stream().map(Slot::empty).toList());
 	}
 }

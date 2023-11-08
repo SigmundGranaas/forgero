@@ -36,7 +36,7 @@ subprojects {
 	dependencies {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modApi "net.fabricmc:fabric-loader:${project.loader_version}"
+		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
 
 		annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -115,4 +115,11 @@ allprojects {
 			rename { "${it}_${archivesBaseName}" }
 		}
 	}
+	java {
+		withSourcesJar()
+	}
+}
+
+java {
+	withSourcesJar()
 }

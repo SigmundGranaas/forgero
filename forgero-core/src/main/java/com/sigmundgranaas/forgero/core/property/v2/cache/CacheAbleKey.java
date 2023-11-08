@@ -6,4 +6,6 @@ public interface CacheAbleKey {
 	CacheAbleKey EMPTY = () -> EMPTY_IDENTIFIER;
 
 	String key();
+
+
 }

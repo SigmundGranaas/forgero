@@ -24,13 +24,6 @@ repositories {
 	mavenLocal()
 }
 
-configurations {
-	modRuntimeOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
-	modCompileOnlyApi.exclude group: 'net.fabricmc', module: 'fabric-loader'
-	modCompileOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
-
-}
-
 dependencies {
 	runtimeOnly project(':content:forgero-vanilla')
 	runtimeOnly project(':content:forgero-extended')
@@ -41,9 +34,10 @@ dependencies {
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modCompileOnly "vazkii.patchouli:Patchouli:1.19-74-FABRIC"
+	modImplementation "vazkii.patchouli:Patchouli:1.19.2-77-FABRIC"
 
 	modImplementation "curse.maven:arrp-463113:3901211"
+
 
 	//dynamiclights compat
 	modCompileOnlyApi "curse.maven:modmenu-308702:4145207"
@@ -62,12 +56,12 @@ dependencies {
 
 
 	//emi
-	//modCompileOnly "dev.emi:emi:${emi_version}:api"
-	//modLocalRuntime "dev.emi:emi:${emi_version}"
+	modCompileOnly "dev.emi:emi:${emi_version}:api"
+	modLocalRuntime "dev.emi:emi:${emi_version}"
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	modRuntimeOnly "maven.modrinth:u6dRKJwZ:Fq2JkIID"
+	//modRuntimeOnly "maven.modrinth:u6dRKJwZ:Fq2JkIID"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"

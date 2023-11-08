@@ -20,13 +20,13 @@
         "order": "BASE",
         "operation": "ADDITION",
         "value": 10
+      },
+      {
+        "type": "forgero:luck",
+        "value": 2
       }
     ],
     "features": [
-      {
-        "type": "LUCK",
-        "value": 2
-      }
     ]
   }
 }

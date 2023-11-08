@@ -39,8 +39,8 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "sword_tip",
-        "type": "TOOL_MATERIAL",
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
@@ -48,17 +48,8 @@
         "category": [
           "UTILITY"
         ],
-        "description": "scabbard",
-        "type": "LEATHER",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "trinket",
-        "type": "TRINKET",
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]
@@ -71,7 +62,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "context": "LOCAL",
-        "value": 40
+        "value": 50
       },
       {
         "id": "schematic-rarity-composite",
@@ -85,14 +76,14 @@
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.1
+        "value": 1.25
       },
       {
         "id": "schematic-weight-composite",
         "type": "WEIGHT",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 0.85
       }
     ]
   },
