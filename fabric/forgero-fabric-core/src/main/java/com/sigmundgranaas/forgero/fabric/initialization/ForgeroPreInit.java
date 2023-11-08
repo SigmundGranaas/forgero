@@ -24,10 +24,6 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
-import com.sigmundgranaas.forgero.minecraft.common.match.BowPullPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.DamagePercentagePredicate;
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
@@ -58,6 +54,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
+import com.sigmundgranaas.forgero.minecraft.common.match.BowPullPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
@@ -98,6 +95,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(BlockPredicateMatcher.BlockPredicateBuilder::new);
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
+		PredicateFactory.register(BowPullPredicate.BowPullPredicateBuilder::new);
 
 		//Writers
 		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);

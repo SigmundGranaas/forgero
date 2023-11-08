@@ -32,6 +32,11 @@ public record BowPullPredicate(float pullProgress) implements Matchable {
 		return false;
 	}
 
+	@Override
+	public boolean isDynamic() {
+		return true;
+	}
+
 	/**
 	 * Attempts to create a Matchable of type BowPullPredicateBuilder from a JsonElement if the element is identified as a "BowPullPredicateBuilder".
 	 */

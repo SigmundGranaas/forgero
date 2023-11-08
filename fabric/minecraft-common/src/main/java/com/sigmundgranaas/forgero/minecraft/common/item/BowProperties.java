@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Flexibility;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Force;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -28,7 +29,7 @@ public class BowProperties {
 
 	public static Optional<BowProperties> fromItemStack(ItemStack itemStack, StateService service) {
 		Optional<State> optionalState = service.convert(itemStack);
-		return optionalState.map(state -> new BowProperties(Flexibility.of(state).asFloat(), Force.of(state).asFloat()));
+		return optionalState.map(state -> new BowProperties(ComputedAttribute.of(state, Flexibility.KEY).asFloat(), ComputedAttribute.of(state, Force.KEY).asFloat()));
 	}
 
 	public float getFlexibility() {

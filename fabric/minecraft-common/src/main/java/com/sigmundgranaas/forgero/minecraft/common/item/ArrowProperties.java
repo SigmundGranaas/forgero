@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Stability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -29,7 +30,7 @@ public class ArrowProperties {
 		Optional<State> optionalState = service.convert(itemStack);
 		if (optionalState.isPresent()) {
 			State state = optionalState.get();
-			return new ArrowProperties(Stability.of(state).asFloat(), Weight.of(state).asFloat());
+			return new ArrowProperties(ComputedAttribute.of(state, Stability.KEY).asFloat(), ComputedAttribute.of(state, Weight.KEY).asFloat());
 		} else {
 			return new ArrowProperties(1.0F, 1.0F);  // Default values for vanilla arrows
 		}

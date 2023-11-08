@@ -41,7 +41,7 @@ public class NameCompositor {
 			return Optional.empty();
 		}
 		if (ingredient.test(Type.of("FEATHER"))) {
-			return Optional.of("");
+			return Optional.empty();
 		}
 		if (ingredient.test(SWORD_BLADE, MatchContext.of())) {
 			return Optional.of(ingredient.name().replace("_blade", ""));

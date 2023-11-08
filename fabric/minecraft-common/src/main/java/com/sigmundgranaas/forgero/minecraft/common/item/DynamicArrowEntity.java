@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -80,7 +81,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 	private double getGravity() {
 		if (getStack() != null) {
-			return StateService.INSTANCE.convert(getStack()).map(state -> 0.001 * (Weight.apply(state))).orElse(0.0);
+			return StateService.INSTANCE.convert(getStack()).map(state -> 0.001 * (ComputedAttribute.apply(state, Weight.KEY))).orElse(0.0);
 		}
 		return 0f;
 	}
