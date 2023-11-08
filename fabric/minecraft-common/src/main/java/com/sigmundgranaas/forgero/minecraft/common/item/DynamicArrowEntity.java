@@ -1,8 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
-
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -12,7 +9,6 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -29,6 +25,9 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 public class DynamicArrowEntity extends PersistentProjectileEntity {
 	private static final TrackedData<ItemStack> STACK;
@@ -75,10 +74,10 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 			this.discard();
 		} else {
 			super.tick();
+
 			streamFeature(this.getStack(), MatchContext.of(), EntityTickFeature.KEY)
 					.forEach(handler -> handler.handle(this));
 
-			// Then manually apply our own gravity
 			if (!this.noClip) {
 				Vec3d vec3d4 = this.getVelocity();
 				this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
@@ -100,13 +99,6 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 			return StateService.INSTANCE.convert(getStack()).map(state -> 0.001 * (ComputedAttribute.apply(state, Weight.KEY))).orElse(0.0);
 		}
 		return 0f;
-	}
-
-	@Override
-	protected void onBlockCollision(BlockState state) {
-		super.onBlockCollision(state);
-
-
 	}
 
 	@Override
@@ -146,6 +138,5 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		if (STACK.equals(data)) {
 			this.getStack().setHolder(this);
 		}
-
 	}
 }

@@ -1,8 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
@@ -20,6 +17,9 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Optional;
 
 public class DynamicArrowItem extends ArrowItem implements StateItem, State {
 	private final StateProvider DEFAULT;
@@ -40,7 +40,6 @@ public class DynamicArrowItem extends ArrowItem implements StateItem, State {
 		} else {
 			return super.createArrow(world, stack, shooter);
 		}
-
 	}
 
 	@Override
