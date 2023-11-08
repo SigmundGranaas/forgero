@@ -183,7 +183,6 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 			ItemStack newBow = bow.copy();
 			newBow.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(converted));
 			player.setStackInHand(hand, newBow);
-
 		}
 	}
 

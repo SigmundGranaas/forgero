@@ -12,6 +12,7 @@
     "recipes": [
       {
         "crafting_type": "STATE_CRAFTING_RECIPE",
+        "count": 4,
         "ingredients": [
           {
             "unique": true,
@@ -43,5 +44,4 @@
   "model": {
     "type": "COMPOSITE"
   }
-
 }

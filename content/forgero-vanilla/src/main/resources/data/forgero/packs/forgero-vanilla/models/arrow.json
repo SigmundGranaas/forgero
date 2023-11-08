@@ -2,18 +2,6 @@
   "type": "ARROW",
   "models": [
     {
-      "target": [
-        "type:ARROW"
-      ],
-      "modelType": "COMPOSITE"
-    },
-    {
-      "target": [
-        "slot:0"
-      ],
-      "modelType": "COMPOSITE"
-    },
-    {
       "name": "feather",
       "template": "arrow_feather.png",
       "type": "GENERATE",
@@ -73,6 +61,18 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "feather"
+    },
+    {
+      "target": [
+        "type:ARROW"
+      ],
+      "modelType": "COMPOSITE"
+    },
+    {
+      "target": [
+        "slot:0"
+      ],
+      "modelType": "COMPOSITE"
     }
   ]
 }

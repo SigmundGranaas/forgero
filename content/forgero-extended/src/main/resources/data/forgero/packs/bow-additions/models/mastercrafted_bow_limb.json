@@ -6,13 +6,55 @@
       "modelType": "GENERATE",
       "template": "mastercrafted_bow_limb.png",
       "palette": "WOOD",
-      "order": 20
+      "order": 20,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_bow_pull_1.png"
+        }
+      ]
     },
     {
       "name": "bow_reinforcement",
+      "modelType": "GENERATE",
+      "template": "mastercrafted_bow_limb_reinforcement.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 25,
       "variants": [
         {
-          "target": [
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_bow_limb_reinforcement_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_bow_limb_reinforcement_pull_1.png"
+        },
+        {
+          "predicate": [
             "model:mastercrafted_bow_limb.png"
           ],
           "template": "mastercrafted_bow_limb_reinforcement.png"
@@ -43,11 +85,19 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
+        "type:WOOD",
         "id:mastercrafted_bow_limb-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "mastercrafted_bow_limb"
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_reinforcement"
     }
   ]
 }
