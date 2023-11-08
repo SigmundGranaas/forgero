@@ -92,9 +92,6 @@ public class EntityEffectPredicate {
 		@Nullable
 		private final Boolean visible;
 
-		public EffectData() {
-			this(NumberRange.IntRange.ANY, NumberRange.IntRange.ANY, null, null);
-		}
 
 		public EffectData(NumberRange.IntRange amplifier, NumberRange.IntRange duration, @Nullable Boolean ambient, @Nullable Boolean visible) {
 			this.amplifier = amplifier;
