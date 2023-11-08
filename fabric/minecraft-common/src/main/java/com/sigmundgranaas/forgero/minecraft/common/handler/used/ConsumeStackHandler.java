@@ -14,7 +14,7 @@ import net.minecraft.util.Hand;
 
 
 /**
- * Represents a handler that damages the ItemStack after it has been used.
+ * Represents a handler that consumes an entire stack after it has been used.
  *
  * <p>Example JSON configuration:
  * <pre>
@@ -37,7 +37,7 @@ import net.minecraft.util.Hand;
 public class ConsumeStackHandler implements AfterUseHandler {
 	public static final String TYPE = "minecraft:consume_stack";
 	public static final JsonBuilder<ConsumeStackHandler> BUILDER = HandlerBuilder.fromObject(ConsumeStackHandler.class, (json) -> new ConsumeStackHandler());
-	
+
 	@Override
 	public void handle(Entity source, ItemStack target, Hand hand) {
 		if (source instanceof LivingEntity livingEntity) {

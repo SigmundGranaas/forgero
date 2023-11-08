@@ -28,6 +28,18 @@ import net.minecraft.util.Hand;
  *     "damage": 50
  *   }
  * }
+ * {
+ *   "type": "minecraft:on_hit",
+ *   "on_hit": {
+ *     "type": "minecraft:explosion",
+ *     "target": "minecraft:targeted_entity",
+ *     "power": 3
+ *   }
+ *   "after_use": {
+ *     "type": "minecraft:stack_damage",
+ *     "percentage": 0.1 // This is 10%
+ *   }
+ * }
  * </pre>
  * </p>
  */
@@ -38,9 +50,11 @@ public class DamageHandler implements AfterUseHandler {
 	public static final JsonBuilder<DamageHandler> BUILDER = HandlerBuilder.fromObject(DamageHandler.class, DamageHandler::fromJson);
 
 	private final int damage;
+	private final float percentage;
 
-	public DamageHandler(int damage) {
+	public DamageHandler(int damage, float percentage) {
 		this.damage = damage;
+		this.percentage = percentage;
 	}
 
 	/**
@@ -50,16 +64,18 @@ public class DamageHandler implements AfterUseHandler {
 	 * @return A new instance of {@link DamageHandler}.
 	 */
 	public static DamageHandler fromJson(JsonObject json) {
-		int damage = json.get("damage").getAsInt();
-		return new DamageHandler(damage);
+		int damage = json.has("damage") ? json.get("damage").getAsInt() : 0;
+		float percentage = json.has("percentage") ? json.get("percentage").getAsFloat() : 0;
+		return new DamageHandler(damage, percentage);
 	}
 
 	@Override
 	public void handle(Entity source, ItemStack target, Hand hand) {
+		int stackDamage = damage == 0 ? (int) (target.getMaxDamage() * percentage) : damage;
 		if (source instanceof LivingEntity livingEntity) {
-			target.damage(damage, livingEntity, (entity) -> entity.sendToolBreakStatus(hand));
+			target.damage(stackDamage, livingEntity, (entity) -> entity.sendToolBreakStatus(hand));
 		} else {
-			target.setDamage(target.getDamage() + damage);
+			target.setDamage(target.getDamage() + stackDamage);
 		}
 	}
 }
