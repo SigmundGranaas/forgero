@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
@@ -44,7 +44,7 @@ public class ConsumeStackHandler implements AfterUseHandler {
 			livingEntity.setStackInHand(hand, ItemStack.EMPTY);
 		} else if (source instanceof ItemEntity item) {
 			item.remove(Entity.RemovalReason.DISCARDED);
-		} else if (source instanceof ArrowEntity arrow) {
+		} else if (source instanceof PersistentProjectileEntity arrow) {
 			arrow.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}

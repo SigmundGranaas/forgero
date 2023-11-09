@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -18,6 +21,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -25,9 +29,6 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 public class DynamicArrowEntity extends PersistentProjectileEntity {
 	private static final TrackedData<ItemStack> STACK;
@@ -111,11 +112,17 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		if (hitResult instanceof BlockHitResult blockHitResult && getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR) {
 			BlockPos pos = blockHitResult.getBlockPos();
 			streamFeature(this.getStack(), context.put(BLOCK_TARGET, this.getWorld().getBlockState(pos)), OnHitBlockFeature.KEY)
-					.forEach(handler -> handler.onHit(this.getOwner(), this.getWorld(), pos));
+					.forEach(handler -> {
+						handler.onHit(this.getOwner(), this.getWorld(), pos);
+						handler.handle(this, this.getStack(), Hand.MAIN_HAND);
+					});
 			super.onCollision(hitResult);
 		} else if (hitResult instanceof EntityHitResult entityHitResult) {
 			streamFeature(this.getStack(), context.put(ENTITY_TARGET, entityHitResult.getEntity()), OnHitEntityFeature.KEY)
-					.forEach(handler -> handler.onHit(this.getOwner(), this.getWorld(), entityHitResult.getEntity()));
+					.forEach(handler -> {
+						handler.onHit(this.getOwner(), this.getWorld(), entityHitResult.getEntity());
+						handler.handle(this, this.getStack(), Hand.MAIN_HAND);
+					});
 		}
 	}
 

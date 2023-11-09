@@ -78,8 +78,21 @@
       {
         "type": "minecraft:on_hit",
         "on_hit": {
-          "type": "minecraft:lightning_strike",
-          "target": "minecraft:targeted_entity"
+          "type": "minecraft:explosion",
+          "power": 5
+        },
+        "after_use": {
+          "type": "minecraft:consume_stack"
+        }
+      },
+      {
+        "type": "minecraft:on_hit_block",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "power": 5
+        },
+        "after_use": {
+          "type": "minecraft:consume_stack"
         }
       }
     ]
