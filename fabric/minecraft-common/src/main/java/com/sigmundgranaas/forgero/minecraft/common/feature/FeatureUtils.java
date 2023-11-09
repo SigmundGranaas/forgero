@@ -31,6 +31,16 @@ public class FeatureUtils {
 				.features(key);
 	}
 
+	public static <T extends Feature> Stream<T> streamFeatureWithSource(ItemStack stack, MatchContext context, ClassKey<T> key) {
+		var state = StateService.INSTANCE.convert(stack);
+		if (state.isEmpty() || !FeatureCache.check(key, state.get())) {
+			return Stream.empty();
+		}
+
+		return state.get().stream(Matchable.DEFAULT_TRUE, context)
+				.features(key);
+	}
+
 	public static <T extends Feature> Stream<T> streamFeature(PropertyContainer container, MatchContext context, ClassKey<T> key) {
 		return container.stream(Matchable.DEFAULT_TRUE, context)
 				.features(key);

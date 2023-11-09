@@ -11,21 +11,26 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.AfterUseHandler;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBlockHandler {
+public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBlockHandler, AfterUseHandler {
 	public static final String ON_HIT_TYPE = "minecraft:on_hit_block";
 	public static final ClassKey<OnHitBlockFeature> KEY = new ClassKey<>(ON_HIT_TYPE, OnHitBlockFeature.class);
 	public static final String ON_HIT = "on_hit";
 	public static final FeatureBuilder<OnHitBlockFeature> BUILDER = FeatureBuilder.of(ON_HIT_TYPE, OnHitBlockFeature::buildFromBase);
 	private final List<OnHitBlockHandler> handler;
+	private final List<AfterUseHandler> afterUseHandlers;
 
-	public OnHitBlockFeature(BasePredicateData data, List<OnHitBlockHandler> handler) {
+	public OnHitBlockFeature(BasePredicateData data, List<OnHitBlockHandler> handler, List<AfterUseHandler> afterUseHandlers) {
 		super(data);
 		this.handler = handler;
+		this.afterUseHandlers = afterUseHandlers;
 		if (!data.type().equals(ON_HIT_TYPE)) {
 			throw new IllegalArgumentException("Type needs to be: " + ON_HIT_TYPE);
 		}
@@ -33,7 +38,9 @@ public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBloc
 
 	private static OnHitBlockFeature buildFromBase(BasePredicateData data, JsonElement element) {
 		List<OnHitBlockHandler> handler = buildHandlerFromJson(element, ON_HIT, obj -> HandlerBuilder.DEFAULT.build(OnHitBlockHandler.KEY, obj));
-		return new OnHitBlockFeature(data, handler);
+		List<AfterUseHandler> afterUseHandler = buildHandlerFromJson(element, AFTER_USE, obj -> HandlerBuilder.DEFAULT.build(AfterUseHandler.KEY, obj));
+
+		return new OnHitBlockFeature(data, handler, afterUseHandler);
 	}
 
 	@Override
@@ -44,5 +51,10 @@ public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBloc
 	@Override
 	public void onHit(Entity root, World world, BlockPos target) {
 		handler.forEach(sub -> sub.onHit(root, world, target));
+	}
+
+	@Override
+	public void handle(Entity source, ItemStack target, Hand hand) {
+		afterUseHandlers.forEach(sub -> sub.handle(source, target, hand));
 	}
 }
