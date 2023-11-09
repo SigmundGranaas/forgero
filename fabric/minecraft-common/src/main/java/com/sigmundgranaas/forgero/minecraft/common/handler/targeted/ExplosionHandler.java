@@ -9,9 +9,12 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.explosion.ExplosionBehavior;
 
 /**
  * Represents a handler that triggers an explosion around entities upon hitting a target.
@@ -24,7 +27,7 @@ import net.minecraft.world.explosion.Explosion;
  *   "on_hit": {
  *     "type": "minecraft:explosion",
  *     "target": "minecraft:targeted_entity",
- *     "power": 3
+ *     "power": 10
  *   }
  * }
  * </pre>
@@ -82,8 +85,8 @@ public class ExplosionHandler implements OnHitHandler, OnHitBlockHandler {
 
 	@Override
 	public void onHit(Entity root, World world, BlockPos pos) {
-		if ("minecraft:targeted_entity".equals(target) && !world.isClient) {
-			world.createExplosion(root, pos.getX(), pos.getY(), pos.getZ(), power, Explosion.DestructionType.BREAK);
+		if (!world.isClient && root instanceof LivingEntity living) {
+			world.createExplosion(root, DamageSource.explosion(living), new ExplosionBehavior(), pos.getX(), pos.getY() + 1, pos.getZ(), power, false, Explosion.DestructionType.BREAK);
 		}
 	}
 }

@@ -54,10 +54,16 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.AfterUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeStackHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeUpgradeHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.CoolDownHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.DamageHandler;
 import com.sigmundgranaas.forgero.minecraft.common.match.BowPullPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
@@ -95,6 +101,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(BlockPredicateMatcher.BlockPredicateBuilder::new);
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
+		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
 		PredicateFactory.register(BowPullPredicate.BowPullPredicateBuilder::new);
 
 		//Writers
@@ -133,6 +140,12 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
 
+		// After use
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, ConsumeStackHandler.TYPE, ConsumeStackHandler.BUILDER);
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, ConsumeUpgradeHandler.TYPE, ConsumeUpgradeHandler.BUILDER);
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, DamageHandler.TYPE, DamageHandler.BUILDER);
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, CoolDownHandler.TYPE, CoolDownHandler.BUILDER);
+
 		// On entity tick
 		HandlerBuilderRegistry.register(EntityHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
@@ -155,7 +168,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 		// Block filters
 		// Soonish
-		PredicateFactory.register(BowPullPredicate.BowPullPredicateBuilder::new);
 	}
 
 	private void soulLevelPropertyReloader() {
