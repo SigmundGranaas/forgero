@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.O
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
@@ -141,15 +142,11 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		return new Vec3d(x, y, z);
 	}
 
-	@Override
-	public void handle(Entity rootEntity) {
-		spawnParticles(rootEntity, rootEntity.getPos());
-	}
 
 	private void spawnParticles(Entity entity, Vec3d pos) {
 		ParticleType<?> particle = Registry.PARTICLE_TYPE.get(particleId);
 
-		if (particle instanceof DefaultParticleType defaultParticleType) {
+		if (particle instanceof DefaultParticleType defaultParticleType && entity != null) {
 			for (int i = 0; i < count; i++) {
 				double velX = velocity.x;
 				double velY = velocity.y;
@@ -191,6 +188,11 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	@Override
 	public void onHit(Entity root, World world, Entity target) {
 		spawnParticles(root, target.getPos());
+	}
+
+	@Override
+	public void handle(Entity rootEntity) {
+		spawnParticles(rootEntity, rootEntity.getPos());
 	}
 
 	// Enumeration for specifying directional behavior of particles
