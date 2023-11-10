@@ -35,6 +35,11 @@ public abstract class BasePredicateFeature implements Feature, Matchable {
 		return this.predicate.test(match, context);
 	}
 
+	@Override
+	public boolean applyCondition(Matchable target, MatchContext context) {
+		return test(target, context);
+	}
+
 	public BasePredicateData data() {
 		return new BasePredicateData(id, type, predicate, title, description);
 	}
