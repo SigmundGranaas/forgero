@@ -7,4 +7,5 @@ with this version of Forgero**
 
 # Changelog
 
-* [Patch]: Fixed crash from missing particle sprite in empty model
+* [Patch]: Fix negative tool durability by @Steveplays28
+* [Patch]: Fix for variant stick by @JorisDeBeer
