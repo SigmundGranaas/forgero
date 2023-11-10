@@ -76,6 +76,20 @@
     ],
     "features": [
       {
+        "type": "minecraft:entity_tick",
+        "handler": {
+          "type": "minecraft:particle",
+          "particle": "minecraft:flame",
+          "count": 2
+        },
+        "predicate": {
+          "condition": "minecraft:entity_properties",
+          "predicate": {
+            "type": "forgero:dynamic_arrow"
+          }
+        }
+      },
+      {
         "type": "minecraft:on_hit",
         "on_hit": {
           "type": "minecraft:explosion",
@@ -87,9 +101,30 @@
       },
       {
         "type": "minecraft:on_hit_block",
-        "on_hit": {
-          "type": "minecraft:explosion",
-          "power": 5
+        "on_hit": [
+          {
+            "type": "minecraft:particle",
+            "particle": "minecraft:smoke",
+            "count": 1000,
+            "velocityRandomness": {
+              "x": 0.1,
+              "y": 0.1,
+              "z": 0.1
+            },
+            "offset": {
+              "x": 5,
+              "y": 5,
+              "z": 5
+            }
+          },
+          {
+            "type": "minecraft:explosion",
+            "power": 5
+          }
+        ],
+        "predicate": {
+          "type": "forgero:random",
+          "value": 0.5
         },
         "after_use": {
           "type": "minecraft:consume_stack"

@@ -76,7 +76,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		} else {
 			super.tick();
 
-			streamFeature(this.getStack(), MatchContext.of(), EntityTickFeature.KEY)
+			streamFeature(this.getStack(), MatchContext.of().put(ENTITY, this).put(WORLD, this.getWorld()), EntityTickFeature.KEY)
 					.forEach(handler -> handler.handle(this));
 
 			if (!this.noClip) {
@@ -97,7 +97,9 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 	private double getGravity() {
 		if (getStack() != null) {
-			return StateService.INSTANCE.convert(getStack()).map(state -> 0.001 * (ComputedAttribute.apply(state, Weight.KEY))).orElse(0.0);
+			return StateService.INSTANCE.convert(getStack())
+					.map(state -> 0.001 * (ComputedAttribute.apply(state, Weight.KEY)))
+					.orElse(0.0);
 		}
 		return 0f;
 	}
