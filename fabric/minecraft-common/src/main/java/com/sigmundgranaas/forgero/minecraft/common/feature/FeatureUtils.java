@@ -28,7 +28,8 @@ public class FeatureUtils {
 		}
 
 		return state.get().stream(Matchable.DEFAULT_TRUE, context)
-				.features(key);
+				.features(key)
+				.filter(feat -> feat.applyCondition(Matchable.DEFAULT_TRUE, context));
 	}
 
 	public static <T extends Feature> Stream<T> streamFeatureWithSource(ItemStack stack, MatchContext context, ClassKey<T> key) {
@@ -43,7 +44,8 @@ public class FeatureUtils {
 
 	public static <T extends Feature> Stream<T> streamFeature(PropertyContainer container, MatchContext context, ClassKey<T> key) {
 		return container.stream(Matchable.DEFAULT_TRUE, context)
-				.features(key);
+				.features(key)
+				.filter(feat -> feat.applyCondition(Matchable.DEFAULT_TRUE, context));
 	}
 
 	public static Attribute of(JsonObject value, String jsonKey, String key, float defaultValue) {

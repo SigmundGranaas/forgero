@@ -46,8 +46,6 @@ public abstract class EntityTickHandlerMixin extends Entity {
 					.put(WORLD, entity.world);
 			streamFeature(main, context, EntityTickFeature.KEY)
 					.forEach(handler -> handler.handle(entity));
-
-
 		}
 	}
 }
