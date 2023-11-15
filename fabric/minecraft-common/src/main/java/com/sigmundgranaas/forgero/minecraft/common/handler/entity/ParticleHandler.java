@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 /**
@@ -144,7 +144,7 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 
 
 	private void spawnParticles(Entity entity, Vec3d pos) {
-		ParticleType<?> particle = Registry.PARTICLE_TYPE.get(particleId);
+		ParticleType<?> particle = Registries.PARTICLE_TYPE.get(particleId);
 
 		if (particle instanceof DefaultParticleType defaultParticleType && entity != null) {
 			for (int i = 0; i < count; i++) {
@@ -174,7 +174,7 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 				double spawnY = pos.y + (Math.random() - 0.5) * 2 * spread;
 				double spawnZ = pos.z + (Math.random() - 0.5) * 2 * spread;
 
-				entity.world.addParticle(defaultParticleType, spawnX, spawnY, spawnZ, velX, velY, velZ);
+				entity.getWorld().addParticle(defaultParticleType, spawnX, spawnY, spawnZ, velX, velY, velZ);
 			}
 		}
 	}

@@ -24,11 +24,11 @@ import net.minecraft.predicate.NbtPredicate;
 import net.minecraft.predicate.entity.EntityEquipmentPredicate;
 import net.minecraft.predicate.entity.EntityFlagsPredicate;
 import net.minecraft.predicate.entity.TypeSpecificPredicate;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public record EntityPredicateMatcher(EntityPredicate predicate, String variant) implements Matchable {
 	public static String ID = "minecraft:entity_properties";
@@ -213,7 +213,7 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 			if (entityTypePred instanceof EntityTypePredicate.Tagged tagged) {
 				return formatTag("entity", tagged.getTag().id());
 			} else if (entityTypePred instanceof EntityTypePredicate.Single single) {
-				return formatTag("entity", Registry.ENTITY_TYPE.getId(single.getType()));
+				return formatTag("entity", Registries.ENTITY_TYPE.getId(single.getType()));
 			}
 			return null;
 		}

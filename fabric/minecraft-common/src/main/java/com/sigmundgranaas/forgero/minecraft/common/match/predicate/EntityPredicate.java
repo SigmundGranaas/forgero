@@ -134,13 +134,13 @@ public class EntityPredicate {
 			return false;
 		}
 
-		if (!this.location.test(world, entity.getX(), entity.getY(), entity.getZ())) {
+		if (!this.location.test(world, entity.getBlockX(), entity.getBlockY(), entity.getBlockZ())) {
 			return false;
 		}
 
 		if (this.steppingOn != LocationPredicate.ANY) {
 			Vec3d vec3d = Vec3d.ofCenter(entity.getSteppingPos());
-			if (!this.steppingOn.test(world, vec3d.getX(), vec3d.getY(), vec3d.getZ())) {
+			if (!this.steppingOn.test(world, (int) vec3d.getX(), (int) vec3d.getY(), (int) vec3d.getZ())) {
 				return false;
 			}
 		}

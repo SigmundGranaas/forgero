@@ -14,8 +14,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 
@@ -81,7 +81,7 @@ public class StatusEffectHandler implements OnHitHandler {
 	 */
 	public static StatusEffectHandler fromJson(JsonObject json) {
 		JsonObject effectJson = json.getAsJsonObject("effect");
-		StatusEffect effect = Registry.STATUS_EFFECT.get(new Identifier(json.getAsJsonObject("effect").get("type").getAsString()));
+		StatusEffect effect = Registries.STATUS_EFFECT.get(new Identifier(json.getAsJsonObject("effect").get("type").getAsString()));
 		Attribute level = FeatureUtils.of(effectJson, "level", EFFECT_LEVEL_TYPE, 1);
 		Attribute duration = FeatureUtils.of(effectJson, "duration", EFFECT_DURATION_TYPE, 10);
 		String target = json.get("target").getAsString();

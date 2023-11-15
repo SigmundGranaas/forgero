@@ -4,16 +4,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.Builder;
 import lombok.Data;
+
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.predicate.StatePredicate;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @Data
@@ -55,7 +58,7 @@ public class FluidPredicate {
 		}
 
 		Identifier identifier = new Identifier(JsonHelper.getString(jsonObject, "fluid"));
-		return Registry.FLUID.get(identifier);
+		return Registries.FLUID.get(identifier);
 	}
 
 	@Nullable
@@ -65,7 +68,7 @@ public class FluidPredicate {
 		}
 
 		Identifier identifier = new Identifier(JsonHelper.getString(jsonObject, "tag"));
-		return TagKey.of(Registry.FLUID_KEY, identifier);
+		return TagKey.of(RegistryKeys.FLUID, identifier);
 	}
 
 	public boolean test(World world, BlockPos pos) {

@@ -9,11 +9,11 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 /**
@@ -87,9 +87,9 @@ public class SoundHandler implements EntityHandler, OnHitBlockHandler, OnHitHand
 	}
 
 	private void playSound(Entity entity) {
-		SoundEvent sound = Registry.SOUND_EVENT.get(soundId);
+		SoundEvent sound = Registries.SOUND_EVENT.get(soundId);
 		if (sound != null) {
-			entity.world.playSound(null, entity.getBlockPos(), sound, SoundCategory.NEUTRAL, volume, pitch);
+			entity.getWorld().playSound(null, entity.getBlockPos(), sound, SoundCategory.NEUTRAL, volume, pitch);
 		}
 	}
 

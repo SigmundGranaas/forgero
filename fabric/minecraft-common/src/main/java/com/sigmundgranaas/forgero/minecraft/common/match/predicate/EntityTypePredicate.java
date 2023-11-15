@@ -8,13 +8,17 @@ import com.google.gson.JsonSyntaxException;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.tag.TagKey;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 
 @Data
 @NoArgsConstructor
@@ -46,10 +50,10 @@ public abstract class EntityTypePredicate {
 			Identifier identifier;
 			if (string.startsWith("#")) {
 				identifier = new Identifier(string.substring(1));
-				return new Tagged(TagKey.of(Registry.ENTITY_TYPE_KEY, identifier));
+				return new Tagged(TagKey.of(RegistryKeys.ENTITY_TYPE, identifier));
 			} else {
 				identifier = new Identifier(string);
-				EntityType<?> entityType = Registry.ENTITY_TYPE.getOrEmpty(identifier).orElseThrow(() -> new JsonSyntaxException("Unknown entity type '" + identifier + "', valid types are: " + COMMA_JOINER.join(Registry.ENTITY_TYPE.getIds())));
+				EntityType<?> entityType = Registries.ENTITY_TYPE.getOrEmpty(identifier).orElseThrow(() -> new JsonSyntaxException("Unknown entity type '" + identifier + "', valid types are: " + COMMA_JOINER.join(Registries.ENTITY_TYPE.getIds())));
 				return new Single(entityType);
 			}
 		} else {
@@ -97,7 +101,7 @@ public abstract class EntityTypePredicate {
 
 		@Override
 		public JsonElement toJson() {
-			return new JsonPrimitive(Registry.ENTITY_TYPE.getId(this.type).toString());
+			return new JsonPrimitive(Registries.ENTITY_TYPE.getId(this.type).toString());
 		}
 	}
 }

@@ -11,10 +11,10 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 
 /**
  * This filter is used to determine whether blocks are similar based on custom criteria defined in block tags.
@@ -71,7 +71,7 @@ public class SimilarBlockFilter implements BlockFilter {
 
 	private void loadSimilarBlockTags() {
 		if (!tagsLoaded) {
-			similarBlockTags = Registry.BLOCK.streamTags()
+			similarBlockTags = Registries.BLOCK.streamTags()
 					.filter(key -> key.id().getPath().startsWith("similar_block"))
 					.collect(Collectors.toSet());
 			tagsLoaded = true;

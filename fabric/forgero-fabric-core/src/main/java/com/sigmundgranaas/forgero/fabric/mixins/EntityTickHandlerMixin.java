@@ -43,7 +43,7 @@ public abstract class EntityTickHandlerMixin extends Entity {
 			ItemStack main = entity.getMainHandStack();
 			MatchContext context = MatchContext.of()
 					.put(ENTITY, entity)
-					.put(WORLD, entity.world);
+					.put(WORLD, entity.getWorld());
 			streamFeature(main, context, EntityTickFeature.KEY)
 					.forEach(handler -> handler.handle(entity));
 		}

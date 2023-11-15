@@ -90,7 +90,7 @@ public class FireHandler implements OnHitHandler, OnHitBlockHandler {
 			// Get the block state at the targeted position
 			BlockState blockState = world.getBlockState(pos);
 
-			if (blockState.getMaterial().isBurnable()) {
+			if (blockState.isBurnable()) {
 				world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 3);
 			}
 		}

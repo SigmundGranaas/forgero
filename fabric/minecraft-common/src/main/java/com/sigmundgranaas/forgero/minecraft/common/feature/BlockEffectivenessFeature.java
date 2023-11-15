@@ -17,9 +17,10 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.block.Block;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+
 
 @Getter
 @Accessors(fluent = true)
@@ -53,6 +54,6 @@ public class BlockEffectivenessFeature extends BasePredicateFeature {
 	}
 
 	public List<TagKey<Block>> keys() {
-		return tags.stream().map(tag -> TagKey.of(Registry.BLOCK_KEY, tag)).collect(Collectors.toList());
+		return tags.stream().map(tag -> TagKey.of(Registries.BLOCK.getKey(), tag)).collect(Collectors.toList());
 	}
 }

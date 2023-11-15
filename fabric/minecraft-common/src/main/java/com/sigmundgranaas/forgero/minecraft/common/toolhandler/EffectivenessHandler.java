@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
-import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_TYPE_KEY;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,10 +10,8 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.FeatureContainerKey;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEffectivenessFeature;
 import net.minecraft.block.Block;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.TagKey;
 
-import java.util.Collections;
-import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.condition.Conditions.BROKEN_KEY;
 import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
