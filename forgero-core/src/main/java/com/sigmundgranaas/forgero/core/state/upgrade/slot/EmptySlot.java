@@ -7,12 +7,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 public class EmptySlot extends AbstractTypedSlot {
 	public EmptySlot(int index, Type type, String description, Set<Category> categories) {
@@ -56,5 +58,10 @@ public class EmptySlot extends AbstractTypedSlot {
 	@Override
 	public Slot copy() {
 		return new EmptySlot(index, type, description, categories);
+	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return getRootProperties();
 	}
 }

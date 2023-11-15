@@ -1,16 +1,21 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
+import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
+
+import java.util.Comparator;
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.condition.Conditional;
+import com.sigmundgranaas.forgero.core.condition.NamedCondition;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.state.State;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.List;
-
-import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 public interface Writer {
 
@@ -24,7 +29,24 @@ public interface Writer {
 
 	static Text nameToTranslatableText(State state) {
 		MutableText text = Text.literal("");
+		if (state instanceof Conditional<?> conditional) {
+			conditional.namedConditions(conditional.compoundedConditions())
+					.stream()
+					.max(Comparator.comparingInt(condition -> ComputedAttribute.of(condition, Rarity.KEY).asInt()))
+					.map(NamedCondition::name)
+					.map(name -> Text.translatable(String.format("condition.forgero.%s", name)))
+					.ifPresent(translated -> text.append(translated).append(Text.literal(" ")));
+		}
 		for (String element : state.name().split("-")) {
+			text.append(Text.translatable(Writer.toTranslationKey(element)));
+			text.append(Text.translatable("util.forgero.name_separator"));
+		}
+		return text;
+	}
+
+	static Text nameToTranslatableText(String name) {
+		MutableText text = Text.literal("");
+		for (String element : name.split("-")) {
 			text.append(Text.translatable(Writer.toTranslationKey(element)));
 			text.append(Text.translatable("util.forgero.name_separator"));
 		}

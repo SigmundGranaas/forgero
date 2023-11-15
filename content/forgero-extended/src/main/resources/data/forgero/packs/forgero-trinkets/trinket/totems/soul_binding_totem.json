@@ -18,7 +18,13 @@
     ],
     "features": [
       {
-        "type": "SOUL_BINDING"
+        "type": "forgero:soul_binding",
+        "on_use": {
+          "effect": "forgero:soul_binding_effect"
+        },
+        "after_use": {
+          "consume": "forgero:source"
+        }
       }
     ]
   },

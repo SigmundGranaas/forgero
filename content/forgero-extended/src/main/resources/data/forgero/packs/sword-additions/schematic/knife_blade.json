@@ -65,6 +65,28 @@
         "value": 50
       },
       {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 3.5
+      },
+      {
+        "id": "sneaking-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_sneaking": true
+            }
+          }
+        }
+      },
+      {
         "id": "schematic-rarity-composite",
         "type": "RARITY",
         "context": "COMPOSITE",
@@ -98,6 +120,10 @@
     "ingredient_count": {
       "value": 1,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "sword",
+      "to": "knife"
     },
     "better_compat_attribute_container": "bettercombat:dagger"
   }

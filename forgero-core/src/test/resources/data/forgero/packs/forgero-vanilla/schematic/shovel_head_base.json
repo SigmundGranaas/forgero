@@ -1,0 +1,31 @@
+{
+  "name": "shovel_head_base",
+  "parent": "tool_part_head_schematic",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-attack_speed-composite",
+        "type": "ATTACK_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -4
+      },
+      {
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 0.5
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/shovel"
+        ]
+      }
+    ]
+  }
+}

@@ -14,7 +14,23 @@
         "crafting_type": "STATE_CRAFTING_RECIPE",
         "ingredients": [
           {
+            "unique": true,
             "type": "AXE_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      },
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "AXE_HEAD"
+          },
+          {
+            "type": "TOOL_BINDING"
           },
           {
             "type": "HANDLE"

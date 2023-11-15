@@ -11,7 +11,7 @@
       "type": "patchouli:spotlight",
       "title": "Assembly station",
       "item": "forgero:assembly_station",
-      "text": "The assembly table is a multi block table which allows you to disassemble tools and parts. Placing tools or parts in the singular slot, will disassemble it into its components. Be aware, breaking parts into their materials will only yield 1 material. Only tools with 100% durability can be disassembled."
+      "text": "The assembly table is a multi block table which allows you to disassemble tools and parts. Placing tools or parts in the singular slot will disassemble it into its components. Be aware that breaking parts down into their materials will only yield 1 material. Only tools with 100% durability can be disassembled."
     },
     {
       "type": "patchouli:crafting",
@@ -21,7 +21,7 @@
       "type": "patchouli:spotlight",
       "title": "Upgrade station",
       "item": "forgero:upgrade_station",
-      "text": "The upgrade station is a multi block table that makes it possible to upgrade everything on you tools and parts. Placing a tool in the upgrade station will create a complete overview of all the different parts, as well as their slots, so you can upgrade them in place."
+      "text": "The upgrade station is a multi block table that makes it possible to upgrade everything on your tools and parts. Placing a tool in the upgrade station will create a complete overview of all the different parts, as well as their slots, so you can upgrade them in place."
     },
     {
       "type": "patchouli:crafting",

@@ -65,10 +65,16 @@
         ]
       }
     ],
-    "attributes": [],
+    "attributes": [
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4.5
+      }
+    ],
     "features": [
       {
-        "type": "EFFECTIVE_BLOCKS",
+        "type": "minecraft:block_effectiveness",
         "tags": [
           "minecraft:mineable/sword"
         ]

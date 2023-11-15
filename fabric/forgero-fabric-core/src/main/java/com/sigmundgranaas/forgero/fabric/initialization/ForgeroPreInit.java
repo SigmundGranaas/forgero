@@ -8,14 +8,15 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBuilder;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotCategoryBuilder;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
-import com.sigmundgranaas.forgero.core.property.active.ActivePropertyRegistry;
-import com.sigmundgranaas.forgero.core.property.active.VeinBreaking;
+import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
@@ -23,9 +24,47 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
-import com.sigmundgranaas.forgero.minecraft.common.match.DamagePercentagePredicate;
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.PatternBreaking;
-import com.sigmundgranaas.forgero.minecraft.common.property.handler.TaggedPatternBreaking;
+import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Diminishing;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.ParticleHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SoundHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SummonHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.ConvertHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.FireHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.KnockbackHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.AfterUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeStackHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeUpgradeHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.CoolDownHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.used.DamageHandler;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -39,15 +78,13 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
 	public void onPreInitialization() {
-		ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(PatternBreaking.predicate, PatternBreaking.factory));
-		ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(TaggedPatternBreaking.predicate, TaggedPatternBreaking.factory));
-		ActivePropertyRegistry.register(new ActivePropertyRegistry.PropertyEntry(VeinBreaking.predicate, VeinBreaking.factory));
-
 		FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
 		soulLevelPropertyReloader();
 		DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);
 		Entities.register();
 		registerPredicateBuilders();
+		registerFeatureBuilder();
+		registerHandlerBuilders();
 	}
 
 	private void registerPredicateBuilders() {
@@ -57,7 +94,78 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(new StringSlotBuilder());
 		PredicateFactory.register(new StringTypeBuilder());
 		PredicateFactory.register(new StringNameBuilder());
+		PredicateFactory.register(StringSlotCategoryBuilder::new);
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
+		PredicateFactory.register(EntityPredicateMatcher.EntityPredicateBuilder::new);
+		PredicateFactory.register(BlockPredicateMatcher.BlockPredicateBuilder::new);
+		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
+		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
+		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
+		//Writers
+		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);
+		PredicateWriterFactory.register(BlockPredicateMatcher.BlockPredicateWriter::builder);
+	}
+
+	private void registerFeatureBuilder() {
+		FeatureRegistry.register(OnHitEntityFeature.KEY, OnHitEntityFeature.BUILDER);
+		FeatureRegistry.register(OnHitBlockFeature.KEY, OnHitBlockFeature.BUILDER);
+		FeatureRegistry.register(BlockBreakFeature.KEY, BlockBreakFeature.BUILDER);
+		FeatureRegistry.register(EntityTickFeature.KEY, EntityTickFeature.BUILDER);
+		FeatureRegistry.register(BlockEfficiencyFeature.KEY, BlockEfficiencyFeature.BUILDER);
+	}
+
+	private void registerHandlerBuilders() {
+		//On hit entity
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, LightningStrikeHandler.TYPE, LightningStrikeHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, FireHandler.TYPE, FireHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, ConvertHandler.TYPE, ConvertHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, KnockbackHandler.TYPE, KnockbackHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
+
+		//On hit block
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, FireHandler.TYPE, FireHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
+		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
+
+		// After use
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, ConsumeStackHandler.TYPE, ConsumeStackHandler.BUILDER);
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, ConsumeUpgradeHandler.TYPE, ConsumeUpgradeHandler.BUILDER);
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, DamageHandler.TYPE, DamageHandler.BUILDER);
+		HandlerBuilderRegistry.register(AfterUseHandler.KEY, CoolDownHandler.TYPE, CoolDownHandler.BUILDER);
+
+
+		// On entity tick
+		HandlerBuilderRegistry.register(EntityHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
+
+		// Block selectors
+		HandlerBuilderRegistry.register(BlockSelector.KEY, ColumnSelector.TYPE, ColumnSelector.BUILDER);
+		HandlerBuilderRegistry.register(BlockSelector.KEY, PatternSelector.TYPE, PatternSelector.BUILDER);
+		HandlerBuilderRegistry.register(BlockSelector.KEY, RadiusVeinSelector.TYPE, RadiusVeinSelector.BUILDER);
+
+
+		// Hardness calculators
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Average.TYPE, Average.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Diminishing.TYPE, Diminishing.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Instant.TYPE, Instant.BUILDER);
+		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Single.TYPE, Single.BUILDER);
+
+		// Block filters
+		// Soonish
 	}
 
 	private void soulLevelPropertyReloader() {

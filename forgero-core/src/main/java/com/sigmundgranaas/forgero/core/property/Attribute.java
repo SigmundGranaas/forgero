@@ -1,11 +1,15 @@
 package com.sigmundgranaas.forgero.core.property;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.context.Context;
+import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
  * Attributes are designed to be pooled together and calculated in a chain.
  */
 public interface Attribute extends Property, Comparable<Attribute> {
-	Predicate<Target> DEFAULT_CONDITION = (target) -> true;
 	Function<Float, Float> DEFAULT_ATTRIBUTE_CALCULATION = (currentFloat) -> currentFloat;
 
 	default CalculationOrder getOrder() {
@@ -22,6 +25,15 @@ public interface Attribute extends Property, Comparable<Attribute> {
 
 	@Override
 	default int compareTo(@NotNull Attribute o) {
+		if (o.getAttributeType().equals(getAttributeType())) {
+			boolean hasDefaultPredicate = getPredicate() == Matchable.DEFAULT_TRUE;
+			boolean hasTargetDefaultPredicate = o.getPredicate() == Matchable.DEFAULT_TRUE;
+			if (hasDefaultPredicate && !hasTargetDefaultPredicate) {
+				return -1;
+			} else if (hasTargetDefaultPredicate && !hasDefaultPredicate) {
+				return 1;
+			}
+		}
 		int order = getOrder().getValue() - o.getOrder().getValue();
 		if (order == 0) {
 			return getOperation().ordinal() - o.getOperation().ordinal();
@@ -35,8 +47,8 @@ public interface Attribute extends Property, Comparable<Attribute> {
 		return DEFAULT_ATTRIBUTE_CALCULATION;
 	}
 
-	default Predicate<Target> getCondition() {
-		return DEFAULT_CONDITION;
+	default Matchable getPredicate() {
+		return Matchable.DEFAULT_TRUE;
 	}
 
 	NumericOperation getOperation();
@@ -57,20 +69,31 @@ public interface Attribute extends Property, Comparable<Attribute> {
 
 	String getId();
 
-
 	float leveledValue();
 
+	default Optional<PropertyContainer> source() {
+		return Optional.empty();
+	}
 
-	default float applyAttribute(Target target, float currentAttribute) {
-		if (this.getCondition().test(target)) {
+	default Attribute setSource(PropertyContainer source) {
+		return AttributeBuilder.createAttributeBuilderFromAttribute(this).applySource(source).build();
+	}
+
+	default float applyAttribute(Matchable target, MatchContext context, float currentAttribute) {
+		if (this.getPredicate().test(target, context)) {
 			return this.getCalculation().apply(currentAttribute);
 		}
 		return currentAttribute;
 	}
 
 	@Override
-	default boolean applyCondition(Target target) {
-		return this.getCondition().test(target);
+	default boolean applyCondition(Matchable target, MatchContext context) {
+		return this.getPredicate().test(target, context);
 	}
 
+	ComputedAttribute compute();
+
+	default PropertyContainer container() {
+		return PropertyContainer.of(this);
+	}
 }

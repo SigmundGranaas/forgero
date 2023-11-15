@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Schematics are the foundation of every tool part. It decides the shape, function and stats of a tool part. Schematics are required in order to create different parts, and can be found scattered around the world."
+      "text": "Schematics are the foundation of every tool part. They define the shape, function and stats of a tool part. Schematics are required in order to create different parts, and can be found scattered around the world."
     },
     {
       "type": "patchouli:text",
@@ -15,7 +15,7 @@
     {
       "type": "patchouli:text",
       "title": "Looting",
-      "text": "Only the basic schematics can be crafted from existing tools. If you want to better schematics, you have to head out into the world and explore. Schematics have different rarity, and will appear in different loot chest depending on their rarity"
+      "text": "Only the basic schematics can be crafted from existing tools. If you want to better schematics, you have to head out into the world and explore. Schematics have different rarities, and will appear in different loot chests depending on their rarity"
     },
     {
       "type": "patchouli:text",

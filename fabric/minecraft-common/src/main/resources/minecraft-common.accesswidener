@@ -3,3 +3,18 @@ accessible	class	net/minecraft/screen/ScreenHandlerType$Factory
 accessible	method	net/minecraft/screen/ScreenHandlerType	<init>	(Lnet/minecraft/screen/ScreenHandlerType$Factory;Lnet/minecraft/resource/featuretoggle/FeatureSet;)V
 extendable	method	net/minecraft/screen/ScreenHandlerType	<init>	(Lnet/minecraft/screen/ScreenHandlerType$Factory;Lnet/minecraft/resource/featuretoggle/FeatureSet;)V
 accessible	class	net/minecraft/client/gui/screen/ingame/HandledScreens$Provider
+
+# Fields in EntityPredicate
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   type               Lnet/minecraft/predicate/entity/EntityTypePredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   distance           Lnet/minecraft/predicate/entity/DistancePredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   location           Lnet/minecraft/predicate/entity/LocationPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   steppingOn         Lnet/minecraft/predicate/entity/LocationPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   effects            Lnet/minecraft/predicate/entity/EntityEffectPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   nbt                Lnet/minecraft/predicate/NbtPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   flags              Lnet/minecraft/predicate/entity/EntityFlagsPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   equipment          Lnet/minecraft/predicate/entity/EntityEquipmentPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   typeSpecific       Lnet/minecraft/predicate/entity/TypeSpecificPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   vehicle            Lnet/minecraft/predicate/entity/EntityPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   passenger          Lnet/minecraft/predicate/entity/EntityPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   targetedEntity     Lnet/minecraft/predicate/entity/EntityPredicate;
+accessible  field   net/minecraft/predicate/entity/EntityPredicate   team               Ljava/lang/String;

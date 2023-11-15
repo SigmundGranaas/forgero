@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Diorite is an intrusive rock, with a composition between granite and basalt. It also contains some crystals. Although it's color is bright and unique, it's properties are still quite similar to normal rocks."
+      "text": "Diorite is an intrusive rock, with a composition between granite and basalt. It also contains some crystals. Although it's color is bright and unique, its properties are still quite similar to normal rocks."
     },
     {
       "type": "patchouli:spotlight",

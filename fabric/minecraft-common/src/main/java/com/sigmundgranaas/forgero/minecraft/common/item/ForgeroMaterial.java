@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
@@ -36,7 +36,7 @@ public class ForgeroMaterial implements ToolMaterial, DynamicAttributeItem {
 
 	@Override
 	public int getDurability() {
-		return Attribute.of(defaultProperties(), Durability.KEY).asInt();
+		return ComputedAttribute.of(defaultProperties(), Durability.KEY).asInt();
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class ForgeroMaterial implements ToolMaterial, DynamicAttributeItem {
 
 	@Override
 	public int getMiningLevel() {
-		return Attribute.of(defaultProperties(), MiningLevel.KEY).asInt();
+		return ComputedAttribute.of(defaultProperties(), MiningLevel.KEY).asInt();
 	}
 
 	@Override

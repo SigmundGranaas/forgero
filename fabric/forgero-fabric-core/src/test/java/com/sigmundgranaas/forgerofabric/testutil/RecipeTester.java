@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgerofabric.testutil;
 
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+import static com.sigmundgranaas.forgerofabric.gametest.Utils.itemFromString;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -14,7 +15,6 @@ import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;

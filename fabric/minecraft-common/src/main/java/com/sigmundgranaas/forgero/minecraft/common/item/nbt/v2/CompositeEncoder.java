@@ -29,7 +29,7 @@ public class CompositeEncoder implements CompoundEncoder<State> {
 
 	public static NbtList encodeConditions(Conditional<?> conditional) {
 		NbtList list = new NbtList();
-		conditional.namedConditions().stream()
+		conditional.namedConditions(conditional.localConditions()).stream()
 				.map(NamedCondition::identifier)
 				.map(NbtString::of)
 				.forEach(list::add);

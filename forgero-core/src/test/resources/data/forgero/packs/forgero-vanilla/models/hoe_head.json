@@ -12,15 +12,15 @@
       "name": "hoe_head_material",
       "template": "hoe_head_tip_reinforcement.png",
       "type": "GENERATE",
-      "palette": "TOOL_MATERIAL",
-      "order": 22
+      "palette": "MATERIAL",
+      "order": 30
     },
     {
-      "name": "hoe_head_trinket",
-      "modelType": "GENERATE",
-      "template": "axe_head_gem.png",
-      "palette": "TRINKET",
-      "order": 90
+      "name": "hoe_dye",
+      "template": "hoe_head.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
     },
     {
       "target": [
@@ -41,11 +41,11 @@
     },
     {
       "target": [
-        "type:TRINKET",
+        "type:DYE",
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "hoe_head_trinket"
+      "template": "hoe_dye"
     }
   ]
 }

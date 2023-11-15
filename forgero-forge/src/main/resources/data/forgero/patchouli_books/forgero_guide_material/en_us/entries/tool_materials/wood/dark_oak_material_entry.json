@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Dark oak is only found in thick dark oak forests. Dark oak is similar to normal oak, but the color is much darker, and the wood is much harder than ordinary oak."
+      "text": "Dark oak is only found in thick dark oak forests. Dark oak is similar to normal oak, but is much darker and harder than ordinary oak."
     },
     {
       "type": "patchouli:spotlight",

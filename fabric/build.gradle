@@ -119,4 +119,11 @@ allprojects {
 			rename { "${it}_${archivesBaseName}" }
 		}
 	}
+	java {
+		withSourcesJar()
+	}
+}
+
+java {
+	withSourcesJar()
 }

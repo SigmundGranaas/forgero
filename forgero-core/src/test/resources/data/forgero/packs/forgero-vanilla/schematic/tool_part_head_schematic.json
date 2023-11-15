@@ -2,19 +2,62 @@
   "name": "tool_part_head_schematic",
   "resource_type": "ABSTRACT",
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "type": "MINING_LEVEL",
-        "order": "COMPOSITE",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "value": 0
+        "order": "BASE",
+        "attributes": [
+        ]
       },
       {
-        "id": "schematic_base_rarity_multiplication",
-        "type": "RARITY",
-        "order": "COMPOSITE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "order": "BASE",
+        "attributes": [
+        ]
       }
     ]
   }

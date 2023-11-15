@@ -1,0 +1,16 @@
+{
+  "type": "BONE",
+  "parent": "bone_base",
+  "name": "bone",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:bone"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "bone"
+  }
+}
