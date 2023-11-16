@@ -12,6 +12,7 @@ public class ComputedAttribute implements com.sigmundgranaas.forgero.core.proper
 	private final PropertyContainer container;
 	private final Matchable target;
 	private final List<AttributeModification> modifications;
+	private float value = 0f;
 
 
 	public ComputedAttribute(String key, ContainerTargetPair pair) {
@@ -28,15 +29,19 @@ public class ComputedAttribute implements com.sigmundgranaas.forgero.core.proper
 
 	@Override
 	public Float asFloat() {
-		float value = container.stream(target).applyAttribute(key());
-		if (modifications.isEmpty()) {
-			return value;
+		if (this.value == 0f) {
+			float attributeValue = container.stream(target).applyAttribute(key());
+			if (modifications.isEmpty()) {
+				this.value = attributeValue;
+				return attributeValue;
+			}
+			com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute computed = com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute.of(attributeValue, key());
+			for (AttributeModification mod : modifications) {
+				computed = mod.apply(computed, container);
+			}
+			this.value = computed.asFloat();
 		}
-		com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute computed = com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute.of(value, key());
-		for (AttributeModification mod : modifications) {
-			computed = mod.apply(computed, container);
-		}
-		return computed.asFloat();
+		return this.value;
 	}
 
 	@Override

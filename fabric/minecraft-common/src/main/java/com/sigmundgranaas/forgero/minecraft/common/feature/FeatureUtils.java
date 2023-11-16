@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.minecraft.common.feature;
 
 import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import com.google.gson.JsonObject;
@@ -30,6 +32,15 @@ public class FeatureUtils {
 		return state.get().stream(Matchable.DEFAULT_TRUE, context)
 				.features(key)
 				.filter(feat -> feat.applyCondition(Matchable.DEFAULT_TRUE, context));
+	}
+
+	public static <T extends Feature> List<T> cachedFeatures(ItemStack stack, MatchContext context, ClassKey<T> key) {
+		var state = StateService.INSTANCE.convert(stack);
+		if (state.isEmpty() || !FeatureCache.check(key, state.get())) {
+			return Collections.emptyList();
+		}
+
+		return FeatureCache.get(key, state.get());
 	}
 
 	public static <T extends Feature> Stream<T> streamFeatureWithSource(ItemStack stack, MatchContext context, ClassKey<T> key) {
