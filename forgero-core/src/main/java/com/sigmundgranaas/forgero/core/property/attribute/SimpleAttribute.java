@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.property.attribute;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
@@ -86,10 +87,15 @@ public record SimpleAttribute(String attribute,
 	public int hashCode() {
 		return Objects.hash(attribute, value);
 	}
-	
+
 	@Override
 	public ComputedAttribute compute() {
 		return ComputedAttribute.of(leveledValue(), type());
+	}
+
+	@Override
+	public Function<Float, Float> getCalculation() {
+		return (value) -> value + getValue();
 	}
 
 	@Override
