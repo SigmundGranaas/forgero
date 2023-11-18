@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.v2.feature;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -42,5 +43,18 @@ public abstract class BasePredicateFeature implements Feature, Matchable {
 
 	public BasePredicateData data() {
 		return new BasePredicateData(id, type, predicate, title, description);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BasePredicateFeature that = (BasePredicateFeature) o;
+		return Objects.equals(id, that.id) && Objects.equals(type, that.type) && Objects.equals(predicate, that.predicate) && Objects.equals(title, that.title) && Objects.equals(description, that.description);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, type, predicate, title, description);
 	}
 }

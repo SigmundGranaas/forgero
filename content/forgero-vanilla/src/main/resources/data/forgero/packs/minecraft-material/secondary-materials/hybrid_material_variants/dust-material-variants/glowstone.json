@@ -26,6 +26,13 @@
         "attributes": [
         ]
       }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
     ]
   },
   "palette": {
