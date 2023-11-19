@@ -71,7 +71,7 @@ public class BlockSelectionTest {
 
 		BlockPos centerOffset = new BlockPos(1, 1, 0);
 		BlockSelector selector = selector(pattern3x3());
-		Set<BlockPos> selected = selector.select(relative.add(centerOffset), context.createMockPlayer());
+		Set<BlockPos> selected = selector.select(relative.add(centerOffset), context.createMockCreativePlayer());
 
 		assertSelected(selected, square, context);
 	}
@@ -85,7 +85,7 @@ public class BlockSelectionTest {
 
 		BlockSelector selector = selector(pattern3x3());
 
-		PlayerEntity entity = context.createMockPlayer();
+		PlayerEntity entity = context.createMockCreativePlayer();
 		BlockPos center = context.getAbsolutePos(relative.add(0, 1, 1));
 		entity.teleport(center.getX(), center.getY(), center.getZ() + 1, false);
 		entity.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(center.getX(), center.getY(), center.getZ()));
@@ -103,7 +103,7 @@ public class BlockSelectionTest {
 		Set<BlockPos> square = insert(createSquare(relative, 1, 3, 3), context);
 
 		BlockSelector selector = selector(pattern3x3());
-		PlayerEntity entity = context.createMockPlayer();
+		PlayerEntity entity = context.createMockCreativePlayer();
 		BlockPos center = relative.add(1, 0, 1);
 		BlockPos centerAbs = context.getAbsolutePos(relative.add(1, 0, 1));
 		entity.teleport(centerAbs.getX(), centerAbs.getY() + 2, centerAbs.getZ() + 1, false);
@@ -121,7 +121,7 @@ public class BlockSelectionTest {
 		Set<BlockPos> square = insert(createSquare(relative, 3, 3, 3), context);
 
 		BlockSelector selector = selector(ModifiableFeatureAttribute.of(DEPTH_MODIFIER, 2), (entity, pos, root) -> context.getBlockState(pos).isOf(Blocks.STONE));
-		Set<BlockPos> selected = selector.select(relative.add(1, 0, 1), context.createMockPlayer());
+		Set<BlockPos> selected = selector.select(relative.add(1, 0, 1), context.createMockCreativePlayer());
 
 		assertSelected(selected, square, context);
 	}
@@ -134,7 +134,7 @@ public class BlockSelectionTest {
 		Set<BlockPos> square = insert(createSquare(relative, 4, 4, 4), context);
 
 		BlockSelector selector = selector(ModifiableFeatureAttribute.of(DEPTH_MODIFIER, 2), (entity, pos, root) -> context.getBlockState(pos).isOf(Blocks.STONE));
-		Set<BlockPos> selected = selector.select(relative.add(1, 0, 1), context.createMockPlayer());
+		Set<BlockPos> selected = selector.select(relative.add(1, 0, 1), context.createMockCreativePlayer());
 
 		try {
 			assertSelected(selected, square, context);

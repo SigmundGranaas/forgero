@@ -4,9 +4,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class Utils {
@@ -18,9 +18,9 @@ public class Utils {
 
 
 	public static Item itemFromString(String identifier) {
-		Item item = Registry.ITEM.get(new Identifier(identifier));
+		Item item = Registries.ITEM.get(new Identifier(identifier));
 		if (item == Items.AIR) {
-			return Registry.ITEM.get(new Identifier("forgero:" + identifier));
+			return Registries.ITEM.get(new Identifier("forgero:" + identifier));
 		}
 		return item;
 	}
