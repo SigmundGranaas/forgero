@@ -1,36 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
-
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
-import com.sigmundgranaas.forgero.core.model.ModelRegistry;
-import com.sigmundgranaas.forgero.core.model.ModelResult;
-import com.sigmundgranaas.forgero.core.model.ModelTemplate;
-import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
-import com.sigmundgranaas.forgero.core.model.TextureBasedModel;
+import com.sigmundgranaas.forgero.core.model.*;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.MutableMatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;
@@ -39,13 +20,23 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public static final BakedModel EMPTY = new EmptyBakedModel();
 	private static final Set<StackContextKey> currentlyBuilding = Collections.newSetFromMap(new ConcurrentHashMap<>());
 	private final LoadingCache<StackContextKey, BakedModelResult> cache;
 	private final LoadingCache<String, BakedModelResult> keyModelsCache;
-	private final LoadingCache<Item, BakedModelResult> vanillaModelCache;
+	private final Map<Item, BakedModel> defaultModels = new ConcurrentHashMap<>();
 	private final ModelRegistry registry;
 	private final StateService stateService;
 	private ModelLoader loader;
@@ -64,7 +55,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 					}
 				});
 
-
 		this.keyModelsCache = CacheBuilder.newBuilder()
 				.softValues()
 				.maximumSize(100)
@@ -74,21 +64,18 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 						return new BakedModelResult(new ModelResult(), EMPTY);
 					}
 				});
-		this.vanillaModelCache = CacheBuilder.newBuilder()
-				.softValues()
-				.maximumSize(100)
-				.build(new CacheLoader<>() {
-					@Override
-					public BakedModelResult load(Item key) {
-						return new BakedModelResult(new ModelResult(), EMPTY);
-					}
-				});
 	}
 
 	public BakedModel getModel(ItemStack stack, MatchContext context) {
 		if (ForgeroConfigurationLoader.configuration.buildModelsAsync) {
 			return getModelAsync(stack, context);
 		} else {
+			// Check if it's a default item
+			if (!stack.hasNbt()) {
+				if (defaultModels.containsKey(stack.getItem())) {
+					return defaultModels.get(stack.getItem());
+				}
+			}
 			StackContextKey key = new StackContextKey(stack, context);
 			try {
 				BakedModelResult result = cache.get(key);
@@ -108,6 +95,12 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		StackContextKey key = new StackContextKey(stack, context);
 		BakedModelResult model = cache.getIfPresent(key);
 
+		// Check if it's a default item
+		if (!stack.hasNbt()) {
+			if (defaultModels.containsKey(stack.getItem())) {
+				return defaultModels.get(stack.getItem());
+			}
+		}
 
 		// If the model exists and is valid, return it
 		if (model != null && model.result().isValid(Matchable.DEFAULT_TRUE, context)) {
@@ -144,11 +137,8 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			}
 		} else if (stack.hasNbt()) {
 			stack.getNbt().putString("ModelCacheKey", UUID.randomUUID().toString());
-		} else if (!stack.hasNbt() && vanillaModelCache.asMap().containsKey(stack.getItem())) {
-			return vanillaModelCache.getUnchecked(stack.getItem()).model();
 		}
-
-		return dynamicModel;
+		return defaultModels.getOrDefault(stack.getItem(), dynamicModel);
 	}
 
 	private void triggerAsyncRebuild(StackContextKey key, BakedModelResult currentModel) {
@@ -164,12 +154,9 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 				return currentModel;
 			}
 		}).thenAccept((m) -> {
-
 			if (key.stack().hasNbt() && key.stack().getNbt().contains("ModelCacheKey")) {
 				String cacheKey = key.stack().getNbt().getString("ModelCacheKey");
 				keyModelsCache.put(cacheKey, m);
-			} else {
-				vanillaModelCache.put(key.stack().getItem(), m);
 			}
 			cache.put(key, m);
 			currentlyBuilding.remove(key);  // Model has been built, remove from tracking set
@@ -183,6 +170,19 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			this.loader = loader;
 			this.textureGetter = textureGetter;
 			cache.invalidateAll();
+			defaultModels.clear();
+			ForgeroStateRegistry.COMPOSITES.parallelStream()
+					.map(stateService::find)
+					.flatMap(Optional::stream)
+					.map(state -> registry.find(state, MatchContext.mutable(MatchContext.of()))
+							.flatMap(this::convertModel)
+							.map(BakedModelResult::model)
+							.map(model -> Pair.of(state, model)))
+					.flatMap(Optional::stream)
+					.map(pair -> stateService.convert(pair.getKey())
+							.map(stack -> Pair.of(stack.getItem(), pair.getValue())))
+					.flatMap(Optional::stream)
+					.forEach(pair -> defaultModels.put(pair.getKey(), pair.getValue()));
 		}
 		return this;
 	}
