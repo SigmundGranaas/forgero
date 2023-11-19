@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.property.v2.cache.AttributeCache;
 import java.util.Optional;
 
 public class LuckHandler {
-	public static String LUCK_TYPE = "forgero:luck";
+	public static String LUCK_TYPE = "minecraft:luck";
 
 	public static Optional<ComputedAttribute> of(PropertyContainer container) {
 		var key = AttributeCache.AttributeContainerKey.of(container, LUCK_TYPE);
@@ -18,8 +18,8 @@ public class LuckHandler {
 		return Optional.empty();
 	}
 
-	public static int compute(PropertyContainer container) {
-		return (int) container.stream()
+	public static float compute(PropertyContainer container) {
+		return container.stream()
 				.applyAttribute(LUCK_TYPE);
 	}
 }

@@ -1,5 +1,5 @@
 {
-  "id": "forgero:tough",
+  "id": "forgero:lucky",
   "priority": 5,
   "target": {
     "types": [
@@ -22,8 +22,8 @@
         "value": 10
       },
       {
-        "type": "forgero:luck",
-        "value": 2
+        "type": "minecraft:luck",
+        "value": 1
       }
     ],
     "features": [
