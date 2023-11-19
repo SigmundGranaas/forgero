@@ -105,6 +105,13 @@
           }
         ]
       }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "forgero.feature.emissive",
+        "description": "forgero.feature.emissive.description"
+      }
     ]
   },
   "palette": {

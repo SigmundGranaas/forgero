@@ -22,7 +22,7 @@
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:piglin_sword_blade-schematic"
+        "name:piglin_sword_blade-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "piglin_sword_blade"

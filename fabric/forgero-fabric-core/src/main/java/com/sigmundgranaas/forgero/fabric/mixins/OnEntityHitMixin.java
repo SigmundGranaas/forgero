@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -41,7 +41,7 @@ public abstract class OnEntityHitMixin {
 					.put(WORLD, entity.getWorld())
 					.put(ENTITY_TARGET, target);
 
-			streamFeature(main, context, OnHitEntityFeature.KEY)
+			cachedFeatures(main, context, OnHitEntityFeature.KEY)
 					.forEach(handler -> {
 						handler.onHit(entity, entity.getWorld(), target);
 						handler.handle(entity, main, Hand.MAIN_HAND);

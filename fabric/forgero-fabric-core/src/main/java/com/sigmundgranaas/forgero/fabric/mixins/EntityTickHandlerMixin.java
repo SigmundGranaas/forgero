@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
 
@@ -44,7 +44,7 @@ public abstract class EntityTickHandlerMixin extends Entity {
 			MatchContext context = MatchContext.of()
 					.put(ENTITY, entity)
 					.put(WORLD, entity.getWorld());
-			streamFeature(main, context, EntityTickFeature.KEY)
+			cachedFeatures(main, context, EntityTickFeature.KEY)
 					.forEach(handler -> handler.handle(entity));
 		}
 	}

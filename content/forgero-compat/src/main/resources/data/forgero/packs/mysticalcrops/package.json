@@ -2,7 +2,7 @@
   "name": "mysticalcrop-compat",
   "resource_type": "PACKAGE",
   "priority": 5,
-  "namespace": "minecraft",
+  "namespace": "mysticalcrops",
   "dependencies": [
     "minecraft",
     "forgero",

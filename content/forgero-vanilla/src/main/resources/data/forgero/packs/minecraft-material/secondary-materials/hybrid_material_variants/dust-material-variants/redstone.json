@@ -127,6 +127,13 @@
         "type": "forgero:emissive",
         "value": 4
       }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "forgero.feature.emissive",
+        "description": "forgero.feature.emissive.description"
+      }
     ]
   },
   "palette": {
