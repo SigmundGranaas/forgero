@@ -104,7 +104,7 @@
             "xxx",
             "xxx"
           ],
-          "predicate": {
+          "filter": {
             "type": "minecraft:block",
             "tag": "forgero:plants"
           }
