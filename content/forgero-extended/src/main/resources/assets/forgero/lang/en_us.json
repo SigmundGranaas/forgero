@@ -101,7 +101,7 @@
   "feature.forgero.golden.title": "Golden",
   "feature.forgero.undying_revival.title": "Totem of undying",
   "feature.forgero.undying_revival.description": "Gives a one time escape from death",
-  "feature.forgero.magnetic.title": "Magnetic",
+  "feature.forgero.magnetic": "Magnetic",
   "feature.forgero.magnetic.description": "Draws items towards you",
   "feature.forgero.vein_mining.title": "Vein Mining",
   "feature.forgero.vein_mining.plants_in_area": "Breaks multiple plants",
