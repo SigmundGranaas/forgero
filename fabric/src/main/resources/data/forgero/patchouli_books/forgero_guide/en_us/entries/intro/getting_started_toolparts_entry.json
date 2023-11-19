@@ -28,7 +28,7 @@
     {
       "type": "patchouli:crafting",
       "title": "Crafting other parts",
-      "recipe": "forgero:copper-pummel",
+      "recipe": "forgero:copper-pommel",
       "recipe2": "forgero:iron-sword_blade"
     }
   ]
