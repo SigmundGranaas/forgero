@@ -16,8 +16,8 @@
     {
       "type": "forgero:state_upgrade_recipe",
       "title": "Upgrading handles",
-      "recipe": "forgero:gold-mastercrafted_handle-pummel",
-      "recipe2": "forgero:stone-mastercrafted_handle-material"
+      "recipe": "forgero:gold-mastercrafted_handle-pommel",
+      "recipe2": "forgero:stone-mastercrafted_handle-upgrade_material"
     }
   ]
 }
