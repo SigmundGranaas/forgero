@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.handler.used;
+package com.sigmundgranaas.forgero.minecraft.common.handler.afterUse;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

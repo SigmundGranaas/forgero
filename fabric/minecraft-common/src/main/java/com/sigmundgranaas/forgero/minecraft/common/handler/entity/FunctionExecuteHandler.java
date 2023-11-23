@@ -1,25 +1,34 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.function.CommandFunction;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a handler that executes a given Minecraft function or a set of commands upon hitting a target.
@@ -48,7 +57,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class FunctionExecuteHandler implements OnHitHandler, EntityHandler, OnHitBlockHandler {
+public class FunctionExecuteHandler implements OnHitHandler, EntityHandler, OnHitBlockHandler, UseHandler, EntityUseHandler, BlockUseHandler {
 	public static final String TYPE = "minecraft:function";
 	public static final JsonBuilder<FunctionExecuteHandler> BUILDER = HandlerBuilder.fromObject(FunctionExecuteHandler.class, FunctionExecuteHandler::fromJson);
 	private final List<SingleFunctionHandler> functions;
@@ -124,6 +133,26 @@ public class FunctionExecuteHandler implements OnHitHandler, EntityHandler, OnHi
 		if (world instanceof ServerWorld serverWorld) {
 			execute(source, serverWorld, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
 		}
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		onHit(user, world, user);
+		return TypedActionResult.success(user.getStackInHand(hand));
+	}
+
+	@Override
+	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+		onHit(user, user.getWorld(), entity);
+		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public ActionResult useOnBlock(ItemUsageContext context) {
+		if (context.getWorld() != null && context.getWorld() instanceof ServerWorld serverWorld) {
+			execute(context.getPlayer(), serverWorld, new Vec3d(context.getHitPos().getX(), context.getHitPos().getY(), context.getHitPos().getZ()));
+		}
+		return ActionResult.SUCCESS;
 	}
 
 	private abstract static class SingleFunctionHandler {

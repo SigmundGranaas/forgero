@@ -5,13 +5,22 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -46,7 +55,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class SoundHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler {
+public class SoundHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler, UseHandler, EntityUseHandler, BlockUseHandler {
 	public static final String TYPE = "minecraft:play_sound";
 	public static final JsonBuilder<SoundHandler> BUILDER = HandlerBuilder.fromObject(SoundHandler.class, SoundHandler::fromJson);
 
@@ -101,5 +110,23 @@ public class SoundHandler implements EntityHandler, OnHitBlockHandler, OnHitHand
 	@Override
 	public void onHit(Entity root, World world, Entity target) {
 		playSound(root);
+	}
+
+	@Override
+	public ActionResult useOnBlock(ItemUsageContext context) {
+		playSound(context.getPlayer());
+		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+		playSound(user);
+		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		playSound(user);
+		return TypedActionResult.success(user.getStackInHand(hand));
 	}
 }

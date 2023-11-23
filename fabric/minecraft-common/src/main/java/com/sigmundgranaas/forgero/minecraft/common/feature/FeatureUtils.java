@@ -1,11 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.feature;
 
-import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
-
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -18,9 +12,15 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
 
 public class FeatureUtils {
 	public static <T extends Feature> Stream<T> streamFeature(ItemStack stack, MatchContext context, ClassKey<T> key) {
@@ -41,6 +41,20 @@ public class FeatureUtils {
 		}
 
 		return FeatureCache.get(key, state.get());
+	}
+
+
+	public static <T extends Feature> Optional<T> cachedFeature(ItemStack stack, MatchContext context, ClassKey<T> key) {
+		var state = StateService.INSTANCE.convert(stack);
+		if (state.isEmpty() || !FeatureCache.check(key, state.get())) {
+			return Optional.empty();
+		}
+
+		return FeatureCache.get(key, state.get()).stream().findFirst();
+	}
+
+	public static <T extends Feature> Optional<T> cachedFeature(ItemStack stack, ClassKey<T> key) {
+		return cachedFeature(stack, MatchContext.of(), key);
 	}
 
 	public static <T extends Feature> Stream<T> streamFeatureWithSource(ItemStack stack, MatchContext context, ClassKey<T> key) {
