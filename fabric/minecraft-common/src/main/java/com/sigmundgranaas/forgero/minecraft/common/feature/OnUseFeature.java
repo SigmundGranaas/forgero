@@ -112,11 +112,13 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	private final BaseHandler baseHandler;
 
+	private final boolean usedOnRelease;
+
 	private final UseAction action;
 
 	private final int maxUseTime;
 
-	public OnUseFeature(BasePredicateData data, List<UseHandler> onUse, List<EntityUseHandler> useOnEntity, List<BlockUseHandler> useOnBlock, List<StopHandler> onStoppedUsing, List<AfterUseHandler> afterUseHandlers, BaseHandler baseHandler, UseAction action, int maxUseTime) {
+	public OnUseFeature(BasePredicateData data, List<UseHandler> onUse, List<EntityUseHandler> useOnEntity, List<BlockUseHandler> useOnBlock, List<StopHandler> onStoppedUsing, List<AfterUseHandler> afterUseHandlers, BaseHandler baseHandler, boolean usedOnRelease, UseAction action, int maxUseTime) {
 		super(data);
 		this.onUse = onUse;
 		this.useOnEntity = useOnEntity;
@@ -124,6 +126,7 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 		this.onStoppedUsing = onStoppedUsing;
 		this.afterUseHandlers = afterUseHandlers;
 		this.baseHandler = baseHandler;
+		this.usedOnRelease = usedOnRelease;
 		this.action = action;
 		this.maxUseTime = maxUseTime;
 
@@ -163,7 +166,9 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 				.findFirst()
 				.orElse(BaseHandler.DEFAULT);
 
-		return new OnUseFeature(data, use, entity, block, stop, afterUseHandler, base, action, maxUseTime);
+		boolean usedOnRelease = element.isJsonObject() && element.getAsJsonObject().has("used_on_release") && element.getAsJsonObject().get("used_on_release").getAsBoolean();
+
+		return new OnUseFeature(data, use, entity, block, stop, afterUseHandler, base, usedOnRelease, action, maxUseTime);
 	}
 
 	private static <T> List<T> parseHandler(ClassKey<T> key, JsonElement element, String jsonKey) {
@@ -284,6 +289,6 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	@Override
 	public boolean isUsedOnRelease(ItemStack stack) {
-		return baseHandler.isUsedOnRelease(stack);
+		return usedOnRelease;
 	}
 }
