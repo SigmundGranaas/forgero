@@ -1,9 +1,25 @@
 package com.sigmundgranaas.forgero.minecraft.common.feature;
 
+import static com.sigmundgranaas.forgero.minecraft.common.handler.HandlerBuilder.buildHandlerFromJson;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.core.property.v2.feature.*;
+import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateData;
+import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
+import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
+import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.AfterUseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.BaseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,9 +31,6 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
 
 public class OnUseFeature extends BasePredicateFeature implements BlockUseHandler, EntityUseHandler, UseHandler, AfterUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:on_use";
@@ -26,22 +39,19 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 	public static final String ENTIY_USE = "entity";
 	public static final String BLOCK_USE = "block";
 	public static final String STOP_USE = "on_stop";
-
 	public static final String AFTER_USE = "after";
 
 	public static final FeatureBuilder<OnUseFeature> BUILDER = FeatureBuilder.of(TYPE, OnUseFeature::buildFromBase);
 
-	@Nullable
-	private final UseHandler onUse;
+	private final List<UseHandler> onUse;
 
-	@Nullable
-	private final EntityUseHandler useOnEntity;
+	private final List<EntityUseHandler> useOnEntity;
 
-	@Nullable
-	private final BlockUseHandler useOnBlock;
+	private final List<BlockUseHandler> useOnBlock;
 
-	@Nullable
-	private final StopHandler onStoppedUsing;
+	private final List<StopHandler> onStoppedUsing;
+
+	private final List<AfterUseHandler> afterUseHandlers;
 
 	private final BaseHandler baseHandler;
 
@@ -49,12 +59,13 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	private final int maxUseTime;
 
-	public OnUseFeature(BasePredicateData data, @Nullable UseHandler onUse, @Nullable EntityUseHandler useOnEntity, @Nullable BlockUseHandler useOnBlock, @Nullable StopHandler onStoppedUsing, BaseHandler baseHandler, UseAction action, int maxUseTime) {
+	public OnUseFeature(BasePredicateData data, List<UseHandler> onUse, List<EntityUseHandler> useOnEntity, List<BlockUseHandler> useOnBlock, List<StopHandler> onStoppedUsing, List<AfterUseHandler> afterUseHandlers, BaseHandler baseHandler, UseAction action, int maxUseTime) {
 		super(data);
 		this.onUse = onUse;
 		this.useOnEntity = useOnEntity;
 		this.useOnBlock = useOnBlock;
 		this.onStoppedUsing = onStoppedUsing;
+		this.afterUseHandlers = afterUseHandlers;
 		this.baseHandler = baseHandler;
 		this.action = action;
 		this.maxUseTime = maxUseTime;
@@ -64,14 +75,17 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 		}
 	}
 
+
 	private static OnUseFeature buildFromBase(BasePredicateData data, JsonElement element) {
-		UseHandler use = parseHandler(UseHandler.KEY, element, USE);
+		List<UseHandler> use = parseHandler(UseHandler.KEY, element, USE);
 
-		EntityUseHandler entity = parseHandler(EntityUseHandler.KEY, element, ENTIY_USE);
+		List<EntityUseHandler> entity = parseHandler(EntityUseHandler.KEY, element, ENTIY_USE);
 
-		BlockUseHandler block = parseHandler(BlockUseHandler.KEY, element, BLOCK_USE);
+		List<BlockUseHandler> block = parseHandler(BlockUseHandler.KEY, element, BLOCK_USE);
 
-		StopHandler stop = parseHandler(StopHandler.KEY, element, STOP_USE);
+		List<StopHandler> stop = parseHandler(StopHandler.KEY, element, STOP_USE);
+
+		List<AfterUseHandler> afterUseHandler = buildHandlerFromJson(element, AFTER_USE, obj -> HandlerBuilder.DEFAULT.build(AfterUseHandler.KEY, obj));
 
 		int maxUseTime = 0;
 		UseAction action = UseAction.NONE;
@@ -86,44 +100,98 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 			}
 		}
 
-		var base = Optional.ofNullable((BaseHandler) use)
-				.or(() -> Optional.ofNullable(entity))
-				.or(() -> Optional.ofNullable(block))
+		BaseHandler base = Stream.of(use, entity, block, stop)
+				.flatMap(List::stream)
+				.map(BaseHandler.class::cast)
+				.findFirst()
 				.orElse(BaseHandler.DEFAULT);
 
-		return new OnUseFeature(data, use, entity, block, stop, base, action, maxUseTime);
+		return new OnUseFeature(data, use, entity, block, stop, afterUseHandler, base, action, maxUseTime);
 	}
 
-	@Nullable
-	private static <T> T parseHandler(ClassKey<T> key, JsonElement element, String jsonKey) {
+	private static <T> List<T> parseHandler(ClassKey<T> key, JsonElement element, String jsonKey) {
 		if (element.isJsonObject() && element.getAsJsonObject().has(jsonKey)) {
 			var object = element.getAsJsonObject();
 			var handlerOpt = HandlerBuilder.DEFAULT.build(key, object.get(jsonKey));
-			return handlerOpt.orElse(null);
-		} else {
-			return null;
+			return handlerOpt.map(List::of).orElse(Collections.emptyList());
+		} else if (element.isJsonArray()) {
+			var elements = element.getAsJsonArray();
+			var handlers = new ArrayList<T>();
+			for (JsonElement jsonElement : elements) {
+				if (jsonElement.isJsonObject() && jsonElement.getAsJsonObject().has(jsonKey)) {
+					var object = jsonElement.getAsJsonObject();
+					HandlerBuilder.DEFAULT.build(key, object.get(jsonKey)).ifPresent(handlers::add);
+				}
+			}
+			if (!handlers.isEmpty()) {
+				return handlers;
+			}
 		}
+		return Collections.emptyList();
 	}
 
 	@Override
 	public ActionResult useOnBlock(ItemUsageContext context) {
-		return Optional.ofNullable(useOnBlock)
-				.map(handler -> handler.useOnBlock(context))
-				.orElse(ActionResult.PASS);
+		if (useOnBlock.isEmpty()) {
+			return ActionResult.PASS;
+		}
+		ActionResult finalResult = ActionResult.PASS;
+		for (BlockUseHandler handler : useOnBlock) {
+			var result = handler.useOnBlock(context);
+			if (result == ActionResult.FAIL) {
+				finalResult = result;
+				break;
+			} else if (result.ordinal() < finalResult.ordinal()) {
+				finalResult = result;
+			}
+		}
+		if (finalResult != ActionResult.PASS) {
+			afterUseHandlers.forEach(sub -> sub.handle(context.getPlayer(), context.getStack(), context.getHand()));
+		}
+		return finalResult;
 	}
 
 	@Override
 	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-		return Optional.ofNullable(useOnEntity)
-				.map(handler -> handler.useOnEntity(stack, user, entity, hand))
-				.orElse(ActionResult.PASS);
+		if (useOnEntity.isEmpty()) {
+			return ActionResult.PASS;
+		}
+		ActionResult finalResult = ActionResult.PASS;
+		for (EntityUseHandler handler : useOnEntity) {
+			var result = handler.useOnEntity(stack, user, entity, hand);
+			if (result == ActionResult.FAIL) {
+				finalResult = result;
+				break;
+			} else if (result.ordinal() < finalResult.ordinal()) {
+				finalResult = result;
+			}
+		}
+		if (finalResult != ActionResult.PASS) {
+			afterUseHandlers.forEach(sub -> sub.handle(user, stack, hand));
+		}
+		return finalResult;
 	}
 
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		return Optional.ofNullable(onUse)
-				.map(handler -> handler.use(world, user, hand))
-				.orElse(TypedActionResult.pass(user.getStackInHand(hand)));
+		if (onUse.isEmpty()) {
+			return TypedActionResult.pass(user.getStackInHand(hand));
+		}
+		TypedActionResult<ItemStack> finalResult = TypedActionResult.pass(user.getStackInHand(hand));
+		for (UseHandler handler : onUse) {
+			var result = handler.use(world, user, hand);
+			if (result.getResult() == ActionResult.FAIL) {
+				finalResult = result;
+				break;
+			} else if (result.getResult().ordinal() < finalResult.getResult().ordinal()) {
+				finalResult = result;
+			}
+		}
+
+		if (finalResult.getResult() != ActionResult.PASS) {
+			afterUseHandlers.forEach(sub -> sub.handle(user, user.getStackInHand(hand), hand));
+		}
+		return finalResult;
 	}
 
 	@Override
@@ -152,8 +220,7 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		Optional.ofNullable(onStoppedUsing)
-				.ifPresent(handler -> handler.onStoppedUsing(stack, world, user, remainingUseTicks));
+		onStoppedUsing.forEach(sub -> sub.onStoppedUsing(stack, world, user, remainingUseTicks));
 	}
 
 	@Override
