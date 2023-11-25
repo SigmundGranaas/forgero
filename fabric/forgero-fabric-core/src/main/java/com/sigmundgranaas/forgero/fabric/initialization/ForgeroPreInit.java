@@ -64,7 +64,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.Consume;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowTridentHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
@@ -201,7 +201,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// Block use handlers
 
 		// Stop use handlers
-		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowHandler.TYPE, ThrowHandler.BUILDER);
+		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowTridentHandler.TYPE, ThrowTridentHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, ConsumeStackHandler.TYPE, ConsumeStackHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, ConsumeUpgradeHandler.TYPE, ConsumeUpgradeHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, DamageHandler.TYPE, DamageHandler.BUILDER);

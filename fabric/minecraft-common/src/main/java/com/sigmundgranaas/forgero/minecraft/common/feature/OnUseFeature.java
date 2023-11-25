@@ -31,7 +31,64 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-
+/**
+ * <p>The OnUseFeature class extends the BasePredicateFeature and implements various handlers
+ * to manage actions when an item is used on entities, blocks, or just in the air. This feature
+ * supports a variety of use scenarios including use on blocks, entities, after use, and when stopping
+ * the use action. Custom titles and conditions can also be applied.</p>
+ *
+ * <p><b>JSON Configuration Format:</b>
+ * The JSON configuration for this feature allows specifying different handlers for various use cases.
+ * This includes defining actions for entity use, block use, after use, and on stopping use. Each action
+ * can be customized using valid handlers. An example configuration is provided for illustration.</p>
+ *
+ * <h3>JSON Configuration Example:</h3>
+ * <p>This particular configuration is designed for an item that behaves like a spear.
+ * The configuration parameters include maximum use time, the action to be taken when used, and handlers for different stages of item usage, such as use, after use, and stopping use.</p>
+ * <pre>
+ * {
+ *   "type": "minecraft:on_use",
+ *   "max_use_time": 72000,
+ *   "use_action": "SPEAR",
+ *   "use": [
+ *     {
+ *       "type": "minecraft:consume"
+ *     }
+ *   ],
+ *   "after_use": [
+ *     {
+ *       "type": "minecraft:stack_damage",
+ *       "damage": 1
+ *     }
+ *   ],
+ *   "on_stop": [
+ *     {
+ *       "type": "forgero:throw_trident"
+ *     },
+ *     {
+ *       "type": "minecraft:play_sound",
+ *       "sound": "minecraft:item.trident.throw"
+ *     },
+ *     {
+ *       "type": "minecraft:consume_stack",
+ *       "count": 1
+ *     }
+ *   ]
+ * }
+ * </pre>
+ *
+ * <p>This configuration will make the tool suffer one damage after the first use action, then upon stopping
+ * the use action, it will throw a trident, play a sound, and decrement the item stack by one.</p>
+ *
+ * <h3>Configuration Details:</h3>
+ * <ul>
+ *   <li><b>max_use_time:</b> Sets the maximum duration the item can be used continuously.</li>
+ *   <li><b>use_action:</b> Defines the action type, here set as 'SPEAR'.</li>
+ *   <li><b>use:</b> Defines what happens when the item is used. In this case, the item is consumed.</li>
+ *   <li><b>after_use:</b> Actions that occur after the item is used. Here, it damages the item stack by 1.</li>
+ *   <li><b>on_stop:</b> Defines a series of actions that occur when the use of the item is stopped. This includes throwing a trident, playing a sound effect, and consuming a stack of the item.</li>
+ * </ul>
+ */
 public class OnUseFeature extends BasePredicateFeature implements BlockUseHandler, EntityUseHandler, UseHandler, AfterUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:on_use";
 	public static final ClassKey<OnUseFeature> KEY = new ClassKey<>(TYPE, OnUseFeature.class);
