@@ -1,7 +1,6 @@
-package com.sigmundgranaas.forgero.minecraft.common.handler.used;
+package com.sigmundgranaas.forgero.minecraft.common.handler.afterUse;
 
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;

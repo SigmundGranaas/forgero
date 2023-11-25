@@ -5,13 +5,24 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
@@ -75,7 +86,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler {
+public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler, UseHandler, EntityUseHandler, BlockUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:particle";
 	public static final JsonBuilder<ParticleHandler> BUILDER = HandlerBuilder.fromObject(ParticleHandler.class, ParticleHandler::fromJson);
 
@@ -142,6 +153,9 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		return new Vec3d(x, y, z);
 	}
 
+	private void spawnParticles(Entity entity, BlockPos pos) {
+		spawnParticles(entity, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+	}
 
 	private void spawnParticles(Entity entity, Vec3d pos) {
 		ParticleType<?> particle = Registry.PARTICLE_TYPE.get(particleId);
@@ -182,7 +196,7 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 
 	@Override
 	public void onHit(Entity root, World world, BlockPos pos) {
-		spawnParticles(root, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+		spawnParticles(root, pos);
 	}
 
 	@Override
@@ -193,6 +207,29 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	@Override
 	public void handle(Entity rootEntity) {
 		spawnParticles(rootEntity, rootEntity.getPos());
+	}
+
+	@Override
+	public ActionResult useOnBlock(ItemUsageContext context) {
+		spawnParticles(context.getPlayer(), context.getHitPos());
+		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+		spawnParticles(user, entity.getPos());
+		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		spawnParticles(user, user.getPos());
+		return TypedActionResult.success(user.getStackInHand(hand));
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		spawnParticles(user, user.getPos());
 	}
 
 	// Enumeration for specifying directional behavior of particles
