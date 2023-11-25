@@ -1,15 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import net.minecraft.item.ItemStack;
 
-public interface ToolStateItem extends StateItem, DynamicAttributeItem, DynamicUseHandler {
+public interface ToolStateItem extends StateItem, DynamicAttributeItem, DynamicItemUseHandler {
 	@Override
 	default PropertyContainer dynamicProperties(ItemStack stack) {
 		return dynamicState(stack);
