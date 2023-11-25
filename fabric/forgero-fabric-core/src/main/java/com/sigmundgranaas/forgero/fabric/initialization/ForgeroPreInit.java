@@ -130,7 +130,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 				.register(EntityHandler.KEY)
 				.register(BlockUseHandler.KEY)
 				.register(EntityUseHandler.KEY)
-				.register(UseHandler.KEY);
+				.register(UseHandler.KEY)
+				.register(StopHandler.KEY);
 
 		HandlerBuilderRegistry.builder(SoundHandler.TYPE, SoundHandler.BUILDER)
 				.register(OnHitHandler.KEY)
@@ -138,7 +139,9 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 				.register(EntityHandler.KEY)
 				.register(BlockUseHandler.KEY)
 				.register(EntityUseHandler.KEY)
-				.register(UseHandler.KEY);
+				.register(UseHandler.KEY)
+				.register(StopHandler.KEY);
+
 
 		HandlerBuilderRegistry.builder(ParticleHandler.TYPE, ParticleHandler.BUILDER)
 				.register(OnHitHandler.KEY)
@@ -146,12 +149,9 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 				.register(EntityHandler.KEY)
 				.register(BlockUseHandler.KEY)
 				.register(EntityUseHandler.KEY)
-				.register(UseHandler.KEY);
+				.register(UseHandler.KEY)
+				.register(StopHandler.KEY);
 
-		HandlerBuilderRegistry.builder(Consume.TYPE, Consume.BUILDER)
-				.register(BlockUseHandler.KEY)
-				.register(EntityUseHandler.KEY)
-				.register(UseHandler.KEY);
 
 		//On hit entity
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
@@ -192,7 +192,10 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Single.TYPE, Single.BUILDER);
 
 		// Use handlers
-
+		HandlerBuilderRegistry.builder(Consume.TYPE, Consume.BUILDER)
+				.register(BlockUseHandler.KEY)
+				.register(EntityUseHandler.KEY)
+				.register(UseHandler.KEY);
 		// Entity use handlers
 
 		// Block use handlers

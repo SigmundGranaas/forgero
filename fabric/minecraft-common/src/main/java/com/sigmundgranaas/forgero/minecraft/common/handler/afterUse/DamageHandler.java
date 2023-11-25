@@ -74,7 +74,7 @@ public class DamageHandler implements AfterUseHandler, StopHandler {
 	@Override
 	public void handle(Entity source, ItemStack target, Hand hand) {
 		int stackDamage = damage == 0 ? (int) (target.getMaxDamage() * percentage) : damage;
-		if (source instanceof LivingEntity livingEntity) {
+		if (source instanceof LivingEntity livingEntity && !livingEntity.getWorld().isClient()) {
 			target.damage(stackDamage, livingEntity, (entity) -> entity.sendToolBreakStatus(hand));
 		} else {
 			target.setDamage(target.getDamage() + stackDamage);

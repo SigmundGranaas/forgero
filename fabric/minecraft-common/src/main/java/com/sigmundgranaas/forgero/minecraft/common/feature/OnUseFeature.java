@@ -39,7 +39,7 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 	public static final String ENTIY_USE = "entity";
 	public static final String BLOCK_USE = "block";
 	public static final String STOP_USE = "on_stop";
-	public static final String AFTER_USE = "after";
+	public static final String AFTER_USE = "after_use";
 
 	public static final FeatureBuilder<OnUseFeature> BUILDER = FeatureBuilder.of(TYPE, OnUseFeature::buildFromBase);
 
@@ -111,20 +111,22 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	private static <T> List<T> parseHandler(ClassKey<T> key, JsonElement element, String jsonKey) {
 		if (element.isJsonObject() && element.getAsJsonObject().has(jsonKey)) {
-			var object = element.getAsJsonObject();
-			var handlerOpt = HandlerBuilder.DEFAULT.build(key, object.get(jsonKey));
-			return handlerOpt.map(List::of).orElse(Collections.emptyList());
-		} else if (element.isJsonArray()) {
-			var elements = element.getAsJsonArray();
-			var handlers = new ArrayList<T>();
-			for (JsonElement jsonElement : elements) {
-				if (jsonElement.isJsonObject() && jsonElement.getAsJsonObject().has(jsonKey)) {
-					var object = jsonElement.getAsJsonObject();
-					HandlerBuilder.DEFAULT.build(key, object.get(jsonKey)).ifPresent(handlers::add);
+			var root = element.getAsJsonObject();
+			if (root.get(jsonKey).isJsonObject() && element.getAsJsonObject().has(jsonKey)) {
+				var handlerOpt = HandlerBuilder.DEFAULT.build(key, root.get(jsonKey));
+				return handlerOpt.map(List::of).orElse(Collections.emptyList());
+			} else if (root.get(jsonKey).isJsonArray()) {
+				var elements = root.get(jsonKey).getAsJsonArray();
+				var handlers = new ArrayList<T>();
+				for (JsonElement jsonElement : elements) {
+					if (jsonElement.isJsonObject()) {
+						HandlerBuilder.DEFAULT.build(key, jsonElement.getAsJsonObject())
+								.ifPresent(handlers::add);
+					}
 				}
-			}
-			if (!handlers.isEmpty()) {
-				return handlers;
+				if (!handlers.isEmpty()) {
+					return handlers;
+				}
 			}
 		}
 		return Collections.emptyList();

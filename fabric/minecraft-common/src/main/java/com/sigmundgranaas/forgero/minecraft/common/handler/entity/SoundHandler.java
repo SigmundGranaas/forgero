@@ -7,9 +7,11 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.O
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -55,7 +57,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class SoundHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler, UseHandler, EntityUseHandler, BlockUseHandler {
+public class SoundHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler, UseHandler, EntityUseHandler, BlockUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:play_sound";
 	public static final JsonBuilder<SoundHandler> BUILDER = HandlerBuilder.fromObject(SoundHandler.class, SoundHandler::fromJson);
 
@@ -128,5 +130,10 @@ public class SoundHandler implements EntityHandler, OnHitBlockHandler, OnHitHand
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		playSound(user);
 		return TypedActionResult.success(user.getStackInHand(hand));
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		playSound(user);
 	}
 }

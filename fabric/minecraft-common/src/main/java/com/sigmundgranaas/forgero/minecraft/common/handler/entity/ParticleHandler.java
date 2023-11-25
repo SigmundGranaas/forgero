@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.O
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -85,7 +86,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler, UseHandler, EntityUseHandler, BlockUseHandler {
+public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler, UseHandler, EntityUseHandler, BlockUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:particle";
 	public static final JsonBuilder<ParticleHandler> BUILDER = HandlerBuilder.fromObject(ParticleHandler.class, ParticleHandler::fromJson);
 
@@ -224,6 +225,11 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		spawnParticles(user, user.getPos());
 		return TypedActionResult.success(user.getStackInHand(hand));
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		spawnParticles(user, user.getPos());
 	}
 
 	// Enumeration for specifying directional behavior of particles

@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
@@ -8,9 +11,11 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.O
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,9 +31,6 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Represents a handler that executes a given Minecraft function or a set of commands upon hitting a target.
@@ -57,7 +59,7 @@ import java.util.List;
  */
 @Getter
 @Accessors(fluent = true)
-public class FunctionExecuteHandler implements OnHitHandler, EntityHandler, OnHitBlockHandler, UseHandler, EntityUseHandler, BlockUseHandler {
+public class FunctionExecuteHandler implements OnHitHandler, EntityHandler, OnHitBlockHandler, UseHandler, EntityUseHandler, BlockUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:function";
 	public static final JsonBuilder<FunctionExecuteHandler> BUILDER = HandlerBuilder.fromObject(FunctionExecuteHandler.class, FunctionExecuteHandler::fromJson);
 	private final List<SingleFunctionHandler> functions;
@@ -153,6 +155,13 @@ public class FunctionExecuteHandler implements OnHitHandler, EntityHandler, OnHi
 			execute(context.getPlayer(), serverWorld, new Vec3d(context.getHitPos().getX(), context.getHitPos().getY(), context.getHitPos().getZ()));
 		}
 		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		if (world instanceof ServerWorld serverWorld) {
+			execute(user, serverWorld, user.getPos());
+		}
 	}
 
 	private abstract static class SingleFunctionHandler {
