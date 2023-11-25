@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFeatures;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -62,7 +62,7 @@ public abstract class PlayerServerInteractionManagerMixin {
 				.put(WORLD, entity.world)
 				.put(BLOCK_TARGET, pos);
 
-		cachedFeatures(main, context, OnHitBlockFeature.KEY)
+		cachedFilteredFeatures(main, OnHitBlockFeature.KEY, context)
 				.forEach(handler -> {
 					handler.onHit(entity, entity.world, pos);
 					handler.handle(entity, main, Hand.MAIN_HAND);
