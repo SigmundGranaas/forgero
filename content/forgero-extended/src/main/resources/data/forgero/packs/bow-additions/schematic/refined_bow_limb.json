@@ -38,8 +38,17 @@
         "category": [
           "UTILITY"
         ],
-        "type": "LEATHER",
         "description": "grip",
+        "type": "SOFT_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
       {
@@ -47,8 +56,8 @@
         "category": [
           "UTILITY"
         ],
-        "type": "TOOL_MATERIAL",
-        "description": "reinforcement",
+        "description": "cosmetic",
+        "type": "DYE",
         "tier": 1
       }
     ]

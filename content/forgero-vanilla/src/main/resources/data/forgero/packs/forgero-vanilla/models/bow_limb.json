@@ -38,12 +38,13 @@
       ]
     },
     {
-      "name": "bow_handle",
-      "template": "bow_handle.png",
+      "name": "bow_grip",
+      "template": "bow_grip.png",
       "type": "GENERATE",
-      "palette": "MATERIAL",
-      "order": 25
+      "palette": "SOFT_MATERIAL",
+      "order": 10
     },
+
     {
       "target": [
         "type:WOOD",
@@ -54,11 +55,11 @@
     },
     {
       "target": [
-        "type:SECONDARY_MATERIAL",
+        "type:SOFT_MATERIAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "bow_handle"
+      "template": "bow_grip"
     }
   ]
 }

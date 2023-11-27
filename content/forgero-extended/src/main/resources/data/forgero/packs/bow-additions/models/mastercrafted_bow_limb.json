@@ -32,7 +32,7 @@
       "name": "bow_reinforcement",
       "modelType": "GENERATE",
       "template": "mastercrafted_bow_limb_reinforcement.png",
-      "palette": "TOOL_MATERIAL",
+      "palette": "UPGRADE_MATERIAL",
       "order": 25,
       "variants": [
         {
@@ -93,7 +93,7 @@
     },
     {
       "target": [
-        "type:TOOL_MATERIAL",
+        "type:UPGRADE_MATERIAL",
         "slot:1"
       ],
       "modelType": "UPGRADE",
