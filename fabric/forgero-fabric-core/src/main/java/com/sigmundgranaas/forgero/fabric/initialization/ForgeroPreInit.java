@@ -1,21 +1,11 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
-import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotCategoryBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.*;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
@@ -24,63 +14,33 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
-import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnUseFeature;
-import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.AfterUseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeStackHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeUpgradeHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.CoolDownHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.DamageHandler;
+import com.sigmundgranaas.forgero.minecraft.common.feature.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Diminishing;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.ParticleHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SoundHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SummonHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.ConvertHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.FireHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.KnockbackHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.Consume;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowTridentHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.*;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.*;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
-
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
@@ -202,6 +162,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 		// Stop use handlers
 		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowTridentHandler.TYPE, ThrowTridentHandler.BUILDER);
+		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowableHandler.TYPE, ThrowableHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, ConsumeStackHandler.TYPE, ConsumeStackHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, ConsumeUpgradeHandler.TYPE, ConsumeUpgradeHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, DamageHandler.TYPE, DamageHandler.BUILDER);
