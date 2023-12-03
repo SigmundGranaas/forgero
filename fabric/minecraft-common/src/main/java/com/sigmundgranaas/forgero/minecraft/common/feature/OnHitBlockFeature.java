@@ -1,23 +1,18 @@
 package com.sigmundgranaas.forgero.minecraft.common.feature;
 
-import static com.sigmundgranaas.forgero.minecraft.common.handler.HandlerBuilder.buildHandlerFromJson;
-
-import java.util.List;
-
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateData;
-import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
-import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
-import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureBuilder;
-import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.AfterUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.AfterUseHandler;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
+
+import static com.sigmundgranaas.forgero.minecraft.common.handler.HandlerBuilder.buildHandlerFromJson;
 
 public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBlockHandler, AfterUseHandler {
 	public static final String ON_HIT_TYPE = "minecraft:on_hit_block";

@@ -1,21 +1,11 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
-import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotCategoryBuilder;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.*;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
@@ -24,56 +14,33 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
-import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Diminishing;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.ParticleHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SoundHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SummonHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.ConvertHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.FireHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.KnockbackHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.AfterUseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeStackHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeUpgradeHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.CoolDownHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.DamageHandler;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.*;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.*;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
-
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
@@ -112,9 +79,40 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		FeatureRegistry.register(BlockBreakFeature.KEY, BlockBreakFeature.BUILDER);
 		FeatureRegistry.register(EntityTickFeature.KEY, EntityTickFeature.BUILDER);
 		FeatureRegistry.register(BlockEfficiencyFeature.KEY, BlockEfficiencyFeature.BUILDER);
+		FeatureRegistry.register(OnUseFeature.KEY, OnUseFeature.BUILDER);
 	}
 
 	private void registerHandlerBuilders() {
+		// Function execution
+		HandlerBuilderRegistry.builder(FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER)
+				.register(OnHitHandler.KEY)
+				.register(OnHitBlockHandler.KEY)
+				.register(EntityHandler.KEY)
+				.register(BlockUseHandler.KEY)
+				.register(EntityUseHandler.KEY)
+				.register(UseHandler.KEY)
+				.register(StopHandler.KEY);
+
+		HandlerBuilderRegistry.builder(SoundHandler.TYPE, SoundHandler.BUILDER)
+				.register(OnHitHandler.KEY)
+				.register(OnHitBlockHandler.KEY)
+				.register(EntityHandler.KEY)
+				.register(BlockUseHandler.KEY)
+				.register(EntityUseHandler.KEY)
+				.register(UseHandler.KEY)
+				.register(StopHandler.KEY);
+
+
+		HandlerBuilderRegistry.builder(ParticleHandler.TYPE, ParticleHandler.BUILDER)
+				.register(OnHitHandler.KEY)
+				.register(OnHitBlockHandler.KEY)
+				.register(EntityHandler.KEY)
+				.register(BlockUseHandler.KEY)
+				.register(EntityUseHandler.KEY)
+				.register(UseHandler.KEY)
+				.register(StopHandler.KEY);
+
+
 		//On hit entity
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
@@ -122,20 +120,14 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, FireHandler.TYPE, FireHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, ConvertHandler.TYPE, ConvertHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, KnockbackHandler.TYPE, KnockbackHandler.BUILDER);
-		HandlerBuilderRegistry.register(OnHitHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
-		HandlerBuilderRegistry.register(OnHitHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
-		HandlerBuilderRegistry.register(OnHitHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
 
 		//On hit block
-		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
 		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, FireHandler.TYPE, FireHandler.BUILDER);
-		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
-		HandlerBuilderRegistry.register(OnHitBlockHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
 
 		// After use
 		HandlerBuilderRegistry.register(AfterUseHandler.KEY, ConsumeStackHandler.TYPE, ConsumeStackHandler.BUILDER);
@@ -143,19 +135,14 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(AfterUseHandler.KEY, DamageHandler.TYPE, DamageHandler.BUILDER);
 		HandlerBuilderRegistry.register(AfterUseHandler.KEY, CoolDownHandler.TYPE, CoolDownHandler.BUILDER);
 
-
 		// On entity tick
 		HandlerBuilderRegistry.register(EntityHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
-		HandlerBuilderRegistry.register(EntityHandler.KEY, FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
-		HandlerBuilderRegistry.register(EntityHandler.KEY, ParticleHandler.TYPE, ParticleHandler.BUILDER);
-		HandlerBuilderRegistry.register(EntityHandler.KEY, SoundHandler.TYPE, SoundHandler.BUILDER);
 
 		// Block selectors
 		HandlerBuilderRegistry.register(BlockSelector.KEY, ColumnSelector.TYPE, ColumnSelector.BUILDER);
 		HandlerBuilderRegistry.register(BlockSelector.KEY, PatternSelector.TYPE, PatternSelector.BUILDER);
 		HandlerBuilderRegistry.register(BlockSelector.KEY, RadiusVeinSelector.TYPE, RadiusVeinSelector.BUILDER);
-
 
 		// Hardness calculators
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
@@ -164,30 +151,48 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Instant.TYPE, Instant.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Single.TYPE, Single.BUILDER);
 
+		// Use handlers
+		HandlerBuilderRegistry.builder(Consume.TYPE, Consume.BUILDER)
+				.register(BlockUseHandler.KEY)
+				.register(EntityUseHandler.KEY)
+				.register(UseHandler.KEY);
+		// Entity use handlers
+
+		// Block use handlers
+
+		// Stop use handlers
+		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowTridentHandler.TYPE, ThrowTridentHandler.BUILDER);
+		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowableHandler.TYPE, ThrowableHandler.BUILDER);
+		HandlerBuilderRegistry.register(StopHandler.KEY, ConsumeStackHandler.TYPE, ConsumeStackHandler.BUILDER);
+		HandlerBuilderRegistry.register(StopHandler.KEY, ConsumeUpgradeHandler.TYPE, ConsumeUpgradeHandler.BUILDER);
+		HandlerBuilderRegistry.register(StopHandler.KEY, DamageHandler.TYPE, DamageHandler.BUILDER);
+		HandlerBuilderRegistry.register(StopHandler.KEY, CoolDownHandler.TYPE, CoolDownHandler.BUILDER);
+
 		// Block filters
 		// Soonish
 	}
 
 	private void soulLevelPropertyReloader() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-			@Override
-			public void reload(ResourceManager manager) {
-				SoulLevelPropertyRegistry.refresh();
-				Gson gson = new Gson();
-				for (Resource res : manager.findResources("leveled_soul_properties", path -> path.getPath().endsWith(".json")).values()) {
-					try (InputStream stream = res.getInputStream()) {
-						SoulLevelPropertyData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), SoulLevelPropertyData.class);
-						SoulLevelPropertyRegistry.register(data.getId(), new SoulLevelPropertyDataProcessor(data));
-					} catch (Exception e) {
-						Forgero.LOGGER.error(e);
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
+				.registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+					@Override
+					public void reload(ResourceManager manager) {
+						SoulLevelPropertyRegistry.refresh();
+						Gson gson = new Gson();
+						for (Resource res : manager.findResources("leveled_soul_properties", path -> path.getPath().endsWith(".json")).values()) {
+							try (InputStream stream = res.getInputStream()) {
+								SoulLevelPropertyData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), SoulLevelPropertyData.class);
+								SoulLevelPropertyRegistry.register(data.getId(), new SoulLevelPropertyDataProcessor(data));
+							} catch (Exception e) {
+								Forgero.LOGGER.error(e);
+							}
+						}
 					}
-				}
-			}
 
-			@Override
-			public Identifier getFabricId() {
-				return new Identifier(Forgero.NAMESPACE, "soul_level_property");
-			}
-		});
+					@Override
+					public Identifier getFabricId() {
+						return new Identifier(Forgero.NAMESPACE, "soul_level_property");
+					}
+				});
 	}
 }

@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.property.v2.attribute.attributes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComputedAttribute implements com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute {
 	private final String key;
@@ -13,7 +13,6 @@ public class ComputedAttribute implements com.sigmundgranaas.forgero.core.proper
 	private final Matchable target;
 	private final List<AttributeModification> modifications;
 	private float value = 0f;
-
 
 	public ComputedAttribute(String key, ContainerTargetPair pair) {
 		this.key = key;
