@@ -35,16 +35,19 @@ public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 		matrixStack.scale(1.5F, 1.5F, 1.5F);
 
 		ItemStack pickupItem = item.asItemStack();
+		if (!item.isInGround()) {
+			float velocity = Math.max((float) item.getVelocity().length(), 1);
+			float spinSpeed = 50 * velocity;
+			float totalAge = item.age + partialTicks;
+			float angle = (totalAge * spinSpeed) % 360;
 
-		float velocity = (float) item.getVelocity().length();
-		float spinSpeed = 50 * velocity;
-		float totalAge = item.age + partialTicks;
-		float angle = (totalAge * spinSpeed) % 360;
-
-		switch (item.getSpinType()) {
-			case HORIZONTAL -> matrixStack.multiply(NEGATIVE_Y.getDegreesQuaternion(angle));
-			case VERTICAL -> matrixStack.multiply(NEGATIVE_Z.getDegreesQuaternion(angle));
-			case NONE -> matrixStack.multiply(POSITIVE_Z.getDegreesQuaternion(45.0F));
+			switch (item.getSpinType()) {
+				case HORIZONTAL -> matrixStack.multiply(NEGATIVE_Y.getDegreesQuaternion(angle));
+				case VERTICAL -> matrixStack.multiply(NEGATIVE_Z.getDegreesQuaternion(angle));
+			}
+		}
+		if (item.getSpinType() == ThrowableItem.SpinType.NONE) {
+			matrixStack.multiply(POSITIVE_Z.getDegreesQuaternion(45.0F));
 		}
 
 		this.renderer.renderItem(pickupItem, ModelTransformation.Mode.GROUND, i, OverlayTexture.DEFAULT_UV, matrixStack, vertexConsumerProvider, item.getId());
