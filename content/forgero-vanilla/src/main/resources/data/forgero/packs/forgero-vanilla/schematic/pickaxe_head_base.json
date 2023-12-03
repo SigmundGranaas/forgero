@@ -23,30 +23,6 @@
         "tags": [
           "minecraft:mineable/pickaxe"
         ]
-      },
-      {
-        "type": "minecraft:on_use",
-        "max_use_time": 72000,
-        "use_action": "SPEAR",
-        "use": [
-          {
-            "type": "minecraft:consume"
-          }
-        ],
-        "on_stop": [
-          {
-            "type": "forgero:throw",
-            "spin_type": "VERTICAL"
-          },
-          {
-            "type": "minecraft:play_sound",
-            "sound": "minecraft:item.trident.throw"
-          },
-          {
-            "type": "minecraft:consume_stack",
-            "count": 1
-          }
-        ]
       }
     ]
   }

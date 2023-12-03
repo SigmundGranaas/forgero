@@ -7,12 +7,42 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+/**
+ * Represents a handler that throws an item when the player stops using it.
+ * <p>
+ * Example JSON configuration:
+ * <pre>
+ *    {
+ *     "type": "minecraft:on_use",
+ *     "max_use_time": 72000,
+ *     "use_action": "SPEAR",
+ *     "use": [
+ *      {
+ *          "type": "minecraft:consume"
+ *      }
+ *     ],
+ *     "on_stop": [
+ *      {
+ *          "type": "forgero:throw",
+ *          "spin_type": "VERTICAL"
+ *      },
+ *      {
+ *          "type": "minecraft:play_sound",
+ *          "sound": "minecraft:item.trident.throw"
+ *      },
+ *      {
+ *          "type": "minecraft:consume_stack",
+ *          "count": 1
+ *      }
+ *     ]
+ *    }
+ * </pre>
+ * </p>
+ */
 public class ThrowableHandler implements StopHandler {
 	public static final String TYPE = "forgero:throw";
 	public static final ClassKey<ThrowableHandler> KEY = new ClassKey<>(TYPE, ThrowableHandler.class);
@@ -56,19 +86,8 @@ public class ThrowableHandler implements StopHandler {
 			world.spawnEntity(throwableItem);
 		}
 	}
-
-	@Getter
-	@Accessors(fluent = true)
-	public static class ThrowableConfig {
-		private final float velocityMultiplier;
-		private final float instability;
-		private final ThrowableItem.SpinType spinType;
-
-		public ThrowableConfig(float velocityMultiplier, float instability, ThrowableItem.SpinType spinType) {
-			this.velocityMultiplier = velocityMultiplier;
-			this.instability = instability;
-			this.spinType = spinType;
-		}
+	
+	public record ThrowableConfig(float velocityMultiplier, float instability, ThrowableItem.SpinType spinType) {
 
 		public static ThrowableConfig fromJson(JsonObject json) {
 			float velocityMultiplier = json.has("velocity_multiplier") ? json.get("velocity_multiplier").getAsFloat() : 1.0F;
