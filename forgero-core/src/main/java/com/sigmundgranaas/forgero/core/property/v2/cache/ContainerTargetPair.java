@@ -5,19 +5,25 @@ import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
+import static com.sigmundgranaas.forgero.core.util.match.Matchable.DEFAULT_TRUE;
+
 public record ContainerTargetPair(PropertyContainer container, Matchable target, MatchContext context) {
 
 	public static ContainerTargetPair of(PropertyContainer container) {
-		return new ContainerTargetPair(container, Matchable.DEFAULT_TRUE, MatchContext.of());
+		return new ContainerTargetPair(container, DEFAULT_TRUE, MatchContext.of());
 	}
 
 	public static ContainerTargetPair of(PropertyContainer container, Matchable matchable, MatchContext context) {
 		return new ContainerTargetPair(container, matchable, context);
 	}
 
+	public static ContainerTargetPair of(PropertyContainer container, MatchContext context) {
+		return new ContainerTargetPair(container, DEFAULT_TRUE, context);
+	}
+
 	@Override
 	public int hashCode() {
-		if (target == Matchable.DEFAULT_TRUE && context == MatchContext.of()) {
+		if (target == DEFAULT_TRUE && context == MatchContext.of()) {
 			return container.hashCode();
 		}
 		return Objects.hashCode(container, target, context);
