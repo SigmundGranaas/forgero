@@ -6,11 +6,9 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 
 public class ThrowableHandler implements StopHandler {
 	public static final String TYPE = "forgero:throw";
@@ -31,16 +29,12 @@ public class ThrowableHandler implements StopHandler {
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (!world.isClient) {
-			int maxUseTime = stack.getMaxUseTime();
-			int chargeDuration = maxUseTime - remainingUseTicks;
-
 			ThrowableItem throwableItem = new ThrowableItem(
 					world,
 					user,
 					stack.copy(),
 					config.weight,
-					config.spinType,
-					chargeDuration
+					config.spinType
 			);
 
 			throwableItem.setVelocity(
@@ -48,15 +42,15 @@ public class ThrowableHandler implements StopHandler {
 					user.getPitch(),
 					user.getYaw(),
 					0.0f,
-					10,
+					10 * config.velocityMultiplier(),
 					1.0f
 			);
 			world.spawnEntity(throwableItem);
 		}
 	}
 
-	@Accessors(fluent = true)
 	@Getter
+	@Accessors(fluent = true)
 	public static class ThrowableConfig {
 		private final float velocityMultiplier;
 		private final float weight;

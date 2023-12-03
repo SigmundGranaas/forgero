@@ -1,14 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.use;
 
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -16,38 +14,30 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ThrowableItem extends ThrownItemEntity {
+public class ThrowableItem extends PersistentProjectileEntity {
+	private static final TrackedData<ItemStack> STACK = DataTracker.registerData(ThrowableItem.class, TrackedDataHandlerRegistry.ITEM_STACK);
 	private static final TrackedData<Float> weight = DataTracker.registerData(ThrowableItem.class, TrackedDataHandlerRegistry.FLOAT);
 	private static final TrackedData<String> spinTypeData = DataTracker.registerData(ThrowableItem.class, TrackedDataHandlerRegistry.STRING);
 	private static final TrackedData<Boolean> hasHit = DataTracker.registerData(ThrowableItem.class, TrackedDataHandlerRegistry.BOOLEAN);
 	public static Identifier THROWN_ENTITY_IDENTIFIER = new Identifier("forgero", "thrown_entity");
-	private float chargeDuration;
 
-	public ThrowableItem(EntityType<? extends ThrownItemEntity> entityType, World world) {
+	public ThrowableItem(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
 		super(entityType, world);
 	}
 
-	public ThrowableItem(World world, LivingEntity owner, ItemStack itemStack, Float weight, SpinType spinType, float chargeDuration) {
+	public ThrowableItem(World world, LivingEntity owner, ItemStack itemStack, Float weight, SpinType spinType) {
 		super(Entities.THROWN_ITEM_ENTITY, owner, world);
-		this.setItem(itemStack);
+		this.getDataTracker().set(STACK, itemStack);
 		this.getDataTracker().set(spinTypeData, spinType.toString());
 		this.getDataTracker().set(ThrowableItem.weight, weight);
 		this.getDataTracker().set(hasHit, false);
-		this.chargeDuration = chargeDuration;
 	}
 
-	@Override
-	protected Item getDefaultItem() {
-		return getItem().getItem();
-	}
-
-	public ItemStack getItem() {
-		return super.getItem();
-	}
 
 	@Override
 	protected void initDataTracker() {
 		super.initDataTracker();
+		this.getDataTracker().startTracking(STACK, ItemStack.EMPTY);
 		this.getDataTracker().startTracking(weight, 0.0F);
 		this.getDataTracker().startTracking(spinTypeData, SpinType.NONE.toString());
 		this.getDataTracker().startTracking(hasHit, false);
@@ -66,7 +56,6 @@ public class ThrowableItem extends ThrownItemEntity {
 		}
 	}
 
-
 	public SpinType getSpinType() {
 		return SpinType.valueOf(this.getDataTracker().get(spinTypeData));
 	}
@@ -76,19 +65,29 @@ public class ThrowableItem extends ThrownItemEntity {
 		super.writeCustomDataToNbt(nbt);
 		nbt.putFloat("weight", this.getDataTracker().get(weight));
 		nbt.putString("spinType", this.getDataTracker().get(spinTypeData));
+		if (!this.asItemStack().isEmpty()) {
+			nbt.put("Item", this.asItemStack().writeNbt(new NbtCompound()));
+		}
 	}
+
 
 	@Override
 	public void readCustomDataFromNbt(NbtCompound nbt) {
 		super.readCustomDataFromNbt(nbt);
 		this.getDataTracker().set(weight, nbt.getFloat("weight"));
 		this.getDataTracker().set(spinTypeData, nbt.getString("spinType"));
+		this.getDataTracker().set(STACK, ItemStack.fromNbt(nbt.getCompound("Item")));
 	}
 
-	private void applyCustomVelocity() {
-		Vec3d velocity = this.getVelocity();
-		float velocityMultiplier = 1.0F + (0.05F * chargeDuration); // Adjust formula as needed
-		this.setVelocity(velocity.multiply(velocityMultiplier / 10));
+	@Override
+	protected ItemStack asItemStack() {
+		return this.getDataTracker().get(STACK);
+	}
+
+	@Override
+	public double getDamage() {
+		// Capping the max damage at 2x the item's max damage
+		return Math.min(asItemStack().getDamage() * getVelocity().length(), asItemStack().getDamage() * 2);
 	}
 
 	public void setVelocity(LivingEntity user, float pitch, float yaw, float roll, float velocityMultiplier, float inaccuracy) {

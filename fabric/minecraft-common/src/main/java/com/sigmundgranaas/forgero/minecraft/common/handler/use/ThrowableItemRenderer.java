@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.use;
 
-import static net.minecraft.util.math.Vec3f.*;
-
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -11,6 +9,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+
+import static net.minecraft.util.math.Vec3f.*;
 
 public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 	private static final Identifier ARROW = new Identifier("textures/entity/projectiles/arrow.png");
@@ -34,7 +34,7 @@ public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 
 		matrixStack.scale(1.5F, 1.5F, 1.5F);
 
-		ItemStack pickupItem = item.getStack();
+		ItemStack pickupItem = item.asItemStack();
 
 		float velocity = (float) item.getVelocity().length();
 		float spinSpeed = 50 * velocity;
