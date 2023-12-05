@@ -5,10 +5,10 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class MultiOnHitHandler implements OnHitHandler {
-	private final List<OnHitHandler> handlers;
+public class MultiOnHitHandler implements EntityTargetHandler {
+	private final List<EntityTargetHandler> handlers;
 
-	public MultiOnHitHandler(List<OnHitHandler> handlers) {
+	public MultiOnHitHandler(List<EntityTargetHandler> handlers) {
 		this.handlers = handlers;
 	}
 

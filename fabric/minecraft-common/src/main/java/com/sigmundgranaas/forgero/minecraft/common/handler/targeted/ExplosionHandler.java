@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.targeted;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.EntityTargetHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -35,7 +35,7 @@ import net.minecraft.world.explosion.ExplosionBehavior;
  */
 @Getter
 @Accessors(fluent = true)
-public class ExplosionHandler implements OnHitHandler, OnHitBlockHandler {
+public class ExplosionHandler implements EntityTargetHandler, BlockTargetHandler {
 	public static final String TYPE = "minecraft:explosion";
 	public static final JsonBuilder<ExplosionHandler> BUILDER = HandlerBuilder.fromObject(ExplosionHandler.class, ExplosionHandler::fromJson);
 
