@@ -5,4 +5,6 @@ import java.util.Optional;
 
 public interface FileLoader {
 	Optional<InputStream> getStream(String location);
+
+	Optional<InputStream> getStreamSilent(String location);
 }

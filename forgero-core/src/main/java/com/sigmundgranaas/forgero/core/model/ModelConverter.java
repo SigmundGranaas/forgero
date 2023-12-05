@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.core.model;
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -236,10 +235,11 @@ public class ModelConverter {
 	 * @return A list of generated model match pairings.
 	 */
 	private List<ModelMatchPairing> generatePairings(List<PaletteData> palettes, ModelData data) {
-		List<ModelData> variants = buildVariants(data);
 		return palettes.stream()
-				.flatMap(palette -> variants.stream()
-						.map(entry -> generate(palette, entry, List.of(new JsonPrimitive("name:" + palette.getTarget())))))
+				.map(palette -> data.toBuilder().palette(palette.getTarget()).build())
+				.map(this::buildVariants)
+				.flatMap(List::stream)
+				.map(model -> generate(model, List.of(new JsonPrimitive("name:" + model.getPalette()))))
 				.toList();
 	}
 
@@ -251,10 +251,11 @@ public class ModelConverter {
 	 * @return A list of created model match pairings.
 	 */
 	private List<ModelMatchPairing> createPairings(List<PaletteData> palettes, ModelData data) {
-		List<ModelData> variants = buildVariants(data);
 		return palettes.stream()
-				.flatMap(palette -> variants.stream()
-						.map(entry -> generate(palette, entry, Collections.emptyList())))
+				.map(palette -> data.toBuilder().palette(palette.getTarget()).build())
+				.map(this::buildVariants)
+				.flatMap(List::stream)
+				.map(model -> generate(model, List.of(new JsonPrimitive("name:" + model.getPalette()))))
 				.toList();
 	}
 
@@ -269,6 +270,7 @@ public class ModelConverter {
 						data.getVariants().stream()
 								.map(variant -> data.toBuilder()
 										.template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() : variant.getTemplate())
+										.palette(variant.getPalette().equals(EMPTY_IDENTIFIER) ? data.getPalette() : variant.getPalette())
 										.predicate(variant.getTarget())
 										.offset(variant.getOffset())
 										.resolution(variant.getResolution())
@@ -281,13 +283,12 @@ public class ModelConverter {
 	/**
 	 * Generates a model match pairing from palette data, model data, and additional predicates.
 	 *
-	 * @param palette              Palette data.
 	 * @param data                 Model data.
 	 * @param additionalPredicates Additional predicates for matching.
 	 * @return A model match pairing.
 	 */
-	private ModelMatchPairing generate(PaletteData palette, ModelData data, List<JsonElement> additionalPredicates) {
-		var model = new PaletteTemplateModel(palette.getTarget(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null));
+	private ModelMatchPairing generate(ModelData data, List<JsonElement> additionalPredicates) {
+		var model = new PaletteTemplateModel(data.getPalette(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null));
 		textures.put(model.identifier(), model);
 		List<JsonElement> predicates = new ArrayList<>(data.getPredicates());
 		predicates.addAll(additionalPredicates);

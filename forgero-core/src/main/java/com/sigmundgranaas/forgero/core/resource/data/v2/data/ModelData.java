@@ -28,18 +28,23 @@ public class ModelData {
 	@SerializedName(value = "modelType", alternate = "type")
 	@Nullable
 	private String modelType = Identifiers.EMPTY_IDENTIFIER;
+
 	@Builder.Default
 	@Nullable
 	private String template = Identifiers.EMPTY_IDENTIFIER;
+
 	@Builder.Default
 	@Nullable
 	private String name = Identifiers.EMPTY_IDENTIFIER;
+
 	@Builder.Default
 	@Nullable
 	private List<ModelEntryData> variants = Collections.emptyList();
+
 	@Builder.Default
 	@Nullable
 	private List<Float> offset = Collections.emptyList();
+
 	@Builder.Default
 	@Nullable
 	private String palette = Identifiers.EMPTY_IDENTIFIER;
@@ -58,27 +63,23 @@ public class ModelData {
 
 	public String getModelType() {
 		return Objects.requireNonNullElse(modelType, Identifiers.EMPTY_IDENTIFIER);
-
 	}
 
 	public String getTemplate() {
 		return Objects.requireNonNullElse(template, Identifiers.EMPTY_IDENTIFIER);
-
 	}
 
 	public String getName() {
 		return Objects.requireNonNullElse(name, Identifiers.EMPTY_IDENTIFIER);
-
 	}
 
 	public int order() {
 		return order;
-
 	}
+
 
 	public List<ModelEntryData> getVariants() {
 		return Objects.requireNonNullElse(variants, Collections.emptyList());
-
 	}
 
 	public List<Float> getOffset() {
