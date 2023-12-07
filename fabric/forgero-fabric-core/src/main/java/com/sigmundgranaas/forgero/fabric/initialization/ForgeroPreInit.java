@@ -17,6 +17,7 @@ import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBui
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotCategoryBuilder;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
@@ -48,6 +49,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.C
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityBasedHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FrostHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.ParticleHandler;
@@ -129,36 +131,13 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 	private void registerHandlerBuilders() {
 		// Function execution
-		HandlerBuilderRegistry.builder(FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER)
-				.register(EntityTargetHandler.KEY)
-				.register(BlockTargetHandler.KEY)
-				.register(EntityBasedHandler.KEY)
-				.register(EntityHandHandler.KEY)
-				.register(BlockUseHandler.KEY)
-				.register(EntityUseHandler.KEY)
-				.register(UseHandler.KEY)
-				.register(StopHandler.KEY);
+		registerEntityBasedHandler(FunctionExecuteHandler.TYPE, FunctionExecuteHandler.BUILDER);
 
-		HandlerBuilderRegistry.builder(SoundHandler.TYPE, SoundHandler.BUILDER)
-				.register(EntityTargetHandler.KEY)
-				.register(BlockTargetHandler.KEY)
-				.register(EntityBasedHandler.KEY)
-				.register(EntityHandHandler.KEY)
-				.register(BlockUseHandler.KEY)
-				.register(EntityUseHandler.KEY)
-				.register(UseHandler.KEY)
-				.register(StopHandler.KEY);
+		registerEntityBasedHandler(SoundHandler.TYPE, SoundHandler.BUILDER);
 
+		registerEntityBasedHandler(ParticleHandler.TYPE, ParticleHandler.BUILDER);
 
-		HandlerBuilderRegistry.builder(ParticleHandler.TYPE, ParticleHandler.BUILDER)
-				.register(EntityTargetHandler.KEY)
-				.register(BlockTargetHandler.KEY)
-				.register(EntityBasedHandler.KEY)
-				.register(EntityHandHandler.KEY)
-				.register(BlockUseHandler.KEY)
-				.register(EntityUseHandler.KEY)
-				.register(UseHandler.KEY)
-				.register(StopHandler.KEY);
+		registerEntityBasedHandler(FrostHandler.TYPE, FrostHandler.BUILDER);
 
 		//On hit entity
 		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
@@ -217,6 +196,18 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 		// Block filters
 		// Soonish
+	}
+
+	private void registerEntityBasedHandler(String key, JsonBuilder<? extends EntityBasedHandler> builder) {
+		HandlerBuilderRegistry.builder(key, builder)
+				.register(EntityTargetHandler.KEY)
+				.register(BlockTargetHandler.KEY)
+				.register(EntityBasedHandler.KEY)
+				.register(EntityHandHandler.KEY)
+				.register(BlockUseHandler.KEY)
+				.register(EntityUseHandler.KEY)
+				.register(UseHandler.KEY)
+				.register(StopHandler.KEY);
 	}
 
 	private void soulLevelPropertyReloader() {
