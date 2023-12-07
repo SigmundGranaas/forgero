@@ -16,19 +16,18 @@ import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
 import com.sigmundgranaas.forgero.fabric.resources.ResourceLoadedFileService;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
+import net.minecraft.resource.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.resource.LifecycledResourceManagerImpl;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.metadata.ResourceMetadata;
 import net.minecraft.util.Identifier;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
 
@@ -50,17 +49,17 @@ public abstract class LifecycleResourceManagerImplMixin {
 				if (texture.isPresent()) {
 					var metadata = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getMetadata(ForgeroClient.TEXTURES.get(textureId), ".mcmeta");
 					Resource resource;
-					packs.get(0)
+
 					resource = metadata
-							.map(object -> new Resource(id.getNamespace(), texture.get()::getStream, convert(object)))
-							.orElseGet(() -> new Resource(id.getNamespace(), texture.get()::getStream));
+							.map(object -> new Resource(packs.get(0), texture.get()::getStream, convert(object)))
+							.orElseGet(() -> new Resource(packs.get(0), texture.get()::getStream));
 					cir.setReturnValue(Optional.of(resource));
 				}
 			}
 		}
 	}
 
-	private Resource.InputSupplier<ResourceMetadata> convert(JsonObject object) {
+	private InputSupplier<ResourceMetadata> convert(JsonObject object) {
 		return () -> ResourceMetadata.create(new ByteArrayInputStream(new Gson().toJson(object).getBytes(StandardCharsets.UTF_8)));
 	}
 }

@@ -9,8 +9,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
-import static net.minecraft.util.math.Vec3f.*;
+import static net.minecraft.client.render.model.json.ModelTransformationMode.GROUND;
+import static net.minecraft.util.math.RotationAxis.*;
+
 
 public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 	private static final Identifier ARROW = new Identifier("textures/entity/projectiles/arrow.png");
@@ -29,8 +32,8 @@ public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 		float interpolatedYaw = MathHelper.lerp(partialTicks, item.prevYaw, item.getYaw()) - 90.0F;
 		float interpolatedPitch = MathHelper.lerp(partialTicks, item.prevPitch, item.getPitch());
 
-		matrixStack.multiply(POSITIVE_Y.getDegreesQuaternion(interpolatedYaw));
-		matrixStack.multiply(POSITIVE_Z.getDegreesQuaternion(interpolatedPitch));
+		matrixStack.multiply(POSITIVE_Y.rotation(interpolatedYaw));
+		matrixStack.multiply(POSITIVE_Z.rotation(interpolatedPitch));
 
 		matrixStack.scale(1.5F, 1.5F, 1.5F);
 
@@ -42,15 +45,15 @@ public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 			float angle = (totalAge * spinSpeed) % 360;
 
 			switch (item.getSpinType()) {
-				case HORIZONTAL -> matrixStack.multiply(NEGATIVE_Y.getDegreesQuaternion(angle));
-				case VERTICAL -> matrixStack.multiply(NEGATIVE_Z.getDegreesQuaternion(angle));
+				case HORIZONTAL -> matrixStack.multiply(NEGATIVE_Y.rotation(angle));
+				case VERTICAL -> matrixStack.multiply(NEGATIVE_Z.rotation(angle));
 			}
 		}
 		if (item.getSpinType() == ThrowableItem.SpinType.NONE) {
-			matrixStack.multiply(POSITIVE_Z.getDegreesQuaternion(45.0F));
+			matrixStack.multiply(POSITIVE_Z.rotation(45.0F));
 		}
 
-		this.renderer.renderItem(pickupItem, ModelTransformation.Mode.GROUND, i, OverlayTexture.DEFAULT_UV, matrixStack, vertexConsumerProvider, item.getId());
+		this.renderer.renderItem(pickupItem, GROUND ,i, 0, matrixStack, vertexConsumerProvider, item.getWorld(), 0);
 		matrixStack.pop();
 		super.render(item, partialTicks, g, matrixStack, vertexConsumerProvider, i);
 	}

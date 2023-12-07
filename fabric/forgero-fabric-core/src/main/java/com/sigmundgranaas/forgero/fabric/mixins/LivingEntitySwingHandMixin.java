@@ -32,7 +32,7 @@ public class LivingEntitySwingHandMixin {
 
 		MatchContext context = MatchContext.of()
 				.put(ENTITY, entity)
-				.put(WORLD, entity.world);
+				.put(WORLD, entity.getWorld());
 
 		cachedFilteredFeatures(main, SwingHandFeature.KEY, context)
 				.forEach(handler -> {
