@@ -9,8 +9,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.EntityTargetHandler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -45,7 +45,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class SummonHandler implements OnHitHandler, EntityHandler, OnHitBlockHandler {
+public class SummonHandler implements EntityTargetHandler, EntityBasedHandler, BlockTargetHandler {
 
 	public static final String TYPE = "minecraft:summon";
 	public static final JsonBuilder<SummonHandler> BUILDER = HandlerBuilder.fromObject(SummonHandler.class, SummonHandler::fromJson);

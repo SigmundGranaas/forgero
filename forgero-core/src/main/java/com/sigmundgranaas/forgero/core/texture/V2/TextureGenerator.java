@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
@@ -29,6 +30,15 @@ public class TextureGenerator {
 		return INSTANCE;
 	}
 
+	public Optional<JsonObject> getMetadata(PaletteTemplateModel templateModel, String extension) {
+		var palette = service.getPaletteMetadata(templateModel.palette(), extension);
+		var template = service.getTemplateMetadata(templateModel.template(), extension);
+		if (palette.isPresent() || template.isPresent()) {
+			return palette.isPresent() ? palette : template;
+		}
+		return Optional.empty();
+	}
+
 	public Optional<Texture> getTexture(PaletteTemplateModel templateModel) {
 		var palette = service.getPalette(templateModel.palette() + ".png");
 		var template = service.getTemplate(templateModel.template());
@@ -36,7 +46,6 @@ public class TextureGenerator {
 			var texture = new RawTexture(template.get().apply(palette.get()).getImage());
 			if (ForgeroConfigurationLoader.configuration.exportGeneratedTextures) {
 				saveImage(texture, templateModel.name());
-
 			}
 			return Optional.of(texture);
 		}
@@ -45,9 +54,7 @@ public class TextureGenerator {
 	}
 
 	public void clear() {
-
 		service.clear();
-
 	}
 
 	private void saveImage(RawTexture texture, String name) {

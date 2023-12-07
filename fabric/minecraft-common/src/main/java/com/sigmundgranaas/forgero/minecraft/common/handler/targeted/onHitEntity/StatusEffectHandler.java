@@ -45,11 +45,11 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class StatusEffectHandler implements OnHitHandler {
+public class StatusEffectHandler implements EntityTargetHandler {
 	public static final String TYPE = "minecraft:status_effect";
 	public static final String EFFECT_LEVEL_TYPE = "minecraft:effect_level";
 	public static final String EFFECT_DURATION_TYPE = "minecraft:effect_duration";
-	public static final JsonBuilder<OnHitHandler> BUILDER = HandlerBuilder.fromObject(OnHitHandler.KEY.clazz(), StatusEffectHandler::fromJson);
+	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), StatusEffectHandler::fromJson);
 	// Default value
 	private static final int DEFAULT_DURATION = 20 * 30;
 	private final StatusEffect effect;

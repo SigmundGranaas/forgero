@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.texture.V2.recolor;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.texture.V2.Palette;
 import com.sigmundgranaas.forgero.core.texture.V2.TemplateTexture;
 import com.sigmundgranaas.forgero.core.texture.template.PixelInformation;
@@ -13,24 +13,62 @@ import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 public class DefaultRecolorStrategy implements RecolorStrategy {
 	@Override
 	public BufferedImage recolor(TemplateTexture template, Palette palette) {
-		int paletteSize = palette.getColourValues().size();
-		int greyScaleSize = template.getGreyScaleValues().size();
-		if (greyScaleSize < 2) {
-			Forgero.LOGGER.error("Template texture has a greyscaleSize of only {}, this can't be recolored!", greyScaleSize);
-		}
-		if (paletteSize < 2) {
-			Forgero.LOGGER.error("Palette texture has a size of only {}, this can't be used to recolor!", palette);
-		}
-		List<RgbColour> paletteValues = createUsableColourPalette(template, palette);
+		int templateFramesCount = template.getNumberOfGreyScales();
+		int paletteFramesCount = palette.getNumberOfPalettes();
 
-
-		BufferedImage recolouredImage = new BufferedImage(template.getImage().getWidth(), template.getImage().getHeight(), BufferedImage.TYPE_INT_ARGB);
-		for (PixelInformation pixel : template.getPixelValues()) {
-			recolouredImage.setRGB(pixel.getLengthIndex(), pixel.getHeightIndex(), paletteValues.get(findIntPosition(pixel.getRgbColor(), template.getGreyScaleValues())).getRgb());
+		// Case 1: Both have only one frame
+		if (templateFramesCount == 1 && paletteFramesCount == 1) {
+			return recolorSingleFrame(template, palette, 0);
 		}
-		return recolouredImage;
+
+		// Determine the height of the final recolored image
+		int recoloredImageHeight = template.getFrameSize() * Math.max(templateFramesCount, paletteFramesCount);
+		BufferedImage recoloredImage = new BufferedImage(template.getFrameSize(), recoloredImageHeight, BufferedImage.TYPE_INT_ARGB);
+
+		if (templateFramesCount > 1 && paletteFramesCount == 1) {
+			// Case 2: Template has multiple frames, Palette has one
+			for (int frameIndex = 0; frameIndex < templateFramesCount; frameIndex++) {
+				BufferedImage frameImage = recolorSingleFrame(template, palette, frameIndex);
+				copyFrameToImage(recoloredImage, frameImage, frameIndex, template.getFrameSize());
+			}
+		} else if (templateFramesCount == 1) {
+			// Case 3: Template has one frame, Palette has multiple
+			for (int frameIndex = 0; frameIndex < paletteFramesCount; frameIndex++) {
+				BufferedImage frameImage = recolorSingleFrame(template, palette, frameIndex);
+				copyFrameToImage(recoloredImage, frameImage, frameIndex, template.getFrameSize());
+			}
+		} else {
+			// Case 4: Both have multiple frames
+			for (int frameIndex = 0; frameIndex < templateFramesCount; frameIndex++) {
+				int normalizedPaletteIndex = frameIndex % paletteFramesCount;
+				BufferedImage frameImage = recolorSingleFrame(template, palette, normalizedPaletteIndex);
+				copyFrameToImage(recoloredImage, frameImage, frameIndex, template.getFrameSize());
+			}
+		}
+
+		return recoloredImage;
 	}
 
+	private BufferedImage recolorSingleFrame(TemplateTexture template, Palette palette, int frameIndex) {
+		List<RgbColour> paletteValues = createUsableColourPalette(template, palette, frameIndex);
+		List<RgbColour> greyScaleValues = template.getGreyScaleValues(frameIndex);
+		List<PixelInformation> pixelValues = template.getPixelInfo(frameIndex);
+
+		BufferedImage frameImage = new BufferedImage(template.getFrameSize(), template.getFrameSize(), BufferedImage.TYPE_INT_ARGB);
+		for (PixelInformation pixel : pixelValues) {
+			int colorIndex = findIntPosition(pixel.getRgbColor(), greyScaleValues);
+			int rgb = paletteValues.get(colorIndex).getRgb();
+			frameImage.setRGB(pixel.getLengthIndex(), pixel.getHeightIndex(), rgb);
+		}
+		return frameImage;
+	}
+
+	private void copyFrameToImage(BufferedImage targetImage, BufferedImage frame, int frameIndex, int frameSize) {
+		int yPosition = frameIndex * frameSize;
+		Graphics g = targetImage.createGraphics();
+		g.drawImage(frame, 0, yPosition, null);
+		g.dispose();
+	}
 
 	public int findIntPosition(RgbColour target, List<RgbColour> reference) {
 		for (int i = 0; i < reference.size(); i++) {
@@ -46,32 +84,25 @@ public class DefaultRecolorStrategy implements RecolorStrategy {
 	 *
 	 * @return A colour palette matching the original greyscale values
 	 */
-	public List<RgbColour> createUsableColourPalette(TemplateTexture template, Palette palette) {
-		int greyScaleSize = template.getGreyScaleValues().size();
+	public List<RgbColour> createUsableColourPalette(TemplateTexture template, Palette palette, int frameIndex) {
+		List<RgbColour> greyScaleValues = template.getGreyScaleValues(frameIndex);
+		List<RgbColour> paletteValues = palette.getColourValues(frameIndex);
+		int greyScaleSize = greyScaleValues.size();
 
-		List<RgbColour> colourList = new ArrayList<>(greyScaleSize);
-		if (greyScaleSize == palette.getColourValues().size()) {
-			for (int i = 0; i < greyScaleSize; i++) {
-				colourList.add(palette.getColourValues().get(i));
-			}
-			return colourList;
+		List<RgbColour> normalizedColourList = new ArrayList<>(greyScaleSize);
+
+		if (greyScaleSize == paletteValues.size()) {
+			normalizedColourList.addAll(paletteValues);
+			return normalizedColourList;
 		}
 
 		for (int i = 0; i < greyScaleSize; i++) {
-			float scaleValue = (float) palette.getColourValues().size() / (float) greyScaleSize;
-			float normalized = scaleValue * i;
-			int newIndex = Math.round(normalized);
+			float scaleValue = (float) paletteValues.size() / (float) greyScaleSize;
+			float normalizedIndex = scaleValue * i;
+			int newIndex = Math.min(Math.round(normalizedIndex), paletteValues.size() - 1);
 
-			if (newIndex == palette.getColourValues().size()) {
-				newIndex--;
-			}
-
-			if ((newIndex == 0 || i == 0) && palette.getColourValues().size() > 0) {
-				colourList.add(0, palette.getColourValues().get(0));
-			} else if (newIndex > 0 && palette.getColourValues().size() > newIndex) {
-				colourList.add(i, palette.getColourValues().get(newIndex));
-			}
+			normalizedColourList.add(paletteValues.get(newIndex));
 		}
-		return colourList;
+		return normalizedColourList;
 	}
 }

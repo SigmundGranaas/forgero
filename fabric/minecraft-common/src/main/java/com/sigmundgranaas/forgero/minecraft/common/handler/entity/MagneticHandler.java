@@ -11,8 +11,8 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.EntityTargetHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -68,7 +68,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class MagneticHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler {
+public class MagneticHandler implements EntityBasedHandler, BlockTargetHandler, EntityTargetHandler {
 	public static final String TYPE = "forgero:magnetic";
 	public static final String MAGNETIC_POWER_ATTRIBUTE_TYPE = "forgero:magnetic_power";
 	public static final String MAGNETIC_RANGE_ATTRIBUTE_TYPE = "forgero:magnetic_range";

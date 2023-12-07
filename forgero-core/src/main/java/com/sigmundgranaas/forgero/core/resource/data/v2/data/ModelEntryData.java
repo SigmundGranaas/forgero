@@ -16,7 +16,10 @@ import org.jetbrains.annotations.NotNull;
 public class ModelEntryData {
 	@SerializedName(value = "target", alternate = {"predicate", "criteria", "predicates"})
 	private List<JsonElement> predicates;
+	@Nullable
 	private String template;
+	@Nullable
+	private String palette;
 	@Builder.Default
 	@Nullable
 	private List<Float> offset = Collections.emptyList();
@@ -45,5 +48,10 @@ public class ModelEntryData {
 	@NotNull
 	public String getTemplate() {
 		return Objects.requireNonNullElse(template, Identifiers.EMPTY_IDENTIFIER);
+	}
+
+	@NotNull
+	public String getPalette() {
+		return Objects.requireNonNullElse(palette, Identifiers.EMPTY_IDENTIFIER);
 	}
 }

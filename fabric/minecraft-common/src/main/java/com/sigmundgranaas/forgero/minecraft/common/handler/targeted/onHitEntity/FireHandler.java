@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -31,7 +31,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class FireHandler implements OnHitHandler, OnHitBlockHandler {
+public class FireHandler implements EntityTargetHandler, BlockTargetHandler {
 	public static final String TYPE = "minecraft:fire";
 	public static final JsonBuilder<FireHandler> BUILDER = HandlerBuilder.fromObject(FireHandler.class, FireHandler::fromJson);
 

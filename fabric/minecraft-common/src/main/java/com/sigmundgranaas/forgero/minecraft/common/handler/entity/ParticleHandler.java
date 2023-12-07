@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.EntityTargetHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
@@ -86,11 +86,12 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler, UseHandler, EntityUseHandler, BlockUseHandler, StopHandler {
+public class ParticleHandler implements EntityBasedHandler, BlockTargetHandler, EntityTargetHandler, UseHandler, EntityUseHandler, BlockUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:particle";
 	public static final JsonBuilder<ParticleHandler> BUILDER = HandlerBuilder.fromObject(ParticleHandler.class, ParticleHandler::fromJson);
 
 	private final Identifier particleId;
+	private final String target;
 	private final int count;
 	private final Vec3d velocity;
 	private final Vec3d velocityRandomness;
@@ -102,12 +103,14 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	 * Constructs a new {@link ParticleHandler} with the specified properties.
 	 *
 	 * @param particleId Identifier for the particle to be displayed.
+	 * @param target     Target for particle spawn position.
 	 * @param count      Number of particles to display.
 	 * @param velocity   Velocity of particles.
 	 * @param offset     Offset for particle spawn position.
 	 */
-	public ParticleHandler(Identifier particleId, int count, Vec3d velocity, Vec3d offset, Vec3d velocityRandomness, DirectionalBehavior behavior, double spread) {
+	public ParticleHandler(Identifier particleId, String target, int count, Vec3d velocity, Vec3d offset, Vec3d velocityRandomness, DirectionalBehavior behavior, double spread) {
 		this.particleId = particleId;
+		this.target = target;
 		this.count = count;
 		this.velocity = velocity;
 		this.velocityRandomness = velocityRandomness;
@@ -126,7 +129,7 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		Identifier particleId = new Identifier(json.get("particle").getAsString());
 		int count = json.has("count") ? json.get("count").getAsInt() : 1;
 		double spread = json.has("spread") ? json.get("spread").getAsDouble() : 1;
-
+		String target = json.has("target") ? json.get("target").getAsString() : "target";
 
 		Vec3d offset = getVec3dFromJson(json, "offset");
 		Vec3d velocity = getVec3dFromJson(json, "velocity");
@@ -137,7 +140,7 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 			behavior = DirectionalBehavior.valueOf(json.get("behavior").getAsString().toUpperCase());
 		}
 
-		return new ParticleHandler(particleId, count, velocity, offset, velocityRandomness, behavior, spread);
+		return new ParticleHandler(particleId, target, count, velocity, offset, velocityRandomness, behavior, spread);
 	}
 
 	private static Vec3d getVec3dFromJson(JsonObject jsonObject, String key) {
@@ -196,12 +199,21 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 
 	@Override
 	public void onHit(Entity root, World world, BlockPos pos) {
-		spawnParticles(root, pos);
+		if (this.target.equals("self")) {
+			spawnParticles(root, root.getPos());
+		} else {
+			spawnParticles(root, pos);
+		}
+
 	}
 
 	@Override
 	public void onHit(Entity root, World world, Entity target) {
-		spawnParticles(root, target.getPos());
+		if (this.target.equals("self")) {
+			spawnParticles(root, root.getPos());
+		} else {
+			spawnParticles(root, target.getPos());
+		}
 	}
 
 	@Override

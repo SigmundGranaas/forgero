@@ -6,10 +6,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 @FunctionalInterface
-public interface OnHitHandler {
-	String type = "minecraft:on_hit";
-	ClassKey<OnHitHandler> KEY = new ClassKey<>(type, OnHitHandler.class);
-	OnHitHandler DEFAULT = (Entity root, World world, Entity target) -> {
+public interface EntityTargetHandler {
+	String type = "minecraft:entity_target";
+	ClassKey<EntityTargetHandler> KEY = new ClassKey<>(type, EntityTargetHandler.class);
+	EntityTargetHandler DEFAULT = (Entity root, World world, Entity target) -> {
 	};
 
 	void onHit(Entity root, World world, Entity target);

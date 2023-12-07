@@ -27,9 +27,11 @@ import net.minecraft.util.math.Direction;
 
 @Mixin(ServerPlayerInteractionManager.class)
 public abstract class PlayerServerInteractionManagerMixin {
+
 	@Shadow
 	@Final
 	protected ServerPlayerEntity player;
+
 	@Shadow
 	protected ServerWorld world;
 

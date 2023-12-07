@@ -30,10 +30,10 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class DisarmHandler implements OnHitHandler {
+public class DisarmHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "forgero:disarm";
-	public static final JsonBuilder<OnHitHandler> BUILDER = HandlerBuilder.fromObject(OnHitHandler.KEY.clazz(), DisarmHandler::fromJson);
+	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), DisarmHandler::fromJson);
 
 	private final String target;
 
