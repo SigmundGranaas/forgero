@@ -1,8 +1,9 @@
-plugins {
-	id "idea"
-	id 'fabric-loom' apply true
-	id 'maven-publish'
-	id 'com.matthewprenger.cursegradle' version '1.4.0'
+// Non transitive runtime only configuration are needed because these are listed as dependencies in the built articacts
+configurations {
+	nonTransitiveRuntimeOnly {
+		extendsFrom runtimeOnly
+		transitive = false
+	}
 }
 
 repositories {
@@ -25,10 +26,10 @@ repositories {
 }
 
 dependencies {
-	runtimeOnly project(':content:forgero-vanilla')
-	runtimeOnly project(':content:forgero-extended')
-	runtimeOnly project(':content:forgero-compat')
-	runtimeOnly project(':content:forgero-structures')
+	nonTransitiveRuntimeOnly project(':content:forgero-vanilla')
+	nonTransitiveRuntimeOnly project(':content:forgero-extended')
+	nonTransitiveRuntimeOnly project(':content:forgero-compat')
+	nonTransitiveRuntimeOnly project(':content:forgero-structures')
 
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')

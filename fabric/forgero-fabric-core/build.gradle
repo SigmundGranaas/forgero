@@ -1,3 +1,12 @@
+// Non transitive runtime only configuration are needed because these are listed as dependencies in the built articacts
+configurations {
+	nonTransitiveRuntimeOnly {
+		extendsFrom runtimeOnly
+		transitive = false
+	}
+}
+
+
 dependencies {
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
@@ -24,10 +33,10 @@ loom {
 			ideConfigGenerated(true)
 
 			dependencies {
-				runtimeOnly project(':content:forgero-vanilla')
-				runtimeOnly project(':content:forgero-extended')
-				runtimeOnly project(':content:forgero-compat')
-				runtimeOnly project(':content:forgero-structures')
+				nonTransitiveRuntimeOnly project(':content:forgero-vanilla')
+				nonTransitiveRuntimeOnly project(':content:forgero-extended')
+				nonTransitiveRuntimeOnly project(':content:forgero-compat')
+				nonTransitiveRuntimeOnly project(':content:forgero-structures')
 			}
 		}
 
@@ -37,10 +46,10 @@ loom {
 			name = "Test Server"
 
 			dependencies {
-				runtimeOnly project(':content:forgero-vanilla')
-				runtimeOnly project(':content:forgero-extended')
-				runtimeOnly project(':content:forgero-compat')
-				runtimeOnly project(':content:forgero-structures')
+				nonTransitiveRuntimeOnly project(':content:forgero-vanilla')
+				nonTransitiveRuntimeOnly project(':content:forgero-extended')
+				nonTransitiveRuntimeOnly project(':content:forgero-compat')
+				nonTransitiveRuntimeOnly project(':content:forgero-structures')
 			}
 			source sourceSets.test
 		}
