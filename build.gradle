@@ -42,7 +42,7 @@ subprojects {
 }
 
 subprojects { project ->
-	if (project.name != 'content' && project.name != 'fabric') {
+	if (project.name != 'content') {
 		apply plugin: "maven-publish"
 		apply plugin: "java-library"
 		repositories {
@@ -76,7 +76,12 @@ subprojects { project ->
 			publications {
 				mavenJava(MavenPublication) {
 					groupId = group
-					artifactId = archivesBaseName
+					if(project.name === 'fabric'){
+						artifactId = 'forgero-fabric'
+						archivesBaseName = 'forgero-fabric'
+					}else {
+						artifactId = archivesBaseName
+					}
 					from components.java
 				}
 			}

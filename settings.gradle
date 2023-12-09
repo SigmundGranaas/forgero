@@ -23,7 +23,7 @@ include 'content:forgero-compat'
 include 'content:forgero-structures'
 
 //Fabric
-include 'forgero-fabric'
+include 'fabric'
 include 'fabric:forgero-fabric-core'
 include 'fabric:forgero-fabric-compat'
 include 'fabric:minecraft-common'
