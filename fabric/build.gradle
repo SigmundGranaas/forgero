@@ -5,9 +5,7 @@ plugins {
 }
 
 configure(allprojects) {
-	apply plugin: 'java-library'
 	apply plugin: "idea"
-	apply plugin: 'maven-publish'
 	apply plugin: 'fabric-loom'
 }
 
@@ -30,7 +28,6 @@ dependencies {
 	include project(':content:forgero-structures')
 
 	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
-	implementation project(path: ':fabric:forgero-fabric-compat', configuration: 'namedElements')
 
 	runtimeOnly project(':content:forgero-vanilla')
 	runtimeOnly project(':content:forgero-extended')
