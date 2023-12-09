@@ -38,6 +38,8 @@ sourceSets {
 	test {
 		compileClasspath += test.compileClasspath
 		runtimeClasspath += test.runtimeClasspath
+		runtimeClasspath += main.runtimeClasspath
+
 	}
 }
 
