@@ -7,7 +7,6 @@ dependencies {
 
 	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
 	include("maven.modrinth:arrp:${project.aarp_version}")
-}
 
 	localRuntime project(':content:forgero-vanilla')
 	localRuntime project(':content:forgero-extended')
