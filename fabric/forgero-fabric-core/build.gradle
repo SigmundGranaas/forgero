@@ -14,51 +14,30 @@ dependencies {
 	localRuntime project(':content:forgero-structures')
 }
 
-sourceSets {
-	test {
-		compileClasspath += test.compileClasspath
-		runtimeClasspath += test.runtimeClasspath
-	}
-}
-
 loom {
 	runs {
-		runClient {
-			client()
-			ideConfigGenerated(true)
-		}
-
 		testmodServer {
 			server()
 			ideConfigGenerated project.rootProject == project
-			name = "Test Server"
-
+			name = "Testmod Server"
 			source sourceSets.test
 		}
-
 		gametest {
 			inherit testmodServer
-			name "Game Test"
 
+			name "Game Test"
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
 			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 			runDir "build/gametest"
 		}
-		autoTestServer {
-			inherit testmodServer
+	}
+}
 
-			name "Auto Test Server"
-			vmArg "-Dfabric.autoTest"
-		}
-
-		gametestClient {
-			inherit testmodServer
-			client()
-
-			name "test client"
-			//vmArg "-Dfabric.autoTest"
-		}
+sourceSets {
+	test {
+		compileClasspath += test.compileClasspath
+		runtimeClasspath += test.runtimeClasspath
 	}
 }
 
