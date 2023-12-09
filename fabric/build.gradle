@@ -1,15 +1,11 @@
 plugins {
-	id "idea"
-	id "fabric-loom" version "1.2.5" apply true
-	id 'maven-publish'
+	id "fabric-loom" version '1.4-SNAPSHOT' apply true
 	id "com.modrinth.minotaur" version "2.+"
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-configure(subprojects) {
-	apply plugin: 'java-library'
+configure(allprojects) {
 	apply plugin: "idea"
-	apply plugin: 'maven-publish'
 	apply plugin: 'fabric-loom'
 }
 
@@ -18,6 +14,7 @@ archivesBaseName = "forgero-fabric"
 dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include project(':forgero-core')
 
@@ -29,6 +26,13 @@ dependencies {
 	include project(':content:forgero-extended')
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
+
+	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+
+	runtimeOnly project(':content:forgero-vanilla')
+	runtimeOnly project(':content:forgero-extended')
+	runtimeOnly project(':content:forgero-compat')
+	runtimeOnly project(':content:forgero-structures')
 
 	include "maven.modrinth:arrp:${project.aarp_version}"
 }
@@ -45,8 +49,6 @@ subprojects {
 		implementation 'org.projectlombok:lombok:1.18.24'
 		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 	}
-	// configure the maven publication
-
 }
 
 curseforge {
@@ -122,8 +124,4 @@ allprojects {
 	java {
 		withSourcesJar()
 	}
-}
-
-java {
-	withSourcesJar()
 }
