@@ -1,11 +1,3 @@
-// Non transitive runtime only configuration are needed because these are listed as dependencies in the built articacts
-configurations {
-	nonTransitiveRuntimeOnly {
-		extendsFrom runtimeOnly
-		transitive = false
-	}
-}
-
 repositories {
 	maven { url "https://api.modrinth.com/maven" }
 	maven { url "https://maven.shedaniel.me/" }
@@ -26,10 +18,10 @@ repositories {
 }
 
 dependencies {
-	nonTransitiveRuntimeOnly project(':content:forgero-vanilla')
-	nonTransitiveRuntimeOnly project(':content:forgero-extended')
-	nonTransitiveRuntimeOnly project(':content:forgero-compat')
-	nonTransitiveRuntimeOnly project(':content:forgero-structures')
+	localRuntime project(':content:forgero-vanilla')
+	localRuntime project(':content:forgero-extended')
+	localRuntime project(':content:forgero-compat')
+	localRuntime project(':content:forgero-structures')
 
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
@@ -38,7 +30,6 @@ dependencies {
 	modImplementation "vazkii.patchouli:Patchouli:1.19.2-77-FABRIC"
 
 	modImplementation "curse.maven:arrp-463113:3901211"
-
 
 	//dynamiclights compat
 	modCompileOnlyApi "curse.maven:modmenu-308702:4145207"
@@ -126,12 +117,16 @@ dependencies {
 
 	//modImplementation 'com.ptsmods:devlogin:2.1'
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modApi("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
 
 	// Mod Menu API
 	modCompileOnlyApi "com.terraformersmc:modmenu:${this.modmenu_version}"
 	modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
+
+	modLocalRuntime "maven.modrinth:lazydfu:4SHylIO9"
+	modLocalRuntime "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
+	modLocalRuntime "maven.modrinth:just-load:ob5o9Cf5"
 }
 
 sourceSets {
@@ -158,28 +153,6 @@ loom {
 			vmArg "-Dfabric-api.gametest"
 			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 			runDir "build/gametest"
-		}
-		clientExtendedCompatOptimised {
-			name "Client Extended Compat Optimised"
-
-			dependencies {
-				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
-			}
-			client()
-			ideConfigGenerated(true)
-		}
-		clientExtendedCompatOptimisedJustLoad {
-			name "Client Extended Compat Optimised Just Load"
-
-			dependencies {
-				modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-				modRuntimeOnly "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
-				modRuntimeOnly "maven.modrinth:just-load:ob5o9Cf5"
-			}
-
-			client()
-			ideConfigGenerated(true)
 		}
 	}
 }

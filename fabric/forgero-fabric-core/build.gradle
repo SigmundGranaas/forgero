@@ -1,22 +1,17 @@
-// Non transitive runtime only configuration are needed because these are listed as dependencies in the built articacts
-configurations {
-	nonTransitiveRuntimeOnly {
-		extendsFrom runtimeOnly
-		transitive = false
-	}
-}
-
-
 dependencies {
-	implementation project(':forgero-core')
-	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	api project(':forgero-core')
+	api project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-
 	modImplementation "curse.maven:arrp-463113:3901211"
 	include "curse.maven:arrp-463113:3901211"
+
+	localRuntime project(':content:forgero-vanilla')
+	localRuntime project(':content:forgero-extended')
+	localRuntime project(':content:forgero-compat')
+	localRuntime project(':content:forgero-structures')
 }
 
 sourceSets {
@@ -31,13 +26,6 @@ loom {
 		runClient {
 			client()
 			ideConfigGenerated(true)
-
-			dependencies {
-				nonTransitiveRuntimeOnly project(':content:forgero-vanilla')
-				nonTransitiveRuntimeOnly project(':content:forgero-extended')
-				nonTransitiveRuntimeOnly project(':content:forgero-compat')
-				nonTransitiveRuntimeOnly project(':content:forgero-structures')
-			}
 		}
 
 		testmodServer {
@@ -45,12 +33,6 @@ loom {
 			ideConfigGenerated project.rootProject == project
 			name = "Test Server"
 
-			dependencies {
-				nonTransitiveRuntimeOnly project(':content:forgero-vanilla')
-				nonTransitiveRuntimeOnly project(':content:forgero-extended')
-				nonTransitiveRuntimeOnly project(':content:forgero-compat')
-				nonTransitiveRuntimeOnly project(':content:forgero-structures')
-			}
 			source sourceSets.test
 		}
 
