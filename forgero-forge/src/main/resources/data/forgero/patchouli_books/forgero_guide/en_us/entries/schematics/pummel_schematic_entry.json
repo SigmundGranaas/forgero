@@ -1,6 +1,6 @@
 {
   "name": "Pommel schematic",
-  "icon": "forgero:shovel_head-schematic",
+  "icon": "forgero:pommel-schematic",
   "category": "forgero:schematic_category",
   "pages": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:pummel-schematic_recipe"
+      "recipe": "forgero:pommel-schematic_recipe"
     }
   ]
 }

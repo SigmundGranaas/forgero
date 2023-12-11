@@ -137,7 +137,9 @@ public class AttributeWriterHelper extends BaseWriter {
 		} else if (writer.isPresent()) {
 			return writer.get().write(attribute.getPredicate());
 		} else {
-			MutableText against = indented(configuration.baseIndent() + 2).append(Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY));
+			MutableText against = indented(configuration.baseIndent() + 2)
+					.append(Text.translatable("tooltip.forgero.against")
+							.formatted(Formatting.GRAY));
 			against.append(TagWriter.writeTagList(attribute.targets()));
 			return List.of(against);
 		}

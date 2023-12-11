@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.item.ItemStack;
 
-public interface ToolStateItem extends StateItem, DynamicAttributeItem {
+public interface ToolStateItem extends StateItem, DynamicAttributeItem, DynamicItemUseHandler {
 	@Override
 	default PropertyContainer dynamicProperties(ItemStack stack) {
 		return dynamicState(stack);
@@ -25,4 +25,5 @@ public interface ToolStateItem extends StateItem, DynamicAttributeItem {
 	default @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
 		return defaultState().getRootProperties(target, context);
 	}
+
 }

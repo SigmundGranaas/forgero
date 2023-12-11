@@ -44,10 +44,10 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class PlaceBlockHandler implements OnHitBlockHandler {
+public class PlaceBlockHandler implements BlockTargetHandler {
 
 	public static final String TYPE = "minecraft:place_block";
-	public static final JsonBuilder<OnHitBlockHandler> BUILDER = HandlerBuilder.fromObject(KEY.clazz(), PlaceBlockHandler::fromJson);
+	public static final JsonBuilder<BlockTargetHandler> BUILDER = HandlerBuilder.fromObject(KEY.clazz(), PlaceBlockHandler::fromJson);
 
 	private final Block block;
 	private final BlockState state;

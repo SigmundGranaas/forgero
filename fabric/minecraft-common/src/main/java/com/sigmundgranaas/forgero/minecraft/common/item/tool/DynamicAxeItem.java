@@ -59,6 +59,5 @@ public class DynamicAxeItem extends AxeItem implements ToolStateItem {
 		return DEFAULT.get();
 	}
 
-
 }
 

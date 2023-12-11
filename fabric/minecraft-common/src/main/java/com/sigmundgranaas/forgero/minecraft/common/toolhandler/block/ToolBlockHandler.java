@@ -1,5 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler.block;
 
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
+
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableSet;
@@ -12,15 +23,12 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-
-import java.util.*;
-import java.util.function.Consumer;
-
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 /**
  * A handler for a block that is being mined.
@@ -54,6 +62,11 @@ public class ToolBlockHandler {
 	}
 
 	public static Optional<ToolBlockHandler> of(PropertyContainer container, BlockPos pos, PlayerEntity player) {
+		Item item = player.getMainHandStack().getItem();
+		if (!item.isDamageable()) {
+			return Optional.empty();
+		}
+
 		FeatureContainerKey featureKey = FeatureContainerKey.of(container, BlockBreakFeature.KEY);
 		CacheAbleKey cacheKey = new Key(player.getMainHandStack(), pos, Direction.getEntityFacingOrder(player)[0]);
 		if (!FeatureCache.check(featureKey) || (canMineCache.containsKey(cacheKey) && !canMineCache.get(cacheKey))) {

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -35,13 +35,14 @@ public abstract class OnEntityHitMixin {
 			if (entity instanceof ServerPlayerEntity player && player.getItemCooldownManager().isCoolingDown(main.getItem())) {
 				return;
 			}
+			@SuppressWarnings("DataFlowIssue")
 			Entity target = (Entity) (Object) this;
 			MatchContext context = MatchContext.of()
 					.put(ENTITY, entity)
 					.put(WORLD, entity.world)
 					.put(ENTITY_TARGET, target);
 
-			streamFeature(main, context, OnHitEntityFeature.KEY)
+			cachedFilteredFeatures(main, OnHitEntityFeature.KEY, context)
 					.forEach(handler -> {
 						handler.onHit(entity, entity.world, target);
 						handler.handle(entity, main, Hand.MAIN_HAND);

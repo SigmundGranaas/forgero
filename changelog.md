@@ -1,4 +1,4 @@
-# Forgero Beta release 0.11.6
+# Forgero Beta release 0.11.7
 
 ## ! Warning !
 
@@ -7,17 +7,11 @@ with this version of Forgero**
 
 # Changelog
 
-* [Patch]: Small fixes to betternether compat by @JorisDeBeer
-* [Patch]: Typos by @Fevix
-* [Feature]: Feature rewrite and new available features by @SigmundGranaas
-* [Patch]: Flickering issues when new stacks are created by @SigmundGranaas
-* [Patch]: Entity attribute fixes by @SigmundGranaas
-* [Feature]: Support for "forgero:reach" attribute by @SigmundGranaas
-* [Patch]: Created a new method for fetching propagated conditions by @SigmundGranaas
-* [Patch]: Updated materials requirement for path mining pickaxe by @SigmundGranaas
-* [Patch]: Preventing datafixer error by @SigmundGranaas
-* [Feature]: Cached attribute builder computations by @SigmundGranaas
-* [Patch]: Fix negative tool durability by @Steveplays28
-* [Feature]: Added a NameVisitor to parse and inject custom names by @SigmundGranaas
-* [Feature]: Reworked Attribute predicates. by @SigmundGranaas
-* [Patch]: Added dragon scale to loottable by @JorisDeBeer
+* [Feature]: Use actions by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/782
+* [Christmas Feature]: Add Christmas logo by @Steveplays28 in https://github.com/SigmundGranaas/forgero/pull/786
+* [Feature]: Throwing handler by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/785
+* [Feature]: Animated palette and template support by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/788
+* [Feature]: Swing feature by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/789
+* [Feature]: Frost handler by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/790
+* [Patch]: Non-transitive runtimeOnly dependencies by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/791
+

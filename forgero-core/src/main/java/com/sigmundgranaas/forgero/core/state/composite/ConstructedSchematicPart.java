@@ -49,6 +49,14 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 				.toList();
 	}
 
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context))
+				.flatMap(List::stream)
+				.toList();
+	}
+
 	@Override
 	public State baseMaterial() {
 		return baseMaterial;

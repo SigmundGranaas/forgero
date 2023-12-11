@@ -1,6 +1,6 @@
 {
   "name": "Binding Schematic",
-  "icon": "forgero:shovel_head-schematic",
+  "icon": "forgero:binding-schematic",
   "category": "forgero:schematic_category",
   "pages": [
     {
@@ -10,10 +10,6 @@
     {
       "type": "patchouli:crafting",
       "recipe": "forgero:netherite-binding"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "forgero:spiked_binding-schematic_recipe"
     }
   ]
 }

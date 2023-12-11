@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.handler.used;
+package com.sigmundgranaas.forgero.minecraft.common.handler.afterUse;
 
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 
@@ -13,4 +13,5 @@ public interface AfterUseHandler {
 	ClassKey<AfterUseHandler> KEY = new ClassKey<>("minecraft:after_use", AfterUseHandler.class);
 
 	void handle(Entity source, ItemStack target, Hand hand);
+
 }

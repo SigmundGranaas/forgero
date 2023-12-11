@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 
 @Getter
 @Accessors(fluent = true)
-public class LifeStealHandler implements OnHitHandler {
+public class LifeStealHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "forgero:life_steal";
-	public static final JsonBuilder<OnHitHandler> BUILDER = HandlerBuilder.fromObject(OnHitHandler.KEY.clazz(), LifeStealHandler::fromJson);
+	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), LifeStealHandler::fromJson);
 
 	private final String target;
 	private final float amount;

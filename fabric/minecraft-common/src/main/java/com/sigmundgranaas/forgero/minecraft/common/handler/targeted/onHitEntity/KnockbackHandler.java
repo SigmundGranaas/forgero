@@ -30,10 +30,10 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class KnockbackHandler implements OnHitHandler {
+public class KnockbackHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "minecraft:knockback";
-	public static final JsonBuilder<OnHitHandler> BUILDER = HandlerBuilder.fromObject(OnHitHandler.KEY.clazz(), KnockbackHandler::fromJson);
+	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), KnockbackHandler::fromJson);
 
 	private final String target;
 	private final double force;

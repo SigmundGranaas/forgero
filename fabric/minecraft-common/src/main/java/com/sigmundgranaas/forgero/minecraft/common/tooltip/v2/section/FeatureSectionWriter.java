@@ -1,18 +1,19 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
-import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
-import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.WriterHelper;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.text.Text;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
+import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.WriterHelper;
+
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.text.Text;
 
 public class FeatureSectionWriter extends SectionWriter {
 	private final PropertyContainer container;
@@ -67,6 +68,7 @@ public class FeatureSectionWriter extends SectionWriter {
 		}
 		return container.stream()
 				.features()
+				.distinct()
 				.map(feature -> BaseFeatureWriter.of(feature, new WriterHelper(featureConfig)))
 				.flatMap(Optional::stream)
 				.map(BaseFeatureWriter::write)

@@ -3,15 +3,26 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.OnHitHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.EntityTargetHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
@@ -75,11 +86,12 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitHandler {
+public class ParticleHandler implements EntityBasedHandler, BlockTargetHandler, EntityTargetHandler, UseHandler, EntityUseHandler, BlockUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:particle";
 	public static final JsonBuilder<ParticleHandler> BUILDER = HandlerBuilder.fromObject(ParticleHandler.class, ParticleHandler::fromJson);
 
 	private final Identifier particleId;
+	private final String target;
 	private final int count;
 	private final Vec3d velocity;
 	private final Vec3d velocityRandomness;
@@ -91,12 +103,14 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 	 * Constructs a new {@link ParticleHandler} with the specified properties.
 	 *
 	 * @param particleId Identifier for the particle to be displayed.
+	 * @param target     Target for particle spawn position.
 	 * @param count      Number of particles to display.
 	 * @param velocity   Velocity of particles.
 	 * @param offset     Offset for particle spawn position.
 	 */
-	public ParticleHandler(Identifier particleId, int count, Vec3d velocity, Vec3d offset, Vec3d velocityRandomness, DirectionalBehavior behavior, double spread) {
+	public ParticleHandler(Identifier particleId, String target, int count, Vec3d velocity, Vec3d offset, Vec3d velocityRandomness, DirectionalBehavior behavior, double spread) {
 		this.particleId = particleId;
+		this.target = target;
 		this.count = count;
 		this.velocity = velocity;
 		this.velocityRandomness = velocityRandomness;
@@ -115,7 +129,7 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		Identifier particleId = new Identifier(json.get("particle").getAsString());
 		int count = json.has("count") ? json.get("count").getAsInt() : 1;
 		double spread = json.has("spread") ? json.get("spread").getAsDouble() : 1;
-
+		String target = json.has("target") ? json.get("target").getAsString() : "target";
 
 		Vec3d offset = getVec3dFromJson(json, "offset");
 		Vec3d velocity = getVec3dFromJson(json, "velocity");
@@ -126,7 +140,7 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 			behavior = DirectionalBehavior.valueOf(json.get("behavior").getAsString().toUpperCase());
 		}
 
-		return new ParticleHandler(particleId, count, velocity, offset, velocityRandomness, behavior, spread);
+		return new ParticleHandler(particleId, target, count, velocity, offset, velocityRandomness, behavior, spread);
 	}
 
 	private static Vec3d getVec3dFromJson(JsonObject jsonObject, String key) {
@@ -142,6 +156,9 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 		return new Vec3d(x, y, z);
 	}
 
+	private void spawnParticles(Entity entity, BlockPos pos) {
+		spawnParticles(entity, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+	}
 
 	private void spawnParticles(Entity entity, Vec3d pos) {
 		ParticleType<?> particle = Registry.PARTICLE_TYPE.get(particleId);
@@ -182,17 +199,49 @@ public class ParticleHandler implements EntityHandler, OnHitBlockHandler, OnHitH
 
 	@Override
 	public void onHit(Entity root, World world, BlockPos pos) {
-		spawnParticles(root, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+		if (this.target.equals("self")) {
+			spawnParticles(root, root.getPos());
+		} else {
+			spawnParticles(root, pos);
+		}
+
 	}
 
 	@Override
 	public void onHit(Entity root, World world, Entity target) {
-		spawnParticles(root, target.getPos());
+		if (this.target.equals("self")) {
+			spawnParticles(root, root.getPos());
+		} else {
+			spawnParticles(root, target.getPos());
+		}
 	}
 
 	@Override
 	public void handle(Entity rootEntity) {
 		spawnParticles(rootEntity, rootEntity.getPos());
+	}
+
+	@Override
+	public ActionResult useOnBlock(ItemUsageContext context) {
+		spawnParticles(context.getPlayer(), context.getHitPos());
+		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+		spawnParticles(user, entity.getPos());
+		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		spawnParticles(user, user.getPos());
+		return TypedActionResult.success(user.getStackInHand(hand));
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		spawnParticles(user, user.getPos());
 	}
 
 	// Enumeration for specifying directional behavior of particles

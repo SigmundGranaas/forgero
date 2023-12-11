@@ -28,10 +28,10 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class LightningStrikeHandler implements OnHitHandler {
+public class LightningStrikeHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "minecraft:lightning_strike";
-	public static final JsonBuilder<OnHitHandler> BUILDER = HandlerBuilder.fromObject(OnHitHandler.KEY.clazz(), LightningStrikeHandler::fromJson);
+	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), LightningStrikeHandler::fromJson);
 
 	private final String target;
 

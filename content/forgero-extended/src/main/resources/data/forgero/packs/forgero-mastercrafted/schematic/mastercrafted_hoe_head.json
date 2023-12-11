@@ -104,7 +104,14 @@
             "xxx",
             "xxx"
           ],
-          "filter": "forgero:can_mine"
+          "filter": {
+            "type": "minecraft:block",
+            "tag": "forgero:plants"
+          }
+        },
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:plants"
         },
         "speed": "forgero:instant",
         "title": "feature.forgero.pattern_mining.title",

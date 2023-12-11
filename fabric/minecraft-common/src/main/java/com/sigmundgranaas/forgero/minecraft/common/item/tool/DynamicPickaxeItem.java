@@ -2,16 +2,12 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 
 import java.util.List;
 
-import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.customdata.CustomNameVisitor;
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
-import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
@@ -27,7 +23,6 @@ public class DynamicPickaxeItem extends PickaxeItem implements ToolStateItem {
 		super(toolMaterial, attackDamage, attackSpeed, settings);
 		this.DEFAULT = defaultState;
 	}
-
 
 	@Override
 	public int getItemBarStep(ItemStack stack) {
@@ -62,5 +57,6 @@ public class DynamicPickaxeItem extends PickaxeItem implements ToolStateItem {
 	public State defaultState() {
 		return DEFAULT.get();
 	}
+
 }
 

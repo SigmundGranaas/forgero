@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -27,9 +27,11 @@ import net.minecraft.util.math.Direction;
 
 @Mixin(ServerPlayerInteractionManager.class)
 public abstract class PlayerServerInteractionManagerMixin {
+
 	@Shadow
 	@Final
 	protected ServerPlayerEntity player;
+
 	@Shadow
 	protected ServerWorld world;
 
@@ -62,7 +64,7 @@ public abstract class PlayerServerInteractionManagerMixin {
 				.put(WORLD, entity.world)
 				.put(BLOCK_TARGET, pos);
 
-		streamFeature(main, context, OnHitBlockFeature.KEY)
+		cachedFilteredFeatures(main, OnHitBlockFeature.KEY, context)
 				.forEach(handler -> {
 					handler.onHit(entity, entity.world, pos);
 					handler.handle(entity, main, Hand.MAIN_HAND);

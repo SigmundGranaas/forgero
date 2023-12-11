@@ -22,7 +22,7 @@
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:piglin_shovel_head-schematic"
+        "name:piglin_shovel_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "piglin_shovel_head"

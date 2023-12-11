@@ -10,8 +10,8 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.OnHitBlockHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.AfterUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.AfterUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -19,15 +19,15 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBlockHandler, AfterUseHandler {
+public class OnHitBlockFeature extends BasePredicateFeature implements BlockTargetHandler, AfterUseHandler {
 	public static final String ON_HIT_TYPE = "minecraft:on_hit_block";
 	public static final ClassKey<OnHitBlockFeature> KEY = new ClassKey<>(ON_HIT_TYPE, OnHitBlockFeature.class);
 	public static final String ON_HIT = "on_hit";
 	public static final FeatureBuilder<OnHitBlockFeature> BUILDER = FeatureBuilder.of(ON_HIT_TYPE, OnHitBlockFeature::buildFromBase);
-	private final List<OnHitBlockHandler> handler;
+	private final List<BlockTargetHandler> handler;
 	private final List<AfterUseHandler> afterUseHandlers;
 
-	public OnHitBlockFeature(BasePredicateData data, List<OnHitBlockHandler> handler, List<AfterUseHandler> afterUseHandlers) {
+	public OnHitBlockFeature(BasePredicateData data, List<BlockTargetHandler> handler, List<AfterUseHandler> afterUseHandlers) {
 		super(data);
 		this.handler = handler;
 		this.afterUseHandlers = afterUseHandlers;
@@ -37,7 +37,7 @@ public class OnHitBlockFeature extends BasePredicateFeature implements OnHitBloc
 	}
 
 	private static OnHitBlockFeature buildFromBase(BasePredicateData data, JsonElement element) {
-		List<OnHitBlockHandler> handler = buildHandlerFromJson(element, ON_HIT, obj -> HandlerBuilder.DEFAULT.build(OnHitBlockHandler.KEY, obj));
+		List<BlockTargetHandler> handler = buildHandlerFromJson(element, ON_HIT, obj -> HandlerBuilder.DEFAULT.build(BlockTargetHandler.KEY, obj));
 		List<AfterUseHandler> afterUseHandler = buildHandlerFromJson(element, AFTER_USE, obj -> HandlerBuilder.DEFAULT.build(AfterUseHandler.KEY, obj));
 
 		return new OnHitBlockFeature(data, handler, afterUseHandler);

@@ -22,7 +22,7 @@
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:piglin_axe_head-schematic"
+        "name:piglin_axe_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "piglin_axe_head"

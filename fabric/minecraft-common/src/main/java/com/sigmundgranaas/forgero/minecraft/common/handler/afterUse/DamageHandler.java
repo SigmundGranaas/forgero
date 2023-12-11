@@ -1,8 +1,9 @@
-package com.sigmundgranaas.forgero.minecraft.common.handler.used;
+package com.sigmundgranaas.forgero.minecraft.common.handler.afterUse;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -10,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 
 /**
  * Represents a handler that damages the ItemStack after it has been used.
@@ -45,7 +47,7 @@ import net.minecraft.util.Hand;
  */
 @Getter
 @Accessors(fluent = true)
-public class DamageHandler implements AfterUseHandler {
+public class DamageHandler implements AfterUseHandler, StopHandler {
 	public static final String TYPE = "minecraft:stack_damage";
 	public static final JsonBuilder<DamageHandler> BUILDER = HandlerBuilder.fromObject(DamageHandler.class, DamageHandler::fromJson);
 
@@ -72,10 +74,16 @@ public class DamageHandler implements AfterUseHandler {
 	@Override
 	public void handle(Entity source, ItemStack target, Hand hand) {
 		int stackDamage = damage == 0 ? (int) (target.getMaxDamage() * percentage) : damage;
-		if (source instanceof LivingEntity livingEntity) {
+		if (source instanceof LivingEntity livingEntity && !livingEntity.getWorld().isClient()) {
 			target.damage(stackDamage, livingEntity, (entity) -> entity.sendToolBreakStatus(hand));
 		} else {
 			target.setDamage(target.getDamage() + stackDamage);
 		}
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		int stackDamage = damage == 0 ? (int) (stack.getMaxDamage() * percentage) : damage;
+		stack.damage(stackDamage, user, (entity) -> entity.sendToolBreakStatus(user.getActiveHand()));
 	}
 }

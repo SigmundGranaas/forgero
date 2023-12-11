@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
 
@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 @Mixin(LivingEntity.class)
 public abstract class EntityTickHandlerMixin extends Entity {
 
-
 	public EntityTickHandlerMixin(EntityType<?> type, World world) {
 		super(type, world);
 	}
@@ -37,14 +36,13 @@ public abstract class EntityTickHandlerMixin extends Entity {
 	 */
 	@Inject(method = "baseTick", at = @At("RETURN"))
 	public void forgero$entityBaseTick$EntityTickHandler(CallbackInfo callbackInfo) {
-		if (this.getMainHandStack().getItem() instanceof PropertyContainer) {
-
-			LivingEntity entity = (LivingEntity) (Object) this;
+		//noinspection ConstantValue
+		if (this.getMainHandStack().getItem() instanceof PropertyContainer && ((Object) this instanceof LivingEntity entity)) {
 			ItemStack main = entity.getMainHandStack();
 			MatchContext context = MatchContext.of()
 					.put(ENTITY, entity)
 					.put(WORLD, entity.world);
-			streamFeature(main, context, EntityTickFeature.KEY)
+			cachedFilteredFeatures(main, EntityTickFeature.KEY, context)
 					.forEach(handler -> handler.handle(entity));
 		}
 	}

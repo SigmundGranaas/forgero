@@ -28,21 +28,35 @@ public class ModelData {
 	@SerializedName(value = "modelType", alternate = "type")
 	@Nullable
 	private String modelType = Identifiers.EMPTY_IDENTIFIER;
+
 	@Builder.Default
 	@Nullable
 	private String template = Identifiers.EMPTY_IDENTIFIER;
+
 	@Builder.Default
 	@Nullable
 	private String name = Identifiers.EMPTY_IDENTIFIER;
+
 	@Builder.Default
 	@Nullable
 	private List<ModelEntryData> variants = Collections.emptyList();
+
 	@Builder.Default
 	@Nullable
 	private List<Float> offset = Collections.emptyList();
+
 	@Builder.Default
 	@Nullable
 	private String palette = Identifiers.EMPTY_IDENTIFIER;
+
+	@Builder.Default
+	@Nullable
+	@SerializedName(value = "children", alternate = {"textures"})
+	private List<ModelData> children = Collections.emptyList();
+
+	@Builder.Default
+	@Nullable
+	private String texture =  Identifiers.EMPTY_IDENTIFIER;
 
 	@Nullable
 	@SerializedName(value = "display_overrides", alternate = "display")
@@ -58,27 +72,22 @@ public class ModelData {
 
 	public String getModelType() {
 		return Objects.requireNonNullElse(modelType, Identifiers.EMPTY_IDENTIFIER);
-
 	}
 
 	public String getTemplate() {
 		return Objects.requireNonNullElse(template, Identifiers.EMPTY_IDENTIFIER);
-
 	}
 
 	public String getName() {
 		return Objects.requireNonNullElse(name, Identifiers.EMPTY_IDENTIFIER);
-
 	}
 
 	public int order() {
 		return order;
-
 	}
 
 	public List<ModelEntryData> getVariants() {
 		return Objects.requireNonNullElse(variants, Collections.emptyList());
-
 	}
 
 	public List<Float> getOffset() {
@@ -98,4 +107,15 @@ public class ModelData {
 	public String getPalette() {
 		return Objects.requireNonNullElse(palette, Identifiers.EMPTY_IDENTIFIER);
 	}
+
+	@NotNull
+	public List<ModelData> getChildren() {
+		return Objects.requireNonNullElse(children, Collections.emptyList());
+	}
+
+	@NotNull
+	public String getTexture() {
+		return Objects.requireNonNullElse(texture, Identifiers.EMPTY_IDENTIFIER);
+	}
+
 }
