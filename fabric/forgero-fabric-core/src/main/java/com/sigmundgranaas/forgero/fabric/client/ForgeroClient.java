@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.model.TextureModel;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
@@ -34,6 +36,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,7 +47,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.U
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
-	public static Map<String, PaletteTemplateModel> TEXTURES = new HashMap<>();
+	public static Map<String, ModelTemplate> TEXTURES = new HashMap<>();
 	public static Map<String, String> PALETTE_REMAP = new HashMap<>();
 
 	@Override
@@ -82,13 +85,17 @@ public class ForgeroClient implements ClientModInitializer {
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder().build());
 		for (State material : materials) {
-			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null));
+			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null, Collections.emptyList()));
 		}
 
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
 		TEXTURES.putAll(modelRegistry.getTextures());
 		TEXTURES.values().forEach(texture -> {
-			ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(texture.nameSpace(), "item/" + texture.name().replace(".png", ""))));
+			if(texture instanceof PaletteTemplateModel paletteTemplateModel){
+				ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(paletteTemplateModel.nameSpace(), "item/" + paletteTemplateModel.name().replace(".png", ""))));
+			}else if(texture instanceof TextureModel model){
+				ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(model.nameSpace(), model.name().replace(".png", ""))));
+			}
 		});
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_leather_base")));
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, atlasRegistry) -> atlasRegistry.register(new Identifier(Forgero.NAMESPACE, "item/" + "repair_kit_needle_base")));

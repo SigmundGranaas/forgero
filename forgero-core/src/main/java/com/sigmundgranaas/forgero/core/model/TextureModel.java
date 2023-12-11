@@ -12,13 +12,12 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public record PaletteTemplateModel(String palette,
-								   String template,
-								   int order,
-								   @Nullable Offset offset,
-								   @Nullable Integer resolution,
-								   @Nullable JsonObject displayOverrides,
-                                   List<ModelTemplate> children) implements ModelTemplate, ModelMatcher, Identifiable {
+public record TextureModel(String texture,
+                           int order,
+                           @Nullable Offset offset,
+                           @Nullable Integer resolution,
+                           @Nullable JsonObject displayOverrides,
+                           List<ModelTemplate> children) implements ModelTemplate, ModelMatcher, Identifiable {
 
 	@Override
 	public Optional<Offset> getOffset() {
@@ -52,13 +51,24 @@ public record PaletteTemplateModel(String palette,
 
 	@Override
 	public String name() {
-		return String.format("%s-%s", palette, template);
+		var split = texture().split(":");
+		if(split.length > 1){
+			return split[1];
+		}else {
+			return texture();
+		}
 	}
 
 	@Override
 	public String nameSpace() {
-		return String.format("%s", Forgero.NAMESPACE);
+		var split = texture.split(":");
+		if(split.length > 1){
+			return split[0];
+		}else {
+			return Forgero.NAMESPACE;
+		}
 	}
+
 
 	@Override
 	public String toString() {

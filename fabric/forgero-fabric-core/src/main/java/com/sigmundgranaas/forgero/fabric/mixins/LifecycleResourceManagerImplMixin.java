@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
+import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.texture.V2.FileLoader;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
@@ -28,17 +30,20 @@ public abstract class LifecycleResourceManagerImplMixin {
 		if (id.getPath().contains(".png") && cir.getReturnValue().isEmpty()) {
 			var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
 			if (ForgeroClient.TEXTURES.containsKey(textureId)) {
-
-				FileLoader loader = new ResourceLoadedFileService();
-				var texture = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getTexture(ForgeroClient.TEXTURES.get(textureId));
-				if (texture.isPresent()) {
-					var metadata = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getMetadata(ForgeroClient.TEXTURES.get(textureId), ".mcmeta");
-					Resource resource;
-					resource = metadata
-							.map(object -> new Resource(id.getNamespace(), texture.get()::getStream, convert(object)))
-							.orElseGet(() -> new Resource(id.getNamespace(), texture.get()::getStream));
-					cir.setReturnValue(Optional.of(resource));
+				ModelTemplate template = ForgeroClient.TEXTURES.get(textureId);
+				if(template instanceof PaletteTemplateModel paletteTemplateModel){
+					FileLoader loader = new ResourceLoadedFileService();
+					var texture = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getTexture(paletteTemplateModel);
+					if (texture.isPresent()) {
+						var metadata = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getMetadata(paletteTemplateModel, ".mcmeta");
+						Resource resource;
+						resource = metadata
+								.map(object -> new Resource(id.getNamespace(), texture.get()::getStream, convert(object)))
+								.orElseGet(() -> new Resource(id.getNamespace(), texture.get()::getStream));
+						cir.setReturnValue(Optional.of(resource));
+					}
 				}
+
 			}
 		}
 	}

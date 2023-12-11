@@ -16,10 +16,13 @@ import org.jetbrains.annotations.NotNull;
 public class ModelEntryData {
 	@SerializedName(value = "target", alternate = {"predicate", "criteria", "predicates"})
 	private List<JsonElement> predicates;
+
 	@Nullable
 	private String template;
+
 	@Nullable
 	private String palette;
+
 	@Builder.Default
 	@Nullable
 	private List<Float> offset = Collections.emptyList();
@@ -28,16 +31,23 @@ public class ModelEntryData {
 	@Nullable
 	private Integer resolution = 16;
 
+	@Builder.Default
+	@Nullable
+	@SerializedName(value = "children", alternate = {"textures"})
+	private List<ModelData> children = Collections.emptyList();
+
+	@Builder.Default
+	@Nullable
+	private String texture =  Identifiers.EMPTY_IDENTIFIER;
+
 	@NotNull
 	public List<Float> getOffset() {
 		return Objects.requireNonNullElse(offset, Collections.emptyList());
-
 	}
 
 	@NotNull
 	public Integer getResolution() {
 		return Objects.requireNonNullElse(resolution, 16);
-
 	}
 
 	@NotNull
@@ -53,5 +63,15 @@ public class ModelEntryData {
 	@NotNull
 	public String getPalette() {
 		return Objects.requireNonNullElse(palette, Identifiers.EMPTY_IDENTIFIER);
+	}
+
+	@NotNull
+	public List<ModelData> getChildren() {
+		return Objects.requireNonNullElse(children, Collections.emptyList());
+	}
+
+	@NotNull
+	public String getTexture() {
+		return Objects.requireNonNullElse(texture, Identifiers.EMPTY_IDENTIFIER);
 	}
 }
