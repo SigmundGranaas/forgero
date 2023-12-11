@@ -49,6 +49,15 @@ public class ModelData {
 	@Nullable
 	private String palette = Identifiers.EMPTY_IDENTIFIER;
 
+	@Builder.Default
+	@Nullable
+	@SerializedName(value = "children", alternate = {"textures"})
+	private List<ModelData> children = Collections.emptyList();
+
+	@Builder.Default
+	@Nullable
+	private String texture =  Identifiers.EMPTY_IDENTIFIER;
+
 	@Nullable
 	@SerializedName(value = "display_overrides", alternate = "display")
 	private JsonObject displayOverrides;
@@ -77,7 +86,6 @@ public class ModelData {
 		return order;
 	}
 
-
 	public List<ModelEntryData> getVariants() {
 		return Objects.requireNonNullElse(variants, Collections.emptyList());
 	}
@@ -99,4 +107,15 @@ public class ModelData {
 	public String getPalette() {
 		return Objects.requireNonNullElse(palette, Identifiers.EMPTY_IDENTIFIER);
 	}
+
+	@NotNull
+	public List<ModelData> getChildren() {
+		return Objects.requireNonNullElse(children, Collections.emptyList());
+	}
+
+	@NotNull
+	public String getTexture() {
+		return Objects.requireNonNullElse(texture, Identifiers.EMPTY_IDENTIFIER);
+	}
+
 }
