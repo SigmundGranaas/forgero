@@ -52,13 +52,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.B
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityBasedHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FrostHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.ParticleHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SoundHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SummonHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.swing.EntityHandHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
@@ -178,6 +172,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		registerEntityBasedHandler(ParticleHandler.TYPE, ParticleHandler.BUILDER);
 
 		registerEntityBasedHandler(FrostHandler.TYPE, FrostHandler.BUILDER);
+
+		registerEntityBasedHandler(TeleportHandler.TYPE, TeleportHandler.BUILDER);
 
 		//On hit entity
 		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
