@@ -1,11 +1,13 @@
-package com.sigmundgranaas.forgero.minecraft.common.item;
+package com.sigmundgranaas.forgero.bow.item;
 
+import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
 import com.sigmundgranaas.forgero.core.customdata.DataContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;

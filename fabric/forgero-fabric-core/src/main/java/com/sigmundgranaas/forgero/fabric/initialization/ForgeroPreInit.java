@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
 import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.defaultItem;
+import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.settingProcessor;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,6 +24,8 @@ import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
+import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
+import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
@@ -71,11 +75,13 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowTridentHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.AfterUseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeStackHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.ConsumeUpgradeHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.CoolDownHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.used.DamageHandler;
+import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
+import com.sigmundgranaas.forgero.minecraft.common.item.GemItemRegistrar;
+import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
+import com.sigmundgranaas.forgero.minecraft.common.item.RegistryFactory;
+import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicToolItemRegistrationHandler;
+import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRegistrationHandler;
 import com.sigmundgranaas.forgero.minecraft.common.match.BowPullPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
@@ -84,6 +90,7 @@ import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredica
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
+import net.minecraft.item.ItemGroup;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -103,6 +110,31 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		registerPredicateBuilders();
 		registerFeatureBuilder();
 		registerHandlerBuilders();
+		registerItemConverters();
+	}
+
+	private void registerItemConverters() {
+		var settingRegistry = ItemRegistries.SETTING_PROCESSOR;
+		var groupRegistry = ItemRegistries.GROUP_CONVERTER;
+
+		var converterRegistry = ItemRegistries.STATE_CONVERTER;
+		var factory = new RegistryFactory<>(groupRegistry);
+
+		RegistryUtils.register(settingRegistry, ItemSettingRegistrars::new);
+		RegistryUtils.register(groupRegistry, ItemGroupRegisters::new);
+		groupRegistry.register("forgero:default", (state) -> ItemGroup.MISC);
+
+		var baseConverter = BuildableStateConverter.builder()
+				.group(factory::convert)
+				.settings(settingProcessor(settingRegistry))
+				.item(defaultItem)
+				.priority(0)
+				.build();
+
+		converterRegistry.register("forgero:default", baseConverter);
+		RegistryUtils.register(converterRegistry, new DynamicWeaponItemRegistrationHandler(baseConverter));
+		RegistryUtils.register(converterRegistry, new DynamicToolItemRegistrationHandler(baseConverter));
+		RegistryUtils.register(converterRegistry, new GemItemRegistrar(baseConverter));
 	}
 
 	private void registerPredicateBuilders() {
@@ -110,8 +142,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(new StringIdentifierBuilder());
 		PredicateFactory.register(new StringModelBuilder());
 		PredicateFactory.register(new StringSlotBuilder());
-		PredicateFactory.register(new StringTypeBuilder());
-		PredicateFactory.register(new StringNameBuilder());
+		PredicateFactory.register(StringTypeBuilder::new);
+		PredicateFactory.register(StringNameBuilder::new);
 		PredicateFactory.register(StringSlotCategoryBuilder::new);
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
 		PredicateFactory.register(EntityPredicateMatcher.EntityPredicateBuilder::new);

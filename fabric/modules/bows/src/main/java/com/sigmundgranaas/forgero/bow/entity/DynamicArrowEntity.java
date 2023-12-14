@@ -1,12 +1,12 @@
-package com.sigmundgranaas.forgero.minecraft.common.item;
+package com.sigmundgranaas.forgero.bow.entity;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.streamFeature;
+import static com.sigmundgranaas.forgero.bow.ForgeroBowInitializer.DYNAMIC_ARROW_ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
@@ -43,11 +43,11 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 	}
 
 	public DynamicArrowEntity(World world, double x, double y, double z) {
-		super(Entities.DYNAMIC_ARROW_ENTITY, x, y, z, world);
+		super(DYNAMIC_ARROW_ENTITY, x, y, z, world);
 	}
 
 	public DynamicArrowEntity(World world, LivingEntity owner, ItemStack stack) {
-		super(Entities.DYNAMIC_ARROW_ENTITY, owner, world);
+		super(DYNAMIC_ARROW_ENTITY, owner, world);
 		setStack(stack);
 	}
 
@@ -76,7 +76,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		} else {
 			super.tick();
 
-			streamFeature(this.getStack(), MatchContext.of().put(ENTITY, this).put(WORLD, this.getWorld()), EntityTickFeature.KEY)
+			cachedFilteredFeatures(this.getStack(), EntityTickFeature.KEY, MatchContext.of().put(ENTITY, this).put(WORLD, this.getWorld()))
 					.forEach(handler -> handler.handle(this));
 
 			if (!this.noClip) {
@@ -113,14 +113,14 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 		if (hitResult instanceof BlockHitResult blockHitResult && getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR) {
 			BlockPos pos = blockHitResult.getBlockPos();
-			streamFeature(this.getStack(), context.put(BLOCK_TARGET, this.getWorld().getBlockState(pos)), OnHitBlockFeature.KEY)
+			cachedFilteredFeatures(this.getStack(), OnHitBlockFeature.KEY, context.put(BLOCK_TARGET, this.getWorld().getBlockState(pos)))
 					.forEach(handler -> {
 						handler.onHit(this.getOwner(), this.getWorld(), pos);
 						handler.handle(this, this.getStack(), Hand.MAIN_HAND);
 					});
 			super.onCollision(hitResult);
 		} else if (hitResult instanceof EntityHitResult entityHitResult) {
-			streamFeature(this.getStack(), context.put(ENTITY_TARGET, entityHitResult.getEntity()), OnHitEntityFeature.KEY)
+			cachedFilteredFeatures(this.getStack(), OnHitEntityFeature.KEY, context.put(ENTITY_TARGET, entityHitResult.getEntity()))
 					.forEach(handler -> {
 						handler.onHit(this.getOwner(), this.getWorld(), entityHitResult.getEntity());
 						handler.handle(this, this.getStack(), Hand.MAIN_HAND);

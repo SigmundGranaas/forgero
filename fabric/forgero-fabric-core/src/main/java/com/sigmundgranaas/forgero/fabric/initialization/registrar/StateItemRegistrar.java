@@ -15,7 +15,9 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.fabric.item.StateToItemConverter;
+import com.sigmundgranaas.forgero.minecraft.common.item.ItemData;
+import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
+import com.sigmundgranaas.forgero.minecraft.common.item.RegistryFactory;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Registrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -51,9 +53,10 @@ public class StateItemRegistrar implements Registrar {
 
 	private void registerState(StateProvider state) {
 		try {
-			var converter = StateToItemConverter.of(state);
-			Identifier identifier = converter.id();
-			var item = converter.convert();
+			RegistryFactory<StateProvider, ItemData> factory = new RegistryFactory<>(ItemRegistries.STATE_CONVERTER);
+			ItemData data = factory.convert(state);
+			Identifier identifier = data.id();
+			var item = data.item();
 			Registry.register(Registry.ITEM, identifier, item);
 		} catch (InvalidIdentifierException e) {
 			Forgero.LOGGER.error("Invalid identifier: {}", state.get().identifier());

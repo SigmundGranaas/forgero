@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.item.tool;
+package com.sigmundgranaas.forgero.bow.item;
 
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
@@ -10,7 +10,6 @@ import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.ArrowProperties;
-import com.sigmundgranaas.forgero.minecraft.common.item.BowProperties;
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -36,7 +35,6 @@ import net.minecraft.world.World;
 
 public class DynamicBowItem extends BowItem implements ToolStateItem {
 	private final StateProvider DEFAULT;
-
 	private final StateService service;
 
 	public DynamicBowItem(Settings settings, StateProvider defaultState, StateService service) {

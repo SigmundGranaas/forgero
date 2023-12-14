@@ -1,7 +1,7 @@
-package com.sigmundgranaas.forgero.fabric.client;
+package com.sigmundgranaas.forgero.bow.client;
 
 
-import com.sigmundgranaas.forgero.minecraft.common.item.DynamicArrowEntity;
+import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
 
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -43,12 +43,10 @@ public class DynamicArrowEntityRenderer extends EntityRenderer<DynamicArrowEntit
 	private static final Identifier ARROW = new Identifier("textures/entity/projectiles/arrow.png");
 	private final ItemRenderer renderer;
 
-
 	public DynamicArrowEntityRenderer(EntityRendererFactory.Context context) {
 		super(context);
 		this.renderer = context.getItemRenderer();
 	}
-
 
 	@Override
 	public void render(DynamicArrowEntity arrow, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {

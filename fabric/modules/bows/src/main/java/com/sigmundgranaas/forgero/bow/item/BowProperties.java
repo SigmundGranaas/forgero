@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.item;
+package com.sigmundgranaas.forgero.bow.item;
 
 import java.util.Optional;
 

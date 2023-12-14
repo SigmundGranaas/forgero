@@ -78,7 +78,6 @@ public class ForgeroClient implements ClientModInitializer {
 		ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
 		EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
 		EntityRendererRegistry.register(Entities.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
-		EntityRendererRegistry.register(Entities.DYNAMIC_ARROW_ENTITY, DynamicArrowEntityRenderer::new);
 		EntityModelLayerRegistry.registerModelLayer(SOUL_ENTITY_MODEL_LAYER, SoulEntityModel::getTexturedModelData);
 	}
 
