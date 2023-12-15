@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.match;
+package com.sigmundgranaas.forgero.bow.predicate;
 
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;

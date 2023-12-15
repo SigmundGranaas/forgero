@@ -1,11 +1,12 @@
-package com.sigmundgranaas.forgero.minecraft.common.item;
+package com.sigmundgranaas.forgero.minecraft.common.registry;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
-@Builder(toBuilder = true)
+@SuperBuilder
 public class BuildableGenericConverter<T, R> implements RankableConverter<T, R> {
 	private Function<T, R> converter;
 

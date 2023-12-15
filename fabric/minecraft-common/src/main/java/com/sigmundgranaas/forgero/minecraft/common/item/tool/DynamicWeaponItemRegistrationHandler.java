@@ -3,16 +3,11 @@ package com.sigmundgranaas.forgero.minecraft.common.item.tool;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.ForgeroMaterial;
-import com.sigmundgranaas.forgero.minecraft.common.item.GenericRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.registry.GenericRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemData;
-import com.sigmundgranaas.forgero.minecraft.common.item.RankableConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.Registerable;
+import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
+import com.sigmundgranaas.forgero.minecraft.common.registry.Registerable;
 import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
-import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicAxeItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicHoeItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicPickaxeItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicShovelItem;
-import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicSwordItem;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
@@ -40,7 +35,7 @@ public class DynamicWeaponItemRegistrationHandler implements Registerable<Rankab
 	}
 
 	private Item sword(StateProvider provider, Item.Settings settings, RegistryUtils.DynamicToolItemSettings params) {
-		return new DynamicSwordItem(new ForgeroMaterial(provider, params.ingredient(), StateService.INSTANCE),  params.attackDamage(), params.attackSpeed(), settings, provider);
+		return new DynamicSwordItem(new ForgeroMaterial(provider, params.ingredient(), StateService.INSTANCE), params.attackDamage(), params.attackSpeed(), settings, provider);
 	}
 
 }

@@ -52,7 +52,14 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.B
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityBasedHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FrostHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.MagneticHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.ParticleHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SoundHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.SummonHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.TeleportHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.swing.EntityHandHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
@@ -72,16 +79,15 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItemRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
-import com.sigmundgranaas.forgero.minecraft.common.item.RegistryFactory;
 import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicToolItemRegistrationHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRegistrationHandler;
-import com.sigmundgranaas.forgero.minecraft.common.match.BowPullPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.item.ItemGroup;
@@ -112,11 +118,11 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		var groupRegistry = ItemRegistries.GROUP_CONVERTER;
 
 		var converterRegistry = ItemRegistries.STATE_CONVERTER;
+		groupRegistry.register("forgero:default", (state) -> ItemGroup.MISC);
 		var factory = new RegistryFactory<>(groupRegistry);
 
 		RegistryUtils.register(settingRegistry, ItemSettingRegistrars::new);
 		RegistryUtils.register(groupRegistry, ItemGroupRegisters::new);
-		groupRegistry.register("forgero:default", (state) -> ItemGroup.MISC);
 
 		var baseConverter = BuildableStateConverter.builder()
 				.group(factory::convert)
@@ -145,7 +151,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
-		PredicateFactory.register(BowPullPredicate.BowPullPredicateBuilder::new);
 
 		//Writers
 		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);

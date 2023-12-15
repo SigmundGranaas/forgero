@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
 import lombok.Builder;
 
 import net.minecraft.item.Item;
@@ -29,7 +30,7 @@ public class BuildableStateConverter implements RankableConverter<StateProvider,
 	private final int priority = 0;
 
 	@Builder.Default
-	private final BiFunction<StateProvider, Item.Settings ,Item> item = (state, settings) -> new DefaultStateItem(settings, state);
+	private final BiFunction<StateProvider, Item.Settings, Item> item = (state, settings) -> new DefaultStateItem(settings, state);
 
 	public ItemData convert(StateProvider state) {
 		ItemGroup group = this.group.apply(state);

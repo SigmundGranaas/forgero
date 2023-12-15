@@ -81,10 +81,11 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 			if (!this.noClip) {
 				Vec3d vec3d4 = this.getVelocity();
-				this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
+				//this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
 			}
 		}
 	}
+
 
 	public boolean isFireImmune() {
 		return this.getStack().getItem().isFireproof() || super.isFireImmune();

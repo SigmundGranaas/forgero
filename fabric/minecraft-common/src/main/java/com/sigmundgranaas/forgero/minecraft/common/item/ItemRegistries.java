@@ -2,6 +2,9 @@ package com.sigmundgranaas.forgero.minecraft.common.item;
 
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 
+import com.sigmundgranaas.forgero.minecraft.common.registry.GenericRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
+
 import net.minecraft.item.ItemGroup;
 
 public class ItemRegistries {

@@ -3,10 +3,10 @@ package com.sigmundgranaas.forgero.fabric.item;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.minecraft.common.item.GenericRegistry;
-import com.sigmundgranaas.forgero.minecraft.common.item.RankableConverter;
+import com.sigmundgranaas.forgero.minecraft.common.registry.GenericRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.Registerable;
+import com.sigmundgranaas.forgero.minecraft.common.registry.Registerable;
 
 import net.minecraft.item.ItemGroup;
 

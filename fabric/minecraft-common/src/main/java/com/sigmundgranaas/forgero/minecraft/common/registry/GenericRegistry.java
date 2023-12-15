@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.item;
+package com.sigmundgranaas.forgero.minecraft.common.registry;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GenericRegistry<T>{
+public class GenericRegistry<T> {
 	private final Map<String, T> registry = new ConcurrentHashMap<>();
 
 	public RegisteredReference<T> register(String id, T item) {
-		if(!registry.containsKey(id)){
+		if (!registry.containsKey(id)) {
 			RegisteredReference<T> reference = new RegisteredReference<>(id, item);
 			registry.put(id, item);
 			return reference;
@@ -35,7 +35,7 @@ public class GenericRegistry<T>{
 
 	@Getter
 	@Accessors(fluent = true)
-	public static final class RegisteredReference <T> {
+	public static final class RegisteredReference<T> {
 		private final String id;
 		private final T item;
 

@@ -27,21 +27,6 @@
     },
     {
       "name": "POMMEL_SCHEMATIC"
-    },
-    {
-      "name": "ARROW_HEAD_SCHEMATIC"
-    },
-    {
-      "name": "ARROW_SCHEMATIC"
-    },
-    {
-      "name": "BOW_LIMB_SCHEMATIC"
-    },
-    {
-      "name": "ARROW_SHAFT_SCHEMATIC"
-    },
-    {
-      "name": "ARROW_FEATHER_SCHEMATIC"
     }
   ]
 }

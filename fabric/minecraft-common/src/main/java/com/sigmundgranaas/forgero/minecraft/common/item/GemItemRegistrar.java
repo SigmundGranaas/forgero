@@ -3,6 +3,9 @@ package com.sigmundgranaas.forgero.minecraft.common.item;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.typeMatcher;
 
 import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.minecraft.common.registry.GenericRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
+import com.sigmundgranaas.forgero.minecraft.common.registry.Registerable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
