@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation;
 
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -7,11 +12,6 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.util.Utils;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader {
 	private static RecipeLoader INSTANCE;
@@ -49,8 +49,6 @@ public record RecipeLoaderImpl(String recipeFolderPath) implements RecipeLoader 
 			recipes.put(RecipeTypes.PART_SMELTING_RECIPE, getRecipeAsJson(recipeFolderPath + "/part_smelting_recipe.json"));
 			recipes.put(RecipeTypes.PART_BLASTING_RECIPE, getRecipeAsJson(recipeFolderPath + "/part_blasting_recipe.json"));
 			recipes.put(RecipeTypes.STATE_UPGRADE_CRAFTING_TABLE_RECIPE, getRecipeAsJson(recipeFolderPath + "/state_upgrade_crafting_table_recipe.json"));
-
-
 			return recipes;
 		} catch (NullPointerException | JsonIOException e) {
 			Forgero.LOGGER.error("Unable to read recipes from: {}", recipeFolderPath);

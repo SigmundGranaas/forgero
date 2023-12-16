@@ -1,0 +1,30 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${wood.name}_sword_blade_basic_recipe",
+  "state_map": {
+    "wood": {
+      "type": "WOOD"
+    }
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " ca",
+    " b ",
+    "a  "
+  ],
+  "key": {
+    "a": {
+      "item": "${wood.namespace}:${wood.name}_planks"
+    },
+    "b": {
+      "tag": "minecraft:stone"
+    },
+    "c": {
+      "tag": "${wood.namespace}:${wood.name}_slabs"
+    }
+  },
+  "result": {
+    "item": "forgero:${wood.name}-sword_blade",
+    "count": 1
+  }
+}

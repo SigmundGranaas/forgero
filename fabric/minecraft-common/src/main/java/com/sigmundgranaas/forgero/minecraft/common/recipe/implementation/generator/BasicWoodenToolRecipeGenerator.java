@@ -45,7 +45,7 @@ public class BasicWoodenToolRecipeGenerator implements RecipeGenerator {
 		replaceKeyWithMaterialName("x", template);
 		replaceKeyWithMaterialName("i", template);
 		Identifier id = new Identifier(Forgero.NAMESPACE, resultName + "-basic_recipe");
-		return new RecipeWrapperImpl(id, template, this.template);
+		return new RecipeWrapperImpl(id, template);
 	}
 
 	private void replaceKeyWithMaterialName(String key, JsonObject template) {

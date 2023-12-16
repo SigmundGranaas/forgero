@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
@@ -11,8 +13,6 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeW
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import java.util.Optional;
 
 public class BasicStonePartUpgradeRecipeGenerator implements RecipeGenerator {
 
@@ -47,7 +47,7 @@ public class BasicStonePartUpgradeRecipeGenerator implements RecipeGenerator {
 		replaceKeyWithMaterialName("x", "tag", String.format("forgero:%s", partName), template);
 		replaceKeyWithMaterialName("i", "item", Optional.ofNullable(ForgeroStateRegistry.STATE_TO_CONTAINER.get(material.identifier())).orElse(material.identifier()), template);
 		Identifier id = new Identifier(Forgero.NAMESPACE, resultName + "-stone_upgrade_recipe");
-		return new RecipeWrapperImpl(id, template, this.template);
+		return new RecipeWrapperImpl(id, template);
 	}
 
 	private void replaceKeyWithMaterialName(String key, String itemOrTag, String value, JsonObject template) {

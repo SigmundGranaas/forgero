@@ -41,7 +41,7 @@ public class RepairKitRecipeGenerator implements RecipeGenerator {
 
 		template.getAsJsonObject("result").addProperty("item", "forgero:" + material.name() + "_repair_kit");
 		Identifier id = new Identifier(Forgero.NAMESPACE, material.name() + "_tool_repair_kit_recipe");
-		return RecipeWrapper.of(id, template, type);
+		return RecipeWrapper.of(id, template);
 	}
 
 	@Override

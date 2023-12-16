@@ -1,0 +1,30 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${axe_head.material}-axe-binding-state-crafting",
+  "state_map": {
+    "axe_head": {
+      "type": "AXE_HEAD"
+    }
+  },
+  "type": "forgero:state_crafting_recipe",
+  "pattern": [
+    "  a",
+    " b ",
+    "c  "
+  ],
+  "key": {
+    "a": {
+      "item": "${axe_head.identifier}"
+    },
+    "b": {
+      "tag": "forgero:tool_binding"
+    },
+    "c": {
+      "tag": "forgero:handle"
+    }
+  },
+  "result": {
+    "item": "forgero:${axe_head.material}-axe",
+    "count": 1
+  }
+}

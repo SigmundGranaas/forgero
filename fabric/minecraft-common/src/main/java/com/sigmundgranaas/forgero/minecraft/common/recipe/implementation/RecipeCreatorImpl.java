@@ -1,23 +1,33 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.resource.data.v2.ResourceLocator;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
+import com.sigmundgranaas.forgero.core.resource.data.v2.loading.JsonContentFilter;
+import com.sigmundgranaas.forgero.core.resource.data.v2.loading.PathWalker;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.loader.PathFinder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
@@ -27,14 +37,22 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generat
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.BasicWoodenToolRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CraftingTableUpgradeGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.MappedRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.MaterialRepairToolGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.PartSmeltingRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.RepairKitRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.SchematicPartGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.SlotUpgradeGenerator;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.StateMapTransformer;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.StringReplacer;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.TemplateGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.ToolRecipeCreator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class RecipeCreatorImpl implements RecipeCreator {
 
@@ -70,7 +88,8 @@ public class RecipeCreatorImpl implements RecipeCreator {
 		generators.addAll(basicStonePartUpgrade());
 		generators.addAll(smeltingMetalPartRecipeGenerators());
 		generators.addAll(woodAndStoneRepairRecipeGenerator());
-		return generators.stream()
+		generators.addAll(recipeGenerators());
+		return generators.parallelStream()
 				.filter(RecipeGenerator::isValid)
 				.map(RecipeGenerator::generate)
 				.toList();
@@ -168,6 +187,56 @@ public class RecipeCreatorImpl implements RecipeCreator {
 		return recipes;
 	}
 
+	private List<RecipeGenerator> recipeGenerators() {
+		ResourceLocator walker = PathWalker.builder()
+				.contentFilter(new JsonContentFilter())
+				.pathFinder(PathFinder::ClassLoaderFinder)
+				.build();
+
+		List<Path> paths = walker.locate("/data/forgero/recipe_generators");
+		Gson gson = new Gson();
+		var mapper = new StateMapTransformer(ForgeroStateRegistry.TREE);
+		StringReplacer replacer = new StringReplacer();
+
+		Function<State, String> idConverter = s -> StateService.INSTANCE.convert(s)
+				.map(ItemStack::getItem)
+				.map(Registry.ITEM::getId)
+				.map(Identifier::toString)
+				.orElseThrow();
+		Function<State, String> tagOrItem = (state) -> Registry.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
+		replacer.register("name", Identifiable::name);
+		replacer.register("namespace", Identifiable::nameSpace);
+		replacer.register("material", s -> s instanceof MaterialBased based ? based.baseMaterial().name() : "");
+		replacer.register("identifier", idConverter);
+		replacer.register("id", idConverter);
+		replacer.register("tagOrItem", tagOrItem);
+
+		var recipes = paths.stream()
+				.map(path -> {
+					try {
+						String jsonContent = Files.readString(path);
+						return Optional.of(gson.fromJson(jsonContent, JsonObject.class));
+					} catch (IOException e) {
+						Forgero.LOGGER.error("Error reading file: " + path, e);
+						return Optional.<JsonObject>empty();
+					}
+				})
+				.flatMap(Optional::stream)
+				.toList();
+
+		return recipes.stream().map(res -> {
+					var map = mapper.transformStateMap(res.getAsJsonObject("state_map"));
+					return map.stream().map(mapped -> new MappedRecipeGenerator(replacer, copy(res), mapped)).toList();
+				})
+				.flatMap(List::stream)
+				.map(RecipeGenerator.class::cast)
+				.toList();
+	}
+
+	private JsonObject copy(JsonObject object) {
+		return new Gson().fromJson(object.toString(), JsonObject.class);
+	}
+
 	private List<RecipeGenerator> basicStonePartUpgrade() {
 		var materials = ForgeroStateRegistry.TREE.find(Type.STONE)
 				.map(node -> node.getResources(State.class))
@@ -201,7 +270,7 @@ public class RecipeCreatorImpl implements RecipeCreator {
 					.map(slot -> new SlotUpgradeGenerator(helper, templateGenerator, slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier())))
 					.collect(Collectors.toList());
 
-			if(ForgeroConfigurationLoader.configuration.enableUpgradeInCraftingTable){
+			if (ForgeroConfigurationLoader.configuration.enableUpgradeInCraftingTable) {
 				res.construct().get().slots().stream()
 						.map(slot -> new CraftingTableUpgradeGenerator(helper, templateGenerator, slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier())))
 						.forEach(upgradeRecipes::add);
