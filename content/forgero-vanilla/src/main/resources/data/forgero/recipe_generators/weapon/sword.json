@@ -1,9 +1,9 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${axe_head.material}-axe-state-crafting",
+  "identifier": "forgero:${material.name}-sword-state-crafting",
   "state_map": {
-    "axe_head": {
-      "type": "AXE_HEAD"
+    "material": {
+      "type": "TOOL_MATERIAL"
     }
   },
   "type": "forgero:state_crafting_recipe",
@@ -13,14 +13,14 @@
   ],
   "key": {
     "a": {
-      "item": "${axe_head.identifier}"
+      "tag": "forgero:${material.name}-sword_blade"
     },
     "b": {
       "tag": "forgero:handle"
     }
   },
   "result": {
-    "item": "forgero:${axe_head.material}-axe",
+    "item": "forgero:${material.name}-sword",
     "count": 1
   }
 }

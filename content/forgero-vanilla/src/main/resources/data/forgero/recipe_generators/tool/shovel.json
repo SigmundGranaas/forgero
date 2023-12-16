@@ -1,0 +1,26 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-shovel-state-crafting",
+  "state_map": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    }
+  },
+  "type": "forgero:state_crafting_recipe",
+  "pattern": [
+    " a",
+    "b "
+  ],
+  "key": {
+    "a": {
+      "tag": "forgero:${material.name}-shovel-head"
+    },
+    "b": {
+      "tag": "forgero:handle"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-shovel",
+    "count": 1
+  }
+}
