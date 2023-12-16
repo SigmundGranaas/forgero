@@ -58,7 +58,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	private Optional<State> convertHead(ItemStack stack) {
 		var converted = service.convert(stack);
-		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))) {
+		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD) || converted.get().test(Type.ARROW_HEAD) || converted.get().test(Type.BOW_LIMB))) {
 			return converted;
 		}
 		return Optional.empty();
@@ -130,6 +130,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 						.orElse(Collections.emptyList())
 						.forEach(enchantment -> enchantment.embed(output));
 			}
+			output.setCount(getOutput().getCount());
 			return output;
 		}
 		return getOutput().copy();

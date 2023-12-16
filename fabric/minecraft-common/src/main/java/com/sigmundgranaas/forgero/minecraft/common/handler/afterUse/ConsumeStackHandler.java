@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -77,6 +78,8 @@ public class ConsumeStackHandler implements AfterUseHandler, StopHandler {
 				item.remove(Entity.RemovalReason.DISCARDED);
 			} else if (source instanceof ArrowEntity arrow) {
 				arrow.remove(Entity.RemovalReason.DISCARDED);
+			} else if (source instanceof ProjectileEntity projectile) {
+				projectile.remove(Entity.RemovalReason.DISCARDED);
 			}
 		}
 	}

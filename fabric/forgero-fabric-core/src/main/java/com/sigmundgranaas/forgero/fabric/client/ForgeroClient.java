@@ -50,6 +50,7 @@ public class ForgeroClient implements ClientModInitializer {
 	public static Map<String, ModelTemplate> TEXTURES = new HashMap<>();
 	public static Map<String, String> PALETTE_REMAP = new HashMap<>();
 
+
 	@Override
 	public void onInitializeClient() {
 		initializeItemModels();

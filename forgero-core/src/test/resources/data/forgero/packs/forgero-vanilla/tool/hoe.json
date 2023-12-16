@@ -56,8 +56,5 @@
         "tier": 1
       }
     ]
-  },
-  "model": {
-    "type": "COMPOSITE"
   }
 }
