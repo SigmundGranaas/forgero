@@ -1,7 +1,7 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
   "identifier": "forgero:${wood.name}_sword_blade_basic_recipe",
-  "state_map": {
+  "variables": {
     "wood": {
       "type": "WOOD"
     }

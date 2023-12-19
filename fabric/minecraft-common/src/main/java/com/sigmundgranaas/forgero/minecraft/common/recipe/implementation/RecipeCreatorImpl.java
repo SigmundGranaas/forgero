@@ -195,7 +195,6 @@ public class RecipeCreatorImpl implements RecipeCreator {
 
 		List<Path> paths = walker.locate("/data/forgero/recipe_generators");
 		Gson gson = new Gson();
-		var mapper = new StateMapTransformer(ForgeroStateRegistry.TREE);
 		StringReplacer replacer = new StringReplacer();
 
 		Function<State, String> idConverter = s -> StateService.INSTANCE.convert(s)
@@ -203,13 +202,14 @@ public class RecipeCreatorImpl implements RecipeCreator {
 				.map(Registry.ITEM::getId)
 				.map(Identifier::toString)
 				.orElseThrow();
+
 		Function<State, String> tagOrItem = (state) -> Registry.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
-		replacer.register("name", Identifiable::name);
-		replacer.register("namespace", Identifiable::nameSpace);
-		replacer.register("material", s -> s instanceof MaterialBased based ? based.baseMaterial().name() : "");
-		replacer.register("identifier", idConverter);
-		replacer.register("id", idConverter);
-		replacer.register("tagOrItem", tagOrItem);
+		replacer.register("name", stateFunction(Identifiable::name));
+		replacer.register("namespace", stateFunction(Identifiable::nameSpace));
+		replacer.register("material", stateFunction(s -> s instanceof MaterialBased based ? based.baseMaterial().name() : ""));
+		replacer.register("identifier", stateFunction(idConverter));
+		replacer.register("id", stateFunction(idConverter));
+		replacer.register("tagOrItem", stateFunction(tagOrItem));
 
 		var recipes = paths.stream()
 				.map(path -> {
@@ -224,14 +224,27 @@ public class RecipeCreatorImpl implements RecipeCreator {
 				.flatMap(Optional::stream)
 				.toList();
 
+		Function<String, List<State>> stateFinder = (type) -> ForgeroStateRegistry.TREE.find(Type.of(type)).map(node -> node.getResources(State.class)).orElse(ImmutableList.<State>builder().build());
+		StateMapTransformer transformer = new StateMapTransformer(stateFinder);
+
 		return recipes.stream().map(res -> {
-					var map = mapper.transformStateMap(res.getAsJsonObject("state_map"));
+					var map = transformer.transformStateMap(res.getAsJsonObject("variables"));
 					return map.stream().map(mapped -> new MappedRecipeGenerator(replacer, copy(res), mapped)).toList();
 				})
 				.flatMap(List::stream)
 				.map(RecipeGenerator.class::cast)
 				.toList();
 	}
+
+	private Function<Object, String> stateFunction(Function<State, String> fn) {
+		return (obj) -> {
+			if (obj instanceof State state) {
+				return fn.apply(state);
+			}
+			return "";
+		};
+	}
+
 
 	private JsonObject copy(JsonObject object) {
 		return new Gson().fromJson(object.toString(), JsonObject.class);

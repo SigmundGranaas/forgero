@@ -1,10 +1,16 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-hoe-binding-state-crafting",
-  "state_map": {
+  "identifier": "forgero:${material.name}-${tool}-binding-state-crafting",
+  "variables": {
     "material": {
       "type": "TOOL_MATERIAL"
-    }
+    },
+    "tool": [
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe"
+    ]
   },
   "type": "forgero:state_crafting_recipe",
   "pattern": [
@@ -14,7 +20,7 @@
   ],
   "key": {
     "a": {
-      "tag": "forgero:${material.name}-hoe_head"
+      "tag": "forgero:${material.name}-${tool}_head"
     },
     "b": {
       "tag": "forgero:tool_binding"
@@ -24,7 +30,7 @@
     }
   },
   "result": {
-    "item": "forgero:${material.name}-hoe",
+    "item": "forgero:${material.name}-${tool}",
     "count": 1
   }
 }

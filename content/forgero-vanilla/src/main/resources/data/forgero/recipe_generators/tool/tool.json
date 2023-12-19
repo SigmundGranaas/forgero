@@ -1,10 +1,16 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-pickaxe-state-crafting",
-  "state_map": {
+  "identifier": "forgero:${material.name}-${tool}-state-crafting",
+  "variables": {
     "material": {
       "type": "TOOL_MATERIAL"
-    }
+    },
+    "tool": [
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe"
+    ]
   },
   "type": "forgero:state_crafting_recipe",
   "pattern": [
@@ -13,14 +19,14 @@
   ],
   "key": {
     "a": {
-      "tag": "forgero:${material.name}-pickaxe-head"
+      "tag": "forgero:${material.name}-${tool}_head"
     },
     "b": {
       "tag": "forgero:handle"
     }
   },
   "result": {
-    "item": "forgero:${material.name}-pickaxe",
+    "item": "forgero:${material.name}-${tool}",
     "count": 1
   }
 }

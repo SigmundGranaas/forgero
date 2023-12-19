@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeWrapperImpl;
@@ -14,10 +13,10 @@ import net.minecraft.util.Identifier;
 public class MappedRecipeGenerator implements RecipeGenerator {
 	public static final String identifier = "forgero:mapped_recipe_generator";
 	private final StringReplacer replacer;
-	private final Map<String, State> stateMap;
+	private final Map<String, Object> stateMap;
 	private JsonObject template;
 
-	public MappedRecipeGenerator(StringReplacer replacer, JsonObject template, Map<String, State> stateMap) {
+	public MappedRecipeGenerator(StringReplacer replacer, JsonObject template, Map<String, Object> stateMap) {
 		this.replacer = replacer;
 		this.template = template;
 		this.stateMap = stateMap;
