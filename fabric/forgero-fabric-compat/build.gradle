@@ -23,6 +23,8 @@ dependencies {
 	localRuntime project(':content:forgero-compat')
 	localRuntime project(':content:forgero-structures')
 
+	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
+
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')

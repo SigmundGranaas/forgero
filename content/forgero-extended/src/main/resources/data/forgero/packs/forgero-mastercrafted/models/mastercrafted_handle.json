@@ -10,6 +10,12 @@
       "variants": [
         {
           "target": [
+            "type:BOW"
+          ],
+          "template": "bow_handle.png"
+        },
+        {
+          "target": [
             "type:HOE"
           ],
           "template": "mastercrafted_tool_handle_long.png"
@@ -37,6 +43,12 @@
             "type:SWORD"
           ],
           "template": "mastercrafted_short_handle.png"
+        },
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "mastercrafted_arrow_shaft.png"
         }
       ]
     },

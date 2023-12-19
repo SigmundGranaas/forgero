@@ -1,0 +1,48 @@
+{
+  "type": "BOW",
+  "name": "bow",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "BOW",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "BOW_LIMB"
+          },
+          {
+            "type": "STRING"
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "type": "BOW_LIMB"
+      },
+      {
+        "type": "STRING"
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UNDEFINED"
+        ],
+        "type": "ARROW",
+        "tier": 1
+      }
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

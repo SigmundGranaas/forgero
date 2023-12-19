@@ -1,0 +1,12 @@
+{
+  "name": "bow-additions",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "forgero",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "forgero-vanilla",
+    "minecraft-vanilla"
+  ]
+}

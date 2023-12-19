@@ -1,0 +1,47 @@
+{
+  "type": "ARROW",
+  "name": "arrow",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "ARROW",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "count": 4,
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "ARROW_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          },
+          {
+            "type": "FEATHER"
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "type": "ARROW_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      },
+      {
+        "type": "FEATHER"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}
