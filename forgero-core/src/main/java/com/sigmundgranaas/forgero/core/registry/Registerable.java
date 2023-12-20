@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.registry;
+package com.sigmundgranaas.forgero.core.registry;
 
 @FunctionalInterface
 public interface Registerable<T> {

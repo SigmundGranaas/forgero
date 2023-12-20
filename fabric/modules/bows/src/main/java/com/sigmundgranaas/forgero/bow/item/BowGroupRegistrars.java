@@ -5,9 +5,9 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.typ
 
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.minecraft.common.registry.GenericRegistry;
-import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
-import com.sigmundgranaas.forgero.minecraft.common.registry.Registerable;
+import com.sigmundgranaas.forgero.core.registry.GenericRegistry;
+import com.sigmundgranaas.forgero.core.registry.RankableConverter;
+import com.sigmundgranaas.forgero.core.registry.Registerable;
 
 import net.minecraft.item.ItemGroup;
 

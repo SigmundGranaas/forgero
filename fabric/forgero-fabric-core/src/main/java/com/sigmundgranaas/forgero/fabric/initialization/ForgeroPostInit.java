@@ -1,14 +1,20 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
 import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
+import static com.sigmundgranaas.forgero.generator.api.Registry.operation;
+import static com.sigmundgranaas.forgero.generator.api.Registry.variableConverter;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 import java.util.List;
+import java.util.function.Function;
 
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.converter.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
@@ -17,6 +23,9 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.state.MaterialBased;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
@@ -34,6 +43,7 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
@@ -43,7 +53,10 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRe
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -84,6 +97,36 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerAARPRecipes(stateService);
 		registerHungerCallbacks(stateService);
 		registerToolTipFilters();
+		registerRecipeGenerators();
+	}
+
+	private void registerRecipeGenerators() {
+		Function<State, String> idConverter = s -> StateService.INSTANCE.convert(s)
+				.map(ItemStack::getItem)
+				.map(Registry.ITEM::getId)
+				.map(Identifier::toString)
+				.orElseThrow();
+
+		Function<State, String> tagOrItem = (state) -> Registry.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
+		Function<State, String> material = (state) -> state instanceof MaterialBased based ? based.baseMaterial().name() : "";
+
+		var factory = new OperationFactory<>(State.class);
+
+		operation("forgero:state_name", "name", factory.build(Identifiable::name));
+		operation("forgero:state_namespace", "namespace", factory.build(Identifiable::nameSpace));
+		operation("forgero:state_material", "material", factory.build(material));
+		operation("forgero:state_identifier", "identifier", factory.build(idConverter));
+		operation("forgero:state_identifier", "id", factory.build(idConverter));
+		operation("forgero:tag_or_item", "tagOrItem", factory.build(tagOrItem));
+
+		Function<String, List<State>> stateFinder = (type) -> ForgeroStateRegistry.TREE.find(Type.of(type))
+				.map(node -> node.getResources(State.class))
+				.orElse(ImmutableList.<State>builder()
+						.build());
+
+		ForgeroTypeVariableConverter typeConverter = new ForgeroTypeVariableConverter(stateFinder);
+
+		variableConverter("forgero:type_converter", typeConverter);
 	}
 
 	private void registerToolTipFilters() {
@@ -218,7 +261,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerRecipeSerializers() {
 		RecipeRegistry.INSTANCE.registerRecipeSerializers();
 	}
-
 
 	/**
 	 * The registerAarpRecipes method registers AARP recipes for the mod.

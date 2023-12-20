@@ -22,10 +22,6 @@
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
   "environment": "*",
-  "entrypoints": {
-  },
-  "mixins": [
-  ],
   "depends": {
     "java": ">=17"
   },

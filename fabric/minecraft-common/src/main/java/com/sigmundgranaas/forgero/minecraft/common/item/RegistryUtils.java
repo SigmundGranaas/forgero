@@ -6,10 +6,10 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.minecraft.common.registry.BuildableGenericConverter;
-import com.sigmundgranaas.forgero.minecraft.common.registry.GenericRegistry;
-import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
-import com.sigmundgranaas.forgero.minecraft.common.registry.Registerable;
+import com.sigmundgranaas.forgero.core.registry.BuildableGenericConverter;
+import com.sigmundgranaas.forgero.core.registry.GenericRegistry;
+import com.sigmundgranaas.forgero.core.registry.RankableConverter;
+import com.sigmundgranaas.forgero.core.registry.Registerable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;

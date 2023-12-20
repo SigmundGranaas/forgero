@@ -1,13 +1,13 @@
-package com.sigmundgranaas.forgero.minecraft.common.registry;
-
-import com.google.common.collect.ImmutableMap;
-import lombok.Getter;
-import lombok.experimental.Accessors;
+package com.sigmundgranaas.forgero.core.registry;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.google.common.collect.ImmutableMap;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class GenericRegistry<T> {
 	private final Map<String, T> registry = new ConcurrentHashMap<>();
@@ -33,13 +33,17 @@ public class GenericRegistry<T> {
 		return ImmutableMap.copyOf(registry);
 	}
 
+	public Collection<T> entries() {
+		return values();
+	}
+
 	@Getter
 	@Accessors(fluent = true)
 	public static final class RegisteredReference<T> {
 		private final String id;
 		private final T item;
 
-		private RegisteredReference(String id, T item) {
+		RegisteredReference(String id, T item) {
 			this.id = id;
 			this.item = item;
 		}

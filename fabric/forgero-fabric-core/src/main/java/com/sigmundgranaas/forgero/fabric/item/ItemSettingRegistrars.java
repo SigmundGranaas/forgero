@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.item;
 
+import com.sigmundgranaas.forgero.core.registry.GenericRegistry;
+import com.sigmundgranaas.forgero.core.registry.Registerable;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.item.*;
-
-import com.sigmundgranaas.forgero.minecraft.common.registry.GenericRegistry;
-import com.sigmundgranaas.forgero.minecraft.common.registry.Registerable;
+import com.sigmundgranaas.forgero.minecraft.common.item.SettingProcessor;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;

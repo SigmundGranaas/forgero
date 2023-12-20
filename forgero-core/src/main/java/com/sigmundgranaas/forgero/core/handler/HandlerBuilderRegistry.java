@@ -46,7 +46,7 @@ public class HandlerBuilderRegistry {
 	 * @param type    The class key representing the target type.
 	 * @param <R>     The generic type of the JsonBuilder.
 	 * @param <T>     The target type for the cast.
-	 * @return An Optional containing the casted JsonBuilder if successful, or an empty Optional otherwise.
+	 * @return An Optional containing the cast JsonBuilder if successful, or an empty Optional otherwise.
 	 */
 	@SuppressWarnings("unchecked")
 	private static <R, T> Optional<JsonBuilder<T>> safeCast(JsonBuilder<? extends R> builder, ClassKey<T> type) {
@@ -55,7 +55,7 @@ public class HandlerBuilderRegistry {
 				return Optional.of((JsonBuilder<T>) builder);
 			}
 		} catch (ClassCastException ignored) {
-			Forgero.LOGGER.error("Could not cast builder to type: " + type.clazz().getName());
+			Forgero.LOGGER.error("Could not cast builder to type: " + type.clazz().type().getTypeName());
 		}
 		return Optional.empty();
 	}
