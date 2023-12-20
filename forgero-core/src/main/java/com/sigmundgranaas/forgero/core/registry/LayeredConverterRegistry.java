@@ -8,6 +8,6 @@ public class LayeredConverterRegistry<T, R> extends LayeredRegistry<RankableConv
 				.filter(converter -> converter.matches(entry))
 				.max(RankableConverter::compareTo)
 				.map(converter -> converter.convert(entry))
-				.orElseThrow(() -> new RuntimeException("No converter found for " + entry));
+				.orElseThrow(() -> new RuntimeException(String.format("No converter found for %s in group %s. Available entries are: %s", entry, group, this.group(group).values())));
 	}
 }

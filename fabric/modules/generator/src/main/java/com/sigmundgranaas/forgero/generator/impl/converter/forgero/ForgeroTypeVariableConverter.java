@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.converter;
+package com.sigmundgranaas.forgero.generator.impl.converter.forgero;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +29,7 @@ public class ForgeroTypeVariableConverter implements RankableConverter<JsonEleme
 		if (typeElement.isJsonArray()) {
 			states = StreamSupport.stream(typeElement.getAsJsonArray().spliterator(), false)
 					.flatMap(type -> stateProvider.apply(type.getAsString()).stream())
+					.distinct()
 					.collect(Collectors.toList());
 		} else {
 			String type = typeElement.getAsString();
@@ -53,7 +54,6 @@ public class ForgeroTypeVariableConverter implements RankableConverter<JsonEleme
 		if (entry.isJsonObject()) {
 			var jsonObject = entry.getAsJsonObject();
 			return jsonObject.has("type");
-
 		}
 		return false;
 	}

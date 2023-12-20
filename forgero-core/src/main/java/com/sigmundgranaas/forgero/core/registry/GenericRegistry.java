@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 public class GenericRegistry<T> {
 	private final Map<String, T> registry = new ConcurrentHashMap<>();
 
-	public RegisteredReference<T> register(String id, T item) {
+	synchronized public RegisteredReference<T> register(String id, T item) {
 		if (!registry.containsKey(id)) {
 			RegisteredReference<T> reference = new RegisteredReference<>(id, item);
 			registry.put(id, item);

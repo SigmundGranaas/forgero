@@ -8,17 +8,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LayeredRegistry<T> {
 	private final Map<String, Map<String, T>> registry = new ConcurrentHashMap<>();
 
-	public GenericRegistry.RegisteredReference<T> register(String group, String id, T item) {
+	synchronized public GenericRegistry.RegisteredReference<T> register(String id, String group, T item) {
 		if (!registry.containsKey(group)) {
 			GenericRegistry.RegisteredReference<T> reference = new GenericRegistry.RegisteredReference<>(id, item);
-			registry.put(id, new ConcurrentHashMap<>());
-			registry.get(id).put(group, item);
+			registry.put(group, new ConcurrentHashMap<>());
+			registry.get(group).put(id, item);
 			return reference;
 		} else {
-			Map<String, T> groupMap = registry.get(id);
+			Map<String, T> groupMap = registry.get(group);
 			if (!groupMap.containsKey(id)) {
 				GenericRegistry.RegisteredReference<T> reference = new GenericRegistry.RegisteredReference<>(id, item);
-				groupMap.put(group, item);
+				groupMap.put(id, item);
 				return reference;
 			} else {
 				throw new IllegalStateException("Already registered entry with id: " + id);
