@@ -69,7 +69,7 @@ public class DataDirectoryRecipeGenerator {
 		Identifier id = new Identifier(replacer.applyReplacements(template.get("identifier").getAsString(), variableMap));
 		template.remove("identifier");
 		template.remove("generator_type");
-		template.remove("state_map");
+		template.remove("variables");
 
 
 		template = new Gson().fromJson(replacer.applyReplacements(template.toString(), variableMap), JsonObject.class);

@@ -3,8 +3,11 @@ package com.sigmundgranaas.forgero.generator.mixin;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.generator.impl.IdentifiedJson;
 import com.sigmundgranaas.forgero.generator.impl.Registries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,10 +24,13 @@ public class RecipeInjectionMixin {
 
 	@Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
 	public void forgero$injectDynamicRecipes(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
-		Registries.recipeProviderRegistry().values()
+		Map<Identifier, JsonObject> recipes = Registries.recipeProviderRegistry().values()
 				.stream()
 				.map(Supplier::get)
 				.flatMap(Collection::stream)
-				.forEach(recipe -> map.put(recipe.id(), recipe.json()));
+				.collect(Collectors.toMap(IdentifiedJson::id, IdentifiedJson::json));
+		
+		map.putAll(recipes);
+
 	}
 }
