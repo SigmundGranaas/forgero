@@ -24,7 +24,6 @@ public class VariableToMapTransformer {
 			Collection<?> entry = converter.apply(stateMapJson.get(key));
 			variables.put(key, entry);
 		}
-
 		return generateCombinations(variables);
 	}
 

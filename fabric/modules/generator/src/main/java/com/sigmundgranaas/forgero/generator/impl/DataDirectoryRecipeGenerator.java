@@ -33,7 +33,7 @@ public class DataDirectoryRecipeGenerator {
 
 	public Collection<IdentifiedJson> generate() {
 		return locatePathsInDirectory(directory)
-				.parallelStream()
+				.stream()
 				.map(this::loadJsonFromPath)
 				.flatMap(Optional::stream)
 				.flatMap(this::convertToIdentifiedJson)
@@ -70,6 +70,7 @@ public class DataDirectoryRecipeGenerator {
 		template.remove("identifier");
 		template.remove("generator_type");
 		template.remove("state_map");
+
 
 		template = new Gson().fromJson(replacer.applyReplacements(template.toString(), variableMap), JsonObject.class);
 		return new IdentifiedJson(id, template);

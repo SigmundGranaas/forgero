@@ -22,8 +22,6 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeLoader;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.BasicStonePartUpgradeRecipeGenerator;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.BasicWoodenToolRecipeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CraftingTableUpgradeGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.MaterialRepairToolGenerator;
@@ -65,8 +63,6 @@ public class RecipeCreatorImpl implements RecipeCreator {
 		generators.addAll(compositeRecipeGenerators());
 		generators.addAll(repairKitToolRecipeGenerators());
 		generators.addAll(constructUpgradeRecipes());
-		generators.addAll(basicWoodenPartRecipes());
-		generators.addAll(basicStonePartUpgrade());
 		generators.addAll(smeltingMetalPartRecipeGenerators());
 		generators.addAll(woodAndStoneRepairRecipeGenerator());
 		return generators.parallelStream()
@@ -145,41 +141,6 @@ public class RecipeCreatorImpl implements RecipeCreator {
 				recipes.add(new PartSmeltingRecipeGenerator(based.baseMaterial(), part, RecipeTypes.PART_BLASTING_RECIPE, templateGenerator));
 				recipes.add(new PartSmeltingRecipeGenerator(based.baseMaterial(), part, RecipeTypes.PART_SMELTING_RECIPE, templateGenerator));
 			}
-		}
-		return recipes;
-	}
-
-	private List<RecipeGenerator> basicWoodenPartRecipes() {
-		var materials = ForgeroStateRegistry.TREE.find(Type.WOOD)
-				.map(node -> node.getResources(State.class))
-				.orElse(ImmutableList.<State>builder().build());
-		var recipes = new ArrayList<RecipeGenerator>();
-		for (State material : materials) {
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "pickaxe_head", RecipeTypes.BASIC_PICKAXE_HEAD, templateGenerator));
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "axe_head", RecipeTypes.BASIC_AXE_HEAD, templateGenerator));
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "shovel_head", RecipeTypes.BASIC_SHOVEL_HEAD, templateGenerator));
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "hoe_head", RecipeTypes.BASIC_HOE_HEAD, templateGenerator));
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "handle", RecipeTypes.BASIC_HANDLE, templateGenerator));
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "sword_blade", RecipeTypes.BASIC_SWORD_BLADE, templateGenerator));
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "sword_guard", RecipeTypes.BASIC_SWORD_GUARD, templateGenerator));
-			recipes.add(new BasicWoodenToolRecipeGenerator(material, "shortsword_blade", RecipeTypes.BASIC_SHORT_SWORD_BLADE, templateGenerator));
-		}
-		return recipes;
-	}
-
-	private List<RecipeGenerator> basicStonePartUpgrade() {
-		var materials = ForgeroStateRegistry.TREE.find(Type.STONE)
-				.map(node -> node.getResources(State.class))
-				.orElse(ImmutableList.<State>builder().build());
-		var recipes = new ArrayList<RecipeGenerator>();
-		for (State material : materials) {
-			recipes.add(new BasicStonePartUpgradeRecipeGenerator(material, "pickaxe_head", RecipeTypes.ANY_PART_TO_STONE, templateGenerator));
-			recipes.add(new BasicStonePartUpgradeRecipeGenerator(material, "axe_head", RecipeTypes.ANY_PART_TO_STONE, templateGenerator));
-			recipes.add(new BasicStonePartUpgradeRecipeGenerator(material, "shovel_head", RecipeTypes.ANY_PART_TO_STONE, templateGenerator));
-			recipes.add(new BasicStonePartUpgradeRecipeGenerator(material, "hoe_head", RecipeTypes.ANY_PART_TO_STONE, templateGenerator));
-			recipes.add(new BasicStonePartUpgradeRecipeGenerator(material, "handle", RecipeTypes.ANY_PART_TO_STONE, templateGenerator));
-			recipes.add(new BasicStonePartUpgradeRecipeGenerator(material, "sword_blade", RecipeTypes.ANY_PART_TO_STONE, templateGenerator));
-			recipes.add(new BasicStonePartUpgradeRecipeGenerator(material, "sword_guard", RecipeTypes.ANY_PART_TO_STONE, templateGenerator));
 		}
 		return recipes;
 	}

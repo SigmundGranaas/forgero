@@ -53,10 +53,8 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRe
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -101,11 +99,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerRecipeGenerators() {
-		Function<State, String> idConverter = s -> StateService.INSTANCE.convert(s)
-				.map(ItemStack::getItem)
-				.map(Registry.ITEM::getId)
-				.map(Identifier::toString)
-				.orElseThrow();
+		Function<State, String> idConverter = s -> StateService.INSTANCE.getMapper().stateToContainer(s.identifier()).toString();
 
 		Function<State, String> tagOrItem = (state) -> Registry.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
 		Function<State, String> material = (state) -> state instanceof MaterialBased based ? based.baseMaterial().name() : "";

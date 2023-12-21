@@ -20,14 +20,13 @@ public class StringReplacer {
 		while (matcher.find()) {
 			String placeholder = matcher.group(1);
 			String[] parts = placeholder.split("\\.");
-			if (parts.length == 2 && variableMap.containsKey(parts[0])) {
-				String variableKey = parts[0];
+			String variableKey = parts[0];
+			if (parts.length == 2 && variableMap.containsKey(variableKey)) {
 				Object variable = variableMap.get(variableKey);
 				String operation = parts[1];
 				String replacement = variableReplacer.apply(operation, variable);
 				matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
-			} else if (parts.length == 1 && variableMap.containsKey(parts[0])) {
-				String variableKey = parts[0];
+			} else if (parts.length == 1 && variableMap.containsKey(variableKey)) {
 				Object variable = variableMap.get(variableKey);
 				String replacement = variable.toString();
 				matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
