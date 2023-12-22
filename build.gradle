@@ -53,14 +53,6 @@ subprojects { project ->
 		publishing {
 			repositories {
 				maven {
-					name = "GitHubPackages"
-					url = uri("https://maven.pkg.github.com/sigmundgranaas/forgero")
-					credentials {
-						username = "sigmundgranaas"
-						password = System.getenv("GPR_API_KEY")
-					}
-				}
-				maven {
 					name = "ArchivaMavenRepo"
 					// Determine if it's a snapshot and adjust the URL accordingly.
 					url = isSnapshotVersion(project.version) ?
@@ -76,10 +68,10 @@ subprojects { project ->
 			publications {
 				mavenJava(MavenPublication) {
 					groupId = group
-					if(project.name === 'fabric'){
+					if (project.name === 'fabric') {
 						artifactId = 'forgero-fabric'
 						archivesBaseName = 'forgero-fabric'
-					}else {
+					} else {
 						artifactId = archivesBaseName
 					}
 					from components.java
