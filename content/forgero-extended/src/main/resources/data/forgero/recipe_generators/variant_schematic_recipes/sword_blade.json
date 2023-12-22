@@ -20,6 +20,9 @@
     },
     {
       "${material.tagOrItem}": "${material.id}"
+    },
+    {
+      "${material.tagOrItem}": "${material.id}"
     }
   ],
   "result": {
