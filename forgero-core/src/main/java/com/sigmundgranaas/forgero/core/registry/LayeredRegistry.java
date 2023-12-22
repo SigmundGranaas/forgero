@@ -27,6 +27,9 @@ public class LayeredRegistry<T> {
 	}
 
 	public Map<String, T> group(String group) {
+		if (!registry.containsKey(group)) {
+			throw new IllegalStateException("No group with name: " + group + ". You are referencing an invalid function.");
+		}
 		return registry.get(group);
 	}
 

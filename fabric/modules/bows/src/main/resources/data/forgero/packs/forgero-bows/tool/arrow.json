@@ -9,24 +9,6 @@
   "construct": {
     "type": "ARROW",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "STATE_CRAFTING_RECIPE",
-        "count": 4,
-        "ingredients": [
-          {
-            "unique": true,
-            "type": "ARROW_HEAD"
-          },
-          {
-            "type": "HANDLE"
-          },
-          {
-            "type": "FEATHER"
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "type": "ARROW_HEAD"

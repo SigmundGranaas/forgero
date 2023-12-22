@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class DataDirectoryRecipeGenerator {
 	private final StringReplacer replacer;
@@ -27,7 +28,19 @@ public class DataDirectoryRecipeGenerator {
 		return loader.load(directory)
 				.stream()
 				.flatMap(this::convertToIdentifiedJson)
+				.filter(this::validateRecipe)
 				.collect(Collectors.toList());
+	}
+
+	private boolean validateRecipe(IdentifiedJson identifiedJson) {
+		if (identifiedJson.json().has("result")) {
+			JsonObject result = identifiedJson.json().getAsJsonObject("result");
+			if (result.has("item")) {
+				Identifier item = new Identifier(result.get("item").getAsString());
+				return Registry.ITEM.containsId(item);
+			}
+		}
+		return false;
 	}
 
 
