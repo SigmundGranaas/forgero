@@ -1,27 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
-import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
-import static com.sigmundgranaas.forgero.generator.api.Registry.operation;
-import static com.sigmundgranaas.forgero.generator.api.Registry.variableConverter;
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
-import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.*;
-import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
-
-import java.util.List;
-import java.util.function.Function;
-
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.BrokenToolAttributeModification;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
-import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.*;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -36,12 +18,7 @@ import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegis
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.AllPartToAllSchematicsGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
-import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.fabric.resources.dynamic.*;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
@@ -50,16 +27,25 @@ import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFuncti
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import net.minecraft.item.Items;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.registry.Registry;
-
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.item.Items;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.util.registry.Registry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.*;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 /**
  * The ForgeroPostInitialization class handles the post-initialization phase of the Forgero mod.

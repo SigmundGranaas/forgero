@@ -1,9 +1,14 @@
 package com.sigmundgranaas.forgero.generator.api.operation;
 
-import java.util.function.Function;
-
 import com.sigmundgranaas.forgero.core.registry.RankableConverter;
 
+import java.util.function.Function;
+
+/**
+ * A basic factory for creating RankableClassBasedOperation objects with the same class target.
+ *
+ * @param <T>
+ */
 public class OperationFactory<T> {
 	private final Class<T> operationClass;
 

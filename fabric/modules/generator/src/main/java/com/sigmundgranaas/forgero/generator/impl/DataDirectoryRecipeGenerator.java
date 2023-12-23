@@ -43,7 +43,6 @@ public class DataDirectoryRecipeGenerator {
 		return false;
 	}
 
-
 	private Stream<IdentifiedJson> convertToIdentifiedJson(JsonObject object) {
 		return transformer.transformStateMap(object.getAsJsonObject("variables"))
 				.stream()

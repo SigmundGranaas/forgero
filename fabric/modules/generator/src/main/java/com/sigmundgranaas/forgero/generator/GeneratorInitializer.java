@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.generator;
 
-import static com.sigmundgranaas.forgero.generator.api.Registry.operation;
-import static com.sigmundgranaas.forgero.generator.api.Registry.variableConverter;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
 
 import java.util.function.Function;
 

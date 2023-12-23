@@ -1,10 +1,18 @@
 package com.sigmundgranaas.forgero.generator.api.operation;
 
-import java.util.function.Function;
-
 import com.sigmundgranaas.forgero.core.registry.RankableConverter;
 
+import java.util.function.Function;
 
+
+/**
+ * RankableClassBasedOperation is a helper object to make it easier to create a VariableOperation for a generic input class type.
+ * See {@link OperationFactory} for a more convenient way to create operations.
+ * <p>
+ * This class' only requirement is that the input class type is the same as the class type of the operation.
+ *
+ * @param <T>
+ */
 public class RankableClassBasedOperation<T> implements RankableConverter<T, String>, VariableOperation {
 	private final Class<T> clazz;
 	private final Function<T, String> operation;
