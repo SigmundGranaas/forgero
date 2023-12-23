@@ -1,0 +1,24 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-schematic-sword_blade",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    }
+  },
+  "type": "forgero:schematic_part_crafting",
+  "ingredients": [
+    {
+      "item": "forgero:sword_blade-schematic"
+    },
+    {
+      "${material.tagOrItem}": "${material.id}"
+    },
+    {
+      "${material.tagOrItem}": "${material.id}"
+    }
+  ],
+  "result": {
+    "item": "forgero:${material.name}-sword_blade"
+  }
+}

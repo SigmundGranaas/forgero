@@ -20,6 +20,7 @@ import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotCat
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
@@ -87,7 +88,6 @@ import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercent
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.item.ItemGroup;
@@ -112,6 +112,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		registerHandlerBuilders();
 		registerItemConverters();
 	}
+
 
 	private void registerItemConverters() {
 		var settingRegistry = ItemRegistries.SETTING_PROCESSOR;

@@ -40,8 +40,7 @@ public class ToolRecipeCreator implements RecipeGenerator {
 			jsonTemplate.getAsJsonArray("pattern").add(new JsonPrimitive("G  "));
 		}
 		jsonTemplate.getAsJsonObject("result").addProperty("item", data.target());
-		jsonTemplate.getAsJsonObject("result").addProperty("count", data.count());
-		return new RecipeWrapperImpl(new Identifier(Forgero.NAMESPACE, ingredientsToRecipeId(data.ingredients())), jsonTemplate, type);
+		return new RecipeWrapperImpl(new Identifier(Forgero.NAMESPACE, ingredientsToRecipeId(data.ingredients())), jsonTemplate);
 	}
 
 	@Override

@@ -8,21 +8,6 @@
   "construct": {
     "type": "PUMMEL",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "METAL",
-            "unique": true,
-            "amount": 1
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"

@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
-import com.sigmundgranaas.forgero.minecraft.common.registry.RegistryFactory;
+import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;

@@ -9,21 +9,6 @@
   "construct": {
     "type": "SWORD_BLADE",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 4
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"

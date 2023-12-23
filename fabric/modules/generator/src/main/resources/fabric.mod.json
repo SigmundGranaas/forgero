@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-generator",
+  "version": "${version}",
+  "name": "Forgero Generator module",
+  "description": "Mod for generating dynamic resources for Forgero",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.generator.GeneratorInitializer"
+    ]
+  },
+  "mixins": [
+    "generator.mixins.json"
+  ],
+  "depends": {
+    "forgero-fabric-core": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero"
+      }
+    }
+  }
+}

@@ -9,20 +9,6 @@
   "construct": {
     "type": "BOW",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "STATE_CRAFTING_RECIPE",
-        "ingredients": [
-          {
-            "unique": true,
-            "type": "BOW_LIMB"
-          },
-          {
-            "type": "STRING"
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "type": "BOW_LIMB"

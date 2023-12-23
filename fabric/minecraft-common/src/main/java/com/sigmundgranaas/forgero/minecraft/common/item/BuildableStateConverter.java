@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import com.sigmundgranaas.forgero.core.registry.RankableConverter;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.minecraft.common.registry.RankableConverter;
 import lombok.Builder;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 @Builder(toBuilder = true)
 public class BuildableStateConverter implements RankableConverter<StateProvider, ItemData> {

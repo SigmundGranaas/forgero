@@ -1,14 +1,15 @@
 package com.sigmundgranaas.forgero.core.property.v2.feature;
 
-import com.google.gson.JsonObject;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.util.TypeToken;
+
 public class FeatureRegistry {
 	private static final Map<ClassKey<?>, FeatureBuilder<?>> builders = new HashMap<>();
-	private static final Map<String, Class<? extends Feature>> idMap = new HashMap<>();
+	private static final Map<String, TypeToken<? extends Feature>> idMap = new HashMap<>();
 
 
 	public static <T extends Feature> Optional<T> of(ClassKey<T> key, JsonObject object) {
@@ -20,7 +21,7 @@ public class FeatureRegistry {
 	public static Optional<Feature> of(JsonObject object) {
 		if (object.has("type")) {
 			String type = object.get("type").getAsString();
-			Optional<Class<? extends Feature>> clazz = Optional.ofNullable(idMap.get(type));
+			Optional<TypeToken<? extends Feature>> clazz = Optional.ofNullable(idMap.get(type));
 			if (clazz.isPresent()) {
 				return clazz.map(zz -> new ClassKey<>(type, zz))
 						.flatMap(key -> Optional.ofNullable(builders.get(key)))

@@ -1,0 +1,29 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-schematic-${variant}",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    },
+    "variant": [
+      "piglin_hoe_head",
+      "piglin_shovel_head",
+      "piglin_sword_blade"
+    ]
+  },
+  "type": "forgero:schematic_part_crafting",
+  "ingredients": [
+    {
+      "item": "forgero:${variant}-schematic"
+    },
+    {
+      "${material.tagOrItem}": "${material.id}"
+    },
+    {
+      "${material.tagOrItem}": "${material.id}"
+    }
+  ],
+  "result": {
+    "item": "forgero:${material.name}-${variant}"
+  }
+}

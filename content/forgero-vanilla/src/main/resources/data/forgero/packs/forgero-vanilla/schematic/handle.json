@@ -8,21 +8,6 @@
   "construct": {
     "type": "HANDLE",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"

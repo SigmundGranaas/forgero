@@ -12,12 +12,12 @@ import java.util.stream.Stream;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
+import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemData;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
-import com.sigmundgranaas.forgero.minecraft.common.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Registrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
