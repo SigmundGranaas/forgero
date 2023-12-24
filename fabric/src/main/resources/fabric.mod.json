@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-fabric-core",
+  "id": "forgero",
   "version": "${version}",
   "name": "Forgero for Fabric",
   "description": "Equipment crafting expansion mod for Fabric!",

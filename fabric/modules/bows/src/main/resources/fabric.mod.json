@@ -50,7 +50,7 @@
         "library"
       ],
       "parent": {
-        "id": "forgero-fabric-core"
+        "id": "forgero"
       }
     }
   }
