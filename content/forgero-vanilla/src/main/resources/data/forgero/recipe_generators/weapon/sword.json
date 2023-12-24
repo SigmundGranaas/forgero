@@ -1,6 +1,6 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-sword-state-crafting",
+  "identifier": "forgero:${material.name}-sword",
   "variables": {
     "material": {
       "type": "TOOL_MATERIAL"

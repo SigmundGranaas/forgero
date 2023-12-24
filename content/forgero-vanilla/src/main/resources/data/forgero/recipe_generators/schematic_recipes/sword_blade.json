@@ -1,6 +1,6 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-schematic-sword_blade",
+  "identifier": "forgero:${material.name}-sword_blade",
   "variables": {
     "material": {
       "type": "TOOL_MATERIAL"
