@@ -1,11 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.use;
 
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -16,14 +22,14 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY_TARGET;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
 
 public class ThrowableItem extends PersistentProjectileEntity {
 	private static final TrackedData<ItemStack> STACK = DataTracker.registerData(ThrowableItem.class, TrackedDataHandlerRegistry.ITEM_STACK);
@@ -67,6 +73,7 @@ public class ThrowableItem extends PersistentProjectileEntity {
 		return this.inGround;
 	}
 
+
 	@Override
 	public void writeCustomDataToNbt(NbtCompound nbt) {
 		super.writeCustomDataToNbt(nbt);
@@ -87,10 +94,36 @@ public class ThrowableItem extends PersistentProjectileEntity {
 	}
 
 	@Override
+	protected void onBlockHit(BlockHitResult blockHitResult) {
+		super.onBlockHit(blockHitResult);
+
+		MatchContext context = MatchContext.of()
+				.put(ENTITY, this.getOwner())
+				.put(WORLD, this.getWorld());
+		BlockPos pos = blockHitResult.getBlockPos();
+		cachedFilteredFeatures(this.asItemStack(), OnHitBlockFeature.KEY, context.put(BLOCK_TARGET, this.getWorld().getBlockState(pos)))
+				.forEach(handler -> {
+					handler.onHit(this.getOwner(), this.getWorld(), pos);
+					handler.handle(this, this.asItemStack(), Hand.MAIN_HAND);
+				});
+	}
+
+	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		super.onEntityHit(entityHitResult);
 
 		Entity entity = entityHitResult.getEntity();
+
+		MatchContext context = MatchContext.of()
+				.put(ENTITY, this.getOwner())
+				.put(WORLD, this.getWorld());
+
+		cachedFilteredFeatures(asItemStack(), OnHitEntityFeature.KEY, context.put(ENTITY_TARGET, entityHitResult.getEntity()))
+				.forEach(handler -> {
+					handler.onHit(this.getOwner(), this.getWorld(), entityHitResult.getEntity());
+					handler.handle(this, asItemStack(), Hand.MAIN_HAND);
+				});
+
 		float damage = (float) getDamage(entity);
 
 		Entity owner = this.getOwner();
