@@ -3,7 +3,7 @@
   "id": "forgero-generator",
   "version": "${version}",
   "name": "Forgero Generator module",
-  "description": "Module for generating dynamic resources for Forgero",
+  "description": "Dynamic resource generator for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],

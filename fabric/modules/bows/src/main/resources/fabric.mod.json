@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "forgero-bows",
   "version": "${version}",
-  "name": "Forgero bow modules",
-  "description": "Adds support for bows and arrows to Forgero",
+  "name": "Forgero bow module",
+  "description": "Bows and arrows support for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
