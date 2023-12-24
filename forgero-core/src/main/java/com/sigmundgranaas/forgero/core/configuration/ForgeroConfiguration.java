@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
-	public List<String> disabledResources = new ArrayList<>();
+	public List<String> disabledResources = Collections.emptyList();
 	@NotNull
 	public List<String> disabledPacks = Collections.emptyList();
 	@NotNull
