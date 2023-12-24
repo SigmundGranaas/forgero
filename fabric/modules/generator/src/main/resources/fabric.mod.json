@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "forgero-generator",
   "version": "${version}",
-  "name": "Forgero Generator module",
+  "name": "Forgero generator module",
   "description": "Dynamic resource generator for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
