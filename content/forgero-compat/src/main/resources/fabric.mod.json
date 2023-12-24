@@ -3,7 +3,7 @@
   "id": "forgero-compat",
   "version": "${version}",
   "name": "Forgero mod compatibility pack",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Forgero content compatibility for Mythic Metals, BetterNether, Byg, and more!",
   "authors": [
     "Sigmund Granaas Sandring"
   ],

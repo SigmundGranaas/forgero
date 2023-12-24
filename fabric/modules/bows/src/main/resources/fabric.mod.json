@@ -3,7 +3,7 @@
   "id": "forgero-bows",
   "version": "${version}",
   "name": "Forgero bow modules",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Adds support for bows and arrows to Forgero",
   "authors": [
     "Sigmund Granaas Sandring"
   ],

@@ -3,7 +3,7 @@
   "id": "forgero-fabric-compat",
   "version": "${version}",
   "name": "Forgero Fabric compatibility pack",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Forgero compatibility pack for Fabric mods. Adds support for LambDynamicLights, Patchouli, ModMenu and BetterCombat.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
