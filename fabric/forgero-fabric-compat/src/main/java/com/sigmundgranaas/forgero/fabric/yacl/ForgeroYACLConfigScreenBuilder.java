@@ -22,7 +22,9 @@ public class ForgeroYACLConfigScreenBuilder {
 	}
 
 	private static YetAnotherConfigLib createBuilder() {
-		return YetAnotherConfigLib.createBuilder().title(Text.translatable("forgero.config.title"))
+		return YetAnotherConfigLib.createBuilder()
+                  .title(Text.translatable("forgero.config.title"))
+                  .save(ForgeroConfigurationLoader::save)
 				  .category(
 							ConfigCategory.createBuilder()
 										  .name(Text.translatable("forgero.config.category.main.title"))
