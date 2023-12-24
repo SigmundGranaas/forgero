@@ -92,8 +92,8 @@ public class HungerHandler {
 
 	private ConfigurationValues getConfigurationValues() {
 		return new ConfigurationValues(
-				ForgeroConfigurationLoader.configuration.WeightIncreasesHungerCenterPoint,
-				ForgeroConfigurationLoader.configuration.WeightIncreasesHungerScaler,
+				ForgeroConfigurationLoader.configuration.weightIncreasesHungerCenterPoint,
+				ForgeroConfigurationLoader.configuration.weightIncreasesHungerScalar,
 				ForgeroConfigurationLoader.configuration.WeightIncreasesHungerBaseChance
 		);
 	}
