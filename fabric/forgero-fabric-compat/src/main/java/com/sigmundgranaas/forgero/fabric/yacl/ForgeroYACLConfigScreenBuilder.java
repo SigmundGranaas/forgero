@@ -20,6 +20,12 @@ import net.minecraft.text.Text;
 
 import java.util.Collections;
 
+/**
+ * Forgero config screen builder, uses YACL to generate the config screen.
+ * <p>
+ * Note: Always check if YACL is loaded using <code>ForgeroCompatInitializer.yacl.get()</code> before invoking any methods inside this class.
+ * </p>
+ */
 public class ForgeroYACLConfigScreenBuilder {
 	public static Screen createScreen(Screen parentScreen) {
 		return createBuilder().generateScreen(parentScreen);

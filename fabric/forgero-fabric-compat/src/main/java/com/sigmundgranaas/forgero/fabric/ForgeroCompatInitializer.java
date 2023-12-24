@@ -16,6 +16,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> patchouli;
 	public static final Supplier<Boolean> bettercombat;
 	public static final Supplier<Boolean> mythicmetals;
+	public static final Supplier<Boolean> yacl;
 
 
 	static {
@@ -23,6 +24,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 		mythicmetals = () -> isModLoaded("mythicmetals");
 		patchouli = () -> isModLoaded("patchouli");
 		bettercombat = () -> isModLoaded("bettercombat");
+		yacl = () -> isModLoaded("yet-another-config-lib") || isModLoaded("yet_another_config_lib_v3");
 	}
 
 	public static boolean isModLoaded(String id) {
