@@ -1,6 +1,6 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-${tool}",
+  "identifier": "forgero:${material.name}-${tool}_head-handle",
   "variables": {
     "material": {
       "type": "TOOL_MATERIAL"
