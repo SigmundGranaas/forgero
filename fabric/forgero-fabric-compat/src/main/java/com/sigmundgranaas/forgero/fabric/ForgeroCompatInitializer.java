@@ -14,7 +14,6 @@ import net.fabricmc.loader.api.FabricLoader;
 public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> toolstats;
 	public static final Supplier<Boolean> patchouli;
-	public static final Supplier<Boolean> modmenu;
 	public static final Supplier<Boolean> bettercombat;
 	public static final Supplier<Boolean> mythicmetals;
 
@@ -23,7 +22,6 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 		toolstats = () -> isModLoaded("toolstats");
 		mythicmetals = () -> isModLoaded("mythicmetals");
 		patchouli = () -> isModLoaded("patchouli");
-		modmenu = () -> isModLoaded("modmenu");
 		bettercombat = () -> isModLoaded("bettercombat");
 	}
 
