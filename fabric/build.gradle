@@ -1,123 +1,147 @@
 plugins {
-    id "fabric-loom" version '1.4-SNAPSHOT' apply true
-    id "com.modrinth.minotaur" version "2.+"
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
+	id "fabric-loom" version '1.4-SNAPSHOT' apply true
+	id "com.modrinth.minotaur" version "2.+"
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 configure(allprojects) {
-    apply plugin: "idea"
-    apply plugin: 'fabric-loom'
+	apply plugin: "idea"
+	apply plugin: 'fabric-loom'
 }
 
 archivesBaseName = "forgero-fabric"
 
 dependencies {
-    minecraft "com.mojang:minecraft:$project.minecraft_version"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft "com.mojang:minecraft:$project.minecraft_version"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    include project(':forgero-core')
+	include project(':forgero-core')
 
-    include project(':fabric:forgero-fabric-core')
-    include project(':fabric:minecraft-common')
-    include project(':fabric:forgero-fabric-compat')
+	include project(':fabric:forgero-fabric-core')
+	include project(':fabric:minecraft-common')
+	include project(':fabric:forgero-fabric-compat')
 
-    include project(':content:forgero-vanilla')
-    include project(':content:forgero-extended')
-    include project(':content:forgero-compat')
-    include project(':content:forgero-structures')
-    include project(':fabric:modules:generator')
+	include project(':content:forgero-vanilla')
+	include project(':content:forgero-extended')
+	include project(':content:forgero-compat')
+	include project(':content:forgero-structures')
+	include project(':fabric:modules:generator')
 
-    api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 
-    runtimeOnly project(':content:forgero-vanilla')
-    runtimeOnly project(':content:forgero-extended')
-    runtimeOnly project(':content:forgero-compat')
-    runtimeOnly project(':content:forgero-structures')
+	runtimeOnly project(':content:forgero-vanilla')
+	runtimeOnly project(':content:forgero-extended')
+	runtimeOnly project(':content:forgero-compat')
+	runtimeOnly project(':content:forgero-structures')
 }
 
 subprojects {
-    dependencies {
-        minecraft "com.mojang:minecraft:$project.minecraft_version"
-        mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-        modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+	dependencies {
+		minecraft "com.mojang:minecraft:$project.minecraft_version"
+		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
 
-        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+		annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-        implementation 'org.jetbrains:annotations:23.0.0'
-        implementation 'org.projectlombok:lombok:1.18.24'
-        testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
-    }
+		implementation 'org.jetbrains:annotations:23.0.0'
+		implementation 'org.projectlombok:lombok:1.18.24'
+		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+	}
 }
 
 curseforge {
-    apiKey = System.getenv("CURSEFORGE_API_KEY") ?: ""
-    project {
-        id = '581435'
-        changelogType = "markdown"
-        changelog = file('../changelog.md')
+	apiKey = System.getenv("CURSEFORGE_API_KEY") ?: ""
+	project {
+		id = '581435'
+		changelogType = "markdown"
+		changelog = file('../changelog.md')
 
-        releaseType = project.release_type
-        addGameVersion project.minecraft_version
-        addGameVersion 'Fabric'
-        addGameVersion 'Quilt'
-        addGameVersion "Java 17"
+		releaseType = project.release_type
+		addGameVersion project.minecraft_version
+		addGameVersion 'Fabric'
+		addGameVersion 'Quilt'
+		addGameVersion "Java 17"
 
-        mainArtifact(remapJar) {
-            displayName = "Forgero [Fabric]: $version"
-            relations {
-                embeddedLibrary 'arrp'
-                requiredDependency 'fabric-api'
-                optionalDependency 'patchouli'
-            }
-        }
-    }
-    options {
-        forgeGradleIntegration = false // defaults to true
-    }
+		mainArtifact(remapJar) {
+			displayName = "Forgero [Fabric]: $version"
+			relations {
+				embeddedLibrary 'arrp'
+				requiredDependency 'fabric-api'
+				optionalDependency 'patchouli'
+				optionalDependency "lambdynamiclights"
+				optionalDependency "better-combat"
+				optionalDependency "modmenu"
+				optionalDependency "ae2"
+				optionalDependency "mythicmetals"
+				optionalDependency "betternether"
+				optionalDependency "byg"
+				optionalDependency "mysticalcrops"
+				optionalDependency "mythicmetals"
+				optionalDependency "vsas"
+				optionalDependency "wiredredstone"
+			}
+		}
+	}
+	options {
+		forgeGradleIntegration = false // defaults to true
+	}
 }
 
 modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
+	token = System.getenv("MODRINTH_TOKEN")
 
-    projectId = project.modid
-    versionNumber = version
-    versionType = project.release_type
-    uploadFile = remapJar
-    gameVersions = [minecraft_version]
-    loaders = ["fabric", "quilt"]
-    versionName = "Forgero $version"
-    changelog = file('../changelog.md').text
-    dependencies {
-        required.project "fabric-api"
-    }
+	projectId = project.modid
+	versionNumber = version
+	versionType = project.release_type
+	uploadFile = remapJar
+	gameVersions = [minecraft_version]
+	loaders = ["fabric", "quilt"]
+	versionName = "Forgero $version"
+	changelog = file('../changelog.md').text
+	dependencies {
+		embedded.project "arrp"
+		required.project "fabric-api"
+		optional.project "patchouli"
+		optional.project "lambdynamiclights"
+		optional.project "better-combat"
+		optional.project "modmenu"
+		optional.project "ae2"
+		optional.project "mythicmetals"
+		optional.project "betternether"
+		optional.project "byg"
+		optional.project "mysticalcrops"
+		optional.project "mythicmetals"
+		optional.project "vsas"
+		optional.project "wiredredstone"
+	}
 }
 
 task publishToModrinthAndCurseForge {
-    dependsOn 'modrinth', 'curseforge'
+	dependsOn 'modrinth', 'curseforge'
 }
 
 allprojects {
-    repositories {
-        maven { url "https://api.modrinth.com/maven" }
-        maven { url "https://cursemaven.com" }
-        maven { url 'https://jitpack.io' }
-    }
+	repositories {
+		maven { url "https://api.modrinth.com/maven" }
+		maven { url "https://cursemaven.com" }
+		maven { url 'https://jitpack.io' }
+	}
 
-    processResources {
-        inputs.property "version", rootProject.version
+	processResources {
+		inputs.property "version", rootProject.version
 
-        filesMatching("fabric.mod.json") {
-            expand "version": rootProject.version
-        }
-    }
+		filesMatching("fabric.mod.json") {
+			expand "version": rootProject.version
+		}
+	}
 
-    jar {
-        from("LICENSE") {
-            rename { "${it}_${archivesBaseName}" }
-        }
-    }
-    java {
-        withSourcesJar()
-    }
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${archivesBaseName}" }
+		}
+	}
+	java {
+		withSourcesJar()
+	}
 }
