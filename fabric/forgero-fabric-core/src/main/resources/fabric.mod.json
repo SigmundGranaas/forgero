@@ -47,9 +47,17 @@
   },
   "custom": {
     "forgeroResource": true,
-    "modmenu": {
-      "links": {
-        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+    "custom": {
+      "modmenu": {
+        "links": {
+          "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+        },
+        "badges": [
+          "library"
+        ],
+        "parent": {
+          "id": "forgero"
+        }
       }
     }
   }
