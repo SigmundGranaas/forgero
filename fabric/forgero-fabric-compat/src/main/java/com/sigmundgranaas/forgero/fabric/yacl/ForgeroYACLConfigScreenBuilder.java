@@ -134,7 +134,7 @@ public class ForgeroYACLConfigScreenBuilder {
 																		 .name(Text.translatable("forgero.config.enableRepairKits"))
 																		 .tooltip(Text.translatable("forgero.config.enableRepairKits.tooltip"))
 																		 .binding(
-																				 false,
+																				 true,
 																				 () -> ForgeroConfigurationLoader.configuration.enableRepairKits,
 																				 newValue -> ForgeroConfigurationLoader.configuration.enableRepairKits = newValue
 																		 ).controller(BooleanController::new).build())
