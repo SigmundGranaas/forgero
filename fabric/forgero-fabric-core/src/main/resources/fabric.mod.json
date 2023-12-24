@@ -51,11 +51,11 @@
       "links": {
         "modmenu.discord": "https://discord.gg/v6sDsftE9N"
       },
-      "badges": [
-        "library"
-      ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Modular example library",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

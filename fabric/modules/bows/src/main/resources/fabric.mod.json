@@ -50,7 +50,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }
