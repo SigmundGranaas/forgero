@@ -91,14 +91,6 @@ public class ForgeroYACLConfigScreenBuilder {
 																				 newValue -> ForgeroConfigurationLoader.configuration.disableVanillaLoot = newValue
 																		 ).controller(BooleanController::new).build())
 															.option(Option.createBuilder(Boolean.class)
-																		 .name(Text.translatable("forgero.config.disableVanillaLoot"))
-																		 .tooltip(Text.translatable("forgero.config.disableVanillaLoot.tooltip"))
-																		 .binding(
-																				 false,
-																				 () -> ForgeroConfigurationLoader.configuration.disableVanillaLoot,
-																				 newValue -> ForgeroConfigurationLoader.configuration.disableVanillaLoot = newValue
-																		 ).controller(BooleanController::new).build())
-															.option(Option.createBuilder(Boolean.class)
 																		 .name(Text.translatable("forgero.config.disableVanillaTools"))
 																		 .tooltip(Text.translatable("forgero.config.disableVanillaTools.tooltip"))
 																		 .binding(
