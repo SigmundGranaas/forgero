@@ -9,9 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
 import java.util.HashMap;
-
 
 @Mixin(ModMenu.class)
 public class ModMenuInitMixin {
@@ -21,10 +19,11 @@ public class ModMenuInitMixin {
 
 	@Inject(method = "onInitializeClient", at = @At(value = "TAIL"), remap = false)
 	private void modify(CallbackInfo ci) {
-		var map = new HashMap<>(configScreenFactories);
+		var configScreenFactoriesMutable = new HashMap<>(configScreenFactories);
 		String compat = "forgero-fabric-compat";
-		map.put("forgero", map.get(compat));
-		map.remove(compat);
-		configScreenFactories = ImmutableMap.copyOf(map);
+
+		configScreenFactoriesMutable.put("forgero-fabric-core", configScreenFactoriesMutable.get(compat));
+		configScreenFactoriesMutable.remove(compat);
+		configScreenFactories = ImmutableMap.copyOf(configScreenFactoriesMutable);
 	}
 }
