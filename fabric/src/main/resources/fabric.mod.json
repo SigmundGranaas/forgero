@@ -26,7 +26,8 @@
     "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.19.2",
-    "java": ">=17"
+    "java": ">=17",
+    "yet_another_config_lib_v3": "*"
   },
   "custom": {
     "forgeroResource": true,

@@ -14,6 +14,10 @@ repositories {
 	maven { url 'https://maven.kosmx.dev/' }
 	maven { url 'https://jitpack.io' }
 	maven { url = uri("https://ueaj.dev/maven") }
+	maven {
+		name = "Xander Maven"
+		url = "https://maven.isxander.dev/releases"
+	}
 	mavenLocal()
 }
 
@@ -130,6 +134,9 @@ dependencies {
 	modLocalRuntime "maven.modrinth:lazydfu:4SHylIO9"
 	modLocalRuntime "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
 	modLocalRuntime "maven.modrinth:just-load:ob5o9Cf5"
+
+	// YetAnotherConfigLib
+	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 }
 
 sourceSets {
