@@ -26,6 +26,7 @@ dependencies {
 	include project(':content:forgero-extended')
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
+	include project(':fabric:modules:generator')
 
 	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 
@@ -70,6 +71,17 @@ curseforge {
 				embeddedLibrary 'arrp'
 				requiredDependency 'fabric-api'
 				optionalDependency 'patchouli'
+				optionalDependency "lambdynamiclights"
+				optionalDependency "better-combat"
+				optionalDependency "modmenu"
+				optionalDependency "ae2"
+				optionalDependency "mythicmetals"
+				optionalDependency "betternether"
+				optionalDependency "byg"
+				optionalDependency "mysticalcrops"
+				optionalDependency "mythicmetals"
+				optionalDependency "vsas"
+				optionalDependency "wiredredstone"
 			}
 		}
 	}
@@ -90,7 +102,20 @@ modrinth {
 	versionName = "Forgero $version"
 	changelog = file('../changelog.md').text
 	dependencies {
+		embedded.project "arrp"
 		required.project "fabric-api"
+		optional.project "patchouli"
+		optional.project "lambdynamiclights"
+		optional.project "better-combat"
+		optional.project "modmenu"
+		optional.project "ae2"
+		optional.project "mythicmetals"
+		optional.project "betternether"
+		optional.project "byg"
+		optional.project "mysticalcrops"
+		optional.project "mythicmetals"
+		optional.project "vsas"
+		optional.project "wiredredstone"
 	}
 }
 
@@ -103,9 +128,6 @@ allprojects {
 		maven { url "https://api.modrinth.com/maven" }
 		maven { url "https://cursemaven.com" }
 		maven { url 'https://jitpack.io' }
-		maven {
-			url = uri("https://ueaj.dev/maven")
-		}
 	}
 
 	processResources {

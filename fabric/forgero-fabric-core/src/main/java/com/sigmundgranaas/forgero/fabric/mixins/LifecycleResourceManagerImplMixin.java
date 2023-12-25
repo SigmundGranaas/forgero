@@ -11,6 +11,8 @@ import static com.sigmundgranaas.forgero.fabric.client.ForgeroClient.TEXTURES;
 import java.util.List;
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
+import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.texture.V2.FileLoader;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
@@ -44,16 +46,18 @@ public abstract class LifecycleResourceManagerImplMixin {
 			var textureId = id.getPath().replace("textures/item/", id.getNamespace() + ":");
 			if (TEXTURES.containsKey(textureId)) {
 				FileLoader loader = new FileService();
+				var template = TEXTURES.get(textureId);
+				if(template instanceof PaletteTemplateModel paletteTemplateModel){
+					var texture = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getTexture(paletteTemplateModel);
+					if (texture.isPresent()) {
+						var metadata = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getMetadata(paletteTemplateModel, ".mcmeta");
+						Resource resource;
 
-				var texture = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getTexture(TEXTURES.get(textureId));
-				if (texture.isPresent()) {
-					var metadata = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getMetadata(ForgeroClient.TEXTURES.get(textureId), ".mcmeta");
-					Resource resource;
-
-					resource = metadata
-							.map(object -> new Resource(packs.get(0), texture.get()::getStream, convert(object)))
-							.orElseGet(() -> new Resource(packs.get(0), texture.get()::getStream));
-					cir.setReturnValue(Optional.of(resource));
+						resource = metadata
+								.map(object -> new Resource(packs.get(0), texture.get()::getStream, convert(object)))
+								.orElseGet(() -> new Resource(packs.get(0), texture.get()::getStream));
+						cir.setReturnValue(Optional.of(resource));
+					}
 				}
 			}
 		}

@@ -18,6 +18,7 @@ import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.model.*;
+import com.sigmundgranaas.forgero.core.texture.V2.Texture;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.MutableMatchContext;
@@ -195,7 +196,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	}
 
 	private Optional<UnbakedDynamicModel> modelConverter(ModelTemplate input) {
-		var textureList = new ArrayList<PaletteTemplateModel>();
+		var textureList = new ArrayList<ModelTemplate>();
 		if (input instanceof CompositeModelTemplate model) {
 			model.getModels().forEach(template -> textureCollector(template, textureList));
 			var unbakedModel = new Unbaked2DTexturedModel(loader, textureGetter, textureList, "dummy");
@@ -208,19 +209,22 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		return Optional.empty();
 	}
 
-	private void textureCollector(ModelTemplate template, List<PaletteTemplateModel> accumulator) {
+	private void textureCollector(ModelTemplate template, List<ModelTemplate> accumulator) {
 		if (template instanceof PaletteTemplateModel palette) {
 			textureCollector(palette, accumulator);
 		} else if (template instanceof CompositeModelTemplate composite) {
 			textureCollector(composite, accumulator);
+		} else if(template instanceof TextureModel textureModel){
+			textureCollector(textureModel, accumulator);
 		}
 	}
 
-	private void textureCollector(PaletteTemplateModel template, List<PaletteTemplateModel> accumulator) {
+	private void textureCollector(PaletteTemplateModel template, List<ModelTemplate> accumulator) {
 		accumulator.add(template);
+		template.children().forEach(child -> textureCollector(child, accumulator));
 	}
 
-	private void textureCollector(CompositeModelTemplate template, List<PaletteTemplateModel> accumulator) {
+	private void textureCollector(CompositeModelTemplate template, List<ModelTemplate> accumulator) {
 		template.getModels().forEach(model -> textureCollector(model, accumulator));
 	}
 
@@ -228,6 +232,11 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
 
 	}
+	private void textureCollector(TextureModel template, List<ModelTemplate> accumulator) {
+		accumulator.add(template);
+		template.children().forEach(child -> textureCollector(child, accumulator));
+	}
+
 
 	@Nullable
 	@Override

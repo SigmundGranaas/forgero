@@ -1,7 +1,8 @@
 {
-  "type": "HIDE",
+  "type": "FEATHER",
   "name": "feather",
   "parent": "hide_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "HOST",
     "id": "minecraft:feather"

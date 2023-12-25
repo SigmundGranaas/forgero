@@ -20,7 +20,6 @@ public class BottledSoulItem extends Item {
 		super(settings);
 	}
 
-
 	@Override
 	public Text getName(ItemStack stack) {
 		Optional<Soul> soul = SoulParser.of(stack);

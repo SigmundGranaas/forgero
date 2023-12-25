@@ -1,0 +1,38 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${stone.name}-${wood.name}-${part}-stone_upgrade-recipe",
+  "variables": {
+    "stone": {
+      "type": "STONE"
+    },
+    "wood": {
+      "type": "WOOD"
+    },
+    "part": [
+      "axe_head",
+      "pickaxe_head",
+      "shovel_head",
+      "hoe_head",
+      "sword_blade",
+      "sword_guard",
+      "handle",
+      "binding"
+    ]
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "yx"
+  ],
+  "key": {
+    "x": {
+      "${stone.tagOrItem}": "${stone.id}"
+    },
+    "y": {
+      "item": "forgero:${wood.name}-${part}"
+    }
+  },
+  "result": {
+    "item": "forgero:${stone.name}-${part}"
+  }
+}

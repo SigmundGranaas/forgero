@@ -30,6 +30,7 @@ public class CompositeParser implements CompoundParser<State> {
 		if (tool.isPresent()) {
 			return tool;
 		}
+
 		var part = new SchematicPartParser(supplier).parse(compound);
 		if (part.isPresent()) {
 			return part;

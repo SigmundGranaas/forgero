@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeW
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
+
 public class PartSmeltingRecipeGenerator implements RecipeGenerator {
 
 	private final State material;
@@ -45,6 +46,6 @@ public class PartSmeltingRecipeGenerator implements RecipeGenerator {
 		template.addProperty("result", result);
 		template.addProperty("group", material.name());
 		Identifier id = new Identifier(part.identifier() + "-" + this.template.getName());
-		return new RecipeWrapperImpl(id, template, this.template);
+		return new RecipeWrapperImpl(id, template);
 	}
 }

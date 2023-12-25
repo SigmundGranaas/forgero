@@ -3,7 +3,7 @@
   "id": "forgero-compat",
   "version": "${version}",
   "name": "Forgero mod compatibility pack",
-  "description": "Forgero extension pack for mod compatability",
+  "description": "Mod compatibility pack for Forgero. Adds compatibility for mods such as Mythic Metals, BetterNether, and BYG.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],

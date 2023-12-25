@@ -1,0 +1,24 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${wood.name}-hoe_head-basic_recipe",
+  "variables": {
+    "wood": {
+      "type": "WOOD"
+    }
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxi"
+  ],
+  "key": {
+    "x": {
+      "item": "${wood.namespace}:${wood.name}_planks"
+    },
+    "i": {
+      "item": "${wood.namespace}:${wood.name}_slab"
+    }
+  },
+  "result": {
+    "item": "forgero:${wood.name}-hoe_head"
+  }
+}

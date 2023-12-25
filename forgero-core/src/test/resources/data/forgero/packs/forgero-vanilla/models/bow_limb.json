@@ -1,0 +1,31 @@
+{
+  "type": "BOW_LIMB",
+  "models": [
+    {
+      "name": "bow_limb",
+      "template": "bow_limb.png",
+      "type": "GENERATE",
+      "palette": "WOOD",
+      "order": 20
+    },
+    {
+      "name": "bow_handle",
+      "template": "bow_handle.png",
+      "type": "GENERATE",
+      "palette": "WOOD",
+      "order": 20
+    },
+    {
+      "modelType": "BASED_COMPOSITE",
+      "template": "bow_limb"
+    },
+    {
+      "target": [
+        "type:WOOD",
+        "type:BOW_LIMB_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "bow_limb"
+    }
+  ]
+}

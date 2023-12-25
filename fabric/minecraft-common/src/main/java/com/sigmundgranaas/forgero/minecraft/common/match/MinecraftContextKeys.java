@@ -3,6 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.match;
 
 import com.sigmundgranaas.forgero.core.util.match.ContextKey;
 import net.minecraft.entity.Entity;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

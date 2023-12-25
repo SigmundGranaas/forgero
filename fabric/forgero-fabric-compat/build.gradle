@@ -1,7 +1,6 @@
 repositories {
-	maven { url "https://api.modrinth.com/maven" }
+	mavenCentral()
 	maven { url "https://maven.shedaniel.me/" }
-	maven { url "https://cursemaven.com" }
 	maven { url 'https://maven.blamejared.com' }
 	maven { url "https://minecraft.guntram.de/maven/" }
 	maven { url "https://maven.terraformersmc.com/" }
@@ -13,7 +12,12 @@ repositories {
 	maven { url 'https://maven.gegy.dev' }
 	maven { url 'https://maven.kosmx.dev/' }
 	maven { url 'https://jitpack.io' }
-	maven { url = uri("https://ueaj.dev/maven") }
+	maven {
+		name = "Xander Maven"
+		url = "https://maven.isxander.dev/releases"
+	}
+	maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
+
 	mavenLocal()
 }
 
@@ -23,8 +27,11 @@ dependencies {
 	localRuntime project(':content:forgero-compat')
 	localRuntime project(':content:forgero-structures')
 
+	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
+
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+	implementation project(path: ':fabric:modules:generator', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
 	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
@@ -51,7 +58,7 @@ dependencies {
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"
+	// modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
@@ -117,6 +124,10 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${this.modmenu_version}")
 
 	modLocalRuntime "maven.modrinth:just-load:${project.justload_version}"
+
+
+	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
+
 }
 
 sourceSets {

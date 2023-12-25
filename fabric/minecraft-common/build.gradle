@@ -1,6 +1,5 @@
 dependencies {
 	api project(':forgero-core')
-
 }
 
 loom {

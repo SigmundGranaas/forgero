@@ -7,24 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
-
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.model.TextureModel;
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.JsonUnbakedModelOverrideMixin;
 
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.Baker;
+import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelElement;
@@ -38,7 +33,7 @@ import net.minecraft.util.math.Direction;
 public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 	public static final String TRANSPARENT_BASE_IDENTIFIER = "transparent_base";
 	private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
-	private final List<PaletteTemplateModel> textures;
+	private final List<ModelTemplate> textures;
 	private final List<JsonObject> displayOverrides;
 	private final Map<String, Offset> offsetMap;
 	private final Map<String, Integer> resolutionMap;
@@ -47,7 +42,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 	private final Baker loader;
 	private final Function<SpriteIdentifier, Sprite> textureGetter;
 
-	public Unbaked2DTexturedModel(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, List<PaletteTemplateModel> textures, String id) {
+	public Unbaked2DTexturedModel(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, List<ModelTemplate> textures, String id) {
 		this.loader = loader;
 		this.textureGetter = textureGetter;
 		this.textures = textures;
@@ -56,11 +51,14 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		this.resolutionMap = new HashMap<>();
 		this.indexMap = new HashMap<>();
 		this.displayOverrides = new ArrayList<>();
-		this.textures.sort(Comparator.comparing(PaletteTemplateModel::order));
+		this.textures.sort(Comparator.comparing(ModelTemplate::order));
 	}
 
-	private String textureName(PaletteTemplateModel model) {
-		return String.format("%s-%s", model.palette(), model.template().replace(".png", ""));
+	private String textureName(ModelTemplate model) {
+		if(model instanceof PaletteTemplateModel paletteTemplateModel){
+			return getTextureBasePath() + String.format("%s-%s", paletteTemplateModel.palette(), paletteTemplateModel.template().replace(".png", ""));
+		}
+		return ((TextureModel)model).texture();
 	}
 
 	public String BuildJsonModel() {
@@ -68,7 +66,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		model.addProperty("parent", "minecraft:item/handheld");
 		model.add("textures", this.getTextures());
 		model.addProperty("gui_light", "front");
-		if (this.displayOverrides.size() > 0) {
+		if (!this.displayOverrides.isEmpty()) {
 			model.add("display", displayOverrides.get(0));
 		}
 		return model.toString();
@@ -80,7 +78,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 
 	protected JsonObject getTextures() {
 		JsonObject jsonTextures = new JsonObject();
-		if (this.textures.size() > 0) {
+		if (!this.textures.isEmpty()) {
 			for (int i = 0; i < this.textures.size(); i++) {
 				var texture = textureName(this.textures.get(i));
 				var layer = "layer" + i;
@@ -88,7 +86,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 				this.resolutionMap.put(layer, textures.get(i).getResolution());
 				textures.get(i).getDisplayOverrides().ifPresent(displayOverrides::add);
 				this.indexMap.put(layer, i + 1);
-				jsonTextures.addProperty(layer, getTextureBasePath() + texture);
+				jsonTextures.addProperty(layer,  texture);
 			}
 		} else {
 			jsonTextures.addProperty("layer" + 1, getTextureBasePath() + TRANSPARENT_BASE_IDENTIFIER);

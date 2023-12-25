@@ -7,7 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -34,25 +36,26 @@ import net.minecraft.world.World;
 
 public class StateCraftingRecipe extends ShapedRecipe {
 	private final StateService service;
+	private final List<State> upgrades;
 
-	public StateCraftingRecipe(ShapedRecipe recipe, StateService service) {
+	public StateCraftingRecipe(ShapedRecipe recipe, StateService service, List<String> upgrades) {
 		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput(null));
 		this.service = service;
+		this.upgrades = upgrades.stream().map(service::find).flatMap(Optional::stream).toList();
 	}
 
 	@Override
 	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		if (super.matches(craftingInventory, world)) {
 			if (result().isPresent() && result().get() instanceof Composite result) {
-				boolean isSameMaterial = IntStream.range(0, craftingInventory.size())
+
+				return IntStream.range(0, craftingInventory.size())
 						.mapToObj(craftingInventory::getStack)
 						.map(this::convertHead)
 						.flatMap(Optional::stream)
 						.map(State::identifier)
 						.map(id -> id.split(":")[1])
 						.anyMatch(name -> name.split("-")[0].equals(result.name().split("-")[0]));
-
-				return isSameMaterial;
 			}
 		}
 		return false;
@@ -60,7 +63,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	private Optional<State> convertHead(ItemStack stack) {
 		var converted = service.convert(stack);
-		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))) {
+		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD) || converted.get().test(Type.ARROW_HEAD) || converted.get().test(Type.BOW_LIMB))) {
 			return converted;
 		}
 		return Optional.empty();
@@ -132,6 +135,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 						.orElse(Collections.emptyList())
 						.forEach(enchantment -> enchantment.embed(output));
 			}
+			output.setCount(getOutput(registryManager).getCount());
 			return output;
 		}
 		return getOutput(registryManager).copy();
@@ -151,12 +155,34 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 		@Override
 		public StateCraftingRecipe read(Identifier identifier, JsonObject jsonObject) {
-			return new StateCraftingRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
+			List<String> states = Collections.emptyList();
+			if (jsonObject.getAsJsonObject("result").has("upgrades")) {
+				states = StreamSupport.stream(jsonObject.getAsJsonObject("result").getAsJsonArray("upgrades").spliterator(), false)
+						.map(JsonElement::getAsString)
+						.toList();
+			}
+
+			return new StateCraftingRecipe(super.read(identifier, jsonObject), StateService.INSTANCE, states);
 		}
 
 		@Override
 		public StateCraftingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
-			return new StateCraftingRecipe(super.read(identifier, packetByteBuf), StateService.INSTANCE);
+			ShapedRecipe recipe = super.read(identifier, packetByteBuf);
+			List<String> upgrades = new ArrayList<>();
+			while (packetByteBuf.isReadable()) {
+				upgrades.add(packetByteBuf.readString());
+			}
+			return new StateCraftingRecipe(recipe, StateService.INSTANCE, upgrades);
+		}
+
+		@Override
+		public void write(PacketByteBuf packetByteBuf, ShapedRecipe shapedRecipe) {
+			super.write(packetByteBuf, shapedRecipe);
+			if (shapedRecipe instanceof StateCraftingRecipe stateCraftingRecipe) {
+				for (State upgrade : stateCraftingRecipe.upgrades) {
+					packetByteBuf.writeString(upgrade.identifier());
+				}
+			}
 		}
 
 		@Override

@@ -1,13 +1,21 @@
 package com.sigmundgranaas.forgero.fabric.modmenu;
 
+import java.util.Collections;
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+import com.sigmundgranaas.forgero.fabric.ForgeroCompatInitializer;
+import com.sigmundgranaas.forgero.fabric.yacl.ForgeroYACLConfigScreenBuilder;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
-import net.minecraft.client.MinecraftClient;
-
 public class ForgeroModMenuIntegration implements ModMenuApi {
 	@Override
-	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return (screen) -> new ForgeroConfigurationScreen(screen, MinecraftClient.getInstance().options);
+	public Map<String, ConfigScreenFactory<?>> getProvidedConfigScreenFactories() {
+		if (!ForgeroCompatInitializer.yacl.get()) {
+			return Collections.emptyMap();
+		}
+
+		return ImmutableMap.of("forgero", ForgeroYACLConfigScreenBuilder::createScreen);
 	}
 }

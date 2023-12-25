@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.resources.RecipeDeletionReloader;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,8 +31,10 @@ import net.minecraft.util.profiler.Profiler;
  */
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
+	@Unique
 	private final List<String> vanillaMaterials = List.of("wooden", "stone", "iron", "golden", "diamond", "netherite");
 
+	@Unique
 	private final List<String> vanillaTools = List.of("pickaxe", "shovel", "axe", "sword", "hoe");
 
 	@Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
@@ -48,11 +51,13 @@ public class RecipeManagerMixin {
 		}
 	}
 
+	@Unique
 	private void deleteRecipes(Map<Identifier, JsonElement> map, ResourceManager resourceManager) {
 		RecipeDeletionReloader.reload(resourceManager);
 		RecipeDeletionReloader.entries.forEach(map::remove);
 	}
 
+	@Unique
 	private void removeAllVanillaToolRecipes(Map<Identifier, JsonElement> map) {
 		vanillaMaterials.stream()
 				.map(material -> vanillaTools.stream().map(tool -> new Identifier(String.format("%s_%s", material, tool))).toList())
@@ -60,6 +65,7 @@ public class RecipeManagerMixin {
 				.forEach(map::remove);
 	}
 
+	@Unique
 	private void convertAllVanillaToolRecipes(Map<Identifier, JsonElement> map) {
 		vanillaMaterials.stream()
 				.map(material -> vanillaTools.stream().map(tool -> new Identifier(String.format("%s_%s", material, tool))).toList())
@@ -69,6 +75,7 @@ public class RecipeManagerMixin {
 				.forEach(this::convertMinecraftToForgeroNameSpace);
 	}
 
+	@Unique
 	private void convertMinecraftToForgeroNameSpace(JsonElement recipe) {
 		if (recipe instanceof JsonObject object && object.has("result") && object.get("result").getAsJsonObject().has("item")) {
 			String newItem = resultItemRenamer(object.getAsJsonObject("result").get("item").getAsString());
@@ -76,6 +83,7 @@ public class RecipeManagerMixin {
 		}
 	}
 
+	@Unique
 	private String resultItemRenamer(String item) {
 		String result = item;
 

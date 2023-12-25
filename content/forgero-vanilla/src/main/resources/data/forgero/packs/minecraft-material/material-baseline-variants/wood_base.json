@@ -45,6 +45,16 @@
             "value": 20
           },
           {
+            "id": "wood-flexibility-composite",
+            "type": "FLEXIBILITY",
+            "value": 50
+          },
+          {
+            "id": "wood-force-composite",
+            "type": "FORCE",
+            "value": 30
+          },
+          {
             "id": "wood-armor-composite",
             "type": "ARMOR",
             "value": 0

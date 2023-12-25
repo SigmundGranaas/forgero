@@ -1,4 +1,4 @@
- {
+{
   "type": "BINDING_SCHEMATIC",
   "name": "binding-schematic",
   "container": {
@@ -8,21 +8,6 @@
   "construct": {
     "type": "TOOL_BINDING",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"

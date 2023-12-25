@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.core.type;
 
 
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
-import com.sigmundgranaas.forgero.core.util.Identifiers;
 
 public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	private final List<MutableTypeNode> rootNodes;
@@ -29,8 +29,8 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 				return Optional.of(node);
 			}
 		} else {
-			Forgero.LOGGER.warn("tried adding duplicated typeData to TypeTree, there might be duplication in your configuration");
-			Forgero.LOGGER.warn("tried adding: {}", nodeData.name());
+			Forgero.LOGGER.debug("tried adding duplicated typeData to TypeTree, there might be duplication in your configuration");
+			Forgero.LOGGER.debug("tried adding: {}", nodeData.name());
 		}
 		return Optional.empty();
 	}

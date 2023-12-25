@@ -3,7 +3,7 @@
   "id": "forgero-core",
   "version": "${version}",
   "name": "Forgero core",
-  "description": "The Core Forgero module",
+  "description": "Dependency free library for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -22,10 +22,6 @@
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
   "environment": "*",
-  "entrypoints": {
-  },
-  "mixins": [
-  ],
   "depends": {
     "java": ">=17"
   },

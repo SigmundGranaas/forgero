@@ -23,9 +23,10 @@ public class HandlerBuilder {
 			}
 		}
 
-		if (handlers.isEmpty()) {
+		if (handlers.isEmpty() && element.isJsonObject() && element.getAsJsonObject().has(key)) {
 			Forgero.LOGGER.warn("Encountered empty handler from structure: {}", element);
 		}
+
 		return handlers;
 	}
 }

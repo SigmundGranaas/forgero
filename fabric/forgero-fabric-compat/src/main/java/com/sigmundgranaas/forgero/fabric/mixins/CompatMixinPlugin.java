@@ -15,8 +15,7 @@ public class CompatMixinPlugin implements IMixinConfigPlugin {
 	private static final Supplier<Boolean> TRUE = () -> true;
 
 	private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
-			"com.sigmundgranaas.forgero.fabric.mixins.BetterCombatWeaponRegistryMixin", ForgeroCompatInitializer.bettercombat,
-			"com.sigmundgranaas.forgero.fabric.mixins.ModMenuInitMixin", ForgeroCompatInitializer.modmenu
+			"com.sigmundgranaas.forgero.fabric.mixins.BetterCombatWeaponRegistryMixin", ForgeroCompatInitializer.bettercombat
 	);
 
 	@Override

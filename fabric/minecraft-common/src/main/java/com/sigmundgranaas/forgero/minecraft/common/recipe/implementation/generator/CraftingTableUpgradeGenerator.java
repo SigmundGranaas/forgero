@@ -43,7 +43,7 @@ public class CraftingTableUpgradeGenerator implements RecipeGenerator {
 
 		template.getAsJsonObject("result").addProperty("item", target);
 		Identifier id = new Identifier(target + ELEMENT_SEPARATOR + slot.type().toLowerCase() + ELEMENT_SEPARATOR + "crafting_table");
-		return RecipeWrapper.of(id, template, type);
+		return RecipeWrapper.of(id, template);
 	}
 
 	@Override

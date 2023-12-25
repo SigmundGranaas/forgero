@@ -25,7 +25,7 @@ public class RecipeDataMapper implements Function<RecipeData, RecipeData> {
 	public RecipeData apply(RecipeData data) {
 		var ingredients = data.ingredients().stream().map(this::mapIngredient).toList();
 		var target = resolveTarget(data);
-		return data.toBuilder().ingredients(ingredients).target(target).build();
+		return data.toBuilder().ingredients(ingredients).count(data.count()).target(target).build();
 	}
 
 	private IngredientData mapIngredient(IngredientData data) {
