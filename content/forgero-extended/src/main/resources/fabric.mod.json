@@ -3,7 +3,7 @@
   "id": "forgero-extended",
   "version": "${version}",
   "name": "Forgero extended pack",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Content expansion pack for Forgero. Contains refined and mastercrafted tools, vein mining tools, more sword variants, and gems!",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -41,7 +41,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

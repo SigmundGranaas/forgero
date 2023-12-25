@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "forgero-generator",
   "version": "${version}",
-  "name": "Forgero Generator module",
-  "description": "Mod for generating dynamic resources for Forgero",
+  "name": "Forgero generator module",
+  "description": "Dynamic resource generator for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -35,7 +35,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

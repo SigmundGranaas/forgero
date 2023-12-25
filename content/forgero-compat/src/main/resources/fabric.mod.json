@@ -3,7 +3,7 @@
   "id": "forgero-compat",
   "version": "${version}",
   "name": "Forgero mod compatibility pack",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Mod compatibility pack for Forgero. Adds compatibility for mods such as Mythic Metals, BetterNether, and BYG.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -41,7 +41,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

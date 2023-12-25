@@ -3,7 +3,7 @@
   "id": "forgero-fabric-core",
   "version": "${version}",
   "name": "Forgero for Fabric",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Core Fabric initialization for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -50,6 +50,12 @@
     "modmenu": {
       "links": {
         "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

@@ -3,7 +3,7 @@
   "id": "forgero-common",
   "version": "${version}",
   "name": "Forgero common library",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Common Minecraft dependency library for Forgero modules.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -45,7 +45,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

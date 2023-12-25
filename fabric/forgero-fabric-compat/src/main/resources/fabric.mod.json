@@ -3,7 +3,7 @@
   "id": "forgero-fabric-compat",
   "version": "${version}",
   "name": "Forgero Fabric compatibility pack",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Fabric mod compatibility pack for Forgero. Adds compatibility for mods such as Mod Menu, LambDynamicLights, and BetterCombat.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -47,6 +47,9 @@
     "java": ">=17",
     "forgero-fabric-core": "*"
   },
+  "recommends": {
+    "yet_another_config_lib_v3": "*"
+  },
   "suggests": {
     "patchouli": "*",
     "lambdynamiclights": "*"
@@ -60,7 +63,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

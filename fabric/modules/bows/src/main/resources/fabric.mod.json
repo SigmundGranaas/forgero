@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "forgero-bows",
   "version": "${version}",
-  "name": "Forgero bow modules",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "name": "Forgero bow module",
+  "description": "Bows and arrows support for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -50,7 +50,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }
