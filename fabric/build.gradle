@@ -77,10 +77,8 @@ curseforge {
 				optionalDependency "ae2"
 				optionalDependency "mythicmetals"
 				optionalDependency "betternether"
-				optionalDependency "byg"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
-				optionalDependency "vsas"
 				optionalDependency "wiredredstone"
 			}
 		}
@@ -111,10 +109,8 @@ modrinth {
 		optional.project "ae2"
 		optional.project "mythicmetals"
 		optional.project "betternether"
-		optional.project "byg"
 		optional.project "mystical_crops"
 		optional.project "mythicmetals"
-		optional.project "vsas"
 		optional.project "wiredredstone"
 	}
 }
