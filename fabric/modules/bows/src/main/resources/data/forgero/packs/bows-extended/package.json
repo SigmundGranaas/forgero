@@ -1,5 +1,5 @@
 {
-  "name": "bow-additions",
+  "name": "bow-extended",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",
