@@ -1,16 +1,6 @@
 {
   "type": "HANDLE",
   "models": [
-    {
-      "name": "mastercrafted_handle",
-      "variants": [
-        {
-          "target": [
-            "type:BOW"
-          ],
-          "template": "bow_handle.png"
-        }
-      ]
-    }
+
   ]
 }

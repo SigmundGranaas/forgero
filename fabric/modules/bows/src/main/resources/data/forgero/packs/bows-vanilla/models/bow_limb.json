@@ -38,6 +38,41 @@
       ]
     },
     {
+      "name": "bow_reinforcement",
+      "modelType": "GENERATE",
+      "template": "bow_limb_reinforcement.png",
+      "palette": "UPGRADE_MATERIAL",
+      "order": 25,
+      "variants": [
+        {
+          "predicate": [
+            "model:bow_limb_reinforcement.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "bow_limb_reinforcement.png"
+        },
+        {
+          "predicate": [
+            "model:bow_limb_reinforcment.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "bow_limb_reinforcement.png"
+        },
+        {
+          "predicate": [
+            "model:bow_limb.png"
+          ],
+          "template": "bow_limb_reinforcement.png"
+        }
+      ]
+    },
+    {
       "name": "bow_grip",
       "template": "bow_grip.png",
       "type": "GENERATE",

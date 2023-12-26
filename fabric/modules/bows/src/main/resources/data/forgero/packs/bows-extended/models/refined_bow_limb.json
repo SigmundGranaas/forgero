@@ -3,10 +3,70 @@
   "models": [
     {
       "name": "refined_bow_limb",
-      "modelType": "GENERATE",
       "template": "refined_bow_limb.png",
+      "type": "GENERATE",
       "palette": "WOOD",
-      "order": 20
+      "order": 5,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "refined_bow_pull_0.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:refined_bow_limb_reinforcement.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_bow_limb_reinforcement_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:refined_bow_limb_reinforcement.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_bow_limb_reinforcement_pull_1.png"
+        },
+        {
+          "target": [
+            "model:refined_bow_limb.png"
+          ],
+          "template": "refined_bow_limb_reinforcement.png"
+        }
+      ]
     },
     {
       "target": [

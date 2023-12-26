@@ -6,7 +6,7 @@
       "template": "bow_string.png",
       "type": "GENERATE",
       "palette": "STRING",
-      "order": 5,
+      "order": 2,
       "variants": [
         {
           "predicate": [

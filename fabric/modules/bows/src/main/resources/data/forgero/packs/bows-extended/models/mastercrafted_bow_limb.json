@@ -6,7 +6,7 @@
       "modelType": "GENERATE",
       "template": "mastercrafted_bow_limb.png",
       "palette": "WOOD",
-      "order": 20,
+      "order": 5,
       "variants": [
         {
           "predicate": [
@@ -30,13 +30,10 @@
     },
     {
       "name": "bow_reinforcement",
-      "modelType": "GENERATE",
-      "template": "mastercrafted_bow_limb_reinforcement.png",
-      "palette": "UPGRADE_MATERIAL",
-      "order": 25,
       "variants": [
         {
           "predicate": [
+            "model:mastercrafted_bow_limb_reinforcement.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
@@ -46,6 +43,7 @@
         },
         {
           "predicate": [
+            "model:mastercrafted_bow_limb_reinforcment.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.6
@@ -73,13 +71,13 @@
       ]
     },
     {
-      "name": "bow_handle",
+      "name": "bow_grip",
       "variants": [
         {
           "target": [
             "model:mastercrafted_bow_limb.png"
           ],
-          "template": "mastercrafted_bow_handle.png"
+          "template": "mastercrafted_bow_grip.png"
         }
       ]
     },

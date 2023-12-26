@@ -6,7 +6,7 @@
       "modelType": "GENERATE",
       "template": "longbow_limb.png",
       "palette": "WOOD",
-      "order": 20
+      "order": 5
     },
     {
       "name": "bow_reinforcement",
@@ -31,13 +31,13 @@
       ]
     },
     {
-      "name": "bow_handle",
+      "name": "bow_grip",
       "variants": [
         {
           "target": [
             "model:longbow_limb.png"
           ],
-          "template": "longbow_handle.png"
+          "template": "longbow_grip.png"
         }
       ]
     },
