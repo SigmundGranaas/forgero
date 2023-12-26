@@ -86,13 +86,8 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 		return Collections.emptyList();
 	}
 
-	@Override
-	public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
+        return Collections.emptyList();
+    }
 }

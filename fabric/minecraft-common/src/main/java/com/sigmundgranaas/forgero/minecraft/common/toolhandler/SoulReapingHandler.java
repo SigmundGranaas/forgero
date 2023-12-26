@@ -20,9 +20,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityStatuses.ENTITY_STATUS_TOTEM;
 
@@ -60,8 +60,8 @@ public class SoulReapingHandler implements RunnableHandler {
 			if (FeatureCache.check(FeatureContainerKey.of(construct, Feature.key("forgero:soul_reaping")))) {
 				SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
 				soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
-				entity.world.spawnEntity(soulEntity);
-				soulEntity.world.sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
+				entity.getWorld().spawnEntity(soulEntity);
+				soulEntity.getWorld().sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
 			} else if (FeatureCache.check(new FeatureContainerKey(ContainerTargetPair.of(construct), Feature.key("forgero:soul_binding")))) {
 				State state = construct;
 				if (construct instanceof SoulBindable bindable) {
@@ -69,13 +69,13 @@ public class SoulReapingHandler implements RunnableHandler {
 				}
 				if (state instanceof Composite comp) {
 					if (comp.has("forgero:soul-totem").isPresent()) {
-						entity.world.sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
+						entity.getWorld().sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
 						state = comp.removeUpgrade("forgero:soul-totem");
 					}
 				}
 				entity.getInventory().setStack(entity.getInventory().selectedSlot, service.convert(state).orElse(ItemStack.EMPTY));
 			} else if (hasSoulTotemInHand()) {
-				entity.world.sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
+				entity.getWorld().sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
 				ItemStack totemSack = getTotemStack();
 				totemSack.decrement(1);
 				State state = construct;
@@ -90,7 +90,7 @@ public class SoulReapingHandler implements RunnableHandler {
 	private boolean hasSoulTotemInHand() {
 		for (Hand hand : Hand.values()) {
 			ItemStack handStack = entity.getStackInHand(hand);
-			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
+			Item totem = Registries.ITEM.get(new Identifier("forgero:soul-totem"));
 			if (totem != Items.AIR && handStack.isOf(totem)) {
 				return true;
 			}
@@ -101,7 +101,7 @@ public class SoulReapingHandler implements RunnableHandler {
 	private ItemStack getTotemStack() {
 		for (Hand hand : Hand.values()) {
 			ItemStack handStack = entity.getStackInHand(hand);
-			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
+			Item totem = Registries.ITEM.get(new Identifier("forgero:soul-totem"));
 			if (totem != Items.AIR && handStack.isOf(totem)) {
 				return handStack;
 			}

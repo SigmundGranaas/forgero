@@ -146,7 +146,7 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 	}
 
 	private ItemStack obtainArrowStack(PlayerEntity playerEntity) {
-		ItemStack arrowStack = playerEntity.getArrowType(playerEntity.getMainHandStack());
+		ItemStack arrowStack = playerEntity.getProjectileType(playerEntity.getMainHandStack());
 		if (arrowStack.isEmpty() && !playerEntity.getAbilities().creativeMode) {
 			arrowStack = new ItemStack(Items.ARROW);
 		}
@@ -163,7 +163,7 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
-		boolean bl = !user.getArrowType(itemStack).isEmpty();
+		boolean bl = !user.getProjectileType(itemStack).isEmpty();
 		if (!user.getAbilities().creativeMode && !bl) {
 			return TypedActionResult.fail(itemStack);
 		} else {

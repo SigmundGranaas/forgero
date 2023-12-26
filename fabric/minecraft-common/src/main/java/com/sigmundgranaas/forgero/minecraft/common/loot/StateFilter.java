@@ -14,8 +14,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 @Data
 @Builder(toBuilder = true)
@@ -53,8 +53,8 @@ public class StateFilter {
 				.filter(this::filter)
 				.forEach(states::add);
 
-		return states.stream().map(Identifiable::identifier).map(id -> Registry.ITEM.get(new Identifier(id))).toList();
-	}
+        return states.stream().map(Identifiable::identifier).map(id -> Registries.ITEM.get(new Identifier(id))).toList();
+    }
 
 	private boolean filter(State state) {
 		if (state.stream().applyAttribute(Rarity.KEY) < lowerRarity) {

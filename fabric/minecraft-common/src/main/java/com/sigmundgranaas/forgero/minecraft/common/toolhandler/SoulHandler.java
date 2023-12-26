@@ -15,9 +15,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class SoulHandler {
@@ -40,7 +40,7 @@ public class SoulHandler {
 			if (handledSoul.getLevel() > soul.getLevel()) {
 				handleLevelUp(handledSoul, world, player);
 			}
-			handledSoul.trackMob(Registry.ENTITY_TYPE.getId(entity.getType()).toString(), 1);
+			handledSoul.trackMob(Registries.ENTITY_TYPE.getId(entity.getType()).toString(), 1);
 			stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER).put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(handledSoul));
 		}
 
@@ -57,7 +57,7 @@ public class SoulHandler {
 		if (handledSoul.getLevel() > soul.getLevel()) {
 			handleLevelUp(handledSoul, world, player);
 		}
-		handledSoul.trackBlock(Registry.BLOCK.getId(state.getBlock()).toString(), 1);
+		handledSoul.trackBlock(Registries.BLOCK.getId(state.getBlock()).toString(), 1);
 		stack.getOrCreateNbt().getCompound(FORGERO_IDENTIFIER).put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(handledSoul));
 	}
 

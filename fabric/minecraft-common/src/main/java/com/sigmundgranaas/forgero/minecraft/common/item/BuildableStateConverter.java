@@ -10,12 +10,13 @@ import lombok.Builder;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.util.Identifier;
 
 @Builder(toBuilder = true)
 public class BuildableStateConverter implements RankableConverter<StateProvider, ItemData> {
 	@Builder.Default
-	private final Function<StateProvider, ItemGroup> group = state -> ItemGroup.MISC;
+	private final Function<StateProvider, ItemGroup> group = state -> ItemGroups.getGroups().get(0);
 
 	@Builder.Default
 	private final SettingProcessor settings = (settings, state) -> settings;
@@ -34,7 +35,7 @@ public class BuildableStateConverter implements RankableConverter<StateProvider,
 
 	public ItemData convert(StateProvider state) {
 		ItemGroup group = this.group.apply(state);
-		Item.Settings settings = this.settings.apply(new Item.Settings().group(group), state.get());
+		Item.Settings settings = this.settings.apply(new Item.Settings(), state.get());
 		Item item = this.item.apply(state, settings);
 		Identifier id = identifier.apply(state);
 		return new ItemData(item, id, settings, group);

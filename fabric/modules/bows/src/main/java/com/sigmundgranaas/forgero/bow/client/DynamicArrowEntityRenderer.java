@@ -13,10 +13,15 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import net.minecraft.util.math.Vec3d;
+
+import static net.minecraft.client.render.model.json.ModelTransformationMode.GROUND;
+import static net.minecraft.util.math.RotationAxis.POSITIVE_Y;
+import static net.minecraft.util.math.RotationAxis.POSITIVE_Z;
 
 /**
  * This class, DynamicArrowEntityRenderer, is responsible for the rendering of DynamicArrowEntity.
@@ -51,15 +56,15 @@ public class DynamicArrowEntityRenderer extends EntityRenderer<DynamicArrowEntit
 	@Override
 	public void render(DynamicArrowEntity arrow, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
 		matrixStack.push();
-		matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.lerp(f, arrow.prevYaw, arrow.getYaw()) - 90.0F));
-		matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.lerp(f, arrow.prevPitch, arrow.getPitch())));
+		matrixStack.multiply(POSITIVE_Y.rotationDegrees(MathHelper.lerp(f, arrow.prevYaw, arrow.getYaw()) - 90.0F));
+		matrixStack.multiply(POSITIVE_Z.rotationDegrees(MathHelper.lerp(f, arrow.prevPitch, arrow.getPitch())));
 		matrixStack.translate(-0.2, 0.0, 0.0);
-		matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-45.0F));
+		matrixStack.multiply(POSITIVE_Z.rotationDegrees(-45.0F));
 		matrixStack.scale(1.5F, 1.5F, 1.5F);
 
-		ItemStack pickupItem = arrow.getStack();
+		ItemStack arrowItem = arrow.getStack();
 
-		this.renderer.renderItem(pickupItem, ModelTransformation.Mode.GROUND, i, OverlayTexture.DEFAULT_UV, matrixStack, vertexConsumerProvider, arrow.getId());
+		this.renderer.renderItem(arrowItem, GROUND, i, 0, matrixStack, vertexConsumerProvider, arrow.getWorld(), 0);
 		matrixStack.pop();
 		super.render(arrow, f, g, matrixStack, vertexConsumerProvider, i);
 	}

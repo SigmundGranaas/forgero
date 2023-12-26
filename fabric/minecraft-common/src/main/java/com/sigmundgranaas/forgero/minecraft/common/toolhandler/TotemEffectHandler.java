@@ -11,10 +11,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class TotemEffectHandler implements RunnableHandler {
@@ -56,7 +56,7 @@ public class TotemEffectHandler implements RunnableHandler {
 	private ItemStack getActiveTotem() {
 		for (Hand hand : Hand.values()) {
 			ItemStack itemStack = entity.getStackInHand(hand);
-			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
+			Item totem = Registries.ITEM.get(new Identifier("forgero:soul-totem"));
 			if (service.convert(itemStack).filter(state -> state instanceof Composite composite && composite.has("forgero:soul-totem").isPresent()).isPresent()) {
 				itemStack = new ItemStack(totem);
 				if (!itemStack.isEmpty()) {

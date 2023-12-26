@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class DataDirectoryRecipeGenerator {
 	private final StringReplacer replacer;
@@ -37,7 +37,7 @@ public class DataDirectoryRecipeGenerator {
 			JsonObject result = identifiedJson.json().getAsJsonObject("result");
 			if (result.has("item")) {
 				Identifier item = new Identifier(result.get("item").getAsString());
-				return Registry.ITEM.containsId(item);
+				return Registries.ITEM.containsId(item);
 			}
 		}
 		return false;

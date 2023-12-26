@@ -12,10 +12,10 @@ import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.registry.RankableConverter;
 
 import net.minecraft.item.Item;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
 
 public class TagToItemConverter implements RankableConverter<JsonElement, Collection<?>> {
 	@Override
@@ -35,16 +35,16 @@ public class TagToItemConverter implements RankableConverter<JsonElement, Collec
 		}
 		if (jsonObject.has("filter")) {
 			Set<String> exclusions = parseFilter(jsonObject.getAsJsonArray("filter"));
-			items.removeIf(item -> exclusions.contains(Registry.ITEM.getId(item).toString()));
+			items.removeIf(item -> exclusions.contains(Registries.ITEM.getId(item).toString()));
 		}
 
 		return items;
 	}
 
 	private Collection<Item> fromTag(String tag) {
-		var tagKey = TagKey.of(Registry.ITEM_KEY, new Identifier(tag));
+		var tagKey = TagKey.of(Registries.ITEM.getKey(), new Identifier(tag));
 
-		return StreamSupport.stream(Registry.ITEM.iterateEntries(tagKey).spliterator(), false)
+		return StreamSupport.stream(Registries.ITEM.iterateEntries(tagKey).spliterator(), false)
 				.map(RegistryEntry::value)
 				.collect(Collectors.toList());
 	}

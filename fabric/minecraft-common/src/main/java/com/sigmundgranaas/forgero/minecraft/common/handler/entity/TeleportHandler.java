@@ -121,24 +121,24 @@ public class TeleportHandler implements EntityBasedHandler {
 		double deltaZ = random.nextDouble() * 2 - 1; // Random value between -1 and 1
 		double deltaY = !onGround ? (random.nextDouble() * 2 - 1) : 0; // Random Y if air teleport is allowed
 
-		BlockPos newPos = entity.getBlockPos().add(deltaX * maxDistance,
-				deltaY * maxDistance,
-				deltaZ * maxDistance);
+		BlockPos newPos = entity.getBlockPos().add((int) (deltaX * maxDistance),
+				(int) (deltaY * maxDistance),
+				(int) (deltaZ * maxDistance));
 		teleportToPosition(entity, world, newPos);
 	}
 
 	private void teleportInLookDirection(Entity entity, World world) {
 		Vec3d lookVec = entity.getCameraPosVec(0);
-		BlockPos newPos = entity.getBlockPos().add(lookVec.x * maxDistance,
-				!onGround ? lookVec.y * maxDistance : 0,
-				lookVec.z * maxDistance);
+		BlockPos newPos = entity.getBlockPos().add((int) (lookVec.x * maxDistance),
+				!onGround ? (int) (lookVec.y * maxDistance) : 0,
+				(int) (lookVec.z * maxDistance));
 		teleportToPosition(entity, world, newPos);
 	}
 
 	private boolean isSafeTeleportLocation(World world, BlockPos pos) {
 		for (int yOffset = 0; yOffset <= 2; yOffset++) {
 			BlockPos checkPos = pos.up(yOffset);
-			if (!world.getBlockState(checkPos).getMaterial().isReplaceable()) {
+			if (!world.getBlockState(checkPos).isReplaceable()) {
 				return false;
 			}
 		}
@@ -149,7 +149,7 @@ public class TeleportHandler implements EntityBasedHandler {
 		if (isSafeTeleportLocation(world, newPos)) {
 			entity.teleport(newPos.getX() + 0.5, newPos.getY(), newPos.getZ() + 0.5);
 			if (entity instanceof ServerPlayerEntity serverPlayer) {
-				((ServerPlayerEntity)entity).networkHandler.sendPacket(new PlayerPositionLookS2CPacket(entity.getX(), entity.getY(), entity.getZ(), serverPlayer.getYaw(), serverPlayer.getPitch(), Collections.emptySet(), 0, false));
+				((ServerPlayerEntity)entity).networkHandler.sendPacket(new PlayerPositionLookS2CPacket(entity.getX(), entity.getY(), entity.getZ(), serverPlayer.getYaw(), serverPlayer.getPitch(), Collections.emptySet(), 0));
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
+
 import com.sigmundgranaas.forgero.core.Forgero;
 
 import net.minecraft.block.*;
@@ -31,30 +32,31 @@ import static net.minecraft.block.Blocks.DEEPSLATE;
 
 public class AssemblyStationBlock extends HorizontalFacingBlock {
 
-	public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
-	public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F));
-	public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
-	// a public identifier for multiple parts of our bigger chest
-	public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
+    public static final EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
+    public static final Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(Settings.copy(DEEPSLATE).strength(3.5F, 6.0F).solidBlock((BlockState state, BlockView world, BlockPos pos) -> true));
+    public static final BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings());
 
-	private static final VoxelShape SHAPE_LEFT;
+    // a public identifier for multiple parts of our bigger chest
+    public static final Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
 
-	private static final VoxelShape SHAPE_RIGHT;
+    private static final VoxelShape SHAPE_LEFT;
 
-	static {
-		VoxelShape shapeLeft = VoxelShapes.empty();
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 1));
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.75, 0.375, 0.625, 0.9375));
-		shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0.625, 0.0625, 1, 0.875, 0.9375));
+    private static final VoxelShape SHAPE_RIGHT;
 
-		SHAPE_LEFT = shapeLeft.simplify();
+    static {
+        VoxelShape shapeLeft = VoxelShapes.empty();
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 1));
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.0625, 0.375, 0.625, 0.25));
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0, 0.75, 0.375, 0.625, 0.9375));
+        shapeLeft = VoxelShapes.union(shapeLeft, VoxelShapes.cuboid(0.1875, 0.625, 0.0625, 1, 0.875, 0.9375));
 
-		VoxelShape shapeRight = VoxelShapes.empty();
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.875, 0, 1.875, 1, 1));
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
-		shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
+        SHAPE_LEFT = shapeLeft.simplify();
+
+        VoxelShape shapeRight = VoxelShapes.empty();
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.875, 0, 1.875, 1, 1));
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1, 0.625, 0.0625, 1.8125, 0.875, 0.9375));
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.0625, 1.8125, 0.625, 0.25));
+        shapeRight = VoxelShapes.union(shapeRight, VoxelShapes.cuboid(1.625, 0, 0.75, 1.8125, 0.625, 0.9375));
 
 		SHAPE_RIGHT = shapeRight.simplify();
 	}
@@ -79,11 +81,6 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 		return buffer[0];
 	}
 
-	@Override
-	public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
-		return true;
-	}
-
 	public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
 		return stateFrom.isOf(this) || super.isSideInvisible(state, stateFrom, direction);
 	}
@@ -104,7 +101,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction direction = ctx.getPlayerFacing().getOpposite();
+		Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
 		return this.getDefaultState().with(FACING, direction);
 	}
 
@@ -151,6 +148,8 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 			return false;
 		}
 	}
+
+
 
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {

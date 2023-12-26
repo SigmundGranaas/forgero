@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DataPipeLin
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DisassemblyReloader;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.LootConditionReloadListener;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.CommandRegistrar;
+import com.sigmundgranaas.forgero.fabric.initialization.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
@@ -22,19 +23,21 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.*;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
-import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.resource.ResourceType;
+
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.item.Items;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.registry.Registry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.function.Function;
@@ -87,7 +90,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerRecipeGenerators() {
 		Function<State, String> idConverter = s -> StateService.INSTANCE.getMapper().stateToContainer(s.identifier()).toString();
 
-		Function<State, String> tagOrItem = (state) -> Registry.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
+		Function<State, String> tagOrItem = (state) -> Registries.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
 		Function<State, String> material = (state) -> state instanceof MaterialBased based ? based.baseMaterial().name() : "";
 
 		var factory = new OperationFactory<>(State.class);
@@ -161,13 +164,13 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerBlocks() {
-		Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
-		Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
-		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+		Registry.register(Registries.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
+		Registry.register(Registries.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
+		Registry.register(Registries.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
 
-		Registry.register(Registry.BLOCK, UPGRADE_STATION, UPGRADE_STATION_BLOCK);
-		Registry.register(Registry.ITEM, UPGRADE_STATION, UPGRADE_STATION_ITEM);
-		Registry.register(Registry.SCREEN_HANDLER, UPGRADE_STATION, UPGRADE_STATION_SCREEN_HANDLER);
+		Registry.register(Registries.BLOCK, UPGRADE_STATION, UPGRADE_STATION_BLOCK);
+		Registry.register(Registries.ITEM, UPGRADE_STATION, UPGRADE_STATION_ITEM);
+		Registry.register(Registries.SCREEN_HANDLER, UPGRADE_STATION, UPGRADE_STATION_SCREEN_HANDLER);
 	}
 
 	/**
@@ -179,7 +182,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 * @param stateService The state service provides services related to Forgero states.
 	 */
 	private void registerItems(StateService stateService) {
-		new StateItemRegistrar(stateService).registerItem(Registry.ITEM);
+		new StateItemRegistrar(stateService).registerItem(Registries.ITEM);
 		new DynamicItemsRegistrar().register();
 	}
 

@@ -9,6 +9,9 @@ import lombok.experimental.Accessors;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 
 @Getter
@@ -59,7 +62,7 @@ public class LifeStealHandler implements EntityTargetHandler {
 
 				float healthToSteal = Math.min(livingTarget.getHealth(), amount);
 
-				livingTarget.damage(DamageSource.MAGIC, healthToSteal); // Deduct health from target
+				livingTarget.damage(targetEntity.getDamageSources().magic(), healthToSteal); // Deduct health from target
 				livingSource.heal(healthToSteal); // Add health to source
 			}
 		}

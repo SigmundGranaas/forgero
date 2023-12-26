@@ -39,12 +39,12 @@ public abstract class OnEntityHitMixin {
 			Entity target = (Entity) (Object) this;
 			MatchContext context = MatchContext.of()
 					.put(ENTITY, entity)
-					.put(WORLD, entity.world)
+					.put(WORLD, entity.getWorld())
 					.put(ENTITY_TARGET, target);
 
 			cachedFilteredFeatures(main, OnHitEntityFeature.KEY, context)
 					.forEach(handler -> {
-						handler.onHit(entity, entity.world, target);
+						handler.onHit(entity, entity.getWorld(), target);
 						handler.handle(entity, main, Hand.MAIN_HAND);
 					});
 		}

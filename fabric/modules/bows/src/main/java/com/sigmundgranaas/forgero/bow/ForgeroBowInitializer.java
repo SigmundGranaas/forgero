@@ -14,27 +14,36 @@ import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-
-
 public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint {
-	public static final ItemGroup FORGERO_BOWS = FabricItemGroupBuilder.create(
-					new Identifier(Forgero.NAMESPACE, "trinkets"))
+	public static final RegistryKey<ItemGroup> FORGERO_BOWS_KEY =  RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "bows"));
+	public static final ItemGroup FORGERO_BOWS = FabricItemGroup.builder()
 			.icon(ForgeroBowInitializer::bowIcon)
+			.displayName(Text.translatable( "itemGroup.forgero.bows"
+			))
 			.build();
 
-	public static EntityType<DynamicArrowEntity> DYNAMIC_ARROW_ENTITY = Registry.register(Registry.ENTITY_TYPE, DYNAMIC_ARROW_IDENTIFIER, EntityType.Builder.create((EntityType<DynamicArrowEntity> entity, World world) -> new DynamicArrowEntity(entity, world), SpawnGroup.MISC).build(DYNAMIC_ARROW_IDENTIFIER.toString()));
+	static {
+		Registry.register(Registries.ITEM_GROUP, FORGERO_BOWS_KEY, FORGERO_BOWS);
+	}
+
+	public static EntityType<DynamicArrowEntity> DYNAMIC_ARROW_ENTITY = Registry.register(Registries.ENTITY_TYPE, DYNAMIC_ARROW_IDENTIFIER, EntityType.Builder.create((EntityType<DynamicArrowEntity> entity, World world) -> new DynamicArrowEntity(entity, world), SpawnGroup.MISC).build(DYNAMIC_ARROW_IDENTIFIER.toString()));
 
 	private static ItemStack bowIcon() {
-		return new ItemStack(Registry.ITEM.get(new Identifier("forgero:oak-bow")));
+		return new ItemStack(Registries.ITEM.get(new Identifier("forgero:oak-bow")));
 	}
 
 	@Override

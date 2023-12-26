@@ -8,7 +8,6 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,11 +36,13 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
+import static net.minecraft.block.Blocks.SMITHING_TABLE;
+
 public class UpgradeStationBlock extends HorizontalFacingBlock {
 
 	public static final EnumProperty<UpgradeStationBlockPart> PART = EnumProperty.of("part", UpgradeStationBlockPart.class);
-	public static final Block UPGRADE_STATION_BLOCK = new UpgradeStationBlock(Settings.of(Material.WOOD).strength(2.5F).sounds(BlockSoundGroup.WOOD));
-	public static final BlockItem UPGRADE_STATION_ITEM = new BlockItem(UPGRADE_STATION_BLOCK, new Item.Settings().group(ItemGroup.MISC));
+	public static final Block UPGRADE_STATION_BLOCK = new UpgradeStationBlock(Settings.copy(SMITHING_TABLE).strength(2.5F).sounds(BlockSoundGroup.WOOD));
+	public static final BlockItem UPGRADE_STATION_ITEM = new BlockItem(UPGRADE_STATION_BLOCK, new Item.Settings());
 	// a public identifier for multiple parts of our bigger chest
 	public static final Identifier UPGRADE_STATION = new Identifier(Forgero.NAMESPACE, "upgrade_station");
 
@@ -99,11 +100,6 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 		return buffer[0];
 	}
 
-	@Override
-	public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
-		return true;
-	}
-
 	public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
 		return stateFrom.isOf(this) || super.isSideInvisible(state, stateFrom, direction);
 	}
@@ -124,7 +120,7 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction direction = ctx.getPlayerFacing().getOpposite();
+		Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
 		return this.getDefaultState().with(FACING, direction);
 	}
 

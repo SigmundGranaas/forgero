@@ -41,7 +41,7 @@ public abstract class LivingEntityUndyingMixin {
 
 	@Inject(method = "tryUseTotem", at = @At("HEAD"), cancellable = true)
 	public void undyingStateItem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-		if (!source.isOutOfWorld()) {
+
 			Hand[] hands = Hand.values();
 			for (Hand hand : hands) {
 				ItemStack stack = this.getStackInHand(hand);
@@ -56,7 +56,6 @@ public abstract class LivingEntityUndyingMixin {
 					break;
 				}
 			}
-		}
 	}
 
 	private void executeUndyingEffect(ItemStack stack) {
@@ -71,6 +70,6 @@ public abstract class LivingEntityUndyingMixin {
 		this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 900, 1));
 		this.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
 		this.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0));
-		entity.world.sendEntityStatus(entity, (byte) 35);
+		entity.getWorld().sendEntityStatus(entity, (byte) 35);
 	}
 }

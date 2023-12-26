@@ -25,10 +25,12 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerialize
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -37,13 +39,13 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	private final List<State> upgrades;
 
 	public StateCraftingRecipe(ShapedRecipe recipe, StateService service, List<String> upgrades) {
-		super(recipe.getId(), recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput());
+		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput(null));
 		this.service = service;
 		this.upgrades = upgrades.stream().map(service::find).flatMap(Optional::stream).toList();
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
+	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		if (super.matches(craftingInventory, world)) {
 			if (result().isPresent() && result().get() instanceof Composite result) {
 
@@ -67,7 +69,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		return Optional.empty();
 	}
 
-	private List<State> partsFromCraftingInventory(CraftingInventory craftingInventory) {
+	private List<State> partsFromCraftingInventory(RecipeInputInventory craftingInventory) {
 		List<ItemStack> ingredients = new ArrayList<>();
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
@@ -78,7 +80,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		return ingredients.stream().map(service::convert).flatMap(Optional::stream).toList();
 	}
 
-	private List<State> upgradesFromCraftingInventory(CraftingInventory craftingInventory) {
+	private List<State> upgradesFromCraftingInventory(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
 		List<State> upgrades = new ArrayList<>();
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
@@ -94,12 +96,12 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
-		var target = service.convert(this.getOutput());
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
+		var target = service.convert(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
-			var upgrades = upgradesFromCraftingInventory(craftingInventory);
+			var upgrades = upgradesFromCraftingInventory(craftingInventory, null);
 			var toolBuilderOpt = ConstructedTool.ToolBuilder.builder(parts);
 			BaseComposite.BaseCompositeBuilder<?> builder;
 			if (toolBuilderOpt.isPresent()) {
@@ -125,7 +127,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 			var state = builder.build();
 			var nbt = new CompositeEncoder().encode(state);
-			var output = getOutput().copy();
+			var output = getOutput(registryManager).copy();
 			output.getOrCreateNbt().put(NbtConstants.FORGERO_IDENTIFIER, nbt);
 			if (toolBuilderOpt.isPresent()) {
 				state.accept(VISITOR)
@@ -133,14 +135,14 @@ public class StateCraftingRecipe extends ShapedRecipe {
 						.orElse(Collections.emptyList())
 						.forEach(enchantment -> enchantment.embed(output));
 			}
-			output.setCount(getOutput().getCount());
+			output.setCount(getOutput(registryManager).getCount());
 			return output;
 		}
-		return getOutput().copy();
+		return getOutput(registryManager).copy();
 	}
 
 	private Optional<State> result() {
-		return service.convert(getOutput());
+		return service.convert(getOutput(null));
 	}
 
 	@Override

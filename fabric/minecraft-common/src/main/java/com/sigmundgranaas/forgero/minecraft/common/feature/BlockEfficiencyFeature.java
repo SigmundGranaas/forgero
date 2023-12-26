@@ -14,9 +14,9 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.block.Block;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 /**
  * Represents a feature that modulates the efficiency of block interactions based on specified criteria.
@@ -66,7 +66,7 @@ public class BlockEfficiencyFeature extends BasePredicateFeature {
 			});
 		}
 		return new BlockEfficiencyFeature(data, extractedTags.stream()
-				.map(id -> TagKey.of(Registry.BLOCK_KEY, id))
+				.map(id -> TagKey.of(RegistryKeys.BLOCK, id))
 				.collect(Collectors.toList()));
 	}
 }

@@ -1,5 +1,17 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -13,24 +25,24 @@ import com.sigmundgranaas.forgero.core.util.match.MutableMatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.client.render.model.Baker;
+
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
-import net.minecraft.client.render.model.ModelLoader;
+import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
+
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public static final BakedModel EMPTY = new EmptyBakedModel();
@@ -40,8 +52,9 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	private final Map<Item, BakedModel> defaultModels = new ConcurrentHashMap<>();
 	private final ModelRegistry registry;
 	private final StateService stateService;
-	private ModelLoader loader;
+	private Baker loader;
 	private Function<SpriteIdentifier, Sprite> textureGetter;
+	private String lastBakedModel;
 
 	public CompositeModelVariant(ModelRegistry modelRegistry, StateService stateService) {
 		this.registry = modelRegistry;
@@ -61,7 +74,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 				.maximumSize(100)
 				.build(new CacheLoader<>() {
 					@Override
-					public BakedModelResult load(String key) {
+					public @NotNull BakedModelResult load(@NotNull String key) {
 						return new BakedModelResult(new ModelResult(), EMPTY);
 					}
 				});
@@ -164,30 +177,6 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		});
 	}
 
-	@Nullable
-	@Override
-	public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-		if (this.loader == null || this.loader != loader) {
-			this.loader = loader;
-			this.textureGetter = textureGetter;
-			cache.invalidateAll();
-			defaultModels.clear();
-			ForgeroStateRegistry.COMPOSITES.parallelStream()
-					.map(stateService::find)
-					.flatMap(Optional::stream)
-					.map(state -> registry.find(state, MatchContext.mutable(MatchContext.of()))
-							.flatMap(this::convertModel)
-							.map(BakedModelResult::model)
-							.map(model -> Pair.of(state, model)))
-					.flatMap(Optional::stream)
-					.map(pair -> stateService.convert(pair.getKey())
-							.map(stack -> Pair.of(stack.getItem(), pair.getValue())))
-					.flatMap(Optional::stream)
-					.forEach(pair -> defaultModels.put(pair.getKey(), pair.getValue()));
-		}
-		return this;
-	}
-
 	private Optional<BakedModelResult> convertModel(ModelResult template) {
 		var unbakedModel = template.getTemplate().convert(this::modelConverter);
 		if (unbakedModel.isPresent()) {
@@ -239,10 +228,42 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		template.getModels().forEach(model -> textureCollector(model, accumulator));
 	}
 
+	@Override
+	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+
+	}
 	private void textureCollector(TextureModel template, List<ModelTemplate> accumulator) {
 		accumulator.add(template);
 		template.children().forEach(child -> textureCollector(child, accumulator));
 	}
+
+
+	@Nullable
+	@Override
+	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+		if (this.loader == null || defaultModels.isEmpty() || lastBakedModel != null && modelId.toString().equals(lastBakedModel)) {
+			this.lastBakedModel = modelId.toString();
+			this.loader = baker;
+			this.textureGetter = textureGetter;
+			cache.invalidateAll();
+			defaultModels.clear();
+
+			ForgeroStateRegistry.COMPOSITES.parallelStream()
+					.map(stateService::find)
+					.flatMap(Optional::stream)
+					.forEach(state -> {
+						CompletableFuture.supplyAsync(() -> registry.find(state, MatchContext.mutable(MatchContext.of())))
+								.thenApplyAsync(optionalModel -> optionalModel
+										.flatMap(this::convertModel))
+								.thenApply(modelOptional -> modelOptional
+										.map(model -> Pair.of(state, model)))
+								.thenApply(optionalPair -> optionalPair
+										.flatMap(pair -> stateService.convert(pair.getKey())
+										.map(stack -> Pair.of(stack.getItem(), pair.getValue()))))
+								.thenAccept(optionalPair -> optionalPair
+										.ifPresent(pair -> defaultModels.put(pair.getKey(), pair.getValue().model())));
+					});
+		}
+		return this;
+	}
 }
-
-

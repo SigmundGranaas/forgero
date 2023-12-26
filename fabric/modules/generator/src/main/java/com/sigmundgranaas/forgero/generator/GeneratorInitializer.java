@@ -10,9 +10,10 @@ import com.sigmundgranaas.forgero.generator.impl.converter.StringListVariableCon
 import com.sigmundgranaas.forgero.generator.impl.converter.TagToItemConverter;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.api.ModInitializer;
+
+import net.minecraft.registry.Registries;
 
 public class GeneratorInitializer implements ModInitializer {
 
@@ -27,7 +28,7 @@ public class GeneratorInitializer implements ModInitializer {
 		variableConverter("minecraft:tags", TagToItemConverter::new);
 
 		OperationFactory<Item> itemOperationFactory = new OperationFactory<>(Item.class);
-		Function<Item, String> identifier = item -> Registry.ITEM.getId(item).toString();
+		Function<Item, String> identifier = item -> Registries.ITEM.getId(item).toString();
 		operation("minecraft:identifier", "identifier", itemOperationFactory.build(identifier));
 		operation("minecraft:identifier", "id", itemOperationFactory.build(identifier));
 

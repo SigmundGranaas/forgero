@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -21,7 +22,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 /**
@@ -70,7 +70,7 @@ public class PlaceBlockHandler implements BlockTargetHandler {
 	 * @return A new instance of {@link PlaceBlockHandler}.
 	 */
 	public static PlaceBlockHandler fromJson(JsonObject json) {
-		Block block = Registry.BLOCK.get(new Identifier(json.get("block").getAsString()));
+		Block block = Registries.BLOCK.get(new Identifier(json.get("block").getAsString()));
 
 		BlockState state = block.getDefaultState();
 		if (json.has("state")) {

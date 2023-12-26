@@ -41,7 +41,7 @@ public abstract class EntityTickHandlerMixin extends Entity {
 			ItemStack main = entity.getMainHandStack();
 			MatchContext context = MatchContext.of()
 					.put(ENTITY, entity)
-					.put(WORLD, entity.world);
+					.put(WORLD, entity.getWorld());
 			cachedFilteredFeatures(main, EntityTickFeature.KEY, context)
 					.forEach(handler -> handler.handle(entity));
 		}

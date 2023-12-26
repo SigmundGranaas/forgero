@@ -91,6 +91,7 @@ import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredic
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -119,7 +120,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		var groupRegistry = ItemRegistries.GROUP_CONVERTER;
 
 		var converterRegistry = ItemRegistries.STATE_CONVERTER;
-		groupRegistry.register("forgero:default", (state) -> ItemGroup.MISC);
+		groupRegistry.register("forgero:default", (state) -> ItemGroups.getGroups().get(0));
 		var factory = new RegistryFactory<>(groupRegistry);
 
 		RegistryUtils.register(settingRegistry, ItemSettingRegistrars::new);

@@ -61,12 +61,12 @@ public abstract class PlayerServerInteractionManagerMixin {
 		}
 		MatchContext context = MatchContext.of()
 				.put(ENTITY, entity)
-				.put(WORLD, entity.world)
+				.put(WORLD, entity.getWorld())
 				.put(BLOCK_TARGET, pos);
 
 		cachedFilteredFeatures(main, OnHitBlockFeature.KEY, context)
 				.forEach(handler -> {
-					handler.onHit(entity, entity.world, pos);
+					handler.onHit(entity, entity.getWorld(), pos);
 					handler.handle(entity, main, Hand.MAIN_HAND);
 				});
 	}

@@ -18,11 +18,11 @@ import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 /**
@@ -123,7 +123,7 @@ public class MagneticHandler implements EntityBasedHandler, BlockTargetHandler, 
 	}
 
 	private static void addEntityTypeFromIdentifier(Set<EntityType<?>> entityFilters, String identifier) {
-		EntityType<?> type = Registry.ENTITY_TYPE.get(Identifier.tryParse(identifier));
+		EntityType<?> type = Registries.ENTITY_TYPE.get(Identifier.tryParse(identifier));
 		entityFilters.add(type);
 	}
 
@@ -147,8 +147,8 @@ public class MagneticHandler implements EntityBasedHandler, BlockTargetHandler, 
 
 	private List<Entity> getNearbyEntities(Entity rootEntity, float range, Predicate<Entity> predicate) {
 		Vec3d rootVec = rootEntity.getPos();
-		BlockPos pos1 = new BlockPos(rootVec.x + range, rootVec.y + range, rootVec.z + range);
-		BlockPos pos2 = new BlockPos(rootVec.x - range, rootVec.y - range, rootVec.z - range);
+		BlockPos pos1 = new BlockPos((int) (rootVec.x + range), (int) (rootVec.y + range), (int) (rootVec.z + range));
+		BlockPos pos2 = new BlockPos((int) (rootVec.x - range), (int) (rootVec.y - range), (int) (rootVec.z - range));
 		return rootEntity.getWorld().getOtherEntities(rootEntity, new Box(pos1, pos2), predicate);
 	}
 

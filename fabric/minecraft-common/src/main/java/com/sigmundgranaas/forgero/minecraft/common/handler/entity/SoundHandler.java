@@ -17,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
@@ -24,7 +25,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 /**
@@ -98,9 +98,9 @@ public class SoundHandler implements EntityBasedHandler, BlockTargetHandler, Ent
 	}
 
 	private void playSound(Entity entity) {
-		SoundEvent sound = Registry.SOUND_EVENT.get(soundId);
+		SoundEvent sound = Registries.SOUND_EVENT.get(soundId);
 		if (sound != null) {
-			entity.world.playSound(null, entity.getBlockPos(), sound, SoundCategory.NEUTRAL, volume, pitch);
+			entity.getWorld().playSound(null, entity.getBlockPos(), sound, SoundCategory.NEUTRAL, volume, pitch);
 		}
 	}
 

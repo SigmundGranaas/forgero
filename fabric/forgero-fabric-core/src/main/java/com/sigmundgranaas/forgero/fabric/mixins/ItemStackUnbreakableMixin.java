@@ -40,7 +40,7 @@ public abstract class ItemStackUnbreakableMixin {
 			if (tool.isPresent() && tool.map(UnbreakableHandler::isUnbreakable).filter(bol -> bol).isPresent()) {
 				if (tool.get() instanceof ConstructedTool conditional && !FeatureCache.check(FeatureContainerKey.of(conditional, BROKEN_KEY))) {
 					stack.setDamage(ComputedAttribute.of(conditional, Durability.KEY).asInt());
-					player.world.playSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_BREAK, player.getSoundCategory(), 0.8f, 0.8f + player.world.random.nextFloat() * 0.4f, false);
+					player.getWorld().playSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_BREAK, player.getSoundCategory(), 0.8f, 0.8f + player.getWorld().random.nextFloat() * 0.4f, false);
 					State brokenTool = conditional.applyCondition(Conditions.BROKEN);
 					player.getInventory().setStack(player.getInventory().selectedSlot, service.update(brokenTool, stack));
 				}

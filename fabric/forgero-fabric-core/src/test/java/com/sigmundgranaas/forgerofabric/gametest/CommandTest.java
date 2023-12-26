@@ -22,8 +22,8 @@ public class CommandTest {
 		context.getWorld().getServer().getPlayerManager().addToOperators(profile);
 
 
-		ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile, null);
-		testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
+        ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile);
+        testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
 
 		BlockPos targetPos = new BlockPos(1, 5, 0);
 		BlockPos absolute = context.getAbsolutePos(targetPos);
@@ -53,8 +53,8 @@ public class CommandTest {
 		GameProfile profile = new GameProfile(UUID.randomUUID(), "test-mock-serverPlayer2");
 		context.getWorld().getServer().getPlayerManager().addToOperators(profile);
 
-		ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile, null);
-		testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
+        ServerPlayerEntity testPlayer = context.getWorld().getServer().getPlayerManager().createPlayer(profile);
+        testPlayer.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.SERVERBOUND), testPlayer);
 
 		BlockPos targetPos = new BlockPos(1, 5, 0);
 		BlockPos absolute = context.getAbsolutePos(targetPos);

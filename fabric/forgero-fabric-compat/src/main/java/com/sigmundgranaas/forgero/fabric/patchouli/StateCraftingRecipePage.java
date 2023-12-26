@@ -2,10 +2,11 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
+
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipe;
@@ -14,7 +15,10 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
 import net.minecraft.util.collection.DefaultedList;
+
+import net.minecraft.world.World;
 
 import vazkii.patchouli.client.book.ClientBookRegistry;
 import vazkii.patchouli.client.book.gui.GuiBook;
@@ -22,37 +26,35 @@ import vazkii.patchouli.client.book.page.PageCrafting;
 
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
-public class StateCraftingRecipe extends PageCrafting {
+public class StateCraftingRecipePage extends PageCrafting {
 	public static Identifier ID = new Identifier(Forgero.NAMESPACE, RecipeTypes.STATE_CRAFTING_RECIPE.getName());
 
-	public StateCraftingRecipe() {
+	public StateCraftingRecipePage() {
 		super();
 	}
 
 	public static void register() {
-		ClientBookRegistry.INSTANCE.pageTypes.put(ID, StateCraftingRecipe.class);
+		ClientBookRegistry.INSTANCE.pageTypes.put(ID, StateCraftingRecipePage.class);
 	}
 
 	@Override
-	protected void drawRecipe(MatrixStack ms, Recipe<?> recipe, int recipeX, int recipeY, int mouseX, int mouseY, boolean second) {
-
-		RenderSystem.setShaderTexture(0, book.craftingTexture);
+	protected void drawRecipe(DrawContext context, Recipe<?> recipe, int recipeX, int recipeY, int mouseX, int mouseY, boolean second) {
 		RenderSystem.enableBlend();
-		DrawableHelper.drawTexture(ms, recipeX - 2, recipeY - 2, 0, 0, 100, 62, 128, 256);
+		context.drawTexture(book.craftingTexture, recipeX - 2, recipeY - 2, 0, 0, 100, 62, 128, 256);
 
 		boolean shaped = recipe instanceof ShapedRecipe;
 		if (!shaped) {
 			int iconX = recipeX + 62;
 			int iconY = recipeY + 2;
-			DrawableHelper.drawTexture(ms, iconX, iconY, 0, 64, 11, 11, 128, 256);
+			context.drawTexture(book.craftingTexture, iconX, iconY, 0, 64, 11, 11, 128, 256);
 			if (parent.isMouseInRelativeRange(mouseX, mouseY, iconX, iconY, 11, 11)) {
 				parent.setTooltip(Text.translatable("patchouli.gui.lexicon.shapeless"));
 			}
 		}
 
-		parent.drawCenteredStringNoShadow(ms, getTitle(second).asOrderedText(), GuiBook.PAGE_WIDTH / 2, recipeY - 10, book.headerColor);
+		parent.drawCenteredStringNoShadow(context, getTitle(second).asOrderedText(), GuiBook.PAGE_WIDTH / 2, recipeY - 10, book.headerColor);
 
-		parent.renderItemStack(ms, recipeX + 79, recipeY + 22, mouseX, mouseY, getRecipeOutput(recipe));
+		parent.renderItemStack(context, recipeX + 79, recipeY + 22, mouseX, mouseY, getRecipeOutput(MinecraftClient.getInstance().world, recipe));
 
 		DefaultedList<Ingredient> ingredients = recipe.getIngredients();
 		int wrap = 3;
@@ -61,10 +63,10 @@ public class StateCraftingRecipe extends PageCrafting {
 		}
 
 		for (int i = 0; i < ingredients.size(); i++) {
-			parent.renderIngredient(ms, recipeX + (i % wrap) * 19 + 3, recipeY + (i / wrap) * 19 + 3, mouseX, mouseY, ingredients.get(i));
+			parent.renderIngredient(context, recipeX + (i % wrap) * 19 + 3, recipeY + (i / wrap) * 19 + 3, mouseX, mouseY, ingredients.get(i));
 		}
 
-		parent.renderItemStack(ms, recipeX + 79, recipeY + 41, mouseX, mouseY, recipe.createIcon());
+		parent.renderItemStack(context, recipeX + 79, recipeY + 41, mouseX, mouseY, recipe.createIcon());
 
 	}
 
@@ -89,11 +91,11 @@ public class StateCraftingRecipe extends PageCrafting {
 	}
 
 	@Override
-	protected ItemStack getRecipeOutput(Recipe<?> recipe) {
+	protected ItemStack getRecipeOutput(World level, Recipe<?> recipe) {
 		if (recipe instanceof CraftingRecipe craftingRecipe) {
-			return craftingRecipe.craft(createCraftingInventory(craftingRecipe));
+			return craftingRecipe.craft(createCraftingInventory(craftingRecipe), level.getRegistryManager());
 		}
-		return recipe.getOutput();
+		return recipe.getOutput(level.getRegistryManager());
 	}
 
 	@Override

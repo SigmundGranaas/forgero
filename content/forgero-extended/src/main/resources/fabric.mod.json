@@ -28,7 +28,6 @@
   ],
   "depends": {
     "forgero-core": "*",
-    "minecraft": "1.19.x",
     "java": ">=17"
   },
   "custom": {

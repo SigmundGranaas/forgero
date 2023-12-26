@@ -2,12 +2,12 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
 import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.ArrayList;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -18,6 +18,7 @@ import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import com.sigmundgranaas.forgero.minecraft.common.mixins.JsonUnbakedModelOverrideMixin;
 
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
@@ -38,10 +39,10 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 	private final Map<String, Integer> resolutionMap;
 	private final Map<String, Integer> indexMap;
 	private final String id;
-	private final ModelLoader loader;
+	private final Baker loader;
 	private final Function<SpriteIdentifier, Sprite> textureGetter;
 
-	public Unbaked2DTexturedModel(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, List<ModelTemplate> textures, String id) {
+	public Unbaked2DTexturedModel(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, List<ModelTemplate> textures, String id) {
 		this.loader = loader;
 		this.textureGetter = textureGetter;
 		this.textures = textures;
@@ -138,12 +139,12 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		for (ModelElementFace face : element.faces.values()) {
 			var res = resolutionMap.getOrDefault(face.textureId, 16);
 			if (!res.equals(topResolution)) {
-				float initialZ = element.from.getZ();
+				float initialZ = element.from.z();
 				float scale = (float) res / topResolution;
-				element.from.multiplyComponentwise(scale, scale, 1);
-				element.to.multiplyComponentwise(scale, scale, 1);
+				element.from.mul(scale, scale, 1);
+				element.to.mul(scale, scale, 1);
 
-				float z = element.from.getZ();
+				float z = element.from.z();
 				element.from.add(0, 0, z - initialZ);
 				element.to.add(0, 0, z - initialZ);
 				break;
@@ -161,16 +162,16 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		for (ModelElement element : generated_model.getElements()) {
 			applyOffset(element);
 		}
+
 		for (ModelElement element : generated_model.getElements()) {
 			applyResolutionScaling(element);
 		}
 
 		if (parentModel instanceof JsonUnbakedModel parent) {
 			((JsonUnbakedModelOverrideMixin) generated_model).setParent(parent);
-
 			return generated_model.bake(loader, parent, textureGetter, X0_Y0, id, true);
 		}
-		//((GeneratedJsonLoader) loader).loadGeneratedJson(generated_model, id);
+
 		return generated_model.bake(loader, model, textureGetter, X0_Y0, id, true);
 
 	}

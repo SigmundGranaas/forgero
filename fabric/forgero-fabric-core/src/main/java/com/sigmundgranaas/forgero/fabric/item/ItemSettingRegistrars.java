@@ -6,8 +6,8 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.item.SettingProcessor;
 
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 
 public class ItemSettingRegistrars implements Registerable<SettingProcessor> {
@@ -20,7 +20,7 @@ public class ItemSettingRegistrars implements Registerable<SettingProcessor> {
 
 	public static Item.Settings recipeRemainderIfSchematic(Item.Settings settings, State state) {
 		if (state.name().contains("schematic")) {
-			settings.recipeRemainder(Registry.ITEM.get(new Identifier(state.identifier())));
+			settings.recipeRemainder(Registries.ITEM.get(new Identifier(state.identifier())));
 		}
 		return settings;
 	}

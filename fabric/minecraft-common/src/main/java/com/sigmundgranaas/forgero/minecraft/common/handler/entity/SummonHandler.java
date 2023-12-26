@@ -121,7 +121,7 @@ public class SummonHandler implements EntityTargetHandler, EntityBasedHandler, B
 
 	@Override
 	public void handle(Entity entity) {
-		onHit(entity, entity.world, entity);
+		onHit(entity, entity.getWorld(), entity);
 	}
 
 	@Override

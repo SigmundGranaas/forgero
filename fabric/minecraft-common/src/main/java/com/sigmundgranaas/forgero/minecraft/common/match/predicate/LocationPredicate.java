@@ -7,6 +7,13 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import lombok.Builder;
 import lombok.Data;
+
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+
+import net.minecraft.registry.RegistryKeys;
+
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -16,8 +23,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.Structure;
@@ -78,9 +83,9 @@ public class LocationPredicate {
 				.x(extractFloatRange(jsonObject, "x"))
 				.y(extractFloatRange(jsonObject, "y"))
 				.z(extractFloatRange(jsonObject, "z"))
-				.dimension(extractRegistryKey(jsonObject, "dimension", Registry.WORLD_KEY))
-				.feature(extractRegistryKey(jsonObject, "feature", Registry.STRUCTURE_KEY))
-				.biome(extractRegistryKey(jsonObject, "biome", Registry.BIOME_KEY))
+				.dimension(extractRegistryKey(jsonObject, "dimension", RegistryKeys.WORLD))
+				.feature(extractRegistryKey(jsonObject, "feature", RegistryKeys.STRUCTURE))
+				.biome(extractRegistryKey(jsonObject, "biome", RegistryKeys.BIOME))
 				.smokey(jsonObject.has("smokey") ? jsonObject.get("smokey").getAsBoolean() : null)
 				.light(LightPredicate.fromJson(jsonObject.get("light")))
 				.block(BlockPredicate.fromJson(jsonObject.get("block")))
@@ -111,7 +116,7 @@ public class LocationPredicate {
 		return null;
 	}
 
-	public boolean test(World world, double x, double y, double z) {
+	public boolean test(World world, int x, int y, int z) {
 		BlockPos blockPos = new BlockPos(x, y, z);
 
 		if (!isPositionValid(x, y, z)) return false;

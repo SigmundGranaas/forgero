@@ -4,7 +4,8 @@ import java.util.UUID;
 
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 public class AttributesRegistrar implements Registrar {
 	public static UUID BASE_MINING_SPEED_ID = UUID.fromString("CB3F55D5-655C-4F38-A497-9C13A33DB5CF");
@@ -15,8 +16,8 @@ public class AttributesRegistrar implements Registrar {
 	public static EntityAttribute MINING_LEVEL;
 
 	public void register() {
-		MINING_SPEED = Registry.register(Registry.ATTRIBUTE, "generic.mining_speed", (new ClampedEntityAttribute("attribute.name.generic.mining_speed", 1, 0.0, 1024.0)).setTracked(true));
-		DURABILITY = Registry.register(Registry.ATTRIBUTE, "generic.durability", (new ClampedEntityAttribute("attribute.name.generic.durability", 1, 0.0, 100000)).setTracked(true));
-		MINING_LEVEL = Registry.register(Registry.ATTRIBUTE, "generic.mining_level", (new ClampedEntityAttribute("attribute.name.generic.mining_level", 0, 0.0, 100)).setTracked(true));
+		MINING_SPEED = Registry.register(Registries.ATTRIBUTE, "generic.mining_speed", (new ClampedEntityAttribute("attribute.name.generic.mining_speed", 1, 0.0, 1024.0)).setTracked(true));
+		DURABILITY = Registry.register(Registries.ATTRIBUTE, "generic.durability", (new ClampedEntityAttribute("attribute.name.generic.durability", 1, 0.0, 100000)).setTracked(true));
+		MINING_LEVEL = Registry.register(Registries.ATTRIBUTE, "generic.mining_level", (new ClampedEntityAttribute("attribute.name.generic.mining_level", 0, 0.0, 100)).setTracked(true));
 	}
 }

@@ -19,7 +19,7 @@
     },
     {
       "type": "patchouli:spotlight",
-      "title": "Assembly station",
+      "title": "Upgrade station",
       "item": "forgero:upgrade_station",
       "text": "The upgrade station is a multi block table that makes it possible to upgrade everything on your tools and parts. Placing a tool in the upgrade station will create a complete overview of all the different parts, as well as their slots, so you can upgrade them in place."
     },

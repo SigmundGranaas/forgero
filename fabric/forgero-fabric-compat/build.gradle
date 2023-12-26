@@ -1,7 +1,6 @@
 repositories {
-	maven { url "https://api.modrinth.com/maven" }
+	mavenCentral()
 	maven { url "https://maven.shedaniel.me/" }
-	maven { url "https://cursemaven.com" }
 	maven { url 'https://maven.blamejared.com' }
 	maven { url "https://minecraft.guntram.de/maven/" }
 	maven { url "https://maven.terraformersmc.com/" }
@@ -13,11 +12,12 @@ repositories {
 	maven { url 'https://maven.gegy.dev' }
 	maven { url 'https://maven.kosmx.dev/' }
 	maven { url 'https://jitpack.io' }
-	maven { url = uri("https://ueaj.dev/maven") }
 	maven {
 		name = "Xander Maven"
 		url = "https://maven.isxander.dev/releases"
 	}
+	maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
+
 	mavenLocal()
 }
 
@@ -34,33 +34,31 @@ dependencies {
 	implementation project(path: ':fabric:modules:generator', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modCompileOnly "vazkii.patchouli:Patchouli:1.19.2-77-FABRIC"
+	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
-	modImplementation "curse.maven:arrp-463113:3901211"
+	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
 
 	//dynamiclights compat
-	modCompileOnlyApi "curse.maven:modmenu-308702:4145207"
-	modCompileOnlyApi "curse.maven:lambdynamiclights-393442:3824820"
-	modCompileOnlyApi("dev.lambdaurora:spruceui:4.1.0+1.19.2")
+	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lambd_version}")
+	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
 	//better combat
-	modCompileOnly "maven.modrinth:better-combat:1.5.5+1.19-fabric"
-	modCompileOnly "maven.modrinth:cloth-config:8.2.88+fabric"
-	modCompileOnly("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
+	modCompileOnly("maven.modrinth:better-combat:${project.better_combat_version}")
+	//modImplementation "maven.modrinth:cloth-config:9.0.94+fabric"
+	//modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
 
 	//betterend&betternether
 	// modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
 	// modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
 	// modImplementation "maven.modrinth:MpzVLzy5:InVK1xFf"
 
-
 	//emi
-	modCompileOnly "dev.emi:emi:${emi_version}:api"
-	modLocalRuntime "dev.emi:emi:${emi_version}"
+	//modCompileOnly "dev.emi:emi:${emi_version}:api"
+	//modLocalRuntime "dev.emi:emi:${emi_version}"
 	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
 
 	//JEI
-	//modRuntimeOnly "maven.modrinth:u6dRKJwZ:Fq2JkIID"
+	// modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"
 
 	//toolstats testing
 	//modImplementation "curse.maven:tool-stats-377109:3944167"
@@ -106,11 +104,6 @@ dependencies {
 	//modCompileOnly "curse.maven:inventory-profiles-next-495267:4263990"
 	//modCompileOnly "curse.maven:libipn-679177:4263961"
 
-	//include project(':forgero-core')
-	//include project(':forgero-vanilla')
-	//include project(':forgero-extended')
-	//include project(':forgero-fabric')
-	//include project(':forgero-compat')
 	//Polymorph testing
 
 	//modImplementation "curse.maven:cardinal-components-318449:3669769"
@@ -123,20 +116,18 @@ dependencies {
 	//modImplementation "curse.maven:combatedit-385513:3869344"
 
 	//modImplementation 'com.ptsmods:devlogin:2.1'
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
 	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Mod Menu API
-	modCompileOnlyApi "com.terraformersmc:modmenu:${this.modmenu_version}"
-	modRuntimeOnly "com.terraformersmc:modmenu:${this.modmenu_version}"
+	modImplementation("com.terraformersmc:modmenu:${this.modmenu_version}")
 
-	modLocalRuntime "maven.modrinth:lazydfu:4SHylIO9"
-	modLocalRuntime "maven.modrinth:here-be-no-dragons:Fi3C0IO5"
-	modLocalRuntime "maven.modrinth:just-load:ob5o9Cf5"
+	modLocalRuntime "maven.modrinth:just-load:${project.justload_version}"
 
-	// YetAnotherConfigLib
-	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+
+	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
+
 }
 
 sourceSets {

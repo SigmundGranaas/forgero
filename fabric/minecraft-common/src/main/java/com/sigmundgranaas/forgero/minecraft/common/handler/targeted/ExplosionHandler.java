@@ -79,14 +79,14 @@ public class ExplosionHandler implements EntityTargetHandler, BlockTargetHandler
 	@Override
 	public void onHit(Entity source, World world, Entity targetEntity) {
 		if ("minecraft:targeted_entity".equals(target) && !world.isClient) {
-			world.createExplosion(targetEntity, targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), power, Explosion.DestructionType.BREAK);
+			world.createExplosion(targetEntity, targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), power,  World.ExplosionSourceType.MOB);
 		}
 	}
 
 	@Override
 	public void onHit(Entity root, World world, BlockPos pos) {
 		if (!world.isClient && root instanceof LivingEntity living) {
-			world.createExplosion(root, DamageSource.explosion(living), new ExplosionBehavior(), pos.getX(), pos.getY() + 1, pos.getZ(), power, false, Explosion.DestructionType.BREAK);
+			world.createExplosion(root, pos.getX(), pos.getY() + 1, pos.getZ(), power, World.ExplosionSourceType.MOB);
 		}
 	}
 }

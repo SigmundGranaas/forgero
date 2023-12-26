@@ -21,10 +21,15 @@ import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Registrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
-import net.minecraft.util.registry.Registry;
 
 /**
  * A class to handle registration of states.
@@ -57,11 +62,20 @@ public class StateItemRegistrar implements Registrar {
 			ItemData data = factory.convert(state);
 			Identifier identifier = data.id();
 			var item = data.item();
-			Registry.register(Registry.ITEM, identifier, item);
+			registerGroup(data);
+			Registry.register(Registries.ITEM, identifier, item);
 		} catch (InvalidIdentifierException e) {
 			Forgero.LOGGER.error("Invalid identifier: {}", state.get().identifier());
 			Forgero.LOGGER.error(e);
 		}
+	}
+
+	private void registerGroup(ItemData data) {
+		Registries.ITEM_GROUP.getKey(data.group())
+				.ifPresent(group -> ItemGroupEvents.modifyEntriesEvent(group)
+						.register((entries) -> {
+							entries.add(new ItemStack(data.item()));
+		}));
 	}
 
 	@Override

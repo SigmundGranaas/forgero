@@ -42,7 +42,7 @@ public class AttributeApplicationTest {
 	public static float EXPECTED_DIAMOND_SWORD_DAMAGE = 7f;
 
 	public static ServerPlayerEntity createMockPlayer(BlockPos pos, TestContext context) {
-		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-player"), null);
+		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-player"));
 		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity);
 		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
 		return entity;

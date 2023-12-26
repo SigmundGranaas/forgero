@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -129,9 +130,9 @@ public class ThrowableItem extends PersistentProjectileEntity {
 		Entity owner = this.getOwner();
 		DamageSource damageSource;
 		if (owner == null) {
-			damageSource = DamageSource.arrow(this, this);
+			damageSource = super.getDamageSources().arrow(this, this);
 		} else {
-			damageSource = DamageSource.arrow(this, owner);
+			damageSource = super.getDamageSources().arrow(this, owner);
 			if (owner instanceof LivingEntity) {
 				((LivingEntity) owner).onAttacking(entity);
 			}
@@ -158,7 +159,7 @@ public class ThrowableItem extends PersistentProjectileEntity {
 	}
 
 	public double getDamage(Entity target) {
-		MatchContext ctx = MatchContext.of().put(ENTITY_TARGET, target).put(WORLD, this.world);
+		MatchContext ctx = MatchContext.of().put(ENTITY_TARGET, target).put(WORLD, this.getWorld());
 		float damage = StateService.INSTANCE.convert(asItemStack())
 				.map(container -> ComputedAttribute.of(ContainerTargetPair.of(container, ctx), AttackDamage.KEY))
 				.map(ComputedAttribute::asFloat)
