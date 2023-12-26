@@ -19,13 +19,7 @@ def getGitVersion = { ->
 
 		// If it's a snapshot version, append '-SNAPSHOT'
 		if (isSnapshotVersion(gitVersionStringParsed)) {
-			gitVersionStringParsed += "-SNAPSHOT"
-		}
-
-		def parts = gitVersionStringParsed.split("-")
-
-		if (parts.length == 2 && parts[1] == project.minecraft_version) {
-			return gitVersionStringParsed
+			return gitVersionStringParsed += "-SNAPSHOT"
 		} else {
 			return projectVersion
 		}
