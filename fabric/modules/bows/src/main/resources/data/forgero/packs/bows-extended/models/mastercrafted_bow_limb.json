@@ -44,7 +44,7 @@
       "variants": [
         {
           "predicate": [
-            "model:mastercrafted_bow_limb.png",
+            "model:mastercrafted_bow_pull_2.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
@@ -54,7 +54,7 @@
         },
         {
           "predicate": [
-            "model:mastercrafted_bow_limb.png",
+            "model:mastercrafted_bow_pull_1.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.6
