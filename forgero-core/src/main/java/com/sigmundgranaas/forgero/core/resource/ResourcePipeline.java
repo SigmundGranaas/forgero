@@ -151,9 +151,14 @@ public class ResourcePipeline {
 	}
 
 	private boolean filterResources(DataResource resource) {
-		boolean filter = ForgeroConfigurationLoader.configuration.disabledResources.stream().noneMatch(disabled -> resource.identifier().equals(disabled));
+		boolean filter = ForgeroConfigurationLoader.configuration.disabledResources
+				.stream().noneMatch(disabled -> resource.identifier().equals(disabled));
 		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging && !silent) {
 			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration, located at {1}", resource.identifier(), ForgeroConfigurationLoader.configurationFilePath));
+		}
+
+		if(!filter){
+			return false;
 		}
 
 		return filterDependencies(dependencies, resource.dependencies(), resource.identifier(), silent, configuration);
