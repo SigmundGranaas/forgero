@@ -42,7 +42,7 @@
       "variants": [
         {
           "predicate": [
-            "model:refined_bow_limb_reinforcement.png",
+            "model:refined_bow_limb.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
@@ -52,7 +52,7 @@
         },
         {
           "predicate": [
-            "model:refined_bow_limb_reinforcement.png",
+            "model:refined_bow_limb.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.6

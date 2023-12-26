@@ -33,7 +33,7 @@
       "variants": [
         {
           "predicate": [
-            "model:mastercrafted_bow_limb_reinforcement.png",
+            "model:mastercrafted_bow_limb.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
@@ -43,7 +43,7 @@
         },
         {
           "predicate": [
-            "model:mastercrafted_bow_limb_reinforcment.png",
+            "model:mastercrafted_bow_limb.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.6
@@ -56,28 +56,6 @@
             "model:mastercrafted_bow_limb.png"
           ],
           "template": "mastercrafted_bow_limb_reinforcement.png"
-        }
-      ]
-    },
-    {
-      "name": "bow_string",
-      "variants": [
-        {
-          "target": [
-            "model:mastercrafted_bow_limb.png"
-          ],
-          "template": "mastercrafted_bow_string.png"
-        }
-      ]
-    },
-    {
-      "name": "bow_grip",
-      "variants": [
-        {
-          "target": [
-            "model:mastercrafted_bow_limb.png"
-          ],
-          "template": "mastercrafted_bow_grip.png"
         }
       ]
     },
