@@ -49,9 +49,44 @@
       "template": "bow_grip.png",
       "type": "GENERATE",
       "palette": "SOFT_MATERIAL",
-      "order": 10
+      "order": 15
     },
-
+    {
+      "name": "bow_dye",
+      "template": "bow_limb.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 10,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "bow_pull_0.png"
+        }
+      ]
+    },
     {
       "target": [
         "type:WOOD",
@@ -67,6 +102,22 @@
       ],
       "modelType": "UPGRADE",
       "template": "bow_grip"
+    },
+    {
+      "target": [
+        "type:UPGRADE_MATERIAL",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_reinforcement"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_dye"
     }
   ]
 }

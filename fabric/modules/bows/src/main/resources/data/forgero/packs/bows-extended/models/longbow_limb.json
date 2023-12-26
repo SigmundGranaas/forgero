@@ -9,6 +9,28 @@
       "order": 5
     },
     {
+      "name": "bow_string",
+      "variants": [
+        {
+          "target": [
+            "model:longbow_limb.png"
+          ],
+          "template": "mastercrafted_bow_string.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_dye",
+      "variants": [
+        {
+          "target": [
+            "model:longbow_limb.png"
+          ],
+          "template": "longbow_limb.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:longbow_limb-schematic"

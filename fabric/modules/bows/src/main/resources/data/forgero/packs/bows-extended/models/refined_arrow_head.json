@@ -6,7 +6,61 @@
       "template": "refined_arrow_head.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 5
+      "order": 5,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "refined_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:BOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "refined_arrow_head_in_bow.png"
+        }
+      ]
+    },
+    {
+      "name": "arrow_dye",
+      "variants": [
+        {
+          "target": [
+            "model:refined_arrow_head.png"
+          ],
+          "template": "refined_arrow_head.png"
+        }
+      ]
     },
     {
       "target": [
