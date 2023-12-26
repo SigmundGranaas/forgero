@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-villager",
+  "version": "${version}",
+  "name": "Forgero villager module",
+  "description": "Villager integration for Forgero",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.villager.VillagerInitializer"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "forgero-fabric-core": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
+      }
+    }
+  }
+}
