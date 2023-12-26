@@ -17,7 +17,7 @@ public class SchematicMatcher extends TypeMatcher {
 			if (type.typeName().equals("SCHEMATIC")) {
 				return true;
 			} else {
-				return type.parent().map(parent -> test(parent, context)).orElse(false);
+				return type.parent().stream().anyMatch(parent -> test(parent, context));
 			}
 		}
 		return false;

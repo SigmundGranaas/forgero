@@ -12,18 +12,17 @@ public class MutableTypeNode {
 	private final String name;
 	private final List<MutableTypeNode> children;
 	private final HashMap<Class<?>, List<Object>> resourceMap;
-	@Nullable
-	private MutableTypeNode parent;
+	private List<MutableTypeNode> parent;
 
-	public MutableTypeNode(@NotNull List<MutableTypeNode> children, @NotNull String name, @Nullable MutableTypeNode parent) {
+	public MutableTypeNode(@NotNull List<MutableTypeNode> children, @NotNull String name, @NotNull List<MutableTypeNode> parent) {
 		this.parent = parent;
 		this.children = children;
 		this.name = name;
 		this.resourceMap = new HashMap<>();
 	}
 
-	public Optional<MutableTypeNode> parent() {
-		return Optional.ofNullable(parent);
+	public List<MutableTypeNode> parent() {
+		return parent;
 	}
 
 	public List<MutableTypeNode> children() {
@@ -50,7 +49,6 @@ public class MutableTypeNode {
 			arrayList.add(resource);
 			resourceMap.put(type, arrayList);
 		}
-
 	}
 
 	public <T> ImmutableList<T> getResources(Class<T> type) {
@@ -69,10 +67,8 @@ public class MutableTypeNode {
 	}
 
 	public MutableTypeNode addParent(MutableTypeNode parent) {
-		if (this.parent != null) {
-			return this;
-		}
-		this.parent = parent;
+		this.parent = new ArrayList<>(this.parent);
+		this.parent.add(parent);
 		return this;
 	}
 
@@ -88,8 +84,8 @@ public class MutableTypeNode {
 	}
 
 	public Type type() {
-		if (parent().isPresent()) {
-			return new SimpleType(name, Optional.of(parent().get().type()), new TypeMatcher());
+		if (!parent.isEmpty()) {
+			return new SimpleType(name, parent.stream().map(MutableTypeNode::type).toList(), new TypeMatcher());
 		}
 		return new SimpleType(name, Optional.empty(), new TypeMatcher());
 	}
