@@ -28,16 +28,17 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-
-
 public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint {
 	public static final RegistryKey<ItemGroup> FORGERO_BOWS_KEY =  RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "bows"));
-
 	public static final ItemGroup FORGERO_BOWS = FabricItemGroup.builder()
 			.icon(ForgeroBowInitializer::bowIcon)
 			.displayName(Text.translatable( "itemGroup.forgero.bows"
 			))
 			.build();
+
+	static {
+		Registry.register(Registries.ITEM_GROUP, FORGERO_BOWS_KEY, FORGERO_BOWS);
+	}
 
 	public static EntityType<DynamicArrowEntity> DYNAMIC_ARROW_ENTITY = Registry.register(Registries.ENTITY_TYPE, DYNAMIC_ARROW_IDENTIFIER, EntityType.Builder.create((EntityType<DynamicArrowEntity> entity, World world) -> new DynamicArrowEntity(entity, world), SpawnGroup.MISC).build(DYNAMIC_ARROW_IDENTIFIER.toString()));
 
