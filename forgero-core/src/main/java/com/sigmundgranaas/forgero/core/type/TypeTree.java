@@ -17,13 +17,10 @@ import java.util.function.Consumer;
 public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	private final List<MutableTypeNode> rootNodes;
 	private List<TypeData> missingNodes;
-	@Getter
-	private final Map<String, List<String>> preloadEntries;
 
 	public TypeTree() {
 		this.rootNodes = new ArrayList<>();
 		this.missingNodes = new ArrayList<>();
-		this.preloadEntries = new HashMap<>();
 	}
 
 	public Optional<MutableTypeNode> addNode(TypeData nodeData) {
@@ -52,12 +49,6 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 		return Optional.empty();
 	}
 
-	private void preloadEntries(String name, String parent) {
-		if(!preloadEntries.containsKey(parent)){
-			preloadEntries.put(parent, new ArrayList<>());
-		}
-		preloadEntries.get(parent).add(name);
-	}
 
 	public void addNodes(List<TypeData> nodes) {
 		nodes.forEach(this::addNode);
@@ -66,9 +57,7 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 
 	private Optional<MutableTypeNode> addNodeWithParent(String name, String parent) {
 		var parentOpt = find(parent);
-		if(name.contains(":")){
-			preloadEntries(name, parent);
-		}
+
 		if (parentOpt.isPresent()) {
 			MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), name, Collections.emptyList());
 			return Optional.of(parentOpt.get().addChild(node));
