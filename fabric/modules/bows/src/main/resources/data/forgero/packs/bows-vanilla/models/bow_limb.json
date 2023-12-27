@@ -6,7 +6,7 @@
       "template": "bow_limb.png",
       "type": "GENERATE",
       "palette": "WOOD",
-      "order": 5,
+      "order": 2,
       "variants": [
         {
           "predicate": [
@@ -42,21 +42,21 @@
       "modelType": "GENERATE",
       "template": "bow_limb_reinforcement.png",
       "palette": "UPGRADE_MATERIAL",
-      "order": 25
+      "order": 5
     },
     {
       "name": "bow_grip",
       "template": "bow_grip.png",
       "type": "GENERATE",
       "palette": "SOFT_MATERIAL",
-      "order": 15
+      "order": 4
     },
     {
       "name": "bow_dye",
       "template": "bow_limb.png",
       "type": "GENERATE",
       "palette": "DYE",
-      "order": 10,
+      "order": 3,
       "variants": [
         {
           "predicate": [

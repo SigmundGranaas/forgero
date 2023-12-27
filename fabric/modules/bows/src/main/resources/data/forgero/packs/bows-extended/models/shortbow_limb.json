@@ -2,9 +2,9 @@
   "type": "BOW_LIMB",
   "models": [
     {
-      "name": "longbow_limb",
+      "name": "shortbow_limb",
       "modelType": "GENERATE",
-      "template": "longbow_limb.png",
+      "template": "shortbow_limb.png",
       "palette": "WOOD",
       "order": 2,
       "variants": [
@@ -15,7 +15,7 @@
               "pull": 0.9
             }
           ],
-          "template": "longbow_pull_2.png"
+          "template": "shortbow_pull_2.png"
         },
         {
           "predicate": [
@@ -24,7 +24,7 @@
               "pull": 0.6
             }
           ],
-          "template": "longbow_pull_1.png"
+          "template": "shortbow_pull_1.png"
         },
         {
           "predicate": [
@@ -33,18 +33,7 @@
               "pull": 0.1
             }
           ],
-          "template": "longbow_pull_0.png"
-        }
-      ]
-    },
-    {
-      "name": "bow_grip",
-      "variants": [
-        {
-          "target": [
-            "model:longbow_limb.png"
-          ],
-          "template": "longbow_grip.png"
+          "template": "shortbow_pull_0.png"
         }
       ]
     },
@@ -52,10 +41,34 @@
       "name": "bow_string",
       "variants": [
         {
-          "target": [
-            "model:longbow_limb.png"
+          "predicate": [
+            "model:shortbow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
           ],
-          "template": "longbow_string.png"
+          "template": "shortbow_string_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "shortbow_string_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "shortbow_string_pull_0.png"
         }
       ]
     },
@@ -64,39 +77,39 @@
       "variants": [
         {
           "predicate": [
-            "model:longbow_pull_2.png",
+            "model:shortbow_pull_2.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
             }
           ],
-          "template": "longbow_limb_reinforcement_pull_2.png"
+          "template": "shortbow_limb_reinforcement_pull_2.png"
         },
         {
           "predicate": [
-            "model:longbow_pull_1.png",
+            "model:shortbow_pull_1.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.6
             }
           ],
-          "template": "longbow_limb_reinforcement_pull_1.png"
+          "template": "shortbow_limb_reinforcement_pull_1.png"
         },
         {
           "predicate": [
-            "model:longbow_pull_0.png",
+            "model:shortbow_pull_0.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.1
             }
           ],
-          "template": "longbow_limb_reinforcement_pull_0.png"
+          "template": "shortbow_limb_reinforcement_pull_0.png"
         },
         {
           "predicate": [
-            "model:longbow_limb.png"
+            "model:shortbow_limb.png"
           ],
-          "template": "longbow_limb_reinforcement.png"
+          "template": "shortbow_limb_reinforcement.png"
         }
       ]
     },
@@ -105,49 +118,49 @@
       "variants": [
         {
           "predicate": [
-            "model:longbow_pull_2.png",
+            "model:shortbow_pull_2.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
             }
           ],
-          "template": "longbow_pull_2.png"
+          "template": "shortbow_pull_2.png"
         },
         {
           "predicate": [
-            "model:longbow_pull_1.png",
+            "model:shortbow_pull_1.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.6
             }
           ],
-          "template": "longbow_pull_1.png"
+          "template": "shortbow_pull_1.png"
         },
         {
           "predicate": [
-            "model:longbow_pull_0.png",
+            "model:shortbow_pull_0.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.1
             }
           ],
-          "template": "longbow_pull_0.png"
+          "template": "shortbow_pull_0.png"
         },
         {
           "target": [
-            "model:longbow_limb.png"
+            "model:shortbow_limb.png"
           ],
-          "template": "longbow_limb.png"
+          "template": "shortbow_limb.png"
         }
       ]
     },
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:longbow_limb-schematic"
+        "id:shortbow_limb-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "longbow_limb"
+      "template": "shortbow_limb"
     }
   ]
 }

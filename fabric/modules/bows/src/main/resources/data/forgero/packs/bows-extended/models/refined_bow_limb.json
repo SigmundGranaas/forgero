@@ -6,7 +6,7 @@
       "template": "refined_bow_limb.png",
       "type": "GENERATE",
       "palette": "WOOD",
-      "order": 5,
+      "order": 2,
       "variants": [
         {
           "predicate": [
@@ -68,7 +68,7 @@
               "pull": 0.1
             }
           ],
-          "template": "refined_bow_limb_reinforcement.png"
+          "template": "refined_bow_limb_reinforcement_pull_0.png"
         },
         {
           "target": [
@@ -89,6 +89,7 @@
         },
           {
             "predicate": [
+              "model:refined_bow_pull_2.png",
               {
                 "type": "forgero:bow_pull",
                 "pull": 0.9
@@ -98,6 +99,7 @@
           },
           {
             "predicate": [
+              "model:refined_bow_pull_1.png",
               {
                 "type": "forgero:bow_pull",
                 "pull": 0.6
@@ -107,6 +109,7 @@
           },
           {
             "predicate": [
+              "model:refined_bow_pull_0.png",
               {
                 "type": "forgero:bow_pull",
                 "pull": 0.1

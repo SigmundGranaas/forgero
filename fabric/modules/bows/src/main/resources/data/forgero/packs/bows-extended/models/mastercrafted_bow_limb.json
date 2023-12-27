@@ -6,7 +6,7 @@
       "modelType": "GENERATE",
       "template": "mastercrafted_bow_limb.png",
       "palette": "WOOD",
-      "order": 5,
+      "order": 2,
       "variants": [
         {
           "predicate": [
@@ -25,17 +25,26 @@
             }
           ],
           "template": "mastercrafted_bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "mastercrafted_bow_pull_0.png"
         }
       ]
     },
     {
-      "name": "bow_string",
+      "name": "bow_grip",
       "variants": [
         {
           "target": [
             "model:mastercrafted_bow_limb.png"
           ],
-          "template": "mastercrafted_bow_string.png"
+          "template": "mastercrafted_bow_grip.png"
         }
       ]
     },
@@ -64,6 +73,16 @@
         },
         {
           "predicate": [
+            "model:mastercrafted_bow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "mastercrafted_bow_limb_reinforcement_pull_0.png"
+        },
+        {
+          "predicate": [
             "model:mastercrafted_bow_limb.png"
           ],
           "template": "mastercrafted_bow_limb_reinforcement.png"
@@ -71,42 +90,56 @@
       ]
     },
     {
-      "name": "bow_dye",
+      "name": "bow_string",
       "variants": [
         {
           "target": [
             "model:mastercrafted_bow_limb.png"
           ],
-          "template": "mastercrafted_bow_limb.png"
-        },
+          "template": "mastercrafted_bow_string.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_dye",
+      "variants": [
           {
             "predicate": [
+              "model:mastercrafted_bow_pull_2.png",
               {
                 "type": "forgero:bow_pull",
                 "pull": 0.9
               }
             ],
-            "template": "refined_bow_pull_2.png"
+            "template": "mastercrafted_bow_pull_2.png"
           },
           {
             "predicate": [
+              "model:mastercrafted_bow_pull_1.png",
               {
                 "type": "forgero:bow_pull",
                 "pull": 0.6
               }
             ],
-            "template": "refined_bow_pull_1.png"
+            "template": "mastercrafted_bow_pull_1.png"
           },
           {
             "predicate": [
+              "model:mastercrafted_bow_pull_0.png",
               {
                 "type": "forgero:bow_pull",
                 "pull": 0.1
               }
             ],
-            "template": "refined_bow_pull_0.png"
-          }
-        ]
+            "template": "mastercrafted_bow_pull_0.png"
+          },
+        {
+          "target": [
+            "model:mastercrafted_bow_limb.png"
+          ],
+          "template": "mastercrafted_bow_limb.png"
+        }
+      ]
     },
     {
       "target": [

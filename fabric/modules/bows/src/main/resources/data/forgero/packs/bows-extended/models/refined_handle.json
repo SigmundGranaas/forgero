@@ -1,0 +1,88 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:BOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:ARROW"
+          ],
+          "template": "arrow_shaft.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_shaft_in_bow.png"
+        }
+      ]
+    }
+  ]
+}
