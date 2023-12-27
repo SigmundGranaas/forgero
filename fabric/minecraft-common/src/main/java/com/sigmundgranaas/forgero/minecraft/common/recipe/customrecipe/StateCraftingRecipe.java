@@ -36,12 +36,10 @@ import net.minecraft.world.World;
 
 public class StateCraftingRecipe extends ShapedRecipe {
 	private final StateService service;
-	private final List<State> upgrades;
 
-	public StateCraftingRecipe(ShapedRecipe recipe, StateService service, List<String> upgrades) {
+	public StateCraftingRecipe(ShapedRecipe recipe, StateService service) {
 		super(recipe.getId(), recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getOutput(null));
 		this.service = service;
-		this.upgrades = upgrades.stream().map(service::find).flatMap(Optional::stream).toList();
 	}
 
 	@Override
@@ -155,34 +153,18 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 		@Override
 		public StateCraftingRecipe read(Identifier identifier, JsonObject jsonObject) {
-			List<String> states = Collections.emptyList();
-			if (jsonObject.getAsJsonObject("result").has("upgrades")) {
-				states = StreamSupport.stream(jsonObject.getAsJsonObject("result").getAsJsonArray("upgrades").spliterator(), false)
-						.map(JsonElement::getAsString)
-						.toList();
-			}
-
-			return new StateCraftingRecipe(super.read(identifier, jsonObject), StateService.INSTANCE, states);
+			return new StateCraftingRecipe(super.read(identifier, jsonObject), StateService.INSTANCE);
 		}
 
 		@Override
 		public StateCraftingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
 			ShapedRecipe recipe = super.read(identifier, packetByteBuf);
-			List<String> upgrades = new ArrayList<>();
-			while (packetByteBuf.isReadable()) {
-				upgrades.add(packetByteBuf.readString());
-			}
-			return new StateCraftingRecipe(recipe, StateService.INSTANCE, upgrades);
+			return new StateCraftingRecipe(recipe, StateService.INSTANCE);
 		}
 
 		@Override
 		public void write(PacketByteBuf packetByteBuf, ShapedRecipe shapedRecipe) {
 			super.write(packetByteBuf, shapedRecipe);
-			if (shapedRecipe instanceof StateCraftingRecipe stateCraftingRecipe) {
-				for (State upgrade : stateCraftingRecipe.upgrades) {
-					packetByteBuf.writeString(upgrade.identifier());
-				}
-			}
 		}
 
 		@Override
