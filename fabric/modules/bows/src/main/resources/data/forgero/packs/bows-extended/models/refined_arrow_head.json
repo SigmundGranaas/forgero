@@ -6,7 +6,7 @@
       "template": "refined_arrow_head.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 5,
+      "order": 10,
       "variants": [
         {
           "predicate": [
@@ -52,13 +52,92 @@
       ]
     },
     {
+      "name": "arrow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:refined_arrow_head.png"
+          ],
+          "template": "refined_arrow_reinforcement.png"
+        },
+        {
+          "predicate": [
+            "model:refined_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_arrow_reinforcement_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:refined_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_arrow_reinforcement_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:refined_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "refined_arrow_reinforcement_in_bow.png"
+        }
+      ]
+    },
+    {
       "name": "arrow_dye",
       "variants": [
         {
-          "target": [
+          "predicate": [
             "model:refined_arrow_head.png"
           ],
           "template": "refined_arrow_head.png"
+        },
+        {
+          "predicate": [
+            "model:refined_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:refined_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:refined_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "refined_arrow_head_in_bow.png"
         }
       ]
     },

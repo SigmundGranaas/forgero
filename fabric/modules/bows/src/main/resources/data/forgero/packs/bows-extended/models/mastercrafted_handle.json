@@ -2,7 +2,7 @@
   "type": "HANDLE",
   "models": [
     {
-      "name": "handle",
+      "name": "mastercrafted_handle",
       "variants": [
         {
           "predicate": [
@@ -46,7 +46,7 @@
           "template": "mastercrafted_arrow_shaft_in_bow.png"
         },
         {
-          "predicate": [
+          "target": [
             "type:ARROW"
           ],
           "template": "mastercrafted_arrow_shaft.png"

@@ -36,15 +36,6 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "UTILITY"
-        ],
-        "description": "effect",
-        "type": "SOFT_MATERIAL",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
           "OFFENSIVE"
         ],
         "description": "reinforcement",
