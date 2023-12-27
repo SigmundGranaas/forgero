@@ -78,7 +78,6 @@ curseforge {
 				optionalDependency "betternether"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
-				optionalDependency "wiredredstone"
 			}
 		}
 	}
