@@ -58,10 +58,10 @@ public class SoulReapingHandler implements RunnableHandler {
 			SoulSource soulSource = new SoulSource(EntityType.getId(targetEntity.getType()).toString(), name);
 			Soul soul = new Soul(soulSource, SoulLevelPropertyRegistry.handler());
 			if (FeatureCache.check(FeatureContainerKey.of(construct, Feature.key("forgero:soul_reaping")))) {
-				SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
-				soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
-				entity.getWorld().spawnEntity(soulEntity);
-				soulEntity.getWorld().sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
+				// SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
+				// soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
+				// entity.getWorld().spawnEntity(soulEntity);
+				// soulEntity.getWorld().sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
 			} else if (FeatureCache.check(new FeatureContainerKey(ContainerTargetPair.of(construct), Feature.key("forgero:soul_binding")))) {
 				State state = construct;
 				if (construct instanceof SoulBindable bindable) {

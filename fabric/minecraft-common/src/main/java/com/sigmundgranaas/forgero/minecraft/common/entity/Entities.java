@@ -18,7 +18,7 @@ public class Entities {
 
 
 	public static void register() {
-		SOUL_ENTITY = Registry.register(Registries.ENTITY_TYPE, SOUL_ENTITIY_IDENTIFIER, EntityType.Builder.create((EntityType<SoulEntity> entity, World world) -> new SoulEntity(entity, world), SpawnGroup.MISC).setDimensions(0.5f, 0.5f).maxTrackingRange(6).trackingTickInterval(2).disableSaving().build(SOUL_ENTITIY_IDENTIFIER.toString()));
+		// SOUL_ENTITY = Registry.register(Registries.ENTITY_TYPE, SOUL_ENTITIY_IDENTIFIER, EntityType.Builder.create((EntityType<SoulEntity> entity, World world) -> new SoulEntity(entity, world), SpawnGroup.MISC).setDimensions(0.5f, 0.5f).maxTrackingRange(6).trackingTickInterval(2).disableSaving().build(SOUL_ENTITIY_IDENTIFIER.toString()));
 		THROWN_ITEM_ENTITY = Registry.register(Registries.ENTITY_TYPE, THROWN_ENTITY_IDENTIFIER, EntityType.Builder.create((EntityType<ThrowableItem> entity, World world) -> new ThrowableItem(entity, world), SpawnGroup.MISC).build(THROWN_ENTITY_IDENTIFIER.toString()));
 	}
 }
