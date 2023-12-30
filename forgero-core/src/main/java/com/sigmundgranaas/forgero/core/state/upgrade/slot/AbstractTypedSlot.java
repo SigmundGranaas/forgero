@@ -52,7 +52,7 @@ public abstract class AbstractTypedSlot implements Slot {
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
 		if (match instanceof State state) {
-			return this.type.test(state, context);
+			return this.type.test(state.type(), context);
 		} else if (match instanceof Type type) {
 			return this.type.test(type, context);
 		}
