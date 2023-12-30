@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.core.type;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
@@ -69,9 +71,7 @@ public interface Type extends Matchable {
 
 	String typeName();
 
-	default Optional<Type> parent() {
-		return Optional.empty();
+	default List<Type> parent() {
+		return Collections.emptyList();
 	}
-
-
 }
