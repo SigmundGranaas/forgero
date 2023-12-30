@@ -32,10 +32,10 @@ import net.minecraft.util.profiler.Profiler;
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
 	@Unique
-	private final List<String> vanillaMaterials = List.of("wooden", "stone", "iron", "golden", "diamond", "netherite");
+	private static final List<String> vanillaMaterials = List.of("wooden", "stone", "iron", "golden", "diamond", "netherite");
 
 	@Unique
-	private final List<String> vanillaTools = List.of("pickaxe", "shovel", "axe", "sword", "hoe");
+	private static final List<String> vanillaTools = List.of("pickaxe", "shovel", "axe", "sword", "hoe");
 
 	@Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
 	public void interceptApply(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
