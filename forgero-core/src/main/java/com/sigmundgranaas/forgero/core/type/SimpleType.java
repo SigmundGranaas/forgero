@@ -30,7 +30,7 @@ public class SimpleType implements Type {
 			if (name.equals(type.typeName())) {
 				return matcher.test(match, context);
 			} else if (!parent.isEmpty()) {
-				return parent.stream().anyMatch(parent -> matcher.test(parent, context)) ;
+				return parent.stream().anyMatch(parent -> parent.test(match, context)) ;
 			}
 		}
 		return false;
