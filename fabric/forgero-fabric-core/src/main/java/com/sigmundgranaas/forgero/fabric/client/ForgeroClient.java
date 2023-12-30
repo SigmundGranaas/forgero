@@ -89,9 +89,9 @@ public class ForgeroClient implements ClientModInitializer {
 		registerToolPartTextures(modelRegistry);
 		var modelProvider = new ForgeroModelVariantProvider(modelRegistry);
 		ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
-		EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
+		// EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
 		EntityRendererRegistry.register(Entities.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
-		EntityModelLayerRegistry.registerModelLayer(SOUL_ENTITY_MODEL_LAYER, SoulEntityModel::getTexturedModelData);
+		// EntityModelLayerRegistry.registerModelLayer(SOUL_ENTITY_MODEL_LAYER, SoulEntityModel::getTexturedModelData);
 	}
 
 	private void registerToolPartTextures(ModelRegistry modelRegistry) {

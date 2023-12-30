@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
-
 import net.minecraft.item.ItemGroups;
 
 
@@ -75,7 +73,6 @@ public class ForgeroInitializer implements ModInitializer {
 
 		StateService service = RegistryHandler.getHandler().initialize();
 		handleInitializedEntryPoints(service);
-		FabricDefaultAttributeRegistry.register(SOUL_ENTITY, MobEntity.createLivingAttributes());
 	}
 
 	private void handleInitializedEntryPoints(StateService service) {

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
-import static com.sigmundgranaas.forgero.minecraft.common.entity.Entities.SOUL_ENTITY;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.defaultItem;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.settingProcessor;
 
@@ -104,7 +103,6 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
 	public void onPreInitialization() {
-		FabricDefaultAttributeRegistry.register(SOUL_ENTITY, SoulEntity.createSoulEntities());
 		soulLevelPropertyReloader();
 		DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);
 		Entities.register();
