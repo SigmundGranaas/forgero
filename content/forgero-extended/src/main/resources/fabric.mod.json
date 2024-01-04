@@ -20,7 +20,7 @@
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
-  "icon": "assets/forgero/icon.png",
+  "icon": "assets/forgero/extended.png",
   "environment": "*",
   "entrypoints": {
   },
