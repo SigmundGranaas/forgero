@@ -43,78 +43,6 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 		this.service = service;
 	}
 
-	public static float getPullProgress(int useTicks, float bowFlexibility) {
-		float f = (float) useTicks / (bowFlexibility * TICKS_PER_SECOND);
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-		return f;
-	}
-
-	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		if (!(user instanceof PlayerEntity playerEntity)) {
-			return;
-		}
-
-		Optional<BowProperties> optionalBowProps = BowProperties.fromItemStack(stack, service);
-		if (optionalBowProps.isEmpty()) {
-			return;
-		}
-		BowProperties bowProps = optionalBowProps.get();
-
-		ItemStack arrowStack = obtainArrowStack(playerEntity);
-		if (arrowStack.isEmpty()) {
-			return;
-		}
-
-		ArrowProperties arrowProps = ArrowProperties.fromItemStack(arrowStack, service);
-
-		int useTime = this.getMaxUseTime(stack) - remainingUseTicks;
-		float pullProgress = getPullProgress(useTime, bowProps.getFlexibility());
-
-		if ((double) pullProgress >= 0.1) {
-			removeItemFromState(stack, playerEntity, playerEntity.getActiveHand());
-			fireArrow(stack, world, playerEntity, arrowStack, pullProgress, bowProps, arrowProps);
-		}
-	}
-
-	private void fireArrow(ItemStack bowStack, World world, PlayerEntity shooter, ItemStack arrowStack, float pullProgress, BowProperties bowProps, ArrowProperties arrowProps) {
-		if (world.isClient) {
-			return;
-		}
-
-		ArrowItem arrowItem = (arrowStack.getItem() instanceof ArrowItem) ? (ArrowItem) arrowStack.getItem() : (ArrowItem) Items.ARROW;
-		PersistentProjectileEntity projectile = createProjectile(arrowItem, arrowStack, shooter, world, bowProps, arrowProps, pullProgress);
-
-		if (pullProgress == 1.0F) {
-			projectile.setCritical(true);
-		}
-
-		bowStack.damage(1, shooter, (playerEntity) -> playerEntity.sendToolBreakStatus(shooter.getActiveHand()));
-
-		boolean isCreativeMode = shooter.getAbilities().creativeMode;
-		if (!isCreativeMode) {
-			arrowStack.decrement(1);
-			if (arrowStack.isEmpty()) {
-				shooter.getInventory().removeOne(arrowStack);
-			}
-		}
-
-		world.spawnEntity(projectile);
-		world.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + pullProgress * 0.5F);
-		shooter.incrementStat(Stats.USED.getOrCreateStat(this));
-	}
-
-	private PersistentProjectileEntity createProjectile(ArrowItem arrowItem, ItemStack arrowStack, PlayerEntity shooter, World world, BowProperties bowProps, ArrowProperties arrowProps, float pullProgress) {
-		PersistentProjectileEntity projectile = arrowItem.createArrow(world, arrowStack, shooter);
-		float launchVelocity = pullProgress * bowProps.getForce();
-		float inaccuracy = 1.0F - arrowProps.getStability();
-		projectile.setVelocity(shooter, shooter.getPitch(), shooter.getYaw(), 0.0F, launchVelocity * 3.0F, inaccuracy);
-		return projectile;
-	}
-
 	@Override
 	public int getItemBarStep(ItemStack stack) {
 		return ToolStateItem.super.getItemBarStep(stack);
@@ -145,22 +73,6 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 		return DEFAULT.get();
 	}
 
-	private ItemStack obtainArrowStack(PlayerEntity playerEntity) {
-		ItemStack arrowStack = playerEntity.getProjectileType(playerEntity.getMainHandStack());
-		if (arrowStack.isEmpty() && !playerEntity.getAbilities().creativeMode) {
-			arrowStack = new ItemStack(Items.ARROW);
-		}
-		return arrowStack;
-	}
-
-	public int getMaxUseTime(ItemStack stack) {
-		return 72000;
-	}
-
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BOW;
-	}
-
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
 		boolean bl = !user.getProjectileType(itemStack).isEmpty();
@@ -168,32 +80,11 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 			return TypedActionResult.fail(itemStack);
 		} else {
 			user.setCurrentHand(hand);
-			addArrowToState(itemStack, user, hand);
 			return TypedActionResult.consume(itemStack);
 		}
 	}
 
-	private void addArrowToState(ItemStack bow, PlayerEntity player, Hand hand) {
-		Optional<State> arrow = StateService.INSTANCE.convert(obtainArrowStack(player));
-		State bowState = dynamicState(bow);
-		if (arrow.isPresent() && bowState instanceof Composite composite) {
-			State converted = composite.upgrade(arrow.get());
-			ItemStack newBow = bow.copy();
-			newBow.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(converted));
-			player.setStackInHand(hand, newBow);
-		}
-	}
 
-	private void removeItemFromState(ItemStack bow, PlayerEntity player, Hand hand) {
-		Optional<State> arrow = StateService.INSTANCE.convert(obtainArrowStack(player));
-		State bowState = dynamicState(bow);
-		if (arrow.isPresent() && bowState instanceof Composite composite) {
-			State converted = composite.removeUpgrade(arrow.get().identifier());
-			ItemStack newBow = bow.copy();
-			newBow.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(converted));
-			player.setStackInHand(hand, newBow);
-		}
-	}
 
 	public Predicate<ItemStack> getProjectiles() {
 		return BOW_PROJECTILES;
