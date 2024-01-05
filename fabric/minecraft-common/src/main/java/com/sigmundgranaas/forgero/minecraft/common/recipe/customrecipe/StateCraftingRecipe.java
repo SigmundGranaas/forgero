@@ -98,8 +98,8 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		var target = service.convert(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
-			var parts = partsFromCraftingInventory(craftingInventory);
 			var upgrades = upgradesFromCraftingInventory(craftingInventory, null);
+			var parts = partsFromCraftingInventory(craftingInventory).stream().filter(state -> !upgrades.contains(state)).toList();
 			var toolBuilderOpt = ConstructedTool.ToolBuilder.builder(parts);
 			BaseComposite.BaseCompositeBuilder<?> builder;
 			if (toolBuilderOpt.isPresent()) {
