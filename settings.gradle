@@ -33,4 +33,6 @@ include 'fabric:minecraft-common'
 include 'fabric:modules'
 include 'fabric:modules:bows'
 include 'fabric:modules:generator'
+include 'fabric:modules:smithing-rework'
+findProject(':fabric:modules:smithing-rework')?.name = 'smithing-rework'
 
