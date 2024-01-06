@@ -21,7 +21,7 @@
           {
             "id": "metal-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 6.5
+            "value": 5
           },
           {
             "id": "metal-durability-composite",
@@ -76,7 +76,7 @@
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 3.25
+            "value": 2.50
           },
           {
             "id": "metal-durability-offensive-upgrade",
