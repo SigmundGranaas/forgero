@@ -1,0 +1,166 @@
+{
+  "type": "BOW_LIMB",
+  "models": [
+    {
+      "name": "shortbow_limb",
+      "modelType": "GENERATE",
+      "template": "shortbow_limb.png",
+      "palette": "WOOD",
+      "order": 2,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "shortbow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "shortbow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "shortbow_pull_0.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_string",
+      "variants": [
+        {
+          "predicate": [
+            "model:shortbow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "shortbow_string_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "shortbow_string_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "shortbow_string_pull_0.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:shortbow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "shortbow_limb_reinforcement_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "shortbow_limb_reinforcement_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "shortbow_limb_reinforcement_pull_0.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_limb.png"
+          ],
+          "template": "shortbow_limb_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_dye",
+      "variants": [
+        {
+          "predicate": [
+            "model:shortbow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "shortbow_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "shortbow_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:shortbow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "shortbow_pull_0.png"
+        },
+        {
+          "target": [
+            "model:shortbow_limb.png"
+          ],
+          "template": "shortbow_limb.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:shortbow_limb-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "shortbow_limb"
+    }
+  ]
+}

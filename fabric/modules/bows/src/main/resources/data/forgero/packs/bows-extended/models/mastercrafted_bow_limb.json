@@ -1,0 +1,153 @@
+{
+  "type": "BOW_LIMB",
+  "models": [
+    {
+      "name": "mastercrafted_bow_limb",
+      "modelType": "GENERATE",
+      "template": "mastercrafted_bow_limb.png",
+      "palette": "WOOD",
+      "order": 2,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "mastercrafted_bow_pull_0.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_grip",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_bow_limb.png"
+          ],
+          "template": "mastercrafted_bow_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:mastercrafted_bow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_bow_limb_reinforcement_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_bow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_bow_limb_reinforcement_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_bow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "mastercrafted_bow_limb_reinforcement_pull_0.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_bow_limb.png"
+          ],
+          "template": "mastercrafted_bow_limb_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_string",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_bow_limb.png"
+          ],
+          "template": "mastercrafted_bow_string.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_dye",
+      "variants": [
+          {
+            "predicate": [
+              "model:mastercrafted_bow_pull_2.png",
+              {
+                "type": "forgero:bow_pull",
+                "pull": 0.9
+              }
+            ],
+            "template": "mastercrafted_bow_pull_2.png"
+          },
+          {
+            "predicate": [
+              "model:mastercrafted_bow_pull_1.png",
+              {
+                "type": "forgero:bow_pull",
+                "pull": 0.6
+              }
+            ],
+            "template": "mastercrafted_bow_pull_1.png"
+          },
+          {
+            "predicate": [
+              "model:mastercrafted_bow_pull_0.png",
+              {
+                "type": "forgero:bow_pull",
+                "pull": 0.1
+              }
+            ],
+            "template": "mastercrafted_bow_pull_0.png"
+          },
+        {
+          "target": [
+            "model:mastercrafted_bow_limb.png"
+          ],
+          "template": "mastercrafted_bow_limb.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:WOOD",
+        "id:mastercrafted_bow_limb-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "mastercrafted_bow_limb"
+    }
+  ]
+}

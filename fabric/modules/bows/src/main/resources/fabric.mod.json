@@ -20,7 +20,7 @@
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
-  "icon": "assets/forgero/icon.png",
+  "icon": "assets/forgero/bows.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -53,7 +53,7 @@
         "id": "forgero",
         "name": "Forgero",
         "description": "Equipment crafting expansion mod for Fabric!",
-        "icon": "assets/forgero/icon.png"
+        "icon": "bows.png"
       }
     }
   }
