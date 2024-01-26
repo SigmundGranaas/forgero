@@ -37,12 +37,6 @@
             "type:SWORD"
           ],
           "template": "mastercrafted_short_handle.png"
-        },
-        {
-          "target": [
-            "type:ARROW"
-          ],
-          "template": "mastercrafted_arrow_shaft.png"
         }
       ]
     },
