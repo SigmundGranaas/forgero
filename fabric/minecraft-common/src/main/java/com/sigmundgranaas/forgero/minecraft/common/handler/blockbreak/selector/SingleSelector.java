@@ -23,7 +23,7 @@ import java.util.Set;
  * 	 "type": "minecraft:block_breaking",
  * 	 "selector": {
  * 	 "type": "forgero:single"
- *          },
+ *   },
  * 	 "speed": "forgero:instant",
  * 	 "predicate": {
  * 	 "type": "minecraft:block",
