@@ -52,6 +52,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.B
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.SingleSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityBasedHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FrostHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
@@ -210,6 +211,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(BlockSelector.KEY, ColumnSelector.TYPE, ColumnSelector.BUILDER);
 		HandlerBuilderRegistry.register(BlockSelector.KEY, PatternSelector.TYPE, PatternSelector.BUILDER);
 		HandlerBuilderRegistry.register(BlockSelector.KEY, RadiusVeinSelector.TYPE, RadiusVeinSelector.BUILDER);
+		HandlerBuilderRegistry.register(BlockSelector.KEY, SingleSelector.TYPE, SingleSelector.BUILDER);
 
 		// Hardness calculators
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
