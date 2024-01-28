@@ -1,0 +1,49 @@
+{
+  "type": "STRING",
+  "models": [
+    {
+      "name": "bow_string",
+      "template": "bow_string.png",
+      "type": "GENERATE",
+      "palette": "STRING",
+      "order": 1,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "bow_string_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "bow_string_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "bow_string_pull_0.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:BOW_LIMB",
+        "type:STRING"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "bow_string"
+    }
+  ]
+}
