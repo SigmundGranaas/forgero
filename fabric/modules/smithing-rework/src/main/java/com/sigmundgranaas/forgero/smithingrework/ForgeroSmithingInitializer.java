@@ -3,6 +3,11 @@ package com.sigmundgranaas.forgero.smithingrework;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 
+import com.sigmundgranaas.forgero.smithingrework.block.ModBlocks;
+import com.sigmundgranaas.forgero.smithingrework.item.ModItemGroups;
+
+import com.sigmundgranaas.forgero.smithingrework.item.ModItems;
+
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -15,6 +20,12 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 	@Override
 	public void onPreInitialization() {
 
+			ModItemGroups.registerItemGroups();
 
+			ModItems.registerModItems();
+			ModBlocks.registerModBlocks();
 	}
+
+
 }
+

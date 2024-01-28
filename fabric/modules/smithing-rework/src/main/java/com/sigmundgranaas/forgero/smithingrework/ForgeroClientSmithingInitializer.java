@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithingrework.client;
+package com.sigmundgranaas.forgero.smithingrework;
 
 
 import net.fabricmc.api.ClientModInitializer;
