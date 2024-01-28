@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "forgero:block/smithing_anvil"
+    },
+    "facing=south": {
+      "model": "forgero:block/smithing_anvil",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "forgero:block/smithing_anvil",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "forgero:block/smithing_anvil",
+      "y": 90
+    }
+  }
+}

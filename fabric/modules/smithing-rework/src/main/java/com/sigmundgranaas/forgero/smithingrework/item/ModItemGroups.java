@@ -16,15 +16,15 @@ import net.minecraft.util.Identifier;
 
 public class ModItemGroups {
 	public static final ItemGroup RUBY_GROUP = Registry.register(Registries.ITEM_GROUP,
-			new Identifier(Forgero.NAMESPACE, "ruby"),
-			FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ruby"))
-					.icon(() -> new ItemStack(ModItems.RUBY)).entries((displayContext, entries) -> {
+			new Identifier(Forgero.NAMESPACE, "smithing"),
+			FabricItemGroup.builder().displayName(Text.translatable("itemgroup.smithing"))
+					.icon(() -> new ItemStack(ModBlocks.SMITHING_ANVIL)).entries((displayContext, entries) -> {
 						entries.add(ModItems.RUBY);
 						entries.add(ModItems.RAW_RUBY);
 
 						entries.add(Items.DIAMOND);
 
-						entries.add(ModBlocks.RUBY_BLOCK);
+						entries.add(ModBlocks.SMITHING_ANVIL);
 						entries.add(ModBlocks.RAW_RUBY_BLOCK);
 
 
