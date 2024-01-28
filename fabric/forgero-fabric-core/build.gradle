@@ -15,6 +15,7 @@ dependencies {
 	localRuntime project(':content:forgero-structures')
 
 	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
+	localRuntime project(path: ':fabric:modules:smithing-rework', configuration: 'namedElements')
 }
 
 loom {
