@@ -24,7 +24,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.sigmundgranaas.forgero.smithingrework.client.ForgeroClientSmithingInitializer"
+      "com.sigmundgranaas.forgero.smithingrework.ForgeroClientSmithingInitializer"
     ],
     "forgeroPreInitialization": [
       "com.sigmundgranaas.forgero.smithingrework.ForgeroSmithingInitializer"
