@@ -24,6 +24,7 @@ import com.sigmundgranaas.forgero.core.type.TypeTree;
 
 public class ResourcePipeline {
 	private final List<DataPackage> packages;
+	private final List<DataResource> overrides;
 	private final List<ResourceListener<List<DataResource>>> dataListeners;
 	private final List<ResourceListener<List<DataResource>>> inflatedDataListener;
 	private final List<ResourceListener<Map<String, State>>> stateListener;
@@ -37,8 +38,9 @@ public class ResourcePipeline {
 	private TypeTree tree;
 	private List<RecipeData> recipes;
 
-	public ResourcePipeline(List<DataPackage> packages, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration, Set<String> modDependencies, boolean silent) {
+	public ResourcePipeline(List<DataPackage> packages, List<DataResource> overrides, List<ResourceListener<List<DataResource>>> dataListeners, List<ResourceListener<Map<String, State>>> stateListener, List<ResourceListener<List<DataResource>>> inflatedDataListener, List<ResourceListener<List<RecipeData>>> recipeListener, List<ResourceListener<List<String>>> createStateListener, ForgeroConfiguration configuration, Set<String> modDependencies, boolean silent) {
 		this.packages = packages;
+		this.overrides = overrides;
 		this.dataListeners = dataListeners;
 		this.inflatedDataListener = inflatedDataListener;
 		this.stateListener = stateListener;
@@ -91,7 +93,7 @@ public class ResourcePipeline {
 		List<DataResource> validatedResources = validateResources(validatedPackages);
 
 		tree = assembleTypeTree(validatedResources);
-		var dataBuilder = DataBuilder.of(validatedResources, tree);
+		var dataBuilder = DataBuilder.of(validatedResources, overrides, tree);
 		List<DataResource> resources = dataBuilder.buildResources();
 		this.recipes = dataBuilder.recipes();
 

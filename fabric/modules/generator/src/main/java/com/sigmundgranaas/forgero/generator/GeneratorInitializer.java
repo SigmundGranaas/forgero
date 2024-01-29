@@ -31,6 +31,5 @@ public class GeneratorInitializer implements ModInitializer {
 		Function<Item, String> identifier = item -> Registries.ITEM.getId(item).toString();
 		operation("minecraft:identifier", "identifier", itemOperationFactory.build(identifier));
 		operation("minecraft:identifier", "id", itemOperationFactory.build(identifier));
-
 	}
 }
