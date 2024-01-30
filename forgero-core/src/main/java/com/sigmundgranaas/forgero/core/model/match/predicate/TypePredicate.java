@@ -15,6 +15,9 @@ public record TypePredicate(Type type) implements Matchable {
 		if (match instanceof FilledSlot slot && slot.content().test(type)) {
 			return true;
 		}
+
+		// Note: The match is very often a TRUE lambda, so the context test really will never actually have anything to do here.
+		// Does that break a lot???
 		return match.test(type, context) || context.test(type, MatchContext.of());
 	}
 }

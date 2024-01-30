@@ -15,10 +15,17 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 public class StringTypeBuilder implements PredicateBuilder {
 	@Override
 	public Optional<Matchable> create(JsonElement element) {
-		return ElementParser.fromString(element)
-				.filter(string -> string.contains("type:"))
-				.map(string -> string.replace("type:", ""))
-				.map(Type::of)
-				.map(TypePredicate::new);
+		if(element.isJsonObject()){
+			return ElementParser.fromIdentifiedElement(element, "forgero:type")
+					.map(jsonObject -> jsonObject.get("value").getAsString())
+					.map(Type::of)
+					.map(TypePredicate::new);
+		}else{
+			return ElementParser.fromString(element)
+					.filter(string -> string.contains("type:"))
+					.map(string -> string.replace("type:", ""))
+					.map(Type::of)
+					.map(TypePredicate::new);
+		}
 	}
 }
