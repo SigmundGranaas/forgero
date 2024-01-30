@@ -26,12 +26,12 @@
             "value": 1
           },
           {
-            "id": "schematic-attack_speed-composite",
+            "id": "schematic-attack_speed-composite_multiplier",
             "type": "ATTACK_SPEED",
             "value": 1
           },
           {
-            "id": "schematic-attack_damage-composite",
+            "id": "schematic-attack_damage-composite_multiplier",
             "type": "ATTACK_DAMAGE",
             "value": 1
           },
