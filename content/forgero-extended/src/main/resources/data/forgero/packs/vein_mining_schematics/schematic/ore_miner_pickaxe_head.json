@@ -75,12 +75,23 @@
       {
         "type": "minecraft:block_breaking",
         "selector": {
-          "type": "forgero:single"
+          "type": "forgero:radius",
+          "filter": [
+            "forgero:can_mine",
+            {
+              "type": "minecraft:block",
+              "tag": "forgero:vein_mining_ores"
+            }
+          ],
+          "depth": 1
         },
-        "speed": "forgero:instant",
-        "predicate":{"type": "forgero:context_type", "types": ["PICKAXE_HEAD"] },
-        "title": "feature.forgero.random_insta_break.title",
-        "description": "feature.forgero.random_insta_break.description"
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_ores"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.ore_vein_mining.description"
       }
     ]
   },
