@@ -71,6 +71,7 @@ public class DataBuilder {
 		Map<String, DataResource> namedResources = resources.stream()
 				.map(res -> applyOverride(this.mappedOverrides, res))
 				.collect(Collectors.toMap((DataResource::name), (dataResource -> dataResource), (present, newRes) -> newRes));
+
 		namedResources.remove(Identifiers.EMPTY_IDENTIFIER);
 		this.resources = namedResources.values().stream()
 				.map(res -> applyParent(namedResources, res))

@@ -120,16 +120,26 @@ public class DataResource implements Identifiable {
 	private static List<PropertyPojo.Attribute> mergeNonNullAttributeLists(List<PropertyPojo.Attribute> firstList,
 	                                                                       List<PropertyPojo.Attribute> secondList) {
 		var combinedAttributes = new HashMap<String, PropertyPojo.Attribute>();
+		var others = new ArrayList<PropertyPojo.Attribute>();
 
 		for (PropertyPojo.Attribute attr : firstList) {
-			combinedAttributes.put(attr.id, attr);
+			if(!attr.id.equals(EMPTY_IDENTIFIER)){
+				combinedAttributes.put(attr.id, attr);
+			}else{
+				others.add(attr);
+			}
 		}
 
 		for (PropertyPojo.Attribute attr : secondList) {
-			combinedAttributes.merge(attr.id, attr, DataResource::attributeMergeRule);
+			if(!attr.id.equals(EMPTY_IDENTIFIER)){
+				combinedAttributes.merge(attr.id, attr, DataResource::attributeMergeRule);
+			}else{
+				others.add(attr);
+			}
 		}
 
-		return new ArrayList<>(combinedAttributes.values());
+		others.addAll(combinedAttributes.values());
+		return others;
 	}
 
 	/**

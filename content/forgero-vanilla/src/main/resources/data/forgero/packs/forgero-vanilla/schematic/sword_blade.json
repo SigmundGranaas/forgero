@@ -58,15 +58,12 @@
         "value": 1
       },
       {
-        "id": "magnetic-power-test",
-        "type": "forgero:magnetic_power",
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
         "value": 1
-      },
-      {
-        "id": "magnetic-range-test",
-        "type": "forgero:magnetic_range",
-        "value": 2,
-        "operation": "MULTIPLICATION"
       }
     ],
     "features": [
