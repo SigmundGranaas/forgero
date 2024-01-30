@@ -34,8 +34,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
         ItemStack itemStack = entity.getRenderStack();
         matrices.push();
-        matrices.translate(1f, 1f, 1f);
-        matrices.scale(5f, 5f, 5f);
+        matrices.translate(0.5f, 1f, 0.5f);
+        matrices.scale(0.5f, 0.5f, 0.5f);
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
         switch (entity.getCachedState().get(SmithingAnvil.FACING)) {

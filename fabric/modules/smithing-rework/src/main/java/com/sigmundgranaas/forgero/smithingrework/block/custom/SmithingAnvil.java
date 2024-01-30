@@ -242,7 +242,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 				blockEntity.removeStack(0);
 			}
 		}
-
+		blockEntity.markDirty();
 		return ActionResult.SUCCESS;
 	}
 }
