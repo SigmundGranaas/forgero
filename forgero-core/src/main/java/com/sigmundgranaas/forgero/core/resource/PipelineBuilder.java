@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
+import com.sigmundgranaas.forgero.core.resource.data.v2.DataOverrideSupplier;
 import com.sigmundgranaas.forgero.core.resource.data.v2.DataPackage;
 import com.sigmundgranaas.forgero.core.resource.data.v2.PackageSupplier;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
@@ -17,6 +18,7 @@ import com.sigmundgranaas.forgero.core.state.State;
 public class PipelineBuilder {
 
 	private final List<DataPackage> packages = new ArrayList<>();
+	private final List<DataResource> overrides = new ArrayList<>();
 
 	private final Set<String> dependencies = new HashSet<>();
 	private final List<ResourceListener<List<DataResource>>> dataListeners = new ArrayList<>();
@@ -24,8 +26,9 @@ public class PipelineBuilder {
 	private final List<ResourceListener<Map<String, State>>> stateListener = new ArrayList<>();
 	private final List<ResourceListener<List<RecipeData>>> recipeListener = new ArrayList<>();
 	private final List<ResourceListener<List<String>>> createStateListener = new ArrayList<>();
-	private boolean silent = false;
 	private Supplier<ForgeroConfiguration> configProvider = ForgeroConfiguration::new;
+	private boolean silent = false;
+
 
 	public static PipelineBuilder builder() {
 		return new PipelineBuilder();
@@ -67,6 +70,12 @@ public class PipelineBuilder {
 		return this;
 	}
 
+	public PipelineBuilder register(DataOverrideSupplier supplier) {
+		var overrides = supplier.get();
+		this.overrides.addAll(overrides);
+		return this;
+	}
+
 	public PipelineBuilder register(Supplier<ForgeroConfiguration> config) {
 		this.configProvider = config;
 		return this;
@@ -83,6 +92,6 @@ public class PipelineBuilder {
 	}
 
 	public ResourcePipeline build() {
-		return new ResourcePipeline(packages, dataListeners, stateListener, inflatedDataListener, recipeListener, createStateListener, configProvider.get(), dependencies, silent);
+		return new ResourcePipeline(packages, overrides, dataListeners, stateListener, inflatedDataListener, recipeListener, createStateListener, configProvider.get(), dependencies, silent);
 	}
 }

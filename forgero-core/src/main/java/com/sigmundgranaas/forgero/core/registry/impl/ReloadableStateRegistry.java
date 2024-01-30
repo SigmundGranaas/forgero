@@ -88,7 +88,9 @@ public class ReloadableStateRegistry implements IdentifiableRegistry<State>, Sta
 	@NotNull
 	@Synchronized
 	public Collection<StateProvider> register(Collection<State> state) {
-		return state.stream().map(this::register).collect(ImmutableList.toImmutableList());
+		return state.stream()
+				.map(this::register)
+				.collect(ImmutableList.toImmutableList());
 	}
 
 	@Synchronized

@@ -33,5 +33,4 @@ public class FabricPackFinder implements PackageSupplier {
 
 		return resources.stream().map(CompletableFuture::join).toList();
 	}
-
 }

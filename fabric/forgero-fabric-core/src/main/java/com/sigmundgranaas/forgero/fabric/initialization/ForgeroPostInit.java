@@ -224,7 +224,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	/**
-	 * The registerDataReloadListener method registers a reload listener for data the data pipeline to reload the Foregero pack configuration to update states.
+	 * The registerDataReloadListener method registers a reload listener for data the data pipeline to reload the Forgero pack configuration to update states.
 	 */
 	private void registerDataReloadListener() {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DataPipeLineReloader());
