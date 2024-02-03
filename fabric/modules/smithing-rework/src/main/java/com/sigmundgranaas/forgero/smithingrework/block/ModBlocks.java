@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithingrework.block;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 
+import com.sigmundgranaas.forgero.smithingrework.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithingrework.block.custom.SmithingAnvil;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -13,14 +14,13 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
 public class ModBlocks {
 	public static final Block SMITHING_ANVIL = registerBlock("smithing_anvil",
 			new SmithingAnvil(FabricBlockSettings.copyOf(Blocks.ANVIL)));
-	public static final Block RAW_RUBY_BLOCK = registerBlock("raw_ruby_block",
-			new Block(FabricBlockSettings.copyOf(Blocks.ANVIL).sounds(BlockSoundGroup.AMETHYST_BLOCK)));
+	public static final Block BLOOMERY = registerBlock("bloomery",
+			new BloomeryBlock(FabricBlockSettings.copyOf(Blocks.FURNACE)));
 
 
 	private static Block registerBlock(String name, Block block) {
