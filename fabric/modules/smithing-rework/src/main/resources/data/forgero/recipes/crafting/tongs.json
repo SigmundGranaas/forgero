@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " I ",
+        "iII",
+        " i "
+    ],
+    "key": {
+        "i": {
+            "item": "forgero:cobblestone-handle"
+        },
+        "I": {
+            "item": "minecraft:cobblestone"
+        }
+    },
+    "result": {
+        "item": "forgero:tongs",
+        "count": 1
+
+    }
+}
