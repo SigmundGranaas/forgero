@@ -5,7 +5,6 @@ repositories {
 	maven { url "https://minecraft.guntram.de/maven/" }
 	maven { url "https://maven.terraformersmc.com/" }
 	maven { url "https://maven.wispforest.io/" }
-	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
 	maven { url "https://maven.cafeteria.dev" }
 	maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
 	maven { url "https://storage.googleapis.com/devan-maven/" }
