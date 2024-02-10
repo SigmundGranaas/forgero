@@ -22,19 +22,27 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
 public class FeatureUtils {
-	public static <T extends Feature> List<T> cachedFeatures(ItemStack stack, ClassKey<T> key) {
+	public static <T extends Feature> List<T> cachedRootFeatures(ItemStack stack, ClassKey<T> key) {
 		var state = StateService.INSTANCE.convert(stack);
 		if (state.isEmpty() || !FeatureCache.check(key, state.get())) {
 			return Collections.emptyList();
 		}
 
-		return FeatureCache.get(key, state.get());
+		return FeatureCache.getRootFeatures(key, state.get());
+	}
+
+	public static <T extends Feature> List<T> appliedCachedFeatures(ItemStack stack, MatchContext context, ClassKey<T> key) {
+		var state = StateService.INSTANCE.convert(stack);
+		if (state.isEmpty() || !FeatureCache.check(key, state.get())) {
+			return Collections.emptyList();
+		}
+
+		return FeatureCache.apply(key, state.get(), context);
 	}
 
 	public static <T extends Feature> List<T> cachedFilteredFeatures(ItemStack stack, ClassKey<T> key, MatchContext context) {
-		return cachedFeatures(stack, key)
+		return appliedCachedFeatures(stack, context, key)
 				.stream()
-				.filter(feat -> feat.applyCondition(Matchable.DEFAULT_TRUE, context))
 				.toList();
 	}
 
@@ -45,7 +53,7 @@ public class FeatureUtils {
 			return Optional.empty();
 		}
 
-		return FeatureCache.get(key, state.get())
+		return FeatureCache.getRootFeatures(key, state.get())
 				.stream()
 				.findFirst();
 	}
