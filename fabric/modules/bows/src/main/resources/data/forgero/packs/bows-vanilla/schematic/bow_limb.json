@@ -85,24 +85,41 @@
         "value": 1
       },
       {
-        "type": "FLEXIBILITY",
-        "order": "BASE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "FORCE",
-        "order": "BASE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
         "type": "MINING_SPEED",
         "context": "COMPOSITE",
         "operation": "ADDITION",
         "value": 1.0
+      },
+      {
+        "type": "forgero:draw_speed",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 3.0
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 7200,
+        "use_action": "BOW",
+        "use": [
+          {
+            "type": "forgero:mount_projectile",
+            "projectile_predicate": {
+              "type": "minecraft:arrow"
+            }
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:launch_projectile",
+            "draw_power": 1.5,
+            "accuracy": 0.2,
+            "projectile_predicate": {
+              "type": "minecraft:arrow"
+            }
+          }
+        ]
       }
     ]
   },

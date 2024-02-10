@@ -25,7 +25,6 @@ public class ArrowProperties {
 		this.weight = weight;
 	}
 
-
 	public static ArrowProperties fromItemStack(ItemStack itemStack, StateService service) {
 		Optional<State> optionalState = service.convert(itemStack);
 		if (optionalState.isPresent()) {
