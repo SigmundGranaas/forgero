@@ -1,9 +1,5 @@
 package com.sigmundgranaas.forgero.bow.entity;
 
-import static com.sigmundgranaas.forgero.bow.ForgeroBowInitializer.DYNAMIC_ARROW_ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
-
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -11,7 +7,6 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -29,6 +24,10 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import static com.sigmundgranaas.forgero.bow.ForgeroBowInitializer.DYNAMIC_ARROW_ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 public class DynamicArrowEntity extends PersistentProjectileEntity {
 	private static final TrackedData<ItemStack> STACK;
@@ -103,7 +102,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 					.orElse(20f);
 			if (weight >= 10f) {
 				double logModifier = Math.log10(weight) - Math.log10(20f);
-				return weight * 0.001 * logModifier * 2;
+				return weight * 0.001 * logModifier;
 			}
 		}
 		return 0f;
