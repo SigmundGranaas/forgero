@@ -113,7 +113,7 @@
         "on_stop": [
           {
             "type": "forgero:launch_projectile",
-            "draw_power": 1.5,
+            "draw_power": 2.0,
             "accuracy": 0.2,
             "projectile_predicate": {
               "type": "minecraft:arrow"
