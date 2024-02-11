@@ -81,7 +81,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 			if (!this.noClip) {
 				Vec3d vec3d4 = this.getVelocity();
-				//this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
+				this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
 			}
 		}
 	}
@@ -98,9 +98,13 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 	private double getGravity() {
 		if (getStack() != null) {
-			return StateService.INSTANCE.convert(getStack())
-					.map(state -> 0.001 * (ComputedAttribute.apply(state, Weight.KEY)))
-					.orElse(0.0);
+			float weight = StateService.INSTANCE.convert(getStack())
+					.map(state -> ComputedAttribute.apply(state, Weight.KEY))
+					.orElse(20f);
+			if (weight >= 10f) {
+				double logModifier = Math.log10(weight) - Math.log10(20f);
+				return weight * 0.001 * logModifier * 2;
+			}
 		}
 		return 0f;
 	}
