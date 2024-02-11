@@ -1,11 +1,5 @@
 package com.sigmundgranaas.forgero.bow.handler;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.compute;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
-
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
@@ -17,7 +11,6 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.ArrowProperties;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -26,6 +19,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+
+import java.util.Optional;
+
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.compute;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
 
 public class LaunchProjectileHandler implements StopHandler {
 	private final StateService service;
@@ -132,7 +131,32 @@ public class LaunchProjectileHandler implements StopHandler {
 	}
 
 	private void applyVelocity(PersistentProjectileEntity projectile, PlayerEntity shooter, LaunchParams params) {
-		projectile.setVelocity(shooter, shooter.getPitch(), shooter.getYaw(), params.roll(), params.power(), params.accuracy());
+		projectile.setVelocity(shooter, shooter.getPitch(), shooter.getYaw(), params.roll(), params.power(), accuracyToDivergence(70));
+	}
+
+
+	/**
+	 * Converts an accuracy value to a divergence value using a quadratic function.
+	 *
+	 * @param accuracy The accuracy value, ranging from 0 to 100 or higher.
+	 * @return The calculated divergence value.
+	 */
+	public static float accuracyToDivergence(int accuracy) {
+		// Coefficients of the quadratic function
+		double a = 11.0 / 3000;
+		double b = -57.0 / 100;
+		double c = 61.0 / 3;
+		
+		double divergence = a * Math.pow(accuracy, 2) + b * accuracy + c;
+
+		// Ensuring correct handling of baseline values
+		if (divergence < 0) {
+			return 0;
+		} else if (divergence > 20) {
+			return 20;
+		} else {
+			return (float) divergence;
+		}
 	}
 
 	private LaunchParams createParams(float pullProgress, ArrowProperties arrowProps) {
