@@ -94,7 +94,7 @@
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 3.0
+        "value": 2.0
       }
     ],
     "features": [

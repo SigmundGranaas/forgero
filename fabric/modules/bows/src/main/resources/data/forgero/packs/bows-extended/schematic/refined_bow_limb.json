@@ -105,6 +105,31 @@
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 50
+      },
+      {
+        "type": "forgero:draw_speed",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.9
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 7200,
+        "use_action": "BOW",
+        "use": [
+          {
+            "type": "forgero:mount_projectile"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:launch_projectile",
+            "draw_power": 2.2,
+            "accuracy": 0.2
+          }
+        ]
       }
     ]
   },
