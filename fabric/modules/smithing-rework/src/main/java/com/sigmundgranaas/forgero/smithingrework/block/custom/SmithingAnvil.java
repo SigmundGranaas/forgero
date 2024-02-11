@@ -40,7 +40,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 		setDefaultState(getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
 	}
 
-	public static final Identifier STUMP_ANVIL = new Identifier(Forgero.NAMESPACE, "smithing_anvil");
+	public static final Identifier SMITHING_ANVIL = new Identifier(Forgero.NAMESPACE, "smithing_anvil");
 
 	private static final VoxelShape SHAPE_NORTH;
 	private static final VoxelShape SHAPE_EAST;
