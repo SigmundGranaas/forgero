@@ -52,6 +52,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.B
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.SingleSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityBasedHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FrostHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.entity.FunctionExecuteHandler;
@@ -85,18 +86,17 @@ import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRe
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.MatchContextTypePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 
@@ -151,6 +151,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
+		PredicateFactory.register(MatchContextTypePredicate.MatchContextTypePredicateBuilder::new);
 
 		//Writers
 		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);
@@ -210,6 +211,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(BlockSelector.KEY, ColumnSelector.TYPE, ColumnSelector.BUILDER);
 		HandlerBuilderRegistry.register(BlockSelector.KEY, PatternSelector.TYPE, PatternSelector.BUILDER);
 		HandlerBuilderRegistry.register(BlockSelector.KEY, RadiusVeinSelector.TYPE, RadiusVeinSelector.BUILDER);
+		HandlerBuilderRegistry.register(BlockSelector.KEY, SingleSelector.TYPE, SingleSelector.BUILDER);
 
 		// Hardness calculators
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
