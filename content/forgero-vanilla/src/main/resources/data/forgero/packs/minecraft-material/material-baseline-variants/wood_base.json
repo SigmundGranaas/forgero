@@ -50,9 +50,10 @@
             "value": 1
           },
           {
-            "id": "wood-force-composite",
-            "type": "FORCE",
-            "value": 30
+            "type": "forgero:draw_power",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 1
           },
           {
             "id": "wood-armor-composite",

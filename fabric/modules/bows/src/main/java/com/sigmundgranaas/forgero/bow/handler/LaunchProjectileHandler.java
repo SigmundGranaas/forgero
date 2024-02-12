@@ -1,16 +1,27 @@
 package com.sigmundgranaas.forgero.bow.handler;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
+import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.Attribute;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Accuracy;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
-import com.sigmundgranaas.forgero.minecraft.common.item.ArrowProperties;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -20,12 +31,6 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.compute;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
-
 public class LaunchProjectileHandler implements StopHandler {
 	private final StateService service;
 	public static final String TYPE = "forgero:launch_projectile";
@@ -34,23 +39,24 @@ public class LaunchProjectileHandler implements StopHandler {
 	public static final String DRAW_POWER_ATTRIBUTE_TYPE = "forgero:draw_power";
 	public static final String DRAW_SPEED_ATTRIBUTE_TYPE = "forgero:draw_speed";
 
-	private final Attribute power;
-	private final float accuracy;
-	private final boolean canBeCritical = true;
-	private final Attribute drawTime;
+	public static final PropertyContainer DEFAULT_ARROW = PropertyContainer.of(BaseAttribute.of(50f, Accuracy.KEY));
+	public static final PropertyContainer DEFAULT_BOW = PropertyContainer.of(List.of(BaseAttribute.of(2f, DRAW_POWER_ATTRIBUTE_TYPE), BaseAttribute.of(1f, DRAW_SPEED_ATTRIBUTE_TYPE)));
 
-	public LaunchProjectileHandler(Attribute power, float accuracy, Attribute drawTime) {
+	private final Attribute power;
+	private final Attribute accuracy;
+	private final boolean canBeCritical = true;
+
+	public LaunchProjectileHandler(Attribute power, Attribute accuracy) {
 		this.power = power;
 		this.accuracy = accuracy;
-		this.drawTime = drawTime;
 		this.service = StateService.INSTANCE;
 	}
 
 	public static LaunchProjectileHandler fromJson(JsonObject json) {
-		float power = json.get("draw_power").getAsFloat();
-		float accuracy = json.get("accuracy").getAsFloat();
+		Attribute power = FeatureUtils.of(json, "draw_power", DRAW_POWER_ATTRIBUTE_TYPE, 0);
+		Attribute accuracy = FeatureUtils.of(json, "accuracy", Accuracy.KEY, 0);
 
-		return new LaunchProjectileHandler(BaseAttribute.of(power, DRAW_POWER_ATTRIBUTE_TYPE), accuracy, BaseAttribute.of(0f, DRAW_SPEED_ATTRIBUTE_TYPE));
+		return new LaunchProjectileHandler(power, accuracy);
 	}
 
 	@Override
@@ -64,13 +70,12 @@ public class LaunchProjectileHandler implements StopHandler {
 			return;
 		}
 
-		ArrowProperties arrowProps = ArrowProperties.fromItemStack(arrowStack, service);
 
 		int useTime = stack.getMaxUseTime() - remainingUseTicks;
 
 		if (useTime > 1) {
 			removeItemFromState(stack, playerEntity, playerEntity.getActiveHand());
-			fireArrow(world, playerEntity, arrowStack, useTime, arrowProps);
+			fireArrow(world, playerEntity, arrowStack, useTime, stack);
 		}
 	}
 
@@ -85,7 +90,7 @@ public class LaunchProjectileHandler implements StopHandler {
 		}
 	}
 
-	private void fireArrow(World world, PlayerEntity shooter, ItemStack arrowStack, int useTime, ArrowProperties arrowProps) {
+	private void fireArrow(World world, PlayerEntity shooter, ItemStack arrowStack, int useTime, ItemStack bow) {
 		if (world.isClient) {
 			return;
 		}
@@ -95,6 +100,7 @@ public class LaunchProjectileHandler implements StopHandler {
 		}
 
 		ArrowItem arrowItem = (arrowStack.getItem() instanceof ArrowItem) ? (ArrowItem) arrowStack.getItem() : (ArrowItem) Items.ARROW;
+
 		PersistentProjectileEntity projectile = createProjectile(arrowItem, arrowStack, shooter, world);
 
 		float pullProgress = getPullProgress(useTime, getDrawTime(shooter));
@@ -103,7 +109,7 @@ public class LaunchProjectileHandler implements StopHandler {
 			projectile.setCritical(true);
 		}
 
-		LaunchParams params = createParams(pullProgress, arrowProps);
+		LaunchParams params = createParams(pullProgress, bow);
 		applyVelocity(projectile, shooter, params);
 
 		world.spawnEntity(projectile);
@@ -121,7 +127,11 @@ public class LaunchProjectileHandler implements StopHandler {
 	}
 
 	private float getDrawTime(PlayerEntity shooter) {
-		float drawTime = compute(this.drawTime, shooter).asFloat();
+		float drawTime = ComputedAttributeBuilder.of(DRAW_SPEED_ATTRIBUTE_TYPE)
+				.addSource(container(shooter))
+				.build()
+				.asFloat();
+		
 		return Math.max(drawTime, 0.1f);
 	}
 
@@ -131,39 +141,43 @@ public class LaunchProjectileHandler implements StopHandler {
 	}
 
 	private void applyVelocity(PersistentProjectileEntity projectile, PlayerEntity shooter, LaunchParams params) {
-		projectile.setVelocity(shooter, shooter.getPitch(), shooter.getYaw(), params.roll(), params.power(), accuracyToDivergence(70));
+		projectile.setVelocity(shooter, shooter.getPitch(), shooter.getYaw(), params.roll(), params.power(), accuracyToDivergence(params.accuracy()));
 	}
 
 
 	/**
-	 * Converts an accuracy value to a divergence value using a quadratic function.
+	 * Converts an accuracy value to a divergence value using an exponential decay function.
 	 *
 	 * @param accuracy The accuracy value, ranging from 0 to 100 or higher.
 	 * @return The calculated divergence value.
 	 */
-	public static float accuracyToDivergence(int accuracy) {
-		// Coefficients of the quadratic function
-		double a = 11.0 / 3000;
-		double b = -57.0 / 100;
-		double c = 61.0 / 3;
-		
-		double divergence = a * Math.pow(accuracy, 2) + b * accuracy + c;
+	public static float accuracyToDivergence(float accuracy) {
+		double a = 20; // Initial divergence when accuracy is 0
+		double b = -0.045;
+		double pow = 1.1;
 
-		// Ensuring correct handling of baseline values
-		if (divergence < 0) {
-			return 0;
-		} else if (divergence > 20) {
-			return 20;
-		} else {
-			return (float) divergence;
-		}
+		// Calculate divergence
+		double divergence = a * Math.exp(b * Math.pow(accuracy, pow));
+
+		// Divergence should never be negative
+		return (float) Math.max(divergence, 0);
 	}
 
-	private LaunchParams createParams(float pullProgress, ArrowProperties arrowProps) {
-		float power = pullProgress * this.power.getValue();
-		float accuracy = 1.0F - arrowProps.getStability() * this.accuracy;
+	private LaunchParams createParams(float pullProgress, ItemStack bow) {
+		float power = ComputedAttributeBuilder.of(DRAW_POWER_ATTRIBUTE_TYPE)
+				.addSource(this.power)
+				.addSource(service.convert(bow).map(PropertyContainer.class::cast).orElse(DEFAULT_BOW))
+				.build()
+				.asFloat();
+
+		float accuracy = ComputedAttributeBuilder.of(Accuracy.KEY)
+				.addSource(this.accuracy)
+				.addSource(service.convert(bow).map(PropertyContainer.class::cast).orElse(DEFAULT_BOW))
+				.build()
+				.asFloat();
+
 		float roll = 0.0F;
-		return new LaunchParams(power, accuracy, roll);
+		return new LaunchParams(power * pullProgress, accuracy, roll);
 	}
 
 	private ItemStack obtainArrowStack(PlayerEntity playerEntity) {

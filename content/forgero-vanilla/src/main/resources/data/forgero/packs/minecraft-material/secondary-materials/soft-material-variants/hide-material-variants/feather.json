@@ -32,6 +32,29 @@
         ]
       },
       {
+        "context": "OFFENSIVE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "hide-durability-offensive",
+            "type": "DURABILITY",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "operation": "ADDITION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "arrow-accuracy",
+            "type": "forgero:accuracy",
+            "value": 25
+          }
+        ]
+      },
+      {
         "context": "UPGRADE",
         "attributes": [
           {

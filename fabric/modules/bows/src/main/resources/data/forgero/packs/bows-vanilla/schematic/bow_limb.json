@@ -95,6 +95,17 @@
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 2.0
+      },
+      {
+        "type": "forgero:accuracy",
+        "operation": "ADDITION",
+        "value": 15
+      },
+      {
+        "type": "forgero:draw_power",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2
       }
     ],
     "features": [
@@ -104,20 +115,12 @@
         "use_action": "BOW",
         "use": [
           {
-            "type": "forgero:mount_projectile",
-            "projectile_predicate": {
-              "type": "minecraft:arrow"
-            }
+            "type": "forgero:mount_projectile"
           }
         ],
         "on_stop": [
           {
-            "type": "forgero:launch_projectile",
-            "draw_power": 2.0,
-            "accuracy": 0.2,
-            "projectile_predicate": {
-              "type": "minecraft:arrow"
-            }
+            "type": "forgero:launch_projectile"
           }
         ]
       }

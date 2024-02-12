@@ -106,6 +106,17 @@
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.8
+      },
+      {
+        "type": "forgero:draw_power",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2.6
+      },
+      {
+        "type": "forgero:accuracy",
+        "operation": "ADDITION",
+        "value": 20
       }
     ],
     "features": [
@@ -120,9 +131,7 @@
         ],
         "on_stop": [
           {
-            "type": "forgero:launch_projectile",
-            "draw_power": 2.6,
-            "accuracy": 0.2
+            "type": "forgero:launch_projectile"
           }
         ]
       }

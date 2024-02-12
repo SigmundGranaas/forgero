@@ -88,11 +88,6 @@
             "id": "mastercrafted-schematic-durability-composite",
             "type": "DURABILITY",
             "value": 1.5
-          },
-          {
-            "id": "mastercrafted-schematic-force-composite",
-            "type": "FORCE",
-            "value": 1.5
           }
         ]
       }
@@ -111,6 +106,17 @@
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 0.5
+      },
+      {
+        "type": "forgero:draw_power",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.7
+      },
+      {
+        "type": "forgero:accuracy",
+        "operation": "ADDITION",
+        "value": 5
       }
     ],
     "features": [
@@ -125,9 +131,7 @@
         ],
         "on_stop": [
           {
-            "type": "forgero:launch_projectile",
-            "draw_power": 1.8,
-            "accuracy": 0.2
+            "type": "forgero:launch_projectile"
           }
         ]
       }
