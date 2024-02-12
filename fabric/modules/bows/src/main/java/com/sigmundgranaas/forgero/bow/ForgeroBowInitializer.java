@@ -4,17 +4,20 @@ import static com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity.DYNAMIC_A
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.*;
 
 import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
+import com.sigmundgranaas.forgero.bow.handler.LaunchProjectileHandler;
+import com.sigmundgranaas.forgero.bow.handler.MountProjectileHandler;
 import com.sigmundgranaas.forgero.bow.item.BowGroupRegistrars;
 import com.sigmundgranaas.forgero.bow.item.DynamicBowItemRegistrationHandler;
 import com.sigmundgranaas.forgero.bow.predicate.BowPullPredicate;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
-import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
-
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -28,11 +31,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
 public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint {
-	public static final RegistryKey<ItemGroup> FORGERO_BOWS_KEY =  RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "bows"));
+	public static final RegistryKey<ItemGroup> FORGERO_BOWS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "bows"));
 	public static final ItemGroup FORGERO_BOWS = FabricItemGroup.builder()
 			.icon(ForgeroBowInitializer::bowIcon)
-			.displayName(Text.translatable( "itemGroup.forgero.bows"
+			.displayName(Text.translatable("itemGroup.forgero.bows"
 			))
 			.build();
 
@@ -66,5 +71,8 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 				.build();
 
 		register(ItemRegistries.STATE_CONVERTER, new DynamicBowItemRegistrationHandler(baseConverter));
+
+		HandlerBuilderRegistry.register(StopHandler.KEY, LaunchProjectileHandler.TYPE, LaunchProjectileHandler.BUILDER);
+		HandlerBuilderRegistry.register(UseHandler.KEY, MountProjectileHandler.TYPE, MountProjectileHandler.BUILDER);
 	}
 }

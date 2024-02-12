@@ -65,12 +65,11 @@
         "value": 25
       },
       {
-        "id": "arrowhead-base-stability",
+        "id": "arrowhead-base-accuracy",
         "order": "BASE",
-        "context": "LOCAL",
         "operation": "ADDITION",
-        "type": "STABILITY",
-        "value": 3
+        "type": "forgero:accuracy",
+        "value": 10
       }
     ],
     "grouped_attributes": [
