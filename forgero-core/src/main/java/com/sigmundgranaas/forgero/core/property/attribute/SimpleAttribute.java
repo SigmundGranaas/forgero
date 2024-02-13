@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
@@ -15,6 +17,13 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public record SimpleAttribute(String attribute,
                               float value) implements Attribute {
+
+	public static final Codec<SimpleAttribute> CODEC = RecordCodecBuilder.create(instance ->
+			instance.group(
+					Codec.STRING.fieldOf("type").forGetter(SimpleAttribute::attribute),
+					Codec.FLOAT.fieldOf("value").forGetter(SimpleAttribute::value)
+			).apply(instance, SimpleAttribute::new)
+	);
 
 
 	@Override
