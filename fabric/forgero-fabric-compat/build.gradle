@@ -1,7 +1,7 @@
 repositories {
 	mavenCentral()
 	maven { url "https://maven.shedaniel.me/" }
-	// maven { url "https://ladysnake.jfrog.io/artifactory/mods" } was broken, enable if necessary
+	//maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
 	maven { url 'https://maven.blamejared.com' }
 	maven { url "https://minecraft.guntram.de/maven/" }
 	maven { url "https://maven.terraformersmc.com/" }
@@ -121,13 +121,11 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Mod Menu API
-	modImplementation("com.terraformersmc:modmenu:${this.modmenu_version}")
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	modLocalRuntime "maven.modrinth:just-load:${project.justload_version}"
 
-
 	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
-
 }
 
 sourceSets {
