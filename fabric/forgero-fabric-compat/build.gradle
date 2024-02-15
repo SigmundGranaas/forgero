@@ -1,26 +1,3 @@
-repositories {
-	mavenCentral()
-	maven { url "https://maven.shedaniel.me/" }
-	//maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
-	maven { url 'https://maven.blamejared.com' }
-	maven { url "https://minecraft.guntram.de/maven/" }
-	maven { url "https://maven.terraformersmc.com/" }
-	maven { url "https://maven.wispforest.io/" }
-	maven { url "https://maven.cafeteria.dev" }
-	maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
-	maven { url "https://storage.googleapis.com/devan-maven/" }
-	maven { url 'https://maven.gegy.dev' }
-	maven { url 'https://maven.kosmx.dev/' }
-	maven { url 'https://jitpack.io' }
-	maven {
-		name = "Xander Maven"
-		url = "https://maven.isxander.dev/releases"
-	}
-	maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
-
-	mavenLocal()
-}
-
 dependencies {
 	localRuntime project(':content:forgero-vanilla')
 	localRuntime project(':content:forgero-extended')
@@ -123,9 +100,10 @@ dependencies {
 	// Mod Menu API
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
+	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
+
 	modLocalRuntime "maven.modrinth:just-load:${project.justload_version}"
 
-	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
 }
 
 sourceSets {
