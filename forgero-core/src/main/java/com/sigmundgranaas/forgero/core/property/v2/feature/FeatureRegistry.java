@@ -5,17 +5,23 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.util.TypeToken;
 
 public class FeatureRegistry {
 	private static final Map<ClassKey<?>, FeatureBuilder<?>> builders = new HashMap<>();
+	private static final Map<ClassKey<?>, Codec<?>> codecs = new HashMap<>();
 	private static final Map<String, TypeToken<? extends Feature>> idMap = new HashMap<>();
 
-
 	public static <T extends Feature> Optional<T> of(ClassKey<T> key, JsonObject object) {
-		return Optional.ofNullable(builders.get(key))
-				.flatMap(builder -> builder.build(object))
-				.map(key.clazz()::cast);
+		return Optional.ofNullable(codecs.get(key))
+				.flatMap(codec -> codec.parse(JsonOps.INSTANCE, object)
+						.map(key.clazz()::cast)
+						.result())
+				.or(() -> Optional.ofNullable(builders.get(key))
+						.flatMap(builder -> builder.build(object))
+						.map(key.clazz()::cast));
 	}
 
 	public static Optional<Feature> of(JsonObject object) {
@@ -38,5 +44,10 @@ public class FeatureRegistry {
 	public static <T extends Feature> void register(ClassKey<T> key, FeatureBuilder<T> builder) {
 		idMap.put(key.type(), key.clazz());
 		builders.put(key, builder);
+	}
+
+	public static <T extends Feature> void register(ClassKey<T> key, Codec<T> builder) {
+		idMap.put(key.type(), key.clazz());
+		codecs.put(key, builder);
 	}
 }

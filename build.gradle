@@ -1,6 +1,7 @@
 plugins {
 	id "maven-publish"
 }
+
 allprojects {
 	repositories {
 		mavenCentral()
@@ -26,7 +27,6 @@ allprojects {
 		mavenLocal()
 	}
 }
-
 
 def isSnapshotVersion = { versionString ->
 	return versionString.contains("-g")
@@ -68,6 +68,9 @@ subprojects {
 	repositories {
 		mavenCentral()
 		mavenLocal()
+		maven {
+			url "https://libraries.minecraft.net"
+		}
 	}
 }
 
@@ -75,10 +78,7 @@ subprojects { project ->
 	if (project.name != 'content') {
 		apply plugin: "maven-publish"
 		apply plugin: "java-library"
-		repositories {
-			mavenCentral()
-			mavenLocal()
-		}
+
 
 		publishing {
 			repositories {

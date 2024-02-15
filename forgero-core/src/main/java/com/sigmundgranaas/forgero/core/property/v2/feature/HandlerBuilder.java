@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.util.TypeToken;
 
@@ -95,7 +96,11 @@ public class HandlerBuilder {
 			if (object.has("type")) {
 				String type = object.get("type").getAsString();
 				return registry.get(key, type)
-						.flatMap(builder -> builder.build(element));
+						.flatMap(builder -> builder.build(element))
+						.or(() -> registry.getCodec(key, type)
+								.flatMap(builder -> builder.parse(JsonOps.INSTANCE, object)
+										.map(key.clazz()::cast)
+										.result()));
 			}
 		} else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
 			return registry.get(key, element.getAsString())

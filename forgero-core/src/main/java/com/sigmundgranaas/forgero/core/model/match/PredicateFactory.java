@@ -9,6 +9,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -16,11 +19,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The PredicateFactory class serves as a factory for creating Matchable instances.
+ * Todo: rework this to have proper class keys as well as registering using distinct types.
  */
+
 public class PredicateFactory {
-
 	private static final List<PredicateBuilder> builders = new ArrayList<>();
-
+	private static final List<Codec<Matchable>> codecs = new ArrayList<>();
 
 	private static final LoadingCache<JsonElement, Matchable> cache = CacheBuilder.newBuilder()
 			.maximumSize(1000)
@@ -31,6 +35,12 @@ public class PredicateFactory {
 									.map(builder -> builder.create(element))
 									.flatMap(Optional::stream)
 									.findAny()
+									.or(() -> codecs.stream()
+											.map(codec -> codec.parse(JsonOps.INSTANCE, element))
+											.map(DataResult::result)
+											.flatMap(Optional::stream)
+											.findAny()
+									)
 									.orElseGet(() -> {
 										Forgero.LOGGER.error("Found predicate element with no corresponding predicate builder: {}, the corresponding entry will always fail matching checks.", element);
 										return Matchable.DEFAULT_FALSE;
@@ -41,6 +51,10 @@ public class PredicateFactory {
 
 	public static void register(PredicateBuilder builder) {
 		builders.add(builder);
+	}
+
+	public static void register(Codec<Matchable> builder) {
+		codecs.add(builder);
 	}
 
 	public static void register(Supplier<PredicateBuilder> builder) {

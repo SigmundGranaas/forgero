@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
@@ -14,6 +15,7 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
  */
 public class HandlerBuilderRegistry {
 	private static final Map<ClassKey<?>, Map<String, JsonBuilder<?>>> REGISTRY = new ConcurrentHashMap<>();
+	private static final Map<ClassKey<?>, Map<String, Codec<?>>> CODEC_REGISTRY = new ConcurrentHashMap<>();
 
 	/**
 	 * Registers a JsonBuilder for a specific type.
@@ -25,6 +27,18 @@ public class HandlerBuilderRegistry {
 	 */
 	public static <T extends Object> void register(ClassKey<T> type, String key, JsonBuilder<? extends T> builder) {
 		REGISTRY.computeIfAbsent(type, k -> new ConcurrentHashMap<>()).put(key, builder);
+	}
+
+	/**
+	 * Registers a Codec for a specific type.
+	 *
+	 * @param type    The class key representing the type for which the builder is being registered.
+	 * @param key     A unique string key to identify the builder.
+	 * @param builder The JsonBuilder instance to be registered.
+	 * @param <T>     The type parameter associated with the class key.
+	 */
+	public static <T extends Object> void register(ClassKey<T> type, String key, Codec<? extends T> builder) {
+		CODEC_REGISTRY.computeIfAbsent(type, k -> new ConcurrentHashMap<>()).put(key, builder);
 	}
 
 	/**
@@ -60,6 +74,16 @@ public class HandlerBuilderRegistry {
 		return Optional.empty();
 	}
 
+	@SuppressWarnings("unchecked")
+	private <T> Optional<? extends Codec<T>> safeCast(Codec<?> builder, ClassKey<T> type) {
+		try {
+			return Optional.of((Codec<T>) builder);
+		} catch (ClassCastException ignored) {
+			Forgero.LOGGER.error("Could not cast builder to type: " + type.clazz().type().getTypeName());
+		}
+		return Optional.empty();
+	}
+
 	/**
 	 * Retrieves a JsonBuilder associated with the specified type and key.
 	 *
@@ -73,6 +97,13 @@ public class HandlerBuilderRegistry {
 				.flatMap(map -> Optional.ofNullable(map.get(key)))
 				.flatMap(builder -> safeCast(builder, type));
 	}
+
+	public <T> Optional<Codec<T>> getCodec(ClassKey<T> type, String key) {
+		return Optional.ofNullable(CODEC_REGISTRY.get(type))
+				.flatMap(map -> Optional.ofNullable(map.get(key)))
+				.flatMap(builder -> safeCast(builder, type));
+	}
+
 
 	/**
 	 * A record that facilitates the registration of JsonBuilders in the HandlerBuilderRegistry.

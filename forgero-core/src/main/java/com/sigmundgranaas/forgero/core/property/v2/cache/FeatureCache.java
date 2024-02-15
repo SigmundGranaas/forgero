@@ -14,6 +14,8 @@ import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import org.jetbrains.annotations.NotNull;
 
 public class FeatureCache {
@@ -29,7 +31,7 @@ public class FeatureCache {
 				}
 			});
 
-	public static final LoadingCache<FeatureContainerKey, List<Feature>> featureCache = CacheBuilder.newBuilder()
+	public static final LoadingCache<FeatureContainerKey, List<Feature>> rootFeatureCache = CacheBuilder.newBuilder()
 			.maximumSize(600)
 			.expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
 			.softValues()
@@ -37,8 +39,23 @@ public class FeatureCache {
 				@Override
 				public @NotNull List<Feature> load(@NotNull FeatureContainerKey key) {
 					return key.pair().container()
-							.stream().features(key.key())
-							.filter(feat -> feat.applyCondition(key.pair().target(), key.pair().context()))
+							.stream()
+							.features(key.key())
+							.collect(Collectors.toList());
+				}
+			});
+
+	public static final LoadingCache<FeatureContainerKey, List<Feature>> featureCache = CacheBuilder.newBuilder()
+			.maximumSize(600)
+			.expireAfterAccess(Duration.of(1, ChronoUnit.MINUTES))
+			.softValues()
+			.build(new CacheLoader<>() {
+				@Override
+				public @NotNull List<Feature> load(@NotNull FeatureContainerKey key) {
+					return key.pair()
+							.container()
+							.stream(key.pair().target(), key.pair().context())
+							.features(key.key())
 							.collect(Collectors.toList());
 				}
 			});
@@ -47,9 +64,10 @@ public class FeatureCache {
 		return check(FeatureContainerKey.of(container, key));
 	}
 
-	public static <T extends Feature> List<T> get(ClassKey<T> key, PropertyContainer container) {
+	public static <T extends Feature> List<T> getRootFeatures(ClassKey<T> key, PropertyContainer container) {
 		try {
-			return (List<T>) featureCache.get(new FeatureContainerKey(ContainerTargetPair.of(container), key));
+			// noinspection unchecked
+			return (List<T>) rootFeatureCache.get(new FeatureContainerKey(ContainerTargetPair.of(container), key));
 		} catch (Exception e) {
 			return Collections.emptyList();
 		}
@@ -65,5 +83,14 @@ public class FeatureCache {
 
 	public static boolean check(Set<String> keys, Function<String, FeatureContainerKey> keyMapper) {
 		return keys.stream().map(keyMapper).anyMatch(FeatureCache::check);
+	}
+
+	public static <T extends Feature> List<T> apply(ClassKey<T> key, State state, MatchContext context) {
+		try {
+			// noinspection unchecked
+			return (List<T>) featureCache.get(new FeatureContainerKey(ContainerTargetPair.of(state, context), key));
+		} catch (Exception e) {
+			return Collections.emptyList();
+		}
 	}
 }

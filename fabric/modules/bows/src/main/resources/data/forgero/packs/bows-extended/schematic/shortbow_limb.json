@@ -1,7 +1,6 @@
 {
   "type": "BOW_LIMB_SCHEMATIC",
   "name": "shortbow_limb-schematic",
-  "parent": "bow_limb-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -89,11 +88,6 @@
             "id": "mastercrafted-schematic-durability-composite",
             "type": "DURABILITY",
             "value": 1.5
-          },
-          {
-            "id": "mastercrafted-schematic-force-composite",
-            "type": "FORCE",
-            "value": 1.5
           }
         ]
       }
@@ -106,6 +100,40 @@
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 75
+      },
+      {
+        "type": "forgero:draw_speed",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.5
+      },
+      {
+        "type": "forgero:draw_power",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.7
+      },
+      {
+        "type": "forgero:accuracy",
+        "operation": "ADDITION",
+        "value": 5
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 7200,
+        "use_action": "BOW",
+        "use": [
+          {
+            "type": "forgero:mount_projectile"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:launch_projectile"
+          }
+        ]
       }
     ]
   },

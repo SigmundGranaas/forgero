@@ -2,11 +2,10 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity
 
 import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.compute;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.property.Attribute;
-import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
-import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils;
+import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -30,13 +29,11 @@ import net.minecraft.world.World;
  *   "on_hit": {
  *     "type": "minecraft:status_effect",
  *     "target": "minecraft:targeted_entity",
- *     "effect": {
- *       "type": "minecraft:poison",
- *       "level": 1
- *     }
+ *     "effect": "minecraft:poison",
+ *     "level": 1
  *   },
  *   "predicate": {
- *     "type": "forgero:chance",
+ *     "type": "forgero:random",
  *     "chance": 0.5
  *   }
  * }
@@ -47,11 +44,17 @@ import net.minecraft.world.World;
 @Accessors(fluent = true)
 public class StatusEffectHandler implements EntityTargetHandler {
 	public static final String TYPE = "minecraft:status_effect";
-	public static final String EFFECT_LEVEL_TYPE = "minecraft:effect_level";
+	public static final String EFFECT_LEVEL_ATTRIBUTE_TYPE = "minecraft:effect_level";
 	public static final String EFFECT_DURATION_TYPE = "minecraft:effect_duration";
-	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), StatusEffectHandler::fromJson);
-	// Default value
-	private static final int DEFAULT_DURATION = 20 * 30;
+
+	private static final Attribute DEFAULT_LEVEL = BaseAttribute.of(1, EFFECT_LEVEL_ATTRIBUTE_TYPE);
+	private static final Attribute DEFAULT_DURATION = BaseAttribute.of(20 * 30, EFFECT_DURATION_TYPE);
+
+	public static Codec<StatusEffect> STATUS_EFFECT_CODEC = Identifier.CODEC.xmap(Registries.STATUS_EFFECT::get, Registries.STATUS_EFFECT::getId);
+
+	public static final Codec<StatusEffectHandler> BUILDER = codec();
+
+
 	private final StatusEffect effect;
 	private final Attribute level;
 	private final Attribute duration; // in ticks
@@ -72,20 +75,13 @@ public class StatusEffectHandler implements EntityTargetHandler {
 		this.target = target;
 	}
 
-
-	/**
-	 * Constructs an {@link StatusEffectHandler} from a JSON object.
-	 *
-	 * @param json The JSON object.
-	 * @return A new instance of {@link StatusEffectHandler}.
-	 */
-	public static StatusEffectHandler fromJson(JsonObject json) {
-		JsonObject effectJson = json.getAsJsonObject("effect");
-		StatusEffect effect = Registries.STATUS_EFFECT.get(new Identifier(json.getAsJsonObject("effect").get("type").getAsString()));
-		Attribute level = FeatureUtils.of(effectJson, "level", EFFECT_LEVEL_TYPE, 1);
-		Attribute duration = FeatureUtils.of(effectJson, "duration", EFFECT_DURATION_TYPE, 10);
-		String target = json.get("target").getAsString();
-		return new StatusEffectHandler(effect, level, duration, target);
+	public static Codec<StatusEffectHandler> codec() {
+		return RecordCodecBuilder.create(instance -> instance.group(
+				STATUS_EFFECT_CODEC.fieldOf("effect").forGetter(StatusEffectHandler::effect),
+				Attribute.defaultOrExplicitTypeCodec(EFFECT_LEVEL_ATTRIBUTE_TYPE).optionalFieldOf("level", DEFAULT_LEVEL).forGetter(StatusEffectHandler::level),
+				Attribute.defaultOrExplicitTypeCodec(EFFECT_DURATION_TYPE).optionalFieldOf("duration", DEFAULT_DURATION).forGetter(StatusEffectHandler::duration),
+				Codec.STRING.fieldOf("target").forGetter(StatusEffectHandler::target)
+		).apply(instance, StatusEffectHandler::new));
 	}
 
 	/**

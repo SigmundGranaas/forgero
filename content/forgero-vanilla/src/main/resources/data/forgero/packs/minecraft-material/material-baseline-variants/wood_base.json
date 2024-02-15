@@ -45,14 +45,15 @@
             "value": 20
           },
           {
-            "id": "wood-flexibility-composite",
-            "type": "FLEXIBILITY",
-            "value": 50
+            "id": "wood-draw_speed-composite",
+            "type": "forgero:draw_speed",
+            "value": 1
           },
           {
-            "id": "wood-force-composite",
-            "type": "FORCE",
-            "value": 30
+            "type": "forgero:draw_power",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 1
           },
           {
             "id": "wood-armor-composite",

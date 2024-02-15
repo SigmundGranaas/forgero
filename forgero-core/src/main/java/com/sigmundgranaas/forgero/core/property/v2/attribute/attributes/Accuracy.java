@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.core.property.v2.attribute.attributes;
 
-public class Stability {
+public class Accuracy {
 
-	public static final String KEY = "STABILITY";
+	public static final String KEY = "forgero:accuracy";
 
 
 }
