@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version '1.4-SNAPSHOT' apply true
+	id "fabric-loom" version '1.5-SNAPSHOT' apply true
 	id "com.modrinth.minotaur" version "2.+"
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
@@ -34,8 +34,6 @@ dependencies {
 	runtimeOnly project(':content:forgero-extended')
 	runtimeOnly project(':content:forgero-compat')
 	runtimeOnly project(':content:forgero-structures')
-
-	include "maven.modrinth:arrp:${project.aarp_version}"
 }
 
 subprojects {
@@ -117,12 +115,6 @@ task publishToModrinthAndCurseForge {
 }
 
 allprojects {
-	repositories {
-		maven { url "https://api.modrinth.com/maven" }
-		maven { url "https://cursemaven.com" }
-		maven { url 'https://jitpack.io' }
-	}
-
 	processResources {
 		inputs.property "version", rootProject.version
 
