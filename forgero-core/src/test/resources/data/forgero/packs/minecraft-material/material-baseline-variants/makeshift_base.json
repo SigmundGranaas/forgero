@@ -1,0 +1,122 @@
+{
+  "type": "MAKESHIFT",
+  "name": "makeshift_base",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "makeshift-rarity-composite",
+            "type": "RARITY",
+            "value": 50
+          },
+          {
+            "id": "makeshift-durability-composite",
+            "type": "DURABILITY",
+            "value": 680
+          },
+          {
+            "id": "makeshift-weight-composite",
+            "type": "WEIGHT",
+            "value": 30
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "makeshift-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "makeshift-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "makeshift-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "makeshift-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "makeshift-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "makeshift-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "makeshift-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 340
+          },
+          {
+            "id": "makeshift-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "makeshift-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "makeshift-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "makeshift-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "makeshift-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 340
+          }
+        ]
+      }
+    ]
+  }
+}

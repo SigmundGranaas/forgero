@@ -6,21 +6,21 @@
       "template": "pickaxe_head.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
-      "order": 40
+      "order": 20
     },
     {
       "name": "pickaxe_head_material",
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "pickaxe_head_tip_reinforcement.png",
-      "order": 51
+      "order": 30
     },
     {
-      "name": "pickaxe_head_gem",
-      "modelType": "GENERATE",
-      "template": "diagonal_gem_high.png",
-      "palette": "TRINKET",
-      "order": 65
+      "name": "pickaxe_dye",
+      "template": "pickaxe_head.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
     },
     {
       "target": [
@@ -40,11 +40,11 @@
     },
     {
       "target": [
-        "type:GEM",
+        "type:DYE",
         "slot:1"
       ],
       "modelType": "UPGRADE",
-      "template": "pickaxe_head_gem"
+      "template": "pickaxe_dye"
     }
   ]
 }

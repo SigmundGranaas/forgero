@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "forgero-fabric-core",
   "version": "${version}",
-  "name": "Forgero Fabric core module",
-  "description": "Core Forgero module for Fabric",
+  "name": "Forgero for Fabric",
+  "description": "Core Fabric initialization for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -44,7 +44,7 @@
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric-api": "*",
-    "minecraft": "1.20.x",
+    "minecraft": "1.20.1",
     "java": ">=17",
     "forgero-common": "*"
   },

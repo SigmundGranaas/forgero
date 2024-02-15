@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.List;
 
 public class ConditionWriter implements Writer {
 	private final Conditional<?> conditional;
@@ -19,8 +19,8 @@ public class ConditionWriter implements Writer {
 
 	@Override
 	public void write(List<Text> tooltip, TooltipContext context) {
-		var conditions = conditional.namedConditions();
-		if (conditions.size() > 0) {
+		var conditions = conditional.namedConditions(conditional.compoundedConditions());
+		if (!conditions.isEmpty()) {
 			Text header = Text.literal(" ").append(Text.translatable("item.forgero.conditions")).formatted(Formatting.GRAY);
 			tooltip.add(header);
 			conditions.forEach(condition -> writeCondition(condition, tooltip));

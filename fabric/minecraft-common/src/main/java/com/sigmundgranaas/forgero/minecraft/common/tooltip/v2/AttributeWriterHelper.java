@@ -1,25 +1,24 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeHelper;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.difference.DifferenceHelper;
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
+
+import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Stream;
 
 public class AttributeWriterHelper extends BaseWriter {
 	private final PropertyContainer container;
@@ -43,7 +42,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public static float roundFloat(float number) {
-		NumberFormat format = NumberFormat.getInstance();
+		NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
 		format.setMaximumFractionDigits(2);
 		try {
 			return Float.parseFloat(format.format(number));
@@ -81,7 +80,7 @@ public class AttributeWriterHelper extends BaseWriter {
 		return o instanceof Matchable matchable && matchable.test(Type.SCHEMATIC);
 	}
 
-	public MutableText writeBaseNumber(com.sigmundgranaas.forgero.core.property.v2.Attribute attribute) {
+	public MutableText writeBaseNumber(ComputedAttribute attribute) {
 		float value = attribute.asFloat();
 		if (attribute.key().equals(AttackSpeed.KEY) && isPartHead(container)) {
 			value = 4 + value;
@@ -131,13 +130,18 @@ public class AttributeWriterHelper extends BaseWriter {
 				.append(Text.literal(percentage + "%"));
 	}
 
-	public Optional<MutableText> writeTarget(Attribute attribute) {
-		if (attribute.applyCondition(Target.EMPTY) || attribute.targets().isEmpty()) {
-			return Optional.empty();
+	public List<MutableText> writeTarget(Attribute attribute) {
+		var writer = new PredicateWriterFactory().build(attribute.getPredicate(), configuration);
+		if (attribute.getPredicate() == Matchable.DEFAULT_TRUE) {
+			return Collections.emptyList();
+		} else if (writer.isPresent()) {
+			return writer.get().write(attribute.getPredicate());
 		} else {
-			MutableText against = indented(configuration.baseIndent() + 2).append(Text.translatable("tooltip.forgero.against").formatted(Formatting.GRAY));
+			MutableText against = indented(configuration.baseIndent() + 2)
+					.append(Text.translatable("tooltip.forgero.against")
+							.formatted(Formatting.GRAY));
 			against.append(TagWriter.writeTagList(attribute.targets()));
-			return Optional.of(against);
+			return List.of(against);
 		}
 	}
 
@@ -177,7 +181,7 @@ public class AttributeWriterHelper extends BaseWriter {
 		return container.stream().getAttributes().filter(attribute -> attribute.type().equals(type));
 	}
 
-	public com.sigmundgranaas.forgero.core.property.v2.Attribute attributeOfType(String type) {
+	public ComputedAttribute attributeOfType(String type) {
 		return helper.apply(type);
 	}
 

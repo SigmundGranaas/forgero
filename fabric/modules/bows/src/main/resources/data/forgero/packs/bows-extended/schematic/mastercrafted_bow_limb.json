@@ -1,0 +1,146 @@
+{
+  "type": "BOW_LIMB_SCHEMATIC",
+  "name": "mastercrafted_bow_limb-schematic",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "BOW_LIMB",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "WOOD",
+            "unique": true,
+            "amount": 3
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "WOOD",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "grip",
+        "type": "SOFT_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "mastercrafted-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.5
+          },
+          {
+            "id": "mastercrafted-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.5
+          },
+          {
+            "id": "mastercrafted-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.5
+          },
+          {
+            "id": "mastercrafted-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.5
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "type": "forgero:draw_speed",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.8
+      },
+      {
+        "type": "forgero:draw_power",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2.6
+      },
+      {
+        "type": "forgero:accuracy",
+        "operation": "ADDITION",
+        "value": 20
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 7200,
+        "use_action": "BOW",
+        "use": [
+          {
+            "type": "forgero:mount_projectile"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:launch_projectile"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    }
+  }
+}

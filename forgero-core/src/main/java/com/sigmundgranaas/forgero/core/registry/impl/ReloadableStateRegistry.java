@@ -82,13 +82,15 @@ public class ReloadableStateRegistry implements IdentifiableRegistry<State>, Sta
 		} else {
 			typeMap.put(type.typeName(), new ArrayList<>(List.of(supplier)));
 		}
-		type.parent().ifPresent(parent -> registerType(parent, supplier));
+		type.parent().forEach(parent -> registerType(parent, supplier));
 	}
 
 	@NotNull
 	@Synchronized
 	public Collection<StateProvider> register(Collection<State> state) {
-		return state.stream().map(this::register).collect(ImmutableList.toImmutableList());
+		return state.stream()
+				.map(this::register)
+				.collect(ImmutableList.toImmutableList());
 	}
 
 	@Synchronized

@@ -3,7 +3,7 @@
   "id": "forgero-vanilla",
   "version": "${version}",
   "name": "Forgero vanilla pack",
-  "description": "Forgero extension pack for vanilla friendly content",
+  "description": "Vanilla content pack for Forgero. Adds vanilla tools and materials.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],

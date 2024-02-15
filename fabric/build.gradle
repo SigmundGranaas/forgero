@@ -1,15 +1,11 @@
 plugins {
-	id "idea"
-	id "fabric-loom" version "1.3.8" apply true
-	id 'maven-publish'
+	id "fabric-loom" version '1.5-SNAPSHOT' apply true
 	id "com.modrinth.minotaur" version "2.+"
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-configure(subprojects) {
-	apply plugin: 'java-library'
+configure(allprojects) {
 	apply plugin: "idea"
-	apply plugin: 'maven-publish'
 	apply plugin: 'fabric-loom'
 }
 
@@ -18,6 +14,7 @@ archivesBaseName = "forgero-fabric"
 dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include project(':forgero-core')
 
@@ -29,8 +26,14 @@ dependencies {
 	include project(':content:forgero-extended')
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
+	include project(':fabric:modules:generator')
 
-	include "maven.modrinth:arrp:${project.aarp_version}"
+	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+
+	runtimeOnly project(':content:forgero-vanilla')
+	runtimeOnly project(':content:forgero-extended')
+	runtimeOnly project(':content:forgero-compat')
+	runtimeOnly project(':content:forgero-structures')
 }
 
 subprojects {
@@ -45,8 +48,6 @@ subprojects {
 		implementation 'org.projectlombok:lombok:1.18.24'
 		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 	}
-	// configure the maven publication
-
 }
 
 curseforge {
@@ -68,6 +69,13 @@ curseforge {
 				embeddedLibrary 'arrp'
 				requiredDependency 'fabric-api'
 				optionalDependency 'patchouli'
+				optionalDependency "lambdynamiclights"
+				optionalDependency "better-combat"
+				optionalDependency "modmenu"
+				optionalDependency "mythicmetals"
+				optionalDependency "betternether"
+				optionalDependency "mystical-crops"
+				optionalDependency "mythicmetals"
 			}
 		}
 	}
@@ -88,7 +96,17 @@ modrinth {
 	versionName = "Forgero $version"
 	changelog = file('../changelog.md').text
 	dependencies {
+		embedded.project "arrp"
 		required.project "fabric-api"
+		optional.project "patchouli"
+		optional.project "lambdynamiclights"
+		optional.project "better-combat"
+		optional.project "modmenu"
+		optional.project "mythicmetals"
+		optional.project "betternether"
+		optional.project "mystical_crops"
+		optional.project "mythicmetals"
+		optional.project "wiredredstone"
 	}
 }
 
@@ -97,15 +115,6 @@ task publishToModrinthAndCurseForge {
 }
 
 allprojects {
-	repositories {
-		maven { url "https://api.modrinth.com/maven" }
-		maven { url "https://cursemaven.com" }
-		maven { url 'https://jitpack.io' }
-		maven {
-			url = uri("https://ueaj.dev/maven")
-		}
-	}
-
 	processResources {
 		inputs.property "version", rootProject.version
 
@@ -118,5 +127,8 @@ allprojects {
 		from("LICENSE") {
 			rename { "${it}_${archivesBaseName}" }
 		}
+	}
+	java {
+		withSourcesJar()
 	}
 }

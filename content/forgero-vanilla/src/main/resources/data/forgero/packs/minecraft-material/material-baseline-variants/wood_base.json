@@ -45,6 +45,17 @@
             "value": 20
           },
           {
+            "id": "wood-draw_speed-composite",
+            "type": "forgero:draw_speed",
+            "value": 1
+          },
+          {
+            "type": "forgero:draw_power",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 1
+          },
+          {
             "id": "wood-armor-composite",
             "type": "ARMOR",
             "value": 0

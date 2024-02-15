@@ -1,74 +1,49 @@
 dependencies {
-	implementation project(':forgero-core')
-	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	api project(':forgero-core')
+	api project(path: ':fabric:modules:generator', configuration: 'namedElements')
+	api project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-
 	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
-}
+	include("maven.modrinth:arrp:${project.aarp_version}")
 
-sourceSets {
-	test {
-		compileClasspath += test.compileClasspath
-		runtimeClasspath += test.runtimeClasspath
-	}
+	localRuntime project(':content:forgero-vanilla')
+	localRuntime project(':content:forgero-extended')
+	localRuntime project(':content:forgero-compat')
+	localRuntime project(':content:forgero-structures')
+
+	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/forgero-fabric-core.accesswidener")
 
 	runs {
-		runClient {
-			client()
-			ideConfigGenerated(true)
-
-			dependencies {
-				runtimeOnly project(':content:forgero-vanilla')
-				runtimeOnly project(':content:forgero-extended')
-				runtimeOnly project(':content:forgero-compat')
-				runtimeOnly project(':content:forgero-structures')
-			}
-		}
-
 		testmodServer {
 			server()
 			ideConfigGenerated project.rootProject == project
-			name = "Test Server"
-
-			dependencies {
-				runtimeOnly project(':content:forgero-vanilla')
-				runtimeOnly project(':content:forgero-extended')
-				runtimeOnly project(':content:forgero-compat')
-				runtimeOnly project(':content:forgero-structures')
-			}
+			name = "Testmod Server"
 			source sourceSets.test
 		}
-
 		gametest {
 			inherit testmodServer
-			name "Game Test"
 
+			name "Game Test"
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
 			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 			runDir "build/gametest"
 		}
-		autoTestServer {
-			inherit testmodServer
+	}
+}
 
-			name "Auto Test Server"
-			vmArg "-Dfabric.autoTest"
-		}
-
-		gametestClient {
-			inherit testmodServer
-			client()
-
-			name "test client"
-			//vmArg "-Dfabric.autoTest"
-		}
+sourceSets {
+	test {
+		compileClasspath += test.compileClasspath
+		runtimeClasspath += test.runtimeClasspath
+		runtimeClasspath += main.runtimeClasspath
 	}
 }
 

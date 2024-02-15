@@ -7,13 +7,16 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -323,6 +326,11 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		@Override
 		public State strip() {
 			return this;
+		}
+
+		@Override
+		public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+			return getRootProperties();
 		}
 	}
 

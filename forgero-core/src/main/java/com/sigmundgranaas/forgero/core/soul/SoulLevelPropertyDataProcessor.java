@@ -3,12 +3,14 @@ package com.sigmundgranaas.forgero.core.soul;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
-import com.sigmundgranaas.forgero.core.property.v2.feature.PropertyDataBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 
@@ -34,14 +36,14 @@ public class SoulLevelPropertyDataProcessor implements PropertyLevelProvider {
 	@Override
 	public List<Property> apply(Integer level) {
 		List<Property> attributes = data.getProperties().getAttributes().stream()
-				.map(AttributeBuilder::createAttributeBuilder)
+				.map((attribute) -> AttributeBuilder.createAttributeBuilder(attribute, new PredicateFactory()))
 				.map(builder -> builder.applyLevel(level))
 				.map(AttributeBuilder::build)
 				.collect(Collectors.toList());
 
 		List<Property> features = data.getProperties().features.stream()
-				.map(PropertyDataBuilder::buildFromPojo)
-				.map(builder -> builder.toBuilder().level(level).build())
+				.map(FeatureRegistry::of)
+				.flatMap(Optional::stream)
 				.collect(Collectors.toList());
 
 		return Stream.of(attributes, features).flatMap(List::stream).toList();

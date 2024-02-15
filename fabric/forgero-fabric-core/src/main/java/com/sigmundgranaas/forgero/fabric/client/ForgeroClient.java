@@ -1,18 +1,12 @@
 package com.sigmundgranaas.forgero.fabric.client;
 
-import static com.sigmundgranaas.forgero.fabric.client.SoulEntityModel.SOUL_ENTITY_MODEL_LAYER;
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
-import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.model.TextureModel;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
@@ -24,6 +18,7 @@ import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableItemRenderer;
 import net.devtech.arrp.api.RRPCallback;
 
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -48,11 +43,26 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.util.Identifier;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.sigmundgranaas.forgero.fabric.client.SoulEntityModel.SOUL_ENTITY_MODEL_LAYER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
-	public static Map<String, PaletteTemplateModel> TEXTURES = new HashMap<>();
+	public static Map<String, ModelTemplate> TEXTURES = new HashMap<>();
 	public static Map<String, String> PALETTE_REMAP = new HashMap<>();
+
 
 	@Override
 	public void onInitializeClient() {
@@ -79,8 +89,9 @@ public class ForgeroClient implements ClientModInitializer {
 		registerToolPartTextures(modelRegistry);
 		var modelProvider = new ForgeroModelVariantProvider(modelRegistry);
 		ModelLoadingRegistry.INSTANCE.registerVariantProvider(variant -> modelProvider);
-		EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
-		EntityModelLayerRegistry.registerModelLayer(SOUL_ENTITY_MODEL_LAYER, SoulEntityModel::getTexturedModelData);
+		// EntityRendererRegistry.register(Entities.SOUL_ENTITY, SoulEntityRenderer::new);
+		EntityRendererRegistry.register(Entities.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
+		// EntityModelLayerRegistry.registerModelLayer(SOUL_ENTITY_MODEL_LAYER, SoulEntityModel::getTexturedModelData);
 	}
 
 	private void registerToolPartTextures(ModelRegistry modelRegistry) {
@@ -88,7 +99,7 @@ public class ForgeroClient implements ClientModInitializer {
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder().build());
 		for (State material : materials) {
-			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null));
+			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null, Collections.emptyList()));
 		}
 
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());

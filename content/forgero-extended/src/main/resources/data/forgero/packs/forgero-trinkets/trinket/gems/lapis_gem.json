@@ -18,6 +18,7 @@
       {
         "type": "MINING_SPEED",
         "order": "BASE",
+        "context": "UPGRADE",
         "category": "ALL",
         "operation": "ADDITION",
         "value": 2.0

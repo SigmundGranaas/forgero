@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator;
 
+import static com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeUtils.ingredientsToJsonEntry;
+
+import java.util.stream.IntStream;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
@@ -10,10 +14,6 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeD
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeWrapperImpl;
 
 import net.minecraft.util.Identifier;
-
-import java.util.stream.IntStream;
-
-import static com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeUtils.ingredientsToJsonEntry;
 
 public class SchematicPartGenerator implements RecipeGenerator {
 
@@ -35,16 +35,13 @@ public class SchematicPartGenerator implements RecipeGenerator {
 			IntStream.range(0, ingredient.amount()).forEach(i -> template.getAsJsonArray("ingredients").add(ingredientsToJsonEntry(ingredient)));
 		}
 		template.getAsJsonObject("result").addProperty("item", data.target());
-		return new RecipeWrapperImpl(new Identifier(data.target()), template, RecipeTypes.SCHEMATIC_PART_CRAFTING);
+		return new RecipeWrapperImpl(new Identifier(data.target()), template);
 	}
 
 	@Override
 	public boolean isValid() {
 		if (generator.generate(type).isEmpty()) {
 			return false;
-		} else if (!helper.stateExists(data.target())) {
-			return false;
-		}
-		return true;
+		} else return helper.stateExists(data.target());
 	}
 }

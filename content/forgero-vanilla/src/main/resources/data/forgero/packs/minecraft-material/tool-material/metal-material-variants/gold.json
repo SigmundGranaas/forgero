@@ -104,7 +104,9 @@
     ],
     "features": [
       {
-        "type": "GOLDEN"
+        "type": "forgero:golden",
+        "title": "feature.forgero.golden",
+        "description": "feature.forgero.golden.description"
       }
     ]
   },

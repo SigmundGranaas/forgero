@@ -25,15 +25,10 @@ public class RecipeInflater {
 
 	private final Function<String, List<DataResource>> typeFinder;
 
-	private final Function<String, Optional<DataResource>> idFinder;
-
-	private final Function<String, Optional<DataResource>> templateProvider;
 
 	public RecipeInflater(DataResource resource, Function<String, List<DataResource>> typeFinder, Function<String, Optional<DataResource>> idFinder, Function<String, Optional<DataResource>> templateProvider) {
 		this.resource = resource;
 		this.typeFinder = typeFinder;
-		this.idFinder = idFinder;
-		this.templateProvider = templateProvider;
 	}
 
 	public List<RecipeData> process() {
@@ -88,6 +83,7 @@ public class RecipeInflater {
 					.ingredients(newComponents)
 					.craftingType(originalRecipe.type())
 					.target(resource.nameSpace() + ":" + name)
+					.count(originalRecipe.count())
 					.build());
 		}
 

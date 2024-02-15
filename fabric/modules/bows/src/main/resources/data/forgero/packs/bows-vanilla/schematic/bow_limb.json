@@ -1,0 +1,135 @@
+{
+  "type": "BOW_LIMB_SCHEMATIC",
+  "name": "bow_limb-schematic",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "BOW_LIMB",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "WOOD",
+            "unique": true,
+            "amount": 3
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "WOOD",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "grip",
+        "type": "SOFT_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "LOCAL",
+        "value": 10
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2.4
+      },
+      {
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.0
+      },
+      {
+        "type": "forgero:draw_speed",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2.0
+      },
+      {
+        "type": "forgero:accuracy",
+        "operation": "ADDITION",
+        "value": 15
+      },
+      {
+        "type": "forgero:draw_power",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 7200,
+        "use_action": "BOW",
+        "use": [
+          {
+            "type": "forgero:mount_projectile"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:launch_projectile"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    }
+  }
+}

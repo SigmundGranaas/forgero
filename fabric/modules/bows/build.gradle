@@ -1,0 +1,6 @@
+dependencies {
+	implementation project(":fabric:forgero-fabric-core")
+	implementation project(":fabric:minecraft-common")
+
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}

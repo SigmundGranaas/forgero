@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.patchouli;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -9,13 +13,9 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.TemplateGenerator;
 
-import net.fabricmc.loader.api.FabricLoader;
-
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class GuideBookGenerator implements RecipeGenerator {
 
@@ -50,7 +50,7 @@ public class GuideBookGenerator implements RecipeGenerator {
 
 
 		template.addProperty("book", "forgero:forgero_guide");
-		return RecipeWrapper.of(new Identifier(Forgero.NAMESPACE, "forgero_guide_book_recipe_" + value), template, RecipeTypes.MISC_SHAPELESS);
+		return RecipeWrapper.of(new Identifier(Forgero.NAMESPACE, "forgero_guide_book_recipe_" + value), template);
 	}
 
 	@Override

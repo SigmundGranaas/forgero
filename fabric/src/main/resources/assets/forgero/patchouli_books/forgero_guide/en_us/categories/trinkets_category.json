@@ -1,6 +1,6 @@
 {
   "name": "Trinkets",
-  "description": "Trinkets are unique artifacts which can be adapted to fit in an upgrade slot of certain tool parts. The trinkets provides unique effect and buffs for your tools",
+  "description": "Trinkets are unique artifacts which can be adapted to fit in an upgrade slot of certain tool parts. The trinkets provide unique effects and buffs for your tools.",
   "icon": "minecraft:totem_of_undying",
   "sortnum": 3
 }

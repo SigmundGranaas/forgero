@@ -5,31 +5,58 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The PredicateFactory class serves as a factory for creating Matchable instances.
+ * Todo: rework this to have proper class keys as well as registering using distinct types.
  */
+
 public class PredicateFactory {
 	private static final List<PredicateBuilder> builders = new ArrayList<>();
+	private static final List<Codec<Matchable>> codecs = new ArrayList<>();
 
-	/**
-	 * Register a new PredicateBuilder to the factory.
-	 *
-	 * @param builder The PredicateBuilder to be registered.
-	 */
+	private static final LoadingCache<JsonElement, Matchable> cache = CacheBuilder.newBuilder()
+			.maximumSize(1000)
+			.build(
+					new CacheLoader<>() {
+						public @NotNull Matchable load(@NotNull JsonElement element) {
+							return builders.stream()
+									.map(builder -> builder.create(element))
+									.flatMap(Optional::stream)
+									.findAny()
+									.or(() -> codecs.stream()
+											.map(codec -> codec.parse(JsonOps.INSTANCE, element))
+											.map(DataResult::result)
+											.flatMap(Optional::stream)
+											.findAny()
+									)
+									.orElseGet(() -> {
+										Forgero.LOGGER.error("Found predicate element with no corresponding predicate builder: {}, the corresponding entry will always fail matching checks.", element);
+										return Matchable.DEFAULT_FALSE;
+									});
+						}
+					}
+			);
+
 	public static void register(PredicateBuilder builder) {
 		builders.add(builder);
 	}
 
-	/**
-	 * Register a new PredicateBuilder to the factory using a supplier.
-	 *
-	 * @param builder A supplier that provides the PredicateBuilder to be registered.
-	 */
+	public static void register(Codec<Matchable> builder) {
+		codecs.add(builder);
+	}
+
 	public static void register(Supplier<PredicateBuilder> builder) {
 		builders.add(builder.get());
 	}
@@ -44,13 +71,10 @@ public class PredicateFactory {
 	 * @return The created Matchable.
 	 */
 	public Matchable create(JsonElement element) {
-		return builders.stream()
-				.map(builder -> builder.create(element))
-				.flatMap(Optional::stream)
-				.findAny()
-				.orElseGet(() -> {
-					Forgero.LOGGER.error("Found predicate element with no corresponding predicate builder: {}, the corresponding entry will always fail matching checks.", element);
-					return Matchable.DEFAULT_FALSE;
-				});
+		try {
+			return cache.get(element);
+		} catch (Exception e) {
+			return Matchable.DEFAULT_FALSE;
+		}
 	}
 }

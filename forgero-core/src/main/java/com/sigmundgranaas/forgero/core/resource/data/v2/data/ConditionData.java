@@ -4,9 +4,13 @@ package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.resource.data.PropertyPojo;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +28,9 @@ public class ConditionData {
 	private float chance = 0.01f;
 	@Builder.Default
 	private PropertyPojo properties = new PropertyPojo();
+	@Builder.Default
+	@SerializedName("custom_data")
+	private Map<String, JsonElement> customData = new HashMap<>();
 
 	@Getter
 	@Builder(toBuilder = true)

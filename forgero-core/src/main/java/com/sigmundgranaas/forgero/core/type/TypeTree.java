@@ -1,14 +1,18 @@
 package com.sigmundgranaas.forgero.core.type;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	private final List<MutableTypeNode> rootNodes;
@@ -20,20 +24,31 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	}
 
 	public Optional<MutableTypeNode> addNode(TypeData nodeData) {
-		if (find(nodeData.name()).isEmpty()) {
+		Optional<MutableTypeNode> nodeOpt = find(nodeData.name());
+		if (nodeOpt.isEmpty()) {
 			if (nodeData.parent().isPresent()) {
 				return addNodeWithParent(nodeData.name(), nodeData.parent().get());
 			} else {
-				MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), nodeData.name(), null);
+				MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), nodeData.name(), Collections.emptyList());
 				rootNodes.add(node);
 				return Optional.of(node);
 			}
 		} else {
-			Forgero.LOGGER.warn("tried adding duplicated typeData to TypeTree, there might be duplication in your configuration");
-			Forgero.LOGGER.warn("tried adding: {}", nodeData.name());
+			if(nodeData.parent().isPresent()){
+				var parentOpt = find(nodeData.parent().get());
+				if(parentOpt.isPresent()){
+					parentOpt.get().addChild(nodeOpt.get());
+					return nodeOpt;
+				}else{
+					if (missingNodes.stream().noneMatch(node -> node.name().equals(nodeData.name()))) {
+						missingNodes.add(new TypeData(nodeData.name(), nodeData.parent(), Collections.emptyList()));
+					}
+				}
+			}
 		}
 		return Optional.empty();
 	}
+
 
 	public void addNodes(List<TypeData> nodes) {
 		nodes.forEach(this::addNode);
@@ -42,13 +57,13 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 
 	private Optional<MutableTypeNode> addNodeWithParent(String name, String parent) {
 		var parentOpt = find(parent);
+
 		if (parentOpt.isPresent()) {
-			MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), name, null);
+			MutableTypeNode node = new MutableTypeNode(new ArrayList<>(), name, Collections.emptyList());
 			return Optional.of(parentOpt.get().addChild(node));
 		} else {
 			if (missingNodes.stream().noneMatch(node -> node.name().equals(name))) {
 				missingNodes.add(new TypeData(name, Optional.of(parent), Collections.emptyList()));
-
 			}
 		}
 		return Optional.empty();

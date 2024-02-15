@@ -5,13 +5,13 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The head of a tool part is the deciding factor for which tool you will craft, there are unique variants of heads for every tool available in Minecraft"
+      "text": "The head of a tool part is the deciding factor for which tool you will craft. There are unique variants of heads for every tool available in Minecraft. There exist two types of heads: blades and tool heads."
     },
     {
       "type": "patchouli:crafting",
       "title": "Crafting heads",
       "recipe": "forgero:iron-pickaxe_head",
-      "recipe2": "forgero:netherite-axe_head"
+      "recipe2": "forgero:netherite-sword_blade"
     },
     {
       "type": "patchouli:crafting",

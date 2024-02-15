@@ -9,35 +9,6 @@
   "construct": {
     "type": "SHOVEL",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "STATE_CRAFTING_RECIPE",
-        "ingredients": [
-          {
-            "unique": true,
-            "type": "SHOVEL_HEAD"
-          },
-          {
-            "type": "HANDLE"
-          }
-        ]
-      },
-      {
-        "crafting_type": "STATE_CRAFTING_RECIPE",
-        "ingredients": [
-          {
-            "unique": true,
-            "type": "SHOVEL_HEAD"
-          },
-          {
-            "type": "TOOL_BINDING"
-          },
-          {
-            "type": "HANDLE"
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "type": "SHOVEL_HEAD"

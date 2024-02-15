@@ -7,7 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -48,15 +50,14 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		if (super.matches(craftingInventory, world)) {
 			if (result().isPresent() && result().get() instanceof Composite result) {
-				boolean isSameMaterial = IntStream.range(0, craftingInventory.size())
+
+				return IntStream.range(0, craftingInventory.size())
 						.mapToObj(craftingInventory::getStack)
 						.map(this::convertHead)
 						.flatMap(Optional::stream)
 						.map(State::identifier)
 						.map(id -> id.split(":")[1])
 						.anyMatch(name -> name.split("-")[0].equals(result.name().split("-")[0]));
-
-				return isSameMaterial;
 			}
 		}
 		return false;
@@ -64,7 +65,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	private Optional<State> convertHead(ItemStack stack) {
 		var converted = service.convert(stack);
-		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD))) {
+		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD) || converted.get().test(Type.ARROW_HEAD) || converted.get().test(Type.BOW_LIMB))) {
 			return converted;
 		}
 		return Optional.empty();
@@ -101,8 +102,8 @@ public class StateCraftingRecipe extends ShapedRecipe {
 		var target = service.convert(this.getResult(registryManager));
 		if (target.isPresent()) {
 			var targetState = target.get();
-			var parts = partsFromCraftingInventory(craftingInventory);
-			var upgrades = upgradesFromCraftingInventory(craftingInventory, registryManager);
+			var upgrades = upgradesFromCraftingInventory(craftingInventory, null);
+			var parts = partsFromCraftingInventory(craftingInventory).stream().filter(state -> !upgrades.contains(state)).toList();
 			var toolBuilderOpt = ConstructedTool.ToolBuilder.builder(parts);
 			BaseComposite.BaseCompositeBuilder<?> builder;
 			if (toolBuilderOpt.isPresent()) {
@@ -136,6 +137,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 						.orElse(Collections.emptyList())
 						.forEach(enchantment -> enchantment.embed(output));
 			}
+			output.setCount(getOutput(registryManager).getCount());
 			return output;
 		}
 		return getResult(registryManager).copy();

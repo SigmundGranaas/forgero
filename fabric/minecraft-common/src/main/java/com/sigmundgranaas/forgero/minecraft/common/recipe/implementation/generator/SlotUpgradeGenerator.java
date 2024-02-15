@@ -38,7 +38,7 @@ public class SlotUpgradeGenerator implements RecipeGenerator {
 		jsonTemplate.getAsJsonObject("addition").addProperty("tag", "forgero:" + slot.type().toLowerCase(Locale.ENGLISH));
 		jsonTemplate.getAsJsonObject("result").addProperty("item", target);
 		Identifier id = new Identifier(target + ELEMENT_SEPARATOR + slot.type().toLowerCase(Locale.ENGLISH));
-		return RecipeWrapper.of(id, jsonTemplate, type);
+		return RecipeWrapper.of(id, jsonTemplate);
 	}
 
 	@Override

@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.core.texture.V2;
 
+import com.sigmundgranaas.forgero.core.texture.V2.recolor.RecolorStrategy;
+import com.sigmundgranaas.forgero.core.texture.template.PixelInformation;
+import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
+import lombok.Getter;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,29 +13,48 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sigmundgranaas.forgero.core.texture.V2.recolor.RecolorStrategy;
-import com.sigmundgranaas.forgero.core.texture.template.PixelInformation;
-import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
-
 public class TemplateTexture implements Texture {
 	private final BufferedImage template;
 	private final RecolorStrategy strategy;
-	private List<PixelInformation> pixelValues;
-	private List<RgbColour> greyScaleValues;
+	@Getter
+	private final int frameSize;
+	private final List<List<PixelInformation>> framesPixelInfo;
+	private final List<List<RgbColour>> framesGreyScaleValues;
 
 	public TemplateTexture(BufferedImage template, RecolorStrategy strategy) {
 		this.template = template;
 		this.strategy = strategy;
-		setTemplateValues();
-
+		this.frameSize = template.getWidth();
+		this.framesPixelInfo = new ArrayList<>();
+		this.framesGreyScaleValues = new ArrayList<>();
+		processFrames();
 	}
 
-	public List<PixelInformation> getPixelValues() {
-		return pixelValues;
+	private void processFrames() {
+		int numFrames = template.getHeight() / frameSize;
+		for (int i = 0; i < numFrames; i++) {
+			BufferedImage frame = template.getSubimage(0, i * frameSize, frameSize, frameSize);
+			framesPixelInfo.add(extractPixelInfo(frame));
+		}
 	}
 
-	public List<RgbColour> getGreyScaleValues() {
-		return greyScaleValues;
+	private List<PixelInformation> extractPixelInfo(BufferedImage frame) {
+		List<PixelInformation> pixelInfoList = new ArrayList<>();
+		HashSet<RgbColour> greyScaleSet = new HashSet<>();
+
+		for (int y = 0; y < frame.getHeight(); ++y) {
+			for (int x = 0; x < frame.getWidth(); ++x) {
+				int rgb = frame.getRGB(x, y);
+				if ((rgb & 0xFF000000) != 0x00000000) {
+					RgbColour colour = new RgbColour(rgb);
+					pixelInfoList.add(new PixelInformation(x, y, colour));
+					greyScaleSet.add(colour);
+				}
+			}
+		}
+
+		framesGreyScaleValues.add(greyScaleSet.stream().sorted().collect(Collectors.toList()));
+		return pixelInfoList;
 	}
 
 	@Override
@@ -38,26 +62,31 @@ public class TemplateTexture implements Texture {
 		return Texture.imageToStream(getImage());
 	}
 
+
 	@Override
 	public BufferedImage getImage() {
 		return template;
 	}
 
-	private void setTemplateValues() {
-		ArrayList<PixelInformation> pixelValues = new ArrayList<>();
-		HashSet<RgbColour> greyScaleValueSet = new HashSet<>();
 
-		for (int y = 0; y < template.getHeight(); ++y) {
-			for (int x = 0; x < template.getWidth(); ++x) {
-				if (template.getRGB(x, y) != 0) {
-					greyScaleValueSet.add(new RgbColour(template.getRGB(x, y)));
-					pixelValues.add(new PixelInformation(x, y, new RgbColour(template.getRGB(x, y))));
-				}
-			}
+	public List<RgbColour> getGreyScaleValues(int frameIndex) {
+		if (frameIndex >= 0 && frameIndex < framesGreyScaleValues.size()) {
+			return framesGreyScaleValues.get(frameIndex);
+		} else {
+			return framesGreyScaleValues.get(0);
 		}
+	}
 
-		this.greyScaleValues = greyScaleValueSet.stream().sorted().collect(Collectors.toList());
-		this.pixelValues = pixelValues;
+	public List<PixelInformation> getPixelInfo(int frameIndex) {
+		if (frameIndex >= 0 && frameIndex < framesPixelInfo.size()) {
+			return framesPixelInfo.get(frameIndex);
+		} else {
+			return framesPixelInfo.get(0);
+		}
+	}
+
+	public int getNumberOfGreyScales() {
+		return framesGreyScaleValues.size();
 	}
 
 	public RawTexture apply(Palette palette) {

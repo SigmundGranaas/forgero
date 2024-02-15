@@ -14,13 +14,25 @@ public class ExtendedLootTable {
 		return FabricLoader.getInstance().isModLoaded("forgero-extended");
 	}
 
-    public static void register() {
-        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
-            if (source.isBuiltin() && id.equals(EntityType.POLAR_BEAR.getLootTableId())) {
-                LootPool.Builder poolBuilder = LootPool.builder()
-                        .with(ItemEntry.builder(Registries.ITEM.get(new Identifier("forgero:polar_bear_pelt"))));
-                tableBuilder.pool(poolBuilder);
-            }
-        });
-    }
+	public static void register() {
+		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
+			if (source.isBuiltin() && id.equals(EntityType.POLAR_BEAR.getLootTableId())) {
+				LootPool.Builder poolBuilder = LootPool.builder()
+						.with(ItemEntry.builder(Registries.ITEM.get(new Identifier("forgero:polar_bear_pelt"))));
+				tableBuilder.pool(poolBuilder);
+			}
+		});
+
+		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
+			if (source.isBuiltin() && id.equals(EntityType.ENDER_DRAGON.getLootTableId())) {
+				LootPool.Builder poolBuilder = LootPool.builder()
+						.with(ItemEntry.builder(Registries.ITEM.get(new Identifier("forgero:dragon_scale"))));
+				tableBuilder.pool(poolBuilder);
+			}
+		});
+	}
 }
+
+
+
+

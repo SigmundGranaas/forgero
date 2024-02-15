@@ -1,6 +1,8 @@
 plugins {
 	id "maven-publish"
 }
+
+
 def isSnapshotVersion = { versionString ->
 	return versionString.contains("-g")
 }
@@ -19,13 +21,7 @@ def getGitVersion = { ->
 
 		// If it's a snapshot version, append '-SNAPSHOT'
 		if (isSnapshotVersion(gitVersionStringParsed)) {
-			gitVersionStringParsed += "-SNAPSHOT"
-		}
-
-		def parts = gitVersionStringParsed.split("-")
-
-		if (parts.length == 2 && parts[1] == project.minecraft_version) {
-			return gitVersionStringParsed
+			return gitVersionStringParsed += "-SNAPSHOT"
 		} else {
 			return projectVersion
 		}
@@ -43,32 +39,42 @@ group = project.maven_group
 subprojects {
 	version = "${getGitVersion()}"
 	group = project.maven_group
-
+	
 	repositories {
 		mavenCentral()
+		maven { url "https://api.modrinth.com/maven" }
+		maven { url "https://cursemaven.com" }
+		maven { url 'https://jitpack.io' }
+		maven { url "https://maven.shedaniel.me/" }
+		maven { url 'https://maven.blamejared.com' }
+		maven { url "https://minecraft.guntram.de/maven/" }
+		maven { url "https://maven.terraformersmc.com/" }
+		maven { url "https://maven.wispforest.io/" }
+		maven { url "https://maven.cafeteria.dev" }
+		maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
+		maven { url 'https://maven.gegy.dev' }
+		maven { url 'https://maven.kosmx.dev/' }
+		maven { url 'https://jitpack.io' }
+		maven {
+			name = "Xander Maven"
+			url = "https://maven.isxander.dev/releases"
+		}
+		maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
+		maven {
+			url "https://libraries.minecraft.net"
+		}
 		mavenLocal()
 	}
 }
 
 subprojects { project ->
-	if (project.name != 'content' && project.name != 'fabric') {
+	if (project.name != 'content') {
 		apply plugin: "maven-publish"
 		apply plugin: "java-library"
-		repositories {
-			mavenCentral()
-			mavenLocal()
-		}
+
 
 		publishing {
 			repositories {
-				maven {
-					name = "GitHubPackages"
-					url = uri("https://maven.pkg.github.com/sigmundgranaas/forgero")
-					credentials {
-						username = "sigmundgranaas"
-						password = System.getenv("GPR_API_KEY")
-					}
-				}
 				maven {
 					name = "ArchivaMavenRepo"
 					// Determine if it's a snapshot and adjust the URL accordingly.
@@ -85,7 +91,12 @@ subprojects { project ->
 			publications {
 				mavenJava(MavenPublication) {
 					groupId = group
-					artifactId = archivesBaseName
+					if (project.name === 'fabric') {
+						artifactId = 'forgero-fabric'
+						archivesBaseName = 'forgero-fabric'
+					} else {
+						artifactId = archivesBaseName
+					}
 					from components.java
 				}
 			}

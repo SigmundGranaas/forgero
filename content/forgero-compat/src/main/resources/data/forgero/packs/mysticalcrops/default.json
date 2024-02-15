@@ -1,5 +1,5 @@
 {
-  "namespace": "minecraft",
+  "namespace": "mysticalcrops",
   "dependencies": [
     "minecraft",
     "forgero",

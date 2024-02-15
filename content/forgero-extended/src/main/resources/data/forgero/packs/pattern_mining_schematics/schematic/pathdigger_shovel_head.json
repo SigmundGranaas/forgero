@@ -9,21 +9,6 @@
   "construct": {
     "type": "SHOVEL_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -88,12 +73,24 @@
     ],
     "features": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
-        "pattern": [
-          "xxx",
-          "xxx",
-          "xxx"
-        ]
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [
+            "xxx",
+            "xxx",
+            "xxx"
+          ],
+          "depth": 2,
+          "direction": "multi",
+          "filter": "forgero:can_mine"
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "forgero:can_mine"
+        },
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.3x3-description"
       }
     ]
   },

@@ -5,6 +5,11 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4.5
+      },
+      {
         "id": "schematic-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
@@ -21,7 +26,7 @@
     ],
     "features": [
       {
-        "type": "EFFECTIVE_BLOCKS",
+        "type": "minecraft:block_effectiveness",
         "tags": [
           "minecraft:mineable/axe"
         ]

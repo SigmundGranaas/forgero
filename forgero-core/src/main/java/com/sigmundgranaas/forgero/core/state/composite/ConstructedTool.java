@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulBindable;
 import com.sigmundgranaas.forgero.core.state.Composite;
@@ -20,6 +19,8 @@ import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -115,20 +116,29 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 
 	@Override
 	public @NotNull
-	List<Property> applyProperty(Target target) {
-		return Stream.of(super.applyProperty(target), conditionProperties()).flatMap(List::stream).toList();
+	List<Property> applyProperty(Matchable target, MatchContext context) {
+		return Stream.of(super.applyProperty(target, context), conditionProperties(target, context))
+				.flatMap(List::stream)
+				.toList();
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(super.getRootProperties(), conditionProperties()).flatMap(List::stream).toList();
+		return Stream.of(super.getRootProperties(), conditionProperties(Matchable.DEFAULT_TRUE, MatchContext.of())).flatMap(List::stream).toList();
 	}
 
 	@Override
 	public @NotNull
-	List<Property> conditionProperties() {
-		return Conditional.super.conditionProperties();
+	List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+	}
+
+
+	@Override
+	public @NotNull
+	List<Property> conditionProperties(Matchable target, MatchContext context) {
+		return Conditional.super.conditionProperties(target, context);
 	}
 
 	@Override
@@ -142,7 +152,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
+	public List<PropertyContainer> localConditions() {
 		List<PropertyContainer> customConditions = new ArrayList<>();
 		if (ForgeroConfigurationLoader.configuration.enableUnbreakableTools && conditions.stream().noneMatch(condition -> condition == UNBREAKABLE)) {
 			customConditions.add(UNBREAKABLE);
@@ -179,8 +189,8 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 		}
 
 		public static Optional<ToolBuilder> builder(List<State> parts) {
-			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE)).findFirst();
-			var handle = parts.stream().filter(part -> part.test(Type.HANDLE)).findFirst();
+			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE) || part.test(Type.BOW_LIMB)).findFirst();
+			var handle = parts.stream().filter(part -> head.orElse(null) != part).findFirst();
 			if (head.isPresent() && handle.isPresent()) {
 				return Optional.of(builder(head.get(), handle.get()));
 			}

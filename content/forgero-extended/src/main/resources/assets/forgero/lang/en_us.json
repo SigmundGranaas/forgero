@@ -14,6 +14,8 @@
   "item.forgero.ender": "Ender",
   "item.forgero.stone_heart": "Stoneheart",
   "item.forgero.blazed_stone_heart": "Blazed Stoneheart",
+  "tag.minecraft.base_stone_nether": "Nether stones",
+  "tag.minecraft.base_stone_overworld": "Stones",
   "item.forgero.magnetico": "Magnetico",
   "item.forgero.quartz": "Quartz",
   "item.forgero.tsuba_sword_guard": "Tsuba Guard",
@@ -95,6 +97,19 @@
   "item.forgero.titanium": "Titanium",
   "item.forgero.titanium_gold": "Titanium Gold",
   "item.forgero.constantan": "Constantan",
-  "item.forgero.therrassium": "Therrassium"
+  "item.forgero.therrassium": "Therrassium",
+  "feature.forgero.golden.title": "Golden",
+  "feature.forgero.undying_revival.title": "Totem of undying",
+  "feature.forgero.undying_revival.description": "Gives a one time escape from death",
+  "feature.forgero.magnetic": "Magnetic",
+  "feature.forgero.magnetic.description": "Draws items towards you",
+  "feature.forgero.vein_mining.title": "Vein Mining",
+  "feature.forgero.vein_mining.plants_in_area": "Breaks multiple plants",
+  "feature.forgero.vein_mining.dirt_in_area": "Breaks multiple dirt blocks",
+  "feature.forgero.ore_vein_mining.description": "Mines ore in a radius",
+  "feature.forgero.pattern_mining.title": "Pattern mining",
+  "feature.forgero.pattern_mining.3x3-description": "Mines in a 3x3 pattern",
+  "feature.forgero.pattern_mining.star-description": "Mines in a 3x3 star pattern",
+  "feature.forgero.pattern_mining.2x1-description": "Mines in a 2x1 path"
 }
 

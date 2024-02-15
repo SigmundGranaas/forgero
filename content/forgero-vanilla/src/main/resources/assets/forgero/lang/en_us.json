@@ -116,5 +116,20 @@
   "condition.forgero.tough": "Tough",
   "condition.forgero.trimmed": "Trimmed",
   "condition.forgero.rare": "Rare",
-  "condition.forgero.unbreakable": "Unbreakable"
+  "condition.forgero.unbreakable": "Unbreakable",
+  "feature.forgero.emissive": "Emissive",
+  "feature.forgero.emissive.description": "Lights up the surrounding area",
+  "feature.forgero.golden": "Golden",
+  "feature.forgero.golden.description": "Piglins will not attack you",
+  "entity.flag.sneaking": "Sneaking",
+  "entity.flag.on_fire": "On Fire",
+  "entity.flag.sprinting": "Sprinting",
+  "entity.flag.swimming": "Swimming",
+  "entity.flag.baby": "Baby",
+  "tooltip.forgero.when": "When: ",
+  "tooltip.forgero.wearing": "When wearing: ",
+  "tooltip.forgero.on": "On: ",
+  "tooltip.forgero.in": "In: ",
+  "tooltip.forgero.is": "Is: ",
+  "tooltip.forgero.against": "Against: "
 }

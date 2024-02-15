@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgerofabric.testutil;
 
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+import static com.sigmundgranaas.forgerofabric.gametest.Utils.itemFromString;
 
 import java.util.Optional;
 import java.util.function.Supplier;

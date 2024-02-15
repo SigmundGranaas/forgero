@@ -54,6 +54,11 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	}
 
 	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return getProperties();
+	}
+
+	@Override
 	public @NotNull
 	Type type() {
 		return type;
@@ -84,7 +89,7 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
+	public List<PropertyContainer> localConditions() {
 		return Collections.emptyList();
 	}
 

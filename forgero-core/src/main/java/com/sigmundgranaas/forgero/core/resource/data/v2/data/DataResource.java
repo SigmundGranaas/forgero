@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -97,13 +98,92 @@ public class DataResource implements Identifiable {
 		} else return Objects.requireNonNullElse(attribute1, attribute2);
 	}
 
-	public static List<PropertyPojo.Attribute> mergeAttributes(List<PropertyPojo.Attribute> attribute1, List<PropertyPojo.Attribute> attribute2) {
-		if (attribute1 == null && attribute2 == null)
+	/**
+	 * Merges two lists of {@link PropertyPojo.Attribute}, considering both id and order.
+	 * If two attributes have the same id but different priority, the one with the higher priority is kept.
+	 *
+	 * @param first the first list of attributes to merge.
+	 * @param second the second list of attributes to merge.
+	 * @return a merged list of attributes, with duplicates removed based on id and higher order preference.
+	 */
+	public static List<PropertyPojo.Attribute> mergeAttributes(List<PropertyPojo.Attribute> first,
+	                                                           List<PropertyPojo.Attribute> second) {
+		if (areAllListsNull(first, second)) {
 			return Collections.emptyList();
-		else if (attribute1 != null && attribute2 != null) {
-			var filteredMergedAttributes = attribute2.stream().filter(attr -> !attr.id.equals(EMPTY_IDENTIFIER) && attribute1.stream().noneMatch(attribute -> attribute.id.equals(attr.id))).toList();
-			return Stream.of(attribute1, filteredMergedAttributes).flatMap(List::stream).toList();
-		} else return Objects.requireNonNullElse(attribute1, attribute2);
+		} else if (areNoListsNull(first, second)) {
+			return mergeNonNullAttributeLists(first, second);
+		} else {
+			return Objects.requireNonNullElse(first, second);
+		}
+	}
+
+	private static List<PropertyPojo.Attribute> mergeNonNullAttributeLists(List<PropertyPojo.Attribute> firstList,
+	                                                                       List<PropertyPojo.Attribute> secondList) {
+		var combinedAttributes = new HashMap<String, PropertyPojo.Attribute>();
+		var others = new ArrayList<PropertyPojo.Attribute>();
+
+		for (PropertyPojo.Attribute attr : firstList) {
+			if(!attr.id.equals(EMPTY_IDENTIFIER)){
+				combinedAttributes.put(attr.id, attr);
+			}else{
+				others.add(attr);
+			}
+		}
+
+		for (PropertyPojo.Attribute attr : secondList) {
+			if(!attr.id.equals(EMPTY_IDENTIFIER)){
+				combinedAttributes.merge(attr.id, attr, DataResource::attributeMergeRule);
+			}else{
+				others.add(attr);
+			}
+		}
+
+		others.addAll(combinedAttributes.values());
+		return others;
+	}
+
+	/**
+	 * Merges two attributes, considering both id and order.
+	 * @param existingAttr the attribute that already exists.
+	 * @param newAttr the attribute that is being merged.
+	 * @return the attribute with the highest priority.
+	 */
+	private static PropertyPojo.Attribute attributeMergeRule(PropertyPojo.Attribute existingAttr, PropertyPojo.Attribute newAttr) {
+		if (newAttr.priority > existingAttr.priority && newAttr.id.equals(existingAttr.id)) {
+			return newAttr;
+		} else {
+			return existingAttr;
+		}
+	}
+
+	/**
+	 * Checks if all provided lists are null.
+	 *
+	 * @param lists an array of lists to check for null.
+	 * @return true if all lists are null, false otherwise.
+	 */
+	private static boolean areAllListsNull(List<?>... lists) {
+		for (List<?> list : lists) {
+			if (list != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if none of the provided lists are null.
+	 *
+	 * @param lists an array of lists to check for non-null.
+	 * @return true if none of the lists are null, false otherwise.
+	 */
+	private static boolean areNoListsNull(List<?>... lists) {
+		for (List<?> list : lists) {
+			if (list == null) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@NotNull
@@ -193,9 +273,7 @@ public class DataResource implements Identifiable {
 		var properties = properties().orElse(new PropertyPojo());
 		var mergeProperties = resource.properties().orElse(new PropertyPojo());
 		var newProps = new PropertyPojo();
-
-		newProps.active = mergeProperty(mergeProperties.active, properties.active).stream().distinct().toList();
-		newProps.passiveProperties = mergeProperty(mergeProperties.passiveProperties, properties.passiveProperties).stream().distinct().toList();
+		
 		newProps.setAttributes(mergeAttributes(properties.getAttributes(), mergeProperties.getAttributes()).stream().distinct().toList());
 		newProps.features = mergeProperty(mergeProperties.features, properties.features).stream().distinct().toList();
 

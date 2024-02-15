@@ -3,7 +3,7 @@
   "id": "forgero-extended",
   "version": "${version}",
   "name": "Forgero extended pack",
-  "description": "Forgero extension pack for new parts and tools",
+  "description": "Content expansion pack for Forgero. Contains refined and mastercrafted tools, vein mining tools, more sword variants, and gems!",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -20,7 +20,7 @@
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
-  "icon": "assets/forgero/icon.png",
+  "icon": "assets/forgero/extended.png",
   "environment": "*",
   "entrypoints": {
   },

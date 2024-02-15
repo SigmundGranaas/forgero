@@ -2,7 +2,9 @@ package com.sigmundgranaas.forgero.fabric.client.texture;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.model.TextureModel;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.minecraft.util.Identifier;
 
@@ -22,7 +24,9 @@ public class Generator {
 
         TEXTURES.values().stream()
                 .map(this::texture)
-                .map(this::textureEntry)
+		        .map(Identifier::toString)
+		        .distinct()
+		        .map(this::textureEntry)
                 .forEach(textures::add);
         atlas.add("sources", textures);
 
@@ -36,7 +40,12 @@ public class Generator {
         return entry;
     }
 
-    private String texture(PaletteTemplateModel templateModel) {
-        return new Identifier(templateModel.nameSpace(), "item/" + templateModel.name().replace(".png", "")).toString();
+    private Identifier texture(ModelTemplate texture) {
+	    if(texture instanceof PaletteTemplateModel paletteTemplateModel){
+		   return new Identifier(paletteTemplateModel.nameSpace(), "item/" + paletteTemplateModel.name().replace(".png", ""));
+	    }else if(texture instanceof TextureModel model){
+		    return new Identifier(model.nameSpace(), "item/" + model.name().replace(".png", ""));
+	    }
+		throw new RuntimeException("Unknown texture type");
     }
 }

@@ -1,0 +1,57 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "refined_handle",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "refined_arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:BOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "refined_arrow_shaft_in_bow.png"
+        },
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "refined_arrow_shaft.png"
+        }
+      ]
+    }
+  ]
+}

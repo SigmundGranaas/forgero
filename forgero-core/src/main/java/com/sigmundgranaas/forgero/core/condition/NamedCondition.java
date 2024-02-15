@@ -1,11 +1,13 @@
 package com.sigmundgranaas.forgero.core.condition;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class NamedCondition implements PropertyContainer, Identifiable {
 	private final String name;
@@ -32,4 +34,10 @@ public class NamedCondition implements PropertyContainer, Identifiable {
 	List<Property> getRootProperties() {
 		return propertyList;
 	}
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return getRootProperties();
+	}
+	
 }

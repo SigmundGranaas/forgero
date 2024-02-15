@@ -1,0 +1,143 @@
+{
+  "type": "MINERAL",
+  "name": "flint",
+  "parent": "mineral_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:flint"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "mineral-attack-damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2.5
+          },
+          {
+            "id": "mineral-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 5
+          },
+          {
+            "id": "mineral-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 1
+          },
+          {
+            "id": "mineral-durability-composite",
+            "type": "DURABILITY",
+            "value": 140
+          },
+          {
+            "id": "mineral-rarity-composite",
+            "type": "RARITY",
+            "value": 25
+          },
+          {
+            "id": "mineral-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "mineral-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 12.5
+          },
+          {
+            "id": "mineral-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "mineral-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "mineral-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.25
+          },
+          {
+            "id": "mineral-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "id": "mineral-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "mineral-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 70
+          },
+          {
+            "id": "mineral-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 70
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "flint"
+  }
+}

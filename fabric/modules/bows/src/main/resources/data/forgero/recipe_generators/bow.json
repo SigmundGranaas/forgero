@@ -1,0 +1,26 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-bow-state-crafting",
+  "variables": {
+    "material": {
+      "type": "WOOD"
+    }
+  },
+  "type": "forgero:state_crafting_recipe",
+  "pattern": [
+    "a ",
+    " b"
+  ],
+  "key": {
+    "a": {
+      "tag": "forgero:${material.name}-bow_limb"
+    },
+    "b": {
+      "tag": "forgero:string"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-bow",
+    "count": 1
+  }
+}

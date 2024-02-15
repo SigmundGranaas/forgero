@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
@@ -19,6 +18,4 @@ public class TagWriter {
 		}
 		return text;
 	}
-
-
 }

@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.core.model;
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ModelEntryData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.PaletteData;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 
@@ -37,7 +37,7 @@ public class ModelConverter {
 
 	private final HashMap<String, ModelData> generationModels;
 
-	private final Map<String, PaletteTemplateModel> textures;
+	private final Map<String, ModelTemplate> textures;
 
 	/**
 	 * Constructor for the ModelConverter class.
@@ -49,7 +49,7 @@ public class ModelConverter {
 	 * @param delayedModels    Models which processing has been delayed.
 	 * @param generationModels Models to be generated.
 	 */
-	public ModelConverter(TypeTree tree, Map<String, PaletteData> palettes, HashMap<String, ModelMatcher> models, Map<String, PaletteTemplateModel> textures, HashMap<String, ArrayList<ModelData>> delayedModels, HashMap<String, ModelData> generationModels) {
+	public ModelConverter(TypeTree tree, Map<String, PaletteData> palettes, HashMap<String, ModelMatcher> models, Map<String, ModelTemplate> textures, HashMap<String, ArrayList<ModelData>> delayedModels, HashMap<String, ModelData> generationModels) {
 		this.tree = tree;
 		this.palettes = palettes;
 		this.delayedModels = delayedModels;
@@ -236,10 +236,11 @@ public class ModelConverter {
 	 * @return A list of generated model match pairings.
 	 */
 	private List<ModelMatchPairing> generatePairings(List<PaletteData> palettes, ModelData data) {
-		List<ModelData> variants = buildVariants(data);
 		return palettes.stream()
-				.flatMap(palette -> variants.stream()
-						.map(entry -> generate(palette, entry, List.of(new JsonPrimitive("name:" + palette.getTarget())))))
+				.map(palette -> data.toBuilder().palette(palette.getTarget()).build())
+				.map(this::buildVariants)
+				.flatMap(List::stream)
+				.map(model -> generate(model, List.of(new JsonPrimitive("name:" + model.getPalette()))))
 				.toList();
 	}
 
@@ -251,10 +252,11 @@ public class ModelConverter {
 	 * @return A list of created model match pairings.
 	 */
 	private List<ModelMatchPairing> createPairings(List<PaletteData> palettes, ModelData data) {
-		List<ModelData> variants = buildVariants(data);
 		return palettes.stream()
-				.flatMap(palette -> variants.stream()
-						.map(entry -> generate(palette, entry, Collections.emptyList())))
+				.map(palette -> data.toBuilder().palette(palette.getTarget()).build())
+				.map(this::buildVariants)
+				.flatMap(List::stream)
+				.map(model -> generate(model, List.of(new JsonPrimitive("name:" + model.getPalette()))))
 				.toList();
 	}
 
@@ -268,7 +270,10 @@ public class ModelConverter {
 		return Stream.concat(
 						data.getVariants().stream()
 								.map(variant -> data.toBuilder()
+										.children(ImmutableList.<ModelData>builder().addAll(data.getChildren()).addAll(variant.getChildren()).build())
+										.texture(variant.getTexture().equals(EMPTY_IDENTIFIER) ? data.getTexture(): variant.getTexture())
 										.template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() : variant.getTemplate())
+										.palette(variant.getPalette().equals(EMPTY_IDENTIFIER) ? data.getPalette() : variant.getPalette())
 										.predicate(variant.getTarget())
 										.offset(variant.getOffset())
 										.resolution(variant.getResolution())
@@ -281,16 +286,33 @@ public class ModelConverter {
 	/**
 	 * Generates a model match pairing from palette data, model data, and additional predicates.
 	 *
-	 * @param palette              Palette data.
 	 * @param data                 Model data.
 	 * @param additionalPredicates Additional predicates for matching.
 	 * @return A model match pairing.
 	 */
-	private ModelMatchPairing generate(PaletteData palette, ModelData data, List<JsonElement> additionalPredicates) {
-		var model = new PaletteTemplateModel(palette.getTarget(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null));
-		textures.put(model.identifier(), model);
+	private ModelMatchPairing generate(ModelData data, List<JsonElement> additionalPredicates) {
 		List<JsonElement> predicates = new ArrayList<>(data.getPredicates());
 		predicates.addAll(additionalPredicates);
-		return new ModelMatchPairing(PredicateMatcher.of(predicates, new PredicateFactory()), model);
+		var model = createTemplate(data);
+		return new ModelMatchPairing(PredicateMatcher.of(predicates, new PredicateFactory()), (ModelMatcher) model);
+	}
+
+	private ModelTemplate createTemplate(ModelData data){
+		List<ModelTemplate> children = data.getChildren().stream()
+				.map(this::createTemplate)
+				.toList();
+
+		ModelTemplate template;
+
+		if(data.getTexture().equals(EMPTY_IDENTIFIER)){
+			  template = new PaletteTemplateModel(data.getPalette(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
+		}else {
+			 template = new TextureModel(data.getTexture(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
+		}
+
+		Identifiable identifiable = (Identifiable) template;
+		textures.put(identifiable.identifier(), template);
+
+		return template;
 	}
 }

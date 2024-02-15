@@ -41,10 +41,14 @@ public class DisableVanillaToolsLootTableGeneration {
 	public void forgero$mapToForgeroLootOrDisableVanillaLoot(LootContext context, CallbackInfoReturnable<ObjectArrayList<ItemStack>> cir) {
 		ObjectArrayList<ItemStack> stacks = cir.getReturnValue();
 		if (ForgeroConfigurationLoader.configuration.convertVanillaToolLoot) {
-			stacks = stacks.stream().map(this::processStack).collect(ObjectArrayList.toList());
+			stacks = stacks.stream()
+					.map(this::processStack)
+					.collect(ObjectArrayList.toList());
 		}
 		if (ForgeroConfigurationLoader.configuration.disableVanillaLoot || ForgeroConfigurationLoader.configuration.disableVanillaTools) {
-			stacks = stacks.stream().filter(stack -> !vanillaToolSet.contains(stack.getItem())).collect(ObjectArrayList.toList());
+			stacks = stacks.stream()
+					.filter(stack -> !vanillaToolSet.contains(stack.getItem()))
+					.collect(ObjectArrayList.toList());
 		}
 		cir.setReturnValue(stacks);
 	}

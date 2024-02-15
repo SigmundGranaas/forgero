@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.core.resource.data.Constant.CORE_PATH;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TypeTreeTest {
 
@@ -56,10 +55,10 @@ class TypeTreeTest {
 		var testNodeSchematic = tree.find("SABER_SCHEMATIC");
 		var testNodeOak = tree.find("OAK");
 		assertTrue(testNodeSchematic.isPresent());
-		assertTrue(testNodeSchematic.get().parent().isPresent());
+		assertFalse(testNodeSchematic.get().parent().isEmpty());
 
 		assertTrue(testNodeOak.isPresent());
-		assertTrue(testNodeOak.get().parent().isPresent());
+		assertFalse(testNodeOak.get().parent().isEmpty());
 	}
 
 	@Test
@@ -71,7 +70,7 @@ class TypeTreeTest {
 
 		var testNodeSchematic = tree.find("LONG_BOW");
 		assertTrue(testNodeSchematic.isPresent());
-		assertEquals("BOW", testNodeSchematic.get().parent().orElseThrow().name());
+		assertEquals("BOW", testNodeSchematic.get().parent().get(0).name());
 	}
 
 	@Test

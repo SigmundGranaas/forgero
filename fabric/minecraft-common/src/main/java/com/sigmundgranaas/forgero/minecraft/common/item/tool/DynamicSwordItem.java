@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.minecraft.common.customdata.CustomNameVisitor;
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class DynamicSwordItem extends SwordItem implements ToolStateItem {
@@ -50,7 +52,15 @@ public class DynamicSwordItem extends SwordItem implements ToolStateItem {
 
 	@Override
 	public Text getName(ItemStack stack) {
-		return getName();
+		var state = dynamicState(stack);
+		return CustomNameVisitor.of(state.customData())
+				.map(replacer -> replacer.replace(state.name()))
+				.map(Writer::nameToTranslatableText)
+				.orElseGet(this::getName);
+	}
+
+	@Override
+	public UseAction getUseAction(ItemStack stack) {
+		return ToolStateItem.super.getUseAction(stack);
 	}
 }
-

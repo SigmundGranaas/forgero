@@ -9,21 +9,6 @@
   "construct": {
     "type": "SHOVEL_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -96,11 +81,22 @@
     ],
     "features": [
       {
-        "type": "VEIN_MINING",
-        "value": 1,
-        "tags": [
-          "forgero:vein_mining_dirt"
-        ]
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "filter": {
+            "type": "minecraft:block",
+            "tag": "forgero:vein_mining_dirt"
+          },
+          "depth": 1
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_dirt"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.vein_mining.dirt_in_area"
       }
     ]
   },

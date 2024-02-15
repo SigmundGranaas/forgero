@@ -5,11 +5,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The default handle schematic creates a basic handle, but there are also several variant of the handle available, which will enable you to upgrade your handles further"
+      "text": "The default handle schematic creates a basic handle, but there are also several variants available which will enable you to upgrade your handles further"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "forgero:oak-handle-schematic_recipe"
+      "recipe": "forgero:handle-schematic_recipe"
     }
   ]
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.minecraft.common.customdata.CustomNameVisitor;
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
@@ -45,7 +46,11 @@ public class DynamicAxeItem extends AxeItem implements ToolStateItem {
 
 	@Override
 	public Text getName(ItemStack stack) {
-		return getName();
+		var state = dynamicState(stack);
+		return CustomNameVisitor.of(state.customData())
+				.map(replacer -> replacer.replace(state.name()))
+				.map(Writer::nameToTranslatableText)
+				.orElseGet(this::getName);
 	}
 
 
@@ -53,7 +58,6 @@ public class DynamicAxeItem extends AxeItem implements ToolStateItem {
 	public State defaultState() {
 		return DEFAULT.get();
 	}
-
 
 }
 
