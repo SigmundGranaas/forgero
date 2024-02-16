@@ -24,7 +24,7 @@ import net.minecraft.loot.function.LootFunctionType;
 
 public class ConditionFunction extends ConditionalLootFunction {
 	public static Codec<ConditionFunction> CODEC = RecordCodecBuilder
-			.create((instance) -> method_53344(instance)
+			.create((instance) -> addConditionsField(instance)
 					.apply(instance, ConditionFunction::of));
 
 	private final StateService service;

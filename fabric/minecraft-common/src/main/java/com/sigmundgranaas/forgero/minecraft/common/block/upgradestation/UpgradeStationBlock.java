@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
+import com.mojang.serialization.MapCodec;
 import com.sigmundgranaas.forgero.core.Forgero;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -59,6 +59,11 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 		super(settings);
 		this.setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(PART, UpgradeStationBlockPart.LEFT));
 		this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(PART, UpgradeStationBlockPart.LEFT);
+	}
+
+	@Override
+	protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
+		return null;
 	}
 
 	private static VoxelShape left() {
@@ -141,7 +146,7 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 		}
 	}
 
-	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		UpgradeStationBlockPart part = state.get(PART);
 		BlockPos blockPos;
 		if (part == UpgradeStationBlockPart.LEFT) {
@@ -156,6 +161,7 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 
 		}
 		super.onBreak(world, pos, state, player);
+		return state;
 	}
 
 	@Override

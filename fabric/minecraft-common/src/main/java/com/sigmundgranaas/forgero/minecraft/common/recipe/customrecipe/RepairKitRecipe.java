@@ -20,19 +20,13 @@ import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerializer;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeCodecs;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 import org.apache.commons.lang3.NotImplementedException;

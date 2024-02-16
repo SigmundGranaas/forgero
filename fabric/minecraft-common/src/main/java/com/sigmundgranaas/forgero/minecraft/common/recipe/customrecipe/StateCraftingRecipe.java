@@ -30,6 +30,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.RawShapedRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -42,7 +43,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	private final StateService service;
 
 	public StateCraftingRecipe(ShapedRecipe recipe, StateService service) {
-		super( recipe.getGroup(), recipe.getCategory(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResult(null));
+		super(recipe.getGroup(), recipe.getCategory(), new RawShapedRecipe(recipe.getHeight(), recipe.getWidth(), recipe.getIngredients(), Optional.empty()), recipe.getResult(null));
 		this.service = service;
 	}
 

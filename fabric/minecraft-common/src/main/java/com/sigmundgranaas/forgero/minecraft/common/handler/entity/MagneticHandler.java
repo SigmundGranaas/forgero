@@ -149,7 +149,7 @@ public class MagneticHandler implements EntityBasedHandler, BlockTargetHandler, 
 		Vec3d rootVec = rootEntity.getPos();
 		BlockPos pos1 = new BlockPos((int) (rootVec.x + range), (int) (rootVec.y + range), (int) (rootVec.z + range));
 		BlockPos pos2 = new BlockPos((int) (rootVec.x - range), (int) (rootVec.y - range), (int) (rootVec.z - range));
-		return rootEntity.getWorld().getOtherEntities(rootEntity, new Box(pos1, pos2), predicate);
+		return rootEntity.getWorld().getOtherEntities(rootEntity, new Box(new Vec3d(pos1.getX(), pos1.getY(), pos1.getZ()), new Vec3d(pos2.getX(), pos2.getY(), pos2.getZ())), predicate);
 	}
 
 	public void pullEntities(Vec3d rootVec, List<Entity> entities, Entity rootEntity) {

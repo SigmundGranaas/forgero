@@ -30,7 +30,7 @@ import java.util.List;
 
 public class GemLevelFunction extends ConditionalLootFunction {
 	public static Codec<GemLevelFunction> CODEC = RecordCodecBuilder
-			.create((instance) -> method_53344(instance)
+			.create((instance) -> addConditionsField(instance)
 					.apply(instance,(GemLevelFunction::new)));
 
 	protected GemLevelFunction(List<LootCondition> conditions) {

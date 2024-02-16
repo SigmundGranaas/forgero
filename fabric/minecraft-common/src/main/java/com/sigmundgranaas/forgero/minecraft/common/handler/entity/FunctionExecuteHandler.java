@@ -202,7 +202,7 @@ public class FunctionExecuteHandler implements EntityTargetHandler, EntityBasedH
 
 		@Override
 		protected void execute(ServerWorld world, ServerCommandSource source) {
-			CommandFunction fn = CommandFunction.create(new Identifier("forgero:dynamic"), world.getServer().getCommandFunctionManager().getDispatcher(), source, List.of(function));
+			var fn = CommandFunction.create(new Identifier("forgero:dynamic"), world.getServer().getCommandFunctionManager().getDispatcher(), source, List.of(function));
 			world.getServer().getCommandFunctionManager().execute(fn, source);
 		}
 	}

@@ -111,7 +111,12 @@ public class StateUpgradeRecipe implements SmithingRecipe {
 	public static class Serializer implements RecipeSerializer<StateUpgradeRecipe>, ForgeroRecipeSerializer {
 		public static final Serializer INSTANCE = new Serializer();
 
-		private static final Codec<StateUpgradeRecipe> CODEC = RecordCodecBuilder.create((instance) -> instance.group( Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter((recipe) -> recipe.base), Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter((recipe) -> recipe.addition), RecipeCodecs.CRAFTING_RESULT.fieldOf("result").forGetter((recipe) -> recipe.result)).apply(instance,StateUpgradeRecipe::new));
+		private static final Codec<StateUpgradeRecipe> CODEC = RecordCodecBuilder.create((instance) ->
+				instance.group(
+						Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter((recipe) -> recipe.base),
+						Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter((recipe) -> recipe.addition),
+						ItemStack.RECIPE_RESULT_CODEC.fieldOf("result").forGetter((recipe) -> recipe.result)
+						).apply(instance,StateUpgradeRecipe::new));
 
 		@Override
 		public Codec<StateUpgradeRecipe> codec() {

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 
+import com.mojang.serialization.MapCodec;
 import com.sigmundgranaas.forgero.core.Forgero;
 
 import net.minecraft.block.*;
@@ -67,6 +68,11 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 		this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(PART, AssemblyStationPart.LEFT);
 	}
 
+	@Override
+	protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
+		return null;
+	}
+
 
 	public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
 		VoxelShape[] buffer = new VoxelShape[]{shape, VoxelShapes.empty()};
@@ -122,7 +128,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 		}
 	}
 
-	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		AssemblyStationPart part = state.get(PART);
 		BlockPos blockPos;
 		if (part == AssemblyStationPart.LEFT) {
@@ -137,6 +143,7 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
 		}
 		super.onBreak(world, pos, state, player);
+		return state;
 	}
 
 	@Override

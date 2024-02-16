@@ -40,11 +40,11 @@ public class ThrowableItem extends PersistentProjectileEntity {
 	public static Identifier THROWN_ENTITY_IDENTIFIER = new Identifier("forgero", "thrown_entity");
 
 	public ThrowableItem(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
-		super(entityType, world);
+		super(entityType, world, ItemStack.EMPTY);
 	}
 
 	public ThrowableItem(World world, LivingEntity owner, ItemStack itemStack, Float weight, SpinType spinType) {
-		super(Entities.THROWN_ITEM_ENTITY, owner, world);
+		super(Entities.THROWN_ITEM_ENTITY, owner, world, itemStack);
 		this.getDataTracker().set(STACK, itemStack);
 		this.getDataTracker().set(spinTypeData, spinType.toString());
 		this.getDataTracker().set(ThrowableItem.weight, weight);
