@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.minecraft.common.match.predicate;
 
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.BLOCK_TARGET;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
-import static com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher.EntityPredicateWriter.formatTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ import net.minecraft.predicate.NbtPredicate;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -59,6 +59,9 @@ public record BlockPredicateMatcher(BlockPredicate predicate) implements Matchab
 					.map(BlockPredicate::fromJson)
 					.map(BlockPredicateMatcher::new);
 		}
+	}
+	public static String formatTag(String base, Identifier id) {
+		return base + "." + id.getNamespace() + "." + id.getPath();
 	}
 
 	public static class BlockPredicateWriter implements PredicateWriter {
@@ -97,11 +100,6 @@ public record BlockPredicateMatcher(BlockPredicate predicate) implements Matchab
 				// Removing the trailing comma and space
 				String blocksString = blocksTooltip.getString().substring(0, blocksTooltip.getString().length() - 2);
 				tooltips.add(Text.literal(blocksString));
-			}
-
-			// Handle NBT
-			if (predicate.getNbt() != NbtPredicate.ANY) {
-				tooltips.add(Text.translatable("tooltip.forgero.nbt_present").formatted(Formatting.GRAY));
 			}
 
 			return tooltips;

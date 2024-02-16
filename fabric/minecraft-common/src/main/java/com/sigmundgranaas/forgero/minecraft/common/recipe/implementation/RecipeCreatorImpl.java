@@ -61,7 +61,6 @@ public class RecipeCreatorImpl implements RecipeCreator {
 	public List<RecipeWrapper> createRecipes() {
 		generators.addAll(compositeRecipeGenerators());
 		generators.addAll(repairKitToolRecipeGenerators());
-		generators.addAll(constructUpgradeRecipes());
 		generators.addAll(smeltingMetalPartRecipeGenerators());
 		generators.addAll(woodAndStoneRepairRecipeGenerator());
 		return generators.parallelStream()
@@ -78,13 +77,6 @@ public class RecipeCreatorImpl implements RecipeCreator {
 	@Override
 	public TemplateGenerator templates() {
 		return templateGenerator;
-	}
-
-	private List<RecipeGenerator> constructUpgradeRecipes() {
-		return ForgeroStateRegistry.CONSTRUCTS.stream()
-				.map(this::upgradeRecipes)
-				.flatMap(List::stream)
-				.toList();
 	}
 
 	private List<RecipeGenerator> compositeRecipeGenerators() {
@@ -152,23 +144,5 @@ public class RecipeCreatorImpl implements RecipeCreator {
 			return Optional.of(new ToolRecipeCreator(data, helper, templateGenerator));
 		}
 		return Optional.empty();
-	}
-
-	private List<RecipeGenerator> upgradeRecipes(DataResource res) {
-		if (res.construct().isPresent()) {
-			List<RecipeGenerator> upgradeRecipes = res.construct().get().slots().stream()
-					.map(slot -> new SlotUpgradeGenerator(helper, templateGenerator, slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier())))
-					.collect(Collectors.toList());
-
-			if (ForgeroConfigurationLoader.configuration.enableUpgradeInCraftingTable) {
-				res.construct().get().slots().stream()
-						.map(slot -> new CraftingTableUpgradeGenerator(helper, templateGenerator, slot, ForgeroStateRegistry.ID_MAPPER.get(res.identifier())))
-						.forEach(upgradeRecipes::add);
-			}
-
-			return upgradeRecipes;
-		} else {
-			return Collections.emptyList();
-		}
 	}
 }

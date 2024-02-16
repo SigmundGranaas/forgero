@@ -137,7 +137,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 						.orElse(Collections.emptyList())
 						.forEach(enchantment -> enchantment.embed(output));
 			}
-			output.setCount(getOutput(registryManager).getCount());
+			output.setCount(getResult(registryManager).getCount());
 			return output;
 		}
 		return getResult(registryManager).copy();

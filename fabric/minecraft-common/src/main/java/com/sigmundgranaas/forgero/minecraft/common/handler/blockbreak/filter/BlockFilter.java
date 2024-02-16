@@ -8,9 +8,9 @@ import java.util.List;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
+
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 

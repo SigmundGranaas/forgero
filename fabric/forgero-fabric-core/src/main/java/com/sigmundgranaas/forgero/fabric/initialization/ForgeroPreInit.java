@@ -28,7 +28,6 @@ import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
-import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
@@ -83,12 +82,9 @@ import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicToolItemRegistrationHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRegistrationHandler;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.MatchContextTypePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.item.ItemGroups;
@@ -146,16 +142,10 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(StringNameBuilder::new);
 		PredicateFactory.register(StringSlotCategoryBuilder::new);
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
-		PredicateFactory.register(EntityPredicateMatcher.EntityPredicateBuilder::new);
-		PredicateFactory.register(BlockPredicateMatcher.BlockPredicateBuilder::new);
-		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
+
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
 		PredicateFactory.register(MatchContextTypePredicate.MatchContextTypePredicateBuilder::new);
-
-		//Writers
-		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);
-		PredicateWriterFactory.register(BlockPredicateMatcher.BlockPredicateWriter::builder);
 	}
 
 	private void registerFeatureBuilder() {

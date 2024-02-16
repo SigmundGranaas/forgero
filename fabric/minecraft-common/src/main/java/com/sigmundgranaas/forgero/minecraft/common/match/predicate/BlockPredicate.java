@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.match.predicate;
 
+import java.util.Collections;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
@@ -7,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.JsonOps;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,8 +34,10 @@ import net.minecraft.world.World;
 @AllArgsConstructor
 @Builder
 public class BlockPredicate {
+	public static final NbtPredicate EMPTY_NBT = new NbtPredicate(null);
+	public static final StatePredicate EMPTY_STATE = new StatePredicate(Collections.emptyList());
 
-	public static final BlockPredicate ANY = new BlockPredicate(null, null, StatePredicate.ANY, NbtPredicate.ANY);
+	public static final BlockPredicate ANY = new BlockPredicate(null, null, new StatePredicate(Collections.emptyList()), new NbtPredicate(null));
 
 	@Nullable
 	private TagKey<Block> tag;
@@ -50,12 +54,11 @@ public class BlockPredicate {
 		}
 
 		JsonObject jsonObject = JsonHelper.asObject(json, "block");
-		NbtPredicate nbtPredicate = NbtPredicate.fromJson(jsonObject.get("nbt"));
-
+		NbtPredicate nbtPredicate = NbtPredicate.CODEC.parse(JsonOps.INSTANCE, jsonObject.get("nbt")).result().orElse(EMPTY_NBT);
 		Set<Block> blocks = parseBlocks(jsonObject);
 		TagKey<Block> tag = parseTag(jsonObject);
 
-		StatePredicate state = StatePredicate.fromJson(jsonObject.get("state"));
+		StatePredicate state = StatePredicate.CODEC.parse(JsonOps.INSTANCE, jsonObject.get("state")).result().orElse(EMPTY_STATE);
 
 		return BlockPredicate.builder()
 				.tag(tag)
@@ -113,7 +116,7 @@ public class BlockPredicate {
 			return false;
 		}
 
-		if (nbt != NbtPredicate.ANY) {
+		if (nbt.nbt() != null) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity == null) {
 				return false;
