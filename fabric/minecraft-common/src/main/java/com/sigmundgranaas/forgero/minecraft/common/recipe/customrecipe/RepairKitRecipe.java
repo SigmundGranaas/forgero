@@ -82,9 +82,7 @@ public class RepairKitRecipe extends ShapelessRecipe {
 		private final ShapelessRecipe.Serializer rootSerializer = new ShapelessRecipe.Serializer();
 		@Override
 		public Codec<RepairKitRecipe> codec() {
-			return rootSerializer.codec().flatXmap(recipe -> DataResult.success(new RepairKitRecipe(recipe, StateService.INSTANCE)) ,(recipe) -> {
-				throw new NotImplementedException("Serializing ShapedRecipe is not implemented yet.");
-			} );
+			return CodecUtils.extendCodec(rootSerializer.codec(), (recipe) -> new RepairKitRecipe(recipe, StateService.INSTANCE), recipe -> recipe);
 		}
 
 		public static final RepairKitRecipeSerializer INSTANCE = new RepairKitRecipeSerializer();
