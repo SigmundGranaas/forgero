@@ -94,18 +94,18 @@
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.0
+        "value": 0.90
       },
       {
         "type": "forgero:accuracy",
         "operation": "ADDITION",
-        "value": 15
+        "value": 10
       },
       {
         "type": "forgero:draw_power",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2
+        "value": 2.9
       }
     ],
     "features": [
