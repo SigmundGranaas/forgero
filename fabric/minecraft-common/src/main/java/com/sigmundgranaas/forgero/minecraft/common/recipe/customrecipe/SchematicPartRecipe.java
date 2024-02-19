@@ -3,10 +3,12 @@ package com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.google.gson.JsonObject;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.*;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
@@ -30,7 +32,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public SchematicPartRecipe(ShapelessRecipe recipe, StateService service) {
-		super( recipe.getGroup(),recipe.getCategory(), recipe.getResult(null), recipe.getIngredients());
+		super(recipe.getGroup(), recipe.getCategory(), recipe.getResult(null), recipe.getIngredients());
 		this.service = service;
 	}
 
@@ -68,18 +70,18 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<SchematicPartRecipe> getSerializer() {
 		return SchematicPartRecipeSerializer.INSTANCE;
 	}
 
 	public static class SchematicPartRecipeSerializer implements RecipeSerializer<SchematicPartRecipe> , ForgeroRecipeSerializer {
 		public static final SchematicPartRecipeSerializer INSTANCE = new SchematicPartRecipeSerializer();
 		private final ShapelessRecipe.Serializer rootSerializer = new ShapelessRecipe.Serializer();
+
+
 		@Override
 		public Codec<SchematicPartRecipe> codec() {
-			return rootSerializer.codec().flatXmap(recipe -> DataResult.success(new SchematicPartRecipe(recipe, StateService.INSTANCE)) ,(recipe) -> {
-				throw new NotImplementedException("Serializing ShapedRecipe is not implemented yet.");
-			} );
+			return CodecUtils.extendCodec(rootSerializer.codec(), (recipe) -> new SchematicPartRecipe(recipe, StateService.INSTANCE), recipe -> recipe);
 		}
 
 		@Override
@@ -88,7 +90,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 		}
 
 		@Override
-		public SchematicPartRecipe read( PacketByteBuf packetByteBuf) {
+		public SchematicPartRecipe read(PacketByteBuf packetByteBuf) {
 			return new SchematicPartRecipe(rootSerializer.read( packetByteBuf), StateService.INSTANCE);
 		}
 

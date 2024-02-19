@@ -156,16 +156,15 @@ public class StateCraftingRecipe extends ShapedRecipe {
 	public static class StateCraftingRecipeSerializer implements RecipeSerializer<StateCraftingRecipe> , ForgeroRecipeSerializer {
 		public static final StateCraftingRecipeSerializer INSTANCE = new StateCraftingRecipeSerializer();
 		private final ShapedRecipe.Serializer rootSerializer = new ShapedRecipe.Serializer();
+
 		@Override
 		public Codec<StateCraftingRecipe> codec() {
-			return rootSerializer.codec().flatXmap(recipe -> DataResult.success(new StateCraftingRecipe(recipe, StateService.INSTANCE)) ,(recipe) -> {
-				throw new NotImplementedException("Serializing ShapedRecipe is not implemented yet.");
-			} );
+			return CodecUtils.extendCodec(rootSerializer.codec(), (recipe) -> new StateCraftingRecipe(recipe, StateService.INSTANCE), recipe -> recipe);
 		}
 
 		@Override
 		public StateCraftingRecipe read( PacketByteBuf packetByteBuf) {
-			return new StateCraftingRecipe(rootSerializer.read( packetByteBuf), StateService.INSTANCE);
+			return new StateCraftingRecipe(rootSerializer.read(packetByteBuf), StateService.INSTANCE);
 		}
 
 		@Override
