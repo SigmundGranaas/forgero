@@ -66,46 +66,87 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
+        "value": 25
       },
       {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "id": "schematic-attack_speed-composite",
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 2.4
       },
       {
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "context": "COMPOSITE",
+        "operation": "FORCE",
+        "value": 1
+      },
+      {
+        "id": "schematic-durability-composite",
         "type": "DURABILITY",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
         "value": 1
       },
       {
+        "id": "schematic-mining_speed-composite",
         "type": "MINING_SPEED",
+        "order": "END",
         "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.0
+        "operation": "FORCE",
+        "value": 1
       },
       {
+        "id": "schematic-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "order": "END",
+        "context": "COMPOSITE",
+        "operation": "FORCE",
+        "value": 0
+      },
+      {
+        "id": "schematic-weight-composite",
+        "type": "WEIGHT",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "id": "schematic-draw_speed-composite",
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.90
+        "value": 1
       },
       {
+        "id": "schematic-accuracy-composite",
         "type": "forgero:accuracy",
-        "operation": "ADDITION",
-        "value": 10
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
       },
       {
+        "id": "schematic-draw_power-composite",
         "type": "forgero:draw_power",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 3
+        "value": 1
       }
     ],
     "features": [

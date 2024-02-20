@@ -50,7 +50,7 @@
           {
             "id": "arrow-accuracy",
             "type": "forgero:accuracy",
-            "value": 25
+            "value": 30
           }
         ]
       },
