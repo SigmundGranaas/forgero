@@ -5,7 +5,7 @@
       "name": "bow_limb",
       "template": "bow_limb.png",
       "type": "GENERATE",
-      "palette": "WOOD",
+      "palette": "BOW_LIMB_MATERIAL",
       "order": 2,
       "variants": [
         {
@@ -89,7 +89,7 @@
     },
     {
       "target": [
-        "type:WOOD",
+        "type:BOW_LIMB_MATERIAL",
         "type:BOW_LIMB_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",

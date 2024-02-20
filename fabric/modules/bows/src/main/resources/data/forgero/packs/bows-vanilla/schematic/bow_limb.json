@@ -17,7 +17,7 @@
             "id": "this"
           },
           {
-            "type": "WOOD",
+            "type": "BOW_LIMB_MATERIAL",
             "unique": true,
             "amount": 3
           }
@@ -29,7 +29,7 @@
         "id": "this"
       },
       {
-        "type": "WOOD",
+        "type": "BOW_LIMB_MATERIAL",
         "unique": true
       }
     ],
@@ -105,7 +105,7 @@
         "type": "forgero:draw_power",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.9
+        "value": 3
       }
     ],
     "features": [

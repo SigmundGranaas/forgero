@@ -16,7 +16,7 @@
             "id": "this"
           },
           {
-            "type": "WOOD",
+            "type": "BOW_LIMB_MATERIAL",
             "unique": true,
             "amount": 3
           }
@@ -28,7 +28,7 @@
         "id": "this"
       },
       {
-        "type": "WOOD",
+        "type": "BOW_LIMB_MATERIAL",
         "unique": true
       }
     ],

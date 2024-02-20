@@ -1,0 +1,12 @@
+{
+  "parent": "TOOL_MATERIAL",
+  "name": "BOW_LIMB_MATERIAL",
+  "children": [
+    {
+      "name": "WOOD"
+    },
+    {
+      "name": "METAL"
+    }
+  ]
+}
