@@ -47,7 +47,7 @@
           {
             "id": "wood-draw_speed-composite",
             "type": "forgero:draw_speed",
-            "value": 0.90
+            "value": 1
           },
           {
             "id": "wood-draw_power-composite",
@@ -149,6 +149,34 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 25
+          },
+          {
+            "id": "wood-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 1
+          },
+          {
+            "id": "wood-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": -1
+          },
+          {
+            "id": "wood-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
           }
         ]
       }

@@ -1,5 +1,6 @@
 {
   "type": "ARROW_HEAD_SCHEMATIC",
+  "resource_type": "DEFAULT",
   "name": "mastercrafted_arrow_head-schematic",
   "container": {
     "type": "CREATE",
@@ -51,7 +52,6 @@
         "type": "DYE",
         "tier": 1
       }
-
     ]
   },
   "properties": {
@@ -63,6 +63,48 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
+      },
+      {
+        "id": "arrowhead-base-accuracy",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "type": "forgero:accuracy",
+        "value": 15
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 0.1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.5
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:entity_tick",
+        "handler": {
+          "type": "minecraft:particle",
+          "particle": "minecraft:flame",
+          "count": 2
+        },
+        "predicate": {
+          "condition": "minecraft:entity_properties",
+          "predicate": {
+            "type": "forgero:dynamic_arrow"
+          }
+        }
       }
     ]
   },
