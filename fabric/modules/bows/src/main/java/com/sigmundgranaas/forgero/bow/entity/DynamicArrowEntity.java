@@ -43,10 +43,6 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		super(entityType, world);
 	}
 
-	public DynamicArrowEntity(World world, double x, double y, double z) {
-		super(DYNAMIC_ARROW_ENTITY, x, y, z, world);
-	}
-
 	public DynamicArrowEntity(World world, LivingEntity owner, ItemStack stack) {
 		super(DYNAMIC_ARROW_ENTITY, owner, world);
 		setStack(stack.copy());
