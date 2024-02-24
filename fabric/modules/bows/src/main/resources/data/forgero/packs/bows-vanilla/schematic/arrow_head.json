@@ -84,27 +84,16 @@
             "value": 0.1
           },
           {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 0.5
+          },
+          {
             "id": "schematic-weight-composite",
             "type": "WEIGHT",
             "value": 1
           }
         ]
-      }
-    ],
-    "features": [
-      {
-        "type": "minecraft:entity_tick",
-        "handler": {
-          "type": "minecraft:particle",
-          "particle": "minecraft:flame",
-          "count": 2
-        },
-        "predicate": {
-          "condition": "minecraft:entity_properties",
-          "predicate": {
-            "type": "forgero:dynamic_arrow"
-          }
-        }
       }
     ]
   },
