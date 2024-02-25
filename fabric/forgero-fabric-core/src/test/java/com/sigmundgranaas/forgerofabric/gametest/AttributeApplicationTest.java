@@ -20,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
+import net.minecraft.network.packet.c2s.common.SyncedClientOptions;
+import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
@@ -36,14 +38,16 @@ import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContext
 import static com.sigmundgranaas.forgerofabric.gametest.BlockSelectionTest.createSquare;
 import static com.sigmundgranaas.forgerofabric.gametest.BlockSelectionTest.insert;
 import static com.sigmundgranaas.forgerofabric.gametest.Utils.itemFromString;
+import static net.minecraft.network.packet.c2s.common.SyncedClientOptions.createDefault;
 
 public class AttributeApplicationTest {
 
 	public static float EXPECTED_DIAMOND_SWORD_DAMAGE = 7f;
 
 	public static ServerPlayerEntity createMockPlayer(BlockPos pos, TestContext context) {
-		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-player"));
-		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity);
+		var profile =  new GameProfile(UUID.randomUUID(), "test-mock-player");
+		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(),profile, createDefault());
+		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity, ConnectedClientData.createDefault(profile));
 		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
 		return entity;
 	}
