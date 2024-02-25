@@ -1,6 +1,7 @@
 {
   "type": "BOW_LIMB_SCHEMATIC",
   "name": "mastercrafted_bow_limb-schematic",
+  "parent": "bow_limb_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -81,52 +82,6 @@
         "value": 1.5
       },
       {
-        "id": "schematic-attack_speed-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 2.4
-      },
-      {
-        "id": "schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "END",
-        "context": "COMPOSITE",
-        "operation": "FORCE",
-        "value": 1
-      },
-      {
-        "id": "schematic-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
-      },
-      {
-        "id": "schematic-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "order": "END",
-        "context": "COMPOSITE",
-        "operation": "FORCE",
-        "value": 1
-      },
-      {
-        "id": "schematic-mining_level-composite",
-        "type": "MINING_LEVEL",
-        "order": "END",
-        "context": "COMPOSITE",
-        "operation": "FORCE",
-        "value": 0
-      },
-      {
-        "id": "schematic-weight-composite",
-        "type": "WEIGHT",
-        "order": "BASE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
         "id": "schematic-draw_speed-composite",
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
@@ -149,21 +104,6 @@
       }
     ],
     "features": [
-      {
-        "type": "minecraft:on_use",
-        "max_use_time": 7200,
-        "use_action": "BOW",
-        "use": [
-          {
-            "type": "forgero:mount_projectile"
-          }
-        ],
-        "on_stop": [
-          {
-            "type": "forgero:launch_projectile"
-          }
-        ]
-      }
     ]
   },
   "custom_data": {

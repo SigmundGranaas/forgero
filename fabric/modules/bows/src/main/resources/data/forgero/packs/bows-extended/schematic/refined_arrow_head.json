@@ -81,7 +81,12 @@
           {
             "id": "schematic-rarity-composite",
             "type": "RARITY",
-            "value": 0.1
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 0.75
           },
           {
             "id": "schematic-weight-composite",

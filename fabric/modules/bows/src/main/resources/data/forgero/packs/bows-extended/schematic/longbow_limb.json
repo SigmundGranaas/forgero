@@ -1,6 +1,7 @@
 {
   "type": "BOW_LIMB_SCHEMATIC",
   "name": "longbow_limb-schematic",
+  "parent": "bow_limb_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -65,70 +66,44 @@
   "properties": {
     "attributes": [
       {
+        "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
+        "context": "LOCAL",
         "operation": "ADDITION",
-        "category": "LOCAL",
-        "value": 10
+        "value": 50
       },
       {
-        "type": "ATTACK_DAMAGE",
-        "order": "COMPOSITE",
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.4
+        "value": 1.25
       },
       {
-        "type": "DURABILITY",
-        "order": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      },
-      {
-        "type": "MINING_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 1.0
-      },
-      {
-        "type": "ATTACK_SPEED",
-        "order": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": -3.0
-      },
-      {
+        "id": "schematic-draw_speed-composite",
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.0
+        "value": 5
       },
       {
+        "id": "schematic-accuracy-composite",
+        "type": "forgero:accuracy",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2
+      },
+      {
+        "id": "schematic-draw_power-composite",
         "type": "forgero:draw_power",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 3
-      },
-      {
-        "type": "forgero:accuracy",
-        "operation": "ADDITION",
-        "value": 20
+        "value": 2
       }
     ],
     "features": [
-      {
-        "type": "minecraft:on_use",
-        "max_use_time": 7200,
-        "use_action": "BOW",
-        "use": [
-          {
-            "type": "forgero:mount_projectile"
-          }
-        ],
-        "on_stop": [
-          {
-            "type": "forgero:launch_projectile"
-          }
-        ]
-      }
     ]
   },
   "custom_data": {
