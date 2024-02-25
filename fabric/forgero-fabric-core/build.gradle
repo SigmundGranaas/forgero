@@ -3,8 +3,8 @@ dependencies {
 	api project(path: ':fabric:modules:generator', configuration: 'namedElements')
 	api project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modApi "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
 	include("maven.modrinth:arrp:${project.aarp_version}")

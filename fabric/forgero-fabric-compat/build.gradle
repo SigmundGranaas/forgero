@@ -11,8 +11,6 @@ dependencies {
 	implementation project(path: ':fabric:modules:generator', configuration: 'namedElements')
 	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
 
-	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
-
 	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
 
 	//dynamiclights compat
@@ -95,7 +93,6 @@ dependencies {
 	//modImplementation 'com.ptsmods:devlogin:2.1'
 
 	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Mod Menu API
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
