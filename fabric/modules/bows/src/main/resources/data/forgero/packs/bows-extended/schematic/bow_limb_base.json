@@ -21,7 +21,7 @@
             "value": 1
           },
           {
-            "id": "schematic-durability-composite",
+            "id": "schematic-durability-composite_multiplier",
             "type": "DURABILITY",
             "value": 1
           },
@@ -50,7 +50,7 @@
       {
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "order": "END",
+        "order": "BASE",
         "attributes": [
           {
             "id": "schematic-durability-composite",
