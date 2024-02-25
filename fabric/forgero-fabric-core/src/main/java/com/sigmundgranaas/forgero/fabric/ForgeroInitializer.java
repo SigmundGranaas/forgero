@@ -16,17 +16,11 @@ import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.entity.mob.MobEntity;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemGroups;
 

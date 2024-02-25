@@ -16,19 +16,20 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+
 	include project(':forgero-core')
 
-	include project(':fabric:forgero-fabric-core')
-	include project(':fabric:minecraft-common')
-	include project(':fabric:forgero-fabric-compat')
+	include project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+	include project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	include project(path: ':fabric:forgero-fabric-compat', configuration: 'namedElements')
+	include project(path: ':fabric:modules:generator', configuration: 'namedElements')
 
 	include project(':content:forgero-vanilla')
 	include project(':content:forgero-extended')
 	include project(':content:forgero-compat')
 	include project(':content:forgero-structures')
-	include project(':fabric:modules:generator')
 
-	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 
 	runtimeOnly project(':content:forgero-vanilla')
 	runtimeOnly project(':content:forgero-extended')
