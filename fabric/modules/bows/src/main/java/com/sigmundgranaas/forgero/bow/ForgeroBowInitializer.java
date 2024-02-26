@@ -1,6 +1,9 @@
 package com.sigmundgranaas.forgero.bow;
 
+import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
+import static com.sigmundgranaas.forgero.bow.Attributes.reduceByWeight;
 import static com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity.DYNAMIC_ARROW_IDENTIFIER;
+import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.*;
 
 import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
@@ -34,6 +37,7 @@ import net.minecraft.world.World;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
 public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint {
+
 	public static final RegistryKey<ItemGroup> FORGERO_BOWS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "bows"));
 	public static final ItemGroup FORGERO_BOWS = FabricItemGroup.builder()
 			.icon(ForgeroBowInitializer::bowIcon)
@@ -74,5 +78,12 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 
 		HandlerBuilderRegistry.register(StopHandler.KEY, LaunchProjectileHandler.TYPE, LaunchProjectileHandler.BUILDER);
 		HandlerBuilderRegistry.register(UseHandler.KEY, MountProjectileHandler.TYPE, MountProjectileHandler.BUILDER);
+
+		modificationBuilder()
+				.attributeKey(DRAW_SPEED)
+				.modification(reduceByWeight)
+				.register();
 	}
+
+
 }
