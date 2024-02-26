@@ -1,5 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.match.predicate;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,10 +16,6 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 import net.minecraft.util.JsonSerializer;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.StreamSupport;
-
 public class MatchContextTypePredicate implements Matchable {
 	public static String ID = "forgero:context_type";
 
@@ -26,6 +26,9 @@ public class MatchContextTypePredicate implements Matchable {
 	}
 
 	public boolean test(Matchable target, MatchContext context) {
+		if (types.isEmpty()) {
+			return false;
+		}
 		return types.stream().allMatch(type -> context.test(type, MatchContext.of()));
 	}
 
@@ -46,6 +49,9 @@ public class MatchContextTypePredicate implements Matchable {
 	public static class MatchContextTypePredicateBuilder implements PredicateBuilder {
 		@Override
 		public Optional<Matchable> create(JsonElement element) {
+			if (element.isJsonPrimitive() && element.getAsString().contains("context_type:")) {
+				return Optional.of(new MatchContextTypePredicate(List.of(Type.of(element.getAsString().replace("context_type:", "")))));
+			}
 			return ElementParser.fromIdentifiedElement(element, ID)
 					.map(json -> new MatchContextTypePredicate.Serializer().fromJson(json, null));
 		}
