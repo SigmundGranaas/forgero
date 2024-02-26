@@ -1,5 +1,12 @@
 package com.sigmundgranaas.forgero.bow.handler;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
+import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -14,6 +21,7 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -22,13 +30,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
-import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
 
 public class LaunchProjectileHandler implements StopHandler {
 	private final StateService service;
@@ -88,6 +89,10 @@ public class LaunchProjectileHandler implements StopHandler {
 			ItemStack newBow = bow.copy();
 			newBow.getOrCreateNbt().put(FORGERO_IDENTIFIER, StateEncoder.ENCODER.encode(converted));
 			player.setStackInHand(hand, newBow);
+
+			if (!player.isCreative()) {
+				newBow.damage(1, player, (p) -> p.sendToolBreakStatus(hand));
+			}
 		}
 	}
 
