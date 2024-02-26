@@ -7,8 +7,9 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 
 /**
- * Matches if the type of a FilledSlot equals to the given type, or if the given type is found within a Matchable or a MatchContext.
+ * Matches if the type of FilledSlot equals to the given type, or if the given type is found within a Matchable or a MatchContext.
  */
+@Deprecated
 public record TypePredicate(Type type) implements Matchable {
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
