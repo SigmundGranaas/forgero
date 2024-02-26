@@ -3,6 +3,8 @@ package com.sigmundgranaas.forgero.bow;
 import static com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity.DYNAMIC_ARROW_IDENTIFIER;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.*;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
 import com.sigmundgranaas.forgero.bow.handler.LaunchProjectileHandler;
 import com.sigmundgranaas.forgero.bow.handler.MountProjectileHandler;
@@ -12,12 +14,17 @@ import com.sigmundgranaas.forgero.bow.predicate.BowPullPredicate;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -74,5 +81,13 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 
 		HandlerBuilderRegistry.register(StopHandler.KEY, LaunchProjectileHandler.TYPE, LaunchProjectileHandler.BUILDER);
 		HandlerBuilderRegistry.register(UseHandler.KEY, MountProjectileHandler.TYPE, MountProjectileHandler.BUILDER);
+
+		var bows = List.of("forgero:draw_power", "forgero:draw_speed", "forgero:accuracy", Weight.KEY, Durability.KEY);
+		TooltipAttributeRegistry.filterBuilder().type(Type.BOW).attributes(bows).register();
+		TooltipAttributeRegistry.filterBuilder().type(Type.BOW_LIMB).attributes(bows).register();
+
+		var arrows = List.of(AttackDamage.KEY, "forgero:accuracy", Weight.KEY);
+		TooltipAttributeRegistry.filterBuilder().type(Type.ARROW_HEAD).attributes(bows).register();
+		TooltipAttributeRegistry.filterBuilder().type(Type.ARROW).attributes(arrows).register();
 	}
 }
