@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.property.v2.CompositePropertyProcessor;
+import com.sigmundgranaas.forgero.core.property.v2.PredicateConvertedPropertyProcessor;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -71,6 +72,8 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	@Override
 	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		var propertyProcessor = new CompositePropertyProcessor();
+		var predicateProcessor = new PredicateConvertedPropertyProcessor();
+
 		var props = new ArrayList<>(super.compositeProperties(target, context));
 
 		var partProps = parts().stream()
@@ -78,6 +81,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 				.toList();
 
 		props.addAll(propertyProcessor.process(partProps, target, context));
+		props.addAll(predicateProcessor.process(partProps, target, context));
 
 		var otherProps = partProps.stream()
 				.filter(this::filterNormalProperties)

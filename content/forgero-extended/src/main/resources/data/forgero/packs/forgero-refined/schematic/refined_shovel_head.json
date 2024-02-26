@@ -80,13 +80,7 @@
       }
     ],
     "features": [
-      {
-        "type": "VEIN_MINING",
-        "value": 1,
-        "tags": [
-          "forgero:vein_mining_dirt"
-        ]
-      }
+
     ]
   },
   "custom_data": {
