@@ -69,7 +69,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "type": "forgero:accuracy",
-        "value": 15
+        "value": 25
       }
     ],
     "grouped_attributes": [
