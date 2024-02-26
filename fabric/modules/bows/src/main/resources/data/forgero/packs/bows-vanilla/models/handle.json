@@ -2,6 +2,30 @@
   "type": "HANDLE",
   "models": [
     {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:ARROW",
+            "model:arrow_shaft.png"
+          ],
+          "template": "empty_model"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:ARROW",
+            "model:arrow_shaft.png"
+          ],
+          "template": "empty_model"
+        }
+      ]
+    },
+    {
       "name": "handle",
       "variants": [
         {

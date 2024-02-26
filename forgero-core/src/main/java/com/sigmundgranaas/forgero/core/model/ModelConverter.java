@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.model;
 
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IMAGE_IDENTIFIER;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -271,7 +272,7 @@ public class ModelConverter {
 						data.getVariants().stream()
 								.map(variant -> data.toBuilder()
 										.children(ImmutableList.<ModelData>builder().addAll(data.getChildren()).addAll(variant.getChildren()).build())
-										.texture(variant.getTexture().equals(EMPTY_IDENTIFIER) ? data.getTexture(): variant.getTexture())
+										.texture(variant.getTexture().equals(EMPTY_IDENTIFIER) ? data.getTexture() : variant.getTexture())
 										.template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() : variant.getTemplate())
 										.palette(variant.getPalette().equals(EMPTY_IDENTIFIER) ? data.getPalette() : variant.getPalette())
 										.predicate(variant.getTarget())
@@ -293,25 +294,28 @@ public class ModelConverter {
 	private ModelMatchPairing generate(ModelData data, List<JsonElement> additionalPredicates) {
 		List<JsonElement> predicates = new ArrayList<>(data.getPredicates());
 		predicates.addAll(additionalPredicates);
-		var model = createTemplate(data);
-		return new ModelMatchPairing(PredicateMatcher.of(predicates, new PredicateFactory()), (ModelMatcher) model);
+		ModelMatcher model = createTemplate(data);
+		return new ModelMatchPairing(PredicateMatcher.of(predicates, new PredicateFactory()), model);
 	}
 
-	private ModelTemplate createTemplate(ModelData data){
+	private ModelMatcher createTemplate(ModelData data) {
 		List<ModelTemplate> children = data.getChildren().stream()
 				.map(this::createTemplate)
+				.map(ModelTemplate.class::cast)
 				.toList();
 
-		ModelTemplate template;
+		ModelMatcher template;
 
-		if(data.getTexture().equals(EMPTY_IDENTIFIER)){
-			  template = new PaletteTemplateModel(data.getPalette(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
-		}else {
-			 template = new TextureModel(data.getTexture(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
+		if (data.getTemplate().contains(EMPTY_IMAGE_IDENTIFIER)) {
+			return ModelMatcher.EMPTY_TRUE;
+		} else if (data.getTexture().equals(EMPTY_IDENTIFIER)) {
+			template = new PaletteTemplateModel(data.getPalette(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
+		} else {
+			template = new TextureModel(data.getTexture(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
 		}
 
 		Identifiable identifiable = (Identifiable) template;
-		textures.put(identifiable.identifier(), template);
+		textures.put(identifiable.identifier(), (ModelTemplate) template);
 
 		return template;
 	}
