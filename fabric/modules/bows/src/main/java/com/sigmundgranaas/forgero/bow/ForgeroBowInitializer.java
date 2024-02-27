@@ -97,6 +97,11 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 				.attributeKey(DRAW_SPEED)
 				.modification(reduceByWeight)
 				.register();
+
+		modificationBuilder()
+				.attributeKey(DRAW_SPEED)
+				.modification(minDrawSpeed)
+				.register();
 	}
 
 
