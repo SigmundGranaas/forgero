@@ -21,7 +21,12 @@
             "value": 1
           },
           {
-            "id": "schematic-durability-composite_multiplier",
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1
+          },
+          {
+            "id": "schematic-durability-composite",
             "type": "DURABILITY",
             "value": 1
           },

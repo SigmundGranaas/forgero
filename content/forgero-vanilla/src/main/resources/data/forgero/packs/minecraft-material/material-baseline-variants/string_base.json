@@ -119,6 +119,18 @@
       }
     ],
     "attributes": [
+      {
+        "id": "string-durability-bow",
+        "type": "DURABILITY",
+        "value": 254,
+        "context": "PREDICATE_CONVERTED",
+        "predicate": {
+          "type": "forgero:context_type",
+          "types": [
+            "BOW"
+          ]
+        }
+      }
     ]
   }
 }
