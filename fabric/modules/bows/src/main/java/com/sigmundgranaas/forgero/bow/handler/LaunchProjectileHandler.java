@@ -28,6 +28,8 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Optional;
 
+import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_POWER;
+import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
 import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
 import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
@@ -37,11 +39,9 @@ public class LaunchProjectileHandler implements StopHandler {
 	public static final String TYPE = "forgero:launch_projectile";
 	public static final JsonBuilder<LaunchProjectileHandler> BUILDER = HandlerBuilder.fromObject(LaunchProjectileHandler.class, LaunchProjectileHandler::fromJson);
 
-	public static final String DRAW_POWER_ATTRIBUTE_TYPE = "forgero:draw_power";
-	public static final String DRAW_SPEED_ATTRIBUTE_TYPE = "forgero:draw_speed";
 
 	public static final PropertyContainer DEFAULT_ARROW = PropertyContainer.of(BaseAttribute.of(50f, Accuracy.KEY));
-	public static final PropertyContainer DEFAULT_BOW = PropertyContainer.of(List.of(BaseAttribute.of(2f, DRAW_POWER_ATTRIBUTE_TYPE), BaseAttribute.of(1f, DRAW_SPEED_ATTRIBUTE_TYPE)));
+	public static final PropertyContainer DEFAULT_BOW = PropertyContainer.of(List.of(BaseAttribute.of(2f, DRAW_POWER), BaseAttribute.of(1f, DRAW_SPEED)));
 
 	private final Attribute power;
 	private final Attribute accuracy;
@@ -54,7 +54,7 @@ public class LaunchProjectileHandler implements StopHandler {
 	}
 
 	public static LaunchProjectileHandler fromJson(JsonObject json) {
-		Attribute power = FeatureUtils.of(json, "draw_power", DRAW_POWER_ATTRIBUTE_TYPE, 0);
+		Attribute power = FeatureUtils.of(json, "draw_power", DRAW_POWER, 0);
 		Attribute accuracy = FeatureUtils.of(json, "accuracy", Accuracy.KEY, 0);
 
 		return new LaunchProjectileHandler(power, accuracy);
@@ -140,7 +140,7 @@ public class LaunchProjectileHandler implements StopHandler {
 	}
 
 	private float getDrawTime(PlayerEntity shooter) {
-		float drawTime = ComputedAttributeBuilder.of(DRAW_SPEED_ATTRIBUTE_TYPE)
+		float drawTime = ComputedAttributeBuilder.of(DRAW_SPEED)
 				.addSource(container(shooter))
 				.build()
 				.asFloat();
@@ -177,7 +177,7 @@ public class LaunchProjectileHandler implements StopHandler {
 	}
 
 	private LaunchParams createParams(float pullProgress, ItemStack bow) {
-		float power = ComputedAttributeBuilder.of(DRAW_POWER_ATTRIBUTE_TYPE)
+		float power = ComputedAttributeBuilder.of(DRAW_POWER)
 				.addSource(this.power)
 				.addSource(service.convert(bow).map(PropertyContainer.class::cast).orElse(DEFAULT_BOW))
 				.build()

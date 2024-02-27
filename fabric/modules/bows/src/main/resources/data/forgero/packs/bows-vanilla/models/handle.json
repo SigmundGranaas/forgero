@@ -10,6 +10,13 @@
             "model:arrow_shaft.png"
           ],
           "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:BOW"
+          ],
+          "template": "empty_model"
         }
       ]
     },
@@ -20,6 +27,13 @@
           "target": [
             "type:ARROW",
             "model:arrow_shaft.png"
+          ],
+          "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:BOW"
           ],
           "template": "empty_model"
         }
