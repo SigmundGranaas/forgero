@@ -1,12 +1,5 @@
 package com.sigmundgranaas.forgero.bow.handler;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
-import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -21,15 +14,23 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
+import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
 
 public class LaunchProjectileHandler implements StopHandler {
 	private final StateService service;
@@ -75,6 +76,16 @@ public class LaunchProjectileHandler implements StopHandler {
 		if (useTime > 1) {
 			fireArrow(world, playerEntity, arrowStack, useTime, stack.copyWithCount(1));
 			removeItemFromState(stack, playerEntity, playerEntity.getActiveHand());
+			world.playSound(
+					null,
+					playerEntity.getX(),
+					playerEntity.getY(),
+					playerEntity.getZ(),
+					SoundEvents.ENTITY_ARROW_SHOOT,
+					SoundCategory.PLAYERS,
+					1.0F,
+					1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + ((float) useTime / 10) * 0.5F
+			);
 			if (!isCreativeMode(playerEntity)) {
 				decrementArrowStack(playerEntity, arrowStack);
 			}
