@@ -14,5 +14,8 @@ public class Attributes {
 		float newValue = attribute.asFloat() - (weight / 100);
 		return ComputedAttribute.of(newValue, attribute.key());
 	};
-	
+
+	public static AttributeModification minDrawSpeed = (attribute, state) -> ComputedAttribute.of((float) Math.max(attribute.asFloat(), 0.1), attribute.key());
+
+
 }
