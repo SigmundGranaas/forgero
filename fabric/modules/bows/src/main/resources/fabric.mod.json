@@ -30,6 +30,9 @@
       "com.sigmundgranaas.forgero.bow.ForgeroBowInitializer"
     ]
   },
+  "mixins": [
+    "forgero-bows.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
@@ -53,7 +56,7 @@
         "id": "forgero",
         "name": "Forgero",
         "description": "Equipment crafting expansion mod for Fabric!",
-        "icon": "bows.png"
+        "icon": "/assets/bows.png"
       }
     }
   }
