@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
@@ -206,6 +207,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			this.dropInventory(player, this.compositeInventory);
 		});
 	}
+
 	@Override
 	public boolean canUse(PlayerEntity player) {
 		return true;
@@ -364,6 +366,9 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			}
 			if (state instanceof Composite composite) {
 				for (com.sigmundgranaas.forgero.core.state.Slot upgradeSlot : composite.slots()) {
+					if (upgradeSlot.category().contains(Category.UNDEFINED)) {
+						continue;
+					}
 					State childState = upgradeSlot.filled() ? upgradeSlot.get().get() : new EmptyState();
 					TreeNode childNode = new TreeNode(childState, upgradeSlot);
 					node.addChild(childNode);
