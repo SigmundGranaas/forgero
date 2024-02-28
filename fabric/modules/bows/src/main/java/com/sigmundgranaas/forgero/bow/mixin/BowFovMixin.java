@@ -33,7 +33,7 @@ public abstract class BowFovMixin {
 			} else {
 				g *= g;
 			}
-			float f = 1.0F - g * 0.3F;
+			float f = 1.0F - g * 0.15F;
 			cir.setReturnValue(MathHelper.lerp((MinecraftClient.getInstance().options.getFovEffectScale().getValue()).floatValue(), 1.0F, f));
 		}
 	}
