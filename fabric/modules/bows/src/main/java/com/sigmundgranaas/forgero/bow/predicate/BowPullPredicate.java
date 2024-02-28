@@ -1,6 +1,13 @@
 package com.sigmundgranaas.forgero.bow.predicate;
 
+import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
+
+import java.util.Optional;
+
 import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.bow.handler.LaunchProjectileHandler;
 import com.sigmundgranaas.forgero.core.model.match.builders.ElementParser;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
@@ -8,14 +15,9 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
 
 /**
  * Matches if the bow is pulling and checks if the pull-progress matches the criteria
@@ -30,7 +32,7 @@ public record BowPullPredicate(float pullProgress) implements Matchable {
 		if (entityOpt.isPresent() && stackOpt.isPresent() && entityOpt.get() instanceof LivingEntity livingEntity) {
 			var stack = stackOpt.get();
 			float drawTime = getDynamicDrawTime(stack);
-			var pull = livingEntity.getActiveItem() != stack ? 0.0F : (float) (stack.getMaxUseTime() - livingEntity.getItemUseTimeLeft()) / (20.0F * drawTime);
+			var pull = livingEntity.getActiveItem() != stack ? 0.0F : LaunchProjectileHandler.getPullProgress(livingEntity.getItemUseTime(), drawTime);
 			return pull >= pullProgress;
 		}
 		return false;

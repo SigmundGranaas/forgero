@@ -1,21 +1,22 @@
 package com.sigmundgranaas.forgero.bow.mixin;
 
+import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
+import static com.sigmundgranaas.forgero.bow.handler.LaunchProjectileHandler.getPullProgress;
+
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.util.UseAction;
-import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
-import static com.sigmundgranaas.forgero.bow.handler.LaunchProjectileHandler.getPullProgress;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.util.UseAction;
+import net.minecraft.util.math.MathHelper;
 
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class BowFovMixin {
