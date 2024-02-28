@@ -211,7 +211,7 @@ public class LaunchProjectileHandler implements StopHandler {
 	 * @return The pull progress.
 	 */
 	public static float getPullProgress(int useTicks, float drawSpeed) {
-		float f = (float) useTicks / (TICKS_PER_SECOND / drawSpeed);
+		float f = (float) useTicks * (drawSpeed / TICKS_PER_SECOND);
 		if (f > 1.0F) {
 			f = 1.0F;
 		}
