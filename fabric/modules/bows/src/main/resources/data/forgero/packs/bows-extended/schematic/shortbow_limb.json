@@ -86,14 +86,14 @@
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.5
+        "value": 1
       },
       {
         "id": "schematic-accuracy-composite",
         "type": "forgero:accuracy",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.75
+        "value": 1
       },
       {
         "id": "schematic-draw_power-composite",
