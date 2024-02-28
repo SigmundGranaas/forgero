@@ -1,5 +1,14 @@
 package com.sigmundgranaas.forgero.bow.handler;
 
+import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_POWER;
+import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
+import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
+import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -14,6 +23,7 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -24,15 +34,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_POWER;
-import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
-import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
 
 public class LaunchProjectileHandler implements StopHandler {
 	private final StateService service;
@@ -210,8 +211,7 @@ public class LaunchProjectileHandler implements StopHandler {
 	 * @return The pull progress.
 	 */
 	public static float getPullProgress(int useTicks, float drawTime) {
-		float f = (float) useTicks / (drawTime * TICKS_PER_SECOND);
-		f = (f * f + f * 2.0F) / 3.0F;
+		float f = (float) useTicks * (drawTime / TICKS_PER_SECOND);
 		if (f > 1.0F) {
 			f = 1.0F;
 		}
