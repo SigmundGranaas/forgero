@@ -206,12 +206,12 @@ public class LaunchProjectileHandler implements StopHandler {
 	 * Get the pull progress based on the draw time.
 	 * Will return a float between 0 and 1. Where 1 is fully drawn.
 	 *
-	 * @param useTicks How many ticks have been used.
-	 * @param drawTime The draw time, measured in seconds.
+	 * @param useTicks  How many ticks have been used.
+	 * @param drawSpeed The draw speed, measured in seconds.
 	 * @return The pull progress.
 	 */
-	public static float getPullProgress(int useTicks, float drawTime) {
-		float f = (float) useTicks * (drawTime / TICKS_PER_SECOND);
+	public static float getPullProgress(int useTicks, float drawSpeed) {
+		float f = (float) useTicks * (drawSpeed / TICKS_PER_SECOND);
 		if (f > 1.0F) {
 			f = 1.0F;
 		}
