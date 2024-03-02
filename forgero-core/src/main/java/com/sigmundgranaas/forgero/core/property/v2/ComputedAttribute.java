@@ -10,6 +10,14 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public interface ComputedAttribute {
 
+	/**
+	 * This function does not take Modifications into account. Use {@link #of(PropertyContainer, String)} instead.
+	 *
+	 * @param value
+	 * @param key
+	 * @return
+	 */
+	@Deprecated
 	static ComputedAttribute of(float value, String key) {
 		return new ComputedAttribute() {
 			@Override
