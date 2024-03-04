@@ -82,11 +82,18 @@
         "value": 1.5
       },
       {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5
+      },
+      {
         "id": "schematic-draw_speed-composite",
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.70
+        "value": 1.2
       },
       {
         "id": "schematic-accuracy-composite",
@@ -100,7 +107,7 @@
         "type": "forgero:draw_power",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1.3
+        "value": 1.2
       }
     ],
     "features": [

@@ -47,7 +47,7 @@
           {
             "id": "metal-draw_speed-composite",
             "type": "forgero:draw_speed",
-            "value": 2
+            "value": 1.25
           },
           {
             "id": "metal-draw_power-composite",

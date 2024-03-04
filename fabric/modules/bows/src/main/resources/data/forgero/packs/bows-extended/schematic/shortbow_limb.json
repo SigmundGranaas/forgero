@@ -82,25 +82,32 @@
         "value": 1.25
       },
       {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.3
+      },
+      {
         "id": "schematic-draw_speed-composite",
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 1.3
       },
       {
         "id": "schematic-accuracy-composite",
         "type": "forgero:accuracy",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.9
       },
       {
         "id": "schematic-draw_power-composite",
         "type": "forgero:draw_power",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 1
+        "value": 0.7
       }
     ],
     "features": [

@@ -47,7 +47,7 @@
           {
             "id": "wood-draw_speed-composite",
             "type": "forgero:draw_speed",
-            "value": 2
+            "value": 1.2
           },
           {
             "id": "wood-draw_power-composite",
