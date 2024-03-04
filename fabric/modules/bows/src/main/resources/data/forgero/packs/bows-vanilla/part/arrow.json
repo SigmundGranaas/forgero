@@ -1,6 +1,6 @@
 {
   "type": "ARROW",
-  "name": "stone-arrow",
+  "name": "flint-arrow",
   "container": {
     "type": "HOST",
     "id": "minecraft:arrow"
@@ -14,10 +14,16 @@
         "value": 5
       },
       {
-        "type": "STABILITY",
+        "type": "ATTACK_DAMAGE",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 20
+        "value": 2
+      },
+      {
+        "type": "forgero:accuracy",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 30
       },
       {
         "type": "WEIGHT",
