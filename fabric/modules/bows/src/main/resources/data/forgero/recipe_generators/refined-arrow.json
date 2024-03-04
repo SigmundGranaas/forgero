@@ -17,7 +17,7 @@
       "item": "forgero:${material.name}-refined_arrow_head"
     },
     "b": {
-      "item": "minecraft:stick"
+      "tag": "forgero:handle"
     },
     "c": {
       "tag": "forgero:feather"
