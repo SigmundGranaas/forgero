@@ -1,0 +1,14 @@
+{
+  "id": "mineshaft_schematics",
+  "tables": [
+    "minecraft:chests/abandoned_mineshaft"
+  ],
+  "types": [
+    "BOW_LIMB_SCHEMATIC",
+    "ARROW_HEAD_SCHEMATIC"
+  ],
+  "upper_rarity_limit": 40,
+  "lower_rarity_limit": 5,
+  "chance": 0.3,
+  "rolls": 1
+}
