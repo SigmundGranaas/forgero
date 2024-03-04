@@ -1,6 +1,6 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-arrow-state-crafting",
+  "identifier": "forgero:${material.name}-refined_arrow-state-crafting",
   "variables": {
     "material": {
       "type": "TOOL_MATERIAL"
@@ -14,7 +14,7 @@
   ],
   "key": {
     "a": {
-      "item": "forgero:${material.name}-arrow_head"
+      "item": "forgero:${material.name}-refined_arrow_head"
     },
     "b": {
       "item": "minecraft:stick"
@@ -25,6 +25,6 @@
   },
   "result": {
     "item": "forgero:${material.name}-arrow",
-    "count": 4
+    "count": 3
   }
 }

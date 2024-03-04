@@ -18,7 +18,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 3
+            "amount": 1
           }
         ]
       }
@@ -67,7 +67,7 @@
   },
   "custom_data": {
     "ingredient_count": {
-      "value": 3,
+      "value": 1,
       "context": "LOCAL"
     }
   }
