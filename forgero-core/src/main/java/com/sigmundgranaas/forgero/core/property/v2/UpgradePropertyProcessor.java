@@ -9,6 +9,9 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
@@ -39,12 +42,17 @@ public class UpgradePropertyProcessor implements PropertyProcessor {
 			return false;
 		}
 		// Temporary fix for weight attribute having an effect on pulling speed
-		if (categories.contains(Category.UNDEFINED) && attribute.getAttributeType().equals(Weight.KEY)) {
+		if (categories.contains(Category.UNDEFINED) && isArrowFilteredAttribute(attribute.getAttributeType())) {
 			return false;
 		}
 		if (attribute.getContext().test(Contexts.UNDEFINED) || attribute.getCategory() == Category.ALL || attribute.getCategory() == Category.PASS) {
 			return true;
 		} else return categories.contains(attribute.getCategory());
+	}
+
+	private boolean isArrowFilteredAttribute(String attributeType) {
+		var filters = Set.of(Weight.KEY, Durability.KEY, AttackSpeed.KEY, AttackDamage.KEY);
+		return filters.contains(attributeType);
 	}
 
 	private Attribute mapToUndefined(Attribute attribute) {
