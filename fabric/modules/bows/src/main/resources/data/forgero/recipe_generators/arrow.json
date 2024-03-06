@@ -14,10 +14,10 @@
   ],
   "key": {
     "a": {
-      "tag": "forgero:${material.name}-arrow_head"
+      "item": "forgero:${material.name}-arrow_head"
     },
     "b": {
-      "item": "minecraft:stick"
+      "tag": "forgero:handle"
     },
     "c": {
       "tag": "forgero:feather"
@@ -25,6 +25,6 @@
   },
   "result": {
     "item": "forgero:${material.name}-arrow",
-    "count": 4
+    "count": 6
   }
 }
