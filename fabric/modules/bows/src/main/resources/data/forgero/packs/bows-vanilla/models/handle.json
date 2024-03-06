@@ -38,24 +38,6 @@
       ]
     },
     {
-      "name": "pommel",
-      "variants": [
-        {
-          "target": [
-            "type:ARROW"
-          ],
-          "template": "empty_model"
-        },
-        {
-          "target": [
-            "type:ARROW",
-            "type:BOW"
-          ],
-          "template": "empty_model"
-        }
-      ]
-    },
-    {
       "name": "mastercrafted_handle_dye",
       "variants": [
         {
