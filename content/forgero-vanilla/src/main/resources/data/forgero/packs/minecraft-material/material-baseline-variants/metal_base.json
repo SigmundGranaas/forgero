@@ -156,6 +156,13 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.75
+          },
+          {
+            "id": "metal-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
           }
         ]
       }
