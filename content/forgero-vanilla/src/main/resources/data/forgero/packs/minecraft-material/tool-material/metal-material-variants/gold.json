@@ -47,6 +47,11 @@
             "id": "metal-armor-composite",
             "type": "ARMOR",
             "value": 0
+          },
+          {
+            "id": "metal-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 4.25
           }
         ]
       },
@@ -96,6 +101,13 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 12
+          },
+          {
+            "id": "metal-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
           }
         ]
       }

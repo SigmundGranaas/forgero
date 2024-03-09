@@ -151,32 +151,11 @@
             "value": 25
           },
           {
-            "id": "wood-draw_speed-utility-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1
-          },
-          {
-            "id": "wood-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
-          },
-          {
-            "id": "wood-accuracy-utility-upgrade",
-            "type": "forgero:accuracy",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1
-          },
-          {
-            "id": "schematic-draw_power-offensive-upgrade",
+            "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 0.5
           }
         ]
       }

@@ -114,6 +114,20 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 15
+          },
+          {
+            "id": "string-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 1
+          },
+          {
+            "id": "string-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.05
           }
         ]
       }

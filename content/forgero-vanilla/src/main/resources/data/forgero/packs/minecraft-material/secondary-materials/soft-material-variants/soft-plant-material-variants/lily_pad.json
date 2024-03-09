@@ -62,6 +62,13 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 30
+          },
+          {
+            "id": "soft_plant-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.7
           }
         ]
       }
