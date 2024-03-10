@@ -1,6 +1,7 @@
 {
   "type": "BOW_LIMB_SCHEMATIC",
   "name": "refined_bow_limb-schematic",
+  "parent": "bow_limb_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -16,7 +17,7 @@
             "id": "this"
           },
           {
-            "type": "WOOD",
+            "type": "BOW_LIMB_MATERIAL",
             "unique": true,
             "amount": 3
           }
@@ -28,7 +29,7 @@
         "id": "this"
       },
       {
-        "type": "WOOD",
+        "type": "BOW_LIMB_MATERIAL",
         "unique": true
       }
     ],
@@ -63,78 +64,53 @@
     ]
   },
   "properties": {
-    "grouped_attributes": [
-      {
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "order": "BASE",
-        "attributes": [
-          {
-            "id": "refined-schematic-rarity-composite",
-            "type": "RARITY",
-            "value": 1.3
-          },
-          {
-            "id": "refined-schematic-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 1.3
-          },
-          {
-            "id": "refined-schematic-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "value": 1.3
-          },
-          {
-            "id": "refined-schematic-durability-composite",
-            "type": "DURABILITY",
-            "value": 1.3
-          }
-        ]
-      }
-    ],
     "attributes": [
       {
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
+        "context": "LOCAL",
         "operation": "ADDITION",
         "value": 50
       },
       {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.25
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.3
+      },
+      {
+        "id": "schematic-draw_speed-composite",
         "type": "forgero:draw_speed",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 0.9
+        "value": 1.1
       },
       {
+        "id": "schematic-accuracy-composite",
+        "type": "forgero:accuracy",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      },
+      {
+        "id": "schematic-draw_power-composite",
         "type": "forgero:draw_power",
         "context": "COMPOSITE",
         "operation": "MULTIPLICATION",
-        "value": 2.2
-      },
-      {
-        "type": "forgero:accuracy",
-        "operation": "ADDITION",
-        "value": 15
+        "value": 1.1
       }
     ],
     "features": [
-      {
-        "type": "minecraft:on_use",
-        "max_use_time": 7200,
-        "use_action": "BOW",
-        "use": [
-          {
-            "type": "forgero:mount_projectile"
-          }
-        ],
-        "on_stop": [
-          {
-            "type": "forgero:launch_projectile"
-          }
-        ]
-      }
     ]
   },
   "custom_data": {

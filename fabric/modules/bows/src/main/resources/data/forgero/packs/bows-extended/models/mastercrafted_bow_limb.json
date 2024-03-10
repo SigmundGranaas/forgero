@@ -5,7 +5,7 @@
       "name": "mastercrafted_bow_limb",
       "modelType": "GENERATE",
       "template": "mastercrafted_bow_limb.png",
-      "palette": "WOOD",
+      "palette": "BOW_LIMB_MATERIAL",
       "order": 2,
       "variants": [
         {
@@ -143,7 +143,7 @@
     },
     {
       "target": [
-        "type:WOOD",
+        "type:BOW_LIMB_MATERIAL",
         "id:mastercrafted_bow_limb-schematic"
       ],
       "modelType": "BASED_COMPOSITE",

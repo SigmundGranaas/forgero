@@ -5,7 +5,7 @@
       "name": "bow_limb",
       "template": "bow_limb.png",
       "type": "GENERATE",
-      "palette": "WOOD",
+      "palette": "BOW_LIMB_MATERIAL",
       "order": 2,
       "variants": [
         {
@@ -43,6 +43,7 @@
       "template": "bow_limb_reinforcement.png",
       "palette": "UPGRADE_MATERIAL",
       "order": 5
+
     },
     {
       "name": "bow_grip",
@@ -89,7 +90,7 @@
     },
     {
       "target": [
-        "type:WOOD",
+        "type:BOW_LIMB_MATERIAL",
         "type:BOW_LIMB_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",

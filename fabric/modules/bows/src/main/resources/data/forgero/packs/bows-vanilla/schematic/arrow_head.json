@@ -34,24 +34,7 @@
       }
     ],
     "slots": [
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "reinforcement",
-        "type": "UPGRADE_MATERIAL",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "UTILITY"
-        ],
-        "description": "cosmetic",
-        "type": "DYE",
-        "tier": 1
-      }
+
     ]
   },
   "properties": {
@@ -69,7 +52,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "type": "forgero:accuracy",
-        "value": 10
+        "value": 15
       }
     ],
     "grouped_attributes": [
@@ -81,12 +64,12 @@
           {
             "id": "schematic-rarity-composite",
             "type": "RARITY",
-            "value": 0.1
+            "value": 1
           },
           {
             "id": "schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 0.5
+            "value": 0.8
           },
           {
             "id": "schematic-weight-composite",

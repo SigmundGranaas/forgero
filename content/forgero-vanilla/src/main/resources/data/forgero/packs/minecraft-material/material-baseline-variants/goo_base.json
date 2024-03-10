@@ -114,6 +114,20 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 105
+          },
+          {
+            "id": "goo-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.25
+          },
+          {
+            "id": "goo-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.15
           }
         ]
       }
