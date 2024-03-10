@@ -1,5 +1,5 @@
 {
-  "name": "imperial",
+  "name": "forgero-imperial",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",

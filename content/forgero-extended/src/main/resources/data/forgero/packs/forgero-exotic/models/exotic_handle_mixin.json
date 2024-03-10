@@ -14,18 +14,6 @@
       ]
     },
     {
-      "name": "handle",
-      "variants": [
-        {
-          "target": [
-            "type:SWORD",
-            "model:nunchucks_chain.png"
-          ],
-          "template": "nunchucks_handles.png"
-        }
-      ]
-    },
-    {
       "name": "grip",
       "variants": [
         {
@@ -34,18 +22,6 @@
             "model:kunai_handle.png"
           ],
           "template": "kunai_rope.png"
-        }
-      ]
-    },
-    {
-      "name": "grip",
-      "variants": [
-        {
-          "target": [
-            "type:HANDLE",
-            "model:nunchucks_handles.png"
-          ],
-          "template": "nunchucks_grip.png"
         }
       ]
     }

@@ -1,5 +1,5 @@
 {
-  "name": "armored",
+  "name": "forgero-utility",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",

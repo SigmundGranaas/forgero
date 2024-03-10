@@ -110,6 +110,18 @@
   "feature.forgero.pattern_mining.title": "Pattern mining",
   "feature.forgero.pattern_mining.3x3-description": "Mines in a 3x3 pattern",
   "feature.forgero.pattern_mining.star-description": "Mines in a 3x3 star pattern",
-  "feature.forgero.pattern_mining.2x1-description": "Mines in a 2x1 path"
+  "feature.forgero.pattern_mining.2x1-description": "Mines in a 2x1 path",
+  "item.forgero.entrenching_shovel_head": "Entrenching Shovel Head",
+  "item.forgero.entrenching_shovel": "Entrenching Shovel",
+  "item.forgero.felling_axe_head": "Felling Axe Head",
+  "item.forgero.felling_axe": "Felling Axe",
+  "item.forgero.hammer_head": "Hammer Head",
+  "item.forgero.hammer": "Hammer",
+  "item.forgero.mandrill_pickaxe_head": "Mandrill Pickaxe Head",
+  "item.forgero.mandrill_pickaxe": "Mandrill Pickaxe",
+  "item.forgero.sickle_blade": "Sickle Blade",
+  "item.forgero.sickle": "Sickle",
+  "item.forgero.spade_head": "Spade Head",
+  "item.forgero.spade": "Spade"
 }
 

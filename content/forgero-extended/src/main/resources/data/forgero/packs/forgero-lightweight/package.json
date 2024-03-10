@@ -1,5 +1,5 @@
 {
-  "name": "artisan",
+  "name": "forgero-lightweight",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",
