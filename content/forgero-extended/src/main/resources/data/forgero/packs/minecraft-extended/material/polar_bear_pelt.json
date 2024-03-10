@@ -1,7 +1,7 @@
 {
-  "type": "LEATHER",
+  "type": "HIDE",
   "name": "polar_bear_pelt",
-  "parent": "leather_base",
+  "parent": "hide_base",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -14,17 +14,17 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "leather-rarity-composite",
+            "id": "hide-rarity-composite",
             "type": "RARITY",
             "value": 75
           },
           {
-            "id": "leather-durability-composite",
+            "id": "hide-durability-composite",
             "type": "DURABILITY",
             "value": 560
           },
           {
-            "id": "leather-weight-composite",
+            "id": "hide-weight-composite",
             "type": "WEIGHT",
             "value": 40
           }
@@ -34,7 +34,7 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "leather-rarity-upgrade",
+            "id": "hide-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -42,7 +42,7 @@
             "value": 75
           },
           {
-            "id": "leather-weight-upgrade",
+            "id": "hide-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
@@ -50,74 +50,81 @@
             "value": 20
           },
           {
-            "id": "leather-attack_speed-offensive-upgrade",
+            "id": "hide-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "leather-attack_damage-offensive-upgrade",
+            "id": "hide-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": -1
           },
           {
-            "id": "leather-mining_speed-offensive-upgrade",
+            "id": "hide-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "leather-mining_level-offensive-upgrade",
+            "id": "hide-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "leather-durability-offensive-upgrade",
+            "id": "hide-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 280
           },
           {
-            "id": "leather-attack_speed-utility-upgrade",
+            "id": "hide-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
           },
           {
-            "id": "leather-attack_damage-utility-upgrade",
+            "id": "hide-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "leather-mining_speed-utility-upgrade",
+            "id": "hide-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
           },
           {
-            "id": "leather-mining_level-utility-upgrade",
+            "id": "hide-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "leather-durability-utility-upgrade",
+            "id": "hide-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 280
+          },
+          {
+            "id": "hide-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.3
           }
         ]
       }
