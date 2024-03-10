@@ -135,6 +135,10 @@
     "ingredient_count": {
       "value": 3,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "bow",
+      "to": "longbow"
     }
   }
 }
