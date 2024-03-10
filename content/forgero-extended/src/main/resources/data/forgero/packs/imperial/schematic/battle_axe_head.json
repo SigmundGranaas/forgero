@@ -1,0 +1,137 @@
+{
+  "type": "AXE_HEAD_SCHEMATIC",
+  "name": "battle_axe_head-schematic",
+  "parent": "axe_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "AXE_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 4
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "context": "ADDITION",
+        "value": 50
+      },
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 3.5
+      },
+      {
+        "id": "sneaking-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_sneaking": true
+            }
+          }
+        }
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.25
+      },
+      {
+        "id": "schematic-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.25
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.25
+      },
+      {
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 3
+      },
+      {
+        "id": "battleaxe-schematic-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.5
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 4,
+      "context": "LOCAL"
+    },
+    "better_compat_attribute_container": "bettercombat:heavy_axe",
+    "name_replacement": {
+      "from": "axe",
+      "to": "battle_axe"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "AXE_HEAD",
+  "models": [
+    {
+      "name": "tomahawk_blade",
+      "type": "GENERATE",
+      "template": "tomahawk_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:tomahawk_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "tomahawk_blade"
+    }
+  ]
+}

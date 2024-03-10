@@ -1,0 +1,53 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:kunai_blade.png"
+          ],
+          "template": "kunai_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:nunchucks_chain.png"
+          ],
+          "template": "nunchucks_handles.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:kunai_handle.png"
+          ],
+          "template": "kunai_rope.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:nunchucks_handles.png"
+          ],
+          "template": "nunchucks_grip.png"
+        }
+      ]
+    }
+  ]
+}

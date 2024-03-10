@@ -1,0 +1,71 @@
+{
+  "type": "SWORD_BLADE_SCHEMATIC",
+  "name": "katana_blade-schematic",
+  "parent": "sword_blade_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORD_BLADE",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "sword",
+      "to": "katana"
+    }
+  }
+}

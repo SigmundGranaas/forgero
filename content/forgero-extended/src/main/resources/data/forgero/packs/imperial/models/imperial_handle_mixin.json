@@ -1,0 +1,65 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:dagger_blade.png"
+          ],
+          "template": "dagger_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_handle_mastercrafted.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:spear_head.png"
+          ],
+          "template": "spear_handle_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_handle_reinforcement.png"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "type": "HOE_HEAD",
+  "models": [
+    {
+      "name": "cutter_mattock_head",
+      "type": "GENERATE",
+      "template": "cutter_mattock_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "pick_mattock_head_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "cutter_mattock_head_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:cutter_mattock_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "cutter_mattock_head"
+    }
+  ]
+}

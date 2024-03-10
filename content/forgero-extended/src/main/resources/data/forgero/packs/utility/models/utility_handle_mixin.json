@@ -1,0 +1,53 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:chisel_head.png"
+          ],
+          "template": "chisel_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "mattock_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "mattock_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:sickle_blade.png"
+          ],
+          "template": "sickle_handle.png"
+        }
+      ]
+    }
+  ]
+}

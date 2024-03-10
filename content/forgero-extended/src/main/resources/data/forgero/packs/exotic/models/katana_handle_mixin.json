@@ -1,0 +1,29 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:katana_blade.png"
+          ],
+          "template": "katana_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:katana_handle.png"
+          ],
+          "template": "katana_handle_grip.png"
+        }
+      ]
+    }
+  ]
+}

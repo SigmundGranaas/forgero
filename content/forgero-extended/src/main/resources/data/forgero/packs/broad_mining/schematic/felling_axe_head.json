@@ -1,0 +1,85 @@
+{
+  "type": "AXE_HEAD_SCHEMATIC",
+  "name": "felling_axe_head-schematic",
+  "parent": "axe_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "AXE_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 3
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:column",
+          "filter": "forgero:similar_block",
+          "depth": 1,
+          "height": 20
+        },
+        "hardness": {
+          "type": "forgero:hardness_composite"
+        },
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_logs"
+        }
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    }
+  }
+}

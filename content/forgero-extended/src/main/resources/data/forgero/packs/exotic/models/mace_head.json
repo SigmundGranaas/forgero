@@ -1,0 +1,31 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "mace_head",
+      "type": "GENERATE",
+      "template": "mace_head.png",
+      "palette": "HARD_TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:mace_head.png"
+          ],
+          "template": "mace_head_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:HARD_TOOL_MATERIAL",
+        "id:mace_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "mace_head"
+    }
+  ]
+}

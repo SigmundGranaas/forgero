@@ -1,0 +1,35 @@
+{
+  "type": "HOE_HEAD",
+  "models": [
+    {
+      "name": "pick_mattock_head",
+      "type": "GENERATE",
+      "template": "pick_mattock_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "pick_mattock_head_reinforcement",
+      "type": "GENERATE",
+      "template": "pick_mattock_head_reinforcement.png",
+      "palette": "MATERIAL",
+      "order": 30
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:pick_mattock_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "pick_mattock_head"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "pick_mattock_head_reinforcement"
+    }
+  ]
+}

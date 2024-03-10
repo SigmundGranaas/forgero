@@ -1,0 +1,51 @@
+{
+  "type": "SWORD_BLADE_SCHEMATIC",
+  "name": "knife_blade-schematic",
+  "parent": "sword_blade_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORD_BLADE",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+
+    ]
+  },
+  "properties": {
+    "attributes": [
+
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    }
+  }
+}
