@@ -120,7 +120,7 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.35
+            "value": 0.15
           },
           {
             "id": "hard_plant-draw_speed-offensive-upgrade",
