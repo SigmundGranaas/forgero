@@ -86,12 +86,32 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 		HandlerBuilderRegistry.register(UseHandler.KEY, MountProjectileHandler.TYPE, MountProjectileHandler.BUILDER);
 
 		var bows = List.of(DRAW_POWER, DRAW_SPEED, ACCURACY, Weight.KEY, Durability.KEY);
-		TooltipAttributeRegistry.filterBuilder().type(Type.BOW).attributes(bows).register();
-		TooltipAttributeRegistry.filterBuilder().type(Type.BOW_LIMB).attributes(bows).register();
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.BOW)
+				.attributes(bows)
+				.register();
+
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.BOW_LIMB)
+				.attributes(bows)
+				.register();
 
 		var arrows = List.of(AttackDamage.KEY, ACCURACY, Weight.KEY);
-		TooltipAttributeRegistry.filterBuilder().type(Type.ARROW_HEAD).attributes(bows).register();
-		TooltipAttributeRegistry.filterBuilder().type(Type.ARROW).attributes(arrows).register();
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.ARROW_HEAD)
+				.attributes(bows)
+				.register();
+
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.ARROW)
+				.attributes(arrows)
+				.register();
+
+		var materials = List.of(DRAW_POWER, DRAW_SPEED, ACCURACY);
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.MATERIAL)
+				.attributes(materials)
+				.register();
 
 		modificationBuilder()
 				.attributeKey(DRAW_SPEED)
