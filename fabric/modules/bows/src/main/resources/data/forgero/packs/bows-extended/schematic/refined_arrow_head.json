@@ -1,6 +1,5 @@
 {
   "type": "ARROW_HEAD_SCHEMATIC",
-  "resource_type": "DEFAULT",
   "name": "refined_arrow_head-schematic",
   "container": {
     "type": "CREATE",

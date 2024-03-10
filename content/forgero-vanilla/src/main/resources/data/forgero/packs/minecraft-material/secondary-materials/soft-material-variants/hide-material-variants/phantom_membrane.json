@@ -2,7 +2,6 @@
   "type": "HIDE",
   "name": "phantom_membrane",
   "parent": "hide_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "HOST",
     "id": "minecraft:phantom_membrane"
