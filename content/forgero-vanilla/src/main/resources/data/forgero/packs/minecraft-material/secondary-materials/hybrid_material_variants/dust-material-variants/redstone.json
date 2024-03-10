@@ -131,8 +131,8 @@
     "features": [
       {
         "type": "forgero:emissive",
-        "title": "forgero.feature.emissive",
-        "description": "forgero.feature.emissive.description"
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
       }
     ]
   },
