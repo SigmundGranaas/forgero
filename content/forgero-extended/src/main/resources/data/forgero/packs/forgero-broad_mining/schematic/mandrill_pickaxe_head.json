@@ -9,21 +9,6 @@
   "construct": {
     "type": "PICKAXE_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 3
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -55,65 +40,51 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "refined-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.3
+          },
+          {
+            "id": "refined-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.3
+          },
+          {
+            "id": "refined-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.3
+          },
+          {
+            "id": "refined-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.3
+          }
+        ]
+      }
+    ],
     "attributes": [
       {
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "context": "LOCAL",
+        "category": "LOCAL",
         "operation": "ADDITION",
         "value": 50
-      },
-      {
-        "id": "schematic-rarity-composite",
-        "type": "RARITY",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.25
-      },
-      {
-        "id": "schematic-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.85
-      },
-      {
-        "id": "schematic-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1
-      }
-    ],
-    "features": [
-      {
-        "type": "minecraft:block_breaking",
-        "selector": {
-          "type": "forgero:radius",
-          "filter": [
-            "forgero:can_mine",
-            {
-              "type": "minecraft:block",
-              "tag": "forgero:vein_mining_ores"
-            }
-          ],
-          "depth": 1
-        },
-        "speed": "forgero:all",
-        "predicate": {
-          "type": "minecraft:block",
-          "tag": "forgero:vein_mining_ores"
-        },
-        "title": "feature.forgero.vein_mining.title",
-        "description": "feature.forgero.ore_vein_mining.description"
       }
     ]
   },
   "custom_data": {
-    "ingredient_count": {
-      "value": 3,
-      "context": "LOCAL"
+    "ingredient_count": "3",
+    "name_replacement": {
+      "from": "pickaxe",
+      "to": "mandrill_pickaxe"
     }
   }
 }

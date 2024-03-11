@@ -45,7 +45,7 @@
       "type": "GENERATE",
       "palette": "MATERIAL",
       "template": "handle_grip.png",
-      "order": 25,
+      "order": 18,
       "variants": [
         {
           "target": [

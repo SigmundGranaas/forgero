@@ -83,6 +83,10 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "2"
+    "ingredient_count": "2",
+    "name_replacement": {
+      "from": "shovel",
+      "to": "spade"
+    }
   }
 }

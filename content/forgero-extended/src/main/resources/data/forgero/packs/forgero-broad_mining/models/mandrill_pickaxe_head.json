@@ -10,8 +10,6 @@
     },
     {
       "name": "pickaxe_head_material",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
       "variants": [
         {
           "target": [

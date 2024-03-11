@@ -7,33 +7,33 @@
         {
           "target": [
             "type:HOE",
-            "model:chisel_head.png"
+            "model:sickle_blade.png"
           ],
-          "template": "chisel_handle.png"
+          "template": "sickle_handle.png"
         }
       ]
     },
     {
-      "name": "handle",
+      "name": "refined_handle",
       "variants": [
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:sickle_blade.png"
           ],
-          "template": "mattock_handle.png"
+          "template": "sickle_refined_handle.png"
         }
       ]
     },
     {
-      "name": "handle",
+      "name": "mastercrafted_handle",
       "variants": [
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:sickle_blade.png"
           ],
-          "template": "mattock_handle.png"
+          "template": "sickle_mastercrafted_handle.png"
         }
       ]
     }

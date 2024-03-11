@@ -9,11 +9,15 @@
       "order": 20
     },
     {
-      "name": "pick_mattock_head_reinforcement",
-      "type": "GENERATE",
-      "template": "pick_mattock_head_reinforcement.png",
-      "palette": "MATERIAL",
-      "order": 30
+      "name": "hoe_head_material",
+      "variants": [
+        {
+          "target": [
+            "model:pick_mattock_head.png"
+          ],
+          "template": "pick_mattock_head_reinforcement.png"
+        }
+      ]
     },
     {
       "target": [

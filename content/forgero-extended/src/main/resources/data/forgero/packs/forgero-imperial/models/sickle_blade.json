@@ -20,13 +20,23 @@
       ]
     },
     {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:sickle_blade.png"
+          ],
+          "template": "sickle_blade.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:sickle_blade-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "sickle_blade"
-
     }
   ]
 }

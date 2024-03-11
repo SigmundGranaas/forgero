@@ -1,13 +1,13 @@
 {
-  "type": "PICKAXE_HEAD_SCHEMATIC",
-  "name": "hammer_head-schematic",
-  "parent": "pickaxe_head_base",
+  "type": "HOE_HEAD_SCHEMATIC",
+  "name": "sickle_blade-schematic",
+  "parent": "hoe_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "PICKAXE_HEAD",
+    "type": "HOE_HEAD",
     "target": "CREATE",
     "components": [
       {
@@ -74,17 +74,19 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "category": "LOCAL",
         "operation": "ADDITION",
+        "category": "LOCAL",
         "value": 50
       }
+    ],
+    "active": [
     ]
   },
   "custom_data": {
-    "ingredient_count": "3",
+    "ingredient_count": "2",
     "name_replacement": {
-      "from": "pickaxe",
-      "to": "hammer"
+      "from": "hoe",
+      "to": "sickle"
     }
   }
 }
