@@ -37,7 +37,7 @@ import net.minecraft.util.math.BlockPos;
  *     "depth": 1
  *   },
  *   "hardness": {
- *     "type": "forgero:hardness_composite"
+ *     "type": "forgero:all"
  *   },
  *   "predicate": {
  *     "type": "minecraft:block",
@@ -144,7 +144,7 @@ import net.minecraft.util.math.BlockPos;
  * <p>This optional parameter calculates the hardness of the blocks being broken.</p>
  * <pre>
  * "hardness": {
- *   "type": "forgero:hardness_composite"
+ *   "type": "forgero:all"
  * }
  * </pre>
  *

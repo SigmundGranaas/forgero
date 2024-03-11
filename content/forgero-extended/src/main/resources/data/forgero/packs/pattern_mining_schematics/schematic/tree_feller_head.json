@@ -81,7 +81,7 @@
           "height": 20
         },
         "hardness": {
-          "type": "forgero:hardness_composite"
+          "type": "forgero:all"
         },
         "predicate": {
           "type": "minecraft:block",
