@@ -77,7 +77,7 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 		var props = new ArrayList<>(super.compositeProperties(target, context));
 
 		var partProps = parts().stream()
-				.flatMap(part -> part.applyProperty(target, context).stream().map(part::applySource))
+				.flatMap(part -> part.getProperties().stream().map(part::applySource))
 				.toList();
 
 		props.addAll(propertyProcessor.process(partProps, target, context));
