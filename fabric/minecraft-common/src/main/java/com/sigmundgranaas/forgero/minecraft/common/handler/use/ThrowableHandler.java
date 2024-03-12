@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -60,7 +61,7 @@ public class ThrowableHandler implements StopHandler {
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (!world.isClient) {
 			float weight = StateService.INSTANCE.convert(stack)
 					.map(container -> ComputedAttribute.of(container, Weight.KEY))
@@ -86,7 +87,7 @@ public class ThrowableHandler implements StopHandler {
 			world.spawnEntity(throwableItem);
 		}
 	}
-	
+
 	public record ThrowableConfig(float velocityMultiplier, float instability, ThrowableItem.SpinType spinType) {
 
 		public static ThrowableConfig fromJson(JsonObject json) {

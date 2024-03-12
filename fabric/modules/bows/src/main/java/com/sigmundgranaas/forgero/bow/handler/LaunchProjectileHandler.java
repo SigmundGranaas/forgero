@@ -62,7 +62,7 @@ public class LaunchProjectileHandler implements StopHandler {
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (!(user instanceof PlayerEntity playerEntity)) {
 			return;
 		}

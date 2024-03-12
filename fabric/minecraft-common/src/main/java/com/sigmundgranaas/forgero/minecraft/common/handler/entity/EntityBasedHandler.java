@@ -53,12 +53,12 @@ public interface EntityBasedHandler extends BlockTargetHandler, EntityTargetHand
 	}
 
 	@Override
-	default void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	default void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		handle(user);
 	}
 
 	@Override
-	default TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	default TypedActionResult<ItemStack> onUse(World world, PlayerEntity user, Hand hand) {
 		handle(user);
 		return UseHandler.DEFAULT_ITEM_USE_ACTIONS.use(world, user, hand);
 	}

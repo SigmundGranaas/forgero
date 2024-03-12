@@ -237,13 +237,13 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 	}
 
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	public TypedActionResult<ItemStack> onUse(World world, PlayerEntity user, Hand hand) {
 		if (onUse.isEmpty()) {
 			return TypedActionResult.pass(user.getStackInHand(hand));
 		}
 		TypedActionResult<ItemStack> finalResult = TypedActionResult.pass(user.getStackInHand(hand));
-		for (UseHandler handler : onUse) {
-			var result = handler.use(world, user, hand);
+		for (com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler handler : onUse) {
+			TypedActionResult<ItemStack> result = handler.onUse(world, user, hand);
 			if (result.getResult() == ActionResult.FAIL) {
 				finalResult = result;
 				break;
@@ -283,8 +283,8 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		onStoppedUsing.forEach(sub -> sub.onStoppedUsing(stack, world, user, remainingUseTicks));
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		onStoppedUsing.forEach(sub -> sub.stoppedUsing(stack, world, user, remainingUseTicks));
 	}
 
 	@Override

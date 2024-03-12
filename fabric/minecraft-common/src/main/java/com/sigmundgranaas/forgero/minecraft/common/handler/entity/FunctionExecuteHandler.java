@@ -138,7 +138,7 @@ public class FunctionExecuteHandler implements EntityTargetHandler, EntityBasedH
 	}
 
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	public TypedActionResult<ItemStack> onUse(World world, PlayerEntity user, Hand hand) {
 		onHit(user, world, user);
 		return TypedActionResult.success(user.getStackInHand(hand));
 	}
@@ -158,7 +158,7 @@ public class FunctionExecuteHandler implements EntityTargetHandler, EntityBasedH
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (world instanceof ServerWorld serverWorld) {
 			execute(user, serverWorld, user.getPos());
 		}
