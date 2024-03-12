@@ -127,13 +127,13 @@ public class SoundHandler implements EntityBasedHandler, BlockTargetHandler, Ent
 	}
 
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	public TypedActionResult<ItemStack> onUse(World world, PlayerEntity user, Hand hand) {
 		playSound(user);
 		return TypedActionResult.success(user.getStackInHand(hand));
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		playSound(user);
 	}
 }

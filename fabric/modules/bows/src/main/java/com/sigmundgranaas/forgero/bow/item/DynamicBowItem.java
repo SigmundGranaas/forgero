@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.bow.item;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
@@ -19,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class DynamicBowItem extends BowItem implements ToolStateItem {
@@ -64,46 +62,18 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 		return DEFAULT.get();
 	}
 
-	public Predicate<ItemStack> getProjectiles() {
-		return BOW_PROJECTILES;
-	}
-
 	public int getRange() {
 		return RANGE;
 	}
 
 	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return dynamicGetUseAction(stack);
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		return dynamicUse(world, user, hand);
 	}
 
-	@Override
-	public int getMaxUseTime(ItemStack stack) {
-		return dynamicGetMaxUseTime(stack);
-	}
-
-	@Override
-	public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-		dynamicUsageTick(world, user, stack, remainingUseTicks);
-	}
-
-	@Override
-	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-		return dynamicFinishUsing(stack, world, user);
-	}
 
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		dynamicOnStoppedUsing(stack, world, user, remainingUseTicks);
-	}
-
-	@Override
-	public boolean isUsedOnRelease(ItemStack stack) {
-		return dynamicIsUsedOnRelease(stack);
-	}
-
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		return dynamicUse(world, user, hand);
 	}
 }

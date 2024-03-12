@@ -23,7 +23,7 @@ public class MountProjectileHandler implements UseHandler {
 	public static final String TYPE = "forgero:mount_projectile";
 	public static final JsonBuilder<MountProjectileHandler> BUILDER = HandlerBuilder.fromObject(MountProjectileHandler.class, (json) -> new MountProjectileHandler());
 
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	public TypedActionResult<ItemStack> onUse(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
 		boolean bl = !user.getProjectileType(itemStack).isEmpty();
 		if (!user.getAbilities().creativeMode && !bl) {

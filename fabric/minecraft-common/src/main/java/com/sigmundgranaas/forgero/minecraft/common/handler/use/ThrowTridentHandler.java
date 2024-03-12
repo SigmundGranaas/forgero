@@ -21,7 +21,7 @@ public class ThrowTridentHandler implements StopHandler {
 	public static final JsonBuilder<ThrowTridentHandler> BUILDER = HandlerBuilder.fromObject(ThrowTridentHandler.class, (json) -> new ThrowTridentHandler());
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (!world.isClient) {
 			TridentEntity tridentEntity = new TridentEntity(world, user, stack.copy());
 			tridentEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 2.5f, 1.0f);
