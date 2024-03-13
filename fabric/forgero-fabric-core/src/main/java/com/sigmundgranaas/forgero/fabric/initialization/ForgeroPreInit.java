@@ -28,7 +28,6 @@ import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
-import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
@@ -111,7 +110,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		registerHandlerBuilders();
 		registerItemConverters();
 	}
-
 
 	private void registerItemConverters() {
 		var settingRegistry = ItemRegistries.SETTING_PROCESSOR;

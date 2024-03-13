@@ -5,6 +5,8 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstan
 
 import java.util.List;
 
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.minecraft.common.customdata.CustomNameVisitor;
@@ -31,7 +33,7 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 	private final StateProvider DEFAULT;
 
 	public DynamicBowItem(Settings settings, StateProvider defaultState, StateService service) {
-		super(settings);
+		super(settings.maxDamage(ComputedAttribute.apply(defaultState.get(), Durability.KEY).intValue()));
 		this.DEFAULT = defaultState;
 	}
 
