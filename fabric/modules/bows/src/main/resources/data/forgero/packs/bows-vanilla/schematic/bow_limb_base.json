@@ -49,9 +49,14 @@
       },
       {
         "context": "COMPOSITE",
-        "operation": "ADDITION",
+        "operation": "FORCE",
         "order": "BASE",
         "attributes": [
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1
+          }
         ]
       }
     ],
