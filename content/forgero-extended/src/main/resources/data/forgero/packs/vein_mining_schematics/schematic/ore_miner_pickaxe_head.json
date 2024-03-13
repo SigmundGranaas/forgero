@@ -83,7 +83,7 @@
               "tag": "forgero:vein_mining_ores"
             }
           ],
-          "depth": 1
+          "radius": 10
         },
         "speed": "forgero:all",
         "predicate": {

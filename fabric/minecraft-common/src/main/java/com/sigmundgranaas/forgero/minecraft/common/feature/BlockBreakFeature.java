@@ -34,7 +34,7 @@ import net.minecraft.util.math.BlockPos;
  *     "filter": [
  *       "forgero:same_block"
  *     ],
- *     "depth": 1
+ *     "radius": 1
  *   },
  *   "hardness": {
  *     "type": "forgero:all"

@@ -96,7 +96,7 @@
         "filter": {
           "type": "forgero:same_block"
         },
-        "depth": 3
+        "radius": 3
       },
       "speed": {
         "type": "forgero:all"
