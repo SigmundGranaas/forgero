@@ -63,7 +63,7 @@
           {
             "id": "schematic-rarity-composite",
             "type": "RARITY",
-            "value": 1
+            "value": 1.3
           },
           {
             "id": "schematic-attack_damage-composite",
