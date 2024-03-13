@@ -50,7 +50,7 @@
           {
             "id": "arrow-accuracy",
             "type": "forgero:accuracy",
-            "value": 25
+            "value": 30
           }
         ]
       },
@@ -86,6 +86,13 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 20
+          },
+          {
+            "id": "hide-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.05
           }
         ]
       }

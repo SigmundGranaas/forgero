@@ -85,7 +85,7 @@ public class ConsumeStackHandler implements AfterUseHandler, StopHandler {
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (count > 0) {
 			stack.decrement(count);
 		} else {

@@ -70,7 +70,7 @@ public class ConsumeUpgradeHandler implements AfterUseHandler, StopHandler {
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		var state = StateService.INSTANCE.convert(stack);
 		if (state.isPresent() && state.get() instanceof Composite composite) {
 			var newState = composite.removeUpgrade(identifier);
