@@ -76,7 +76,7 @@
         "type": "minecraft:block_breaking",
         "selection": {
           "type": "forgero:radius",
-          "depth": 3,
+          "radius": 3,
           "filter": {
             "type": "minecraft:block",
             "tag": "forgero:plants"
