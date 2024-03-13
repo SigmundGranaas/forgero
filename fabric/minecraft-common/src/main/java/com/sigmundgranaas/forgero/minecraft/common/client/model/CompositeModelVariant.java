@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -17,21 +16,25 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
-import com.sigmundgranaas.forgero.core.model.*;
-import com.sigmundgranaas.forgero.core.texture.V2.Texture;
+import com.sigmundgranaas.forgero.core.model.CompositeModelTemplate;
+import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.model.ModelResult;
+import com.sigmundgranaas.forgero.core.model.ModelTemplate;
+import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
+import com.sigmundgranaas.forgero.core.model.TextureBasedModel;
+import com.sigmundgranaas.forgero.core.model.TextureModel;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.MutableMatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.client.render.model.Baker;
-
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
@@ -39,14 +42,12 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.*;
 
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public static final BakedModel EMPTY = new EmptyBakedModel();
 	private static final Set<StackContextKey> currentlyBuilding = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
 	private final LoadingCache<StackContextKey, BakedModelResult> cache;
 	private final LoadingCache<String, BakedModelResult> keyModelsCache;
 	private final Map<Item, BakedModel> defaultModels = new ConcurrentHashMap<>();
@@ -60,17 +61,18 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		this.registry = modelRegistry;
 		this.stateService = stateService;
 		this.cache = CacheBuilder.newBuilder()
-				.expireAfterAccess(Duration.ofMinutes(1))
+				.maximumSize(100)
 				.build(new CacheLoader<>() {
 					@Override
 					public @NotNull
 					BakedModelResult load(@NotNull StackContextKey pair) {
-						return converter(pair.stack(), MatchContext.mutable(pair.context())).flatMap((model) -> convertModel(model)).orElse(new BakedModelResult(new ModelResult(), EMPTY));
+						return converter(pair.stack(), MatchContext.mutable(pair.context()))
+								.flatMap((model) -> convertModel(model))
+								.orElse(new BakedModelResult(new ModelResult(), EMPTY));
 					}
 				});
 
 		this.keyModelsCache = CacheBuilder.newBuilder()
-				.softValues()
 				.maximumSize(100)
 				.build(new CacheLoader<>() {
 					@Override
@@ -145,12 +147,21 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			triggerAsyncRebuild(key, baked);
 		}
 
-		if (stack.hasNbt() && stack.getNbt().contains("ModelCacheKey")) {
-			if (keyModelsCache.asMap().containsKey(stack.getNbt().getString("ModelCacheKey"))) {
-				return keyModelsCache.getUnchecked(stack.getNbt().getString("ModelCacheKey")).model();
+		if (isCacheAble(stack)) {
+			BakedModelResult mod = keyModelsCache.getIfPresent(getCacheKeyFromStack(stack));
+			if (mod != null && mod.result().isValid(Matchable.DEFAULT_TRUE, context)) {
+				return mod.model();
+			} else {
+				Optional<ModelResult> computed = converter(stack, context);
+				if (computed.isPresent()) {
+					Optional<BakedModelResult> converted = computed.flatMap(this::convertModel);
+					if (converted.isPresent()) {
+						BakedModelResult convertedModel = converted.get();
+						keyModelsCache.put(getCacheKeyFromStack(stack), convertedModel);
+						return convertedModel.model();
+					}
+				}
 			}
-		} else if (stack.hasNbt()) {
-			stack.getNbt().putString("ModelCacheKey", UUID.randomUUID().toString());
 		}
 		return defaultModels.getOrDefault(stack.getItem(), dynamicModel);
 	}
@@ -168,13 +179,21 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 				return currentModel;
 			}
 		}).thenAccept((m) -> {
-			if (key.stack().hasNbt() && key.stack().getNbt().contains("ModelCacheKey")) {
-				String cacheKey = key.stack().getNbt().getString("ModelCacheKey");
+			if (isCacheAble(key.stack())) {
+				String cacheKey = getCacheKeyFromStack(key.stack());
 				keyModelsCache.put(cacheKey, m);
 			}
 			cache.put(key, m);
 			currentlyBuilding.remove(key);  // Model has been built, remove from tracking set
 		});
+	}
+
+	private String getCacheKeyFromStack(ItemStack stack) {
+		return String.valueOf(stack.hashCode());
+	}
+
+	private boolean isCacheAble(ItemStack stack) {
+		return stack.hasNbt();
 	}
 
 	private Optional<BakedModelResult> convertModel(ModelResult template) {
@@ -214,7 +233,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 			textureCollector(palette, accumulator);
 		} else if (template instanceof CompositeModelTemplate composite) {
 			textureCollector(composite, accumulator);
-		} else if(template instanceof TextureModel textureModel){
+		} else if (template instanceof TextureModel textureModel) {
 			textureCollector(textureModel, accumulator);
 		}
 	}
@@ -232,6 +251,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
 
 	}
+
 	private void textureCollector(TextureModel template, List<ModelTemplate> accumulator) {
 		accumulator.add(template);
 		template.children().forEach(child -> textureCollector(child, accumulator));
@@ -259,7 +279,7 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 										.map(model -> Pair.of(state, model)))
 								.thenApply(optionalPair -> optionalPair
 										.flatMap(pair -> stateService.convert(pair.getKey())
-										.map(stack -> Pair.of(stack.getItem(), pair.getValue()))))
+												.map(stack -> Pair.of(stack.getItem(), pair.getValue()))))
 								.thenAccept(optionalPair -> optionalPair
 										.ifPresent(pair -> defaultModels.put(pair.getKey(), pair.getValue().model())));
 					});
