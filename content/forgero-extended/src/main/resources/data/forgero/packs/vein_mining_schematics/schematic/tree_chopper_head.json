@@ -79,8 +79,8 @@
           "filter": "forgero:similar_block",
           "radius": 2
         },
-        "hardness": {
-          "type": "forgero:every_block"
+        "speed": {
+          "type": "forgero:all"
         },
         "predicate": {
           "type": "minecraft:block",

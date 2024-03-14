@@ -80,7 +80,7 @@
           "depth": 1,
           "height": 20
         },
-        "hardness": {
+        "speed": {
           "type": "forgero:all"
         },
         "predicate": {

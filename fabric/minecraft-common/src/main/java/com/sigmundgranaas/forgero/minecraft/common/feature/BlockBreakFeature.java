@@ -36,7 +36,7 @@ import net.minecraft.util.math.BlockPos;
  *     ],
  *     "radius": 1
  *   },
- *   "hardness": {
+ *   "speed": {
  *     "type": "forgero:all"
  *   },
  *   "predicate": {
@@ -143,7 +143,7 @@ import net.minecraft.util.math.BlockPos;
  * <h3>Hardness Calculation:</h3>
  * <p>This optional parameter calculates the hardness of the blocks being broken.</p>
  * <pre>
- * "hardness": {
+ * "speed": {
  *   "type": "forgero:all"
  * }
  * </pre>
