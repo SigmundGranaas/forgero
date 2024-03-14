@@ -82,7 +82,9 @@
           ],
           "filter": "forgero:can_mine"
         },
-        "hardness": "forgero:all",
+        "speed": {
+          "type": "forgero:all"
+        },
         "predicate": {
           "type": "forgero:can_mine"
         },
