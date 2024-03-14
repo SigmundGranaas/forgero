@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PredicateFactory {
 	private static final List<PredicateBuilder> builders = new ArrayList<>();
-	private static final List<Codec<Matchable>> codecs = new ArrayList<>();
+	private static final List<Codec<? extends Matchable>> codecs = new ArrayList<>();
 
 	private static final LoadingCache<JsonElement, Matchable> cache = CacheBuilder.newBuilder()
 			.maximumSize(1000)
@@ -53,7 +53,7 @@ public class PredicateFactory {
 		builders.add(builder);
 	}
 
-	public static void register(Codec<Matchable> builder) {
+	public static void register(Codec<? extends Matchable> builder) {
 		codecs.add(builder);
 	}
 
