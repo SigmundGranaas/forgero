@@ -1,6 +1,6 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
-  "name": "rapier_sword_guard-schematic",
+  "name": "basket_hilt_sword_guard-schematic",
   "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",

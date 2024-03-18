@@ -1,13 +1,13 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
-  "name": "mace_head-schematic",
-  "parent": "sword_blade_base",
+  "type": "SWORD_GUARD_SCHEMATIC",
+  "name": "cutlass_sword_guard-schematic",
+  "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "SWORD_GUARD",
     "target": "CREATE",
     "recipes": [
       {
@@ -17,7 +17,7 @@
             "id": "this"
           },
           {
-            "type": "METAL",
+            "type": "WOOD",
             "unique": true,
             "amount": 2
           }
@@ -29,7 +29,7 @@
         "id": "this"
       },
       {
-        "type": "METAL",
+        "type": "WOOD",
         "unique": true
       }
     ],
@@ -55,17 +55,14 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+
+    ],
     "attributes": [
+
     ]
   },
   "custom_data": {
-    "ingredient_count": {
-      "value": 2,
-      "context": "LOCAL"
-    },
-    "name_replacement": {
-      "from": "sword",
-      "to": "mace"
-    }
+    "ingredient_count": "2"
   }
 }

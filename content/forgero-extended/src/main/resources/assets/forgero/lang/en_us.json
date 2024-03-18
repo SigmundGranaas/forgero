@@ -33,7 +33,6 @@
   "item.forgero.mastercrafted_sword_blade": "Mastercrafted Sword Blade",
   "item.forgero.serrated_sword_blade": "Serrated Sword Blade",
   "item.forgero.scimitar_blade": "Scimitar Blade",
-  "item.forgero.rapier_blade": "Rapier Blade",
   "item.forgero.knife_blade": "Knife Blade",
   "item.forgero.sacrificial_dagger_blade": "Sacrificial Dagger Blade",
   "item.forgero.slanted_sword_blade": "Slanted Sword Blade",
@@ -122,6 +121,16 @@
   "item.forgero.sickle_blade": "Sickle Blade",
   "item.forgero.sickle": "Sickle",
   "item.forgero.spade_head": "Spade Head",
-  "item.forgero.spade": "Spade"
+  "item.forgero.spade": "Spade",
+  "item.forgero.club_head": "Club Head",
+  "item.forgero.club": "Club",
+  "item.forgero.cutlass_blade": "Cutlass Blade",
+  "item.forgero.cutlass": "Cutlass",
+  "item.forgero.cutlass_sword_guard": "Cutlass Sword Guard",
+  "item.forgero.mace_head": "Mace Head",
+  "item.forgero.mace": "Mace",
+  "item.forgero.rapier": "Rapier",
+  "item.forgero.rapier_blade": "Rapier Blade",
+  "item.forgero.basket_hilt_sword_guard": "Basket Hilt Sword Guard"
 }
 

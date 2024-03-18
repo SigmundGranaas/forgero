@@ -78,6 +78,28 @@
         "operation": "ADDITION",
         "value": 50
       }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [
+            "XXX",
+            "XXX",
+            "XXX"
+          ],
+          "filter": "forgero:can_mine"
+        },
+        "speed": {
+          "type": "forgero:all"
+        },
+        "predicate": {
+          "type": "forgero:can_mine"
+        },
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.2x1-description"
+      }
     ]
   },
   "custom_data": {

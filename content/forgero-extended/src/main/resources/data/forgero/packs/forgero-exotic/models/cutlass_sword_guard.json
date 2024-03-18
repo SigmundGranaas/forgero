@@ -1,0 +1,31 @@
+{
+  "type": "SWORD_GUARD",
+  "models": [
+    {
+      "name": "cutlass_sword_guard",
+      "template": "cutlass_sword_guard.png",
+      "type": "GENERATE",
+      "palette": "WOOD",
+      "order": 60
+    },
+    {
+      "name": "sword_guard_dye",
+      "variants": [
+        {
+          "target": [
+            "model:cutlass_sword_guard.png"
+          ],
+          "template": "cutlass_sword_guard.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:WOOD",
+        "id:cutlass_sword_guard-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "cutlass_sword_guard"
+    }
+  ]
+}

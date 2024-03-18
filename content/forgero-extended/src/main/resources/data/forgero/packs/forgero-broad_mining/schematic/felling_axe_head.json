@@ -78,6 +78,23 @@
         "operation": "ADDITION",
         "value": 50
       }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "filter": "forgero:similar_block",
+          "radius": 2
+        },
+        "speed": {
+          "type": "forgero:all"
+        },
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_logs"
+        }
+      }
     ]
   },
   "custom_data": {

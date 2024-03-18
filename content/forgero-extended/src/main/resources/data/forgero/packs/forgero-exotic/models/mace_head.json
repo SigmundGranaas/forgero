@@ -5,7 +5,7 @@
       "name": "mace_head",
       "type": "GENERATE",
       "template": "mace_head.png",
-      "palette": "HARD_TOOL_MATERIAL",
+      "palette": "METAL",
       "order": 20
     },
     {
@@ -20,8 +20,19 @@
       ]
     },
     {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mace_head.png"
+          ],
+          "template": "mace_head.png"
+        }
+      ]
+    },
+    {
       "target": [
-        "type:HARD_TOOL_MATERIAL",
+        "type:METAL",
         "id:mace_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",

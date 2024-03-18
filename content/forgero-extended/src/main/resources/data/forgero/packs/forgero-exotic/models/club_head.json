@@ -20,6 +20,17 @@
       ]
     },
     {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:club_head.png"
+          ],
+          "template": "club_head.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:WOOD",
         "id:club_head-schematic"
