@@ -8,15 +8,19 @@
   "authors": [
     "SigmundGranaas"
   ],
+  "mixins": [
+    "forgero-test.mixins.json"
+  ],
   "entrypoints": {
     "fabric-gametest": [
-      "com.sigmundgranaas.forgerofabric.gametest.RecipeTest",
-      "com.sigmundgranaas.forgerofabric.gametest.AssemblyStationTester",
-      "com.sigmundgranaas.forgerofabric.gametest.RepairKitTest",
-      "com.sigmundgranaas.forgerofabric.gametest.UpgradeTest",
-      "com.sigmundgranaas.forgerofabric.gametest.BlockSelectionTest",
-      "com.sigmundgranaas.forgerofabric.gametest.MiningLevelTest",
-      "com.sigmundgranaas.forgerofabric.gametest.AttributeApplicationTest"
+      "com.sigmundgranaas.forgero.fabric.gametest.RecipeTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.AssemblyStationTester",
+      "com.sigmundgranaas.forgero.fabric.gametest.RepairKitTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.UpgradeTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.MiningLevelTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.AttributeApplicationTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.ToolMiningTest"
     ]
   }
 }
