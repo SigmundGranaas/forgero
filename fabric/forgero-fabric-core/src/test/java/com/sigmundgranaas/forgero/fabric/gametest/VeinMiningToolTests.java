@@ -26,7 +26,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
-public class ToolMiningTest {
+public class VeinMiningToolTests {
 	// Ore miner heads
 	public static String VEIN_MINING_PICKAXE_HEAD = "forgero:netherite-ore_miner_pickaxe_head";
 	public static String STONE_VEIN_MINING_PICKAXE_HEAD = "forgero:stone-ore_miner_pickaxe_head";
