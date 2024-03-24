@@ -20,7 +20,8 @@
       "com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest",
       "com.sigmundgranaas.forgero.fabric.gametest.MiningLevelTest",
       "com.sigmundgranaas.forgero.fabric.gametest.AttributeApplicationTest",
-      "com.sigmundgranaas.forgero.fabric.gametest.VeinMiningToolTests"
+      "com.sigmundgranaas.forgero.fabric.gametest.VeinMiningToolTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.PatternMiningToolTests"
     ]
   }
 }

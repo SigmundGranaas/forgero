@@ -1,0 +1,83 @@
+package com.sigmundgranaas.forgero.fabric.gametest;
+
+import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
+import static com.sigmundgranaas.forgero.testutil.Items.NETHERITE_PATH_MINING_PICKAXE;
+import static net.minecraft.block.Blocks.COAL_ORE;
+
+import java.util.Set;
+
+import com.sigmundgranaas.forgero.fabric.gametest.cases.BlockBreakingCase;
+import com.sigmundgranaas.forgero.fabric.gametest.helper.WorldBlockHelper;
+import com.sigmundgranaas.forgero.testutil.PlayerActionHelper;
+import com.sigmundgranaas.forgero.testutil.PlayerFactory;
+import com.sigmundgranaas.forgero.testutil.TestPos;
+import com.sigmundgranaas.forgero.testutil.TestPosCollection;
+
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.test.GameTest;
+import net.minecraft.test.TestContext;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.GameMode;
+
+public class PatternMiningToolTests {
+	public static BlockPos RELATIVE_STAR_X7_CENTER = new BlockPos(3, 4, 3);
+
+	@GameTest(templateName = "forgero:coal_3x3_east", batchId = "tool_mining_test")
+	public void test_path_mining_pickaxe_head_creative(TestContext context) {
+		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER, context);
+		TestPosCollection validationSquare = TestPosCollection.of(Set.of(center.relative(), center.relative().down()), context);
+		ServerPlayerEntity player = PlayerFactory.builder(context)
+				.gameMode(GameMode.CREATIVE)
+				.direction(Direction.EAST)
+				.stack(NETHERITE_PATH_MINING_PICKAXE)
+				.pos(center.absolute())
+				.build()
+				.createPlayer();
+
+		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
+		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
+		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
+		TestPosCollection box = blockHelper.testCollection();
+
+		// Break the cluster of coal blocks using pattern mining
+		blockBreakingCase.assertBreakSelection(validationSquare, center);
+
+		blockBreakingCase.assertBlockCount(7, box, COAL_ORE);
+
+		context.complete();
+	}
+
+	@GameTest(templateName = "forgero:coal_3x3_east", batchId = "tool_mining_test")
+	public void test_path_mining_pickaxe_head_survival(TestContext context) {
+		int TIME_TO_BREAK_COAL = 50;
+		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER, context);
+		TestPos singleCoal = TestPos.of(RELATIVE_STAR_X7_CENTER.east(), context);
+		context.setBlockState(singleCoal.relative(), COAL_ORE);
+		TestPosCollection validationSquare = TestPosCollection.of(Set.of(center.relative(), center.relative().down()), context);
+
+		ServerPlayerEntity player = PlayerFactory.builder(context)
+				.gameMode(GameMode.SURVIVAL)
+				.direction(Direction.EAST)
+				.stack(NETHERITE_PATH_MINING_PICKAXE)
+				.pos(center.absolute())
+				.build()
+				.createPlayer();
+
+		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
+		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
+		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
+		TestPosCollection box = blockHelper.testCollection();
+
+		// Break the cluster of coal blocks using pattern mining
+		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_COAL * 2);
+
+		blockBreakingCase.assertBlockCount(8, box, COAL_ORE);
+
+		blockBreakingCase.assertBreakBlock(singleCoal, TIME_TO_BREAK_COAL);
+
+		assertDamage(player.getMainHandStack(), 3);
+
+		context.complete();
+	}
+}

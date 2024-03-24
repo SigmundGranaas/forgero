@@ -80,13 +80,15 @@
           "depth": 1,
           "height": 20
         },
-        "hardness": {
+        "speed": {
           "type": "forgero:all"
         },
         "predicate": {
           "type": "minecraft:block",
           "tag": "forgero:vein_mining_logs"
-        }
+        },
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.tree_felling"
       }
     ]
   },

@@ -13,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
 
 
@@ -25,12 +26,13 @@ public class PlayerFactory implements ContextSupplier {
 	private Supplier<ItemStack> stack = () -> ItemStack.EMPTY;
 	private Hand stackHand = Hand.MAIN_HAND;
 	private BlockPos pos = new BlockPos(0, 0, 0);
+	private Direction direction = Direction.NORTH;
 
 	public static PlayerBuilder builder(TestContext context) {
 		return new PlayerBuilder().ctxSupplier(() -> context);
 	}
 
-	PlayerFactory(Supplier<TestContext> ctxSupplier, String playerName, UUID uuid, GameMode gameMode, Supplier<ItemStack> stack, Hand stackHand, BlockPos pos) {
+	PlayerFactory(Supplier<TestContext> ctxSupplier, String playerName, UUID uuid, GameMode gameMode, Supplier<ItemStack> stack, Hand stackHand, BlockPos pos, Direction lookDirection) {
 		this.ctxSupplier = ctxSupplier;
 		this.playerName = playerName;
 		this.uuid = uuid;
@@ -38,6 +40,7 @@ public class PlayerFactory implements ContextSupplier {
 		this.stack = stack;
 		this.stackHand = stackHand;
 		this.pos = pos;
+		this.direction = lookDirection;
 	}
 
 	private static String $default$playerName() {
@@ -64,6 +67,11 @@ public class PlayerFactory implements ContextSupplier {
 		return new BlockPos(0, 0, 0);
 	}
 
+	private static Direction $default$direction() {
+		return Direction.NORTH;
+	}
+
+
 	public static PlayerBuilder builder() {
 		return new PlayerBuilder();
 	}
@@ -81,9 +89,9 @@ public class PlayerFactory implements ContextSupplier {
 		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
 		entity.changeGameMode(gameMode);
 		entity.setStackInHand(stackHand, stack.get());
+		entity.setYaw(direction.asRotation());
 		return entity;
 	}
-
 
 	public static class PlayerBuilder {
 		private Supplier<TestContext> ctxSupplier;
@@ -99,6 +107,8 @@ public class PlayerFactory implements ContextSupplier {
 		private boolean stackHand$set;
 		private BlockPos pos$value;
 		private boolean pos$set;
+		private Direction direction$value;
+		private boolean direction$set;
 
 		PlayerBuilder() {
 		}
@@ -144,6 +154,12 @@ public class PlayerFactory implements ContextSupplier {
 			return this;
 		}
 
+		public PlayerBuilder direction(Direction dir) {
+			this.direction$value = dir;
+			this.direction$set = true;
+			return this;
+		}
+
 		public PlayerFactory build() {
 			String playerName$value = this.playerName$value;
 			if (!this.playerName$set) {
@@ -169,7 +185,11 @@ public class PlayerFactory implements ContextSupplier {
 			if (!this.pos$set) {
 				pos$value = PlayerFactory.$default$pos();
 			}
-			return new PlayerFactory(this.ctxSupplier, playerName$value, uuid$value, gameMode$value, stack$value, stackHand$value, pos$value);
+			Direction direction$value = this.direction$value;
+			if (!this.direction$set) {
+				direction$value = PlayerFactory.$default$direction();
+			}
+			return new PlayerFactory(this.ctxSupplier, playerName$value, uuid$value, gameMode$value, stack$value, stackHand$value, pos$value, direction$value);
 		}
 
 		public String toString() {
