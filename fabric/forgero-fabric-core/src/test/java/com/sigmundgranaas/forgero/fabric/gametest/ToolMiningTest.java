@@ -13,20 +13,16 @@ import java.util.function.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.sigmundgranaas.forgero.fabric.gametest.cases.BlockBreakingCase;
 import com.sigmundgranaas.forgero.fabric.gametest.helper.WorldBlockHelper;
+import com.sigmundgranaas.forgero.minecraft.common.utils.BlockUtils;
 import com.sigmundgranaas.forgero.testutil.PlayerActionHelper;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
@@ -43,7 +39,10 @@ public class ToolMiningTest {
 	// Reaper heads
 	public static String NETHERITE_REAPER_HEAD = "forgero:netherite-reaper_head";
 
+	// Tree chopper heads
+	public static String TREE_CHOPPER_AXE_HEAD = "forgero:iron-tree_chopper_head";
 
+	// Handles
 	public static String OAK_HANDLE = "forgero:oak-handle";
 
 	// Pickaxes
@@ -67,6 +66,12 @@ public class ToolMiningTest {
 
 	// Reaper hoe
 	public static Supplier<ItemStack> NETHERITE_REAPER_HOE = () -> createTool(NETHERITE_REAPER_HEAD, OAK_HANDLE, NETHERITE_HOE);
+
+	// Axes
+	public static String NETHERITE_AXE = "forgero:netherite-axe";
+
+	// Tree chopper axe
+	public static Supplier<ItemStack> NETHERITE_TREE_CHOPPER_AXE = () -> createTool(TREE_CHOPPER_AXE_HEAD, OAK_HANDLE, NETHERITE_AXE);
 
 
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
@@ -189,6 +194,54 @@ public class ToolMiningTest {
 		context.complete();
 	}
 
+	@GameTest(templateName = "forgero:coal_x21", batchId = "tool_mining_test")
+	public void netherite_tree_chopper_head_selection_survival(TestContext context) {
+		// Netherite vein mining shovel
+		int TICKS_FOR_MINING_DIRT = 250;
+		int TICKS_FOR_MINING_PLANK = 50;
+		int TICKS_FOR_MINING_DIRT_CLUSTER = 650;
+
+		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare, context);
+		TestPos center = TestPos.of(RELATIVE_STAR_X21_CENTER, context);
+		TestPos plank = TestPos.of(center, new BlockPos(-1, 1, -1));
+		TestPos singleDirt = TestPos.of(center, new BlockPos(0, -3, 0));
+
+		ServerPlayerEntity player = PlayerFactory.builder(context)
+				.gameMode(GameMode.SURVIVAL)
+				.stack(NETHERITE_TREE_CHOPPER_AXE)
+				.pos(center.absolute())
+				.build()
+				.createPlayer();
+
+		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
+		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
+		WorldBlockHelper worldHelper = new WorldBlockHelper(context);
+
+		context.setBlockState(singleDirt.relative(), DIRT);
+		worldHelper.replace(ImmutableMap.of(COAL_ORE, OAK_WOOD, STONE, BIRCH_PLANKS));
+
+		// Break the outcast plank block
+		blockBreakingCase.assertBreakBlock(plank, TICKS_FOR_MINING_PLANK);
+
+		// Make sure none of the planks was mined
+		Predicate<TestPos> validator = pos -> actionHelper.absolute(pos).getBlock() == OAK_WOOD || actionHelper.absolute(pos).getBlock() == OAK_PLANKS;
+		blockBreakingCase.assertBlockCount(25, validationSquare, validator);
+
+		// Break the cluster of wood blocks using vein mining
+		blockBreakingCase.assertBreakSelection(validationSquare, center, TICKS_FOR_MINING_DIRT_CLUSTER);
+
+		// Make sure the lowest dirt block did not get mined by the vein mining
+		blockBreakingCase.assertExists(singleDirt, "Expected the lowest dirt block to not be mined by vein mining");
+
+		// Break the outcast dirt block
+		blockBreakingCase.assertBreakBlock(singleDirt, TICKS_FOR_MINING_DIRT);
+
+		// Make sure the tool takes damage
+		assertDamage(player.getMainHandStack(), 27);
+
+		context.complete();
+	}
+
 	private void survivalOreMiningTest(int stoneTicks, int clusterTicks, Supplier<ItemStack> tool, TestContext context) {
 		TestPosCollection validationSquare = TestPosCollection.of(relativeValidationSquare, context);
 		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER, context);
@@ -251,12 +304,11 @@ public class ToolMiningTest {
 		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
 		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
 
-		TagKey<Block> tag = TagKey.of(Registries.BLOCK.getKey(), new Identifier("forgero:plants"));
-
-		Predicate<BlockState> predicate = state -> state.isIn(tag);
+		// Plant validator
+		Predicate<TestPos> isPlant = blockBreakingCase.stateToPos(BlockUtils.isIn("forgero:plants"));
 
 		// Make sure all the plants are present
-		blockBreakingCase.assertBlockCount(40, validationSquare, blockBreakingCase.stateToPos(predicate));
+		blockBreakingCase.assertBlockCount(40, validationSquare, isPlant);
 
 		// Break the cluster of plants
 		blockBreakingCase.assertBreakSelection(validationSquare, center);

@@ -80,7 +80,7 @@
           "radius": 2
         },
         "speed": {
-          "type": "forgero:every_block"
+          "type": "forgero:all"
         },
         "predicate": {
           "type": "minecraft:block",
