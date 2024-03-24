@@ -79,7 +79,7 @@
           "filter": "forgero:similar_block",
           "radius": 2
         },
-        "hardness": {
+        "speed": {
           "type": "forgero:every_block"
         },
         "predicate": {

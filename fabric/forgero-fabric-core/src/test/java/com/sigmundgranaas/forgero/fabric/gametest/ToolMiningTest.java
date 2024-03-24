@@ -1,11 +1,13 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
+import static com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest.createPlane;
 import static com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest.createSquare;
 import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
 import static com.sigmundgranaas.forgero.testutil.Utils.createTool;
 import static net.minecraft.block.Blocks.*;
 
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableMap;
@@ -16,10 +18,15 @@ import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
@@ -32,6 +39,9 @@ public class ToolMiningTest {
 
 	// Grave digger heads
 	public static String NETHERITE_GRAVE_DIGGER_HEAD = "forgero:netherite-grave_digger_head";
+
+	// Reaper heads
+	public static String NETHERITE_REAPER_HEAD = "forgero:netherite-reaper_head";
 
 
 	public static String OAK_HANDLE = "forgero:oak-handle";
@@ -51,6 +61,12 @@ public class ToolMiningTest {
 
 	// Grave digger shovels
 	public static Supplier<ItemStack> NETHERITE_GRAVE_DIGGER_SHOVEL = () -> createTool(NETHERITE_GRAVE_DIGGER_HEAD, OAK_HANDLE, NETHERITE_SHOVEL);
+
+	// Hoes
+	public static String NETHERITE_HOE = "forgero:netherite-hoe";
+
+	// Reaper hoe
+	public static Supplier<ItemStack> NETHERITE_REAPER_HOE = () -> createTool(NETHERITE_REAPER_HEAD, OAK_HANDLE, NETHERITE_HOE);
 
 
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
@@ -149,6 +165,9 @@ public class ToolMiningTest {
 		WorldBlockHelper worldHelper = new WorldBlockHelper(context);
 		worldHelper.replace(ImmutableMap.of(COAL_ORE, DIRT, STONE, OAK_PLANKS));
 
+		// Make sure it is not possible to mine planks as quickly as dirt with the shovel
+		blockBreakingCase.assertNotBreakBlock(plank, TICKS_FOR_MINING_DIRT);
+
 		// Break the outcast plank block
 		blockBreakingCase.assertBreakBlock(plank, TICKS_FOR_MINING_PLANK);
 
@@ -166,6 +185,8 @@ public class ToolMiningTest {
 
 		// Make sure the tool takes damage
 		assertDamage(player.getMainHandStack(), 27);
+
+		context.complete();
 	}
 
 	private void survivalOreMiningTest(int stoneTicks, int clusterTicks, Supplier<ItemStack> tool, TestContext context) {
@@ -203,5 +224,53 @@ public class ToolMiningTest {
 
 		// Make sure the tool takes damage
 		assertDamage(player.getMainHandStack(), 8);
+
+		context.complete();
+	}
+
+	public static BlockPos RELATIVE_STAR_PLANTS_CENTER = new BlockPos(3, 2, 3);
+	public static Set<BlockPos> relativePlantsValidationPlane = createPlane(new BlockPos(0, 1, 0), 7, 7);
+
+
+	@GameTest(templateName = "forgero:plants_7x7x7", batchId = "tool_mining_test")
+	public void reaper_hoe_plant_mining(TestContext context) {
+		// The reaper head uses instant mining for the plants, so it should work the same in creative and survival
+
+		int TICKS_FOR_MINING_GRASS = 100;
+		TestPosCollection validationSquare = TestPosCollection.of(relativePlantsValidationPlane, context);
+		TestPos center = TestPos.of(RELATIVE_STAR_PLANTS_CENTER, context);
+		TestPos singleGrass = TestPos.of(center, new BlockPos(0, -1, 0));
+
+		ServerPlayerEntity player = PlayerFactory.builder(context)
+				.gameMode(GameMode.SURVIVAL)
+				.stack(NETHERITE_REAPER_HOE)
+				.pos(center.absolute())
+				.build()
+				.createPlayer();
+
+		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
+		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
+
+		TagKey<Block> tag = TagKey.of(Registries.BLOCK.getKey(), new Identifier("forgero:plants"));
+
+		Predicate<BlockState> predicate = state -> state.isIn(tag);
+
+		// Make sure all the plants are present
+		blockBreakingCase.assertBlockCount(40, validationSquare, blockBreakingCase.stateToPos(predicate));
+
+		// Break the cluster of plants
+		blockBreakingCase.assertBreakSelection(validationSquare, center);
+
+		// Make sure the lowest grass block did not get mined by the vein mining
+		blockBreakingCase.assertExists(singleGrass, "Expected the lowest grass block to not be mined by vein mining");
+
+		// Break the outcast grass block
+		blockBreakingCase.assertBreakBlock(singleGrass, TICKS_FOR_MINING_GRASS);
+
+		// Make sure the tool takes damage
+		// Todo for now this only takes two damage for some reason. Decide if that should be permanent or not.
+		assertDamage(player.getMainHandStack(), 2);
+
+		context.complete();
 	}
 }

@@ -149,6 +149,16 @@ public class BlockSelectionTest {
 		return square;
 	}
 
+	public static Set<BlockPos> createPlane(BlockPos root, int width, int depth) {
+		Set<BlockPos> square = new HashSet<>();
+		for (int j = 0; j < width; j++) {
+			for (int k = 0; k < depth; k++) {
+				square.add(root.add(j, root.getY(), k));
+			}
+		}
+		return square;
+	}
+
 	public static Set<BlockPos> insert(Set<BlockPos> blocks, TestContext context, BlockState state) {
 		for (BlockPos pos : blocks) {
 			context.setBlockState(pos, state);

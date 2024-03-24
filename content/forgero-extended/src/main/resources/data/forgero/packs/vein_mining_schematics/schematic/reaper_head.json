@@ -74,7 +74,7 @@
     "features": [
       {
         "type": "minecraft:block_breaking",
-        "selection": {
+        "selector": {
           "type": "forgero:radius",
           "radius": 3,
           "filter": {

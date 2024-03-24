@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.testutil.TestPosCollection;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.test.GameTestException;
 
 public class BlockBreakingCase {
@@ -51,14 +50,22 @@ public class BlockBreakingCase {
 		return pos -> predicate.test(helper.absolute(pos).getBlock());
 	}
 
-	public void assertBlockCount(int expected, TestPosCollection collection, Block block) {
-		assertBlockCount(expected, collection, is(block));
+	private BlockState state(TestPos pos) {
+		return helper.absolute(pos);
 	}
 
-	public void assertBlockCount(int expected, TestPosCollection collection, Predicate<Block> predicate) {
-		long count = collection.count(isBlock(predicate));
+	public Predicate<TestPos> stateToPos(Predicate<BlockState> statePredicate) {
+		return pos -> statePredicate.test(state(pos));
+	}
+
+	public void assertBlockCount(int expected, TestPosCollection collection, Block block) {
+		assertBlockCount(expected, collection, pos -> is(block).test(helper.absolute(pos).getBlock()));
+	}
+
+	public void assertBlockCount(int expected, TestPosCollection collection, Predicate<TestPos> predicate) {
+		long count = collection.count(predicate);
 		if (count != expected) {
-			String contents = collection.apply(isBlock(predicate)).toString(helper);
+			String contents = collection.apply(predicate).toString(helper);
 			String message = String.format("Expected %s blocks, but got: %s. Here is the selection contents: %s", expected, count, contents);
 			throw new GameTestException(message);
 		}
@@ -78,7 +85,7 @@ public class BlockBreakingCase {
 
 		// No blocks should be left
 		if (selection.anyMatch(notBroken())) {
-			veinMiningErrors(root, selection.apply(isBroken()));
+			veinMiningErrors(root, selection.apply(notBroken()));
 		}
 	}
 
@@ -158,6 +165,6 @@ public class BlockBreakingCase {
 	}
 
 	private boolean isBroken(TestPos pos) {
-		return helper.absolute(pos).getBlock() == Blocks.AIR;
+		return helper.absolute(pos).isAir();
 	}
 }

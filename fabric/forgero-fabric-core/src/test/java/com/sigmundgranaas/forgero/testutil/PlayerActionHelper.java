@@ -38,13 +38,15 @@ public class PlayerActionHelper implements ContextSupplier {
 
 	public BlockState processInstamine(TestPos pos, Direction dir) {
 		player.interactionManager.processBlockBreakingAction(pos.absolute(), PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, dir, get().getWorld().getHeight(), 1);
+		player.interactionManager.update();
+		player.interactionManager.processBlockBreakingAction(pos.absolute(), PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, dir, get().getWorld().getHeight(), 1);
+
 		return absolute(pos);
 	}
 
 	public BlockState processBreakingBlock(TestPos pos, int ticks, Direction dir) {
 		player.interactionManager.processBlockBreakingAction(pos.absolute(), PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, dir, get().getWorld().getHeight(), 1);
 
-		//Mining the stone block should not propagate to the coal blocks
 		for (int i = 0; i < ticks; i++) {
 			player.interactionManager.update();
 		}
