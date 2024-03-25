@@ -86,7 +86,7 @@
           "tag": "forgero:vein_mining_logs"
         },
         "title": "feature.forgero.pattern_mining.title",
-        "description": "feature.forgero.pattern_mining.tree_felling"
+        "description": "feature.forgero.pattern_mining.tree_felling-description"
       }
     ]
   },
