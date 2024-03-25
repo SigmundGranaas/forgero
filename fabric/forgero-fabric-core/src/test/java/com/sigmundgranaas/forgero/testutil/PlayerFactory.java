@@ -1,10 +1,6 @@
 package com.sigmundgranaas.forgero.testutil;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
 import com.mojang.authlib.GameProfile;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
@@ -15,6 +11,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
+
+import java.util.UUID;
+import java.util.function.Supplier;
 
 
 public class PlayerFactory implements ContextSupplier {
@@ -90,6 +89,11 @@ public class PlayerFactory implements ContextSupplier {
 		entity.changeGameMode(gameMode);
 		entity.setStackInHand(stackHand, stack.get());
 		entity.setYaw(direction.asRotation());
+		entity.setPitch(0f);
+		entity.setHeadYaw(direction.asRotation());
+
+		entity.baseTick();
+		entity.baseTick();
 		return entity;
 	}
 

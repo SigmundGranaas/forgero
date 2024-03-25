@@ -1,24 +1,25 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
-import static com.sigmundgranaas.forgero.testutil.Items.NETHERITE_PATH_MINING_PICKAXE;
-import static net.minecraft.block.Blocks.COAL_ORE;
-
-import java.util.Set;
-
 import com.sigmundgranaas.forgero.fabric.gametest.cases.BlockBreakingCase;
 import com.sigmundgranaas.forgero.fabric.gametest.helper.WorldBlockHelper;
 import com.sigmundgranaas.forgero.testutil.PlayerActionHelper;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;
-
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
+
+import java.util.Set;
+
+import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
+import static com.sigmundgranaas.forgero.testutil.Items.NETHERITE_PATH_DIGGER_SHOVEL;
+import static com.sigmundgranaas.forgero.testutil.Items.NETHERITE_PATH_MINING_PICKAXE;
+import static net.minecraft.block.Blocks.COAL_ORE;
+import static net.minecraft.block.Blocks.DIRT;
 
 public class PatternMiningToolTests {
 	public static BlockPos RELATIVE_STAR_X7_CENTER = new BlockPos(3, 4, 3);
@@ -69,7 +70,7 @@ public class PatternMiningToolTests {
 		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
 		TestPosCollection box = blockHelper.testCollection();
 
-		// Break the cluster of coal blocks using pattern mining
+		// Break a column in the coal blocks using pattern mining
 		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_COAL * 2);
 
 		blockBreakingCase.assertBlockCount(8, box, COAL_ORE);
@@ -77,6 +78,39 @@ public class PatternMiningToolTests {
 		blockBreakingCase.assertBreakBlock(singleCoal, TIME_TO_BREAK_COAL);
 
 		assertDamage(player.getMainHandStack(), 3);
+
+		context.complete();
+	}
+
+	@GameTest(templateName = "forgero:coal_3x3_east", batchId = "tool_mining_test")
+	public void test_path_digger_shovel_head_survival(TestContext context) {
+		int TIME_TO_BREAK_DIRT = 30;
+		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER, context);
+		TestPos singleCoal = TestPos.of(RELATIVE_STAR_X7_CENTER.east(), context);
+
+		ServerPlayerEntity player = PlayerFactory.builder(context)
+				.gameMode(GameMode.SURVIVAL)
+				.direction(Direction.EAST)
+				.stack(NETHERITE_PATH_DIGGER_SHOVEL)
+				.pos(center.absolute().west().down(2))
+				.build()
+				.createPlayer();
+
+		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
+		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
+		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
+		TestPosCollection validationSquare = TestPosCollection.of(Set.of(center.relative(), center.relative().down()), context);
+		TestPosCollection box = blockHelper.testCollection();
+		blockHelper.replace(COAL_ORE, DIRT);
+		context.setBlockState(singleCoal.relative(), DIRT);
+
+		// Break the 3x3 wall of dirt blocks using pattern mining
+		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_DIRT * 10);
+
+		// No blocks should be left
+		blockBreakingCase.assertBlockCount(0, box, DIRT);
+
+		assertDamage(player.getMainHandStack(), 10);
 
 		context.complete();
 	}

@@ -15,9 +15,11 @@ public class Items {
 	// Path mining heads
 	public static String PATH_MINING_PICKAXE_HEAD = "forgero:netherite-path_mining_pickaxe_head";
 
-
 	// Grave digger heads
 	public static String NETHERITE_GRAVE_DIGGER_HEAD = "forgero:netherite-grave_digger_head";
+
+	// Path digger heads
+	public static String NETHERITE_PATH_DIGGER_HEAD = "forgero:netherite-path_digger_shovel_head";
 
 	// Reaper heads
 	public static String NETHERITE_REAPER_HEAD = "forgero:netherite-reaper_head";
@@ -58,5 +60,8 @@ public class Items {
 
 	// Path miner pickaxe
 	public static Supplier<ItemStack> NETHERITE_PATH_MINING_PICKAXE = () -> createTool(PATH_MINING_PICKAXE_HEAD, OAK_HANDLE, NETHERITE_PICKAXE);
+
+	// Path digger shovels
+	public static Supplier<ItemStack> NETHERITE_PATH_DIGGER_SHOVEL = () -> createTool(NETHERITE_PATH_DIGGER_HEAD, OAK_HANDLE, NETHERITE_SHOVEL);
 
 }
