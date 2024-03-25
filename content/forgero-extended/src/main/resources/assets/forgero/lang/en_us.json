@@ -110,6 +110,7 @@
   "feature.forgero.pattern_mining.title": "Pattern mining",
   "feature.forgero.pattern_mining.3x3-description": "Mines in a 3x3 pattern",
   "feature.forgero.pattern_mining.star-description": "Mines in a 3x3 star pattern",
-  "feature.forgero.pattern_mining.2x1-description": "Mines in a 2x1 path"
+  "feature.forgero.pattern_mining.2x1-description": "Mines in a 2x1 path",
+  "feature.forgero.pattern_mining.tree_felling-description": "Mines blocks in tall columns"
 }
 
