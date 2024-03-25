@@ -80,9 +80,7 @@
           "depth": 1,
           "height": 20
         },
-        "speed": {
-          "type": "forgero:all"
-        },
+        "speed": "forgero:all",
         "predicate": {
           "type": "minecraft:block",
           "tag": "forgero:vein_mining_logs"

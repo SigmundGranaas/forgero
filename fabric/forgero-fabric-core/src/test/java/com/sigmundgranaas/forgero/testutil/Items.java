@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.testutil;
 
-import static com.sigmundgranaas.forgero.testutil.Utils.createTool;
+import net.minecraft.item.ItemStack;
 
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
+import static com.sigmundgranaas.forgero.testutil.Utils.createTool;
 
 public class Items {
 	// Ore miner heads
@@ -26,6 +26,9 @@ public class Items {
 
 	// Tree chopper heads
 	public static String TREE_CHOPPER_AXE_HEAD = "forgero:iron-tree_chopper_head";
+
+	// Tree feller heads
+	public static String TREE_FELLER_HEAD = "forgero:netherite-tree_feller_head";
 
 	// Handles
 	public static String OAK_HANDLE = "forgero:oak-handle";
@@ -57,6 +60,9 @@ public class Items {
 
 	// Tree chopper axe
 	public static Supplier<ItemStack> NETHERITE_TREE_CHOPPER_AXE = () -> createTool(TREE_CHOPPER_AXE_HEAD, OAK_HANDLE, NETHERITE_AXE);
+
+	// Tree feller axe
+	public static Supplier<ItemStack> NETHERITE_TREE_FELLER_AXE = () -> createTool(TREE_FELLER_HEAD, OAK_HANDLE, NETHERITE_AXE);
 
 	// Path miner pickaxe
 	public static Supplier<ItemStack> NETHERITE_PATH_MINING_PICKAXE = () -> createTool(PATH_MINING_PICKAXE_HEAD, OAK_HANDLE, NETHERITE_PICKAXE);

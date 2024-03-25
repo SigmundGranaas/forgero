@@ -15,11 +15,10 @@ import net.minecraft.world.GameMode;
 
 import java.util.Set;
 
+import static com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest.createSquare;
 import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
-import static com.sigmundgranaas.forgero.testutil.Items.NETHERITE_PATH_DIGGER_SHOVEL;
-import static com.sigmundgranaas.forgero.testutil.Items.NETHERITE_PATH_MINING_PICKAXE;
-import static net.minecraft.block.Blocks.COAL_ORE;
-import static net.minecraft.block.Blocks.DIRT;
+import static com.sigmundgranaas.forgero.testutil.Items.*;
+import static net.minecraft.block.Blocks.*;
 
 public class PatternMiningToolTests {
 	public static BlockPos RELATIVE_STAR_X7_CENTER = new BlockPos(3, 4, 3);
@@ -111,6 +110,38 @@ public class PatternMiningToolTests {
 		blockBreakingCase.assertBlockCount(0, box, DIRT);
 
 		assertDamage(player.getMainHandStack(), 10);
+
+		context.complete();
+	}
+
+	@GameTest(templateName = "forgero:jungle_tree", batchId = "tool_mining_test")
+	public void test_tree_feller_column_miner(TestContext context) {
+		int TIME_TO_BREAK_WOOD = 30;
+		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER.down(2), context);
+		TestPos singleWood = TestPos.of(center.relative().west(3), context);
+		TestPosCollection validationColumn = TestPosCollection.of(createSquare(center.relative(), 20, 1, 1), context);
+
+		ServerPlayerEntity player = PlayerFactory.builder(context)
+				.gameMode(GameMode.SURVIVAL)
+				.stack(NETHERITE_TREE_FELLER_AXE)
+				.pos(center.absolute().west())
+				.build()
+				.createPlayer();
+		context.setBlockState(singleWood.relative(), JUNGLE_WOOD);
+
+		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
+		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
+
+		// Confirm the block cannot be mined under the given ticks
+		blockBreakingCase.assertNotBreakBlock(singleWood, TIME_TO_BREAK_WOOD - 10);
+
+		// Confirm the correct tick amount for breaking a single wooden block
+		blockBreakingCase.assertBreakBlock(singleWood, TIME_TO_BREAK_WOOD);
+
+		// Break a single column of the tree
+		blockBreakingCase.assertBreakSelection(validationColumn, center, TIME_TO_BREAK_WOOD * 20);
+
+		assertDamage(player.getMainHandStack(), 21);
 
 		context.complete();
 	}
