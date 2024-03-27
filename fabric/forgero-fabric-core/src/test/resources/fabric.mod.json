@@ -21,7 +21,8 @@
       "com.sigmundgranaas.forgero.fabric.gametest.MiningLevelTest",
       "com.sigmundgranaas.forgero.fabric.gametest.AttributeApplicationTest",
       "com.sigmundgranaas.forgero.fabric.gametest.VeinMiningToolTests",
-      "com.sigmundgranaas.forgero.fabric.gametest.PatternMiningToolTests"
+      "com.sigmundgranaas.forgero.fabric.gametest.PatternMiningToolTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.BlockFilterTest"
     ]
   }
 }

@@ -27,18 +27,21 @@ public class SimilarBlockFilter implements BlockFilter {
 	public static final SimilarBlockFilter DEFAULT = new SimilarBlockFilter();
 
 
-	private final Cache<Block, Set<Identifier>> blockTagCache = CacheBuilder.newBuilder().softValues().build();
-	private final Cache<BlockState, Boolean> similarityCache = CacheBuilder.newBuilder().softValues().build();
-	private Set<TagKey<Block>> similarBlockTags;
-	private boolean tagsLoaded = false;
+	private static final Cache<Block, Set<Identifier>> blockTagCache = CacheBuilder.newBuilder().build();
+	private static final Cache<Integer, Boolean> similarityCache = CacheBuilder.newBuilder().build();
+	private static Set<TagKey<Block>> similarBlockTags;
+	private static boolean tagsLoaded = false;
 
 	@Override
 	public boolean filter(Entity entity, BlockPos currentPos, BlockPos root) {
 		BlockState currentBlock = entity.getWorld().getBlockState(currentPos);
 		BlockState rootBlock = entity.getWorld().getBlockState(root);
 
+		if (currentBlock.getBlock() == rootBlock.getBlock()) {
+			return true;
+		}
 		try {
-			return similarityCache.get(currentBlock, () -> evaluateSimilarity(currentBlock, rootBlock));
+			return similarityCache.get(currentBlock.getBlock().hashCode() + rootBlock.getBlock().hashCode(), () -> evaluateSimilarity(currentBlock, rootBlock));
 		} catch (ExecutionException e) {
 			Forgero.LOGGER.error(e);
 			return false;

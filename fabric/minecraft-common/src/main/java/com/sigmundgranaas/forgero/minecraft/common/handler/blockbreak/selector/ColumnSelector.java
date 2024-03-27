@@ -24,6 +24,23 @@ import net.minecraft.util.math.Direction;
  */
 public class ColumnSelector implements BlockSelector {
 	public static final String TYPE = "forgero:column";
+	public static String COLUMN_MINING_DEPTH = "forgero:column_mining_depth";
+	public static String DEPTH_KEY = "depth";
+
+	public static String COLUMN_MINING_HEIGHT = "forgero:column_mining_height";
+	public static String HEIGHT_KEY = "height";
+
+
+	public static final ModifiableFeatureAttribute.Builder HEIGHT_BUILDER = ModifiableFeatureAttribute
+			.builder(COLUMN_MINING_DEPTH)
+			.key(HEIGHT_KEY)
+			.defaultValue(1);
+
+	public static final ModifiableFeatureAttribute.Builder DEPTH_BUILDER = ModifiableFeatureAttribute
+			.builder(COLUMN_MINING_HEIGHT)
+			.key(DEPTH_KEY)
+			.defaultValue(1);
+
 	public static final JsonBuilder<ColumnSelector> BUILDER = HandlerBuilder.fromObject(ColumnSelector.class, ColumnSelector::fromJson);
 
 	private final ModifiableFeatureAttribute depth;
@@ -37,8 +54,8 @@ public class ColumnSelector implements BlockSelector {
 	}
 
 	public static ColumnSelector fromJson(JsonObject json) {
-		ModifiableFeatureAttribute depth = ModifiableFeatureAttribute.of(json, "depth", "forgero:column_mining_depth");
-		ModifiableFeatureAttribute height = ModifiableFeatureAttribute.of(json, "height", "forgero:column_mining_height", 10);
+		ModifiableFeatureAttribute depth = DEPTH_BUILDER.build(json);
+		ModifiableFeatureAttribute height = HEIGHT_BUILDER.build(json);
 		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
 		return new ColumnSelector(depth, height, filter);
 	}

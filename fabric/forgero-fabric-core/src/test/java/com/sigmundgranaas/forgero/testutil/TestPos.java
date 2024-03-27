@@ -12,6 +12,10 @@ public record TestPos(BlockPos absoluteRoot, BlockPos relativeRoot, BlockPos off
 		return absoluteRoot.add(offset);
 	}
 
+	public TestPos offset(BlockPos offset) {
+		return new TestPos(absolute(), relative(), offset);
+	}
+
 	public static TestPos of(BlockPos relative, TestContext context) {
 		return new TestPos(context.getAbsolutePos(relative), relative, BlockPos.ORIGIN);
 	}

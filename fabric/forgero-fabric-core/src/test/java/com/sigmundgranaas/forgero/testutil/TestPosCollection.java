@@ -15,6 +15,11 @@ public record TestPosCollection(Set<TestPos> positions) {
 		return new TestPosCollection(positions);
 	}
 
+	public static TestPosCollection ofAbsolute(Set<BlockPos> absolute, TestContext ctx) {
+		var positions = absolute.stream().map(pos -> TestPos.of(pos, ctx.getRelativePos(pos))).collect(Collectors.toSet());
+		return new TestPosCollection(positions);
+	}
+
 	public static TestPosCollection of(Set<TestPos> positions) {
 		return new TestPosCollection(positions);
 	}

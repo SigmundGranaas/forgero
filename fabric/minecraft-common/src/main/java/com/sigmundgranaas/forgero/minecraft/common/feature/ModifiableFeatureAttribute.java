@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.feature;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
@@ -67,5 +68,42 @@ public class ModifiableFeatureAttribute implements ComputedAttribute {
 	@Override
 	public ComputedAttribute modify(AttributeModification mod) {
 		return this;
+	}
+
+	public static Builder builder(String attribute) {
+		return new Builder(attribute);
+	}
+
+	public static class Builder {
+		private String key = "value";
+		private final String attribute;
+		private float defaultValue;
+		private boolean hasSetDefaultValue = false;
+
+		Builder(String attribute) {
+			this.attribute = attribute;
+		}
+
+		public Builder key(String key) {
+			this.key = key;
+			return this;
+		}
+
+		public Builder defaultValue(float defaultValue) {
+			this.defaultValue = defaultValue;
+			this.hasSetDefaultValue = true;
+			return this;
+		}
+
+		public ModifiableFeatureAttribute build(JsonObject object) {
+			if (object.has(key)) {
+				return of(attribute, object.get(key).getAsFloat());
+			} else {
+				if (!hasSetDefaultValue) {
+					Forgero.LOGGER.warn(String.format("No key for attribute %s found in the object, and no default value set. This likely means the field was considered a mandatory field, but was not set. This is probably an error. Here is the object: \n %s", key, object.getAsString()));
+				}
+				return of(attribute, defaultValue);
+			}
+		}
 	}
 }
