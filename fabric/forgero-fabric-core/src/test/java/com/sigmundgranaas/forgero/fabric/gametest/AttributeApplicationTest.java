@@ -1,5 +1,10 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
+import java.util.List;
+import java.util.UUID;
+
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
@@ -11,7 +16,8 @@ import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import com.sigmundgranaas.forgero.testutil.TestPos;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -30,10 +36,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
-import java.util.List;
-import java.util.UUID;
-
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 public class AttributeApplicationTest {
 
@@ -61,11 +64,7 @@ public class AttributeApplicationTest {
 
 
 	public static void createFloor(TestContext context) {
-		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 0, 0)).add(-3, 0, -3);
-		BlockPos relative = context.getRelativePos(rootPos);
-
-		BlockSelectionTest.insert(BlockSelectionTest.createSquare(relative.add(-3, -1, -3), 1, 8, 8), context);
-
+		BlockSelectionTest.insert(BlockSelectionTest.createSquare(TestPos.of(BlockPos.ORIGIN, context), 1, 7, 7), context);
 	}
 
 	public static void runDamageTest(TestContext context, ItemStack testItem, EntityType<?> testEntity, float expectedDamage) {

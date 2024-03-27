@@ -31,7 +31,9 @@ public class VeinMiningToolTests {
 
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
 	public void test_ore_mining_pickaxe_block_selection_creative(TestContext context) {
-		TestPosCollection validationSquare = TestPosCollection.of(relativeValidationSquare, context);
+		Set<TestPos> relativeValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X7_CENTER.add(-1, -1, -1), context), 3, 3, 3);
+		TestPosCollection validationSquare = TestPosCollection.of(relativeValidationSquare);
+
 		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER, context);
 		TestPos stone = TestPos.of(center, new BlockPos(-1, 0, -1));
 		TestPos singleCoal = TestPos.of(center, new BlockPos(0, -2, 0));
@@ -65,7 +67,6 @@ public class VeinMiningToolTests {
 	}
 
 	public static BlockPos RELATIVE_STAR_X7_CENTER = new BlockPos(3, 4, 3);
-	public static Set<BlockPos> relativeValidationSquare = createSquare(RELATIVE_STAR_X7_CENTER.add(-1, -1, -1), 3, 3, 3);
 
 
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
@@ -98,8 +99,6 @@ public class VeinMiningToolTests {
 	}
 
 	public static BlockPos RELATIVE_STAR_X21_CENTER = new BlockPos(3, 4, 3);
-	public static Set<BlockPos> relativex21ValidationSquare = createSquare(RELATIVE_STAR_X21_CENTER.add(-2, -2, -2), 5, 5, 5);
-
 
 	@GameTest(templateName = "forgero:coal_x21", batchId = "tool_mining_test")
 	public void netherite_grave_digger_head_selection_survival(TestContext context) {
@@ -108,7 +107,8 @@ public class VeinMiningToolTests {
 		int TICKS_FOR_MINING_DIRT = 30;
 		int TICKS_FOR_MINING_DIRT_CLUSTER = 650;
 
-		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare, context);
+		Set<TestPos> relativex21ValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X21_CENTER.add(-2, -2, -2), context), 5, 5, 5);
+		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare);
 		TestPos center = TestPos.of(RELATIVE_STAR_X21_CENTER, context);
 		TestPos plank = TestPos.of(center, new BlockPos(-1, 1, -1));
 		TestPos singleDirt = TestPos.of(center, new BlockPos(0, -3, 0));
@@ -156,7 +156,8 @@ public class VeinMiningToolTests {
 		int TICKS_FOR_MINING_PLANK = 50;
 		int TICKS_FOR_MINING_DIRT_CLUSTER = 650;
 
-		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare, context);
+		Set<TestPos> relativex21ValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X21_CENTER.add(-2, -2, -2), context), 5, 5, 5);
+		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare);
 		TestPos center = TestPos.of(RELATIVE_STAR_X21_CENTER, context);
 		TestPos plank = TestPos.of(center, new BlockPos(-1, 1, -1));
 		TestPos singleDirt = TestPos.of(center, new BlockPos(0, -3, 0));
@@ -198,7 +199,8 @@ public class VeinMiningToolTests {
 	}
 
 	private void survivalOreMiningTest(int stoneTicks, int clusterTicks, Supplier<ItemStack> tool, TestContext context) {
-		TestPosCollection validationSquare = TestPosCollection.of(relativeValidationSquare, context);
+		Set<TestPos> relativeValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X7_CENTER.add(-1, -1, -1), context), 3, 3, 3);
+		TestPosCollection validationSquare = TestPosCollection.of(relativeValidationSquare);
 		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER, context);
 		TestPos stone = TestPos.of(center, new BlockPos(-1, 0, -1));
 		TestPos singleCoal = TestPos.of(center, new BlockPos(0, -2, 0));
@@ -237,7 +239,6 @@ public class VeinMiningToolTests {
 	}
 
 	public static BlockPos RELATIVE_STAR_PLANTS_CENTER = new BlockPos(3, 2, 3);
-	public static Set<BlockPos> relativePlantsValidationPlane = createPlane(new BlockPos(0, 1, 0), 7, 7);
 
 
 	@GameTest(templateName = "forgero:plants_7x7x7", batchId = "tool_mining_test")
@@ -245,7 +246,8 @@ public class VeinMiningToolTests {
 		// The reaper head uses instant mining for the plants, so it should work the same in creative and survival
 
 		int TICKS_FOR_MINING_GRASS = 100;
-		TestPosCollection validationSquare = TestPosCollection.of(relativePlantsValidationPlane, context);
+		Set<TestPos> relativePlantsValidationPlane = createPlane(TestPos.of(new BlockPos(0, 1, 0), context), 7, 7);
+		TestPosCollection validationSquare = TestPosCollection.of(relativePlantsValidationPlane);
 		TestPos center = TestPos.of(RELATIVE_STAR_PLANTS_CENTER, context);
 		TestPos singleGrass = TestPos.of(center, new BlockPos(0, -1, 0));
 

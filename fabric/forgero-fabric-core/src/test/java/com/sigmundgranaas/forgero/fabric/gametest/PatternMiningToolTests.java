@@ -1,24 +1,25 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
+import static com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest.createSquare;
+import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
+import static com.sigmundgranaas.forgero.testutil.Items.*;
+import static net.minecraft.block.Blocks.*;
+
+import java.util.Set;
+
 import com.sigmundgranaas.forgero.fabric.gametest.cases.BlockBreakingCase;
 import com.sigmundgranaas.forgero.fabric.gametest.helper.WorldBlockHelper;
 import com.sigmundgranaas.forgero.testutil.PlayerActionHelper;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;
+
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
-
-import java.util.Set;
-
-import static com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest.createSquare;
-import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
-import static com.sigmundgranaas.forgero.testutil.Items.*;
-import static net.minecraft.block.Blocks.*;
 
 public class PatternMiningToolTests {
 	public static BlockPos RELATIVE_STAR_X7_CENTER = new BlockPos(3, 4, 3);
@@ -119,7 +120,7 @@ public class PatternMiningToolTests {
 		int TIME_TO_BREAK_WOOD = 30;
 		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER.down(2), context);
 		TestPos singleWood = TestPos.of(center.relative().west(3), context);
-		TestPosCollection validationColumn = TestPosCollection.of(createSquare(center.relative(), 20, 1, 1), context);
+		TestPosCollection validationColumn = TestPosCollection.of(createSquare(center, 20, 1, 1));
 
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.gameMode(GameMode.SURVIVAL)

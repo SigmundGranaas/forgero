@@ -5,6 +5,8 @@ import static com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.fil
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
@@ -22,11 +24,21 @@ public interface BlockFilter {
 	BlockFilter DEFAULT_FALSE = (source, current, root) -> false;
 
 
-	static BlockFilter fromJson(JsonElement json) {
+	static BlockFilter fromJson(@Nullable JsonElement json) {
+		if (json == null) {
+			Forgero.LOGGER.warn("Tried parsing filter element, but filter element was null. \n Defaulting to the default filter value. This is likely due to incorrect syntax.");
+			return DEFAULT;
+		}
+
+		if (json.isJsonObject() && json.getAsJsonObject().has("filter")) {
+			return fromJson(json.getAsJsonObject().get("filter"));
+		}
+
 		if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
 			String type = json.getAsJsonPrimitive().getAsString();
 			return fromString(type, json.getAsJsonPrimitive());
 		}
+
 		if (json.isJsonArray()) {
 			List<BlockFilter> filters = new ArrayList<>();
 			json.getAsJsonArray().forEach(element -> filters.add(fromJson(element)));
@@ -40,6 +52,8 @@ public interface BlockFilter {
 				return fromString(type.getAsString(), object);
 			}
 		}
+		Forgero.LOGGER.warn("Tried parsing filter element, but did not recognize the contents. \n Defaulting to the default filter value. This is likely due to incorrect syntax. Here is the object: \n{}", json);
+
 		return BlockFilter.DEFAULT;
 	}
 
@@ -52,6 +66,8 @@ public interface BlockFilter {
 			return new BlockPredicateMatcher(BlockPredicate.fromJson(json));
 		} else if (type.equals(CanMineFilter.Key)) {
 			return CanMineFilter.DEFAULT;
+		} else if (type.equals(IsBlockFilter.Key)) {
+			return IsBlockFilter.DEFAULT;
 		}
 		Forgero.LOGGER.warn("Unknown filter type: {}", type);
 		return BlockFilter.DEFAULT_FALSE;
