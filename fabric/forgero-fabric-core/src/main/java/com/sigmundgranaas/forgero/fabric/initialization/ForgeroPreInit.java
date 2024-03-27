@@ -44,7 +44,6 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.Can
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Diminishing;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
@@ -214,7 +213,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// Hardness calculators
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Average.TYPE, Average.BUILDER);
-		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Diminishing.TYPE, Diminishing.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Instant.TYPE, Instant.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Single.TYPE, Single.BUILDER);
 
@@ -224,8 +222,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 				.register(EntityUseHandler.KEY)
 				.register(UseHandler.KEY);
 		// Entity use handlers
-
-		// Block use handlers
 
 		// Stop use handlers
 		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowTridentHandler.TYPE, ThrowTridentHandler.BUILDER);
