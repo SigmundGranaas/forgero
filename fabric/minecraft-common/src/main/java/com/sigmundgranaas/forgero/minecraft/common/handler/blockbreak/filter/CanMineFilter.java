@@ -28,6 +28,9 @@ public class CanMineFilter implements BlockFilter, Matchable {
 	public boolean filter(Entity entity, BlockPos currentPos, BlockPos root) {
 		if (entity instanceof PlayerEntity player) {
 			BlockState state = player.getWorld().getBlockState(currentPos);
+			if (state.isAir()) {
+				return false;
+			}
 			return player.canHarvest(state);
 		}
 		return false;

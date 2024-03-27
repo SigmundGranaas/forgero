@@ -16,6 +16,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.B
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.SingleSelector;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;
 
@@ -54,6 +55,23 @@ public class BlockSelectionTest {
 		Set<BlockPos> selected = selector.select(center.absolute(), context.createMockCreativePlayer());
 
 		assertSelected(selected, square, context);
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
+	public void singleSelectorTest(TestContext context) {
+		// Prepare selector
+		BlockSelector selector = selectorSingle();
+
+		TestPos center = TestPos.of(RELATIVE_3X3_NORTH, context);
+		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(new BlockPos(0, 1, 0), context), 3, 3, 1), context));
+
+		Set<BlockPos> selected = selector.select(center.absolute().up(), context.createMockCreativePlayer());
+
+		if (selected.size() == 1) {
+			context.complete();
+		} else {
+			throw new GameTestException("Did not only select a single block. \n Here is the selection: " + TestPosCollection.ofAbsolute(selected, context).toString(() -> context));
+		}
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
@@ -334,13 +352,12 @@ public class BlockSelectionTest {
 	public static BlockSelector selectorSingle() {
 		String selectorJson = """
 				{
-					"type": "forgero:radius",
-					"radius": 2,
+					"type": "forgero:single",
 					"filter": "forgero:is_block"
 				}
 					
 				""";
 
-		return Utils.handlerFromString(selectorJson, RadiusVeinSelector.BUILDER);
+		return Utils.handlerFromString(selectorJson, SingleSelector.BUILDER);
 	}
 }
