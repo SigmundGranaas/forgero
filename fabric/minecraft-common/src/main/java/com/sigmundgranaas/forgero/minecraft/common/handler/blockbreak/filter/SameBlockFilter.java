@@ -16,7 +16,6 @@ public class SameBlockFilter implements BlockFilter {
 
 	public final static JsonBuilder<SameBlockFilter> BUILDER = HandlerBuilder.fromStringOrType(KEY.clazz(), TYPE, DEFAULT);
 
-
 	@Override
 	public boolean filter(Entity entity, BlockPos currentPos, BlockPos root) {
 		return entity.getWorld().getBlockState(currentPos).getBlock().equals(entity.getWorld().getBlockState(root).getBlock());

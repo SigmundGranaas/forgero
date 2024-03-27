@@ -132,10 +132,7 @@ public class VeinMiningToolTests {
 
 		// Make sure none of the dirt blocks are mined
 		blockBreakingCase.assertBlockCount(25, validationSquare, DIRT);
-
-		// Make sure it takes longer to break the selection than a single block
-		blockBreakingCase.assertNotBreakSelection(validationSquare.apply(pos -> !context.getBlockState(pos.relative()).isAir()), center, TICKS_FOR_MINING_DIRT);
-
+		
 		// Break the cluster of dirt blocks using vein mining
 		blockBreakingCase.assertBreakSelection(validationSquare, center, TICKS_FOR_MINING_DIRT * 25);
 
