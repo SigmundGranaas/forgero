@@ -56,7 +56,7 @@ public class ColumnSelector implements BlockSelector {
 	public static ColumnSelector fromJson(JsonObject json) {
 		ModifiableFeatureAttribute depth = DEPTH_BUILDER.build(json);
 		ModifiableFeatureAttribute height = HEIGHT_BUILDER.build(json);
-		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
+		BlockFilter filter = HandlerBuilder.DEFAULT.build(BlockFilter.KEY, json.get("filter")).orElseThrow();
 		return new ColumnSelector(depth, height, filter);
 	}
 

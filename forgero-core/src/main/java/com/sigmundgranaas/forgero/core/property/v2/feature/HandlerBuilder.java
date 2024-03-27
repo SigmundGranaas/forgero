@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.util.TypeToken;
 
@@ -19,9 +20,6 @@ public class HandlerBuilder {
 		this.registry = registry;
 	}
 
-	public static <T> JsonBuilder<T> fromObjectOrStringDefaulted(Class<T> clazz, String type, Function<JsonObject, T> baseBuilder, Supplier<T> defaultSupplier) {
-		return fromObjectOrStringDefaulted(TypeToken.of(clazz), type, baseBuilder, defaultSupplier);
-	}
 
 	public static <T> JsonBuilder<T> fromObjectOrStringDefaulted(TypeToken<T> clazz, String type, Function<JsonObject, T> baseBuilder, Supplier<T> defaultSupplier) {
 		return new JsonBuilder<T>() {
@@ -124,6 +122,16 @@ public class HandlerBuilder {
 	}
 
 	public <T> Optional<T> build(ClassKey<T> key, JsonElement element) {
+		Optional<T> result = buildInternal(key, element);
+		if (result.isEmpty()) {
+			Forgero.LOGGER.warn("Expected to be able to build element from: {} But found no corresponding registered handler. Maybe it is not set up to handle your json structure?", element.toString());
+			Forgero.LOGGER.warn("Available handlers: {}", registry.entriesForKey(key).toString());
+		}
+		return result;
+	}
+
+
+	private <T> Optional<T> buildInternal(ClassKey<T> key, JsonElement element) {
 		if (element.isJsonObject()) {
 			var object = element.getAsJsonObject();
 			if (object.has("type")) {
@@ -138,6 +146,11 @@ public class HandlerBuilder {
 		} else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
 			return registry.get(key, element.getAsString())
 					.flatMap(builder -> builder.build(element));
+		} else if (element.isJsonArray()) {
+			return registry.allJsonBuilders(key).stream()
+					.map(builder -> builder.build(element))
+					.flatMap(Optional::stream)
+					.findFirst();
 		}
 		return Optional.empty();
 	}

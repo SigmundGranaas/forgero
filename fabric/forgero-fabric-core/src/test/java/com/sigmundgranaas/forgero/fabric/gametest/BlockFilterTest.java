@@ -5,6 +5,11 @@ import java.util.List;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.IsBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SameBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SimilarBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 
@@ -185,7 +190,7 @@ public class BlockFilterTest {
 				"type": "forgero:is_block"
 				}
 				""";
-		return BlockFilter.fromJson(JsonParser.parseString(filter));
+		return IsBlockFilter.BUILDER.build(JsonParser.parseString(filter)).orElseThrow();
 	}
 
 	public static BlockFilter isBlockArray() {
@@ -197,27 +202,27 @@ public class BlockFilterTest {
 					}
 				 ]
 				""";
-		return BlockFilter.fromJson(JsonParser.parseString(filter));
+		return IsBlockFilter.BUILDER.build(JsonParser.parseString(filter)).orElseThrow();
 	}
 
 	public static BlockFilter isBlock() {
 		String filter = "forgero:is_block";
-		return BlockFilter.fromJson(new JsonPrimitive(filter));
+		return IsBlockFilter.BUILDER.build(new JsonPrimitive(filter)).orElseThrow();
 	}
 
 	public static BlockFilter canMine() {
 		String filter = "forgero:can_mine";
-		return BlockFilter.fromJson(new JsonPrimitive(filter));
+		return CanMineFilter.BUILDER.build(new JsonPrimitive(filter)).orElseThrow();
 	}
 
 	public static BlockFilter sameBlockFilter() {
 		String filter = "forgero:same_block";
-		return BlockFilter.fromJson(new JsonPrimitive(filter));
+		return SameBlockFilter.BUILDER.build(new JsonPrimitive(filter)).orElseThrow();
 	}
 
 	public static BlockFilter similarBlockFilter() {
 		String filter = "forgero:similar_block";
-		return BlockFilter.fromJson(new JsonPrimitive(filter));
+		return SimilarBlockFilter.BUILDER.build(new JsonPrimitive(filter)).orElseThrow();
 	}
 
 	public static BlockFilter blockTag() {
@@ -227,6 +232,6 @@ public class BlockFilterTest {
 				    "tag": "forgero:vein_mining_ores"
 				}
 				""";
-		return BlockFilter.fromJson(JsonParser.parseString(filter));
+		return BlockPredicateMatcher.BUILDER.build(JsonParser.parseString(filter)).orElseThrow();
 	}
 }

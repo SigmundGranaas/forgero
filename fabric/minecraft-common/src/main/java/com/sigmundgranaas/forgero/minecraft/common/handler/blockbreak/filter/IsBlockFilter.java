@@ -3,6 +3,9 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.BLOCK_TARGET;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
 
+import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
+import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
@@ -16,9 +19,14 @@ import net.minecraft.util.math.BlockPos;
  * Class for filtering blocks. Air will be ignored.
  */
 public class IsBlockFilter implements BlockFilter, Matchable {
-	public static final String Key = "forgero:is_block";
+	public static final String TYPE = "forgero:is_block";
 
 	public static final IsBlockFilter DEFAULT = new IsBlockFilter();
+
+	public final static ClassKey<IsBlockFilter> KEY = new ClassKey<>(TYPE, IsBlockFilter.class);
+
+	public final static JsonBuilder<IsBlockFilter> BUILDER = HandlerBuilder.fromStringOrType(KEY.clazz(), TYPE, DEFAULT);
+
 
 	@Override
 	public boolean filter(Entity entity, BlockPos currentPos, BlockPos root) {

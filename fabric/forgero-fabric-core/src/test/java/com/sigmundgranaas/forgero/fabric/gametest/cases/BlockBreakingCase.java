@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.testutil.PlayerActionHelper;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;
@@ -76,7 +77,17 @@ public class BlockBreakingCase {
 
 		// No blocks should be left
 		if (selection.anyMatch(notBroken())) {
+			Forgero.LOGGER.warn("Not all blocks in the selection was broken, here is the result: {}", selection.apply(notBroken()).toString(helper));
 			veinMiningErrors(root, ticks);
+		}
+	}
+
+	public void assertNotBreakSelection(TestPosCollection selection, TestPos root, int ticks) {
+		helper.processBreakingBlock(root, ticks);
+
+		// No blocks should be broken
+		if (selection.anyMatch(isBroken())) {
+			throw new GameTestException("Blocks from the selection was broken, this means that blocks were mined in under the given ticks. Here is the result: " + selection.toString(helper));
 		}
 	}
 
@@ -85,6 +96,7 @@ public class BlockBreakingCase {
 
 		// No blocks should be left
 		if (selection.anyMatch(notBroken())) {
+			Forgero.LOGGER.warn("Not all blocks in the selection was broken, here is the result: {}", selection.apply(notBroken()).toString(helper));
 			veinMiningErrors(root, selection.apply(notBroken()));
 		}
 	}

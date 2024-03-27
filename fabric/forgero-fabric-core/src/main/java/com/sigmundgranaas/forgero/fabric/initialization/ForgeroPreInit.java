@@ -40,7 +40,12 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeStack
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeUpgradeHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.CoolDownHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.DamageHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.FilterWrapper;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.IsBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SameBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SimilarBlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
@@ -232,7 +237,12 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(StopHandler.KEY, CoolDownHandler.TYPE, CoolDownHandler.BUILDER);
 
 		// Block filters
-		// Soonish
+		HandlerBuilderRegistry.register(BlockFilter.KEY, FilterWrapper.TYPE, FilterWrapper.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, CanMineFilter.TYPE, CanMineFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, IsBlockFilter.TYPE, IsBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, SameBlockFilter.TYPE, SameBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, SimilarBlockFilter.TYPE, SimilarBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, BlockPredicateMatcher.ID, BlockPredicateMatcher.BUILDER);
 	}
 
 	private void registerEntityBasedHandler(String key, JsonBuilder<? extends EntityBasedHandler> builder) {

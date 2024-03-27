@@ -103,7 +103,7 @@ public class PatternSelector implements BlockSelector {
 
 	public static PatternSelector fromJson(JsonObject json) {
 		List<String> pattern = parsePattern(json);
-		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
+		BlockFilter filter = HandlerBuilder.DEFAULT.build(BlockFilter.KEY, json.get("filter")).orElseThrow();
 		ModifiableFeatureAttribute depth = MODIFIER_BUILDER.build(json);
 		String direction = json.has("direction") ? json.get("direction").getAsString() : "multi"; // default direction
 		return new PatternSelector(pattern, filter, depth, direction);

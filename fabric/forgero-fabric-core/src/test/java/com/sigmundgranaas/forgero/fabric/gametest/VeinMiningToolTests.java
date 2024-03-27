@@ -105,7 +105,6 @@ public class VeinMiningToolTests {
 		// Netherite vein mining shovel
 		int TICKS_FOR_MINING_PLANK = 250;
 		int TICKS_FOR_MINING_DIRT = 30;
-		int TICKS_FOR_MINING_DIRT_CLUSTER = 650;
 
 		Set<TestPos> relativex21ValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X21_CENTER.add(-2, -2, -2), context), 5, 5, 5);
 		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare);
@@ -134,8 +133,11 @@ public class VeinMiningToolTests {
 		// Make sure none of the dirt blocks are mined
 		blockBreakingCase.assertBlockCount(25, validationSquare, DIRT);
 
+		// Make sure it takes longer to break the selection than a single block
+		blockBreakingCase.assertNotBreakSelection(validationSquare.apply(pos -> !context.getBlockState(pos.relative()).isAir()), center, TICKS_FOR_MINING_DIRT);
+
 		// Break the cluster of dirt blocks using vein mining
-		blockBreakingCase.assertBreakSelection(validationSquare, center, TICKS_FOR_MINING_DIRT_CLUSTER);
+		blockBreakingCase.assertBreakSelection(validationSquare, center, TICKS_FOR_MINING_DIRT * 25);
 
 		// Make sure the lowest dirt block did not get mined by the vein mining
 		blockBreakingCase.assertExists(singleDirt, "Expected the lowest dirt block to not be mined by vein mining");
@@ -154,7 +156,6 @@ public class VeinMiningToolTests {
 		// Netherite vein mining shovel
 		int TICKS_FOR_MINING_DIRT = 250;
 		int TICKS_FOR_MINING_PLANK = 50;
-		int TICKS_FOR_MINING_DIRT_CLUSTER = 650;
 
 		Set<TestPos> relativex21ValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X21_CENTER.add(-2, -2, -2), context), 5, 5, 5);
 		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare);
@@ -183,8 +184,11 @@ public class VeinMiningToolTests {
 		Predicate<TestPos> validator = pos -> actionHelper.absolute(pos).getBlock() == OAK_WOOD || actionHelper.absolute(pos).getBlock() == OAK_PLANKS;
 		blockBreakingCase.assertBlockCount(25, validationSquare, validator);
 
+		// Make sure it takes longer to break the selection than a single block
+		blockBreakingCase.assertNotBreakSelection(validationSquare.apply(pos -> !context.getBlockState(pos.relative()).isAir()), center, TICKS_FOR_MINING_PLANK);
+
 		// Break the cluster of wood blocks using vein mining
-		blockBreakingCase.assertBreakSelection(validationSquare, center, TICKS_FOR_MINING_DIRT_CLUSTER);
+		blockBreakingCase.assertBreakSelection(validationSquare, center, TICKS_FOR_MINING_PLANK * 25);
 
 		// Make sure the lowest dirt block did not get mined by the vein mining
 		blockBreakingCase.assertExists(singleDirt, "Expected the lowest dirt block to not be mined by vein mining");
@@ -220,6 +224,9 @@ public class VeinMiningToolTests {
 
 		// Make sure none of the coal blocks are mined
 		blockBreakingCase.assertBlockCount(7, validationSquare, COAL_ORE);
+
+		// Make sure it takes longer to break the selection than a single block
+		blockBreakingCase.assertNotBreakSelection(validationSquare.apply(pos -> !context.getBlockState(pos.relative()).isAir()), center, stoneTicks);
 
 		// Break the cluster of coal blocks using vein mining
 		blockBreakingCase.assertBreakSelection(validationSquare, center, clusterTicks);

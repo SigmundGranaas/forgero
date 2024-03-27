@@ -64,7 +64,7 @@ public class RadiusVeinSelector implements BlockSelector {
 	 */
 	public static RadiusVeinSelector fromJson(JsonObject json) {
 		ModifiableFeatureAttribute radius = MODIFIER_BUILDER.build(json);
-		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
+		BlockFilter filter = HandlerBuilder.DEFAULT.build(BlockFilter.KEY, json.get("filter")).orElseThrow();
 		return new RadiusVeinSelector(radius, filter);
 	}
 
