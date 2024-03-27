@@ -128,6 +128,24 @@ public class BlockFilterTest {
 		context.complete();
 	}
 
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockFilterTest")
+	public void testBlockTagFilter(TestContext context) {
+		// Prepare filters
+		BlockFilter filter = blockTag();
+		TestPos pos = TestPos.of(POS, context);
+
+		context.setBlockState(pos.relative(), Blocks.AIR);
+		assertFalse(pos, filter, context);
+
+		context.setBlockState(pos.relative(), Blocks.STONE);
+		assertFalse(pos, filter, context);
+
+		context.setBlockState(pos.relative(), Blocks.COAL_ORE);
+		assertTrue(pos, filter, context);
+
+		context.complete();
+	}
+
 
 	public static void assertTrue(TestPos root, TestPos pos, BlockFilter filter, TestContext context) {
 		assertTrue(root, pos, filter, context, context.createMockCreativePlayer());
@@ -200,5 +218,15 @@ public class BlockFilterTest {
 	public static BlockFilter similarBlockFilter() {
 		String filter = "forgero:similar_block";
 		return BlockFilter.fromJson(new JsonPrimitive(filter));
+	}
+
+	public static BlockFilter blockTag() {
+		String filter = """
+				{
+					"type": "minecraft:block",
+				    "tag": "forgero:vein_mining_ores"
+				}
+				""";
+		return BlockFilter.fromJson(JsonParser.parseString(filter));
 	}
 }
