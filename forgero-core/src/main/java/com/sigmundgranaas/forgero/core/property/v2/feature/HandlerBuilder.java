@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.util.TypeToken;
@@ -63,6 +64,38 @@ public class HandlerBuilder {
 			}
 		};
 	}
+
+	public static <T> JsonBuilder<T> fromStringOrType(TypeToken<T> clazz, String type, T instance) {
+		return new JsonBuilder<T>() {
+			@Override
+			public Optional<T> build(JsonElement element) {
+				if (element.isJsonPrimitive()) {
+					return Optional.ofNullable(element.getAsJsonPrimitive())
+							.filter(JsonPrimitive::isString)
+							.map(JsonPrimitive::getAsString)
+							.filter(t -> t.equals(type))
+							.map(it -> instance);
+
+				} else if (element.isJsonObject() && element.getAsJsonObject().has("type")) {
+					return Optional.ofNullable(element.getAsJsonObject().get("type"))
+							.filter(JsonElement::isJsonPrimitive)
+							.map(JsonElement::getAsJsonPrimitive)
+							.filter(JsonPrimitive::isString)
+							.map(JsonPrimitive::getAsString)
+							.filter(t -> t.equals(type))
+							.map(it -> instance);
+				}
+
+				return Optional.empty();
+			}
+
+			@Override
+			public TypeToken<T> getTargetClass() {
+				return clazz;
+			}
+		};
+	}
+
 
 	public static <T> JsonBuilder<T> fromString(Class<T> clazz, Function<String, Optional<T>> baseBuilder) {
 		return fromString(TypeToken.of(clazz), baseBuilder);

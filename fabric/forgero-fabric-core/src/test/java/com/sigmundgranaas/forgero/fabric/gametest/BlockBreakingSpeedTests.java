@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.fabric.gametest;
 
 import java.util.Set;
 
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
@@ -57,7 +58,10 @@ public class BlockBreakingSpeedTests {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSpeedTest")
 	public void testAverageBlockSpeedWithVaryingBlocks(TestContext context) {
+		// Handler
 		BlockBreakSpeedCalculator average = average();
+
+		// Block setup
 		TestPos center = TestPos.of(POS, context);
 		TestPosCollection singleStone = TestPosCollection.of(Set.of(center.relative().up()), context);
 		TestPosCollection multipleStones = TestPosCollection.of(Set.of(center.relative().up(), center.relative().down(), center.relative().east(), center.relative().west()), context);
@@ -99,9 +103,11 @@ public class BlockBreakingSpeedTests {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSpeedTest")
 	public void testInstantBlockBreaking(TestContext context) {
 		// Instant block breaking handler configured to not break unmineable blocks
-		BlockBreakSpeedCalculator instantMineableOnly = new Instant(false);
+		BlockBreakSpeedCalculator instantMineableOnly = cannotBreakInstant();
+
 		// Instant block breaking handler configured to also break unmineable blocks
-		BlockBreakSpeedCalculator instantIncludingUnmineable = new Instant(true);
+		BlockBreakSpeedCalculator instantIncludingUnmineable = canBreakInstant();
+
 
 		TestPos center = TestPos.of(POS, context);
 		TestPos mineablePos = center.offset(center.relative().north());
@@ -133,6 +139,26 @@ public class BlockBreakingSpeedTests {
 		context.complete();
 	}
 
+	public static BlockBreakSpeedCalculator cannotBreakInstant() {
+		String handler = """
+				         {
+				             "type": "forgero:instant",
+				             "can_break_unmineable": false
+				         }
+				""";
+		return Instant.BUILDER.build(JsonParser.parseString(handler)).orElseThrow();
+	}
+
+	public static BlockBreakSpeedCalculator canBreakInstant() {
+		String handler = """
+				         {
+				             "type": "forgero:instant",
+				             "can_break_unmineable": true
+				         }
+				""";
+		return Instant.BUILDER.build(JsonParser.parseString(handler)).orElseThrow();
+	}
+
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockBreakSpeedTest")
 	public void testSingleBlockSpeed(TestContext context) {
 		BlockBreakSpeedCalculator single = Single.INSTANCE;
@@ -155,16 +181,17 @@ public class BlockBreakingSpeedTests {
 		// For simplicity, we'll check if it's greater than 0 to ensure some breaking speed is calculated.
 		Assertions.assertTrue(breakingDelta > 0, "Breaking delta should be positive for a stone block with a player in survival mode without tools.");
 
-		// Optionally, to make this test more precise, you could assert against a known expected delta value
-		// calculated for a stone block under these specific conditions. This would require knowing the exact calculation,
-		// which typically involves the player's current tool effectiveness against the block and the block's hardness.
-
 		context.complete();
 	}
 
 	public static BlockBreakSpeedCalculator average() {
-		String handler = Average.TYPE;
-		return Average.BUILDER.build(new JsonPrimitive(handler)).orElseThrow();
+		String handler = """
+				{
+					"type": "forgero:average"
+				}
+				""";
+		return Average.BUILDER.build(JsonParser.parseString(handler)).orElseThrow();
 	}
+
 
 }
