@@ -39,7 +39,7 @@ public class Instant implements BlockBreakSpeedCalculator {
 
 		if (jsonElement.isJsonObject()) {
 			JsonObject json = jsonElement.getAsJsonObject();
-			canBreakUnmineable = json.get("canBreakUnmineable").getAsBoolean();
+			canBreakUnmineable = json.get("can_break_unmineable").getAsBoolean();
 		}
 
 		return new Instant(canBreakUnmineable);

@@ -24,8 +24,8 @@ public class All implements BlockBreakSpeedCalculator {
 
 	public final static ClassKey<All> KEY = new ClassKey<>(TYPE, All.class);
 
-	public final static JsonBuilder<All> BUILDER = HandlerBuilder.fromString(KEY.clazz(), HandlerBuilder.fromStringOptional(TYPE, () -> INSTANCE));
-
+	public final static JsonBuilder<All> BUILDER = HandlerBuilder.fromStringOrType(KEY.clazz(), TYPE, INSTANCE);
+	
 	@Override
 	public float calculateBlockBreakingDelta(Entity source, BlockPos target, Set<BlockPos> availableBlocks) {
 		float totalDelta = 0.0f;
