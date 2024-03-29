@@ -11,6 +11,9 @@ import java.util.Optional;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.model.match.builders.ElementParser;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.core.util.TypeToken;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
@@ -30,6 +33,10 @@ import net.minecraft.world.World;
 public record BlockPredicateMatcher(BlockPredicate predicate) implements Matchable, BlockFilter {
 	public static String ID = "minecraft:block";
 
+	public final static ClassKey<BlockPredicateMatcher> KEY = new ClassKey<>(ID, BlockPredicateMatcher.class);
+
+	public final static JsonBuilder<BlockPredicateMatcher> BUILDER = new BlockFilterBuilder();
+	
 	@Override
 	public boolean isDynamic() {
 		return true;
@@ -58,6 +65,21 @@ public record BlockPredicateMatcher(BlockPredicate predicate) implements Matchab
 			return ElementParser.fromIdentifiedElement(element, ID)
 					.map(BlockPredicate::fromJson)
 					.map(BlockPredicateMatcher::new);
+		}
+	}
+
+	public static class BlockFilterBuilder implements JsonBuilder<BlockPredicateMatcher> {
+
+		@Override
+		public Optional<BlockPredicateMatcher> build(JsonElement element) {
+			return ElementParser.fromIdentifiedElement(element, ID)
+					.map(BlockPredicate::fromJson)
+					.map(BlockPredicateMatcher::new);
+		}
+
+		@Override
+		public TypeToken<BlockPredicateMatcher> getTargetClass() {
+			return KEY.clazz();
 		}
 	}
 

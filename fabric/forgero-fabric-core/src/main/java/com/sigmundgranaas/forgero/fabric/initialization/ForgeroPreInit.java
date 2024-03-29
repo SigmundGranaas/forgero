@@ -28,7 +28,6 @@ import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
-import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
@@ -41,11 +40,15 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeStack
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeUpgradeHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.CoolDownHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.DamageHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.FilterWrapper;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.IsBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SameBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SimilarBlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Diminishing;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
@@ -111,7 +114,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		registerHandlerBuilders();
 		registerItemConverters();
 	}
-
 
 	private void registerItemConverters() {
 		var settingRegistry = ItemRegistries.SETTING_PROCESSOR;
@@ -216,7 +218,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// Hardness calculators
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Average.TYPE, Average.BUILDER);
-		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Diminishing.TYPE, Diminishing.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Instant.TYPE, Instant.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Single.TYPE, Single.BUILDER);
 
@@ -227,8 +228,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 				.register(UseHandler.KEY);
 		// Entity use handlers
 
-		// Block use handlers
-
 		// Stop use handlers
 		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowTridentHandler.TYPE, ThrowTridentHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowableHandler.TYPE, ThrowableHandler.BUILDER);
@@ -238,7 +237,12 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(StopHandler.KEY, CoolDownHandler.TYPE, CoolDownHandler.BUILDER);
 
 		// Block filters
-		// Soonish
+		HandlerBuilderRegistry.register(BlockFilter.KEY, FilterWrapper.TYPE, FilterWrapper.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, CanMineFilter.TYPE, CanMineFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, IsBlockFilter.TYPE, IsBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, SameBlockFilter.TYPE, SameBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, SimilarBlockFilter.TYPE, SimilarBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, BlockPredicateMatcher.ID, BlockPredicateMatcher.BUILDER);
 	}
 
 	private void registerEntityBasedHandler(String key, JsonBuilder<? extends EntityBasedHandler> builder) {

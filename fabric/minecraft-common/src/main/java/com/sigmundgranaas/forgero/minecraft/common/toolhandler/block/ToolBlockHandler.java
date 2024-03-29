@@ -36,7 +36,6 @@ import net.minecraft.util.math.Direction;
  * Prefer cached handlers from {@link BlockHandlerCache} over creating new ones.
  * Calculating the blocks to mine is expensive, and should only be done once per block unless it is invalidated.
  * Caching is extremely short term, and should only be for actions that calls the handler multiple times in a row, like when calculating brok breaking deltas.
- * See {@link BlockHandlerHelper} for creating handlers from tools.
  */
 @Getter
 @Accessors(fluent = true)

@@ -1,8 +1,0 @@
-{
-  "priority": 5,
-  "namespace": "forgero",
-  "dependencies": [
-    "minecraft",
-    "forgero"
-  ]
-}

@@ -80,6 +80,10 @@
         "on_stop": [
           {
             "type": "forgero:launch_projectile"
+          },
+          {
+            "type": "minecraft:stack_damage",
+            "damage": 1
           }
         ]
       }
