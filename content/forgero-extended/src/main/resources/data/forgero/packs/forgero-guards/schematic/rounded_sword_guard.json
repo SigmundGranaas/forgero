@@ -1,6 +1,6 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
-  "name": "basket_hilt_sword_guard-schematic",
+  "name": "rounded_sword_guard-schematic",
   "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",
@@ -56,14 +56,7 @@
   },
   "properties": {
     "grouped_attributes": [
-      {
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "order": "BASE",
-        "attributes": [
 
-        ]
-      }
     ],
     "attributes": [
 

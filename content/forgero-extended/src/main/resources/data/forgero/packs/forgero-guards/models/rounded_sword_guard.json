@@ -2,8 +2,8 @@
   "type": "SWORD_GUARD",
   "models": [
     {
-      "name": "basket_hilt_sword_guard",
-      "template": "basket_hilt_sword_guard.png",
+      "name": "rounded_sword_guard",
+      "template": "rounded_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 60
@@ -13,19 +13,19 @@
       "variants": [
         {
           "target": [
-            "model:basket_hilt_sword_guard.png"
+            "model:rounded_sword_guard.png"
           ],
-          "template": "basket_hilt_sword_guard.png"
+          "template": "rounded_sword_guard.png"
         }
       ]
     },
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:basket_hilt_sword_guard-schematic"
+        "id:rounded_sword_guard-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "basket_hilt_sword_guard"
+      "template": "rounded_sword_guard"
     }
   ]
 }

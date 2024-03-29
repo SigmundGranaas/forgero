@@ -18,7 +18,6 @@
   "tag.minecraft.base_stone_overworld": "Stones",
   "item.forgero.magnetico": "Magnetico",
   "item.forgero.quartz": "Quartz",
-  "item.forgero.tsuba_sword_guard": "Tsuba Guard",
   "item.forgero.refined_sword_guard": "Refined Sword Guard",
   "item.forgero.mastercrafted_sword_guard": "Mastercrafted Sword Guard",
   "item.forgero.duelling_sword_guard": "Duelling Guard",
@@ -131,6 +130,12 @@
   "item.forgero.mace": "Mace",
   "item.forgero.rapier": "Rapier",
   "item.forgero.rapier_blade": "Rapier Blade",
-  "item.forgero.basket_hilt_sword_guard": "Basket Hilt Sword Guard"
+  "item.forgero.swept_sword_guard": "Swept Guard",
+  "item.forgero.tsuba_sword_guard": "Tsuba Guard",
+  "item.forgero.half_basket_sword_guard": "Half Basket Guard",
+  "item.forgero.cruciform_sword_guard": "Cruciform Guard",
+  "item.forgero.mechanized_sword_guard": "Mechanized Guard",
+  "item.forgero.rounded_sword_guard": "Rounded Guard"
+
 }
 

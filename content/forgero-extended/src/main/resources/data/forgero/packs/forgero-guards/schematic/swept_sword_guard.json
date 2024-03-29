@@ -1,6 +1,6 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
-  "name": "cutlass_sword_guard-schematic",
+  "name": "swept_sword_guard-schematic",
   "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",
@@ -17,7 +17,7 @@
             "id": "this"
           },
           {
-            "type": "WOOD",
+            "type": "TOOL_MATERIAL",
             "unique": true,
             "amount": 2
           }
@@ -29,7 +29,7 @@
         "id": "this"
       },
       {
-        "type": "WOOD",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],
@@ -56,7 +56,14 @@
   },
   "properties": {
     "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
 
+        ]
+      }
     ],
     "attributes": [
 

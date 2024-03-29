@@ -1,6 +1,6 @@
 {
   "type": "SWORD_GUARD_SCHEMATIC",
-  "name": "mechanized_sawblade_guard-schematic",
+  "name": "cruciform_sword_guard-schematic",
   "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",
