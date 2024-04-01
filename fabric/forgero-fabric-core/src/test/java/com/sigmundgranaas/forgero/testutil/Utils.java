@@ -23,6 +23,10 @@ public class Utils {
 		return StateService.INSTANCE.convert(pickaxe).get();
 	}
 
+	public static ItemStack fromId(String id) {
+		return StateService.INSTANCE.convert(StateService.INSTANCE.find(id).get()).get();
+	}
+
 
 	public static String debugId(BlockState state) {
 		return Registries.BLOCK.getId(state.getBlock()).toString();

@@ -32,6 +32,7 @@ public class RadiusVeinSelector implements BlockSelector {
 	public static final String TYPE = "forgero:radius";
 	public static final String VEIN_MINING_RADIUS_MODIFIER = "forgero:vein_mining_radius";
 	public static final String VEIN_MINING_RADIUS_MODIFIER_KEY = "radius";
+
 	public static final ModifiableFeatureAttribute.Builder MODIFIER_BUILDER = ModifiableFeatureAttribute
 			.builder(VEIN_MINING_RADIUS_MODIFIER)
 			.key(VEIN_MINING_RADIUS_MODIFIER_KEY)
@@ -41,8 +42,8 @@ public class RadiusVeinSelector implements BlockSelector {
 
 	private final ModifiableFeatureAttribute depth;
 	private final BlockFilter filter;
-	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
+	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
 	public RadiusVeinSelector(ModifiableFeatureAttribute depth, BlockFilter filter) {
 		this.depth = depth;

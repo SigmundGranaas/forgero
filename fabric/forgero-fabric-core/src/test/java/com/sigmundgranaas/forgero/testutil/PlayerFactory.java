@@ -85,15 +85,17 @@ public class PlayerFactory implements ContextSupplier {
 		context.getWorld().getServer().setDemo(false);
 		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(uuid, playerName));
 		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity);
+
 		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
-		entity.changeGameMode(gameMode);
 		entity.setStackInHand(stackHand, stack.get());
 		entity.setYaw(direction.asRotation());
 		entity.setPitch(0f);
 		entity.setHeadYaw(direction.asRotation());
 
-		entity.baseTick();
-		entity.baseTick();
+		context.getWorld().getServer().getPlayerManager().onPlayerConnect(new ClientConnection(NetworkSide.SERVERBOUND), entity);
+		entity.tick();
+
+		entity.changeGameMode(gameMode);
 		return entity;
 	}
 

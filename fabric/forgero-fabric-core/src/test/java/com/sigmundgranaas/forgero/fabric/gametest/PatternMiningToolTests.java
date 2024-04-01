@@ -101,6 +101,7 @@ public class PatternMiningToolTests {
 		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
 		TestPosCollection validationSquare = TestPosCollection.of(Set.of(center.relative(), center.relative().down()), context);
 		TestPosCollection box = blockHelper.testCollection();
+
 		blockHelper.replace(COAL_ORE, DIRT);
 		context.setBlockState(singleCoal.relative(), DIRT);
 
