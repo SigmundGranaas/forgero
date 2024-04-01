@@ -1,12 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,11 +9,17 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttribute;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * <h1>PatternSelector</h1>
@@ -182,12 +181,24 @@ public class PatternSelector implements BlockSelector {
 		return selectWithDepth(rootPos, source);
 	}
 
+	private boolean isAir(BlockPos rootPos, Entity source) {
+		return source.getWorld().getBlockState(rootPos).isAir();
+	}
+
 	@NotNull
 	public Set<BlockPos> selectPattern(BlockPos rootPos, Entity source) {
-		Direction facingHorizontal = source.getHorizontalFacing();
+		Direction facing = source.getHorizontalFacing();
 		Direction[] primaryFacing = Direction.getEntityFacingOrder(source);
 		Set<BlockPos> blocks = new HashSet<>();
 		//iterate through the pattern list, and find all the blocks that match the pattern
+
+
+		for (Direction direction : primaryFacing) {
+			if (isAir(rootPos.offset(direction.getOpposite()), source)) {
+				facing = direction;
+				break;
+			}
+		}
 
 		boolean vertical;
 		//determine if the pattern should be applied horizontally or vertically based on player facing direction and direction variable
@@ -196,7 +207,7 @@ public class PatternSelector implements BlockSelector {
 		} else if (direction.equals(verticalDirection)) {
 			vertical = true;
 		} else {
-			vertical = primaryFacing[0] != Direction.DOWN && primaryFacing[0] != Direction.UP;
+			vertical = facing != Direction.DOWN && facing != Direction.UP;
 		}
 
 		//iterate through the pattern and check if the blocks match the pattern
@@ -215,12 +226,12 @@ public class PatternSelector implements BlockSelector {
 					//Center the pattern
 					pos = centerOffset().subtract(pos);
 
-					//Flatten the pattern player if facing up or down
+					//Flatten the pattern if player is facing up or down
 					if (!vertical) {
 						pos = rotate(pos, 1, Direction.Axis.X);
 					}
 					//Rotate the block based on the player's facing direction
-					pos = rotate(pos, rotationAmount(facingHorizontal), Direction.Axis.Y);
+					pos = rotate(pos, rotationAmount(facing), Direction.Axis.Y);
 
 					//Apply absolute position
 					pos = rootPos.add(pos);
