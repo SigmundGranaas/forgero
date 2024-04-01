@@ -34,7 +34,6 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameMode;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
@@ -49,19 +48,6 @@ public class AttributeApplicationTest {
 		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
 		return entity;
 	}
-
-	public static ServerPlayerEntity createCreativePlayer(BlockPos pos, TestContext context) {
-		ServerPlayerEntity entity = createMockPlayer(pos, context);
-		entity.changeGameMode(GameMode.CREATIVE);
-		return entity;
-	}
-
-	public static ServerPlayerEntity createSurvivalPlayer(BlockPos pos, TestContext context) {
-		ServerPlayerEntity entity = createMockPlayer(pos, context);
-		entity.changeGameMode(GameMode.SURVIVAL);
-		return entity;
-	}
-
 
 	public static void createFloor(TestContext context) {
 		BlockSelectionTest.insert(BlockSelectionTest.createSquare(TestPos.of(BlockPos.ORIGIN, context), 1, 7, 7), context);
