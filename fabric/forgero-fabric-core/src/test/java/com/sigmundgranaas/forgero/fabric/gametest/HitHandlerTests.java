@@ -2,13 +2,16 @@ package com.sigmundgranaas.forgero.fabric.gametest;
 
 import static com.sigmundgranaas.forgero.fabric.gametest.AttributeApplicationTest.createFloor;
 
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.ConvertHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.DisarmHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.FireHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.KnockbackHandler;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.mob.ZombieEntity;
@@ -21,12 +24,13 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 public class HitHandlerTests {
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "FireHandlerTest", tickLimit = 120)
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "hitHandler", tickLimit = 120)
 	public void testFireHandlerOnEntity(TestContext context) {
 		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
 		createFloor(context);
@@ -57,7 +61,7 @@ public class HitHandlerTests {
 		});
 	}
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "FireHandlerTest", tickLimit = 120)
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "hitHandler", tickLimit = 120)
 	public void testFireHandlerOnBlock(TestContext context) {
 		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
 
@@ -106,7 +110,7 @@ public class HitHandlerTests {
 		return Utils.handlerFromString(handler, FireHandler.BUILDER);
 	}
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "DisarmHandlerTest", tickLimit = 120)
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "hitHandler", tickLimit = 120)
 	public void testDisarmHandler(TestContext context) {
 		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
 
@@ -149,5 +153,125 @@ public class HitHandlerTests {
 				}
 				""";
 		return Utils.handlerFromString(json, DisarmHandler.BUILDER);
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "hitHandler", tickLimit = 120)
+	public void testConvertHandler(TestContext context) {
+		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
+		createFloor(context);
+
+		PlayerEntity player = PlayerFactory.builder(context)
+				.pos(playerPos.absolute())
+				.build()
+				.createPlayer();
+
+		Entity target = context.spawnEntity(EntityType.PIG, playerPos.offset(1, 0, 1).relative());
+
+		ConvertHandler convertHandler = convertHandler();
+		convertHandler.onHit(player, context.getWorld(), target);
+
+		// After a brief delay, check if the target has been converted
+		context.runAtTick(20, () -> {
+			// Verify that the original target is removed
+			context.assertTrue(target.isRemoved(), "Original target entity has not been removed.");
+
+			boolean conversionSuccessful = context.getWorld().getEntitiesByClass(EntityType.ZOMBIE.getBaseClass(), new Box(playerPos.offset(1, 0, 1).absolute()), e -> true).size() == 1;
+			context.assertTrue(conversionSuccessful, "Target entity was not converted to the specified type.");
+
+			context.complete();
+		});
+	}
+
+	public static ConvertHandler convertHandler() {
+		String json = """
+				{
+				    "type": "minecraft:convert",
+				    "convert_to": "minecraft:zombie",
+				    "target": "minecraft:targeted_entity"
+				}
+				""";
+		return Utils.handlerFromString(json, ConvertHandler.BUILDER);
+
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "KnockbackHandlerTest", tickLimit = 120)
+	public void testKnockbackHandlerPush(TestContext context) {
+		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
+
+		PlayerEntity player = PlayerFactory.builder(context)
+				.pos(playerPos.absolute())
+				.build()
+				.createPlayer();
+
+		Entity target = context.spawnEntity(EntityType.PIG, playerPos.offset(1, 0, 1).relative());
+
+		// Configure and apply a push direction knockback handler
+		KnockbackHandler knockbackHandlerPush = pushKnockbackHandler();
+		knockbackHandlerPush.onHit(player, context.getWorld(), target);
+
+		context.runAtTick(1, () -> {
+			Vec3d expectedDirection = target.getPos().subtract(player.getPos()).normalize();
+			Vec3d actualVelocity = target.getVelocity();
+
+			// Verify that the target's velocity is in the expected direction for a push
+			context.assertTrue(actualVelocity.dotProduct(expectedDirection) > 0, "Target entity was not pushed away from the source.");
+
+			context.complete();
+		});
+	}
+
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "KnockbackHandlerTest", tickLimit = 120)
+	public void testKnockbackHandlerPull(TestContext context) {
+		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
+
+		PlayerEntity player = PlayerFactory.builder(context)
+				.pos(playerPos.absolute())
+				.build()
+				.createPlayer();
+
+		Entity target = context.spawnEntity(EntityType.PIG, playerPos.offset(1, 0, 1).relative());
+
+		// Configure and apply a pull direction knockback handler
+		KnockbackHandler knockbackHandlerPull = pullKnockbackHandler();
+		knockbackHandlerPull.onHit(player, context.getWorld(), target);
+
+		context.runAtTick(1, () -> {
+			Vec3d expectedDirection = player.getPos().subtract(target.getPos()).normalize();
+			Vec3d actualVelocity = target.getVelocity();
+
+			// Verify that the target's velocity is in the expected direction for a pull
+			context.assertTrue(actualVelocity.dotProduct(expectedDirection) > 0, "Target entity was not pulled towards the source.");
+
+			context.complete();
+		});
+	}
+
+
+	public static KnockbackHandler pushKnockbackHandler() {
+		String json = """
+				{
+				        "type": "minecraft:knockback",
+				        "target": "minecraft:targeted_entity",
+				        "force": 1.5,
+				        "direction": "push"
+				    }
+				    		
+				""";
+		return Utils.handlerFromString(json, KnockbackHandler.BUILDER);
+	}
+
+	public static KnockbackHandler pullKnockbackHandler() {
+		String json = """
+				{
+								
+				        "type": "minecraft:knockback",
+				        "target": "minecraft:targeted_entity",
+				        "force": 1.5,
+				        "direction": "pull"
+				    }
+								
+				""";
+		return Utils.handlerFromString(json, KnockbackHandler.BUILDER);
 	}
 }

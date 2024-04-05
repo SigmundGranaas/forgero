@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 public class KnockbackHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "minecraft:knockback";
-	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), KnockbackHandler::fromJson);
+	public static final JsonBuilder<KnockbackHandler> BUILDER = HandlerBuilder.fromObject(KnockbackHandler.class, KnockbackHandler::fromJson);
 
 	private final String target;
 	private final double force;
@@ -84,4 +84,5 @@ public class KnockbackHandler implements EntityTargetHandler {
 			targetEntity.addVelocity(vec.x * force, vec.y * force, vec.z * force);
 		}
 	}
+
 }

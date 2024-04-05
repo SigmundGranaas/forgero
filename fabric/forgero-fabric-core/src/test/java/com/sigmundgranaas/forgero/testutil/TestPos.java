@@ -16,6 +16,10 @@ public record TestPos(BlockPos absoluteRoot, BlockPos relativeRoot, BlockPos off
 		return new TestPos(absolute(), relative(), offset);
 	}
 
+	public TestPos offset(int x, int y, int z) {
+		return new TestPos(absolute(), relative(), new BlockPos(x, y, z));
+	}
+
 	public static TestPos of(BlockPos relative, TestContext context) {
 		return new TestPos(context.getAbsolutePos(relative), relative, BlockPos.ORIGIN);
 	}
