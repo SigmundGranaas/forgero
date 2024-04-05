@@ -1,6 +1,10 @@
 package com.sigmundgranaas.forgero.testutil;
 
+import java.util.UUID;
+import java.util.function.Supplier;
+
 import com.mojang.authlib.GameProfile;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
@@ -11,9 +15,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
-
-import java.util.UUID;
-import java.util.function.Supplier;
 
 
 public class PlayerFactory implements ContextSupplier {
@@ -29,6 +30,10 @@ public class PlayerFactory implements ContextSupplier {
 
 	public static PlayerBuilder builder(TestContext context) {
 		return new PlayerBuilder().ctxSupplier(() -> context);
+	}
+
+	public static ServerPlayerEntity of(TestContext context, TestPos pos) {
+		return new PlayerBuilder().ctxSupplier(() -> context).pos(pos.absolute()).build().createPlayer();
 	}
 
 	PlayerFactory(Supplier<TestContext> ctxSupplier, String playerName, UUID uuid, GameMode gameMode, Supplier<ItemStack> stack, Hand stackHand, BlockPos pos, Direction lookDirection) {

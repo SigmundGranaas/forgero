@@ -29,31 +29,23 @@ loom {
 	accessWidenerPath = file("src/main/resources/forgero-core.accesswidener")
 
 	runs {
-		testmodClient {
-			client()
-			ideConfigGenerated project.rootProject == project
-			name = "Testmod Client"
-			source sourceSets.test
-		}
-		testmodServer {
+		testServer {
 			server()
 			ideConfigGenerated project.rootProject == project
-			name = "Testmod Server"
+			name = "Test Server"
 			source sourceSets.test
 		}
 		gametest {
-			inherit testmodServer
-
+			inherit testServer
 			name "Game Test"
-
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
 			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 			runDir "build/gametest"
 		}
-		testmodClient {
+		testClient {
 			client()
-			name = "Testmod Client"
+			name = "Test Client"
 			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/forgero/gametest/structures")}"
 
 			ideConfigGenerated = false

@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity;
 
+import java.util.Random;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
@@ -11,6 +13,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 /**
@@ -33,7 +36,7 @@ import net.minecraft.world.World;
 public class DisarmHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "forgero:disarm";
-	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), DisarmHandler::fromJson);
+	public static final JsonBuilder<DisarmHandler> BUILDER = HandlerBuilder.fromObject(DisarmHandler.class, DisarmHandler::fromJson);
 
 	private final String target;
 
@@ -73,7 +76,11 @@ public class DisarmHandler implements EntityTargetHandler {
 			if (!mainHandStack.isEmpty()) {
 
 				// Drop the item in the world
-				ItemEntity itemEntity = new ItemEntity(world, livingTarget.getX(), livingTarget.getY(), livingTarget.getZ(), mainHandStack);
+				ItemEntity itemEntity = new ItemEntity(world, livingTarget.getX(), livingTarget.getEyeY(), livingTarget.getZ(), mainHandStack.copy());
+
+				float f = new Random().nextFloat() * 0.1F;
+				float g = new Random().nextFloat() * 0.1F;
+				itemEntity.setVelocity(-MathHelper.sin(g) * f, 0.2, MathHelper.cos(g) * f);
 				world.spawnEntity(itemEntity);
 
 				// Empty the main hand of the entity
