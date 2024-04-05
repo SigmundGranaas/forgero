@@ -8,8 +8,8 @@ import com.sigmundgranaas.forgero.testutil.TestPos;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
@@ -30,7 +30,7 @@ public class HitHandlerTests {
 				.createPlayer();
 
 
-		Entity target = context.spawnEntity(EntityType.PIG, playerPos.offset(new BlockPos(1, 0, 1)).relative());
+		PigEntity target = context.spawnEntity(EntityType.PIG, playerPos.offset(new BlockPos(1, 0, 1)).relative());
 
 		// Apply FireHandler effects on the target entity
 		FireHandler fireHandler = fireHandler();
@@ -38,8 +38,13 @@ public class HitHandlerTests {
 
 		// After 1 tick, check if the target entity is on fire
 		context.runAtTick(1, () -> {
+			// Verify that the target is on fire
+			context.assertTrue(target.getFireTicks() > 1, "Target entity is not on fire.");
+
+			context.assertTrue(target.getHealth() < target.getMaxHealth(), "Target entity has not taken any damage.");
+
 			// Verify the target is on fire for the expected duration
-			context.assertTrue(target.getFireTicks() == fireHandler.duration() * 20, "Target entity is not on fire for the expected duration.");
+			context.assertTrue(target.getFireTicks() == (fireHandler.duration() * 20) - 1, "Target entity is not on fire for the expected duration.");
 
 			context.complete();
 		});
@@ -48,11 +53,10 @@ public class HitHandlerTests {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "FireHandlerTest", tickLimit = 120)
 	public void testFireHandlerOnBlock(TestContext context) {
 		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
-		createFloor(context);
 
 		// Place a burnable block next to the player
-		BlockPos targetBlockPos = playerPos.absolute().add(1, 0, 0);
-		context.setBlockState(targetBlockPos, Blocks.OAK_PLANKS.getDefaultState());
+		TestPos targetBlockPos = TestPos.of(new BlockPos(1, 2, 1), context);
+		context.setBlockState(targetBlockPos.relative(), Blocks.OAK_PLANKS);
 
 		PlayerEntity player = PlayerFactory.builder(context)
 				.pos(playerPos.absolute())
@@ -61,11 +65,11 @@ public class HitHandlerTests {
 
 
 		FireHandler fireHandler = fireBlockHandler();
-		fireHandler.onHit(player, context.getWorld(), targetBlockPos);
+		fireHandler.onHit(player, context.getWorld(), targetBlockPos.absolute());
 
 		// After 1 tick, check if the block at targetBlockPos is set on fire
 		context.runAtTick(1, () -> {
-			BlockState stateAtTarget = context.getWorld().getBlockState(targetBlockPos);
+			BlockState stateAtTarget = context.getWorld().getBlockState(targetBlockPos.absolute().up());
 			// Verify the block is replaced with fire
 			context.assertTrue(stateAtTarget.getBlock() == Blocks.FIRE, "Target block is not set on fire as expected.");
 
@@ -77,7 +81,6 @@ public class HitHandlerTests {
 		String handler = """
 				{
 					"type": "minecraft:fire",
-				    "target": "minecraft:targeted_entity",
 				    "duration": 5
 				    }
 								
@@ -89,10 +92,10 @@ public class HitHandlerTests {
 		String handler = """
 				{
 				        "type": "minecraft:fire",
-				        "target": "minecraft:targeted_block",
 				        "duration": 5
 				    }
-				    """;
+				   
+				""";
 		return Utils.handlerFromString(handler, FireHandler.BUILDER);
 	}
 }
