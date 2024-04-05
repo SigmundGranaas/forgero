@@ -6,6 +6,9 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.DisarmHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.FireHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.KnockbackHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LifeStealHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 
@@ -14,6 +17,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -273,5 +280,125 @@ public class HitHandlerTests {
 								
 				""";
 		return Utils.handlerFromString(json, KnockbackHandler.BUILDER);
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "LifeStealHandlerTest", tickLimit = 120)
+	public void testLifeStealHandler(TestContext context) {
+		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
+
+		PlayerEntity player = PlayerFactory.of(context, playerPos);
+
+		// Set player's health to half to see the healing effect clearly
+		player.setHealth(player.getMaxHealth() / 2);
+
+		// Spawn a target entity with a set amount of health
+		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, playerPos.offset(1, 0, 1).relative());
+		target.setHealth(target.getMaxHealth());
+
+		// Create an instance of LifeStealHandler from JSON
+		LifeStealHandler lifeStealHandler = lifeStealHandler();
+
+		// Trigger the onHit method simulating the player hitting the target
+		lifeStealHandler.onHit(player, context.getWorld(), target);
+
+		context.runAtTick(1, () -> {
+			// Verify the target's health decreased
+			context.assertTrue(target.getHealth() < target.getMaxHealth(), "Target entity's health was not reduced.");
+
+			// Verify the source (player) health increased
+			context.assertTrue(player.getHealth() > player.getMaxHealth() / 2, "Source entity's (player) health was not increased.");
+
+			context.complete();
+		});
+	}
+
+	public static LifeStealHandler lifeStealHandler() {
+		String json = """
+				{
+				    "type": "forgero:life_steal",
+				    "target": "minecraft:targeted_entity",
+				    "amount": 2.0
+				}
+				""";
+		return Utils.handlerFromString(json, LifeStealHandler.BUILDER);
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "LightningStrikeHandlerTest", tickLimit = 120)
+	public void testLightningStrikeHandler(TestContext context) {
+		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
+		createFloor(context);
+
+		PlayerEntity player = PlayerFactory.of(context, playerPos);
+
+		// Spawn a target entity (e.g., a zombie) that will be struck by lightning
+		Entity target = context.spawnEntity(EntityType.ZOMBIE, playerPos.offset(1, 0, 1).relative());
+
+		// Create an instance of LightningStrikeHandler from JSON
+		LightningStrikeHandler lightningStrikeHandler = lightningStrikeHandler();
+
+		// Trigger the onHit method simulating the player hitting the target
+		lightningStrikeHandler.onHit(player, context.getWorld(), target);
+
+		// Check for a lightning bolt entity at the target's location
+		context.runAtTick(1, () -> {
+			boolean lightningStruck = context.getWorld().getEntitiesByClass(LightningEntity.class, new Box(target.getPos().subtract(3, 3, 3), target.getPos().add(3, 3, 3)), e -> true).size() == 1;
+			context.assertTrue(lightningStruck, "A lightning bolt was not spawned at the target entity's location.");
+
+			context.complete();
+		});
+	}
+
+	public static LightningStrikeHandler lightningStrikeHandler() {
+		String json = """
+				{
+				    "type": "minecraft:lightning_strike",
+				    "target": "minecraft:targeted_entity"
+				}
+				""";
+		return Utils.handlerFromString(json, LightningStrikeHandler.BUILDER);
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "StatusEffectHandlerTest", tickLimit = 120)
+	public void testStatusEffectHandler(TestContext context) {
+		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
+		createFloor(context);
+
+		PlayerEntity player = PlayerFactory.of(context, playerPos);
+
+		// Spawn a target entity (e.g., a zombie) that will receive the status effect
+		LivingEntity target = context.spawnEntity(EntityType.PIG, playerPos.offset(1, 0, 1).relative());
+
+		// Create an instance of StatusEffectHandler from JSON
+		StatusEffectHandler statusEffectHandler = statusEffectHandler();
+
+		// Trigger the onHit method simulating the player hitting the target
+		statusEffectHandler.onHit(player, context.getWorld(), target);
+
+		// Verify the status effect is applied correctly
+		context.runAtTick(1, () -> {
+			boolean hasEffect = target.hasStatusEffect(StatusEffects.POISON);
+			context.assertTrue(hasEffect, "Target entity does not have the expected Poison effect.");
+
+			if (hasEffect) {
+				StatusEffectInstance effectInstance = target.getStatusEffect(StatusEffects.POISON);
+				context.assertTrue(0 == effectInstance.getAmplifier(), "Poison effect level is not as expected.");
+				context.assertTrue(599 == effectInstance.getDuration(), "Poison effect duration is not as expected.");
+			}
+
+			context.complete();
+		});
+	}
+
+	public static StatusEffectHandler statusEffectHandler() {
+		String json = """
+				{
+				  "type": "minecraft:status_effect",
+				   "target": "minecraft:targeted_entity",
+				   "effect": "minecraft:poison",
+				   "level": 1,
+				   "duration": 600
+				}
+				""";
+		return Utils.handlerFromString(json, StatusEffectHandler.BUILDER);
 	}
 }
