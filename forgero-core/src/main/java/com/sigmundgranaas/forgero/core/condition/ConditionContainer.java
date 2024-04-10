@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.condition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -54,5 +55,18 @@ public class ConditionContainer implements Conditional<ConditionContainer>, Prop
 				.map(cond -> cond.getRootProperties(target, context))
 				.flatMap(List::stream)
 				.toList();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ConditionContainer that = (ConditionContainer) o;
+		return Objects.equals(conditions, that.conditions);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(conditions);
 	}
 }

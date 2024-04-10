@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
+import static com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel.EMPTY;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +29,6 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.MutableMatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
-import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,6 @@ import net.minecraft.util.Identifier;
 
 
 public class CompositeModelVariant extends ForgeroCustomModelProvider {
-	public static final BakedModel EMPTY = new EmptyBakedModel();
 	private static final Set<StackContextKey> currentlyBuilding = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	private final LoadingCache<StackContextKey, BakedModelResult> cache;
@@ -247,14 +247,14 @@ public class CompositeModelVariant extends ForgeroCustomModelProvider {
 		template.getModels().forEach(model -> textureCollector(model, accumulator));
 	}
 
-	@Override
-	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
-
-	}
-
 	private void textureCollector(TextureModel template, List<ModelTemplate> accumulator) {
 		accumulator.add(template);
 		template.children().forEach(child -> textureCollector(child, accumulator));
+	}
+
+	@Override
+	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+
 	}
 
 

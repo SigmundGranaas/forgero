@@ -64,4 +64,6 @@ public class EmptySlot extends AbstractTypedSlot {
 	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
 		return getRootProperties();
 	}
+
+
 }

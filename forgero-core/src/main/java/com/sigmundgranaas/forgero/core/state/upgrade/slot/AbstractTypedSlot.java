@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
@@ -64,5 +65,16 @@ public abstract class AbstractTypedSlot implements Slot {
 		return type.typeName();
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AbstractTypedSlot that = (AbstractTypedSlot) o;
+		return index == that.index && Objects.equals(categories, that.categories) && Objects.equals(type, that.type) && Objects.equals(description, that.description);
+	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(categories, type, index, description);
+	}
 }

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.client.model;
 
-import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.CompositeModelVariant;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -22,9 +21,12 @@ public class ForgeroModelVariantProvider implements ModelVariantProvider {
 	@Override
 	public @Nullable
 	UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
-		if (ForgeroStateRegistry.COMPOSITES.contains(String.format("%s:%s", modelId.getNamespace(), modelId.getPath()))) {
-			return compositeModel;
-		}
+		/**
+		 * if (ForgeroStateRegistry.COMPOSITES.contains(String.format("%s:%s", modelId.getNamespace(), modelId.getPath()))) {
+		 * 			return compositeModel;
+		 *                }
+		 */
+
 		return null;
 	}
 

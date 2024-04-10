@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
-import static com.sigmundgranaas.forgero.minecraft.common.client.model.CompositeModelVariant.EMPTY;
 
 import java.util.List;
 
+import com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
@@ -19,8 +19,7 @@ public class DynamicBakedModel implements BakedModel {
 	private volatile BakedModel currentModel;
 
 	public DynamicBakedModel() {
-		this.currentModel = EMPTY;
-		
+		this.currentModel = EmptyBakedModel.EMPTY;
 	}
 
 	public void updateModel(BakedModel newModel) {

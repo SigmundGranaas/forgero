@@ -5,6 +5,7 @@ import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -29,6 +30,8 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	private final State handle;
 
 	private final List<PropertyContainer> conditions;
+
+	private Integer hashCode;
 
 	public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id) {
 		super(slots, id, List.of(head, handle));
@@ -168,6 +171,21 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	@Override
 	public ConstructedTool removeCondition(String identifier) {
 		return toolBuilder().conditions(Conditional.removeConditions(conditions, identifier)).build();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		return o.hashCode() == this.hashCode();
+	}
+
+	@Override
+	public int hashCode() {
+		if (hashCode == null) {
+			this.hashCode = Objects.hash(super.hashCode(), conditions);
+		}
+		return hashCode;
 	}
 
 	@Getter

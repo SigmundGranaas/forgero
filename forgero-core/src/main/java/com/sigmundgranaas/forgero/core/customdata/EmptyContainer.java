@@ -37,4 +37,5 @@ public class EmptyContainer implements DataContainer {
 	public DataContainer merge(DataContainer other, Context context, Target target) {
 		return other;
 	}
+	
 }

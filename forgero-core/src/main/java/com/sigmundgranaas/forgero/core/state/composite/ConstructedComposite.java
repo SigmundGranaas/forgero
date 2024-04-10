@@ -5,6 +5,7 @@ import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposi
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -156,6 +157,19 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	public DataContainer customData(Target target) {
 		var combinedTarget = target.combineTarget(new TypeTarget(Set.of(type().typeName())));
 		return components().stream().map(state -> state.customData(combinedTarget)).reduce(DataContainer.empty(), (dataContainer1, dataContainer2) -> DataContainer.transitiveMerge(dataContainer1, dataContainer2, combinedTarget));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ConstructedComposite that = (ConstructedComposite) o;
+		return that.hashCode() == this.hashCode();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(parts, super.hashCode());
 	}
 
 	public static class ConstructBuilder extends BaseCompositeBuilder<ConstructBuilder> {

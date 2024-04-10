@@ -1,5 +1,12 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -15,12 +22,6 @@ import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @SuppressWarnings("ALL")
 public abstract class BaseComposite implements Composite {
 	protected final SlotContainer slotContainer;
@@ -31,7 +32,6 @@ public abstract class BaseComposite implements Composite {
 		this.slotContainer = slotContainer;
 		this.id = id;
 	}
-
 
 	@Override
 	public @NotNull
@@ -110,6 +110,19 @@ public abstract class BaseComposite implements Composite {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BaseComposite that = (BaseComposite) o;
+		return Objects.equals(slotContainer, that.slotContainer) && Objects.equals(id, that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(slotContainer, id);
 	}
 
 	@Override
