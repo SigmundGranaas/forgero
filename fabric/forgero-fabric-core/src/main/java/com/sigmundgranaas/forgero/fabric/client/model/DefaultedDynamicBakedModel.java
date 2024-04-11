@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.ModelStrategy;
 import com.sigmundgranaas.forgero.minecraft.common.match.ItemWorldEntityKey;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.Nullable;

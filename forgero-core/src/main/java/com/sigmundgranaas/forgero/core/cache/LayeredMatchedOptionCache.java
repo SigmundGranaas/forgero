@@ -26,7 +26,7 @@ public class LayeredMatchedOptionCache<K, V> {
 	public V get(K key, Supplier<V> callback, Predicate<V> matcher) {
 		Deque<CacheEntry<V>> entries = prepareMap(key);
 
-		cleanUpEntries(entries);
+		cleanUpEntries(entries, key);
 
 		return findValidEntry(entries, matcher)
 				.map(CacheEntry::value)
@@ -42,12 +42,15 @@ public class LayeredMatchedOptionCache<K, V> {
 		return cache.get(key);
 	}
 
-	private void cleanUpEntries(Deque<CacheEntry<V>> entries) {
+	private void cleanUpEntries(Deque<CacheEntry<V>> entries, K key) {
 		for (Iterator<CacheEntry<V>> it = entries.iterator(); it.hasNext(); ) {
 			CacheEntry<V> entry = it.next();
 			if (now > entry.expiryTime || entries.size() > maxCacheSize) {
 				it.remove();
 			}
+		}
+		if (entries.isEmpty()) {
+			this.cache.remove(key);
 		}
 	}
 

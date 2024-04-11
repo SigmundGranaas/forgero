@@ -1,8 +1,10 @@
-package com.sigmundgranaas.forgero.fabric.client.model;
+package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
 
 import java.util.Collections;
 import java.util.List;
 
+import com.sigmundgranaas.forgero.fabric.client.model.DynamicQuadProvider;
+import com.sigmundgranaas.forgero.fabric.client.model.ItemModelWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;

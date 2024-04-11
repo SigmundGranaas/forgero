@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model;
+package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
 
 import java.time.Duration;
 import java.util.function.Predicate;
@@ -9,11 +9,11 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
 
-public class CachedSingleStateStrategy implements ModelStrategy {
+public class LayeredCachedSingleStateStrategy implements ModelStrategy {
 	private final ModelStrategy strategy;
 	private final LayeredMatchedOptionCache<Integer, BakedModelResult> modelCache;
 
-	public CachedSingleStateStrategy(ModelStrategy strategy) {
+	public LayeredCachedSingleStateStrategy(ModelStrategy strategy) {
 		this.strategy = strategy;
 		this.modelCache = new LayeredMatchedOptionCache<>(Duration.ofMinutes(1), 20);
 	}

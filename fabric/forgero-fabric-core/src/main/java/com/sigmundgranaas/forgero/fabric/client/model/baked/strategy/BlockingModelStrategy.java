@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model;
+package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
 
 
 import static com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel.EMPTY;
@@ -6,6 +6,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.mod
 import com.sigmundgranaas.forgero.core.model.ModelResult;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.fabric.client.model.StateModelBaker;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
 
 public class BlockingModelStrategy implements ModelStrategy {

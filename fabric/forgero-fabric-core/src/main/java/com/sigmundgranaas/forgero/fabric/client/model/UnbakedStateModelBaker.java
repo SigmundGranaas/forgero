@@ -7,6 +7,11 @@ import java.util.function.Function;
 
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.BakedDefaultedStateModel;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.BlockingModelStrategy;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.LayeredCachedSingleStateStrategy;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.ModelStrategy;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.SingleCachedStateStrategy;
 import com.sigmundgranaas.forgero.minecraft.common.client.ForgeroCustomModelProvider;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +38,7 @@ public class UnbakedStateModelBaker extends ForgeroCustomModelProvider {
 	@Override
 	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		StateModelBaker modelBaker = new StateModelBaker(baker, textureGetter, registry);
-		ModelStrategy strategy = new CachedSingleStateStrategy(new BlockingModelStrategy(modelBaker));
+		ModelStrategy strategy = new SingleCachedStateStrategy(new LayeredCachedSingleStateStrategy(new BlockingModelStrategy(modelBaker)));
 		Optional<BakedModel> model = service.find(this.modelId)
 				.flatMap(state -> modelBaker.bake(state, MatchContext.of()))
 				.map(baked -> new BakedDefaultedStateModel(baked.model()))
