@@ -6,10 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -17,7 +14,6 @@ public class LayeredMatchedOptionCache<K, V> {
 	private final Map<K, Deque<CacheEntry<V>>> cache;
 	private final long entryTTL; // Time to live for each cache entry
 	private final int maxCacheSize; // Maximum number of entries in each of the sections of the cache
-	private final Executor cleanupExecutor;
 	private long now;
 
 
@@ -25,13 +21,12 @@ public class LayeredMatchedOptionCache<K, V> {
 		this.entryTTL = entryTTL != null ? entryTTL.toMillis() : Long.MAX_VALUE;
 		this.maxCacheSize = maxCacheSize != null ? maxCacheSize : Integer.MAX_VALUE;
 		this.cache = new ConcurrentHashMap<>();
-		this.cleanupExecutor = Executors.newSingleThreadExecutor(); // Single thread executor for cleanup tasks
 	}
 
 	public V get(K key, Supplier<V> callback, Predicate<V> matcher) {
 		Deque<CacheEntry<V>> entries = prepareMap(key);
 
-		cleanup(entries);
+		cleanUpEntries(entries);
 
 		return findValidEntry(entries, matcher)
 				.map(CacheEntry::value)
@@ -47,17 +42,7 @@ public class LayeredMatchedOptionCache<K, V> {
 		return cache.get(key);
 	}
 
-	private void cleanup(Deque<CacheEntry<V>> entries) {
-		cleanUpEntriesAsync(entries);
-	}
-
-	private void cleanUpEntriesAsync(Deque<CacheEntry<V>> entries) {
-		CompletableFuture.runAsync(() -> cleanUpEntries(entries), cleanupExecutor);
-	}
-
 	private void cleanUpEntries(Deque<CacheEntry<V>> entries) {
-		long now = System.currentTimeMillis();
-
 		for (Iterator<CacheEntry<V>> it = entries.iterator(); it.hasNext(); ) {
 			CacheEntry<V> entry = it.next();
 			if (now > entry.expiryTime || entries.size() > maxCacheSize) {
