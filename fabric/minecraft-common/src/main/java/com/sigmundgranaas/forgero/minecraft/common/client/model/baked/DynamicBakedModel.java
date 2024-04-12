@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.client.model;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked;
 
 
 import java.util.List;

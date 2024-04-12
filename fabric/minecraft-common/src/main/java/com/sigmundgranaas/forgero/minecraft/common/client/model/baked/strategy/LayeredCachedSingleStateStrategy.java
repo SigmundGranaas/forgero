@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.core.cache.LayeredMatchedOptionCache;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
 
 public class LayeredCachedSingleStateStrategy implements ModelStrategy {
 	private ModelStrategy fallBack;

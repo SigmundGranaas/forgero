@@ -1,11 +1,11 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
 
 public class StrategyFactory {
 	public enum Strategy {

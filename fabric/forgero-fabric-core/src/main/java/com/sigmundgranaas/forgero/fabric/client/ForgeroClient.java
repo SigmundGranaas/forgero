@@ -20,7 +20,7 @@ import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.fabric.client.model.unbaked.ForgeroStateModelResolver;
+import com.sigmundgranaas.forgero.fabric.client.model.ForgeroStateModelResolver;
 import com.sigmundgranaas.forgero.fabric.client.texture.Generator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;

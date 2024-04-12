@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy;
 
 
 import java.util.Map;
@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.core.model.ModelResult;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.DynamicBakedModel;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.DynamicBakedModel;
 
 public class AsyncModelStrategy implements ModelStrategy {
 	private final ModelStrategy modelProvider;

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.client.model;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.unbaked;
 
 import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
 
@@ -19,7 +19,6 @@ import com.sigmundgranaas.forgero.minecraft.common.mixins.JsonUnbakedModelOverri
 
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.Baker;
-import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelElement;
@@ -55,10 +54,10 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 	}
 
 	private String textureName(ModelTemplate model) {
-		if(model instanceof PaletteTemplateModel paletteTemplateModel){
+		if (model instanceof PaletteTemplateModel paletteTemplateModel) {
 			return getTextureBasePath() + String.format("%s-%s", paletteTemplateModel.palette(), paletteTemplateModel.template().replace(".png", ""));
 		}
-		return ((TextureModel)model).texture();
+		return ((TextureModel) model).texture();
 	}
 
 	public String BuildJsonModel() {
@@ -86,7 +85,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 				this.resolutionMap.put(layer, textures.get(i).getResolution());
 				textures.get(i).getDisplayOverrides().ifPresent(displayOverrides::add);
 				this.indexMap.put(layer, i + 1);
-				jsonTextures.addProperty(layer,  texture);
+				jsonTextures.addProperty(layer, texture);
 			}
 		} else {
 			jsonTextures.addProperty("layer" + 1, getTextureBasePath() + TRANSPARENT_BASE_IDENTIFIER);

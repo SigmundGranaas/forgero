@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked;
 
 import java.io.BufferedReader;
 import java.io.IOException;

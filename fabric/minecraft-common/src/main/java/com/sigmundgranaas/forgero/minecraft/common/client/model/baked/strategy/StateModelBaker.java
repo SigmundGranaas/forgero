@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ import com.sigmundgranaas.forgero.core.model.TextureBasedModel;
 import com.sigmundgranaas.forgero.core.model.TextureModel;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.Unbaked2DTexturedModel;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.UnbakedDynamicModel;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.unbaked.Unbaked2DTexturedModel;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.unbaked.UnbakedDynamicModel;
 
 import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.texture.Sprite;

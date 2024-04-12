@@ -1,6 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model.unbaked;
-
-import static com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.StrategyFactory.Strategy.PRE_BAKED;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.unbaked;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -8,11 +6,11 @@ import java.util.function.Function;
 
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.fabric.client.model.QuadProviderPreparer;
-import com.sigmundgranaas.forgero.fabric.client.model.baked.DefaultedDynamicBakedModel;
-import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.ModelStrategy;
-import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.StateModelBaker;
-import com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.StrategyFactory;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.QuadProviderPreparer;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.DefaultedDynamicBakedModel;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.ModelStrategy;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.StateModelBaker;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.StrategyFactory;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +38,7 @@ public class UnbakedStateModel implements UnbakedModel {
 	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		State state = service.find(this.modelId).get();
 		StateModelBaker modelBaker = new StateModelBaker(baker, textureGetter, registry);
-		ModelStrategy strategy = new StrategyFactory(modelBaker, PRE_BAKED).build(state);
+		ModelStrategy strategy = new StrategyFactory(modelBaker, StrategyFactory.Strategy.PRE_BAKED).build(state);
 
 		return new QuadProviderPreparer(new DefaultedDynamicBakedModel(strategy, service));
 	}

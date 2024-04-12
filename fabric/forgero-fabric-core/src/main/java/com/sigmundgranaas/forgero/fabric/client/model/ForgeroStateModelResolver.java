@@ -1,8 +1,9 @@
-package com.sigmundgranaas.forgero.fabric.client.model.unbaked;
+package com.sigmundgranaas.forgero.fabric.client.model;
 
 import java.util.Set;
 
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.unbaked.UnbakedStateModel;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.Nullable;
 

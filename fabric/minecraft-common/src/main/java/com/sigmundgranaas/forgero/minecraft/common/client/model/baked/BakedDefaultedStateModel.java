@@ -1,9 +1,8 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;

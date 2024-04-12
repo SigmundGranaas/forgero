@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
+package com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy;
 
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
 
@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.BakedModelResult;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
 
 import net.minecraft.item.ItemStack;
 

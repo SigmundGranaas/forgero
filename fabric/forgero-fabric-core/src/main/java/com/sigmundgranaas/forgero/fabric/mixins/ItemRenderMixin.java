@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.fabric.client.model.QuadProviderPreparer;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.QuadProviderPreparer;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
