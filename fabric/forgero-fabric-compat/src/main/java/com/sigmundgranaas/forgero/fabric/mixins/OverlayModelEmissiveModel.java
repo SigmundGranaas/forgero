@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.sigmundgranaas.forgero.minecraft.common.client.model.QuadProviderPreparer;
+import io.github.moremcmeta.emissiveplugin.fabric.model.OverlayBakedModel;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,17 +19,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 @Mixin(ItemRenderer.class)
-public abstract class ItemRenderMixin {
-
+public class OverlayModelEmissiveModel {
 	@Shadow
 	@Final
 	private ItemModels models;
 
 	@Inject(at = @At("HEAD"), method = "getModel")
-	public void forgero$prepareModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
+	public void forgero$preparOverlayModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
 		BakedModel bakedModel = this.models.getModel(stack);
-		if (bakedModel instanceof QuadProviderPreparer preparer && world instanceof ClientWorld clientWorld) {
-			preparer.provideContext(stack, clientWorld, entity);
+		if (bakedModel instanceof OverlayBakedModel overlay) {
+			if (overlay.getWrappedModel() instanceof QuadProviderPreparer preparer && world instanceof ClientWorld clientWorld) {
+				preparer.provideContext(stack, clientWorld, entity);
+			}
 		}
 	}
 }

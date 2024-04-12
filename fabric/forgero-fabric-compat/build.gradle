@@ -24,6 +24,8 @@ dependencies {
 	//modImplementation "maven.modrinth:cloth-config:9.0.94+fabric"
 	//modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
 
+	modCompileOnly("maven.modrinth:moremcmeta-emissive:v1.20.2-2.0.4-fabric")
+	
 	// Betterend & Betternether
 	// modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
 	// modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
