@@ -33,13 +33,20 @@ public class DefaultedDynamicBakedModel implements DynamicQuadProvider {
 	public List<BakedQuad> getQuads(ItemStack stack, @Nullable World world, @Nullable Entity entity, @Nullable Direction face, Random random) {
 		Optional<State> state = service.convert(stack);
 		if (state.isPresent()) {
-			MatchContext ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, world), new MatchContext.KeyValuePair(STACK, stack));
+			MatchContext ctx;
+
+			if (stack != null) {
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, world), new MatchContext.KeyValuePair(STACK, stack));
+			} else {
+				ctx = MatchContext.of();
+			}
 
 			return strategy.getModel(state.get(), ctx)
 					.map(BakedModelResult::model)
 					.orElse(EMPTY)
 					.getQuads(null, face, random);
 		}
+
 		return Collections.emptyList();
 	}
 }

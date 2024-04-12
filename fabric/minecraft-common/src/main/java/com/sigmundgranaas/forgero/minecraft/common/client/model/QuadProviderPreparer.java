@@ -34,6 +34,12 @@ public final class QuadProviderPreparer implements ItemModelWrapper {
 		this.entity = entity;
 	}
 
+	public void provideStack(ItemStack stack) {
+		this.stack = stack;
+
+	}
+
+
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
 		if (stack != null) {

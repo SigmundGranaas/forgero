@@ -38,7 +38,7 @@ public class UnbakedStateModel implements UnbakedModel {
 	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		State state = service.find(this.modelId).get();
 		StateModelBaker modelBaker = new StateModelBaker(baker, textureGetter, registry);
-		ModelStrategy strategy = new StrategyFactory(modelBaker, StrategyFactory.Strategy.PRE_BAKED).build(state);
+		ModelStrategy strategy = new StrategyFactory(modelBaker, StrategyFactory.Strategy.FULLY_ASYNC).build(state);
 
 		return new QuadProviderPreparer(new DefaultedDynamicBakedModel(strategy, service));
 	}
