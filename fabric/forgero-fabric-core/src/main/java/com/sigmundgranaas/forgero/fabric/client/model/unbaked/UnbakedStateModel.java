@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.client.model.unbaked;
 
-import static com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.StrategyFactory.Strategy.FULLY_ASYNC;
+import static com.sigmundgranaas.forgero.fabric.client.model.baked.strategy.StrategyFactory.Strategy.PRE_BAKED;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -40,7 +40,7 @@ public class UnbakedStateModel implements UnbakedModel {
 	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		State state = service.find(this.modelId).get();
 		StateModelBaker modelBaker = new StateModelBaker(baker, textureGetter, registry);
-		ModelStrategy strategy = new StrategyFactory(modelBaker, FULLY_ASYNC).build(state);
+		ModelStrategy strategy = new StrategyFactory(modelBaker, PRE_BAKED).build(state);
 
 		return new QuadProviderPreparer(new DefaultedDynamicBakedModel(strategy, service));
 	}
