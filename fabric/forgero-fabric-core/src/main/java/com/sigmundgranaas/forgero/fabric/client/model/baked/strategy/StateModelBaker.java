@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model;
+package com.sigmundgranaas.forgero.fabric.client.model.baked.strategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 
-public class StateModelBaker {
+public class StateModelBaker implements ModelStrategy {
 	private final Baker baker;
 	private final Function<SpriteIdentifier, Sprite> textureGetter;
 	private final ModelRegistry registry;
@@ -84,5 +84,10 @@ public class StateModelBaker {
 	private void textureCollector(TextureModel template, List<ModelTemplate> accumulator) {
 		accumulator.add(template);
 		template.children().forEach(child -> textureCollector(child, accumulator));
+	}
+
+	@Override
+	public Optional<BakedModelResult> getModel(State state, MatchContext context) {
+		return bake(state, context);
 	}
 }

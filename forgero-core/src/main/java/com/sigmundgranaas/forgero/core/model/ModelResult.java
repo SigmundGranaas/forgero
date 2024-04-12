@@ -27,7 +27,12 @@ public class ModelResult {
 		if (invalidationOptions.isEmpty()) {
 			return true;
 		}
-		return invalidationOptions.stream().noneMatch(option -> option.test(matchable, context));
+		for (Matchable test : invalidationOptions) {
+			if (test.test(matchable, context)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public List<Boolean> footprint(Matchable matchable, MatchContext context) {

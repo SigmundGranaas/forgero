@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model;
+package com.sigmundgranaas.forgero.fabric.client.model.baked;
 
 import java.util.List;
 

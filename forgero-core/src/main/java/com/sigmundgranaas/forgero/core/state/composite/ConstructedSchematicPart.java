@@ -25,6 +25,7 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	private final State schematic;
 	private final State baseMaterial;
 	private final ConditionContainer conditions;
+	private int code = 0;
 
 
 	public ConstructedSchematicPart(State schematic, State baseMaterial, SlotContainer slots, IdentifiableContainer id, ConditionContainer conditions) {
@@ -131,7 +132,11 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), schematic, baseMaterial, conditions);
+		if (this.code == 0) {
+			this.code = Objects.hash(super.hashCode(), schematic, baseMaterial, conditions);
+		}
+		return code;
+
 	}
 
 	@Getter

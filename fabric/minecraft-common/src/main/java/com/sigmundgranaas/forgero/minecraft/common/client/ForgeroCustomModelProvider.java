@@ -93,12 +93,14 @@ public abstract class ForgeroCustomModelProvider implements UnbakedModel, BakedM
 	}
 
 	@Override
+	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+
+	}
+
+	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
 		return Collections.emptyList();
 	}
 
-	@Override
-	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
 
-	}
 }

@@ -33,6 +33,20 @@ public class LayeredMatchedOptionCache<K, V> {
 				.orElseGet(() -> addNewEntry(entries, callback.get()));
 	}
 
+	public Optional<V> getPrevious(K key) {
+		Deque<CacheEntry<V>> entries = prepareMap(key);
+		if (entries.isEmpty()) {
+			return Optional.empty();
+		}
+		if (entries.size() == 1) {
+			return Optional.of(entries.peek().value);
+		} else {
+			Iterator<CacheEntry<V>> it = entries.iterator();
+			it.next();
+			return Optional.of(it.next().value);
+		}
+	}
+
 	private Deque<CacheEntry<V>> prepareMap(K key) {
 		this.now = System.currentTimeMillis();
 		if (!cache.containsKey(key)) {
@@ -43,6 +57,9 @@ public class LayeredMatchedOptionCache<K, V> {
 	}
 
 	private void cleanUpEntries(Deque<CacheEntry<V>> entries, K key) {
+		if (entries.isEmpty()) {
+			return;
+		}
 		for (Iterator<CacheEntry<V>> it = entries.iterator(); it.hasNext(); ) {
 			CacheEntry<V> entry = it.next();
 			if (now > entry.expiryTime || entries.size() > maxCacheSize) {

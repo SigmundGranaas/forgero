@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.client.model;
+package com.sigmundgranaas.forgero.fabric.client.model.unbaked;
 
 import java.util.Set;
 
@@ -25,7 +25,7 @@ public class ForgeroStateModelResolver implements ModelResolver {
 	@Override
 	public @Nullable UnbakedModel resolveModel(Context context) {
 		if (models.contains(context.id())) {
-			return new UnbakedStateModelBaker(new Identifier(context.id().getNamespace(), context.id().getPath().replace("item/", "")), registry, service);
+			return new UnbakedStateModel(new Identifier(context.id().getNamespace(), context.id().getPath().replace("item/", "")), registry, service);
 		}
 		return null;
 	}

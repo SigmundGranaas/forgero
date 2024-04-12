@@ -2,7 +2,8 @@ package com.sigmundgranaas.forgero.fabric.client.model;
 
 import java.util.List;
 
-import com.sigmundgranaas.forgero.minecraft.common.match.ItemWorldEntityKey;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.DynamicQuadProvider;
+import com.sigmundgranaas.forgero.fabric.client.model.baked.ItemModelWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
@@ -13,20 +14,27 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public class QuadProviderPreparer implements ItemModelWrapper {
+public final class QuadProviderPreparer implements ItemModelWrapper {
 	private final DynamicQuadProvider provider;
-	private ItemWorldEntityKey current;
+	private ItemStack stack;
+	@Nullable
+	private World world;
+	@Nullable
+	private LivingEntity entity;
+
 
 	public QuadProviderPreparer(DynamicQuadProvider provider) {
 		this.provider = provider;
 	}
 
 	public void provideContext(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
-		current = new ItemWorldEntityKey(stack, world, entity);
+		this.stack = stack;
+		this.world = world;
+		this.entity = entity;
 	}
 
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
-		return provider.getQuads(current.stack(), current.world(), current.entity(), face, random);
+		return provider.getQuads(stack, world, entity, face, random);
 	}
 }
