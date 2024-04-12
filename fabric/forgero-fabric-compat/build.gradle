@@ -32,7 +32,8 @@ dependencies {
 	//emi
 	//modCompileOnly "dev.emi:emi:${emi_version}:api"
 	//modLocalRuntime "dev.emi:emi:${emi_version}"
-	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
+	// modImplementation "maven.modrinth:emi-loot:0.6.5+1.20.1"
+	// modImplementation "maven.modrinth:emi:1.1.4+1.20.1+fabric"
 
 	//JEI
 	// modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"

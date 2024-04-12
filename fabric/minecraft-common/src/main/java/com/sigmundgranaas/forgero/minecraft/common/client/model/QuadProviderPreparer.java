@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.DynamicQuadProvider;
@@ -35,6 +36,10 @@ public final class QuadProviderPreparer implements ItemModelWrapper {
 
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
-		return provider.getQuads(stack, world, entity, face, random);
+		if (stack != null) {
+			return provider.getQuads(stack, world, entity, face, random);
+		} else {
+			return Collections.emptyList();
+		}
 	}
 }
