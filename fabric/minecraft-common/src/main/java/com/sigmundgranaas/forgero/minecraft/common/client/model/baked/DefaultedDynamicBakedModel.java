@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model.baked;
 import static com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel.EMPTY;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,12 +12,13 @@ import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.M
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
 
 public class DefaultedDynamicBakedModel implements DynamicQuadProvider {
 	private final ModelStrategy strategy;
@@ -30,7 +30,14 @@ public class DefaultedDynamicBakedModel implements DynamicQuadProvider {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(ItemStack stack, @Nullable World world, @Nullable Entity entity, @Nullable Direction face, Random random) {
+	public List<BakedQuad> getQuads(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random) {
+		BakedModel result = getModel(stack, world, entity, seed);
+		return result.getQuads(null, face, random);
+
+	}
+
+	@Override
+	public BakedModel getModel(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed) {
 		Optional<State> state = service.convert(stack);
 		if (state.isPresent()) {
 			MatchContext ctx;
@@ -40,13 +47,13 @@ public class DefaultedDynamicBakedModel implements DynamicQuadProvider {
 			} else {
 				ctx = MatchContext.of();
 			}
-
-			return strategy.getModel(state.get(), ctx)
+			BakedModel model = strategy.getModel(state.get(), ctx)
 					.map(BakedModelResult::model)
-					.orElse(EMPTY)
-					.getQuads(null, face, random);
-		}
+					.orElse(EMPTY);
 
-		return Collections.emptyList();
+			return model.getOverrides().apply(model, stack, world, entity, seed);
+
+		}
+		return EMPTY;
 	}
 }

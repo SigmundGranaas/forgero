@@ -29,7 +29,7 @@ public class OverlayModelEmissiveModel {
 		BakedModel bakedModel = this.models.getModel(stack);
 		if (bakedModel instanceof OverlayBakedModel overlay) {
 			if (overlay.getWrappedModel() instanceof QuadProviderPreparer preparer && world instanceof ClientWorld clientWorld) {
-				preparer.provideContext(stack, clientWorld, entity);
+				preparer.provideContext(stack, clientWorld, entity, seed);
 			}
 		}
 	}

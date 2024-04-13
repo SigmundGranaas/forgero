@@ -2,12 +2,12 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model.unbaked;
 
 import static net.minecraft.client.render.model.ModelRotation.X0_Y0;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.ArrayList;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
