@@ -3,17 +3,12 @@ package com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.sigmundgranaas.forgero.core.model.Strategy;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
 
 public class StrategyFactory {
-	public enum Strategy {
-		FULLY_ASYNC,
-		PRE_BAKED,
-		NO_ASYNC,
-		NO_CACHE
-	}
 
 	private final StateModelBaker baker;
 	private final Strategy strategy;

@@ -66,6 +66,6 @@
   "forgero.config.category.performance.title.tooltip": "Performance and threading related settings.",
   "forgero.config.group.performance.title": "Performance",
   "forgero.config.group.performance.title.tooltip": "Performance and threading related settings.",
-  "forgero.config.buildModelsAsync": "Build models async",
-  "forgero.config.buildModelsAsync.tooltip": "Builds models asynchronously (off-thread) so the game's main server thread and render thread aren't blocked during model building."
+  "forgero.config.modelStrategy": "Model selection strategy",
+  "forgero.config.modelStrategy.tooltip": "(FULLY_ASYNC) Build and cache models fully async so the thread is not blocked. \n (PRE_BAKED) Pre-bake default models, combined with async models and cache. \n (NO_ASYNC) Cache models, but build them using a blocking strategy. \n (NO_CACHE) Don't cache anything. This is very slow, only use for debugging."
 }
