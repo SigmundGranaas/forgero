@@ -11,6 +11,6 @@
     "defaultRequire": 1
   },
   "client": [
-    "OverlayModelEmissiveModel"
+    "EmissiveOverlayModelMixin"
   ]
 }

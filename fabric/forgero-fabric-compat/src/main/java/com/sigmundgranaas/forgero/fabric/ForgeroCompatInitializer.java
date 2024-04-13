@@ -16,6 +16,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> toolstats;
 	public static final Supplier<Boolean> patchouli;
 	public static final Supplier<Boolean> bettercombat;
+	public static final Supplier<Boolean> emissiveModel;
 	public static final Supplier<Boolean> mythicmetals;
 	public static final Supplier<Boolean> yacl;
 	public static final Supplier<Boolean> emi;
@@ -27,6 +28,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 		mythicmetals = () -> isModLoaded("mythicmetals");
 		patchouli = () -> isModLoaded("patchouli");
 		bettercombat = () -> isModLoaded("bettercombat");
+		emissiveModel = () -> isModLoaded("moremcmeta_emissive_plugin");
 		yacl = () -> isModLoaded("yet-another-config-lib") || isModLoaded("yet_another_config_lib_v3");
 	}
 
@@ -40,7 +42,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 			ToolStatTagGenerator.generateTags();
 		}
 
-		if(emi.get()){
+		if (emi.get()) {
 			ForgeroConfigurationLoader.configuration.buildModelsAsync = false;
 		}
 
