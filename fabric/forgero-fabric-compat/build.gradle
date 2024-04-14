@@ -92,7 +92,7 @@ dependencies {
 
 	//modImplementation 'com.ptsmods:devlogin:2.1'
 
-	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
+	modImplementation("net.fabricmc:fabric-language-kotlin:1.10.18+kotlin.1.9.22")
 
 	// Mod Menu API
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
