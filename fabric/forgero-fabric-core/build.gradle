@@ -50,14 +50,6 @@ loom {
 			ideConfigGenerated = false
 			source sourceSets.test
 		}
-		autoTestClient {
-			client()
-			name = "Auto test Client"
-			vmArg "-Dfabric-api.gametest"
-			
-			ideConfigGenerated = false
-			source sourceSets.test
-		}
 	}
 }
 

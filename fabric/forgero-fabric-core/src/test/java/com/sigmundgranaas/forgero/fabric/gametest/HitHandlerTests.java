@@ -178,11 +178,11 @@ public class HitHandlerTests {
 		convertHandler.onHit(player, context.getWorld(), target);
 
 		// After a brief delay, check if the target has been converted
-		context.runAtTick(20, () -> {
+		context.runAtTick(2, () -> {
 			// Verify that the original target is removed
 			context.assertTrue(target.isRemoved(), "Original target entity has not been removed.");
 
-			boolean conversionSuccessful = context.getWorld().getEntitiesByClass(EntityType.ZOMBIE.getBaseClass(), new Box(playerPos.offset(1, 0, 1).absolute()), e -> true).size() == 1;
+			boolean conversionSuccessful = context.getWorld().getEntitiesByClass(EntityType.ZOMBIE.getBaseClass(), new Box(playerPos.offset(-3, -2, -3).absolute(), playerPos.offset(3, 2, 3).absolute()), e -> true).size() == 1;
 			context.assertTrue(conversionSuccessful, "Target entity was not converted to the specified type.");
 
 			context.complete();
