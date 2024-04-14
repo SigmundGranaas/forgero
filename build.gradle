@@ -39,7 +39,7 @@ group = project.maven_group
 subprojects {
 	version = "${getGitVersion()}"
 	group = project.maven_group
-	
+
 	repositories {
 		mavenCentral()
 		maven { url "https://api.modrinth.com/maven" }
@@ -76,14 +76,14 @@ subprojects { project ->
 		publishing {
 			repositories {
 				maven {
-					name = "ArchivaMavenRepo"
+					name = "ReposiliteMavenRepo"
 					// Determine if it's a snapshot and adjust the URL accordingly.
 					url = isSnapshotVersion(project.version) ?
-						"https://maven.sigmundgranaas.com/repository/snapshots/" :
-						"https://maven.sigmundgranaas.com/repository/internal/"
+						"https://maven.sigmundgranaas.com/snapshots/" :
+						"https://maven.sigmundgranaas.com/releases/"
 					credentials {
 						username 'admin'
-						password System.getenv("ARCHIVA_ADMIN_KEY")
+						password System.getenv("REPOSILITE_ADMIN_SECRET")
 					}
 				}
 			}
