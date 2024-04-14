@@ -162,9 +162,9 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		ConstructedComposite that = (ConstructedComposite) o;
-		return that.hashCode() == this.hashCode();
+		if (!(o instanceof ConstructedComposite that)) return false;
+		if (!super.equals(o)) return false;
+		return Objects.equals(parts, that.parts);
 	}
 
 	@Override

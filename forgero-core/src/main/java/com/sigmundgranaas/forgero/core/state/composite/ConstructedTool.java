@@ -176,8 +176,9 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		return o.hashCode() == this.hashCode();
+		if (!(o instanceof ConstructedTool that)) return false;
+		if (!super.equals(o)) return false;
+		return Objects.equals(conditions, that.conditions);
 	}
 
 	@Override

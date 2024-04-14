@@ -8,6 +8,11 @@ import com.sigmundgranaas.forgero.core.property.Target;
  * An empty data container. Used as a default value for custom data containers.
  */
 public class EmptyContainer implements DataContainer {
+	public static EmptyContainer EMPTY = new EmptyContainer();
+
+	private EmptyContainer() {
+	}
+
 	@Override
 	public Optional<Integer> getInteger(String key) {
 		return Optional.empty();
@@ -37,5 +42,14 @@ public class EmptyContainer implements DataContainer {
 	public DataContainer merge(DataContainer other, Context context, Target target) {
 		return other;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof EmptyContainer && o == EMPTY;
+	}
+
+	@Override
+	public int hashCode() {
+		return 1;
+	}
 }
