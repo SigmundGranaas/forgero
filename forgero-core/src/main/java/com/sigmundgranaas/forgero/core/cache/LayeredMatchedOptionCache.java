@@ -10,12 +10,24 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * A generic caching utility that stores values based on key, with support for time-to-live (TTL)
+ * and maximum size constraints per key. This cache is designed to be layered, meaning that
+ * it can store multiple entries per key, each with individual expiration and access metrics.
+ * <p>
+ * The cache is intended for scenarios where entries are not only time-sensitive but also
+ * need to be validated against a predicate before retrieval. This is useful in situations
+ * where cache entries might become stale or invalid under certain conditions, and fresh data
+ * needs to be fetched dynamically.
+ *
+ * @param <K> The type of keys maintained by this cache.
+ * @param <V> The type of mapped values.
+ */
 public class LayeredMatchedOptionCache<K, V> {
 	private final Map<K, Deque<CacheEntry<V>>> cache;
 	private final long entryTTL; // Time to live for each cache entry
 	private final int maxCacheSize; // Maximum number of entries in each of the sections of the cache
 	private long now;
-
 
 	public LayeredMatchedOptionCache(Duration entryTTL, Integer maxCacheSize) {
 		this.entryTTL = entryTTL != null ? entryTTL.toMillis() : Long.MAX_VALUE;
@@ -23,6 +35,17 @@ public class LayeredMatchedOptionCache<K, V> {
 		this.cache = new ConcurrentHashMap<>();
 	}
 
+	/**
+	 * Retrieves a value based on the key, using a callback and a matcher predicate.
+	 * If the cache contains valid entries for the key, it tries to find an entry that matches
+	 * the predicate. If no valid entry is found, the callback is used to generate a new value,
+	 * which is then cached and returned.
+	 *
+	 * @param key      The key whose associated value is to be returned.
+	 * @param callback A {@link Supplier} that provides a new value when required.
+	 * @param matcher  A {@link Predicate} that must be satisfied by a cached value for it to be considered valid.
+	 * @return The value associated with the key or newly fetched if no valid cache entry exists.
+	 */
 	public V get(K key, Supplier<V> callback, Predicate<V> matcher) {
 		Deque<CacheEntry<V>> entries = prepareMap(key);
 
@@ -33,6 +56,14 @@ public class LayeredMatchedOptionCache<K, V> {
 				.orElseGet(() -> addNewEntry(entries, callback.get()));
 	}
 
+	/**
+	 * Retrieves the second-most recently accessed value for a specific key, if available.
+	 * This method is typically used for fetching previous state values when the most recent
+	 * value may already be engaged or locked in processing.
+	 *
+	 * @param key The key for which the previous value is requested.
+	 * @return An {@link Optional<V>} containing the previous value if available, otherwise empty.
+	 */
 	public Optional<V> getPrevious(K key) {
 		Deque<CacheEntry<V>> entries = prepareMap(key);
 		if (entries.isEmpty()) {

@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Function;
 
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
+import com.sigmundgranaas.forgero.core.model.Strategy;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.QuadProviderPreparer;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.DefaultedDynamicBakedModel;
@@ -24,24 +24,24 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 
 public class UnbakedStateModel implements UnbakedModel {
-	private final Identifier modelId;
 	private final ModelRegistry registry;
 	private final StateService service;
+	private final Strategy strategy;
+	private final State state;
 
-	public UnbakedStateModel(Identifier model, ModelRegistry registry, StateService service) {
-		this.modelId = model;
+	public UnbakedStateModel(ModelRegistry registry, StateService service, Strategy strategy, State state) {
 		this.registry = registry;
 		this.service = service;
+		this.strategy = strategy;
+		this.state = state;
 	}
 
 	@Nullable
 	@Override
 	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-		State state = service.find(this.modelId).get();
 		StateModelBaker modelBaker = new StateModelBaker(baker, textureGetter, registry);
-		ModelStrategy strategy = new StrategyFactory(modelBaker, ForgeroConfigurationLoader.configuration.modelStrategy).build(state);
-
-		return new QuadProviderPreparer(new DefaultedDynamicBakedModel(strategy, service));
+		ModelStrategy modelStrategy = new StrategyFactory(modelBaker, strategy).build(state);
+		return new QuadProviderPreparer(new DefaultedDynamicBakedModel(modelStrategy, service));
 	}
 
 

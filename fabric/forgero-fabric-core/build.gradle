@@ -40,7 +40,6 @@ loom {
 			name "Game Test"
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
-			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 			runDir "build/gametest"
 		}
 		testClient {
@@ -48,6 +47,14 @@ loom {
 			name = "Test Client"
 			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/forgero/gametest/structures")}"
 
+			ideConfigGenerated = false
+			source sourceSets.test
+		}
+		autoTestClient {
+			client()
+			name = "Auto test Client"
+			vmArg "-Dfabric-api.gametest"
+			
 			ideConfigGenerated = false
 			source sourceSets.test
 		}

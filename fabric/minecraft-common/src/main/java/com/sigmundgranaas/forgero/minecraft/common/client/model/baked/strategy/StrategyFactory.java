@@ -8,17 +8,30 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
 
+/**
+ * A factory class for creating model strategies based on predefined operational modes. This class allows for
+ * flexible generation of strategies that can either cache models, operate fully asynchronously, or combine both
+ * behaviors depending on the provided configuration.
+ * <p>
+ * The factory simplifies the creation of complex model retrieval strategies by encapsulating the logic required
+ * to assemble various components like caching layers and asynchronous operations.
+ */
 public class StrategyFactory {
 
-	private final StateModelBaker baker;
+	private final ModelStrategy baker;
 	private final Strategy strategy;
 
-
-	public StrategyFactory(StateModelBaker baker, Strategy strategy) {
+	public StrategyFactory(ModelStrategy baker, Strategy strategy) {
 		this.baker = baker;
 		this.strategy = strategy;
 	}
 
+	/**
+	 * Builds and returns a ModelStrategy according to the specified strategy configuration.
+	 *
+	 * @param state The state this strategy is intended to be used for.
+	 * @return A ModelStrategy that conforms to the specified operational mode.
+	 */
 	public ModelStrategy build(State state) {
 		return switch (strategy) {
 			case FULLY_ASYNC -> fullyAsync(state);
@@ -28,7 +41,7 @@ public class StrategyFactory {
 		};
 	}
 
-	public ModelStrategy PreBaked(State state) {
+	private ModelStrategy PreBaked(State state) {
 		ModelStrategy defaultModel = defaultBaked(state);
 
 		LayeredCachedSingleStateStrategy cache = layeredCache();
@@ -38,7 +51,7 @@ public class StrategyFactory {
 		return defaultModel.then(singleCache().then(cache.then(asyncBaker)));
 	}
 
-	public ModelStrategy noAsync(State state) {
+	private ModelStrategy noAsync(State state) {
 		ModelStrategy defaultModel = defaultBaked(state);
 
 		LayeredCachedSingleStateStrategy cache = layeredCache();
@@ -50,7 +63,7 @@ public class StrategyFactory {
 		return new DefaultModelStrategy(baker.getModel(state, MatchContext.of()).orElseThrow(), state.hashCode());
 	}
 
-	public ModelStrategy fullyAsync(State state) {
+	private ModelStrategy fullyAsync(State state) {
 		ModelStrategy lazy = lazyDefaultBaker(state);
 
 		LayeredCachedSingleStateStrategy cache = layeredCache();

@@ -7,6 +7,14 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A caching implementation of ModelStrategy that caches a single model result.
+ * It leverages a simple cache to remember the last successful model fetched based on a state's hash code.
+ * If the state changes or if the cached model is no longer valid, the strategy falls back to a secondary strategy.
+ * <p>
+ * This strategy is useful when model retrieval is costly and the state changes infrequently,
+ * or when the validity of the model depends on the context that may occasionally change. Usually only a single model will correspond
+ */
 public class SingleCachedStateStrategy implements ModelStrategy {
 	@Nullable
 	private BakedModelResult result;
