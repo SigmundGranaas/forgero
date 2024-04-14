@@ -47,6 +47,9 @@ public class CachedStackConverter implements Converter<ItemStack, Optional<State
 
 	@Override
 	public Optional<State> convert(ItemStack stack) {
+		if (stack == null) {
+			return Optional.empty();
+		}
 		try {
 			return stackCache.get(stack, () -> convertCompound(stack));
 		} catch (Exception e) {

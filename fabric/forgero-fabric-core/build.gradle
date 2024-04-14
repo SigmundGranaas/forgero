@@ -40,7 +40,6 @@ loom {
 			name "Game Test"
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
-			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
 			runDir "build/gametest"
 		}
 		testClient {

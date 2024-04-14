@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.state.composite;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ public class Construct implements Composite, ConstructedState {
 	private final String name;
 	private final String nameSpace;
 	private final Type type;
+	private int code = 0;
 
 	protected Construct(List<State> ingredientList, SlotContainer upgrades, String name, Type type) {
 		this.name = name;
@@ -311,6 +313,21 @@ public class Construct implements Composite, ConstructedState {
 	public DataContainer customData(Target target) {
 		var combinedTarget = target.combineTarget(new TypeTarget(Set.of(type().typeName())));
 		return components().stream().map(state -> state.customData(combinedTarget)).reduce(DataContainer.empty(), (dataContainer1, dataContainer2) -> DataContainer.transitiveMerge(dataContainer1, dataContainer2, combinedTarget));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Construct construct)) return false;
+		return Objects.equals(ingredientList, construct.ingredientList) && Objects.equals(upgrades, construct.upgrades) && Objects.equals(name, construct.name) && Objects.equals(nameSpace, construct.nameSpace) && Objects.equals(type, construct.type);
+	}
+
+	@Override
+	public int hashCode() {
+		if (code == 0) {
+			code = Objects.hash(ingredientList, upgrades, name, nameSpace, type);
+		}
+		return code;
 	}
 
 	public static class ConstructBuilder extends BaseComposite.BaseCompositeBuilder<ConstructBuilder> {

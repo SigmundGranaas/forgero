@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.fabric;
 
 import java.util.function.Supplier;
 
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.mythicmetals.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
@@ -16,6 +15,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> toolstats;
 	public static final Supplier<Boolean> patchouli;
 	public static final Supplier<Boolean> bettercombat;
+	public static final Supplier<Boolean> emissiveModel;
 	public static final Supplier<Boolean> mythicmetals;
 	public static final Supplier<Boolean> yacl;
 	public static final Supplier<Boolean> emi;
@@ -27,6 +27,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 		mythicmetals = () -> isModLoaded("mythicmetals");
 		patchouli = () -> isModLoaded("patchouli");
 		bettercombat = () -> isModLoaded("bettercombat");
+		emissiveModel = () -> isModLoaded("moremcmeta_emissive_plugin");
 		yacl = () -> isModLoaded("yet-another-config-lib") || isModLoaded("yet_another_config_lib_v3");
 	}
 
@@ -38,10 +39,6 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public void onInitialized(StateService service) {
 		if (toolstats.get()) {
 			ToolStatTagGenerator.generateTags();
-		}
-
-		if(emi.get()){
-			ForgeroConfigurationLoader.configuration.buildModelsAsync = false;
 		}
 
 		if (patchouli.get()) {

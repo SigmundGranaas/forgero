@@ -1,15 +1,19 @@
 package com.sigmundgranaas.forgero.fabric.yacl;
 
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import static com.sigmundgranaas.forgero.core.model.Strategy.PRE_BAKED;
 
+import java.util.Collections;
+
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.model.Strategy;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.ListOption;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
-
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
@@ -17,8 +21,6 @@ import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-
-import java.util.Collections;
 
 /**
  * Forgero config screen builder, uses YACL to generate the config screen.
@@ -217,16 +219,30 @@ public class ForgeroYACLConfigScreenBuilder {
 
 	private static class PerformanceCategory {
 		private static ConfigCategory buildPerformanceCategory() {
-			return ConfigCategory.createBuilder().name(Text.translatable("forgero.config.category.performance.title")).tooltip(
-					Text.translatable("forgero.config.category.performance.title.tooltip")).group(
-					OptionGroup.createBuilder().name(Text.translatable("forgero.config.group.performance.title")).description(
-							OptionDescription.of(Text.translatable("forgero.config.group.performance.title.tooltip"))).option(
-							Option.<Boolean>createBuilder().name(Text.translatable("forgero.config.buildModelsAsync")).description(
-									OptionDescription.of(Text.translatable("forgero.config.buildModelsAsync.tooltip"))).binding(
-									true,
-									() -> ForgeroConfigurationLoader.configuration.buildModelsAsync,
-									newValue -> ForgeroConfigurationLoader.configuration.buildModelsAsync = newValue
-							).controller(BooleanControllerBuilder::create).build()).build()).build();
+			return ConfigCategory.createBuilder()
+					.name(Text.translatable("forgero.config.category.performance.title"))
+					.tooltip(
+							Text.translatable("forgero.config.category.performance.title.tooltip"))
+					.group(
+							OptionGroup.createBuilder()
+									.name(Text.translatable("forgero.config.group.performance.title"))
+									.description(
+											OptionDescription.of(Text.translatable("forgero.config.group.performance.title.tooltip")))
+									.option(
+											Option.<Strategy>createBuilder()
+													.name(Text.translatable("forgero.config.modelStrategy"))
+													.description(
+															OptionDescription.of(Text.translatable("forgero.config.modelStrategy.tooltip")))
+													.binding(
+															PRE_BAKED,
+															() -> ForgeroConfigurationLoader.configuration.modelStrategy,
+															newValue -> ForgeroConfigurationLoader.configuration.modelStrategy = newValue
+													)
+													.controller((option) -> EnumControllerBuilder.create(option).enumClass(Strategy.class))
+													.build()
+									)
+									.build())
+					.build();
 		}
 	}
 }

@@ -1,69 +1,49 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+import static net.minecraft.client.render.model.json.ModelTransformationMode.GROUND;
 
-import java.time.Duration;
-import java.util.concurrent.ExecutionException;
-
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.CompositeModelVariant;
-import com.sigmundgranaas.forgero.minecraft.common.match.ItemWorldEntityKey;
-import org.jetbrains.annotations.NotNull;
+import com.sigmundgranaas.forgero.minecraft.common.client.model.QuadProviderPreparer;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-/**
- * This is a stupid mixin. PLEASE REMOVE WHEN POSSIBLE
- */
-
 @Mixin(ItemRenderer.class)
 public abstract class ItemRenderMixin {
-	@Unique
-	private static final LoadingCache<ItemWorldEntityKey, MatchContext> contextCache = CacheBuilder.newBuilder()
-			.expireAfterAccess(Duration.ofMinutes(1))
-			.build(new CacheLoader<>() {
-				@Override
-				public @NotNull MatchContext load(@NotNull ItemWorldEntityKey key) {
-					return new MatchContext()
-							.put(ENTITY, key.entity())
-							.put(WORLD, key.world())
-							.put(STACK, key.stack());
-				}
-			});
+
 	@Shadow
 	@Final
 	private ItemModels models;
 
-	@Inject(at = @At("HEAD"), method = "getModel", cancellable = true)
-	public void getModelMixin(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
-		if (this.models.getModel(stack) instanceof CompositeModelVariant variant) {
-			try {
-				ItemWorldEntityKey key = new ItemWorldEntityKey(stack, world, entity);
-				MatchContext context = contextCache.get(key);
+	@Inject(at = @At("HEAD"), method = "getModel")
+	public void forgero$prepareModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
+		BakedModel bakedModel = this.models.getModel(stack);
+		if (bakedModel instanceof QuadProviderPreparer preparer && world instanceof ClientWorld clientWorld) {
+			preparer.provideContext(stack, clientWorld, entity, seed);
+		}
+	}
 
-				BakedModel model = variant.getModel(stack, context);
-				ClientWorld clientWorld = world instanceof ClientWorld ? (ClientWorld) world : null;
-				ci.setReturnValue(model.getOverrides().apply(model, stack, clientWorld, entity, seed));
-
-			} catch (ExecutionException ignored) {
-			}
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V"), method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V")
+	private void forgero$applyGroundTransformation(ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
+		if (model instanceof QuadProviderPreparer && renderMode.equals(GROUND)) {
+			// The ground model is scaled down by half to make sure it's the same size as other models
+			// Investigate why it's doing this. This mixin should not be needed.
+			matrices.scale(0.5f, 0.5f, 0.5f);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.state;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.condition.ConditionContainer;
@@ -105,5 +106,18 @@ public class ConditionedState implements State, Conditional<ConditionedState> {
 	@Override
 	public DataContainer customData(Target target) {
 		return customData;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ConditionedState that = (ConditionedState) o;
+		return Objects.equals(id, that.id) && Objects.equals(conditions, that.conditions) && Objects.equals(properties, that.properties) && Objects.equals(customData, that.customData);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, conditions, customData);
 	}
 }

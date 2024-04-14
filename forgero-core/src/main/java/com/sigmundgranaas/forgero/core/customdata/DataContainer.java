@@ -15,7 +15,7 @@ import com.sigmundgranaas.forgero.core.property.Target;
  */
 public interface DataContainer {
 	static DataContainer empty() {
-		return new EmptyContainer();
+		return EmptyContainer.EMPTY;
 	}
 
 	static DataContainer transitiveMerge(DataContainer a, DataContainer b, Target target) {

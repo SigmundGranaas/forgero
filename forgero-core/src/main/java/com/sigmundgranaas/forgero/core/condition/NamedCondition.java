@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.condition;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -39,5 +40,16 @@ public class NamedCondition implements PropertyContainer, Identifiable {
 	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
 		return getRootProperties();
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		return Objects.equals(this.identifier(), this.identifier());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.identifier());
+	}
 }

@@ -19,6 +19,7 @@ import net.minecraft.util.math.random.Random;
 
 
 public class EmptyBakedModel implements BakedModel {
+	public static final BakedModel EMPTY = new EmptyBakedModel();
 
 
 	@Override

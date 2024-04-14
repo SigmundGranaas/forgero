@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.state;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
@@ -106,5 +107,18 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	@Override
 	public DataContainer customData(Target target) {
 		return customData;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SimpleState that = (SimpleState) o;
+		return Objects.equals(name, that.name) && Objects.equals(nameSpace, that.nameSpace) && Objects.equals(type, that.type) && Objects.equals(properties, that.properties) && Objects.equals(customData, that.customData);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, nameSpace, type, this.identifier() + "_properties", customData);
 	}
 }

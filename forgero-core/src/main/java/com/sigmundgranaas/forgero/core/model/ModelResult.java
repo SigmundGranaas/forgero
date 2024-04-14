@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 
 public class ModelResult {
+	public static final ModelResult EMPTY = new ModelResult();
 	public static final ContextKey<ModelResult> MODEL_RESULT = new ContextKey<>("MODEL_RESULT", ModelResult.class);
 	private final List<Matchable> invalidationOptions;
 
@@ -26,7 +27,18 @@ public class ModelResult {
 		if (invalidationOptions.isEmpty()) {
 			return true;
 		}
-		return invalidationOptions.stream().noneMatch(option -> option.test(matchable, context));
+		for (Matchable test : invalidationOptions) {
+			if (test.test(matchable, context)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public List<Boolean> footprint(Matchable matchable, MatchContext context) {
+		return invalidationOptions.stream()
+				.map(option -> option.test(matchable, context))
+				.toList();
 	}
 
 	public ModelResult addOptions(Matchable options) {

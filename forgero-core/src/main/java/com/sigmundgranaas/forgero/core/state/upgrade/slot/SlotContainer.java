@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -110,5 +111,18 @@ public class SlotContainer implements CopyAble<SlotContainer> {
 
 	public SlotContainer strip() {
 		return new SlotContainer(slots().stream().map(Slot::empty).toList());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SlotContainer that = (SlotContainer) o;
+		return Objects.equals(slots, that.slots);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(slots);
 	}
 }
