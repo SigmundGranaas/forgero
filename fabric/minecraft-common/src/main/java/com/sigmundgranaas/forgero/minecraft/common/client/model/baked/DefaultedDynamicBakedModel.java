@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.minecraft.common.client.api.model.ContextAwareBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.ModelStrategy;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 
-public class DefaultedDynamicBakedModel implements DynamicQuadProvider {
+public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemModelWrapper {
 	private final ModelStrategy strategy;
 	private final StateService service;
 
@@ -30,13 +31,12 @@ public class DefaultedDynamicBakedModel implements DynamicQuadProvider {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random) {
+	public List<BakedQuad> getQuadsWithContext(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random) {
 		BakedModel result = getModel(stack, world, entity, seed);
 		return result.getQuads(null, face, random);
 
 	}
 
-	@Override
 	public BakedModel getModel(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed) {
 		Optional<State> state = service.convert(stack);
 		if (state.isPresent()) {
