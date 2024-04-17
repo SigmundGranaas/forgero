@@ -63,6 +63,12 @@ subprojects {
 		maven {
 			url "https://libraries.minecraft.net"
 		}
+		maven {
+			url "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
+			content {
+				includeGroup "com.klikli_dev"
+			}
+		}
 		mavenLocal()
 	}
 }

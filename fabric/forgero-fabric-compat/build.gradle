@@ -13,6 +13,8 @@ dependencies {
 
 	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
+	modImplementation "com.klikli_dev:modonomicon-${minecraft_version}-fabric:${modonomicon_version}"
+
 	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
 
 	//dynamiclights compat
