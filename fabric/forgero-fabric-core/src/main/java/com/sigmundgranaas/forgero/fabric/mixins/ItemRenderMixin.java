@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.fabric.mixins;
 
 import static net.minecraft.client.render.model.json.ModelTransformationMode.GROUND;
 
+import com.sigmundgranaas.forgero.minecraft.common.client.impl.model.RenderContextManager;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.QuadProviderPreparer;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.RenderContextManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
