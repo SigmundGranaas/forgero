@@ -19,14 +19,14 @@ import net.minecraft.world.World;
 @Mixin(ItemRenderer.class)
 public abstract class ItemRenderMixin {
 	@Inject(method = "getModel", at = @At("HEAD"))
-	private void injectRenderContext(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
+	private void forgero$injectRenderContext(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
 		if (world instanceof ClientWorld clientWorld) {
 			RenderContextManager.setContext(stack, clientWorld, entity, seed);
 		}
 	}
 
 	@Inject(method = "renderBakedItemModel", at = @At("RETURN"))
-	private void clearRenderContext(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices, CallbackInfo ci) {
+	private void forgero$clearRenderContext(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices, CallbackInfo ci) {
 		RenderContextManager.clearContext();
 	}
 }
