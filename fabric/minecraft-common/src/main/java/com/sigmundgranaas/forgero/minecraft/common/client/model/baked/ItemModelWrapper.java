@@ -1,11 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.client.model.baked;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelOverrideList;
-import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 
 public interface ItemModelWrapper extends BakedModel {
@@ -29,20 +24,5 @@ public interface ItemModelWrapper extends BakedModel {
 	@Override
 	default boolean isBuiltin() {
 		return false;
-	}
-
-	@Override
-	default Sprite getParticleSprite() {
-		return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(new Identifier("block/cobblestone"));
-	}
-
-	@Override
-	default ModelTransformation getTransformation() {
-		return DefaultTransformation.loadTransformFromJson(HANDHELD);
-	}
-
-	@Override
-	default ModelOverrideList getOverrides() {
-		return ModelOverrideList.EMPTY;
 	}
 }

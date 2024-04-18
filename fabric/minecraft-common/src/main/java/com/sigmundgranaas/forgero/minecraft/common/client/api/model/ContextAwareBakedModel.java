@@ -8,11 +8,17 @@ import com.sigmundgranaas.forgero.minecraft.common.client.impl.model.RenderConte
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.render.model.json.ModelOverrideList;
+import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 
@@ -49,6 +55,45 @@ public interface ContextAwareBakedModel extends BakedModel {
 		return Collections.emptyList();
 	}
 
+	@Override
+	default Sprite getParticleSprite() {
+		Optional<RenderContext> ctx = getCurrentContext();
+		if (ctx.isPresent()) {
+			RenderContext context = ctx.get();
+			return getParticleSpriteWithContext(context.stack(), context.world(), context.entity(), context.seed());
+		} else {
+			return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(new Identifier("block/cobblestone"));
+		}
+	}
+
+	@Override
+	default ModelTransformation getTransformation() {
+		Optional<RenderContext> ctx = getCurrentContext();
+		if (ctx.isPresent()) {
+			RenderContext context = ctx.get();
+			return getTransformationWithContext(context.stack(), context.world(), context.entity(), context.seed());
+		} else {
+			return ModelTransformation.NONE;
+		}
+	}
+
+	@Override
+	default ModelOverrideList getOverrides() {
+		Optional<RenderContext> ctx = getCurrentContext();
+		if (ctx.isPresent()) {
+			RenderContext context = ctx.get();
+			return getOverridesWithContext(context.stack(), context.world(), context.entity(), context.seed());
+		} else {
+			return ModelOverrideList.EMPTY;
+		}
+	}
+
+	Sprite getParticleSpriteWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed);
+
+	ModelTransformation getTransformationWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed);
+
+	ModelOverrideList getOverridesWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed);
+
 	/**
 	 * Default method override to integrate context awareness into model rendering. It checks for context availability
 	 * and calls {@code getQuadsWithContext} if context is present, otherwise falls back to {@code defaultQuads}.
@@ -68,6 +113,7 @@ public interface ContextAwareBakedModel extends BakedModel {
 			return defaultQuads(face, random);
 		}
 	}
+
 
 	/**
 	 * Record to encapsulate the rendering context which includes an item stack, a world, an entity, and a seed.

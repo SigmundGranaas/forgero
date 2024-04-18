@@ -15,6 +15,9 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.render.model.json.ModelOverrideList;
+import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -29,7 +32,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 		this.strategy = strategy;
 		this.service = service;
 	}
-
+	
 	@Override
 	public List<BakedQuad> getQuadsWithContext(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random) {
 		BakedModel result = getModel(stack, world, entity, seed);
@@ -56,4 +59,20 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 		}
 		return EMPTY;
 	}
+
+	@Override
+	public Sprite getParticleSpriteWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
+		return getModel(stack, world, entity, seed).getParticleSprite();
+	}
+
+	@Override
+	public ModelTransformation getTransformationWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
+		return getModel(stack, world, entity, seed).getTransformation();
+	}
+
+	@Override
+	public ModelOverrideList getOverridesWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
+		return getModel(stack, world, entity, seed).getOverrides();
+	}
 }
+
