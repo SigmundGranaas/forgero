@@ -1,0 +1,26 @@
+{
+  "category": "forgero:getting_started",
+  "name": "About This Mod",
+  "description": "",
+  "icon": "forgero:handbook",
+  "x": -5,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "title": "book.forgero.guidebook.getting_started.about_this_mod.title",
+      "text": "book.forgero.guidebook.getting_started.about_this_mod.text",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "title": "book.forgero.guidebook.getting_started.about_this_mod.title1",
+      "text": "book.forgero.guidebook.getting_started.about_this_mod.text1",
+      "use_markdown_in_title": false
+    }
+  ]
+}

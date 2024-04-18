@@ -1,0 +1,26 @@
+{
+  "category": "forgero:getting_started",
+  "name": "Upgrading to the Stone Age & Beyond",
+  "description": "",
+  "icon": "minecraft:cobblestone",
+  "x": 6,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "title": "book.forgero.guidebook.getting_started.stone_age.title",
+      "text": "book.forgero.guidebook.getting_started.stone_age.text",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:getting_started/your_first_tool",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}

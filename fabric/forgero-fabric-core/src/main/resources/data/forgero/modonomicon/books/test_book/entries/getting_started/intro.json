@@ -1,0 +1,32 @@
+{
+  "category": "forgero:getting_started",
+  "name": "Welcome To The World Of Forgero!",
+  "description": "",
+  "icon": "minecraft:feather",
+  "x": -3,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "title": "book.forgero.guidebook.getting_started.intro.title",
+      "text": "book.forgero.guidebook.getting_started.intro.text",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "text": "book.forgero.guidebook.getting_started.intro.text1",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:getting_started/about_this_mod",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}

@@ -32,8 +32,8 @@
     "texture_height": 256,
     "texture_width": 256
   },
-  "model": "theurgy:the_hermetica_icon",
-  "name": "book.theurgy.the_hermetica.name",
+  "model": "forgero:the_book_icon",
+  "name": "book.forgero.the_book.name",
   "read_all_button_y_offset": 0,
   "right_frame_overlay": {
     "frame_height": 70,
@@ -46,7 +46,7 @@
   },
   "search_button_x_offset": 0,
   "search_button_y_offset": 0,
-  "tooltip": "book.theurgy.the_hermetica.tooltip",
+  "tooltip": "book.forgero.the_book.tooltip",
   "top_frame_overlay": {
     "frame_height": 7,
     "frame_width": 72,

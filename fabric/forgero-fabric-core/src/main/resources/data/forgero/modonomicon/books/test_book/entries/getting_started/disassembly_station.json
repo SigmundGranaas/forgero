@@ -1,0 +1,50 @@
+{
+  "category": "forgero:getting_started",
+  "name": "Using the Disassembly Station",
+  "description": "",
+  "icon": "forgero:assembly_station",
+  "x": 10,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "title": "book.forgero.guidebook.getting_started.disassembly_station.title",
+      "text": "book.forgero.guidebook.getting_started.disassembly_station.text",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "recipe_id_1": "forgero:assembly_table",
+      "text": "book.forgero.guidebook.getting_started.disassembly_station.text1",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "title": "book.forgero.guidebook.getting_started.disassembly_station.title2",
+      "text": "book.forgero.guidebook.getting_started.disassembly_station.text2",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:multiblock",
+      "anchor": "",
+      "show_title_separator": true,
+      "multiblock_name": "book.forgero.guidebook.getting_started.multiblock.disassembly_station",
+      "multiblock_id": "forgero:assembly_station",
+      "text": "book.forgero.guidebook.getting_started.disassembly_station.text3",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:getting_started/base_schematics",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}
