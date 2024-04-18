@@ -32,8 +32,8 @@
     "texture_height": 256,
     "texture_width": 256
   },
-  "model": "forgero:the_book_icon",
-  "name": "book.forgero.the_book.name",
+  "model": "forgero:guidebook_icon",
+  "name": "book.forgero.guidebook.name",
   "read_all_button_y_offset": 0,
   "right_frame_overlay": {
     "frame_height": 70,
