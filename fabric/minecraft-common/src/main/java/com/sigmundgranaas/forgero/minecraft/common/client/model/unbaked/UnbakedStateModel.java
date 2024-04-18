@@ -7,7 +7,6 @@ import java.util.function.Function;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
 import com.sigmundgranaas.forgero.core.model.Strategy;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.QuadProviderPreparer;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.DefaultedDynamicBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.ModelStrategy;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.StateModelBaker;
@@ -41,7 +40,7 @@ public class UnbakedStateModel implements UnbakedModel {
 	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		StateModelBaker modelBaker = new StateModelBaker(baker, textureGetter, registry);
 		ModelStrategy modelStrategy = new StrategyFactory(modelBaker, strategy).build(state);
-		return new QuadProviderPreparer(new DefaultedDynamicBakedModel(modelStrategy, service));
+		return new DefaultedDynamicBakedModel(modelStrategy, service);
 	}
 
 

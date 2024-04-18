@@ -27,12 +27,14 @@ import net.minecraft.util.math.random.Random;
 public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemModelWrapper {
 	private final ModelStrategy strategy;
 	private final StateService service;
+	@Nullable
+	private BakedModel defaultModel;
 
 	public DefaultedDynamicBakedModel(ModelStrategy strategy, StateService service) {
 		this.strategy = strategy;
 		this.service = service;
 	}
-	
+
 	@Override
 	public List<BakedQuad> getQuadsWithContext(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random) {
 		BakedModel result = getModel(stack, world, entity, seed);
@@ -52,6 +54,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 			}
 			BakedModel model = strategy.getModel(state.get(), ctx)
 					.map(BakedModelResult::model)
+					.or(() -> Optional.ofNullable(defaultModel))
 					.orElse(EMPTY);
 
 			return model.getOverrides().apply(model, stack, world, entity, seed);
@@ -67,12 +70,30 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 
 	@Override
 	public ModelTransformation getTransformationWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
-		return getModel(stack, world, entity, seed).getTransformation();
+		if (defaultModel != null) {
+			return defaultModel.getTransformation();
+		}
+		BakedModel model = getModel(stack, world, entity, seed);
+		if (model != EMPTY) {
+			this.defaultModel = model;
+			return this.defaultModel.getTransformation();
+		}
+
+		return model.getTransformation();
 	}
 
 	@Override
 	public ModelOverrideList getOverridesWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
-		return getModel(stack, world, entity, seed).getOverrides();
+		if (defaultModel != null) {
+			return defaultModel.getOverrides();
+		}
+		BakedModel model = getModel(stack, world, entity, seed);
+		if (model != EMPTY) {
+			this.defaultModel = model;
+			return this.defaultModel.getOverrides();
+		}
+
+		return model.getOverrides();
 	}
 }
 

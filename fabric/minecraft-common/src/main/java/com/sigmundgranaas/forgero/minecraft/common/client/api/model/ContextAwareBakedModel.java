@@ -113,8 +113,7 @@ public interface ContextAwareBakedModel extends BakedModel {
 			return defaultQuads(face, random);
 		}
 	}
-
-
+	
 	/**
 	 * Record to encapsulate the rendering context which includes an item stack, a world, an entity, and a seed.
 	 *
