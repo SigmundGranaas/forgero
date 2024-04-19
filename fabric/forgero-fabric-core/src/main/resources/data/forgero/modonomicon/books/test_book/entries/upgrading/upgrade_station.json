@@ -30,8 +30,8 @@
         "forgero:textures/gui/upgrade_station_interface.png"
 
       ],
-      "text": "book.modonomicon.demo.features.image.image.text",
-      "title": "book.modonomicon.demo.features.image.image.title"
+      "text": "book.forgero.guidebook.upgrading.upgrade_station.text1",
+      "title": "book.forgero.guidebook.upgrading.upgrade_station.title1"
     },
     {
       "type": "modonomicon:text",

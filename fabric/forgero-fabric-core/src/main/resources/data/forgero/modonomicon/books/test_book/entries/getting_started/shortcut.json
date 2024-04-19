@@ -1,9 +1,9 @@
 {
   "category": "forgero:getting_started",
   "name": "book.forgero.guidebook.getting_started.shortcut.name",
+  "description": "book.forgero.guidebook.getting_started.shortcut.description",
   "background_u_index": 1,
   "background_v_index": 2,
-  "description": "The Basics On Upgrading!",
   "icon": "forgero:upgrade_station",
   "category_to_open": "forgero:upgrading",
   "x": 11,
