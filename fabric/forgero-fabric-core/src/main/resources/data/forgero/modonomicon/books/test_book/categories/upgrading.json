@@ -1,0 +1,10 @@
+{
+  "name": "book.forgero.guidebook.category.upgrading",
+  "icon": "forgero:leather-soft_binding",
+  "background": "forgero:textures/gui/background.png",
+  "condition" : {
+    "type": "modonomicon:entry_read",
+    "entry_id": "forgero:getting_started/using_your_schematics"
+  },
+  "sort_number": 2
+}

@@ -1,0 +1,34 @@
+{
+  "category": "forgero:getting_started",
+  "name": "Crafting Your First Tool!",
+  "description": "",
+  "icon": "minecraft:crafting_table",
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "title": "book.forgero.guidebook.getting_started.crafting_your_first_tool.title",
+      "text": "book.forgero.guidebook.getting_started.crafting_your_first_tool.text",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "recipe_id_1": "forgero:oak-pickaxe_head-handle",
+      "text": "book.forgero.guidebook.getting_started.crafting_your_first_tool.text1",
+      "title1": "",
+      "title2": ""
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:getting_started/intro",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}

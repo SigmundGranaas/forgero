@@ -1,0 +1,19 @@
+{
+  "category": "forgero:upgrading",
+  "name": "Back To Crafting",
+  "description": "",
+  "background_u_index": 1,
+  "background_v_index": 2,
+  "icon": "minecraft:crafting_table",
+  "category_to_open": "forgero:getting_started",
+  "x": -5,
+  "y": -3,
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:upgrading/upgrade_station",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}

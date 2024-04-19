@@ -1,0 +1,8 @@
+{
+  "entry_textures": "modonomicon:textures/gui/entry_textures.png",
+  "name": "book.forgero.guidebook.category.getting_started",
+  "icon": "forgero:oak-pickaxe_head",
+  "background": "forgero:textures/gui/background.png",
+  "sort_number": 1,
+  "show_category_button" : true
+}

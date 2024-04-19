@@ -1,0 +1,26 @@
+{
+  "category": "forgero:upgrading",
+  "name": "Reinforcements",
+  "description": "",
+  "icon": "minecraft:netherite_ingot",
+  "x": 6,
+  "y": 1,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
+      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "use_markdown_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:upgrading/offensive",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}

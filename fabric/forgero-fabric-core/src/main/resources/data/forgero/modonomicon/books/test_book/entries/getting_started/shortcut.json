@@ -1,0 +1,19 @@
+{
+  "category": "forgero:getting_started",
+  "name": "Upgrading Your Tool!",
+  "background_u_index": 1,
+  "background_v_index": 2,
+  "description": "The Basics On Upgrading!",
+  "icon": "forgero:upgrade_station",
+  "category_to_open": "forgero:upgrading",
+  "x": 14,
+  "y": 0,
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:getting_started/using_your_schematics",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}
