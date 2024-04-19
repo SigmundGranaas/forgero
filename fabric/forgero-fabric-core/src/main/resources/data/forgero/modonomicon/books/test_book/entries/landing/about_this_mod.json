@@ -1,9 +1,9 @@
 {
-  "category": "forgero:getting_started",
+  "category": "forgero:landing",
   "name": "About This Mod",
   "description": "",
   "icon": "forgero:handbook",
-  "x": -5,
+  "x": 0,
   "y": 0,
   "pages": [
     {

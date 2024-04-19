@@ -1,5 +1,5 @@
 {
-  "name": "book.forgero.the_book.category.upgrading",
+  "name": "book.forgero.guidebook.category.upgrading",
   "icon": "forgero:leather-soft_binding",
   "background": "forgero:textures/gui/background.png",
   "condition" : {

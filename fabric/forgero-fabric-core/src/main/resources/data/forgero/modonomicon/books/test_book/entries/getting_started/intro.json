@@ -20,13 +20,5 @@
       "text": "book.forgero.guidebook.getting_started.intro.text1",
       "use_markdown_in_title": false
     }
-  ],
-  "parents": [
-    {
-      "draw_arrow": true,
-      "entry": "forgero:getting_started/about_this_mod",
-      "line_enabled": true,
-      "line_reversed": false
-    }
   ]
 }

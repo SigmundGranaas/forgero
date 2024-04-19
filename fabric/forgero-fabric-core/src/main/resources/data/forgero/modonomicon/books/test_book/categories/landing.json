@@ -1,8 +1,8 @@
 {
   "entry_textures": "modonomicon:textures/gui/entry_textures.png",
-  "name": "book.forgero.guidebook.category.getting_started",
-  "icon": "forgero:oak-pickaxe_head",
+  "name": "book.forgero.guidebook.category.landing",
+  "icon": "minecraft:grass_block",
   "background": "forgero:textures/gui/background.png",
-  "sort_number": 1,
+  "sort_number": 0,
   "show_category_button" : true
 }
