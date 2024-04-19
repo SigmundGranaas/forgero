@@ -1,0 +1,7 @@
+{
+  "background": "forgero:textures/gui/background.png",
+  "entry_textures": "modonomicon:textures/gui/entry_textures.png",
+  "icon": "minecraft:nether_star",
+  "name": "book.modonomicon.demo.features.name",
+  "sort_number": -1
+}
