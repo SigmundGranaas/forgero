@@ -74,7 +74,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 			return defaultModel.getTransformation();
 		}
 		BakedModel model = getModel(stack, world, entity, seed);
-		if (model != EMPTY) {
+		if (model != EMPTY && model.getTransformation() != ModelTransformation.NONE) {
 			this.defaultModel = model;
 			return this.defaultModel.getTransformation();
 		}
@@ -88,7 +88,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 			return defaultModel.getOverrides();
 		}
 		BakedModel model = getModel(stack, world, entity, seed);
-		if (model != EMPTY) {
+		if (model != EMPTY && model.getOverrides() != ModelOverrideList.EMPTY) {
 			this.defaultModel = model;
 			return this.defaultModel.getOverrides();
 		}
