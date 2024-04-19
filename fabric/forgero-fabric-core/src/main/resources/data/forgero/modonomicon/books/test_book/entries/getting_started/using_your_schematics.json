@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Using Your Schematic",
-  "description": "Everything on Base Schematics",
+  "name": "book.forgero.guidebook.getting_started.using_your_schematic.name",
+  "description": "book.forgero.guidebook.getting_started.using_your_schematics.description",
   "icon": "forgero:cobblestone-pickaxe",
   "x": 10,
   "y": 0,

@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Using the Disassembly Station",
-  "description": "",
+  "name": "book.forgero.guidebook.getting_started.disassembly_station.name",
+  "description": "book.forgero.guidebook.getting_started.disassembly_station.description",
   "icon": "forgero:assembly_station",
   "x": 7,
   "y": 1,

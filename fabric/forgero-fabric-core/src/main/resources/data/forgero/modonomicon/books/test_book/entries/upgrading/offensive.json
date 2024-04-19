@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
-  "name": "Offensive Slots",
-  "description": "",
+  "name": "book.forgero.guidebook.upgrading.offensive.name",
+  "description": "book.forgero.guidebook.upgrading.offensive.description",
   "icon": "minecraft:anvil",
   "background_v_index": 1,
   "x": 4,
@@ -11,8 +11,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.offensive.text",
+      "title": "book.forgero.guidebook.upgrading.offensive.title",
       "use_markdown_title": false
     }
   ],

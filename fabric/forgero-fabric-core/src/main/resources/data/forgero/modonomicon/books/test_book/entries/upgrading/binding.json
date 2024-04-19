@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
-  "name": "Bindings",
-  "description": "",
+  "name": "book.forgero.guidebook.upgrading.binding.name",
+  "description": "book.forgero.guidebook.upgrading.binding.description",
   "icon": "forgero:vines-soft_binding",
   "x": -1,
   "y": 5,
@@ -10,8 +10,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.binding.text",
+      "title": "book.forgero.guidebook.upgrading.binding.title",
       "use_markdown_title": false
     }
   ],

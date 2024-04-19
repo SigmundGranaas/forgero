@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Refined Schematics",
-  "description": "Everything on Refined Schematics!",
+  "name": "book.forgero.guidebook.getting_started.refined_schematics.name",
+  "description": "book.forgero.guidebook.getting_started.refined_schematics.description",
   "icon": "forgero:refined_pickaxe_head-schematic",
   "x": 6,
   "y": -4,
@@ -10,8 +10,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.getting_started.refined_schematics.text",
+      "title": "book.forgero.guidebook.getting_started.refined_schematics.title",
       "use_markdown_title": false
     }
   ],

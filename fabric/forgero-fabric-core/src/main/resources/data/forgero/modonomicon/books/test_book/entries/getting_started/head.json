@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Crafting Your First Toolhead",
-  "description": "",
+  "name": "book.forgero.guidebook.getting_started.head.name",
+  "description": "book.forgero.guidebook.getting_started.head.description",
   "icon": "forgero:oak-pickaxe_head",
   "x": 2,
   "y": -1,

@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Crafting Your First Tool!",
-  "description": "",
+  "name": "book.forgero.guidebook.getting_started.crafting_your_first_tool.name",
+  "description": "book.forgero.guidebook.getting_started.crafting_your_first_tool.description",
   "icon": "minecraft:crafting_table",
   "x": 0,
   "y": 0,

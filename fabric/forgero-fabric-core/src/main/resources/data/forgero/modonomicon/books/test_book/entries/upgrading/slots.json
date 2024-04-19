@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
-  "name": "Tools & Slots",
-  "description": "",
+  "name": "book.forgero.guidebook.upgrading.slots.name",
+  "description": "book.forgero.guidebook.upgrading.slots.description",
   "icon": "forgero:iron-mastercrafted_pickaxe_head",
   "x": -2,
   "y": 2,
@@ -10,8 +10,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.slots.text",
+      "title": "book.forgero.guidebook.upgrading.slots.title",
       "use_markdown_title": false
     }
   ],

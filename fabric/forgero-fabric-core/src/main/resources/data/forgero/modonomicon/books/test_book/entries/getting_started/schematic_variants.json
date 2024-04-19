@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Schematic Variants",
-  "description": "Everything on Base Schematics",
+  "name": "book.forgero.guidebook.getting_started.schematic_variants.name",
+  "description": "book.forgero.guidebook.getting_started.schematic_variants.description",
   "icon": "forgero:pickaxe_head-schematic",
   "x": 7,
   "y": -2,

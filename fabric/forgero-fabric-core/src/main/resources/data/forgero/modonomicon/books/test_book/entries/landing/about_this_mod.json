@@ -1,7 +1,7 @@
 {
   "category": "forgero:landing",
   "background_v_index": 1,
-  "name": "book.forgero.guidebook.intro.title",
+  "name": "book.forgero.guidebook.landing.about_this_mod.title",
   "description": "",
   "icon": "forgero:handbook",
   "x": 0,

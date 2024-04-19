@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Schematics",
-  "description": "Stone Tools And More",
+  "name": "book.forgero.guidebook.getting_started.schematics.name",
+  "description": "book.forgero.guidebook.getting_started.schematics.description",
   "icon": "forgero:handle-schematic",
   "x": 7,
   "y": 0,

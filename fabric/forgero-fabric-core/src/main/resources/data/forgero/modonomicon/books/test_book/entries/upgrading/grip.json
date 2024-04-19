@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
-  "name": "Handle Grip",
-  "description": "",
+  "name": "book.forgero.guidebook.upgrading.grip.name",
+  "description": "book.forgero.guidebook.upgrading.grip.description",
   "icon": "minecraft:leather",
   "x": 1,
   "y": 6,
@@ -10,8 +10,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.grip.text",
+      "title": "book.forgero.guidebook.upgrading.grip.title",
       "use_markdown_title": false
     }
   ],

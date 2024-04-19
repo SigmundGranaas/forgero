@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Crafting Your First Handle",
-  "description": "",
+  "name": "book.forgero.guidebook.getting_started.handle.name",
+  "description": "book.forgero.guidebook.getting_started.handle.description",
   "icon": "forgero:oak-handle",
   "x": 2,
   "y": 1,

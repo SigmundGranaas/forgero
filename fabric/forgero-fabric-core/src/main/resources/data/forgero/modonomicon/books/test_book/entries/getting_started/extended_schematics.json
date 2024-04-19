@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Extended Schematics",
-  "description": "Everything on Extended Schematics!",
+  "name": "book.forgero.guidebook.getting_started.extended_schematics.name",
+  "description": "book.forgero.guidebook.getting_started.extended_schematics.description",
   "icon": "forgero:refined_pickaxe_head-schematic",
   "x": 7,
   "y": -4,

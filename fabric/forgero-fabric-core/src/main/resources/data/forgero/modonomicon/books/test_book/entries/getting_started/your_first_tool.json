@@ -1,7 +1,7 @@
 {
   "category": "forgero:getting_started",
-  "name": "Your First Tool!",
-  "description": "",
+  "name": "book.forgero.guidebook.getting_started.your_first_tool.name",
+  "description": "book.forgero.guidebook.getting_started.your_first_tool.description",
   "icon": "forgero:oak-pickaxe",
   "x": 4,
   "y": 0,
