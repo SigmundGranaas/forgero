@@ -1,7 +1,11 @@
 {
+  "background": "forgero:textures/gui/background.png",
+  "background_height": 512,
+  "background_parallax_layers": [],
+  "background_texture_zoom_multiplier": 1.0,
+  "background_width": 512,
   "name": "book.forgero.guidebook.category.upgrading",
   "icon": "forgero:leather-soft_binding",
-  "background": "forgero:textures/gui/background.png",
   "condition" : {
     "type": "modonomicon:entry_read",
     "entry_id": "forgero:getting_started/using_your_schematics"

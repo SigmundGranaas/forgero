@@ -1,7 +1,11 @@
 {
-  "background": "forgero:textures/gui/background.png",
+  "background": "forgero:textures/gui/landingbackground.png",
+  "background_height": 512,
+  "background_parallax_layers": [],
+  "background_texture_zoom_multiplier": 1.0,
+  "background_width": 512,
   "entry_textures": "modonomicon:textures/gui/entry_textures.png",
   "icon": "minecraft:nether_star",
-  "name": "book.modonomicon.demo.features.name",
+  "name": "book.forgero.guidebook.category.landing",
   "sort_number": -1
 }
