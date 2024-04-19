@@ -7,18 +7,18 @@
   "y": -1,
   "pages": [
     {
-      "type": "modonomicon:text",
+      "type": "modonomicon:spotlight",
       "anchor": "",
-      "show_title_separator": true,
-      "title": "book.forgero.guidebook.getting_started.head.title",
+      "item": {
+        "item": "forgero:oak-pickaxe_head"
+      },
       "text": "book.forgero.guidebook.getting_started.head.text",
-      "use_markdown_in_title": false
+      "title": "book.forgero.guidebook.getting_started.head.title"
     },
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
-      "recipe_id_1": "forgero:oak-pickaxe_head",
-      "text": "book.forgero.guidebook.getting_started.schematic.crafting.text",
+      "recipe_id_1": "forgero:oak-pickaxe_head-basic_recipe",
       "title1": "",
       "title2": ""
     }

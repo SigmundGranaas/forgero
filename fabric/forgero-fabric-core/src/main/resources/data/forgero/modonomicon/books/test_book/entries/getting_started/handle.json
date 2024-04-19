@@ -7,18 +7,18 @@
   "y": 1,
   "pages": [
     {
-      "type": "modonomicon:text",
+      "type": "modonomicon:spotlight",
       "anchor": "",
-      "show_title_separator": true,
-      "title": "book.forgero.guidebook.getting_started.handle.title",
+      "item": {
+        "item": "forgero:oak-handle"
+      },
       "text": "book.forgero.guidebook.getting_started.handle.text",
-      "use_markdown_in_title": false
+      "title": "book.forgero.guidebook.getting_started.handle.title"
     },
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
-      "recipe_id_1": "forgero:oak-handle",
-      "text": "book.forgero.guidebook.getting_started.schematic.crafting.text",
+      "recipe_id_1": "forgero:oak-handle-basic_recipe",
       "title1": "",
       "title2": ""
     }

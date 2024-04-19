@@ -1,6 +1,7 @@
 {
   "category": "forgero:landing",
-  "name": "About This Mod",
+  "background_v_index": 1,
+  "name": "book.forgero.guidebook.intro.title",
   "description": "",
   "icon": "forgero:handbook",
   "x": 0,
@@ -8,19 +9,18 @@
   "pages": [
     {
       "type": "modonomicon:text",
-      "anchor": "",
       "show_title_separator": true,
-      "title": "book.forgero.guidebook.getting_started.about_this_mod.title",
       "text": "book.forgero.guidebook.getting_started.about_this_mod.text",
-      "use_markdown_in_title": false
+      "title": "book.forgero.guidebook.getting_started.about_this_mod.title",
+      "use_markdown_title": false
     },
     {
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "title": "book.forgero.guidebook.getting_started.about_this_mod.title1",
       "text": "book.forgero.guidebook.getting_started.about_this_mod.text1",
-      "use_markdown_in_title": false
+      "title": "book.forgero.guidebook.getting_started.about_this_mod.title1",
+      "use_markdown_title": false
     }
   ]
 }
