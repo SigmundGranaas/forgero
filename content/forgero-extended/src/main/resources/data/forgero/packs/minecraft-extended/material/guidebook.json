@@ -1,0 +1,16 @@
+{
+  "type": "SCALE",
+  "name": "guidebook",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "grouped_attributes": [
+
+    ]
+  },
+  "palette": {
+    "name": "guidebook"
+  }
+}

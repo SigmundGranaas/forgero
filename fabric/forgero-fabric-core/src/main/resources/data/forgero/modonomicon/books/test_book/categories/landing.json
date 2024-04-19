@@ -1,8 +1,7 @@
 {
-  "entry_textures": "modonomicon:textures/gui/entry_textures.png",
-  "name": "book.forgero.guidebook.category.landing",
-  "icon": "minecraft:grass_block",
   "background": "forgero:textures/gui/background.png",
-  "sort_number": 0,
-  "show_category_button" : true
+  "entry_textures": "modonomicon:textures/gui/entry_textures.png",
+  "icon": "minecraft:nether_star",
+  "name": "book.modonomicon.demo.features.name",
+  "sort_number": -1
 }
