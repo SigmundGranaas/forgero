@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
   "name": "book.forgero.guidebook.upgrading.weight.name",
-  "description": "book.forgero.guidebook.upgrading.trinket.description",
+  "description": "book.forgero.guidebook.upgrading.weight.description",
   "icon": "minecraft:feather",
   "x": -2,
   "y": -4,

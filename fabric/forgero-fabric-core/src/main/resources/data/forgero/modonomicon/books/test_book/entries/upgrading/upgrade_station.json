@@ -37,8 +37,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.upgrade_station.text2",
+      "title": "book.forgero.guidebook.upgrading.upgrade_station.title2",
       "use_markdown_in_title": false
     }
   ]

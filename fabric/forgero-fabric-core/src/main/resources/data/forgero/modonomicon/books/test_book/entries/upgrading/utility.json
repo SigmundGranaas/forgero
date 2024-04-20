@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
   "name": "book.forgero.guidebook.upgrading.utility.name",
-  "description": "book.forgero.guidebook.upgrading.trinket.description",
+  "description": "book.forgero.guidebook.upgrading.utility.description",
   "icon": "forgero:leather-scrappy_binding",
   "background_v_index": 1,
   "x": 1,
