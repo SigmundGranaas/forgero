@@ -3,8 +3,8 @@
   "name": "book.forgero.guidebook.getting_started.refined_schematics.name",
   "description": "book.forgero.guidebook.getting_started.refined_schematics.description",
   "icon": "forgero:refined_pickaxe_head-schematic",
-  "x": 6,
-  "y": -4,
+  "x": 5,
+  "y": -3,
   "pages": [
     {
       "type": "modonomicon:text",

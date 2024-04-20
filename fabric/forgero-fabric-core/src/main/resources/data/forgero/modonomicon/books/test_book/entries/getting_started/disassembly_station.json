@@ -19,7 +19,7 @@
       "type": "modonomicon:multiblock",
       "multiblock_name": "",
       "multiblock_id": "forgero:assembly_station",
-      "text": ""
+      "text": "book.forgero.guidebook.getting_started.disassembly_station.text3"
     },
     {
       "type": "modonomicon:text",
