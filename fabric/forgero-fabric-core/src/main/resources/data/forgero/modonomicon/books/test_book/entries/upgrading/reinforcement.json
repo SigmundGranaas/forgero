@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
-  "name": "Reinforcements",
-  "description": "",
+  "name": "book.forgero.guidebook.upgrading.reinforcement.name",
+  "description": "book.forgero.guidebook.upgrading.reinforcement.description",
   "icon": "minecraft:netherite_ingot",
   "x": 6,
   "y": 1,
@@ -10,8 +10,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.reinforcement.text",
+      "title": "book.forgero.guidebook.upgrading.reinforcement.title",
       "use_markdown_title": false
     }
   ],

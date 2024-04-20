@@ -1,7 +1,7 @@
 {
   "category": "forgero:upgrading",
-  "name": "Tools & Stats",
-  "description": "",
+  "name": "book.forgero.guidebook.upgrading.stats.name",
+  "description": "book.forgero.guidebook.upgrading.stats.description",
   "icon": "forgero:iron-axe",
   "x": -2,
   "y": -2,
@@ -10,8 +10,16 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.stats.text",
+      "title": "book.forgero.guidebook.upgrading.stats.title",
+      "use_markdown_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.upgrading.stats.text1",
+      "title": "book.forgero.guidebook.upgrading.stats.title1",
       "use_markdown_title": false
     }
   ],

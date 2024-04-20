@@ -1,18 +1,18 @@
 {
   "category": "forgero:getting_started",
-  "name": "Upgrading Your Tool!",
+  "name": "book.forgero.guidebook.getting_started.shortcut.name",
+  "description": "book.forgero.guidebook.getting_started.shortcut.description",
   "background_u_index": 1,
   "background_v_index": 2,
-  "description": "The Basics On Upgrading!",
   "icon": "forgero:upgrade_station",
   "category_to_open": "forgero:upgrading",
-  "x": 14,
+  "x": 11,
   "y": 0,
   "parents": [
     {
-      "draw_arrow": true,
+      "draw_arrow": false,
       "entry": "forgero:getting_started/using_your_schematics",
-      "line_enabled": true,
+      "line_enabled": false,
       "line_reversed": false
     }
   ]

@@ -1,25 +1,27 @@
 {
   "category": "forgero:getting_started",
-  "name": "Your First Tool!",
-  "description": "How to Create Your First Tool!",
+  "name": "book.forgero.guidebook.getting_started.your_first_tool.name",
+  "description": "book.forgero.guidebook.getting_started.your_first_tool.description",
   "icon": "forgero:oak-pickaxe",
   "x": 4,
   "y": 0,
   "pages": [
     {
-      "type": "modonomicon:text",
+      "type": "modonomicon:spotlight",
       "anchor": "",
-      "show_title_separator": true,
-      "title": "book.forgero.guidebook.getting_started.your_first_tool.title",
+      "item": {
+        "item": "forgero:oak-pickaxe"
+      },
       "text": "book.forgero.guidebook.getting_started.your_first_tool.text",
-      "use_markdown_in_title": false
+      "title": "book.forgero.guidebook.getting_started.your_first_tool.title"
     },
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
       "recipe_id_1": "forgero:oak-pickaxe_head-handle",
       "text": "book.forgero.guidebook.getting_started.your_first_tool.text1",
-      "use_markdown_in_title": false
+      "title1": "",
+      "title2": ""
     }
   ],
   "parents": [

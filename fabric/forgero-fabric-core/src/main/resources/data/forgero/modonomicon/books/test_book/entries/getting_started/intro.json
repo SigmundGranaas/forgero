@@ -1,8 +1,8 @@
 {
   "category": "forgero:getting_started",
-  "name": "Welcome To The World Of Forgero!",
+  "name": "book.forgero.guidebook.getting_started.intro.name",
   "description": "",
-  "icon": "minecraft:feather",
+  "icon": "minecraft:iron_ingot",
   "x": -3,
   "y": 0,
   "pages": [
@@ -10,15 +10,17 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "title": "book.forgero.guidebook.getting_started.intro.title",
       "text": "book.forgero.guidebook.getting_started.intro.text",
-      "use_markdown_in_title": false
+      "title": "book.forgero.guidebook.getting_started.intro.title",
+      "use_markdown_title": false
     },
     {
       "type": "modonomicon:text",
       "anchor": "",
+      "show_title_separator": true,
       "text": "book.forgero.guidebook.getting_started.intro.text1",
-      "use_markdown_in_title": false
+      "title": " ",
+      "use_markdown_title": false
     }
   ]
 }

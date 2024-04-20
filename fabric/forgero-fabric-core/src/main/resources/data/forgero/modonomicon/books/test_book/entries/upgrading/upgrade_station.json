@@ -1,8 +1,8 @@
 {
   "category": "forgero:upgrading",
-  "name": "Taking Your Tools To The Next Level",
+  "name": "book.forgero.guidebook.upgrading.upgrade_station.name",
+  "description": "book.forgero.guidebook.upgrading.upgrade_station.description",
   "background_v_index": 1,
-  "description": "The Basics On The Upgrade Station!",
   "icon": "forgero:upgrade_station",
   "x": -5,
   "y": 0,
@@ -11,8 +11,8 @@
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.upgrade_station.text",
+      "title": "book.forgero.guidebook.upgrading.upgrade_station.title",
       "use_markdown_title": false
     },
     {
@@ -30,15 +30,15 @@
         "forgero:textures/gui/upgrade_station_interface.png"
 
       ],
-      "text": "book.modonomicon.demo.features.image.image.text",
-      "title": "book.modonomicon.demo.features.image.image.title"
+      "text": "book.forgero.guidebook.upgrading.upgrade_station.text1",
+      "title": "book.forgero.guidebook.upgrading.upgrade_station.title1"
     },
     {
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "text": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.text",
-      "title": "book.occultism.dictionary_of_spirits.getting_started.intro.intro.title",
+      "text": "book.forgero.guidebook.upgrading.upgrade_station.text2",
+      "title": "book.forgero.guidebook.upgrading.upgrade_station.title2",
       "use_markdown_in_title": false
     }
   ]

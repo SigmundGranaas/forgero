@@ -1,24 +1,24 @@
 {
   "category": "forgero:getting_started",
-  "name": "Refined Schematics",
-  "description": "Everything on Refined Schematics!",
+  "name": "book.forgero.guidebook.getting_started.refined_schematics.name",
+  "description": "book.forgero.guidebook.getting_started.refined_schematics.description",
   "icon": "forgero:refined_pickaxe_head-schematic",
-  "x": 10,
-  "y": -2,
+  "x": 5,
+  "y": -3,
   "pages": [
     {
       "type": "modonomicon:text",
       "anchor": "",
       "show_title_separator": true,
-      "title": "book.forgero.guidebook.getting_started.refined_schematics.title",
       "text": "book.forgero.guidebook.getting_started.refined_schematics.text",
-      "use_markdown_in_title": false
+      "title": "book.forgero.guidebook.getting_started.refined_schematics.title",
+      "use_markdown_title": false
     }
   ],
   "parents": [
     {
       "draw_arrow": true,
-      "entry": "forgero:getting_started/base_schematics",
+      "entry": "forgero:getting_started/schematic_variants",
       "line_enabled": true,
       "line_reversed": false
     }
