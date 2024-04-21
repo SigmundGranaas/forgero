@@ -1,5 +1,5 @@
 {
-  "category": "forgero:getting_started",
+  "category": "forgero:schematics",
   "name": "book.forgero.guidebook.getting_started.refined_schematics.name",
   "description": "book.forgero.guidebook.getting_started.refined_schematics.description",
   "icon": "forgero:refined_pickaxe_head-schematic",
@@ -18,7 +18,7 @@
   "parents": [
     {
       "draw_arrow": true,
-      "entry": "forgero:getting_started/schematic_variants",
+      "entry": "",
       "line_enabled": true,
       "line_reversed": false
     }

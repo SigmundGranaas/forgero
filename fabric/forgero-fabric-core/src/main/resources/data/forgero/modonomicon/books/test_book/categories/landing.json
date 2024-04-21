@@ -5,7 +5,7 @@
   "background_texture_zoom_multiplier": 1.0,
   "background_width": 512,
   "entry_textures": "modonomicon:textures/gui/entry_textures.png",
-  "icon": "minecraft:nether_star",
+  "icon": "forgero:guidebook",
   "name": "book.forgero.guidebook.category.landing",
-  "sort_number": -1
+  "sort_number": 1
 }

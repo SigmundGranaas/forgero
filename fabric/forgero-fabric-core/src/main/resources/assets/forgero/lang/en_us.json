@@ -297,5 +297,6 @@
   "book.forgero.guidebook.upgrading.pommel.text": "",
   "book.forgero.guidebook.upgrading.pommel.title": "",
   "book.forgero.guidebook.upgrading.back_to_crafting.name": "Back To Crafting",
-  "book.forgero.guidebook.upgrading.back_to_crafting.description": "Refresh on the basics"
+  "book.forgero.guidebook.upgrading.back_to_crafting.description": "Refresh on the basics",
+  "book.forgero.guidebook.category.schematics": "Schematics & Co"
 }

@@ -3,8 +3,8 @@
   "background_v_index": 1,
   "name": "book.forgero.guidebook.landing.about_this_mod.name",
   "description": "",
-  "icon": "forgero:handbook",
-  "x": 0,
+  "icon": "forgero:guidebook",
+  "x": 1.5,
   "y": 0,
   "pages": [
     {

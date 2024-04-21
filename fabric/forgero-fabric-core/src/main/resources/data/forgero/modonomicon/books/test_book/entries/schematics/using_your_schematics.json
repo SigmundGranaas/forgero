@@ -1,5 +1,5 @@
 {
-  "category": "forgero:getting_started",
+  "category": "forgero:schematics",
   "name": "book.forgero.guidebook.getting_started.using_your_schematics.name",
   "description": "book.forgero.guidebook.getting_started.using_your_schematics.description",
   "icon": "forgero:cobblestone-pickaxe",
@@ -27,7 +27,7 @@
   "parents": [
     {
       "draw_arrow": true,
-      "entry": "forgero:getting_started/schematics",
+      "entry": "",
       "line_enabled": true,
       "line_reversed": false
     }
