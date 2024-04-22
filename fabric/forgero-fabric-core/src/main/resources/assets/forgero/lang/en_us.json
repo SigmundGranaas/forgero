@@ -207,7 +207,7 @@
   "book.forgero.guidebook.getting_started.your_first_tool.text1": "Here is a small reminder for the crafting recipe. Now you will never forget it! (right?)",
   "book.forgero.guidebook.getting_started.schematics.name": "Schematics",
   "book.forgero.guidebook.getting_started.schematics.description": "A different approach",
-  "book.forgero.guidebook.getting_started.schematics.text": "After wooden tools you will want to upgrade to stone tools. These tools can't be crafted like the wooden ones, but require [#](1e0099)Schematics[#](). The [#](1e0099)Base Schematics[#]() can be crafted with the previous made wooden parts using the [#](#eb9b34)[Disassembly Station](entry://getting_started/disassembly_station)[#]().",
+  "book.forgero.guidebook.getting_started.schematics.text": "After wooden tools you will want to upgrade to stone tools. These tools can't be crafted like the wooden ones, but require [#](1e0099)Schematics[#](). The [#](1e0099)Base Schematics[#]() can be crafted with the previous made wooden parts using the [#](#eb9b34)[Disassembly Station](entry://schematics/disassembly_station)[#]().",
   "book.forgero.guidebook.getting_started.schematics.title": "Schematics",
   "book.forgero.guidebook.getting_started.schematic_variants.name": "Schematic Variants",
   "book.forgero.guidebook.getting_started.schematic_variants.description": "But wait, there's more",
