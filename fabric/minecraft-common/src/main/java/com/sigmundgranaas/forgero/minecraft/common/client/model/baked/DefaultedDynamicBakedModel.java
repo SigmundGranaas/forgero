@@ -4,6 +4,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.mod
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.State;
@@ -29,29 +30,33 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 	private final StateService service;
 	@Nullable
 	private BakedModel defaultModel;
+	private final ItemStack stack;
 
-	public DefaultedDynamicBakedModel(ModelStrategy strategy, StateService service) {
+	public DefaultedDynamicBakedModel(ModelStrategy strategy, StateService service, ItemStack stack) {
 		this.strategy = strategy;
 		this.service = service;
+		this.stack = stack;
+	}
+
+	@Override
+	public List<BakedQuad> defaultQuads(@Nullable Direction face, Random random) {
+		return getModel(stack, null, null, 0).getQuads(null, face, random);
 	}
 
 	@Override
 	public List<BakedQuad> getQuadsWithContext(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random) {
 		BakedModel result = getModel(stack, world, entity, seed);
 		return result.getQuads(null, face, random);
-
 	}
 
 	public BakedModel getModel(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed) {
+		ItemStack itemStack = Objects.requireNonNullElse(stack, this.stack);
 		Optional<State> state = service.convert(stack);
 		if (state.isPresent()) {
 			MatchContext ctx;
 
-			if (stack != null) {
-				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, world), new MatchContext.KeyValuePair(STACK, stack));
-			} else {
-				ctx = MatchContext.of();
-			}
+			ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, world), new MatchContext.KeyValuePair(STACK, itemStack));
+
 			BakedModel model = strategy.getModel(state.get(), ctx)
 					.map(BakedModelResult::model)
 					.or(() -> Optional.ofNullable(defaultModel))

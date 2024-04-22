@@ -49,7 +49,7 @@ public interface ContextAwareBakedModel extends BakedModel {
 	 * @param random A {@code Random} instance for random number generation.
 	 * @return A list of {@code BakedQuad} for the model, tailored to the provided context.
 	 */
-	List<BakedQuad> getQuadsWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed, @Nullable Direction face, Random random);
+	List<BakedQuad> getQuadsWithContext(@Nullable ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random);
 
 	default List<BakedQuad> defaultQuads(@Nullable Direction face, Random random) {
 		return Collections.emptyList();
@@ -113,7 +113,7 @@ public interface ContextAwareBakedModel extends BakedModel {
 			return defaultQuads(face, random);
 		}
 	}
-	
+
 	/**
 	 * Record to encapsulate the rendering context which includes an item stack, a world, an entity, and a seed.
 	 *

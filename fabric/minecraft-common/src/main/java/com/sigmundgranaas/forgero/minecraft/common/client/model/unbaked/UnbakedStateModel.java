@@ -20,6 +20,7 @@ import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class UnbakedStateModel implements UnbakedModel {
@@ -40,7 +41,7 @@ public class UnbakedStateModel implements UnbakedModel {
 	public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		StateModelBaker modelBaker = new StateModelBaker(baker, textureGetter, registry);
 		ModelStrategy modelStrategy = new StrategyFactory(modelBaker, strategy).build(state);
-		return new DefaultedDynamicBakedModel(modelStrategy, service);
+		return new DefaultedDynamicBakedModel(modelStrategy, service, service.convert(state).orElse(ItemStack.EMPTY));
 	}
 
 
