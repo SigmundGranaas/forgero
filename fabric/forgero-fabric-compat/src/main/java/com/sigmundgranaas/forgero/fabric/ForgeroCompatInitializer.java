@@ -1,15 +1,14 @@
 package com.sigmundgranaas.forgero.fabric;
 
-import java.util.function.Supplier;
-
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.mythicmetals.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.patchouli.GuideBookGenerator;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
 import net.fabricmc.loader.api.FabricLoader;
+
+import java.util.function.Supplier;
 
 public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> toolstats;
@@ -19,9 +18,11 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> mythicmetals;
 	public static final Supplier<Boolean> yacl;
 	public static final Supplier<Boolean> emi;
+	public static final Supplier<Boolean> modonomicon;
 
 
 	static {
+		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
 		mythicmetals = () -> isModLoaded("mythicmetals");

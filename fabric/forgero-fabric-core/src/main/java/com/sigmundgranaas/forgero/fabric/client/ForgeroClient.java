@@ -1,15 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.client;
 
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
-import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
@@ -30,12 +20,6 @@ import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableItemRenderer;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.devtech.arrp.api.RRPCallback;
-
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
-
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -47,6 +31,16 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 @Environment(EnvType.CLIENT)
 public class ForgeroClient implements ClientModInitializer {
@@ -87,7 +81,6 @@ public class ForgeroClient implements ClientModInitializer {
 
 		ModelResolver stateModels = new ForgeroStateModelResolver(modelRegistry, StateService.INSTANCE, models);
 		ModelLoadingPlugin.register(pluginContext -> pluginContext.resolveModel().register(stateModels));
-
 		EntityRendererRegistry.register(Entities.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
 	}
 
