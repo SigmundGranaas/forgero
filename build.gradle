@@ -63,6 +63,11 @@ subprojects {
 		maven {
 			url "https://libraries.minecraft.net"
 		}
+		maven {
+			// Cardinal components
+			name = 'Ladysnake Mods'
+			url = 'https://maven.ladysnake.org/releases'
+		}
 		mavenLocal()
 	}
 }
