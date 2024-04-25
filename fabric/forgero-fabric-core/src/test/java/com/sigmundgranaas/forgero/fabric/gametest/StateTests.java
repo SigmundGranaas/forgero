@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.NameCompositor;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
-import com.sigmundgranaas.forgero.core.state.identity.NameCompositor;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.test.GameTest;

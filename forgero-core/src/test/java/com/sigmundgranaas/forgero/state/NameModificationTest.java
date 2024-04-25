@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.state;
 
+import com.sigmundgranaas.forgero.core.api.identity.DefaultRules;
+import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.identity.DefaultRules;
-import com.sigmundgranaas.forgero.core.state.identity.ModificationRuleBuilder;
 import com.sigmundgranaas.forgero.testutil.ToolParts;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

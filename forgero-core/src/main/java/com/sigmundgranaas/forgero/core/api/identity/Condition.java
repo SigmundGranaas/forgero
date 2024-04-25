@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state.identity;
+package com.sigmundgranaas.forgero.core.api.identity;
 
 import java.util.function.Predicate;
 
@@ -6,6 +6,12 @@ import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
+/**
+ * Condition class used to build dynamic conditions for States.
+ * Aimed at making it easier to build Modification rules
+ *
+ * @param predicate
+ */
 public record Condition(Predicate<State> predicate) {
 	public static Condition ALWAYS = of(e -> true);
 

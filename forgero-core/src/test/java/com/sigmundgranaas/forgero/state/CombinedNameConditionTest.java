@@ -2,11 +2,11 @@ package com.sigmundgranaas.forgero.state;
 
 import java.util.List;
 
+import com.sigmundgranaas.forgero.core.api.identity.DefaultRules;
+import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
+import com.sigmundgranaas.forgero.core.state.NameCompositor;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.identity.DefaultRules;
-import com.sigmundgranaas.forgero.core.state.identity.ModificationRuleRegistry;
-import com.sigmundgranaas.forgero.core.state.identity.NameCompositor;
-import com.sigmundgranaas.forgero.core.state.identity.sorting.SortingRuleRegistry;
 import com.sigmundgranaas.forgero.testutil.Materials;
 import com.sigmundgranaas.forgero.testutil.Schematics;
 import com.sigmundgranaas.forgero.testutil.ToolParts;

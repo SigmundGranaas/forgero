@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.core.state.identity.NameCompositor;
+import com.sigmundgranaas.forgero.core.state.NameCompositor;
 
 public class RecipeDataMapper implements Function<RecipeData, RecipeData> {
 	private final RecipeDataHelper helper;

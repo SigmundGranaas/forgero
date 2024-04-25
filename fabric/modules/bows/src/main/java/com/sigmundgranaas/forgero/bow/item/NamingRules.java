@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.bow.item;
 
-import static com.sigmundgranaas.forgero.core.state.identity.ModificationRuleBuilder.builder;
+import static com.sigmundgranaas.forgero.core.api.identity.ModificationRuleBuilder.builder;
 
-import com.sigmundgranaas.forgero.core.state.identity.Condition;
-import com.sigmundgranaas.forgero.core.state.identity.ModificationRuleBuilder;
+import com.sigmundgranaas.forgero.core.api.identity.Condition;
+import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleBuilder;
 import com.sigmundgranaas.forgero.core.type.Type;
 
 public class NamingRules {

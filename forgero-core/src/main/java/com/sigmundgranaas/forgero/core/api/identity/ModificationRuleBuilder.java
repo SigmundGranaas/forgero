@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state.identity;
+package com.sigmundgranaas.forgero.core.api.identity;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.core.state.State;
 
+/**
+ * A rule builder class to make it easier to build rules and register them, either locally or using the static registry.
+ */
 public class ModificationRuleBuilder {
 	private ModificationRuleRegistry registry = ModificationRuleRegistry.staticRegistry();
 	private Condition condition;

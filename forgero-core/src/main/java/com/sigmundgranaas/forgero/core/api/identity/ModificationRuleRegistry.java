@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state.identity;
+package com.sigmundgranaas.forgero.core.api.identity;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -6,6 +6,10 @@ import java.util.function.Function;
 
 import com.sigmundgranaas.forgero.core.state.State;
 
+/**
+ * A registry to keep track of the current modification rules.
+ * Each rules can be overridden. The local registry can be used for testing, while the static registry is used by default when running the client.
+ */
 public class ModificationRuleRegistry {
 	private static final Map<String, ModificationRule> staticRules = new ConcurrentHashMap<>();
 	private final Map<String, ModificationRule> rules;

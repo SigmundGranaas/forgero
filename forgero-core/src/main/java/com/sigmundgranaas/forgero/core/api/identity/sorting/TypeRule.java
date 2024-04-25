@@ -1,8 +1,11 @@
-package com.sigmundgranaas.forgero.core.state.identity.sorting;
+package com.sigmundgranaas.forgero.core.api.identity.sorting;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 
+/**
+ * Convenience class to make it faster to create Sorting rules that need a type and an integer.
+ */
 public class TypeRule implements SortingRule {
 	private final Type type;
 

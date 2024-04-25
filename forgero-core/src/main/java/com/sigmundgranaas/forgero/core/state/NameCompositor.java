@@ -1,12 +1,12 @@
-package com.sigmundgranaas.forgero.core.state.identity;
+package com.sigmundgranaas.forgero.core.state;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.identity.sorting.SortingRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
 
 public class NameCompositor {
 	private ModificationRuleRegistry registry;

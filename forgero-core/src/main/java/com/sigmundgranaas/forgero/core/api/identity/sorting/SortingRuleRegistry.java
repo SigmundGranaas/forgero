@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state.identity.sorting;
+package com.sigmundgranaas.forgero.core.api.identity.sorting;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -6,6 +6,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.sigmundgranaas.forgero.core.state.State;
 
+/**
+ * A registry to keep track of the current sorting rules.
+ * Each rules can be overridden. The local registry can be used for testing, while the static registry is used by default when running the client.
+ */
 public class SortingRuleRegistry {
 	private static final Map<String, SortingRule> staticRules = new ConcurrentHashMap<>();
 	private final Map<String, SortingRule> rules;
