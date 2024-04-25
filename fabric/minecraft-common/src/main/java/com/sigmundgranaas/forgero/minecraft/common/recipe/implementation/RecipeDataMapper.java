@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
-import com.sigmundgranaas.forgero.core.state.composite.NameCompositor;
+import com.sigmundgranaas.forgero.core.state.identity.NameCompositor;
 
 public class RecipeDataMapper implements Function<RecipeData, RecipeData> {
 	private final RecipeDataHelper helper;
@@ -62,7 +62,7 @@ public class RecipeDataMapper implements Function<RecipeData, RecipeData> {
 					.map(Supplier::get)
 					.toList();
 
-			return String.format("%s:%s", Forgero.NAMESPACE, new NameCompositor().compositeName(states));
+			return String.format("%s:%s", Forgero.NAMESPACE, NameCompositor.of().compositeName(states));
 		}
 	}
 }

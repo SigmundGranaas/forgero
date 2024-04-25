@@ -25,7 +25,8 @@
       "com.sigmundgranaas.forgero.fabric.gametest.BlockFilterTest",
       "com.sigmundgranaas.forgero.fabric.gametest.BlockBreakingSpeedTests",
       "com.sigmundgranaas.forgero.fabric.gametest.HandlerInteractionTests",
-      "com.sigmundgranaas.forgero.fabric.gametest.HitHandlerTests"
+      "com.sigmundgranaas.forgero.fabric.gametest.HitHandlerTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.StateTests"
     ]
   }
 }

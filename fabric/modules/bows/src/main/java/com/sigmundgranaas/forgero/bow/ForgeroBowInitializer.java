@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.bow;
 
 import static com.sigmundgranaas.forgero.bow.Attributes.*;
 import static com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity.DYNAMIC_ARROW_IDENTIFIER;
+import static com.sigmundgranaas.forgero.bow.item.NamingRules.*;
 import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.*;
 
@@ -20,6 +21,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDa
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
+import com.sigmundgranaas.forgero.core.state.identity.ModificationRuleRegistry;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
@@ -122,7 +124,13 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 				.attributeKey(DRAW_SPEED)
 				.modification(minDrawSpeed)
 				.register();
+
+		ModificationRuleRegistry modification = ModificationRuleRegistry.staticRegistry();
+
+		modification.registerRule("forgero:bow_limb", bowLimb.build());
+		modification.registerRule("forgero:arrow_head", arrowHead.build());
+		modification.registerRule("forgero:feather", feather.build());
+		modification.registerRule("forgero:string", string.build());
 	}
-
-
 }
+

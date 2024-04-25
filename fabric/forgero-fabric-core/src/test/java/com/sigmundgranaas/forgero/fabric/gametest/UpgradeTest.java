@@ -1,8 +1,14 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
+import static com.sigmundgranaas.forgero.fabric.gametest.RecipeTest.assertFalse;
 import static com.sigmundgranaas.forgero.fabric.gametest.RecipeTest.assertTrue;
 
+import java.util.List;
+
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.composite.Construct;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.testutil.RecipeTester;
 
 import net.minecraft.test.GameTest;
@@ -17,6 +23,27 @@ public class UpgradeTest {
 	public void testUpgradeDiamondPickaxeHead(TestContext context) {
 		var test = RecipeTester.smithingUpgrade("diamond-pickaxe_head", "minecraft:iron_ingot", context);
 		assertTrue(test, "Unable to upgrade diamond pickaxe head with iron");
+		context.complete();
+	}
+	
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
+	public void testUpgradeMastercraftedHandleWithDye(TestContext context) {
+		var test = RecipeTester.smithingUpgrade("oak-mastercrafted_handle", "minecraft:pink_dye", context);
+		assertTrue(test, "Unable to upgrade mastercrafted handle with dye");
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
+	public void testUpgradeMastercraftedHandleArrowWithDye(TestContext context) {
+		var head = StateService.INSTANCE.find("forgero:oak-mastercrafted_arrow_head").get();
+		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-mastercrafted_handle").get();
+		handle = handle.upgrade(StateService.INSTANCE.find("minecraft:pink_dye").get());
+		var feather = StateService.INSTANCE.find("minecraft:feather").get();
+
+		var arrow = new Construct.ConstructBuilder().addIngredients(List.of(head, handle, feather)).id("forgero:oak-arrow").build();
+
+		var test = RecipeTester.smithingUpgrade(arrow, "minecraft:pink_dye", context);
+		assertFalse(test, "Should not be able to dye arrow directly");
 		context.complete();
 	}
 

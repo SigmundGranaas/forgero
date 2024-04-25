@@ -6,7 +6,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.StateUpgradeRecipe;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
@@ -59,7 +61,7 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.CRAFTING);
 	}
 
-	private static Item itemFromString(String identifier) {
+	public static Item itemFromString(String identifier) {
 		Item item = Registries.ITEM.get(new Identifier(identifier));
 		if (item == Items.AIR) {
 			return Registries.ITEM.get(new Identifier("forgero:" + identifier));
@@ -91,6 +93,15 @@ public class RecipeTester<T extends Inventory, R extends Recipe<T>> implements S
 		inventory.setStack(StateUpgradeRecipe.additionIndex, new ItemStack(itemFromString(upgrade)));
 
 		Item outcome = itemFromString(target);
+		return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
+	}
+
+	public static RecipeTester<Inventory, SmithingRecipe> smithingUpgrade(State target, String upgrade, TestContext context) {
+		SimpleInventory inventory = new SimpleInventory(3);
+		inventory.setStack(StateUpgradeRecipe.baseIndex, StateService.INSTANCE.convert(target).get());
+		inventory.setStack(StateUpgradeRecipe.additionIndex, new ItemStack(itemFromString(upgrade)));
+
+		Item outcome = StateService.INSTANCE.convert(target).get().getItem();
 		return new RecipeTester<>(context, inventory, outcome, RecipeType.SMITHING);
 	}
 

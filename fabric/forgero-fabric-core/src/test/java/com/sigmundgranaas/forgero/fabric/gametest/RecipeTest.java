@@ -17,6 +17,13 @@ public class RecipeTest {
 		}
 	}
 
+	public static void assertFalse(Supplier<Boolean> test, String errorMessage) {
+		if (test.get()) {
+			throw new GameTestException(errorMessage);
+		}
+	}
+
+
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testCraftIronPickaxe(TestContext context) {
 		var test = RecipeTester.ofTool("iron-pickaxe_head", "oak-handle", "forgero:iron-pickaxe", context);

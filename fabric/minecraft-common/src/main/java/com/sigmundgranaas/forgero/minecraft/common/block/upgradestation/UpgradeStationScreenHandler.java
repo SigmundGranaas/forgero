@@ -135,6 +135,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 					}
 					isBuildingTree = false;
 					ItemStack newState = service.convert(compositeSlot.state).get();
+				
 					var nbt = compositeSlot.inventory.getStack(0).copy().getOrCreateNbt();
 					nbt.put(FORGERO_IDENTIFIER, newState.getOrCreateNbt().get(FORGERO_IDENTIFIER));
 					newState.setNbt(nbt);
