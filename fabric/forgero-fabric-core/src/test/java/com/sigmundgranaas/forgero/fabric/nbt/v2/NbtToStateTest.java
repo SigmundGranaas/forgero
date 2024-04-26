@@ -11,7 +11,6 @@ import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.Composite;
-import com.sigmundgranaas.forgero.core.state.Ingredient;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
@@ -30,13 +29,13 @@ public class NbtToStateTest {
 
 	public static Optional<State> ingredientSupplier(String id) {
 		return switch (id) {
-			case "forgero#oak-handle" -> Optional.of(Ingredient.of(ToolParts.HANDLE));
-			case "forgero#iron-pickaxe_head" -> Optional.of(Ingredient.of(ToolParts.PICKAXE_HEAD));
-			case "forgero#iron" -> Optional.of(Materials.IRON);
-			case "forgero#oak" -> Optional.of(Materials.OAK);
-			case "forgero#pickaxehead-schematic" -> Optional.of(Schematics.PICKAXE_HEAD_SCHEMATIC);
-			case "forgero#handle-schematic" -> Optional.of(Schematics.HANDLE_SCHEMATIC);
-			case "forgero#binding-schematic" -> Optional.of(Schematics.BINDING_SCHEMATIC);
+			case "forgero:oak-handle" -> Optional.of(ToolParts.HANDLE);
+			case "forgero:iron-pickaxe_head" -> Optional.of(ToolParts.PICKAXE_HEAD);
+			case "c:iron" -> Optional.of(Materials.IRON);
+			case "forgero:oak" -> Optional.of(Materials.OAK);
+			case "forgero:pickaxe_head-schematic" -> Optional.of(Schematics.PICKAXE_HEAD_SCHEMATIC);
+			case "forgero:handle-schematic" -> Optional.of(Schematics.HANDLE_SCHEMATIC);
+			case "forgero:binding-schematic" -> Optional.of(Schematics.BINDING_SCHEMATIC);
 			default -> Optional.empty();
 		};
 	}

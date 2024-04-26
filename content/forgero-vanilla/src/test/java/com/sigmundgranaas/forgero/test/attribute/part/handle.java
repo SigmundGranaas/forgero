@@ -1,9 +1,9 @@
-package com.sigmundgranaas.forgeroforge.test.attribute.part;
+package com.sigmundgranaas.forgero.test.attribute.part;
 
-import static com.sigmundgranaas.forgeroforge.test.util.StateHelper.state;
+import static com.sigmundgranaas.forgero.test.util.StateHelper.state;
 
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
-import com.sigmundgranaas.forgeroforge.test.util.ForgeroPackageTest;
+import com.sigmundgranaas.forgero.test.util.ForgeroPackageTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

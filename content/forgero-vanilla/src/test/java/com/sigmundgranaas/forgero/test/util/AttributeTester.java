@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgeroforge.test.util;
+package com.sigmundgranaas.forgero.test.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

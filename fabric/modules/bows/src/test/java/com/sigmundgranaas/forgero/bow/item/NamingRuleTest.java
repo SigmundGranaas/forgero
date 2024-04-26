@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.api.identity.DefaultRules;
 import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRule;
 import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
@@ -26,8 +27,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class NamingRuleTest {
-	private ModificationRuleRegistry modificationRuleRegistry;
-	private SortingRuleRegistry sorting;
+	public static NameCompositor compositor() {
+		SortingRuleRegistry sorting = SortingRuleRegistry.local();
+		sorting.registerRule("forgero:schematic", SortingRule.of(Type.SCHEMATIC, 20));
+		sorting.registerRule("forgero:material", SortingRule.of(Type.MATERIAL, 10));
+		sorting.registerRule("forgero:part", SortingRule.of(Type.PART, 30));
+
+		ModificationRuleRegistry modification = ModificationRuleRegistry.local();
+		modification.registerRule("forgero:handle", DefaultRules.handle.build());
+		modification.registerRule("forgero:arrow_head", arrowHead.build());
+		modification.registerRule("forgero:feather", feather.build());
+
+		modification.registerRule("forgero:schematic", DefaultRules.schematic.build());
+		modification.registerRule("forgero:bow_limb", bowLimb.build());
+		modification.registerRule("forgero:string", string.build());
+		return new NameCompositor(modification, sorting);
+	}
+
 	private NameCompositor compositor;
 	public static Attribute ATTACK_DAMAGE_1 = new AttributeBuilder(AttackDamage.KEY)
 			.applyOrder(BASE)
@@ -55,79 +71,64 @@ public class NamingRuleTest {
 			.addIngredient(OAK)
 			.addIngredient(HANDLE_SCHEMATIC)
 			.type(Type.HANDLE)
+			.compositor(compositor())
 			.build();
 
 	public static State ARROW_HEAD = Construct.builder()
 			.addIngredient(IRON)
 			.addIngredient(ARROW_HEAD_SCHEMATIC)
 			.type(Type.ARROW_HEAD)
+			.compositor(compositor())
 			.build();
 
 	public static State ARROW_HEAD_MASTER = Construct.builder()
 			.addIngredient(IRON)
 			.addIngredient(MASTER_HEAD_SCHEMATIC)
 			.type(Type.ARROW_HEAD)
+			.compositor(compositor())
 			.build();
 
 	public static State BOW_LIMB_REFINED = Construct.builder()
 			.addIngredient(OAK)
 			.addIngredient(REFINED_BOW_LIMB_SCHEMATIC)
 			.type(Type.BOW_LIMB)
+			.compositor(compositor())
 			.build();
 
 	public static State BOW_LIMB = Construct.builder()
 			.addIngredient(OAK)
 			.addIngredient(BOW_LIMB_SCHEMATIC)
 			.type(Type.BOW_LIMB)
+			.compositor(compositor())
 			.build();
 
 
 	@BeforeEach
 	public void prepareRegistry() {
-		modificationRuleRegistry = ModificationRuleRegistry.local();
-		sorting = SortingRuleRegistry.local();
-		compositor = new NameCompositor(modificationRuleRegistry, sorting);
+		compositor = compositor();
 	}
 
 	@Test
 	public void testArrow() {
-		modificationRuleRegistry.registerRule("forgero:handle", DefaultRules.handle.build());
-		modificationRuleRegistry.registerRule("forgero:arrow_head", arrowHead.build());
-		modificationRuleRegistry.registerRule("forgero:feather", feather.build());
-
 		List<State> arrow = List.of(ARROW_HEAD, HANDLE, FEATHER);
-
 		Assertions.assertEquals("iron-arrow", compositor.compositeName(arrow));
 	}
 
 	@Test
 	public void testMastercraftedArrow() {
-		modificationRuleRegistry.registerRule("forgero:handle", DefaultRules.handle.build());
-		modificationRuleRegistry.registerRule("forgero:arrow_head", arrowHead.build());
-		modificationRuleRegistry.registerRule("forgero:feather", feather.build());
-
 		List<State> arrow = List.of(ARROW_HEAD_MASTER, HANDLE, FEATHER);
-
 		Assertions.assertEquals("iron-arrow", compositor.compositeName(arrow));
 	}
 
 	@Test
 	public void testBow() {
-		modificationRuleRegistry.registerRule("forgero:bow_limb", bowLimb.build());
-		modificationRuleRegistry.registerRule("forgero:string", string.build());
-
 		List<State> parts = List.of(BOW_LIMB, STRING);
-
 		Assertions.assertEquals("oak-bow", compositor.compositeName(parts));
 	}
 
 	@Test
 	public void testRefinedBow() {
-		modificationRuleRegistry.registerRule("forgero:bow_limb", bowLimb.build());
-		modificationRuleRegistry.registerRule("forgero:string", string.build());
-
 		List<State> parts = List.of(BOW_LIMB_REFINED, STRING);
-
 		Assertions.assertEquals("oak-bow", compositor.compositeName(parts));
 	}
 }

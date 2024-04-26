@@ -38,13 +38,13 @@ public class StateToNbtTest {
 
 	@Test
 	void encodeCompound() {
-		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE);
+		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.get());
 		Assertions.assertEquals("iron-pickaxe", compound.getString(NAME_IDENTIFIER));
 	}
 
 	@Test
 	void encodeCompoundWithIngredients() {
-		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE);
+		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.get());
 		NbtList list = compound.getList(INGREDIENTS_IDENTIFIER, NbtElement.COMPOUND_TYPE);
 		Assertions.assertEquals(2, list.size());
 		Assertions.assertEquals(((NbtCompound) list.get(0)).getString(NAME_IDENTIFIER), "oak-handle");
@@ -53,7 +53,7 @@ public class StateToNbtTest {
 
 	@Test
 	void encodeCompoundWithUpgrades() {
-		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.upgrade(Upgrades.BINDING));
+		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.get().upgrade(Upgrades.BINDING));
 		NbtList list = compound.getList(UPGRADES_IDENTIFIER, NbtElement.COMPOUND_TYPE);
 		//Assertions.assertEquals(1, list.size());
 		//Assertions.assertEquals(((NbtCompound) list.get(0)).getString(NAME_IDENTIFIER), "oak-binding");

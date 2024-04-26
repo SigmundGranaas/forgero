@@ -33,6 +33,9 @@ public interface Type extends Matchable {
 	Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
 	Type SWORD_BLADE_SCHEMATIC = new SimpleType("SWORD_BLADE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
 	Type TOOL_PART_HEAD_SCHEMATIC = new SimpleType("SWORD_PART_HEAD_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
+	Type HANDLE_SCHEMATIC = new SimpleType("HANDLE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
+	Type PICKAXE_SCHEMATIC = new SimpleType("PICKAXE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
+	Type BINDING_SCHEMATIC = new SimpleType("BINDING_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
 	Type TRINKET = new SimpleType("TRINKET", Optional.empty(), new SchematicMatcher());
 	Type GEM = new SimpleType("GEM", Optional.of(TRINKET), new SchematicMatcher());
 	Type UNDEFINED = new SimpleType("UNDEFINED", Optional.empty(), new TypeMatcher());

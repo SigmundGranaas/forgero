@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.registry.StateCollection;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
@@ -111,7 +112,7 @@ public class ForgeroInstanceRegistry implements StateService {
 		}
 		Function<String, Optional<Identifier>> mapFn = (String id) -> Optional.of(mapper.stateToContainer(id));
 		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, mapFn).convert(state);
-		if (stack == null || stack.isEmpty()) {
+		if ((stack == null || stack.isEmpty()) && ForgeroConfigurationLoader.configuration.resourceLogging) {
 			Forgero.LOGGER.warn("The converted stack is empty, which means you tried to convert invalid data: {}", state.toString());
 		}
 		return Optional.ofNullable(stack);

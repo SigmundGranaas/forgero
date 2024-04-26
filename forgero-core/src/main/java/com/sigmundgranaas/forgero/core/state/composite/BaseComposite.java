@@ -218,6 +218,11 @@ public abstract class BaseComposite implements Composite {
 			return (B) this;
 		}
 
+		public B compositor(NameCompositor compositor) {
+			this.compositor = compositor;
+			return (B) this;
+		}
+
 		protected void compositeName() {
 			if (this.name == null && !ingredientList.isEmpty()) {
 				this.name = compositor.compositeName(ingredientList);
