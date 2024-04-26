@@ -1,4 +1,4 @@
-# Forgero Beta release 0.12.0-rc-3
+# Forgero Beta release 0.12.0-rc-4
 
 # Changelog
 
