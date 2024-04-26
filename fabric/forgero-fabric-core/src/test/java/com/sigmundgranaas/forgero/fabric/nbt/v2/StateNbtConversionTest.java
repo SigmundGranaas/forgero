@@ -64,18 +64,26 @@ public class StateNbtConversionTest {
 
 	@Test
 	void encodeCompoundParseCompoundWithIngredients() {
+		TypeTree tree = new TypeTree();
+		tree.addNode(new TypeData(TOOL_PART_HEAD.typeName(), Optional.empty(), Collections.emptyList()));
+		tree.addNode(new TypeData(Type.PICKAXE_HEAD.typeName(), Optional.of(TOOL_PART_HEAD.typeName()), Collections.emptyList()));
+
+		ForgeroStateRegistry.TREE = tree;
+
 		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.get());
 		var pickaxe = parser.parse(compound).map(ConstructedState.class::cast).orElseThrow();
 		Assertions.assertEquals(2, pickaxe.parts().size());
-		Assertions.assertEquals("oak-handle", pickaxe.parts().get(1).name());
 		Assertions.assertEquals("iron-pickaxe_head", pickaxe.parts().get(0).name());
+		Assertions.assertEquals("oak-handle", pickaxe.parts().get(1).name());
+
+		ForgeroStateRegistry.TREE = null;
 	}
 
 	@Test
 	void encodeCompoundParseCompoundWithProperties() {
 		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.get().upgrade(Upgrades.BINDING));
 		var pickaxe = parser.parse(compound).map(ConstructedState.class::cast).orElseThrow();
-		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(AttackDamage.KEY));
+		Assertions.assertEquals(22, pickaxe.stream().applyAttribute(AttackDamage.KEY));
 		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(Durability.KEY));
 	}
 
@@ -104,5 +112,6 @@ public class StateNbtConversionTest {
 		var pickaxe = parser.parse(compound);
 
 		Assertions.assertTrue(pickaxe.isPresent() && pickaxe.get() instanceof Constructed constructedTool && constructedTool.parts().size() == 2);
+		ForgeroStateRegistry.TREE = null;
 	}
 }

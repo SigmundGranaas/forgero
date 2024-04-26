@@ -6,11 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
-import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
@@ -72,12 +70,6 @@ public class NbtToStateTest {
 		Assertions.assertEquals("iron-pickaxe_head", ingredients.get(1).name());
 	}
 
-	@Test()
-	void parseSimplePickaxeWithUpgrades() {
-		List<State> upgrades = StateParser.STATE_PARSER.parse(PICKAXE_NBT).map(Composite.class::cast).map(Composite::upgrades).orElse(ImmutableList.<State>builder().build());
-		//Assertions.assertEquals(1, upgrades.size());
-		//Assertions.assertEquals("iron-binding", upgrades.get(0).name());
-	}
 
 	@Test
 	void assertPropertiesParsed() {
