@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
+import com.sigmundgranaas.forgero.core.state.NameCompositor;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
@@ -148,7 +149,7 @@ public abstract class BaseComposite implements Composite {
 	public static abstract class BaseCompositeBuilder<B extends BaseCompositeBuilder<B>> {
 		protected List<State> ingredientList;
 		protected SlotContainer upgradeContainer;
-		protected NameCompositor compositor = new NameCompositor();
+		protected NameCompositor compositor = NameCompositor.of();
 		protected Type type = Type.UNDEFINED;
 		protected String name;
 		protected String nameSpace = Forgero.NAMESPACE;
@@ -214,6 +215,11 @@ public abstract class BaseComposite implements Composite {
 				this.nameSpace = elements[0];
 				this.name = elements[1];
 			}
+			return (B) this;
+		}
+
+		public B compositor(NameCompositor compositor) {
+			this.compositor = compositor;
 			return (B) this;
 		}
 

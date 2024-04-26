@@ -33,7 +33,6 @@
       }
     ],
     "slots": [
-
     ]
   },
   "properties": {
@@ -79,20 +78,6 @@
       }
     ],
     "features": [
-      {
-        "type": "minecraft:entity_tick",
-        "handler": {
-          "type": "minecraft:particle",
-          "particle": "minecraft:flame",
-          "count": 2
-        },
-        "predicate": {
-          "condition": "minecraft:entity_properties",
-          "predicate": {
-            "type": "forgero:dynamic_arrow"
-          }
-        }
-      }
     ]
   },
   "custom_data": {

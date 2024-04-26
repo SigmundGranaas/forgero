@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.state;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
@@ -121,4 +122,22 @@ public final class SimpleState implements Ingredient, Conditional<State> {
 	public int hashCode() {
 		return Objects.hash(name, nameSpace, type, this.identifier() + "_properties", customData);
 	}
+
+	@Override
+	public String toString() {
+		return "SimpleState{" +
+				"name='" + name + '\'' +
+				", nameSpace='" + nameSpace + '\'' +
+				", type=" + type +
+				", properties=" + properties.stream()
+				.map(Property::toString)
+				.collect(Collectors.joining(", ", "[", "]")) +
+				", customData=" + customData.toString() +
+				'}';
+	}
+
 }
+
+
+
+
