@@ -21,10 +21,10 @@ public class CompositeHandler implements DisassemblyHandler {
 
 	@Override
 	public List<ItemStack> disassemble() {
-		if (composite.test(Type.ARROW_HEAD)) {
+		if (composite.type().test(Type.ARROW_HEAD)) {
 			return Collections.emptyList();
 		}
-		if (composite.test(Type.ARROW)) {
+		if (composite.type().test(Type.ARROW)) {
 			return parts()
 					.filter(stack -> stack.getItem() != Items.FEATHER)
 					.toList();
