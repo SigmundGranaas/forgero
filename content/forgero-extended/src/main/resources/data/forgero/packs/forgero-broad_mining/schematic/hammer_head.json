@@ -91,14 +91,12 @@
           ],
           "filter": "forgero:can_mine"
         },
-        "speed": {
-          "type": "forgero:all"
-        },
+        "speed": "forgero:all",
         "predicate": {
           "type": "forgero:can_mine"
         },
         "title": "feature.forgero.pattern_mining.title",
-        "description": "feature.forgero.pattern_mining.2x1-description"
+        "description": "feature.forgero.pattern_mining.3x3-description"
       }
     ]
   },
