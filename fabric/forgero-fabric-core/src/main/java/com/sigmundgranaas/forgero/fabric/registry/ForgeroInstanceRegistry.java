@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.registry.StateCollection;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
@@ -21,11 +23,11 @@ import com.sigmundgranaas.forgero.minecraft.common.utils.ItemUtils;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
 public class ForgeroInstanceRegistry implements StateService {
@@ -110,6 +112,9 @@ public class ForgeroInstanceRegistry implements StateService {
 		}
 		Function<String, Optional<Identifier>> mapFn = (String id) -> Optional.of(mapper.stateToContainer(id));
 		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, mapFn).convert(state);
+		if ((stack == null || stack.isEmpty()) && ForgeroConfigurationLoader.configuration.resourceLogging) {
+			Forgero.LOGGER.warn("The converted stack is empty, which means you tried to convert invalid data: {}", state.toString());
+		}
 		return Optional.ofNullable(stack);
 	}
 

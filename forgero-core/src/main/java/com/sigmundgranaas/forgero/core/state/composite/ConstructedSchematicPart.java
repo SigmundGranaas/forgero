@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.state.composite;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -24,6 +25,7 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	private final State schematic;
 	private final State baseMaterial;
 	private final ConditionContainer conditions;
+	private int code = 0;
 
 
 	public ConstructedSchematicPart(State schematic, State baseMaterial, SlotContainer slots, IdentifiableContainer id, ConditionContainer conditions) {
@@ -117,6 +119,24 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	@Override
 	public State schematic() {
 		return schematic;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		ConstructedSchematicPart that = (ConstructedSchematicPart) o;
+		return Objects.equals(schematic, that.schematic) && Objects.equals(baseMaterial, that.baseMaterial) && Objects.equals(conditions, that.conditions);
+	}
+
+	@Override
+	public int hashCode() {
+		if (this.code == 0) {
+			this.code = Objects.hash(super.hashCode(), schematic, baseMaterial, conditions);
+		}
+		return code;
+
 	}
 
 	@Getter

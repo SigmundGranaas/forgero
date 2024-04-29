@@ -28,7 +28,7 @@ dependencies {
 	include project(':content:forgero-structures')
 	include project(':fabric:modules:generator')
 	include project(':fabric:modules:bows')
-	
+
 	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 
 	runtimeOnly project(':content:forgero-vanilla')
@@ -43,12 +43,21 @@ subprojects {
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
 
-		annotationProcessor 'org.projectlombok:lombok:1.18.24'
+		annotationProcessor 'org.projectlombok:lombok:1.18.32'
+		implementation 'org.projectlombok:lombok:1.18.32'
 
 		implementation 'org.jetbrains:annotations:23.0.0'
-		implementation 'org.projectlombok:lombok:1.18.24'
 		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 	}
+
+	test {
+		useJUnitPlatform()
+	}
+
+	java {
+		withSourcesJar()
+	}
+
 }
 
 curseforge {
@@ -77,6 +86,7 @@ curseforge {
 				optionalDependency "betternether"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
+				incompatible "exordium"
 			}
 		}
 	}
@@ -108,6 +118,7 @@ modrinth {
 		optional.project "mystical_crops"
 		optional.project "mythicmetals"
 		optional.project "wiredredstone"
+		incompatible.project "exordium"
 	}
 }
 

@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 public class ConvertHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "minecraft:convert";
-	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(KEY.clazz(), ConvertHandler::fromJson);
+	public static final JsonBuilder<ConvertHandler> BUILDER = HandlerBuilder.fromObject(ConvertHandler.class, ConvertHandler::fromJson);
 
 	private final String target;
 	private final String convertTo;

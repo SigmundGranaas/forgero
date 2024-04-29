@@ -13,8 +13,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -104,7 +102,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			super.dropInventory(player, new SimpleInventory(compositeSlot.getStack()));
 		}
 	}
-
 
 
 	@Override
@@ -237,7 +234,14 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 		@Override
 		public boolean canInsert(ItemStack stack) {
-			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(stack) instanceof EmptyHandler);
+			DisassemblyHandler handler = DisassemblyHandler.createHandler(stack);
+			if (handler instanceof EmptyHandler) {
+				return false;
+			} else if (handler.disassemble().isEmpty()) {
+				return false;
+			}
+
+			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty();
 		}
 
 		public void doneConstructing() {

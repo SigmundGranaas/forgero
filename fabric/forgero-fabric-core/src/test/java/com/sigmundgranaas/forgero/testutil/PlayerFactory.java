@@ -1,6 +1,10 @@
 package com.sigmundgranaas.forgero.testutil;
 
+import java.util.UUID;
+import java.util.function.Supplier;
+
 import com.mojang.authlib.GameProfile;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
@@ -11,9 +15,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameMode;
-
-import java.util.UUID;
-import java.util.function.Supplier;
 
 
 public class PlayerFactory implements ContextSupplier {
@@ -29,6 +30,10 @@ public class PlayerFactory implements ContextSupplier {
 
 	public static PlayerBuilder builder(TestContext context) {
 		return new PlayerBuilder().ctxSupplier(() -> context);
+	}
+
+	public static ServerPlayerEntity of(TestContext context, TestPos pos) {
+		return new PlayerBuilder().ctxSupplier(() -> context).pos(pos.absolute()).build().createPlayer();
 	}
 
 	PlayerFactory(Supplier<TestContext> ctxSupplier, String playerName, UUID uuid, GameMode gameMode, Supplier<ItemStack> stack, Hand stackHand, BlockPos pos, Direction lookDirection) {
@@ -85,15 +90,17 @@ public class PlayerFactory implements ContextSupplier {
 		context.getWorld().getServer().setDemo(false);
 		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(uuid, playerName));
 		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity);
+
 		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
-		entity.changeGameMode(gameMode);
 		entity.setStackInHand(stackHand, stack.get());
 		entity.setYaw(direction.asRotation());
 		entity.setPitch(0f);
 		entity.setHeadYaw(direction.asRotation());
 
-		entity.baseTick();
-		entity.baseTick();
+		context.getWorld().getServer().getPlayerManager().onPlayerConnect(new ClientConnection(NetworkSide.SERVERBOUND), entity);
+		entity.tick();
+
+		entity.changeGameMode(gameMode);
 		return entity;
 	}
 

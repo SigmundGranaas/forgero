@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.fabric.gametest;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 
 import net.minecraft.block.BlockState;
@@ -32,6 +34,14 @@ public class Utils {
 	public static <T> T handlerFromString(String handler, JsonBuilder<T> builder) {
 		JsonElement element = JsonParser.parseString(handler);
 		return builder.build(element).orElseThrow(() -> new IllegalStateException(String.format("Encountered invalid handler when trying to build from string. It's either invalid or the API has changed. Here is the handler in question: %s", handler)));
+	}
+
+	public static <T> T handlerFromString(String handler, Codec<T> builder) {
+		JsonElement element = JsonParser.parseString(handler);
+		return builder.decode(JsonOps.INSTANCE, element)
+				.result()
+				.orElseThrow(() -> new IllegalStateException(String.format("Encountered invalid handler when trying to build from string. It's either invalid or the API has changed. Here is the handler in question: %s", handler)))
+				.getFirst();
 	}
 
 }

@@ -24,12 +24,18 @@ public interface Type extends Matchable {
 	Type SWORD_GUARD = new SimpleType("SWORD_GUARD", Optional.of(PART), new TypeMatcher());
 	Type TOOL_PART_HEAD = new SimpleType("TOOL_PART_HEAD", Optional.of(PART), new TypeMatcher());
 	Type AXE_HEAD = new SimpleType("AXE_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
+	Type HOE_HEAD = new SimpleType("HOE_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
+	Type PICKAXE_HEAD = new SimpleType("PICKAXE_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
+	Type SHOVEL_HEAD = new SimpleType("SHOVEL_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
 	Type HANDLE = new SimpleType("HANDLE", Optional.empty(), new TypeMatcher());
 	Type BLADE = new SimpleType("BLADE", Optional.empty(), new TypeMatcher());
 	Type SWORD_BLADE = new SimpleType("SWORD_BLADE", Optional.of(BLADE), new TypeMatcher());
 	Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
 	Type SWORD_BLADE_SCHEMATIC = new SimpleType("SWORD_BLADE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
 	Type TOOL_PART_HEAD_SCHEMATIC = new SimpleType("SWORD_PART_HEAD_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
+	Type HANDLE_SCHEMATIC = new SimpleType("HANDLE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
+	Type PICKAXE_SCHEMATIC = new SimpleType("PICKAXE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
+	Type BINDING_SCHEMATIC = new SimpleType("BINDING_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
 	Type TRINKET = new SimpleType("TRINKET", Optional.empty(), new SchematicMatcher());
 	Type GEM = new SimpleType("GEM", Optional.of(TRINKET), new SchematicMatcher());
 	Type UNDEFINED = new SimpleType("UNDEFINED", Optional.empty(), new TypeMatcher());
@@ -74,4 +80,6 @@ public interface Type extends Matchable {
 	default List<Type> parent() {
 		return Collections.emptyList();
 	}
+
+
 }

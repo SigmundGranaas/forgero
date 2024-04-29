@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.type;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.util.TypeMatcher;
@@ -18,6 +19,7 @@ public class SimpleType implements Type {
 		this.parent = parent;
 		this.matcher = matcher;
 	}
+
 	public SimpleType(String name, Optional<Type> parent, TypeMatcher matcher) {
 		this.name = name;
 		this.parent = parent.map(List::of).orElse(List.of());
@@ -30,7 +32,7 @@ public class SimpleType implements Type {
 			if (name.equals(type.typeName())) {
 				return matcher.test(match, context);
 			} else if (!parent.isEmpty()) {
-				return parent.stream().anyMatch(parent -> parent.test(match, context)) ;
+				return parent.stream().anyMatch(parent -> parent.test(match, context));
 			}
 		}
 		return false;
@@ -44,5 +46,18 @@ public class SimpleType implements Type {
 	@Override
 	public List<Type> parent() {
 		return parent;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SimpleType that = (SimpleType) o;
+		return Objects.equals(name, that.name) && Objects.equals(parent, that.parent);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, parent);
 	}
 }

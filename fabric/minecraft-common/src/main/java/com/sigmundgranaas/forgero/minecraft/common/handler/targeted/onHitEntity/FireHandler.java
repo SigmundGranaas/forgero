@@ -7,10 +7,11 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.B
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 /**
@@ -22,7 +23,6 @@ import net.minecraft.world.World;
  *   "type": "minecraft:on_hit",
  *   "on_hit": {
  *     "type": "minecraft:fire",
- *     "target": "minecraft:targeted_entity",
  *     "duration": 5
  *   }
  * }
@@ -35,17 +35,14 @@ public class FireHandler implements EntityTargetHandler, BlockTargetHandler {
 	public static final String TYPE = "minecraft:fire";
 	public static final JsonBuilder<FireHandler> BUILDER = HandlerBuilder.fromObject(FireHandler.class, FireHandler::fromJson);
 
-	private final String target;
 	private final int duration;
 
 	/**
 	 * Constructs a new {@link FireHandler} with the specified target and duration.
 	 *
-	 * @param target   The target entity.
 	 * @param duration The duration for which the entity will be on fire (in seconds).
 	 */
-	public FireHandler(String target, int duration) {
-		this.target = target;
+	public FireHandler(int duration) {
 		this.duration = duration;
 	}
 
@@ -56,9 +53,8 @@ public class FireHandler implements EntityTargetHandler, BlockTargetHandler {
 	 * @return A new instance of {@link FireHandler}.
 	 */
 	public static FireHandler fromJson(JsonObject json) {
-		String target = json.get("target").getAsString();
 		int duration = json.get("duration").getAsInt();
-		return new FireHandler(target, duration);
+		return new FireHandler(duration);
 	}
 
 	/**
@@ -71,9 +67,7 @@ public class FireHandler implements EntityTargetHandler, BlockTargetHandler {
 	 */
 	@Override
 	public void onHit(Entity source, World world, Entity targetEntity) {
-		if ("minecraft:targeted_entity".equals(target)) {
-			targetEntity.setOnFireFor(duration);
-		}
+		targetEntity.setOnFireFor(duration);
 	}
 
 	/**
@@ -86,13 +80,17 @@ public class FireHandler implements EntityTargetHandler, BlockTargetHandler {
 	 */
 	@Override
 	public void onHit(Entity source, World world, BlockPos pos) {
-		if ("minecraft:targeted_block".equals(target)) {
-			// Get the block state at the targeted position
-			BlockState blockState = world.getBlockState(pos);
+		// Get the block state at the targeted position
+		BlockState blockState = world.getBlockState(pos);
 
-			if (blockState.isBurnable()) {
-				world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 3);
+		if (blockState.isBurnable()) {
+			for (Direction dir : Direction.values()) {
+				if (world.getBlockState(pos.offset(dir)).isAir()) {
+					BlockState fire = AbstractFireBlock.getState(world, pos.offset(dir));
+					world.setBlockState(pos.offset(dir), fire, 11);
+				}
 			}
 		}
+
 	}
 }

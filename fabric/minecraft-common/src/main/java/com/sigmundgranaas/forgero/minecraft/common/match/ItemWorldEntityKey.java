@@ -4,11 +4,11 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public record ItemWorldEntityKey(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+public record ItemWorldEntityKey(ItemStack stack, @Nullable World world, @Nullable Entity entity) {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

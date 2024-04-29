@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.core.configuration;
 
+import static com.sigmundgranaas.forgero.core.model.Strategy.PRE_BAKED;
+
 import java.util.Collections;
 import java.util.List;
 
+import com.sigmundgranaas.forgero.core.model.Strategy;
 import org.jetbrains.annotations.NotNull;
 
 public class ForgeroConfiguration implements ForgeroConfigurationData {
@@ -67,5 +70,5 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 
 	// Performance
 	@NotNull
-	public Boolean buildModelsAsync = true;
+	public Strategy modelStrategy = PRE_BAKED;
 }
