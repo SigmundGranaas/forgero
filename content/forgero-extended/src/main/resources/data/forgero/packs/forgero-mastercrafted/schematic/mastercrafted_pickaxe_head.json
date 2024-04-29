@@ -36,6 +36,15 @@
         "description": "cosmetic",
         "type": "DYE",
         "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "modification",
+        "type": "HEAD_MODIFICATION",
+        "tier": 1
       }
     ]
   },
