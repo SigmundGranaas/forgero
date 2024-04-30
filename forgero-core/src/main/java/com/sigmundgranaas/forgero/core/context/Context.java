@@ -1,9 +1,15 @@
 package com.sigmundgranaas.forgero.core.context;
 
+import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public class Context implements Matchable {
+
+	public static final Codec<Context> CODEC = Codec.STRING.xmap(
+			Context::of,
+			Context::value
+	);
 	private final String context;
 
 	public Context(String context) {

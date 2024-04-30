@@ -10,6 +10,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.Builder;
 import lombok.Data;
+
+import net.minecraft.registry.Registries;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.Entity;
@@ -19,7 +22,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 
 @Data
 @Builder
@@ -57,7 +59,7 @@ public class EntityEffectPredicate {
 	}
 
 	private static StatusEffect getStatusEffect(Identifier identifier) {
-		return Registry.STATUS_EFFECT.getOrEmpty(identifier)
+		return Registries.STATUS_EFFECT.getOrEmpty(identifier)
 				.orElseThrow(() -> new JsonSyntaxException("Unknown effect '" + identifier + "'"));
 	}
 
@@ -92,9 +94,6 @@ public class EntityEffectPredicate {
 		@Nullable
 		private final Boolean visible;
 
-		public EffectData() {
-			this(NumberRange.IntRange.ANY, NumberRange.IntRange.ANY, null, null);
-		}
 
 		public EffectData(NumberRange.IntRange amplifier, NumberRange.IntRange duration, @Nullable Boolean ambient, @Nullable Boolean visible) {
 			this.amplifier = amplifier;

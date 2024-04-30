@@ -1,0 +1,108 @@
+{
+  "features": [
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "minecraft:status_effect",
+        "target": "minecraft:targeted_entity",
+        "effect": {
+          "type": "minecraft:poison",
+          "level": 1
+        }
+      },
+      "predicate": {
+        "type": "forgero:chance",
+        "chance": 0.5
+      }
+    },
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "minecraft:explosion",
+        "target": "minecraft:targeted_entity",
+        "radius": 5,
+        "power": 3
+      },
+      "after_use": {
+        "type": "minecraft:consume",
+        "consume": "forgero:source"
+      }
+    },
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "minecraft:knock_back",
+        "target": "minecraft:targeted_entity",
+        "power": 3
+      }
+    },
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "minecraft:ignite_entity",
+        "target": "minecraft:targeted_entity",
+        "duration": 60
+      }
+    },
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "forgero:chained_lightning",
+        "range": 5,
+        "damage": 4
+      }
+    },
+    {
+      "type": "forgero:self_repair",
+      "rate": {
+        "type": "forgero:per_minute",
+        "amount": 5
+      }
+    },
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "forgero:life_steal",
+        "target": "minecraft:targeted_entity",
+        "amount": 2
+      }
+    },
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "minecraft:status_effect",
+        "effect": {
+          "type": "minecraft:slowness",
+          "duration": 100,
+          "amplifier": 1
+        }
+      }
+    },
+    {
+      "type": "minecraft:on_hit",
+      "on_hit": {
+        "type": "forgero:disarm",
+        "target": "minecraft:targeted_entity"
+      },
+      "predicate": {
+        "type": "forgero:chance",
+        "chance": 0.2
+      }
+    },
+    {
+      "type": "minecraft:block_breaking",
+      "selector": {
+        "type": "forgero:radius",
+        "filter": {
+          "type": "forgero:same_block"
+        },
+        "radius": 3
+      },
+      "speed": "forgero:all",
+      "predicate": {
+        "type": "minecraft:block",
+        "tag": "forgero:vein_mining_ores"
+      }
+    }
+  ]
+}

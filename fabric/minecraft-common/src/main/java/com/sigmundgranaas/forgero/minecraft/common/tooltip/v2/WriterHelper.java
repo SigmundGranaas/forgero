@@ -1,11 +1,15 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.stream.IntStream;
 
+@Getter
+@Accessors(fluent = true)
 public class WriterHelper {
 	private final TooltipConfiguration configuration;
 

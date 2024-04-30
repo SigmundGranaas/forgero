@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -8,10 +10,9 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeWrapperImpl;
 
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
-import java.util.Optional;
 
 public class PartSmeltingRecipeGenerator implements RecipeGenerator {
 
@@ -31,7 +32,7 @@ public class PartSmeltingRecipeGenerator implements RecipeGenerator {
 
 	@Override
 	public boolean isValid() {
-		if (!Registry.ITEM.containsId(new Identifier(part.identifier()))) {
+		if (!Registries.ITEM.containsId(new Identifier(part.identifier()))) {
 			return false;
 		}
 		return ForgeroStateRegistry.STATE_TO_CONTAINER.containsKey(material.identifier());
@@ -45,6 +46,6 @@ public class PartSmeltingRecipeGenerator implements RecipeGenerator {
 		template.addProperty("result", result);
 		template.addProperty("group", material.name());
 		Identifier id = new Identifier(part.identifier() + "-" + this.template.getName());
-		return new RecipeWrapperImpl(id, template, this.template);
+		return new RecipeWrapperImpl(id, template);
 	}
 }

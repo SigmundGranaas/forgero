@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.state.upgrade.slot;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -41,8 +42,10 @@ public class FilledSlot extends AbstractTypedSlot {
 	}
 
 	private List<Property> filterProperties(Matchable target, MatchContext context) {
-		var properties = upgrade.applyProperty(target, context).stream().map(upgrade::applySource).toList();
-		return new UpgradePropertyProcessor(categories).process(properties, target, context);
+		var properties = upgrade.applyProperty(target, context).stream()
+				.map(upgrade::applySource)
+				.toList();
+		return new UpgradePropertyProcessor(categories).process(properties, target, context.put(SLOT_CONTEXT_KEY, this));
 	}
 
 	@Override
@@ -88,5 +91,19 @@ public class FilledSlot extends AbstractTypedSlot {
 			upgrade = composite.copy();
 		}
 		return new FilledSlot(index, type, upgrade, description, categories);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		FilledSlot that = (FilledSlot) o;
+		return Objects.equals(upgrade, that.upgrade);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), upgrade);
 	}
 }

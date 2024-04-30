@@ -9,21 +9,6 @@
   "construct": {
     "type": "PICKAXE_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 3
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -88,11 +73,25 @@
     ],
     "features": [
       {
-        "type": "VEIN_MINING",
-        "tags": [
-          "forgero:vein_mining_ores"
-        ],
-        "value": 8
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "filter": [
+            "forgero:can_mine",
+            {
+              "type": "minecraft:block",
+              "tag": "forgero:vein_mining_ores"
+            }
+          ],
+          "radius": 1
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_ores"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.ore_vein_mining.description"
       }
     ]
   },

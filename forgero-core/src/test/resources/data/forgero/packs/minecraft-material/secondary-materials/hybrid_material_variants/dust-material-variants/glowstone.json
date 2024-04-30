@@ -1,0 +1,34 @@
+{
+  "type": "DUST",
+  "name": "glowstone",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:glowstone_dust"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "glowstone"
+  }
+}

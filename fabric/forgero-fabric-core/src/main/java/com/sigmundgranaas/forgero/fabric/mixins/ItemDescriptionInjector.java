@@ -16,8 +16,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @Mixin(Item.class)
@@ -27,7 +27,7 @@ public class ItemDescriptionInjector {
 	@Inject(at = @At("HEAD"), method = "appendTooltip")
 	public void forgero$InjectForgeroAttributes(ItemStack stack, World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
 		Item item = (Item) (Object) this;
-		String id = Registry.ITEM.getId(item).toString();
+		String id = Registries.ITEM.getId(item).toString();
 		if (!(item instanceof StateItem) && StateService.INSTANCE.find(id).isPresent()) {
 			if (Screen.hasShiftDown()) {
 				StateService.INSTANCE.find(id)

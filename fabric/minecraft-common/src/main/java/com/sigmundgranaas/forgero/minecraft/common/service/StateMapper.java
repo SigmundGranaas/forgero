@@ -5,10 +5,11 @@ import java.util.Map;
 import java.util.Optional;
 
 import net.minecraft.item.Item;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
+
 
 public class StateMapper {
 	private final Map<String, String> containerToStateMap;
@@ -47,9 +48,9 @@ public class StateMapper {
 			Optional<String> containerTag = Optional.ofNullable(stateToTagMap.get(id));
 			if (containerTag.isPresent()) {
 				Identifier tagId = new Identifier(containerTag.get());
-				TagKey<Item> tag = TagKey.of(Registry.ITEM_KEY, tagId);
-				for (RegistryEntry<Item> item : Registry.ITEM.iterateEntries(tag)) {
-					return Registry.ITEM.getId(item.value());
+				TagKey<Item> tag = TagKey.of(Registries.ITEM.getKey(), tagId);
+				for (RegistryEntry<Item> item : Registries.ITEM.iterateEntries(tag)) {
+					return Registries.ITEM.getId(item.value());
 				}
 				return tagId;
 			} else {
@@ -61,9 +62,9 @@ public class StateMapper {
 	public Optional<Identifier> findTagIdFromContainer(Identifier id) {
 		for (String tag : stateToTagMap.values()) {
 			Identifier identifier = new Identifier(tag);
-			TagKey<Item> tagKey = TagKey.of(Registry.ITEM_KEY, identifier);
-			for (RegistryEntry<Item> item : Registry.ITEM.iterateEntries(tagKey)) {
-				if (Registry.ITEM.getId(item.value()).equals(id)) {
+			TagKey<Item> tagKey = TagKey.of(Registries.ITEM.getKey(), identifier);
+			for (RegistryEntry<Item> item : Registries.ITEM.iterateEntries(tagKey)) {
+				if (Registries.ITEM.getId(item.value()).equals(id)) {
 					return Optional.of(identifier);
 				}
 			}

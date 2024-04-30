@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.util.match;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,17 @@ public class MatchContext implements Matchable {
 		this.metadata = new HashMap<>();
 		this.matches = new ArrayList<>();
 	}
+
+	public static MatchContext of(KeyValuePair... pairs) {
+		MatchContext context = new MatchContext();
+		Arrays.stream(pairs).forEach(pair -> context.metadata.put(pair.key().getKey(), pair.value()));
+		return context;
+	}
+
+	public record KeyValuePair(ContextKey<?> key, Object value) {
+	}
+
+	;
 
 	/**
 	 * Constructor that allows the initialization of metadata and matches with given values.

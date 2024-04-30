@@ -43,4 +43,4 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-          ARCHIVA_ADMIN_KEY: ${{secrets.ARCHIVA_ADMIN_KEY}}
+          REPOSILITE_ADMIN_SECRET: ${{secrets.REPOSILITE_ADMIN_SECRET}}

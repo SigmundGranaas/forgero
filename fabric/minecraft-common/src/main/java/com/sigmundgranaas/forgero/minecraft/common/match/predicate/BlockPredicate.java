@@ -11,6 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
@@ -18,11 +22,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.predicate.NbtPredicate;
 import net.minecraft.predicate.StatePredicate;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @NoArgsConstructor
@@ -72,7 +74,7 @@ public class BlockPredicate {
 		ImmutableSet.Builder<Block> builder = ImmutableSet.builder();
 		for (JsonElement jsonElement : jsonArray) {
 			Identifier identifier = new Identifier(JsonHelper.asString(jsonElement, "block"));
-			builder.add(Registry.BLOCK.getOrEmpty(identifier).orElseThrow(() ->
+			builder.add(Registries.BLOCK.getOrEmpty(identifier).orElseThrow(() ->
 					new JsonSyntaxException("Unknown block id '" + identifier + "'")
 			));
 		}
@@ -86,7 +88,7 @@ public class BlockPredicate {
 		}
 
 		Identifier identifier = new Identifier(JsonHelper.getString(jsonObject, "tag"));
-		return TagKey.of(Registry.BLOCK_KEY, identifier);
+		return TagKey.of(Registries.BLOCK.getKey(), identifier);
 	}
 
 	public boolean test(World world, BlockPos pos) {

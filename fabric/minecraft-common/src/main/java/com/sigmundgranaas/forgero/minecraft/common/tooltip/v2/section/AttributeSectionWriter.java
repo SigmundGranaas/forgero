@@ -1,20 +1,20 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
-
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public class AttributeSectionWriter extends SectionWriter {
 
@@ -73,11 +73,11 @@ public class AttributeSectionWriter extends SectionWriter {
 		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attributeOpt.isPresent() && attributeOpt.get().leveledValue() == 0f) {
 			return Collections.emptyList();
 		} else if (attributeOpt.isPresent()) {
-			Attribute attribute = attributeOpt.get();
+			ComputedAttribute attribute = ComputedAttribute.of(container, attributeType);
 
 			var builder = ImmutableList.<Text>builder();
 			builder.add(helper.writeBaseNumber(attribute));
-			builder.addAll(helper.writeTarget(attribute));
+			builder.addAll(helper.writeTarget(attributeOpt.get()));
 			return builder.build();
 		}
 

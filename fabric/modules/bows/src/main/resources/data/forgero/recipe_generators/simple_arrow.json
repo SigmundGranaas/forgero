@@ -1,0 +1,30 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-simple_arrow-state-crafting",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    }
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  a",
+    " b ",
+    "c  "
+  ],
+  "key": {
+    "a": {
+      "${material.tagOrItem}": "${material.id}"
+    },
+    "b": {
+      "tag": "forgero:handle"
+    },
+    "c": {
+      "item": "minecraft:feather"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-arrow",
+    "count": 4
+  }
+}

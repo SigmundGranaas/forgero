@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityStatuses.ENTITY_STATUS_TOTEM;
-
 import com.sigmundgranaas.forgero.core.property.v2.RunnableHandler;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
-import com.sigmundgranaas.forgero.core.property.v2.cache.ContainsFeatureCache;
-import com.sigmundgranaas.forgero.core.property.v2.cache.PropertyTargetCacheKey;
+import com.sigmundgranaas.forgero.core.property.v2.cache.FeatureCache;
+import com.sigmundgranaas.forgero.core.property.v2.cache.FeatureContainerKey;
+import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.soul.Soul;
 import com.sigmundgranaas.forgero.core.soul.SoulBindable;
@@ -14,7 +13,6 @@ import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.entity.SoulEntity;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -22,9 +20,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.EntityStatuses.ENTITY_STATUS_TOTEM;
 
 public class SoulReapingHandler implements RunnableHandler {
 
@@ -57,25 +57,25 @@ public class SoulReapingHandler implements RunnableHandler {
 			String name = targetEntity.hasCustomName() && targetEntity.getCustomName() != null ? targetEntity.getCustomName().getString() : targetEntity.getName().getString();
 			SoulSource soulSource = new SoulSource(EntityType.getId(targetEntity.getType()).toString(), name);
 			Soul soul = new Soul(soulSource, SoulLevelPropertyRegistry.handler());
-			if (ContainsFeatureCache.check(PropertyTargetCacheKey.of(construct, "SOUL_REAPING"))) {
-				SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
-				soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
-				entity.world.spawnEntity(soulEntity);
-				soulEntity.world.sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
-			} else if (ContainsFeatureCache.check(new PropertyTargetCacheKey(ContainerTargetPair.of(construct), "SOUL_BINDING"))) {
+			if (FeatureCache.check(FeatureContainerKey.of(construct, Feature.key("forgero:soul_reaping")))) {
+				// SoulEntity soulEntity = new SoulEntity(targetEntity.getWorld(), soul);
+				// soulEntity.setPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ());
+				// entity.getWorld().spawnEntity(soulEntity);
+				// soulEntity.getWorld().sendEntityStatus(soulEntity, EntityStatuses.PLAY_SPAWN_EFFECTS);
+			} else if (FeatureCache.check(new FeatureContainerKey(ContainerTargetPair.of(construct), Feature.key("forgero:soul_binding")))) {
 				State state = construct;
 				if (construct instanceof SoulBindable bindable) {
 					state = bindable.bind(soul);
 				}
 				if (state instanceof Composite comp) {
 					if (comp.has("forgero:soul-totem").isPresent()) {
-						entity.world.sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
+						entity.getWorld().sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
 						state = comp.removeUpgrade("forgero:soul-totem");
 					}
 				}
 				entity.getInventory().setStack(entity.getInventory().selectedSlot, service.convert(state).orElse(ItemStack.EMPTY));
 			} else if (hasSoulTotemInHand()) {
-				entity.world.sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
+				entity.getWorld().sendEntityStatus(entity, ENTITY_STATUS_TOTEM);
 				ItemStack totemSack = getTotemStack();
 				totemSack.decrement(1);
 				State state = construct;
@@ -90,7 +90,7 @@ public class SoulReapingHandler implements RunnableHandler {
 	private boolean hasSoulTotemInHand() {
 		for (Hand hand : Hand.values()) {
 			ItemStack handStack = entity.getStackInHand(hand);
-			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
+			Item totem = Registries.ITEM.get(new Identifier("forgero:soul-totem"));
 			if (totem != Items.AIR && handStack.isOf(totem)) {
 				return true;
 			}
@@ -101,7 +101,7 @@ public class SoulReapingHandler implements RunnableHandler {
 	private ItemStack getTotemStack() {
 		for (Hand hand : Hand.values()) {
 			ItemStack handStack = entity.getStackInHand(hand);
-			Item totem = Registry.ITEM.get(new Identifier("forgero:soul-totem"));
+			Item totem = Registries.ITEM.get(new Identifier("forgero:soul-totem"));
 			if (totem != Items.AIR && handStack.isOf(totem)) {
 				return handStack;
 			}

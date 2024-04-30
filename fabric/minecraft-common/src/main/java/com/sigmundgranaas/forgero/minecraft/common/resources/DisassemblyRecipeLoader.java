@@ -15,9 +15,9 @@ import lombok.Data;
 
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.registry.Registry;
 
 public class DisassemblyRecipeLoader {
 	private static ImmutableList<DisassemblyRecipe> entries = ImmutableList.<DisassemblyRecipe>builder().build();
@@ -56,13 +56,13 @@ public class DisassemblyRecipeLoader {
 
 		public static Optional<DisassemblyRecipe> of(DisassemblyData data) {
 			Optional<Ingredient> input = RegistryUtils.safeId(data.getInput())
-					.flatMap(id -> RegistryUtils.safeRegistryLookup(Registry.ITEM, id))
+					.flatMap(id -> RegistryUtils.safeRegistryLookup(Registries.ITEM, id))
 					.map(Ingredient::ofItems);
 
 			List<Item> results = data.results.stream()
 					.map(RegistryUtils::safeId)
 					.flatMap(Optional::stream)
-					.map(id -> RegistryUtils.safeRegistryLookup(Registry.ITEM, id))
+					.map(id -> RegistryUtils.safeRegistryLookup(Registries.ITEM, id))
 					.flatMap(Optional::stream)
 					.toList();
 

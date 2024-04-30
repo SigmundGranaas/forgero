@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
@@ -24,6 +25,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
@@ -133,6 +135,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 					}
 					isBuildingTree = false;
 					ItemStack newState = service.convert(compositeSlot.state).get();
+				
 					var nbt = compositeSlot.inventory.getStack(0).copy().getOrCreateNbt();
 					nbt.put(FORGERO_IDENTIFIER, newState.getOrCreateNbt().get(FORGERO_IDENTIFIER));
 					newState.setNbt(nbt);
@@ -199,8 +202,8 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	}
 
 	@Override
-	public void close(PlayerEntity player) {
-		super.close(player);
+	public void onClosed(PlayerEntity player) {
+		super.onClosed(player);
 		this.context.run((world, pos) -> {
 			this.dropInventory(player, this.compositeInventory);
 		});
@@ -212,7 +215,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	}
 
 	@Override
-	public ItemStack transferSlot(PlayerEntity player, int invSlot) {
+	public ItemStack quickMove(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		if (this.slots.size() > invSlot) {
 			Slot slot = this.slots.get(invSlot);
@@ -364,6 +367,9 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			}
 			if (state instanceof Composite composite) {
 				for (com.sigmundgranaas.forgero.core.state.Slot upgradeSlot : composite.slots()) {
+					if (upgradeSlot.category().contains(Category.UNDEFINED)) {
+						continue;
+					}
 					State childState = upgradeSlot.filled() ? upgradeSlot.get().get() : new EmptyState();
 					TreeNode childNode = new TreeNode(childState, upgradeSlot);
 					node.addChild(childNode);
@@ -431,5 +437,5 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 
 	}
 
-	public static ScreenHandlerType<UpgradeStationScreenHandler> UPGRADE_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(UpgradeStationScreenHandler::new);
+	public static ScreenHandlerType<UpgradeStationScreenHandler> UPGRADE_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(UpgradeStationScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
 }

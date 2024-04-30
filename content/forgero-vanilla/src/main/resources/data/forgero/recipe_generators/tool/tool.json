@@ -1,0 +1,32 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-${tool}_head-handle",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    },
+    "tool": [
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe"
+    ]
+  },
+  "type": "forgero:state_crafting_recipe",
+  "pattern": [
+    " a",
+    "b "
+  ],
+  "key": {
+    "a": {
+      "tag": "forgero:${material.name}-${tool}_head"
+    },
+    "b": {
+      "tag": "forgero:handle"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-${tool}",
+    "count": 1
+  }
+}

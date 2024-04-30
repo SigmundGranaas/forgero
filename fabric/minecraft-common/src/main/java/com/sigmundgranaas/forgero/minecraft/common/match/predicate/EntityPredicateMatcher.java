@@ -1,34 +1,30 @@
 package com.sigmundgranaas.forgero.minecraft.common.match.predicate;
 
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY_TARGET;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.model.match.builders.ElementParser;
 import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.WriterHelper;
-
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.predicate.NbtPredicate;
 import net.minecraft.predicate.entity.EntityEquipmentPredicate;
 import net.minecraft.predicate.entity.EntityFlagsPredicate;
 import net.minecraft.predicate.entity.TypeSpecificPredicate;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY_TARGET;
 
 public record EntityPredicateMatcher(EntityPredicate predicate, String variant) implements Matchable {
 	public static String ID = "minecraft:entity_properties";
@@ -108,7 +104,7 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 			if (predicate.variant.equals(ID_TARGET) && isNotAny(predicate.predicate.getType())) {
 				EntityTypePredicate entityTypePred = predicate.predicate.getType();
 				String tag = formatEntityTypeTag(entityTypePred);
-				addTooltips("tooltip.forgero.against", tag, tooltips);
+				addTooltips("entity.forgero.against", tag, tooltips);
 			}
 
 			// Handle Entity Type Predicate
@@ -164,7 +160,13 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 				tooltips.add(helper.writeBase().append(Text.translatable("tooltip.forgero.type_specific").formatted(Formatting.GRAY)));
 			}
 
-			return tooltips.isEmpty() ? Collections.emptyList() : tooltips;
+			return tooltips.isEmpty() ? Collections.emptyList() : tooltips.stream()
+					.map(entry -> BaseWriter
+							.indented(helper.configuration().baseIndent())
+							.append(entry)
+							.formatted(helper.base())
+					)
+					.toList();
 		}
 
 		private String formatEffectTag(EntityEffectPredicate effects) {
@@ -176,22 +178,24 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 			JsonObject jsonFlags = flags.toJson().getAsJsonObject();
 
 			if (jsonFlags.has("is_on_fire") && jsonFlags.get("is_on_fire").getAsBoolean()) {
-				flagTooltips.add(Text.translatable("tooltip.forgero.on_fire").formatted(Formatting.GRAY));
+				flagTooltips.add(Text.translatable("entity.flag.on_fire"));
 			}
 			if (jsonFlags.has("is_sneaking") && jsonFlags.get("is_sneaking").getAsBoolean()) {
-				flagTooltips.add(Text.translatable("tooltip.forgero.sneaking").formatted(Formatting.GRAY));
+				flagTooltips.add(Text.translatable("entity.flag.sneaking"));
 			}
 			if (jsonFlags.has("is_sprinting") && jsonFlags.get("is_sprinting").getAsBoolean()) {
-				flagTooltips.add(Text.translatable("tooltip.forgero.sprinting").formatted(Formatting.GRAY));
+				flagTooltips.add(Text.translatable("entity.flag.sprinting"));
 			}
 			if (jsonFlags.has("is_swimming") && jsonFlags.get("is_swimming").getAsBoolean()) {
-				flagTooltips.add(Text.translatable("tooltip.forgero.swimming").formatted(Formatting.GRAY));
+				flagTooltips.add(Text.translatable("entity.flag.swimming"));
 			}
 			if (jsonFlags.has("is_baby") && jsonFlags.get("is_baby").getAsBoolean()) {
-				flagTooltips.add(Text.translatable("tooltip.forgero.baby").formatted(Formatting.GRAY));
+				flagTooltips.add(Text.translatable("entity.flag.baby"));
 			}
 
-			return flagTooltips;
+			return flagTooltips.stream()
+					.map(entry -> Text.translatable("tooltip.forgero.when").append(entry))
+					.toList();
 		}
 
 		private String formatEquipmentTag(EntityEquipmentPredicate equipment) {
@@ -213,7 +217,7 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 			if (entityTypePred instanceof EntityTypePredicate.Tagged tagged) {
 				return formatTag("entity", tagged.getTag().id());
 			} else if (entityTypePred instanceof EntityTypePredicate.Single single) {
-				return formatTag("entity", Registry.ENTITY_TYPE.getId(single.getType()));
+				return formatTag("entity", Registries.ENTITY_TYPE.getId(single.getType()));
 			}
 			return null;
 		}
@@ -232,9 +236,10 @@ public record EntityPredicateMatcher(EntityPredicate predicate, String variant) 
 		private void addTooltips(String preposition, String tag, List<MutableText> tooltips) {
 			if (tag != null) {
 				tooltips.add(
-						helper.writeBase().append(
-								Text.translatable(preposition).formatted(Formatting.GRAY)
-						).append(Text.translatable(tag))
+						helper.writeBase()
+								.append(Text.translatable(preposition)
+										.formatted(Formatting.GRAY))
+								.append(Text.translatable(tag))
 				);
 			}
 		}

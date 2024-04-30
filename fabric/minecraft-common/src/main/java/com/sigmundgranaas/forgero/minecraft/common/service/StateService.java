@@ -3,6 +3,8 @@ package com.sigmundgranaas.forgero.minecraft.common.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import com.sigmundgranaas.forgero.core.registry.StateFinder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
@@ -38,7 +40,7 @@ public interface StateService extends StateFinder {
 
 	Optional<State> convert(ItemStack stack);
 
-	Optional<ItemStack> convert(State state);
+	Optional<ItemStack> convert(@Nullable State state);
 
 	ItemStack update(State state, ItemStack stack);
 

@@ -9,21 +9,6 @@
   "construct": {
     "type": "PICKAXE_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 3
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -88,17 +73,27 @@
     ],
     "features": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
-        "pattern": [
-          "X",
-          "x"
-        ]
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [
+            "X",
+            "x"
+          ],
+          "filter": "forgero:can_mine"
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "forgero:can_mine"
+        },
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.2x1-description"
       }
     ]
   },
   "custom_data": {
     "ingredient_count": {
-      "value": 2,
+      "value": 3,
       "context": "LOCAL"
     }
   }

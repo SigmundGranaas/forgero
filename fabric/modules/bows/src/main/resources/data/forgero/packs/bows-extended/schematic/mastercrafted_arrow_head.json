@@ -1,0 +1,89 @@
+{
+  "type": "ARROW_HEAD_SCHEMATIC",
+  "name": "mastercrafted_arrow_head-schematic",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "ARROW_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 50
+      },
+      {
+        "id": "arrowhead-base-accuracy",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "type": "forgero:accuracy",
+        "value": 15
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.5
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.50
+          }
+        ]
+      }
+    ],
+    "features": [
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 1,
+      "context": "LOCAL"
+    }
+  }
+}

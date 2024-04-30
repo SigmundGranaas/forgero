@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.v2.attribute.attributes;
 
-import com.sigmundgranaas.forgero.core.property.v2.Attribute;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 
 
 public class Weight {
@@ -9,9 +9,9 @@ public class Weight {
 
 	public static AttributeModification reduceAttackSpeedByWeight() {
 		return (attribute, state) -> {
-			float weight = Attribute.apply(state, KEY);
+			float weight = ComputedAttribute.apply(state, KEY);
 			float newValue = attribute.asFloat() - (weight / 100);
-			return Attribute.of(newValue, attribute.key());
+			return ComputedAttribute.of(newValue, attribute.key());
 		};
 	}
 }

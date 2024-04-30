@@ -58,4 +58,5 @@ public class DynamicShovelItem extends ShovelItem implements ToolStateItem {
 	public State defaultState() {
 		return DEFAULT.get();
 	}
+
 }

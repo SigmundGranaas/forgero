@@ -9,21 +9,6 @@
   "construct": {
     "type": "SWORD_BLADE",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -63,6 +48,11 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 50
+      },
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4
       },
       {
         "id": "schematic-rarity-composite",

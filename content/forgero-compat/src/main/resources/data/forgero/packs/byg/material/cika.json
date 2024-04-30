@@ -4,7 +4,7 @@
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "byg:cika"
+    "id": "byg:cika_planks"
   },
   "properties": {
     "grouped_attributes": [

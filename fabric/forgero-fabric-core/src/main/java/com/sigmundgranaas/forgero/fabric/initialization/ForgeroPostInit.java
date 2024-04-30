@@ -1,13 +1,18 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
 import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 import java.util.List;
+import java.util.function.Function;
 
+import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
@@ -17,6 +22,9 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
+import com.sigmundgranaas.forgero.core.state.Identifiable;
+import com.sigmundgranaas.forgero.core.state.MaterialBased;
+import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
@@ -24,6 +32,7 @@ import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DataPipeLin
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DisassemblyReloader;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.LootConditionReloadListener;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.CommandRegistrar;
+import com.sigmundgranaas.forgero.fabric.initialization.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
@@ -34,8 +43,9 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
+import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
-import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.DynamicItemsRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
@@ -43,8 +53,10 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRe
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -84,6 +96,32 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerAARPRecipes(stateService);
 		registerHungerCallbacks(stateService);
 		registerToolTipFilters();
+		registerRecipeGenerators();
+	}
+
+	private void registerRecipeGenerators() {
+		Function<State, String> idConverter = s -> StateService.INSTANCE.getMapper().stateToContainer(s.identifier()).toString();
+
+		Function<State, String> tagOrItem = (state) -> Registries.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
+		Function<State, String> material = (state) -> state instanceof MaterialBased based ? based.baseMaterial().name() : "";
+
+		var factory = new OperationFactory<>(State.class);
+
+		operation("forgero:state_name", "name", factory.build(Identifiable::name));
+		operation("forgero:state_namespace", "namespace", factory.build(Identifiable::nameSpace));
+		operation("forgero:state_material", "material", factory.build(material));
+		operation("forgero:state_identifier", "identifier", factory.build(idConverter));
+		operation("forgero:state_identifier", "id", factory.build(idConverter));
+		operation("forgero:tag_or_item", "tagOrItem", factory.build(tagOrItem));
+
+		Function<String, List<State>> stateFinder = (type) -> ForgeroStateRegistry.TREE.find(Type.of(type))
+				.map(node -> node.getResources(State.class))
+				.orElse(ImmutableList.<State>builder()
+						.build());
+
+		ForgeroTypeVariableConverter typeConverter = new ForgeroTypeVariableConverter(stateFinder);
+
+		variableConverter("forgero:type_converter", typeConverter);
 	}
 
 	private void registerToolTipFilters() {
@@ -94,6 +132,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY);
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD_BLADE).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD).register();
+		TooltipAttributeRegistry.filterBuilder().attributes(defaults).type(Type.MATERIAL).register();
 		registerAttributeModifications();
 	}
 
@@ -138,13 +177,13 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerBlocks() {
-		Registry.register(Registry.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
-		Registry.register(Registry.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
-		Registry.register(Registry.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+		Registry.register(Registries.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
+		Registry.register(Registries.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
+		Registry.register(Registries.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
 
-		Registry.register(Registry.BLOCK, UPGRADE_STATION, UPGRADE_STATION_BLOCK);
-		Registry.register(Registry.ITEM, UPGRADE_STATION, UPGRADE_STATION_ITEM);
-		Registry.register(Registry.SCREEN_HANDLER, UPGRADE_STATION, UPGRADE_STATION_SCREEN_HANDLER);
+		Registry.register(Registries.BLOCK, UPGRADE_STATION, UPGRADE_STATION_BLOCK);
+		Registry.register(Registries.ITEM, UPGRADE_STATION, UPGRADE_STATION_ITEM);
+		Registry.register(Registries.SCREEN_HANDLER, UPGRADE_STATION, UPGRADE_STATION_SCREEN_HANDLER);
 	}
 
 	/**
@@ -156,7 +195,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 * @param stateService The state service provides services related to Forgero states.
 	 */
 	private void registerItems(StateService stateService) {
-		new StateItemRegistrar(stateService).registerItem(Registry.ITEM);
+		new StateItemRegistrar(stateService).registerItem(Registries.ITEM);
 		new DynamicItemsRegistrar().register();
 	}
 
@@ -198,7 +237,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	/**
-	 * The registerDataReloadListener method registers a reload listener for data the data pipeline to reload the Foregero pack configuration to update states.
+	 * The registerDataReloadListener method registers a reload listener for data the data pipeline to reload the Forgero pack configuration to update states.
 	 */
 	private void registerDataReloadListener() {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DataPipeLineReloader());
@@ -218,7 +257,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerRecipeSerializers() {
 		RecipeRegistry.INSTANCE.registerRecipeSerializers();
 	}
-
 
 	/**
 	 * The registerAarpRecipes method registers AARP recipes for the mod.

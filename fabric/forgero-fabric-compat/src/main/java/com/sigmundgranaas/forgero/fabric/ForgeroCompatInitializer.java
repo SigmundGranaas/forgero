@@ -14,17 +14,19 @@ import net.fabricmc.loader.api.FabricLoader;
 public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> toolstats;
 	public static final Supplier<Boolean> patchouli;
-	public static final Supplier<Boolean> modmenu;
 	public static final Supplier<Boolean> bettercombat;
 	public static final Supplier<Boolean> mythicmetals;
+	public static final Supplier<Boolean> yacl;
+	public static final Supplier<Boolean> emi;
 
 
 	static {
 		toolstats = () -> isModLoaded("toolstats");
+		emi = () -> isModLoaded("emi");
 		mythicmetals = () -> isModLoaded("mythicmetals");
 		patchouli = () -> isModLoaded("patchouli");
-		modmenu = () -> isModLoaded("modmenu");
 		bettercombat = () -> isModLoaded("bettercombat");
+		yacl = () -> isModLoaded("yet-another-config-lib") || isModLoaded("yet_another_config_lib_v3");
 	}
 
 	public static boolean isModLoaded(String id) {

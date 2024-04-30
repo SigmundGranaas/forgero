@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.model;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
@@ -16,7 +17,8 @@ public record PaletteTemplateModel(String palette,
 								   int order,
 								   @Nullable Offset offset,
 								   @Nullable Integer resolution,
-								   @Nullable JsonObject displayOverrides) implements ModelTemplate, ModelMatcher, Identifiable {
+								   @Nullable JsonObject displayOverrides,
+                                   List<ModelTemplate> children) implements ModelTemplate, ModelMatcher, Identifiable {
 
 	@Override
 	public Optional<Offset> getOffset() {
@@ -57,7 +59,6 @@ public record PaletteTemplateModel(String palette,
 	public String nameSpace() {
 		return String.format("%s", Forgero.NAMESPACE);
 	}
-
 
 	@Override
 	public String toString() {

@@ -5,6 +5,7 @@ import static com.sigmundgranaas.forgero.core.state.composite.ConstructedComposi
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -14,6 +15,7 @@ import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.Target;
 import com.sigmundgranaas.forgero.core.property.attribute.TypeTarget;
 import com.sigmundgranaas.forgero.core.property.v2.CompositePropertyProcessor;
+import com.sigmundgranaas.forgero.core.property.v2.PredicateConvertedPropertyProcessor;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -71,13 +73,16 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	@Override
 	public List<Property> compositeProperties(Matchable target, MatchContext context) {
 		var propertyProcessor = new CompositePropertyProcessor();
+		var predicateProcessor = new PredicateConvertedPropertyProcessor();
+
 		var props = new ArrayList<>(super.compositeProperties(target, context));
 
 		var partProps = parts().stream()
-				.flatMap(part -> part.getRootProperties(target, context).stream().map(part::applySource))
+				.flatMap(part -> part.getProperties().stream().map(part::applySource))
 				.toList();
 
 		props.addAll(propertyProcessor.process(partProps, target, context));
+		props.addAll(predicateProcessor.process(partProps, target, context));
 
 		var otherProps = partProps.stream()
 				.filter(this::filterNormalProperties)
@@ -152,6 +157,19 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 	public DataContainer customData(Target target) {
 		var combinedTarget = target.combineTarget(new TypeTarget(Set.of(type().typeName())));
 		return components().stream().map(state -> state.customData(combinedTarget)).reduce(DataContainer.empty(), (dataContainer1, dataContainer2) -> DataContainer.transitiveMerge(dataContainer1, dataContainer2, combinedTarget));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ConstructedComposite that)) return false;
+		if (!super.equals(o)) return false;
+		return Objects.equals(parts, that.parts);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(parts, super.hashCode());
 	}
 
 	public static class ConstructBuilder extends BaseCompositeBuilder<ConstructBuilder> {

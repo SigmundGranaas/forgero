@@ -132,6 +132,20 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 70
+          },
+          {
+            "id": "mineral-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.30
+          },
+          {
+            "id": "mineral-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
           }
         ]
       }

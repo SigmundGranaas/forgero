@@ -3,63 +3,63 @@
   "models": [
     {
       "target": [
-        "id:acacia-stick"
+        "name:acacia-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:birch-stick"
+        "name:birch-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:crimson-stick"
+        "name:crimson-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:dark_oak-stick"
+        "name:dark_oak-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:jungle-stick"
+        "name:jungle-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:mangrove-stick"
+        "name:mangrove-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:oak-stick"
+        "name:oak-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:spruce-stick"
+        "name:spruce-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"
     },
     {
       "target": [
-        "id:warped-stick"
+        "name:warped-stick"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "handle"

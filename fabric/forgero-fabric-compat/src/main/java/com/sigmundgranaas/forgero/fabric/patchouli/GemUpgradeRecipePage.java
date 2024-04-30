@@ -3,19 +3,23 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
+import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.GemUpgradeRecipe;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import vazkii.patchouli.client.book.ClientBookRegistry;
-import vazkii.patchouli.client.book.gui.GuiBook;
-import vazkii.patchouli.client.book.page.abstr.PageDoubleRecipeRegistry;
-import vazkii.patchouli.mixin.AccessorSmithingRecipe;
 
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
+
+import net.minecraft.world.World;
+
+import vazkii.patchouli.client.book.ClientBookRegistry;
+import vazkii.patchouli.client.book.gui.GuiBook;
+import vazkii.patchouli.client.book.page.abstr.PageDoubleRecipeRegistry;
 
 public class GemUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRecipe> {
 	public static Identifier ID = new Identifier(Forgero.NAMESPACE, RecipeTypes.GEM_UPGRADE_RECIPE.getName());
@@ -29,33 +33,34 @@ public class GemUpgradeRecipePage extends PageDoubleRecipeRegistry<SmithingRecip
 	}
 
 	@Override
-	protected void drawRecipe(MatrixStack ms, SmithingRecipe recipe, int recipeX, int recipeY, int mouseX, int mouseY, boolean second) {
-		RenderSystem.setShaderTexture(0, book.craftingTexture);
+	protected void drawRecipe(DrawContext context, SmithingRecipe recipe, int recipeX, int recipeY, int mouseX, int mouseY, boolean second) {
 		RenderSystem.enableBlend();
-		DrawableHelper.drawTexture(ms, recipeX, recipeY, 11, 135, 96, 43, 128, 256);
-		parent.drawCenteredStringNoShadow(ms, getTitle(second).asOrderedText(), GuiBook.PAGE_WIDTH / 2, recipeY - 10, book.headerColor);
+		context.drawTexture(book.craftingTexture, recipeX, recipeY, 11, 135, 96, 43, 128, 256);
+		parent.drawCenteredStringNoShadow(context, getTitle(second).asOrderedText(), GuiBook.PAGE_WIDTH / 2, recipeY - 10, book.headerColor);
 
-		parent.renderIngredient(ms, recipeX + 4, recipeY + 4, mouseX, mouseY, ((AccessorSmithingRecipe) recipe).getBase());
-		parent.renderIngredient(ms, recipeX + 4, recipeY + 23, mouseX, mouseY, ((AccessorSmithingRecipe) recipe).getAddition());
-		parent.renderItemStack(ms, recipeX + 40, recipeY + 13, mouseX, mouseY, recipe.createIcon());
-		parent.renderItemStack(ms, recipeX + 76, recipeY + 13, mouseX, mouseY, getRecipeOutput(recipe));
+		parent.renderIngredient(context, recipeX + 4, recipeY + 4, mouseX, mouseY, recipe.getIngredients().get(GemUpgradeRecipe.baseIndex));
+		parent.renderIngredient(context, recipeX + 4, recipeY + 23, mouseX, mouseY, recipe.getIngredients().get(GemUpgradeRecipe.additionIndex));
+		parent.renderItemStack(context, recipeX + 40, recipeY + 13, mouseX, mouseY, recipe.createIcon());
+		parent.renderItemStack(context, recipeX + 76, recipeY + 13, mouseX, mouseY, getRecipeOutput(MinecraftClient.getInstance().world, recipe));
 	}
 
 	@Override
-	protected ItemStack getRecipeOutput(SmithingRecipe recipe) {
+	protected ItemStack getRecipeOutput(World level, SmithingRecipe recipe) {
 		if (recipe == null) {
 			return ItemStack.EMPTY;
 		}
 
-		var gemState = StateService.INSTANCE.convert(recipe.getOutput());
+		var gemState = StateService.INSTANCE.convert(recipe.getOutput(level.getRegistryManager()));
 		if (gemState.isPresent() && gemState.get() instanceof LeveledState leveledState) {
 			var leveled = leveledState.levelUp();
-			return StateService.INSTANCE.convert(leveled).orElse(recipe.getOutput());
+
+			return StateService.INSTANCE.convert(leveled).orElseGet(() -> recipe.getOutput(level.getRegistryManager()));
 		}
 
-		return recipe.getOutput();
+		return recipe.getOutput(level.getRegistryManager());
 	}
-	
+
+
 	@Override
 	protected int getRecipeHeight() {
 		return 60;

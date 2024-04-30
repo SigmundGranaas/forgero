@@ -19,8 +19,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 @Mixin(LootTable.class)
 public class DisableVanillaToolsLootTableGeneration {
@@ -32,7 +32,7 @@ public class DisableVanillaToolsLootTableGeneration {
 
 	private static final Set<Item> vanillaToolSet = vanillaMaterials.stream()
 			.flatMap(material -> vanillaTools.stream().map(tool -> new Identifier(material + "_" + tool)))
-			.map(Registry.ITEM::getOrEmpty)
+			.map(Registries.ITEM::getOrEmpty)
 			.flatMap(Optional::stream)
 			.collect(Collectors.toSet());
 
@@ -41,18 +41,22 @@ public class DisableVanillaToolsLootTableGeneration {
 	public void forgero$mapToForgeroLootOrDisableVanillaLoot(LootContext context, CallbackInfoReturnable<ObjectArrayList<ItemStack>> cir) {
 		ObjectArrayList<ItemStack> stacks = cir.getReturnValue();
 		if (ForgeroConfigurationLoader.configuration.convertVanillaToolLoot) {
-			stacks = stacks.stream().map(this::processStack).collect(ObjectArrayList.toList());
+			stacks = stacks.stream()
+					.map(this::processStack)
+					.collect(ObjectArrayList.toList());
 		}
 		if (ForgeroConfigurationLoader.configuration.disableVanillaLoot || ForgeroConfigurationLoader.configuration.disableVanillaTools) {
-			stacks = stacks.stream().filter(stack -> !vanillaToolSet.contains(stack.getItem())).collect(ObjectArrayList.toList());
+			stacks = stacks.stream()
+					.filter(stack -> !vanillaToolSet.contains(stack.getItem()))
+					.collect(ObjectArrayList.toList());
 		}
 		cir.setReturnValue(stacks);
 	}
 
 	private ItemStack processStack(ItemStack stack) {
 		if (vanillaToolSet.contains(stack.getItem())) {
-			String newId = resultItemRenamer(Registry.ITEM.getId(stack.getItem()).toString());
-			Item newItem = Registry.ITEM.get(new Identifier(newId));
+			String newId = resultItemRenamer(Registries.ITEM.getId(stack.getItem()).toString());
+			Item newItem = Registries.ITEM.get(new Identifier(newId));
 			ItemStack newStack = new ItemStack(newItem);
 
 			if (stack.hasNbt()) {

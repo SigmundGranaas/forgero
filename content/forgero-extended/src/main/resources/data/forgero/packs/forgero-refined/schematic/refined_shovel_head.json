@@ -9,21 +9,6 @@
   "construct": {
     "type": "SHOVEL_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -95,13 +80,7 @@
       }
     ],
     "features": [
-      {
-        "type": "VEIN_MINING",
-        "value": 1,
-        "tags": [
-          "forgero:vein_mining_dirt"
-        ]
-      }
+
     ]
   },
   "custom_data": {

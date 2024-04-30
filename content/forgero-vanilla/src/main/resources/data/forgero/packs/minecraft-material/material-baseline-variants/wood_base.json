@@ -45,6 +45,16 @@
             "value": 20
           },
           {
+            "id": "wood-draw_speed-composite",
+            "type": "forgero:draw_speed",
+            "value": 1.2
+          },
+          {
+            "id": "wood-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 3
+          },
+          {
             "id": "wood-armor-composite",
             "type": "ARMOR",
             "value": 0
@@ -139,6 +149,20 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 25
+          },
+          {
+            "id": "wood-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.25
+          },
+          {
+            "id": "wood-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
           }
         ]
       }

@@ -1,5 +1,14 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -16,19 +25,13 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static com.sigmundgranaas.forgero.core.condition.Conditions.UNBREAKABLE;
-
 public class ConstructedTool extends ConstructedComposite implements SoulBindable, Conditional<ConstructedTool> {
 	private final State head;
 	private final State handle;
 
 	private final List<PropertyContainer> conditions;
+
+	private Integer hashCode;
 
 	public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id) {
 		super(slots, id, List.of(head, handle));
@@ -152,7 +155,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
+	public List<PropertyContainer> localConditions() {
 		List<PropertyContainer> customConditions = new ArrayList<>();
 		if (ForgeroConfigurationLoader.configuration.enableUnbreakableTools && conditions.stream().noneMatch(condition -> condition == UNBREAKABLE)) {
 			customConditions.add(UNBREAKABLE);
@@ -168,6 +171,22 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	@Override
 	public ConstructedTool removeCondition(String identifier) {
 		return toolBuilder().conditions(Conditional.removeConditions(conditions, identifier)).build();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ConstructedTool that)) return false;
+		if (!super.equals(o)) return false;
+		return Objects.equals(conditions, that.conditions);
+	}
+
+	@Override
+	public int hashCode() {
+		if (hashCode == null) {
+			this.hashCode = Objects.hash(super.hashCode(), conditions);
+		}
+		return hashCode;
 	}
 
 	@Getter
@@ -189,8 +208,8 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 		}
 
 		public static Optional<ToolBuilder> builder(List<State> parts) {
-			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE)).findFirst();
-			var handle = parts.stream().filter(part -> part.test(Type.HANDLE)).findFirst();
+			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE) || part.test(Type.BOW_LIMB)).findFirst();
+			var handle = parts.stream().filter(part -> head.orElse(null) != part).findFirst();
 			if (head.isPresent() && handle.isPresent()) {
 				return Optional.of(builder(head.get(), handle.get()));
 			}

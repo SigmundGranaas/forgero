@@ -14,10 +14,10 @@
   "properties": {
     "attributes": [
       {
-        "type": "ATTACK_SPEED",
+        "type": "WEIGHT",
         "order": "BASE",
-        "operation": "ADDITION",
-        "value": 0.2
+        "operation": "MULTIPLICATION",
+        "value": 0.8
       },
       {
         "type": "RARITY",

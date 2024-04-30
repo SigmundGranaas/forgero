@@ -1,0 +1,156 @@
+{
+  "type": "TOOL_BINDING",
+  "models": [
+    {
+      "name": "soft_binding",
+      "template": "soft_binding.png",
+      "type": "GENERATE",
+      "palette": "SOFT_MATERIAL",
+      "order": 40,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ],
+          "template": "soft_axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "soft_pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "soft_hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "soft_shovel_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_gem",
+      "type": "GENERATE",
+      "palette": "TRINKET",
+      "template": "sword_gem_center.png",
+      "order": 50,
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ]
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "offset": [
+            2,
+            2
+          ]
+        },
+        {
+          "target": [
+            "model:soft_binding.png"
+          ],
+          "offset": [
+            -5,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_dye",
+      "template": "soft_binding.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 45,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "offset": [
+            1,
+            1
+          ],
+          "template": "soft_axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "soft_pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "soft_hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "soft_shovel_binding.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "id:soft_binding-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "soft_binding"
+    },
+    {
+      "target": [
+        "type:GEM",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "soft_binding_gem"
+    },
+    {
+      "target": [
+        "type:TOTEM",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "soft_binding_gem"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "soft_binding_dye"
+    }
+  ]
+}

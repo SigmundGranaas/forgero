@@ -33,7 +33,7 @@ public interface DisassemblyHandler {
 			return false;
 		}
 		for (int i = 0; i < stacks.size(); i++) {
-			if (!stacks.get(i).isItemEqual(items2.get(i))) {
+			if (!stacks.get(i).isOf(items2.get(i).getItem())) {
 				return false;
 			}
 		}

@@ -1,0 +1,131 @@
+{
+  "type": "BOW_LIMB",
+  "models": [
+    {
+      "name": "refined_bow_limb",
+      "template": "refined_bow_limb.png",
+      "type": "GENERATE",
+      "palette": "BOW_LIMB_MATERIAL",
+      "order": 2,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "refined_bow_pull_0.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:refined_bow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_bow_limb_reinforcement_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:refined_bow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_bow_limb_reinforcement_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:refined_bow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "refined_bow_limb_reinforcement_pull_0.png"
+        },
+        {
+          "target": [
+            "model:refined_bow_limb.png"
+          ],
+          "template": "refined_bow_limb_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_dye",
+      "variants": [
+        {
+          "target": [
+            "model:refined_bow_limb.png"
+          ],
+          "template": "refined_bow_limb.png"
+        },
+          {
+            "predicate": [
+              "model:refined_bow_pull_2.png",
+              {
+                "type": "forgero:bow_pull",
+                "pull": 0.9
+              }
+            ],
+            "template": "refined_bow_pull_2.png"
+          },
+          {
+            "predicate": [
+              "model:refined_bow_pull_1.png",
+              {
+                "type": "forgero:bow_pull",
+                "pull": 0.6
+              }
+            ],
+            "template": "refined_bow_pull_1.png"
+          },
+          {
+            "predicate": [
+              "model:refined_bow_pull_0.png",
+              {
+                "type": "forgero:bow_pull",
+                "pull": 0.1
+              }
+            ],
+            "template": "refined_bow_pull_0.png"
+          }
+        ]
+    },
+    {
+      "target": [
+        "type:BOW_LIMB_MATERIAL",
+        "id:refined_bow_limb-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "refined_bow_limb"
+    }
+  ]
+}

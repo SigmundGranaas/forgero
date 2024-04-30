@@ -3,7 +3,7 @@
   "id": "forgero-vanilla",
   "version": "${version}",
   "name": "Forgero vanilla pack",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Vanilla content pack for Forgero. Adds vanilla tools and materials.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -28,7 +28,6 @@
   ],
   "depends": {
     "forgero-core": "*",
-    "minecraft": "1.19.x",
     "java": ">=17"
   },
   "custom": {
@@ -41,7 +40,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

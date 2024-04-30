@@ -123,11 +123,16 @@
       }
     ],
     "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
     ],
     "features": [
       {
-        "type": "EMISSIVE",
-        "value": 4
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
       }
     ]
   },

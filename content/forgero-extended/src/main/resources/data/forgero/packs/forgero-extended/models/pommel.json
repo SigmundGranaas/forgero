@@ -28,11 +28,6 @@
             -1,
             -1
           ]
-        },
-        {
-          "target": [
-            "type:HANDLE"
-          ]
         }
       ]
     },
@@ -54,11 +49,6 @@
           "offset": [
             -1,
             -1
-          ]
-        },
-        {
-          "target": [
-            "type:HANDLE"
           ]
         }
       ]

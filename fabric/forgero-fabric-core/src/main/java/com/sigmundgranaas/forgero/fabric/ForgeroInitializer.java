@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.fabric;
 
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.ASSEMBLY_STATION_ITEM;
+import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock.UPGRADE_STATION_ITEM;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,12 +15,20 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.registry.RegistryHandler;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.entity.mob.MobEntity;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import net.minecraft.item.ItemGroups;
 
 
 public class ForgeroInitializer implements ModInitializer {
@@ -27,12 +38,16 @@ public class ForgeroInitializer implements ModInitializer {
 					.stream()
 					.map(EntrypointContainer::getEntrypoint)
 					.toList();
-
 	private static final List<ForgeroPreInitializationEntryPoint> PRE_INITIALIZED_ENTRY_POINTS =
 			FabricLoader.getInstance().getEntrypointContainers("forgeroPreInitialization", ForgeroPreInitializationEntryPoint.class)
 					.stream()
 					.map(EntrypointContainer::getEntrypoint)
 					.toList();
+
+	static {
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(ASSEMBLY_STATION_ITEM));
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(UPGRADE_STATION_ITEM));
+	}
 
 	@Override
 	public void onInitialize() {

@@ -1,0 +1,6 @@
+dependencies {
+	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}

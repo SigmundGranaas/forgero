@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.sigmundgranaas.forgero.core.condition.ConditionContainer;
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.property.Property;
@@ -15,15 +21,11 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 public class ConstructedSchematicPart extends ConstructedComposite implements MaterialBased, SchematicBased, Conditional<ConstructedSchematicPart> {
 	private final State schematic;
 	private final State baseMaterial;
 	private final ConditionContainer conditions;
+	private int code = 0;
 
 
 	public ConstructedSchematicPart(State schematic, State baseMaterial, SlotContainer slots, IdentifiableContainer id, ConditionContainer conditions) {
@@ -49,6 +51,14 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 				.toList();
 	}
 
+
+	@Override
+	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
+		return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context))
+				.flatMap(List::stream)
+				.toList();
+	}
+
 	@Override
 	public State baseMaterial() {
 		return baseMaterial;
@@ -59,6 +69,14 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 		return partBuilder().addUpgrade(upgrade).build();
 	}
 
+	@Override
+	public List<PropertyContainer> compoundedConditions() {
+		if (schematic instanceof Conditional<?> conditional) {
+			return Stream.concat(localConditions().stream(), conditional.compoundedConditions().stream())
+					.toList();
+		}
+		return localConditions();
+	}
 
 	@Override
 	public ConstructedSchematicPart removeUpgrade(String id) {
@@ -71,8 +89,8 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	}
 
 	@Override
-	public List<PropertyContainer> conditions() {
-		return conditions.conditions();
+	public List<PropertyContainer> localConditions() {
+		return conditions.localConditions();
 	}
 
 	@Override
@@ -83,14 +101,14 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	public SchematicPartBuilder partBuilder() {
 		return SchematicPartBuilder.builder(schematic(), baseMaterial())
 				.addSlotContainer(slotContainer.copy())
-				.conditions(conditions())
+				.conditions(localConditions())
 				.type(type())
 				.id(identifier());
 	}
 
 	@Override
 	public ConstructedSchematicPart removeCondition(String identifier) {
-		return partBuilder().conditions(Conditional.removeConditions(conditions(), identifier)).build();
+		return partBuilder().conditions(Conditional.removeConditions(localConditions(), identifier)).build();
 	}
 
 	@Override
@@ -101,6 +119,24 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	@Override
 	public State schematic() {
 		return schematic;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		ConstructedSchematicPart that = (ConstructedSchematicPart) o;
+		return Objects.equals(schematic, that.schematic) && Objects.equals(baseMaterial, that.baseMaterial) && Objects.equals(conditions, that.conditions);
+	}
+
+	@Override
+	public int hashCode() {
+		if (this.code == 0) {
+			this.code = Objects.hash(super.hashCode(), schematic, baseMaterial, conditions);
+		}
+		return code;
+
 	}
 
 	@Getter
@@ -123,6 +159,9 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 		}
 
 		public static Optional<SchematicPartBuilder> builder(List<State> parts) {
+			if (parts.stream().anyMatch(part -> part.test(Type.PART))) {
+				return Optional.empty();
+			}
 			var schematic = parts.stream().filter(part -> part.test(Type.SCHEMATIC)).findFirst();
 			var material = parts.stream().filter(part -> part.test(Type.MATERIAL)).findFirst();
 			if (schematic.isPresent() && material.isPresent()) {

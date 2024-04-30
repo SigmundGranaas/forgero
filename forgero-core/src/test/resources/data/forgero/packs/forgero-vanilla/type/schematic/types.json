@@ -26,7 +26,16 @@
       "name": "SWORD_GUARD_SCHEMATIC"
     },
     {
-      "name": "PUMMEL_SCHEMATIC"
+      "name": "POMMEL_SCHEMATIC"
+    },
+    {
+      "name": "ARROW_HEAD_SCHEMATIC"
+    },
+    {
+      "name": "ARROW_SCHEMATIC"
+    },
+    {
+      "name": "BOW_LIMB_SCHEMATIC"
     }
   ]
 }

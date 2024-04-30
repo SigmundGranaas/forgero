@@ -13,6 +13,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
@@ -23,7 +24,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
 		@Override
-		public ItemStack transferSlot(PlayerEntity player, int index) {
+		public ItemStack quickMove(PlayerEntity player, int index) {
 			return ItemStack.EMPTY;
 		}
 
@@ -102,9 +103,10 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 	}
 
+
 	@Override
-	public void close(PlayerEntity player) {
-		super.close(player);
+	public void onClosed(PlayerEntity player) {
+		super.onClosed(player);
 		this.context.run((world, pos) -> {
 			this.dropInventory(player, this.inventory);
 		});
@@ -117,7 +119,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	// Shift + Player Inv Slot
 	@Override
-	public ItemStack transferSlot(PlayerEntity player, int invSlot) {
+	public ItemStack quickMove(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(invSlot);
 		if (slot.hasStack() && (this.compositeSlot.canInsert(slot.getStack()) || invSlot < this.inventory.size())) {
@@ -232,7 +234,14 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 		@Override
 		public boolean canInsert(ItemStack stack) {
-			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty() && !(DisassemblyHandler.createHandler(stack) instanceof EmptyHandler);
+			DisassemblyHandler handler = DisassemblyHandler.createHandler(stack);
+			if (handler instanceof EmptyHandler) {
+				return false;
+			} else if (handler.disassemble().isEmpty()) {
+				return false;
+			}
+
+			return this.inventory.isEmpty() && doneConstructing && stack.getDamage() == 0 && resultInventory.isEmpty();
 		}
 
 		public void doneConstructing() {
@@ -252,7 +261,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 	}
 
-	public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new);
-
+	public static ScreenHandlerType<AssemblyStationScreenHandler> ASSEMBLY_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(AssemblyStationScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
 
 }

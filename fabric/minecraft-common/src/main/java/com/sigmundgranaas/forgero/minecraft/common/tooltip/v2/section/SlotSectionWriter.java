@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeHelper;
+import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
@@ -58,6 +59,7 @@ public class SlotSectionWriter extends SectionWriter {
 	@Override
 	public List<Text> entries() {
 		return container.slots().stream()
+				.filter(slot -> !slot.category().contains(Category.UNDEFINED))
 				.map(slot -> new SlotWriter(slot, configuration))
 				.map(SectionWriter::entries)
 				.flatMap(List::stream)

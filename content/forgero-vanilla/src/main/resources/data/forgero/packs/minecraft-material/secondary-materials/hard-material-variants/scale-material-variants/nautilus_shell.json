@@ -118,6 +118,20 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 190
+          },
+          {
+            "id": "scale-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.65
+          },
+          {
+            "id": "scale-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
           }
         ]
       }

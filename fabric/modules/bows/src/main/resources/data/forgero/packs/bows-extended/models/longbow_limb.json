@@ -1,0 +1,153 @@
+{
+  "type": "BOW_LIMB",
+  "models": [
+    {
+      "name": "longbow_limb",
+      "modelType": "GENERATE",
+      "template": "longbow_limb.png",
+      "palette": "BOW_LIMB_MATERIAL",
+      "order": 2,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "longbow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "longbow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "longbow_pull_0.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_grip",
+      "variants": [
+        {
+          "target": [
+            "model:longbow_limb.png"
+          ],
+          "template": "longbow_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_string",
+      "variants": [
+        {
+          "target": [
+            "model:longbow_limb.png"
+          ],
+          "template": "longbow_string.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:longbow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "longbow_limb_reinforcement_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:longbow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "longbow_limb_reinforcement_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:longbow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "longbow_limb_reinforcement_pull_0.png"
+        },
+        {
+          "predicate": [
+            "model:longbow_limb.png"
+          ],
+          "template": "longbow_limb_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_dye",
+      "variants": [
+        {
+          "predicate": [
+            "model:longbow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "longbow_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:longbow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "longbow_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:longbow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "longbow_pull_0.png"
+        },
+        {
+          "target": [
+            "model:longbow_limb.png"
+          ],
+          "template": "longbow_limb.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:BOW_LIMB_MATERIAL",
+        "id:longbow_limb-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "longbow_limb"
+    }
+  ]
+}

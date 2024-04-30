@@ -13,21 +13,23 @@ import com.sigmundgranaas.forgero.minecraft.common.recipe.ForgeroRecipeSerialize
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 
 public class SchematicPartRecipe extends ShapelessRecipe {
 	private final StateService service;
 
 	public SchematicPartRecipe(ShapelessRecipe recipe, StateService service) {
-		super(recipe.getId(), recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
+		super(recipe.getId(), recipe.getGroup(),recipe.getCategory(), recipe.getOutput(null), recipe.getIngredients());
 		this.service = service;
 	}
 
-	private List<State> partsFromCraftingInventory(CraftingInventory craftingInventory) {
+	private List<State> partsFromCraftingInventory(RecipeInputInventory craftingInventory) {
 		List<ItemStack> ingredients = new ArrayList<>();
 		for (int i = 0; i < craftingInventory.size(); i++) {
 			var stack = craftingInventory.getStack(i);
@@ -42,8 +44,8 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
-		var target = service.convert(this.getOutput());
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
+		var target = service.convert(this.getOutput(null));
 		if (target.isPresent()) {
 			var targetState = target.get();
 			var parts = partsFromCraftingInventory(craftingInventory);
@@ -57,7 +59,7 @@ public class SchematicPartRecipe extends ShapelessRecipe {
 			}
 
 		}
-		return getOutput().copy();
+		return getOutput(registryManager).copy();
 	}
 
 	@Override

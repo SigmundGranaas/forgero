@@ -1,0 +1,124 @@
+{
+  "type": "BOW_LIMB",
+  "models": [
+    {
+      "name": "bow_limb",
+      "template": "bow_limb.png",
+      "type": "GENERATE",
+      "palette": "BOW_LIMB_MATERIAL",
+      "order": 2,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "bow_pull_0.png"
+        }
+      ]
+    },
+    {
+      "name": "bow_reinforcement",
+      "modelType": "GENERATE",
+      "template": "bow_limb_reinforcement.png",
+      "palette": "UPGRADE_MATERIAL",
+      "order": 5
+
+    },
+    {
+      "name": "bow_grip",
+      "template": "bow_grip.png",
+      "type": "GENERATE",
+      "palette": "SOFT_MATERIAL",
+      "order": 4
+    },
+    {
+      "name": "bow_dye",
+      "template": "bow_limb.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 3,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "bow_pull_0.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:BOW_LIMB_MATERIAL",
+        "type:BOW_LIMB_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "bow_limb"
+    },
+    {
+      "target": [
+        "type:SOFT_MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_grip"
+    },
+    {
+      "target": [
+        "type:UPGRADE_MATERIAL",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_reinforcement"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "bow_dye"
+    }
+  ]
+}

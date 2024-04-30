@@ -2,6 +2,7 @@
   "type": "STRING",
   "name": "string",
   "parent": "string_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "HOST",
     "id": "minecraft:string"
@@ -18,7 +19,6 @@
       {
         "context": "UPGRADE",
         "attributes": [
-
         ]
       }
     ],

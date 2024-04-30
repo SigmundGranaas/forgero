@@ -3,7 +3,7 @@
   "id": "forgero-core",
   "version": "${version}",
   "name": "Forgero core",
-  "description": "Equipment crafting expansion mod for Fabric!",
+  "description": "Dependency free library for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],
@@ -22,10 +22,6 @@
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
   "environment": "*",
-  "entrypoints": {
-  },
-  "mixins": [
-  ],
   "depends": {
     "java": ">=17"
   },
@@ -38,7 +34,10 @@
         "library"
       ],
       "parent": {
-        "id": "forgero"
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
       }
     }
   }

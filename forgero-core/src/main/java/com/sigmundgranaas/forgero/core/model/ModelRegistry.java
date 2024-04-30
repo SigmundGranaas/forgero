@@ -17,11 +17,14 @@ import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import lombok.Getter;
 
 public class ModelRegistry {
 	private final HashMap<String, ModelMatcher> modelMap;
-	private final Map<String, PaletteTemplateModel> textures;
+	@Getter
+	private final Map<String, ModelTemplate> textures;
 
+	@Getter
 	private final Map<String, String> paletteRemapper;
 	private final Map<String, PaletteData> palettes;
 
@@ -117,13 +120,5 @@ public class ModelRegistry {
 			return Optional.of(MultipleModelMatcher.of(tree.find(state.type().typeName()).map(node -> node.getResources(ModelMatcher.class)).orElse(ImmutableList.<ModelMatcher>builder().build())));
 		}
 		return Optional.empty();
-	}
-
-	public Map<String, PaletteTemplateModel> getTextures() {
-		return textures;
-	}
-
-	public Map<String, String> getPaletteRemapper() {
-		return paletteRemapper;
 	}
 }

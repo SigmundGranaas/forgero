@@ -9,21 +9,6 @@
   "construct": {
     "type": "HOE_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -96,12 +81,19 @@
     ],
     "active": [
       {
-        "type": "BLOCK_BREAKING_PATTERN",
-        "pattern": [
-          " x ",
-          "xxx",
-          " x "
-        ]
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [
+            " x ",
+            "xxx",
+            " x "
+          ],
+          "filter": "forgero:can_mine"
+        },
+        "speed": "forgero:single",
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.star-description"
       }
     ]
   },

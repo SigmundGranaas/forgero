@@ -7,6 +7,12 @@
     "id": "minecraft:crying_obsidian"
   },
   "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
@@ -51,12 +57,6 @@
             "value": 940
           }
         ]
-      }
-    ],
-    "features": [
-      {
-        "type": "EMISSIVE",
-        "value": 4
       }
     ]
   },

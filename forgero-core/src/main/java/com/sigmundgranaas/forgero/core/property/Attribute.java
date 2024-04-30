@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.context.Context;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
+import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
+import com.sigmundgranaas.forgero.core.property.attribute.SimpleAttribute;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +21,32 @@ import org.jetbrains.annotations.NotNull;
  * Attributes are designed to be pooled together and calculated in a chain.
  */
 public interface Attribute extends Property, Comparable<Attribute> {
+	static Codec<Attribute> defaultOrExplicitTypeCodec(String defaultType) {
+		Codec<Either<Float, Either<SimpleAttribute, BaseAttribute>>> codec = Codec.either(
+				Codec.FLOAT,
+				Codec.either(SimpleAttribute.CODEC, BaseAttribute.BaseAttributeCodec.CODEC)
+		);
+
+		return codec.xmap(
+				either -> either.map(
+						value -> new SimpleAttribute(defaultType, value),
+						eitherSimpleOrComplex -> eitherSimpleOrComplex.map(
+								simpleAttribute -> simpleAttribute,
+								baseAttribute -> baseAttribute
+						)
+				),
+				attribute -> {
+					if (attribute instanceof BaseAttribute baseAttribute) {
+						return Either.right(Either.right(baseAttribute));
+					} else if (attribute instanceof SimpleAttribute simpleAttribute) {
+						return Either.right(Either.left(simpleAttribute));
+					} else {
+						return Either.left(attribute.getValue());
+					}
+				}
+		);
+	}
+
 	Function<Float, Float> DEFAULT_ATTRIBUTE_CALCULATION = (currentFloat) -> currentFloat;
 
 	default CalculationOrder getOrder() {
@@ -90,4 +121,9 @@ public interface Attribute extends Property, Comparable<Attribute> {
 		return this.getPredicate().test(target, context);
 	}
 
+	ComputedAttribute compute();
+
+	default PropertyContainer container() {
+		return PropertyContainer.of(this);
+	}
 }

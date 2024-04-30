@@ -44,7 +44,7 @@ public class CommandRegistrar implements Registrar {
 									//structureBlock.setStructureName(new Identifier("forgero:forgerostation"));
 									structureBlock.loadStructure(context.getSource().getWorld());
 									structureBlock.place(context.getSource().getWorld(), true, station.get());
-									context.getSource().sendFeedback(Text.literal("Placed Forgero testing station"), true);
+									context.getSource().sendMessage(Text.literal("Placed Forgero testing station"));
 									context.getSource().getWorld().setBlockState(pos, initialState);
 
 									station.get().place(context.getSource().getWorld(), pos, pos, new StructurePlacementData(), Random.create(), 3);
