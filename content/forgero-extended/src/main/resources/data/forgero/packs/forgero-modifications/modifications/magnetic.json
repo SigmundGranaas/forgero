@@ -1,6 +1,6 @@
 {
-  "type": "GEM",
-  "name": "magnetico-gem",
+  "type": "HEAD_MODIFICATION",
+  "name": "magnetic-modification",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -29,8 +29,5 @@
         "description": "feature.forgero.magnetic.description"
       }
     ]
-  },
-  "palette": {
-    "name": "magnetico_gem"
   }
 }
