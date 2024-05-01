@@ -114,7 +114,7 @@
     "better_compat_attribute_container": "bettercombat:heavy_axe",
     "name_replacement": {
       "from": "axe",
-      "to": "warhammer"
+      "to": "war_hammer"
     }
   }
 }

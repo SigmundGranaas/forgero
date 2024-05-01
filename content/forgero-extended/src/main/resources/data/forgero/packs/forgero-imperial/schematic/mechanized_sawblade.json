@@ -17,7 +17,7 @@
             "id": "this"
           },
           {
-            "type": "HARD_TOOL_MATERIAL",
+            "type": "METAL",
             "unique": true,
             "amount": 2
           }
@@ -29,7 +29,7 @@
         "id": "this"
       },
       {
-        "type": "HARD_TOOL_MATERIAL",
+        "type": "METAL",
         "unique": true
       }
     ],

@@ -1,13 +1,13 @@
 {
-  "type": "HOE_HEAD_SCHEMATIC",
+  "type": "SWORD_BLADE_SCHEMATIC",
   "name": "spear_head-schematic",
-  "parent": "hoe_head_base",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "HOE_HEAD",
+    "type": "SWORD_BLADE",
     "target": "CREATE",
     "recipes": [
       {
@@ -89,6 +89,10 @@
     "ingredient_count": {
       "value": 2,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "sword",
+      "to": "spear"
     }
   }
 }

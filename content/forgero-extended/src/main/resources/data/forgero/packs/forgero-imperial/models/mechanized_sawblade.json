@@ -5,7 +5,7 @@
       "name": "mechanized_sawblade",
       "type": "GENERATE",
       "template": "mechanized_sawblade.png",
-      "palette": "HARD_TOOL_MATERIAL",
+      "palette": "METAL",
       "order": 20
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "target": [
-        "type:HARD_TOOL_MATERIAL",
+        "type:METAL",
         "id:mechanized_sawblade-schematic"
       ],
       "modelType": "BASED_COMPOSITE",

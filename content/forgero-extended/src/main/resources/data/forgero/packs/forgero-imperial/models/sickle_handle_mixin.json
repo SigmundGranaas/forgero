@@ -12,30 +12,6 @@
           "template": "sickle_handle.png"
         }
       ]
-    },
-    {
-      "name": "refined_handle",
-      "variants": [
-        {
-          "target": [
-            "type:HOE",
-            "model:sickle_blade.png"
-          ],
-          "template": "sickle_refined_handle.png"
-        }
-      ]
-    },
-    {
-      "name": "mastercrafted_handle",
-      "variants": [
-        {
-          "target": [
-            "type:HOE",
-            "model:sickle_blade.png"
-          ],
-          "template": "sickle_mastercrafted_handle.png"
-        }
-      ]
     }
   ]
 }

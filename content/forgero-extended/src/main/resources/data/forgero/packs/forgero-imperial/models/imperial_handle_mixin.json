@@ -42,7 +42,7 @@
       "variants": [
         {
           "target": [
-            "type:HOE",
+            "type:SWORD",
             "model:spear_head.png"
           ],
           "template": "spear_handle_grip.png"

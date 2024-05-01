@@ -1,5 +1,5 @@
 {
-  "type": "HOE_HEAD",
+  "type": "SWORD_BLADE",
   "models": [
     {
       "name": "spear_head",
@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "hoe_head_material",
+      "name": "sword_blade_material",
       "variants": [
         {
           "target": [
