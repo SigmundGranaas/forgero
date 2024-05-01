@@ -116,6 +116,9 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		operation("forgero:state_identifier", "id", factory.build(idConverter));
 		operation("forgero:tag_or_item", "tagOrItem", factory.build(tagOrItem));
 
+		// Edge cases
+		operation("forgero:state_name_replace_planks", "name_replace_planks", factory.build((State state) -> state.name().replace("_planks", "")));
+
 		Function<String, List<State>> stateFinder = (type) -> ForgeroStateRegistry.TREE.find(Type.of(type))
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder()
