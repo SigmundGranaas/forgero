@@ -9,6 +9,28 @@
       "order": 20
     },
     {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_blade.png"
+        }
+      ]
+    },
+    {
+      "name": "hoe_head_material",
+      "variants": [
+        {
+          "target": [
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_blade_reinforcement.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:scythe_blade-schematic"

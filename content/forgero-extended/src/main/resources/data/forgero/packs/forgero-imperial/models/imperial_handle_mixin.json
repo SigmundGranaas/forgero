@@ -7,14 +7,14 @@
         {
           "target": [
             "type:SWORD",
-            "model:dagger_blade.png"
+            "model:spear_head.png"
           ],
-          "template": "dagger_handle.png"
+          "template": "handle.png"
         }
       ]
     },
     {
-      "name": "handle",
+      "name": "handle_dye",
       "variants": [
         {
           "target": [
