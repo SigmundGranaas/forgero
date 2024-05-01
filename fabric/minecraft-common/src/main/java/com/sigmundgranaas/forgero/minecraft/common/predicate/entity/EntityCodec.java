@@ -1,25 +1,22 @@
-package com.sigmundgranaas.forgero.minecraft.common.predicate;
+package com.sigmundgranaas.forgero.minecraft.common.predicate.entity;
+
+import com.mojang.serialization.*;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.GroupEntry;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.Predicate;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationRegistry;
+import net.minecraft.entity.Entity;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.MapLike;
-import com.mojang.serialization.RecordBuilder;
-
-import net.minecraft.entity.Entity;
-
 public class EntityCodec extends MapCodec<GroupEntry<KeyPair<Predicate<Entity>>>> {
 	private final String key;
-	private final Map<String, Codec<KeyPair<Predicate<Entity>>>> codecs;
+	private final SpecificationRegistry<Codec<KeyPair<Predicate<Entity>>>> codecs;
 
-	public EntityCodec(String key, Map<String, Codec<KeyPair<Predicate<Entity>>>> codec) {
+	public EntityCodec(String key, SpecificationRegistry<Codec<KeyPair<Predicate<Entity>>>> codec) {
 		this.key = key;
 		this.codecs = codec;
 	}
@@ -33,10 +30,12 @@ public class EntityCodec extends MapCodec<GroupEntry<KeyPair<Predicate<Entity>>>
 	public <T> RecordBuilder<T> encode(GroupEntry<KeyPair<Predicate<Entity>>> input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
 		var temp = prefix;
 		for (var element : input.entries()) {
-			var codec = codecs.get(element.key());
-			var res = codec.encodeStart(ops, element).result();
-			if (res.isPresent()) {
-				temp = temp.add(ops.createString(element.key()), res.get());
+			var codec = codecs.apply(element.key()).map(KeyPair::value);
+			if (codec.isPresent()) {
+				var res = codec.get().encodeStart(ops, element).result();
+				if (res.isPresent()) {
+					temp = temp.add(ops.createString(element.key()), res.get());
+				}
 			}
 		}
 		temp = prefix.add("type", ops.createString(key));
@@ -48,7 +47,8 @@ public class EntityCodec extends MapCodec<GroupEntry<KeyPair<Predicate<Entity>>>
 		List<KeyPair<Predicate<Entity>>> elements = input.entries()
 				.map(entry -> {
 					var key = ops.getStringValue(entry.getFirst()).result().orElse("");
-					return Optional.ofNullable(codecs.get(key))
+					return codecs.apply(key)
+							.map(KeyPair::value)
 							.map(codec -> codec.parse(ops, entry.getSecond()))
 							.flatMap(DataResult::result);
 				})

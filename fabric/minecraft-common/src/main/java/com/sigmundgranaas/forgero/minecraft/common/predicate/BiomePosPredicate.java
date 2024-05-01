@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
 import com.mojang.datafixers.util.Pair;
-
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -10,8 +9,6 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.biome.Biome;
 
 public record BiomePosPredicate(String biome) implements Predicate<Pair<BlockPos, WorldView>> {
-
-
 	@Override
 	public boolean test(Pair<BlockPos, WorldView> blockPosWorldViewPair) {
 		var world = blockPosWorldViewPair.getSecond();
