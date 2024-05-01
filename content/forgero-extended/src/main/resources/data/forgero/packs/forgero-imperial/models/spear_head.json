@@ -20,10 +20,21 @@
       ]
     },
     {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:spear_head.png"
+          ],
+          "template": "spear_head.png"
+        }
+      ]
+    },
+    {
       "name": "spear_head_attachment",
       "modelType": "GENERATE",
       "template": "spear_head_attachment.png",
-      "palette": "SECONDARY_MATERIAL",
+      "palette": "SOFT_PLANT",
       "order": 25
     },
     {
@@ -36,7 +47,7 @@
     },
     {
       "target": [
-        "type:SECONDARY_MATERIAL",
+        "type:SOFT_PLANT",
         "slot:1"
       ],
       "modelType": "BASED_COMPOSITE",
