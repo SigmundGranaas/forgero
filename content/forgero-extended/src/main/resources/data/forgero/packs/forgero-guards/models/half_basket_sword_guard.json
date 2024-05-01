@@ -9,6 +9,17 @@
       "order": 60
     },
     {
+      "name": "sword_guard_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "model:half_basket_sword_guard.png"
+          ],
+          "template": "half_basket_sword_guard_reinforcement.png"
+        }
+      ]
+    },
+    {
       "name": "sword_guard_dye",
       "variants": [
         {

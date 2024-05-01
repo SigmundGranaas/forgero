@@ -9,6 +9,28 @@
       "order": 60
     },
     {
+      "name": "sword_guard_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "model:mechanized_sword_guard.png"
+          ],
+          "template": "mechanized_sword_guard_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "sword_guard_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mechanized_sword_guard.png"
+          ],
+          "template": "mechanized_sword_guard.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:mechanized_sword_guard-schematic"

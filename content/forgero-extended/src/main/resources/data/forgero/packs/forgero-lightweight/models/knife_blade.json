@@ -2,9 +2,9 @@
   "type": "SWORD_BLADE",
   "models": [
     {
-      "name": "butcher_knife",
+      "name": "knife_blade",
       "type": "GENERATE",
-      "template": "butcher_knife.png",
+      "template": "knife_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:butcher_knife.png"
+            "model:knife_blade.png"
           ],
-          "template": "butcher_knife_reinforcement.png"
+          "template": "knife_blade_reinforcement.png"
         }
       ]
     },
@@ -24,19 +24,19 @@
       "variants": [
         {
           "target": [
-            "model:butcher_knife.png"
+            "model:knife_blade.png"
           ],
-          "template": "butcher_knife.png"
+          "template": "knife_blade.png"
         }
       ]
     },
     {
       "target": [
-        "type:HARD_TOOL_MATERIAL",
-        "id:butcher_knife-schematic"
+        "type:TOOL_MATERIAL",
+        "id:knife_blade-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "butcher_knife"
+      "template": "knife_blade"
     }
   ]
 }

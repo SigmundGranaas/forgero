@@ -33,6 +33,7 @@
   "item.forgero.serrated_sword_blade": "Serrated Sword Blade",
   "item.forgero.scimitar_blade": "Scimitar Blade",
   "item.forgero.knife_blade": "Knife Blade",
+  "item.forgero.knife": "Knife",
   "item.forgero.sacrificial_dagger_blade": "Sacrificial Dagger Blade",
   "item.forgero.slanted_sword_blade": "Slanted Sword Blade",
   "item.forgero.battle_axe_head": "Battle Axe Head",
@@ -134,9 +135,15 @@
   "item.forgero.swept_sword_guard": "Swept Guard",
   "item.forgero.tsuba_sword_guard": "Tsuba Guard",
   "item.forgero.half_basket_sword_guard": "Half Basket Guard",
+  "item.forgero.shell_sword_guard": "Shell Guard",
   "item.forgero.cruciform_sword_guard": "Cruciform Guard",
   "item.forgero.mechanized_sword_guard": "Mechanized Guard",
-  "item.forgero.rounded_sword_guard": "Rounded Guard"
-
+  "item.forgero.rounded_sword_guard": "Rounded Guard",
+  "item.forgero.cutter_mattock_head": "Cutter Mattock Head",
+  "item.forgero.cutter_mattock": "Cutter Mattock",
+  "item.forgero.pick_mattock_head": "Pick Mattock Head",
+  "item.forgero.pick_mattock": "Pick Mattock",
+  "item.forgero.kunai_blade": "Kunai Blade",
+  "item.forgero.kunai": "Kunai"
 }
 

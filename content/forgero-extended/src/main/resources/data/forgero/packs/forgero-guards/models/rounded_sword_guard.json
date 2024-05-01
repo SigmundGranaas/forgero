@@ -9,6 +9,17 @@
       "order": 60
     },
     {
+      "name": "sword_guard_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "model:rounded_sword_guard.png"
+          ],
+          "template": "rounded_sword_guard_reinforcement.png"
+        }
+      ]
+    },
+    {
       "name": "sword_guard_dye",
       "variants": [
         {

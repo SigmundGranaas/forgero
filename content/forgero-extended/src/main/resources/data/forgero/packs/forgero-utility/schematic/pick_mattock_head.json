@@ -56,6 +56,14 @@
   },
   "properties": {
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/pickaxe"
+        ]
+      }
     ]
   },
   "custom_data": {
@@ -65,7 +73,7 @@
     },
     "name_replacement": {
       "from": "hoe",
-      "to": "mattock"
+      "to": "pick_mattock"
     }
   }
 }

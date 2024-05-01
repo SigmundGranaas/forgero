@@ -9,6 +9,17 @@
       "order": 20
     },
     {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:pick_mattock_head.png"
+          ],
+          "template": "pick_mattock_head.png"
+        }
+      ]
+    },
+    {
       "name": "hoe_head_material",
       "variants": [
         {

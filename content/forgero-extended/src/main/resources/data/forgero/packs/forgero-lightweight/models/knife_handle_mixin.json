@@ -10,17 +10,6 @@
             "model:knife_blade.png"
           ],
           "template": "throwing_handle.png"
-        },
-        {
-          "target": [
-            "type:AXE",
-            "model:tomahawk_head.png"
-          ],
-          "offset": [
-            2,
-            0
-          ],
-          "template": "throwing_handle.png"
         }
       ]
     }

@@ -9,21 +9,6 @@
   "construct": {
     "type": "SWORD_GUARD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -40,7 +25,14 @@
           "OFFENSIVE"
         ],
         "description": "reinforcement",
-        "type": "UPGRADE_MATERIAL",
+        "type": "UPGRADE_MATERIAL"
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
         "tier": 1
       },
       {
@@ -56,7 +48,14 @@
   },
   "properties": {
     "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
 
+        ]
+      }
     ],
     "attributes": [
 

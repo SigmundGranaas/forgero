@@ -45,14 +45,6 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
-        ],
-        "type": "SLOT_MATERIAL",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
           "UTILITY"
         ],
         "description": "cosmetic",
@@ -64,13 +56,43 @@
   },
   "properties": {
     "attributes": [
-
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 72000,
+        "use_action": "SPEAR",
+        "use": [
+          {
+            "type": "minecraft:consume"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:throw",
+            "velocity_multiplier": "2",
+            "instability": "10"
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.trident.throw"
+          },
+          {
+            "type": "minecraft:consume_stack",
+            "count": 1
+          }
+        ]
+      }
     ]
   },
   "custom_data": {
     "ingredient_count": {
       "value": 2,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "sword",
+      "to": "kunai"
     }
   }
 }

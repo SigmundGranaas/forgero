@@ -1,35 +1,20 @@
 {
-  "type": "HOE_HEAD_SCHEMATIC",
-  "name": "chisel_head-schematic",
-  "parent": "hoe_head_base",
+  "type": "SWORD_GUARD_SCHEMATIC",
+  "name": "shell_sword_guard-schematic",
+  "parent": "sword_guard-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "HOE_HEAD",
+    "type": "SWORD_GUARD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "HARD_TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
       },
       {
-        "type": "HARD_TOOL_MATERIAL",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],
@@ -40,7 +25,14 @@
           "OFFENSIVE"
         ],
         "description": "reinforcement",
-        "type": "UPGRADE_MATERIAL",
+        "type": "UPGRADE_MATERIAL"
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "TRINKET",
         "tier": 1
       },
       {
@@ -55,17 +47,21 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+
+        ]
+      }
+    ],
     "attributes": [
+
     ]
   },
   "custom_data": {
-    "ingredient_count": {
-      "value": 2,
-      "context": "LOCAL"
-    },
-    "name_replacement": {
-      "from": "hoe",
-      "to": "chisel"
-    }
+    "ingredient_count": "2"
   }
 }

@@ -1,0 +1,229 @@
+{
+  "type": "TOOL_BINDING",
+  "models": [
+    {
+      "name": "soft_binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "soft_hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "sword_gem_center.png",
+          "offset": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "soft_hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "hoe_binding_reinforced.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:cutter_mattock_head.png"
+          ],
+          "template": "square_gem_center.png",
+          "offset": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "soft_binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "soft_hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "sword_gem_center.png",
+          "offset": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "soft_hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "hoe_binding.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "hoe_binding_reinforced.png",
+          "offset": [
+            -1,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:pick_mattock_head.png"
+          ],
+          "template": "square_gem_center.png",
+          "offset": [
+            1,
+            1
+          ]
+        }
+      ]
+    }
+  ]
+}

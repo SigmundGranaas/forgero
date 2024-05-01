@@ -1,13 +1,13 @@
 {
-  "type": "AXE_HEAD_SCHEMATIC",
-  "name": "tomahawk_blade-schematic",
-  "parent": "axe_head_base",
+  "type": "SWORD_BLADE_SCHEMATIC",
+  "name": "knife_blade-schematic",
+  "parent": "sword_blade_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "AXE_HEAD",
+    "type": "SWORD_BLADE",
     "target": "CREATE",
     "recipes": [
       {
@@ -39,7 +39,6 @@
         "category": [
           "OFFENSIVE"
         ],
-        "description": "reinforcement",
         "type": "UPGRADE_MATERIAL",
         "tier": 1
       },
@@ -56,13 +55,42 @@
   },
   "properties": {
     "attributes": [
-
+      ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 72000,
+        "use_action": "SPEAR",
+        "use": [
+          {
+            "type": "minecraft:consume"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:throw",
+            "spin_type": "VERTICAL"
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.trident.throw"
+          },
+          {
+            "type": "minecraft:consume_stack",
+            "count": 1
+          }
+        ]
+      }
     ]
   },
   "custom_data": {
     "ingredient_count": {
       "value": 2,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "sword",
+      "to": "knife"
     }
   }
 }

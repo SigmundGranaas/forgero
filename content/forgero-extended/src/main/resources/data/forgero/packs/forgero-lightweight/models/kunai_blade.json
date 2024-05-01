@@ -20,6 +20,17 @@
       ]
     },
     {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:kunai_blade.png"
+          ],
+          "template": "kunai_blade.png"
+        }
+      ]
+    },
+    {
       "name": "kunai_rope",
       "type": "GENERATE",
       "template": "kunai_rope.png",
