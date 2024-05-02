@@ -2,6 +2,6 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "forgero:item/variant_schematic_base_big",
-    "layer1": "forgero:item/pickaxe_outline_variant"
+    "layer1": "forgero:item/hoe_outline_variant"
   }
 }
