@@ -23,6 +23,7 @@ include 'content:forgero-extended'
 include 'content:forgero-vanilla'
 include 'content:forgero-compat'
 include 'content:forgero-structures'
+include 'content:forgero-deprecated'
 
 // Fabric
 include 'fabric'
