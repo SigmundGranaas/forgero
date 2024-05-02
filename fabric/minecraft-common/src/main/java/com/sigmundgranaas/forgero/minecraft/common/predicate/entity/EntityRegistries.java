@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate.entity;
 
+import java.util.function.Predicate;
+
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.Predicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationRegistry;
+
 import net.minecraft.entity.Entity;
 
 public class EntityRegistries {

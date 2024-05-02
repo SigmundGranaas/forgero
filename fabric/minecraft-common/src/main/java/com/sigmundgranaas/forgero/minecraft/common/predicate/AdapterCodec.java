@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;

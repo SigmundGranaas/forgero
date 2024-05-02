@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate.flag;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.Predicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityRegistries;
-import net.minecraft.entity.Entity;
 
-import java.util.List;
+import net.minecraft.entity.Entity;
 
 public record FlagGroupPredicate<T>(List<FlagPredicateInstance<T>> entries) implements Predicate<T> {
 	public static final String KEY = "flag";

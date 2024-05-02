@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
+import java.util.function.Predicate;
+
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.PredicatePair;
 
 public interface KeyPair<T> {

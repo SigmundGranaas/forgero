@@ -16,6 +16,10 @@ public class SpecificationRegistry<T> implements KeyProvider<KeyPair<T>> {
 		registry.put(entry.key(), entry);
 	}
 
+	public void register(String key, T entry) {
+		register(KeyPair.pair(key, entry));
+	}
+
 	@Override
 	public Optional<KeyPair<T>> apply(String key) {
 		return Optional.ofNullable(registry.get(key));

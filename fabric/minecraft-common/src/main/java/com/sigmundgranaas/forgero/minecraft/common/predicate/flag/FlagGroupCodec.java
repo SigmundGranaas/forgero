@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.minecraft.common.predicate.flag;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +16,6 @@ import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyProvider;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.Predicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationRegistry;
 
 public class FlagGroupCodec<R> implements Codec<KeyPair<FlagGroupPredicate<R>>> {

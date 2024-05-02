@@ -1,6 +1,9 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
+import java.util.function.Predicate;
+
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;

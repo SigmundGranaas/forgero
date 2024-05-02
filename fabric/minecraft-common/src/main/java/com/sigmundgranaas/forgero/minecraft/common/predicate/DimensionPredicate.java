@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
+import java.util.function.Predicate;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 

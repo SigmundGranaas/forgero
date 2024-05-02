@@ -1,11 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public record PredicateAdapter<T, R>(Function<T, R> transformer, Predicate<R> predicate) implements Predicate<T> {
 	@Override
 	public boolean test(T r) {
-		return transformer.apply(r).equals(r);
+		return predicate.test(transformer.apply(r));
 	}
 
 	public static <T, R> PredicateAdapter<T, R> adapt(Function<T, R> transformer, Predicate<R> predicate) {

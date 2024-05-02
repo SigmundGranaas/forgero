@@ -1,5 +1,14 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
+import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.defaultItem;
+import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.settingProcessor;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.block.Adapters.*;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter.ENTITY_TYPE_KEY;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityFlagPredicates.*;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -9,7 +18,12 @@ import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRule;
 import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
-import com.sigmundgranaas.forgero.core.model.match.builders.string.*;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringModelBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringNameBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringSlotCategoryBuilder;
+import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
@@ -22,8 +36,6 @@ import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
-import com.sigmundgranaas.forgero.minecraft.common.feature.*;
-import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.*;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
@@ -38,9 +50,6 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.CoolDownHand
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.DamageHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.*;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.*;
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.*;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.FilterWrapper;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.IsBlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SameBlockFilter;
@@ -66,36 +75,47 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.entity.TeleportHandle
 import com.sigmundgranaas.forgero.minecraft.common.handler.swing.EntityHandHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitBlock.BlockTargetHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.*;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.*;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.ConvertHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.EntityTargetHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.FireHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.KnockbackHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.Consume;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowTridentHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.GemItemRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicToolItemRegistrationHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRegistrationHandler;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.*;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.MatchContextTypePredicate;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+
 import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.defaultItem;
-import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.settingProcessor;
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter.ENTITY_TYPE_KEY;
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityFlagPredicates.*;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
@@ -152,6 +172,13 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	}
 
 	private void registerPredicateBuilders() {
+		// Block
+		BlockRegistries.BLOCK_CODEC_REGISTRY.register(BLOCKS_KEY, blockAdapter());
+		BlockRegistries.BLOCK_CODEC_REGISTRY.register(TAGS_KEY, blockTagsAdapter());
+		BlockRegistries.BLOCK_CODEC_REGISTRY.register(TAG_KEY, blockTagAdapter());
+
+		PredicateFactory.register(BlockPredicateMatcher.CODEC);
+
 		// Entity
 		EntityRegistries.ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SNEAKING);
 		EntityRegistries.ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SPRINTING);
@@ -172,7 +199,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(StringNameBuilder::new);
 		PredicateFactory.register(StringSlotCategoryBuilder::new);
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
-		PredicateFactory.register(BlockPredicateMatcher.BlockPredicateBuilder::new);
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
@@ -180,7 +206,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 		//Writers
 		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);
-		PredicateWriterFactory.register(BlockPredicateMatcher.BlockPredicateWriter::builder);
 	}
 
 	private void registerFeatureBuilder() {
@@ -191,7 +216,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		FeatureRegistry.register(BlockEfficiencyFeature.KEY, BlockEfficiencyFeature.BUILDER);
 		FeatureRegistry.register(OnUseFeature.KEY, OnUseFeature.BUILDER);
 		FeatureRegistry.register(SwingHandFeature.KEY, SwingHandFeature.BUILDER);
-
 	}
 
 	private void registerHandlerBuilders() {
@@ -265,7 +289,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(BlockFilter.KEY, IsBlockFilter.TYPE, IsBlockFilter.BUILDER);
 		HandlerBuilderRegistry.register(BlockFilter.KEY, SameBlockFilter.TYPE, SameBlockFilter.BUILDER);
 		HandlerBuilderRegistry.register(BlockFilter.KEY, SimilarBlockFilter.TYPE, SimilarBlockFilter.BUILDER);
-		HandlerBuilderRegistry.register(BlockFilter.KEY, BlockPredicateMatcher.ID, BlockPredicateMatcher.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, BlockPredicateMatcher.TYPE, BlockPredicateMatcher.CODEC);
 	}
 
 	private void registerEntityBasedHandler(String key, JsonBuilder<? extends EntityBasedHandler> builder) {

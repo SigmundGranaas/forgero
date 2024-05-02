@@ -1,9 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
-import com.mojang.datafixers.util.Pair;
+import java.util.function.Predicate;
+
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.util.math.BlockPos;
@@ -15,18 +14,6 @@ public record XYZPredicate(double x, double y, double z) implements Predicate<Bl
 							Codec.DOUBLE.fieldOf("y").forGetter(XYZPredicate::y),
 							Codec.DOUBLE.fieldOf("z").forGetter(XYZPredicate::z))
 					.apply(instance, XYZPredicate::new));
-
-	public static final Codec<Predicate<BlockPos>> GENERAL_CODEC = new Codec<>() {
-		@Override
-		public <T> DataResult<Pair<Predicate<BlockPos>, T>> decode(DynamicOps<T> ops, T input) {
-			return CODEC.decode(ops, input).map(pair -> pair.mapFirst(xyz -> xyz));
-		}
-
-		@Override
-		public <T> DataResult<T> encode(Predicate<BlockPos> input, DynamicOps<T> ops, T prefix) {
-			return CODEC.encode((XYZPredicate) input, ops, prefix);
-		}
-	};
 
 	@Override
 	public boolean test(BlockPos pos) {

@@ -1,33 +1,34 @@
-package com.sigmundgranaas.forgero.minecraft.common.predicate.entity;
-
-import com.mojang.serialization.*;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.GroupEntry;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.Predicate;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationRegistry;
-import net.minecraft.entity.Entity;
+package com.sigmundgranaas.forgero.minecraft.common.predicate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class EntityCodec extends MapCodec<GroupEntry<KeyPair<Predicate<Entity>>>> {
-	private final String key;
-	private final SpecificationRegistry<Codec<KeyPair<Predicate<Entity>>>> codecs;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 
-	public EntityCodec(String key, SpecificationRegistry<Codec<KeyPair<Predicate<Entity>>>> codec) {
+public class SpecificationBackedPredicateCodec<T> extends MapCodec<GroupEntry<KeyPair<Predicate<T>>>> {
+	private final String key;
+	private final SpecificationRegistry<Codec<KeyPair<Predicate<T>>>> codecs;
+
+	public SpecificationBackedPredicateCodec(String key, SpecificationRegistry<Codec<KeyPair<Predicate<T>>>> codec) {
 		this.key = key;
 		this.codecs = codec;
 	}
 
 	@Override
-	public <T> Stream<T> keys(DynamicOps<T> ops) {
+	public <R> Stream<R> keys(DynamicOps<R> ops) {
 		return codecs.keySet().stream().map(ops::createString);
 	}
 
 	@Override
-	public <T> RecordBuilder<T> encode(GroupEntry<KeyPair<Predicate<Entity>>> input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
+	public <R> RecordBuilder<R> encode(GroupEntry<KeyPair<Predicate<T>>> input, DynamicOps<R> ops, RecordBuilder<R> prefix) {
 		var temp = prefix;
 		for (var element : input.entries()) {
 			var codec = codecs.apply(element.key()).map(KeyPair::value);
@@ -43,8 +44,8 @@ public class EntityCodec extends MapCodec<GroupEntry<KeyPair<Predicate<Entity>>>
 	}
 
 	@Override
-	public <T> DataResult<GroupEntry<KeyPair<Predicate<Entity>>>> decode(DynamicOps<T> ops, MapLike<T> input) {
-		List<KeyPair<Predicate<Entity>>> elements = input.entries()
+	public <R> DataResult<GroupEntry<KeyPair<Predicate<T>>>> decode(DynamicOps<R> ops, MapLike<R> input) {
+		List<KeyPair<Predicate<T>>> elements = input.entries()
 				.map(entry -> {
 					var key = ops.getStringValue(entry.getFirst()).result().orElse("");
 					return codecs.apply(key)
@@ -57,3 +58,4 @@ public class EntityCodec extends MapCodec<GroupEntry<KeyPair<Predicate<Entity>>>
 		return DataResult.success(new GroupEntry<>(key, elements));
 	}
 }
+
