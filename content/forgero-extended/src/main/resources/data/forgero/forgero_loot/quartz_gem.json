@@ -1,0 +1,11 @@
+{
+  "id": "quartz_gem_from_ore",
+  "tables": [
+    "minecraft:blocks/nether_quartz_ore"
+  ],
+  "ids": [
+    "forgero:quartz_gem_1"
+  ],
+  "chance": 0.025,
+  "rolls": 1
+}

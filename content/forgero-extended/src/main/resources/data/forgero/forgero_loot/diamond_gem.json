@@ -7,6 +7,6 @@
   "ids": [
     "forgero:diamond_gem_1"
   ],
-  "chance": 0.1,
+  "chance": 0.025,
   "rolls": 1
 }

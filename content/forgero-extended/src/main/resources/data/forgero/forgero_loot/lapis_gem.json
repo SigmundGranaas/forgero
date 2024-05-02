@@ -1,0 +1,12 @@
+{
+  "id": "lapis_gem_from_ore",
+  "tables": [
+    "minecraft:blocks/lapis_ore",
+    "minecraft:blocks/deepslate_lapis_ore"
+  ],
+  "ids": [
+    "forgero:lapis_gem_1"
+  ],
+  "chance": 0.025,
+  "rolls": 1
+}
