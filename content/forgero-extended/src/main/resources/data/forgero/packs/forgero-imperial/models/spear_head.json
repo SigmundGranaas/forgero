@@ -31,27 +31,12 @@
       ]
     },
     {
-      "name": "spear_head_attachment",
-      "modelType": "GENERATE",
-      "template": "spear_head_attachment.png",
-      "palette": "SOFT_PLANT",
-      "order": 25
-    },
-    {
       "target": [
         "type:TOOL_MATERIAL",
         "id:spear_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "spear_head"
-    },
-    {
-      "target": [
-        "type:SOFT_PLANT",
-        "slot:2"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "spear_head_attachment"
     }
   ]
 }

@@ -46,15 +46,6 @@
       {
         "upgrade_type": "SMITHING",
         "category": [
-          "OFFENSIVE"
-        ],
-        "description": "binding",
-        "type": "SOFT_PLANT",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
           "UTILITY"
         ],
         "description": "cosmetic",
