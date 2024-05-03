@@ -117,6 +117,14 @@
       ],
       "modelType": "UPGRADE",
       "template": "handle_dye"
+    },
+    {
+      "target": [
+        "type:POMMEL",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "handle_pommel"
     }
   ]
 }
