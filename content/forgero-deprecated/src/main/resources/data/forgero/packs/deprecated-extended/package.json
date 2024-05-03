@@ -1,5 +1,5 @@
 {
-  "name": "handle-variants",
+  "name": "deprecated-extended",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",
