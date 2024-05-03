@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "forgero:item/variant_schematic_base",
-    "layer1": "forgero:item/axe_outline_variant"
-  }
-}
