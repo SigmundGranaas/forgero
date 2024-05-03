@@ -1,6 +1,7 @@
 dependencies {
 	localRuntime project(':content:forgero-vanilla')
 	localRuntime project(':content:forgero-extended')
+	localRuntime project(':content:forgero-deprecated')
 	localRuntime project(':content:forgero-compat')
 	localRuntime project(':content:forgero-structures')
 
