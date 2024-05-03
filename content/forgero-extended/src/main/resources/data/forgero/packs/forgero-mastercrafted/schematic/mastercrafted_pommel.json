@@ -38,12 +38,12 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "refined-schematic-rarity-composite",
+            "id": "mastercrafted-schematic-rarity-composite",
             "type": "RARITY",
             "value": 1.5
           },
           {
-            "id": "refined-schematic-durability-composite",
+            "id": "mastercrafted-schematic-durability-composite",
             "type": "DURABILITY",
             "value": 1.5
           }
