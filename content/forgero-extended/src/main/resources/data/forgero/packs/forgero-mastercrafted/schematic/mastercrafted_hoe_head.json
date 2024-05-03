@@ -71,32 +71,10 @@
         "order": "BASE",
         "operation": "ADDITION",
         "category": "LOCAL",
-        "value": 75
+        "value": 100
       }
     ],
     "features": [
-      {
-        "type": "minecraft:block_breaking",
-        "selector": {
-          "type": "forgero:pattern",
-          "pattern": [
-            "xxx",
-            "xxx",
-            "xxx"
-          ],
-          "filter": {
-            "type": "minecraft:block",
-            "tag": "forgero:plants"
-          }
-        },
-        "predicate": {
-          "type": "minecraft:block",
-          "tag": "forgero:plants"
-        },
-        "speed": "forgero:instant",
-        "title": "feature.forgero.pattern_mining.title",
-        "description": "feature.forgero.pattern_mining.3x3-description"
-      }
     ]
   },
   "custom_data": {
