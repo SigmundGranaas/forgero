@@ -29,12 +29,23 @@ public class EntityPredicate implements Predicate<Entity>, Matchable {
 
 	@Override
 	public boolean test(Entity entity) {
-		return entry.entries().stream().allMatch(specification -> specification.value().test(entity));
+		return entry.entries().stream()
+				.map(KeyPair::value)
+				.allMatch(specification -> specification.test(entity));
 	}
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		return context.get(ENTITY).or(() -> context.get(ENTITY_TARGET)).map(this::test).orElse(false);
+		var entity = context.get(ENTITY)
+				.map(this::test)
+				.orElse(false);
+
+		if (entity) {
+			return true;
+		}
+		return context.get(ENTITY_TARGET)
+				.map(this::test)
+				.orElse(false);
 	}
 }
 

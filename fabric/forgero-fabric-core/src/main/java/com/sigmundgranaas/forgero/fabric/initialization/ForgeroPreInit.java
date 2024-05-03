@@ -95,7 +95,6 @@ import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicToolItemRegistrationHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRegistrationHandler;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.EntityPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.MatchContextTypePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
@@ -106,7 +105,6 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapte
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.Resource;
@@ -203,9 +201,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
 		PredicateFactory.register(MatchContextTypePredicate.MatchContextTypePredicateBuilder::new);
-
-		//Writers
-		PredicateWriterFactory.register(EntityPredicateMatcher.EntityPredicateWriter::builder);
 	}
 
 	private void registerFeatureBuilder() {

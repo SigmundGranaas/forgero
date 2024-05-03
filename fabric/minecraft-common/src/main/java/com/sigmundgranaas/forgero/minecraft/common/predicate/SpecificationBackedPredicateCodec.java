@@ -45,6 +45,11 @@ public class SpecificationBackedPredicateCodec<T> extends MapCodec<GroupEntry<Ke
 
 	@Override
 	public <R> DataResult<GroupEntry<KeyPair<Predicate<T>>>> decode(DynamicOps<R> ops, MapLike<R> input) {
+		String type = ops.getStringValue(input.get("type")).result().orElse("");
+		if (!type.equals(this.key)) {
+			return DataResult.error(() -> "Incorrect type");
+		}
+
 		List<KeyPair<Predicate<T>>> elements = input.entries()
 				.map(entry -> {
 					var key = ops.getStringValue(entry.getFirst()).result().orElse("");
