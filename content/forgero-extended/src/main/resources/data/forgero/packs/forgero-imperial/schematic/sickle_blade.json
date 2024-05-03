@@ -47,24 +47,29 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "refined-schematic-rarity-composite",
+            "id": "variant-schematic-rarity-composite",
             "type": "RARITY",
-            "value": 1.3
+            "value": 1.375
           },
           {
-            "id": "refined-schematic-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 1.3
-          },
-          {
-            "id": "refined-schematic-mining_speed-composite",
+            "id": "variant-schematic-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 1.3
+            "value": 1.4
           },
           {
-            "id": "refined-schematic-durability-composite",
+            "id": "variant-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.35
+          },
+          {
+            "id": "variant-schematic-durability-composite",
             "type": "DURABILITY",
-            "value": 1.3
+            "value": 1.15
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 0.85
           }
         ]
       }
@@ -74,12 +79,41 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "operation": "ADDITION",
         "category": "LOCAL",
-        "value": 50
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "variant-reach-composite",
+        "type": "forgero:reach",
+        "value": 3.5
       }
     ],
-    "active": [
+    "features": [
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/sword"
+        ]
+      },
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "radius": 3,
+          "filter": {
+            "type": "minecraft:block",
+            "tag": "forgero:plants"
+          }
+        },
+        "speed": "forgero:instant",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:plants"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.vein_mining.plants_in_area"
+      }
     ]
   },
   "custom_data": {

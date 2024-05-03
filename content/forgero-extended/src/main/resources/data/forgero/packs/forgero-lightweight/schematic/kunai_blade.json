@@ -19,7 +19,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 2
+            "amount": 1
           }
         ]
       }
@@ -55,7 +55,49 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.4
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.1
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 0.45
+          }
+        ]
+      }
+    ],
     "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "variant-reach-composite",
+        "type": "forgero:reach",
+        "value": 2.5
+      }
     ],
     "features": [
       {
@@ -87,7 +129,7 @@
   },
   "custom_data": {
     "ingredient_count": {
-      "value": 2,
+      "value": 1,
       "context": "LOCAL"
     },
     "name_replacement": {

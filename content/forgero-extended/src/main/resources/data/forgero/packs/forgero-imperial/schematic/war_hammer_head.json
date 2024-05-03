@@ -55,55 +55,51 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 0.25
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2.4
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.9
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.85
+          }
+        ]
+      }
+    ],
     "attributes": [
       {
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
         "category": "LOCAL",
-        "context": "ADDITION",
-        "value": 50
-      },
-      {
-        "id": "schematic-reach",
-        "type": "forgero:reach",
-        "value": 4
-      },
-      {
-        "id": "schematic-rarity-composite",
-        "type": "RARITY",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.25
-      },
-      {
-        "id": "schematic-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 0.25
-      },
-      {
-        "id": "schematic-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.25
-      },
-      {
-        "id": "schematic-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 3
-      },
-      {
-        "id": "battleaxe-schematic-weight-composite",
-        "type": "WEIGHT",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 1.5
+        "operation": "ADDITION",
+        "value": 75
       }
+    ],
+    "features": [
     ]
   },
   "custom_data": {

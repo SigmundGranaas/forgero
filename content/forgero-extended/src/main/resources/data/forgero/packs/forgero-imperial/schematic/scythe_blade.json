@@ -55,11 +55,80 @@
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.2
+          },
+          {
+            "id": "variant-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.65
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.35
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.2
+          }
+        ]
+      }
+    ],
     "attributes": [
-
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "variant-reach-composite",
+        "type": "forgero:reach",
+        "value": 5.5
+      }
     ],
     "features": [
-
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/sword"
+        ]
+      },
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "radius": 5,
+          "filter": {
+            "type": "minecraft:block",
+            "tag": "forgero:plants"
+          }
+        },
+        "speed": "forgero:instant",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:plants"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.vein_mining.plants_in_area"
+      }
     ]
   },
   "custom_data": {

@@ -15,7 +15,8 @@
       },
       {
         "type": "TOOL_MATERIAL",
-        "unique": true
+        "unique": true,
+        "amount": 3
       }
     ],
     "slots": [
@@ -47,24 +48,24 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "refined-schematic-rarity-composite",
+            "id": "variant-schematic-rarity-composite",
             "type": "RARITY",
-            "value": 1.3
+            "value": 1.375
           },
           {
-            "id": "refined-schematic-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 1.3
-          },
-          {
-            "id": "refined-schematic-mining_speed-composite",
+            "id": "variant-schematic-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 1.3
+            "value": 1.35
           },
           {
-            "id": "refined-schematic-durability-composite",
+            "id": "variant-schematic-durability-composite",
             "type": "DURABILITY",
-            "value": 1.3
+            "value": 1.55
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.15
           }
         ]
       }
@@ -74,9 +75,9 @@
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",
-        "operation": "ADDITION",
         "category": "LOCAL",
-        "value": 50
+        "operation": "ADDITION",
+        "value": 75
       }
     ],
     "features": [
@@ -103,7 +104,10 @@
     ]
   },
   "custom_data": {
-    "ingredient_count": "2",
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    },
     "name_replacement": {
       "from": "shovel",
       "to": "spade"

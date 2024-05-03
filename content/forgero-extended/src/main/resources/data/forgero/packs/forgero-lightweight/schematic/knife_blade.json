@@ -19,7 +19,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 2
+            "amount": 1
           }
         ]
       }
@@ -51,11 +51,54 @@
         "type": "DYE",
         "tier": 1
       }
+
     ]
   },
   "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.15
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 0.85
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 0.8
+          }
+        ]
+      }
+    ],
     "attributes": [
-      ],
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "variant-reach-composite",
+        "type": "forgero:reach",
+        "value": 2.5
+      }
+    ],
     "features": [
       {
         "type": "minecraft:on_use",
@@ -69,7 +112,8 @@
         "on_stop": [
           {
             "type": "forgero:throw",
-            "spin_type": "VERTICAL"
+            "velocity_multiplier": "2",
+            "instability": "10"
           },
           {
             "type": "minecraft:play_sound",
@@ -80,12 +124,29 @@
             "count": 1
           }
         ]
+      },
+      {
+        "id": "sneaking-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 2,
+        "predicate": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_sneaking": true
+            }
+          }
+        }
       }
     ]
   },
   "custom_data": {
     "ingredient_count": {
-      "value": 2,
+      "value": 1,
       "context": "LOCAL"
     },
     "name_replacement": {

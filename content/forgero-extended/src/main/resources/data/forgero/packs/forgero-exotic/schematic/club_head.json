@@ -19,7 +19,7 @@
           {
             "type": "WOOD",
             "unique": true,
-            "amount": 2
+            "amount": 3
           }
         ]
       }
@@ -55,12 +55,44 @@
     ]
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.4
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 2
+          },
+          {
+            "id": "variant-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2
+          },
+          {
+            "id": "variant-schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 1
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 2
+          }
+        ]
+      }
     ]
   },
   "custom_data": {
     "ingredient_count": {
-      "value": 2,
+      "value": 3,
       "context": "LOCAL"
     },
     "name_replacement": {
