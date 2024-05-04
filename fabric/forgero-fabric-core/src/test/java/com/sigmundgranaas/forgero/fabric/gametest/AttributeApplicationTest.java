@@ -105,10 +105,10 @@ public class AttributeApplicationTest {
 
 		var object = new JsonObject();
 		var pigObject = new JsonObject();
-		pigObject.addProperty("type", "minecraft:pig");
+		pigObject.addProperty("id", "minecraft:pig");
 
-		object.addProperty("condition", "minecraft:target_entity_properties");
-		object.add("predicate", pigObject);
+		object.addProperty("type", "minecraft:entity");
+		object.add("entity_type", pigObject);
 
 		Matchable pigPredicate = new PredicateFactory().create(object);
 		Attribute attribute = AttributeBuilder.builder(AttackDamage.KEY)
