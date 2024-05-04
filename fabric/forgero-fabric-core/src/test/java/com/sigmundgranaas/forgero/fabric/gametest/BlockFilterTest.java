@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.IsBlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SameBlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SimilarBlockFilter;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.BlockPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 
@@ -232,6 +233,6 @@ public class BlockFilterTest {
 				    "tag": "forgero:vein_mining_ores"
 				}
 				""";
-		return BlockPredicateMatcher.BUILDER.build(JsonParser.parseString(filter)).orElseThrow();
+		return BlockPredicateMatcher.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(filter)).result().get().getFirst();
 	}
 }
