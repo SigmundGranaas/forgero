@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate.entity;
 
+import static com.sigmundgranaas.forgero.minecraft.common.api.v0.predicate.Registries.ENTITY_CODEC_REGISTRY;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY_TARGET;
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityRegistries.ENTITY_CODEC_REGISTRY;
 
 import java.util.function.Predicate;
 

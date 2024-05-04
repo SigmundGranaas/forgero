@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate.block;
 
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockRegistries.BLOCK_CODEC_REGISTRY;
+import static com.sigmundgranaas.forgero.minecraft.common.api.v0.predicate.Registries.BLOCK_CODEC_REGISTRY;
 
 import java.util.function.Predicate;
 

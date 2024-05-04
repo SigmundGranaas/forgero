@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
+import static com.sigmundgranaas.forgero.minecraft.common.api.v0.predicate.Registries.*;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.defaultItem;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.settingProcessor;
 import static com.sigmundgranaas.forgero.minecraft.common.predicate.block.Adapters.*;
@@ -100,10 +101,8 @@ import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredica
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicateMatcher;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
 
 import net.minecraft.item.ItemGroups;
@@ -171,22 +170,28 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 	private void registerPredicateBuilders() {
 		// Block
-		BlockRegistries.BLOCK_CODEC_REGISTRY.register(BLOCKS_KEY, blockAdapter());
-		BlockRegistries.BLOCK_CODEC_REGISTRY.register(TAGS_KEY, blockTagsAdapter());
-		BlockRegistries.BLOCK_CODEC_REGISTRY.register(TAG_KEY, blockTagAdapter());
+		// Key options
+		BLOCK_CODEC_REGISTRY.register(BLOCKS_KEY, blocksAdapter());
+		BLOCK_CODEC_REGISTRY.register(BLOCK_KEY, blockAdapter());
+		BLOCK_CODEC_REGISTRY.register(TAGS_KEY, blockTagsAdapter());
+		BLOCK_CODEC_REGISTRY.register(TAG_KEY, blockTagAdapter());
 
+		// Block predicate
 		PredicateFactory.register(BlockPredicateMatcher.CODEC);
 
 		// Entity
-		EntityRegistries.ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SNEAKING);
-		EntityRegistries.ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SPRINTING);
-		EntityRegistries.ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SWIMMING);
-		EntityRegistries.ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_ON_GROUND);
+		// Flag options
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SNEAKING);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SPRINTING);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SWIMMING);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_ON_GROUND);
 
-		EntityRegistries.ENTITY_CODEC_REGISTRY.register(KeyPair.pair(FlagGroupPredicate.KEY, FlagGroupPredicate.CODEC_SPECIFICATION));
-		EntityRegistries.ENTITY_CODEC_REGISTRY.register(KeyPair.pair("pos", EntityAdapter.entityPosCodec()));
-		EntityRegistries.ENTITY_CODEC_REGISTRY.register(KeyPair.pair(ENTITY_TYPE_KEY, EntityAdapter.entityTypePredicate()));
+		// Key options
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(FlagGroupPredicate.KEY, FlagGroupPredicate.CODEC_SPECIFICATION));
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair("pos", EntityAdapter.entityPosCodec()));
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(ENTITY_TYPE_KEY, EntityAdapter.entityTypePredicate()));
 
+		// Entity predicate
 		PredicateFactory.register(EntityPredicate.CODEC);
 
 		PredicateFactory.register(new StringModelBuilder());

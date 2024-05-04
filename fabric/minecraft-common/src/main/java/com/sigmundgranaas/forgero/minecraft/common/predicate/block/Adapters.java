@@ -20,6 +20,7 @@ public class Adapters {
 	public static String TAGS_KEY = "tags";
 	public static String TAG_KEY = "tag";
 	public static String BLOCKS_KEY = "blocks";
+	public static String BLOCK_KEY = "block";
 
 	public static Codec<KeyPair<Predicate<WorldBlockPair>>> blockTagsAdapter() {
 		return AdapterCodec.of(TAGS_KEY, generalPredicate(TagPredicate.CODEC, TagPredicate.class), PredicateAdapter.create(Adapters.state));
@@ -29,7 +30,11 @@ public class Adapters {
 		return AdapterCodec.of(TAG_KEY, generalPredicate(TagPredicate.CODEC, TagPredicate.class), PredicateAdapter.create(Adapters.state));
 	}
 
-	public static Codec<KeyPair<Predicate<WorldBlockPair>>> blockAdapter() {
+	public static Codec<KeyPair<Predicate<WorldBlockPair>>> blocksAdapter() {
 		return AdapterCodec.of(BLOCKS_KEY, generalPredicate(BlockPredicate.CODEC, BlockPredicate.class), PredicateAdapter.create(Adapters.block));
+	}
+
+	public static Codec<KeyPair<Predicate<WorldBlockPair>>> blockAdapter() {
+		return AdapterCodec.of(BLOCK_KEY, generalPredicate(BlockPredicate.CODEC, BlockPredicate.class), PredicateAdapter.create(Adapters.block));
 	}
 }
