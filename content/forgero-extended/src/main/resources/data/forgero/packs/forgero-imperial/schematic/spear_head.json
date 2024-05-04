@@ -97,26 +97,22 @@
         "id": "variant-reach-composite",
         "type": "forgero:reach",
         "value": 7.5
-      }
-    ],
-    "features": [
+      },
       {
-        "id": "running-attack_damage-composite",
+        "id": "sprinting-attack_damage-composite",
         "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "context": "COMPOSITE",
+        "order": "END",
         "operation": "MULTIPLICATION",
         "value": 1.5,
         "predicate": {
-          "condition": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "flags": {
-              "is_sprinting": true
-            }
+          "type": "minecraft:entity",
+          "flag": {
+            "is_sprinting": true
           }
         }
       }
+    ],
+    "features": [
     ]
   },
   "custom_data": {

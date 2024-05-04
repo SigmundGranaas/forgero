@@ -97,6 +97,19 @@
         "id": "variant-reach-composite",
         "type": "forgero:reach",
         "value": 2.5
+      },
+      {
+        "id": "sneaking-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "type": "minecraft:entity",
+          "flag": {
+            "is_sneaking": true
+          }
+        }
       }
     ],
     "features": [
@@ -124,23 +137,6 @@
             "count": 1
           }
         ]
-      },
-      {
-        "id": "sneaking-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "order": "BASE",
-        "context": "COMPOSITE",
-        "operation": "MULTIPLICATION",
-        "value": 2,
-        "predicate": {
-          "condition": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "flags": {
-              "is_sneaking": true
-            }
-          }
-        }
       }
     ]
   },
