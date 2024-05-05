@@ -23,7 +23,7 @@ public class Average implements BlockBreakSpeedCalculator {
 	public final static String TYPE = "forgero:average";
 
 	public static ClassKey<Average> KEY = new ClassKey<>(TYPE, Average.class);
-	public final static JsonBuilder<Average> BUILDER = HandlerBuilder.fromString(KEY.clazz(), HandlerBuilder.fromStringOptional(TYPE, () -> INSTANCE));
+	public final static JsonBuilder<Average> BUILDER = HandlerBuilder.fromStringOrType(KEY.clazz(), TYPE, INSTANCE);
 
 	@Override
 	public float calculateBlockBreakingDelta(Entity source, BlockPos target, Set<BlockPos> availableBlocks) {

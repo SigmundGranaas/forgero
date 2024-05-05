@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.customdata;
 
-import static com.sigmundgranaas.forgeroforge.testutil.Materials.IRON;
+import static com.sigmundgranaas.forgero.testutil.Materials.IRON;
 
 import java.util.Collections;
 import java.util.HashMap;

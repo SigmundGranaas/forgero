@@ -1,10 +1,18 @@
 package com.sigmundgranaas.forgero.core.state.composite;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
+import com.sigmundgranaas.forgero.core.state.NameCompositor;
 import com.sigmundgranaas.forgero.core.state.Slot;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
@@ -14,12 +22,6 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.core.util.match.NameMatch;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public abstract class BaseComposite implements Composite {
@@ -31,7 +33,6 @@ public abstract class BaseComposite implements Composite {
 		this.slotContainer = slotContainer;
 		this.id = id;
 	}
-
 
 	@Override
 	public @NotNull
@@ -113,6 +114,19 @@ public abstract class BaseComposite implements Composite {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BaseComposite that = (BaseComposite) o;
+		return Objects.equals(slotContainer, that.slotContainer) && Objects.equals(id, that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(slotContainer, id);
+	}
+
+	@Override
 	public ImmutableList<State> upgrades() {
 		return slotContainer.entries();
 	}
@@ -135,7 +149,7 @@ public abstract class BaseComposite implements Composite {
 	public static abstract class BaseCompositeBuilder<B extends BaseCompositeBuilder<B>> {
 		protected List<State> ingredientList;
 		protected SlotContainer upgradeContainer;
-		protected NameCompositor compositor = new NameCompositor();
+		protected NameCompositor compositor = NameCompositor.of();
 		protected Type type = Type.UNDEFINED;
 		protected String name;
 		protected String nameSpace = Forgero.NAMESPACE;
@@ -201,6 +215,11 @@ public abstract class BaseComposite implements Composite {
 				this.nameSpace = elements[0];
 				this.name = elements[1];
 			}
+			return (B) this;
+		}
+
+		public B compositor(NameCompositor compositor) {
+			this.compositor = compositor;
 			return (B) this;
 		}
 

@@ -1,5 +1,5 @@
 {
-  "name": "vein_mining_parts",
+  "name": "vein_mining_schematics",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",

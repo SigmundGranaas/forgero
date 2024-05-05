@@ -17,7 +17,7 @@
       "${material.tagOrItem}": "${material.id}"
     },
     "b": {
-      "item": "minecraft:stick"
+      "tag": "forgero:handle"
     },
     "c": {
       "item": "minecraft:feather"

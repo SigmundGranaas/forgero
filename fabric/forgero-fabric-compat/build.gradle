@@ -17,10 +17,20 @@ dependencies {
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lambd_version}")
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
+	// Simple hats
+	// modImplementation("maven.modrinth:simple-hats:${project.simple_hats_version}")
+	// modImplementation("maven.modrinth:trinkets:${project.trinkets_version}")
+
+	// Cardinal
+	// modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+	// modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+
 	//better combat
 	modCompileOnly("maven.modrinth:better-combat:${project.better_combat_version}")
 	//modImplementation "maven.modrinth:cloth-config:9.0.94+fabric"
 	//modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
+
+	// modCompileOnly("maven.modrinth:moremcmeta-emissive:v1.20.2-2.0.4-fabric")
 
 	// Betterend & Betternether
 	// modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
@@ -30,7 +40,8 @@ dependencies {
 	//emi
 	//modCompileOnly "dev.emi:emi:${emi_version}:api"
 	//modLocalRuntime "dev.emi:emi:${emi_version}"
-	//modImplementation "maven.modrinth:emi-loot:0.5.0+1.19"
+	// modImplementation "maven.modrinth:emi-loot:0.6.5+1.20.1"
+	modImplementation "maven.modrinth:emi:1.1.4+1.20.1+fabric"
 
 	//JEI
 	// modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"
@@ -68,8 +79,6 @@ dependencies {
 	//modImplementation "com.github.DaFuqs:AdditionalEntityAttributes:${project.aea_versionite}"
 	//include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.rea_version}")
 	// Cardinal Components
-	//modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
-	//modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
 
 	//ae2 testing
 	//modLocalRuntime "maven.modrinth:ae2:fabric-12.9.2"

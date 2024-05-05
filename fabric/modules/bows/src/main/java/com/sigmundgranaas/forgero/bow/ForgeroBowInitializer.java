@@ -1,7 +1,12 @@
 package com.sigmundgranaas.forgero.bow;
 
+import static com.sigmundgranaas.forgero.bow.Attributes.*;
 import static com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity.DYNAMIC_ARROW_IDENTIFIER;
+import static com.sigmundgranaas.forgero.bow.item.NamingRules.*;
+import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.*;
+
+import java.util.List;
 
 import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
 import com.sigmundgranaas.forgero.bow.handler.LaunchProjectileHandler;
@@ -10,14 +15,20 @@ import com.sigmundgranaas.forgero.bow.item.BowGroupRegistrars;
 import com.sigmundgranaas.forgero.bow.item.DynamicBowItemRegistrationHandler;
 import com.sigmundgranaas.forgero.bow.predicate.BowPullPredicate;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
+import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -34,6 +45,7 @@ import net.minecraft.world.World;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
 public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint {
+
 	public static final RegistryKey<ItemGroup> FORGERO_BOWS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "bows"));
 	public static final ItemGroup FORGERO_BOWS = FabricItemGroup.builder()
 			.icon(ForgeroBowInitializer::bowIcon)
@@ -74,5 +86,51 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 
 		HandlerBuilderRegistry.register(StopHandler.KEY, LaunchProjectileHandler.TYPE, LaunchProjectileHandler.BUILDER);
 		HandlerBuilderRegistry.register(UseHandler.KEY, MountProjectileHandler.TYPE, MountProjectileHandler.BUILDER);
+
+		var bows = List.of(DRAW_POWER, DRAW_SPEED, ACCURACY, Weight.KEY, Durability.KEY);
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.BOW)
+				.attributes(bows)
+				.register();
+
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.BOW_LIMB)
+				.attributes(bows)
+				.register();
+
+		var arrows = List.of(AttackDamage.KEY, ACCURACY, Weight.KEY);
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.ARROW_HEAD)
+				.attributes(bows)
+				.register();
+
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.ARROW)
+				.attributes(arrows)
+				.register();
+
+		var materials = List.of(DRAW_POWER, DRAW_SPEED, ACCURACY);
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.MATERIAL)
+				.attributes(materials)
+				.register();
+
+		modificationBuilder()
+				.attributeKey(DRAW_SPEED)
+				.modification(reduceByWeight)
+				.register();
+
+		modificationBuilder()
+				.attributeKey(DRAW_SPEED)
+				.modification(minDrawSpeed)
+				.register();
+
+		ModificationRuleRegistry modification = ModificationRuleRegistry.staticRegistry();
+
+		modification.registerRule("forgero:bow_limb", bowLimb.build());
+		modification.registerRule("forgero:arrow_head", arrowHead.build());
+		modification.registerRule("forgero:feather", feather.build());
+		modification.registerRule("forgero:string", string.build());
 	}
 }
+

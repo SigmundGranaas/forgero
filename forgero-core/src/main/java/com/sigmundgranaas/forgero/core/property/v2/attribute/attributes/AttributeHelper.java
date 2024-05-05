@@ -7,7 +7,6 @@ import java.util.function.BiFunction;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
-import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
 public class AttributeHelper {
 	private final PropertyContainer container;
@@ -30,7 +29,7 @@ public class AttributeHelper {
 	}
 
 	private static BiFunction<ContainerTargetPair, String, ComputedAttribute> defaultAttributeFn(String type) {
-		return (container, target) -> ComputedAttribute.of(container.container().stream(container.target(), MatchContext.of()).applyAttribute(type), type);
+		return (container, target) -> ComputedAttribute.of(container, type);
 	}
 
 	public ComputedAttribute apply(String type) {

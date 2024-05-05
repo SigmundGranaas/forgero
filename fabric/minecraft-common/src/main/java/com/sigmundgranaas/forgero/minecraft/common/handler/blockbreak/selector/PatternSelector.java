@@ -1,22 +1,25 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
-import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttribute;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * <h1>PatternSelector</h1>
@@ -71,6 +74,15 @@ import net.minecraft.util.math.Direction;
 public class PatternSelector implements BlockSelector {
 	public static final String TYPE = "forgero:pattern";
 	public static final String DEPTH_MODIFIER = "forgero:pattern_mining_depth";
+	public static final String DEPTH_MODIFIER_KEY = "depth";
+
+	public static final ModifiableFeatureAttribute.Builder MODIFIER_BUILDER = ModifiableFeatureAttribute
+			.builder(DEPTH_MODIFIER)
+			.key(DEPTH_MODIFIER_KEY)
+			.defaultValue(1);
+
+	public static final String PATTERN_KEY = "pattern";
+
 	public static final JsonBuilder<PatternSelector> BUILDER = HandlerBuilder.fromObject(PatternSelector.class, PatternSelector::fromJson);
 	public static String multiDirection = "multi";
 	public static String horizontalDirection = "horizontal";
@@ -89,15 +101,43 @@ public class PatternSelector implements BlockSelector {
 	}
 
 	public static PatternSelector fromJson(JsonObject json) {
+		List<String> pattern = parsePattern(json);
+		BlockFilter filter = HandlerBuilder.DEFAULT.build(BlockFilter.KEY, json.get("filter")).orElseThrow();
+		ModifiableFeatureAttribute depth = MODIFIER_BUILDER.build(json);
+		String direction = json.has("direction") ? json.get("direction").getAsString() : "multi"; // default direction
+		return new PatternSelector(pattern, filter, depth, direction);
+	}
+
+	public static List<String> parsePattern(JsonObject object) {
+		List<String> fallback = Collections.emptyList();
+		Supplier<String> example = () -> """
+				"pattern": [
+				"xxx",
+				"xxx",
+				"xxx"
+				]
+								
+				""";
+
+		Supplier<String> fallbackMessage = () -> "Setting an empty fallback pattern, which will not select any blocks.";
+		if (!object.has(PATTERN_KEY)) {
+			Forgero.LOGGER.warn("Missing pattern key for object pattern selection object. This is a required field. Here is an example of how the field can look: \n {} \n Here is the actual object: \n {}", example.get(), object);
+			Forgero.LOGGER.warn(fallbackMessage.get());
+			return fallback;
+		}
+		if (!object.get(PATTERN_KEY).isJsonArray()) {
+			Forgero.LOGGER.warn("Encountered unknown pattern data: \n {}. Only lists are supported. Here is an example of a correct pattern: \n {} \n Here is the whole object: \n", object.get(PATTERN_KEY), example.get());
+			Forgero.LOGGER.warn(fallbackMessage.get());
+			return fallback;
+		}
+		return stringListFromJson(object.getAsJsonArray(PATTERN_KEY));
+	}
+
+	public static List<String> stringListFromJson(JsonArray array) {
 		Type typeOfList = new TypeToken<List<String>>() {
 		}.getType();
 		Gson gson = new Gson();
-		List<String> pattern = json.has("pattern") ? gson.fromJson(json.get("pattern").getAsJsonArray(), typeOfList) : List.of("");
-		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
-		ModifiableFeatureAttribute depth = ModifiableFeatureAttribute.of(json, "depth", DEPTH_MODIFIER);
-		String direction = json.has("direction") ? json.get("direction").getAsString() : "multi"; // default direction
-
-		return new PatternSelector(pattern, filter, depth, direction);
+		return gson.fromJson(array, typeOfList);
 	}
 
 	public Set<BlockPos> selectWithDepth(BlockPos rootPos, Entity source) {
@@ -141,12 +181,24 @@ public class PatternSelector implements BlockSelector {
 		return selectWithDepth(rootPos, source);
 	}
 
+	private boolean isAir(BlockPos rootPos, Entity source) {
+		return source.getWorld().getBlockState(rootPos).isAir();
+	}
+
 	@NotNull
 	public Set<BlockPos> selectPattern(BlockPos rootPos, Entity source) {
-		Direction facingHorizontal = source.getHorizontalFacing();
+		Direction facing = source.getHorizontalFacing();
 		Direction[] primaryFacing = Direction.getEntityFacingOrder(source);
 		Set<BlockPos> blocks = new HashSet<>();
 		//iterate through the pattern list, and find all the blocks that match the pattern
+
+
+		for (Direction direction : primaryFacing) {
+			if (isAir(rootPos.offset(direction.getOpposite()), source)) {
+				facing = direction;
+				break;
+			}
+		}
 
 		boolean vertical;
 		//determine if the pattern should be applied horizontally or vertically based on player facing direction and direction variable
@@ -155,7 +207,7 @@ public class PatternSelector implements BlockSelector {
 		} else if (direction.equals(verticalDirection)) {
 			vertical = true;
 		} else {
-			vertical = primaryFacing[0] != Direction.DOWN && primaryFacing[0] != Direction.UP;
+			vertical = facing != Direction.DOWN && facing != Direction.UP;
 		}
 
 		//iterate through the pattern and check if the blocks match the pattern
@@ -174,12 +226,12 @@ public class PatternSelector implements BlockSelector {
 					//Center the pattern
 					pos = centerOffset().subtract(pos);
 
-					//Flatten the pattern player if facing up or down
+					//Flatten the pattern if player is facing up or down
 					if (!vertical) {
 						pos = rotate(pos, 1, Direction.Axis.X);
 					}
 					//Rotate the block based on the player's facing direction
-					pos = rotate(pos, rotationAmount(facingHorizontal), Direction.Axis.Y);
+					pos = rotate(pos, rotationAmount(facing), Direction.Axis.Y);
 
 					//Apply absolute position
 					pos = rootPos.add(pos);
@@ -239,6 +291,6 @@ public class PatternSelector implements BlockSelector {
 	}
 
 	private boolean isValidEntry(char c) {
-		return c == 'x' || c == 'X' || c == 'c' || c == 'C' || c == ' ';
+		return c == 'x' || c == 'X' || c == 'c' || c == 'C';
 	}
 }

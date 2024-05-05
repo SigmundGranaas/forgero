@@ -1,8 +1,13 @@
 package com.sigmundgranaas.forgero.core.handler;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -104,6 +109,17 @@ public class HandlerBuilderRegistry {
 				.flatMap(builder -> safeCast(builder, type));
 	}
 
+	public Set<String> entriesForKey(ClassKey<?> type) {
+		return Stream.concat(REGISTRY.computeIfAbsent(type, (key) -> new HashMap<>()).keySet().stream(), CODEC_REGISTRY.computeIfAbsent(type, (key) -> new HashMap<>()).keySet().stream()).collect(Collectors.toSet());
+	}
+
+
+	public <T> List<JsonBuilder<T>> allJsonBuilders(ClassKey<T> type) {
+		return REGISTRY.computeIfAbsent(type, (key) -> new HashMap<>()).values().stream()
+				.map(builder -> safeCast(builder, type))
+				.flatMap(Optional::stream)
+				.collect(Collectors.toList());
+	}
 
 	/**
 	 * A record that facilitates the registration of JsonBuilders in the HandlerBuilderRegistry.

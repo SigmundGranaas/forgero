@@ -3,26 +3,50 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
+import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttribute;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 
+/**
+ * Handler for applying lifesteal when hitting an entity.
+ * The amount of lifesteal can be configured.
+ *
+ * <p>Example JSON configuration:
+ * <pre>
+ * {
+ *   "type": "minecraft:on_hit",
+ *   "on_hit": {
+ *   "type": "forgero:life_steal",
+ *     "target": "minecraft:targeted_entity",
+ *     "damage": 1,
+ *     "healing": 1,
+ *   }
+ * }
+ *
+ * The amount is configurable using attributes the attribute "forgero:life_steal".
+ * </pre>
+ * </p>
+ */
 @Getter
 @Accessors(fluent = true)
 public class LifeStealHandler implements EntityTargetHandler {
 
 	public static final String TYPE = "forgero:life_steal";
-	public static final JsonBuilder<EntityTargetHandler> BUILDER = HandlerBuilder.fromObject(EntityTargetHandler.KEY.clazz(), LifeStealHandler::fromJson);
+	public static final JsonBuilder<LifeStealHandler> BUILDER = HandlerBuilder.fromObject(LifeStealHandler.class, LifeStealHandler::fromJson);
+
+	public static final String AMOUNT_KEY = "amount";
+
+	public static final ModifiableFeatureAttribute.Builder MODIFIER_BUILDER = ModifiableFeatureAttribute
+			.builder(TYPE)
+			.key(AMOUNT_KEY)
+			.defaultValue(1);
 
 	private final String target;
-	private final float amount;
+	private final ModifiableFeatureAttribute amount;
 
 	/**
 	 * Constructs a new {@link LifeStealHandler} with the specified target and amount of health to steal.
@@ -30,7 +54,7 @@ public class LifeStealHandler implements EntityTargetHandler {
 	 * @param target The target entity.
 	 * @param amount The amount of health to steal.
 	 */
-	public LifeStealHandler(String target, float amount) {
+	public LifeStealHandler(String target, ModifiableFeatureAttribute amount) {
 		this.target = target;
 		this.amount = amount;
 	}
@@ -43,7 +67,7 @@ public class LifeStealHandler implements EntityTargetHandler {
 	 */
 	public static LifeStealHandler fromJson(JsonObject json) {
 		String target = json.get("target").getAsString();
-		float amount = json.get("amount").getAsFloat();
+		ModifiableFeatureAttribute amount = MODIFIER_BUILDER.build(json);
 		return new LifeStealHandler(target, amount);
 	}
 
@@ -60,7 +84,8 @@ public class LifeStealHandler implements EntityTargetHandler {
 		if ("minecraft:targeted_entity".equals(target) && !world.isClient) {
 			if (targetEntity instanceof LivingEntity livingTarget && source instanceof LivingEntity livingSource) {
 
-				float healthToSteal = Math.min(livingTarget.getHealth(), amount);
+				float lifeSteal = amount.with(targetEntity).asFloat();
+				float healthToSteal = Math.min(livingTarget.getHealth(), lifeSteal);
 
 				livingTarget.damage(targetEntity.getDamageSources().magic(), healthToSteal); // Deduct health from target
 				livingSource.heal(healthToSteal); // Add health to source

@@ -1,5 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector;
 
+import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.getBlockPositionsAround;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
@@ -7,16 +14,10 @@ import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttr
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.selector.BlockSelectionUtils.getBlockPositionsAround;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * BlockSelector that selects chained blocks in a radius around the root position.
@@ -29,12 +30,20 @@ import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.sele
 @Accessors(fluent = true)
 public class RadiusVeinSelector implements BlockSelector {
 	public static final String TYPE = "forgero:radius";
+	public static final String VEIN_MINING_RADIUS_MODIFIER = "forgero:vein_mining_radius";
+	public static final String VEIN_MINING_RADIUS_MODIFIER_KEY = "radius";
+
+	public static final ModifiableFeatureAttribute.Builder MODIFIER_BUILDER = ModifiableFeatureAttribute
+			.builder(VEIN_MINING_RADIUS_MODIFIER)
+			.key(VEIN_MINING_RADIUS_MODIFIER_KEY)
+			.defaultValue(1);
+
 	public static final JsonBuilder<RadiusVeinSelector> BUILDER = HandlerBuilder.fromObject(RadiusVeinSelector.class, RadiusVeinSelector::fromJson);
 
 	private final ModifiableFeatureAttribute depth;
 	private final BlockFilter filter;
-	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
+	private Function<BlockPos, Predicate<BlockPos>> rootPosValidator = (BlockPos root) -> (BlockPos blockPos) -> false;
 
 	public RadiusVeinSelector(ModifiableFeatureAttribute depth, BlockFilter filter) {
 		this.depth = depth;
@@ -55,8 +64,8 @@ public class RadiusVeinSelector implements BlockSelector {
 	 * @return A new instance of {@link RadiusVeinSelector}.
 	 */
 	public static RadiusVeinSelector fromJson(JsonObject json) {
-		ModifiableFeatureAttribute radius = ModifiableFeatureAttribute.of(json, "radius", "forgero:vein_mining_radius");
-		BlockFilter filter = BlockFilter.fromJson(json.get("filter"));
+		ModifiableFeatureAttribute radius = MODIFIER_BUILDER.build(json);
+		BlockFilter filter = HandlerBuilder.DEFAULT.build(BlockFilter.KEY, json.get("filter")).orElseThrow();
 		return new RadiusVeinSelector(radius, filter);
 	}
 

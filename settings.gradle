@@ -8,6 +8,7 @@ pluginManagement {
 		maven { url "https://files.minecraftforge.net/maven/" }
 		mavenCentral()
 		gradlePluginPortal()
+		mavenLocal()
 	}
 }
 

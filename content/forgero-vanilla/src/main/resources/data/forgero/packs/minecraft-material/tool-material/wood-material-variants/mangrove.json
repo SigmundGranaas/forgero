@@ -27,6 +27,11 @@
             "id": "wood-weight-composite",
             "type": "WEIGHT",
             "value": 30
+          },
+          {
+            "id": "wood-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 2.75
           }
         ]
       },
@@ -62,6 +67,20 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 32
+          },
+          {
+            "id": "wood-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.20
+          },
+          {
+            "id": "wood-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
           }
         ]
       }

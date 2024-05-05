@@ -21,7 +21,7 @@
 <br />
 <div align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/forgero">
-    <img src="assets/logo/logo_christmas.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Forgero [Fabric]</h3>
@@ -65,7 +65,7 @@ Key features:
 
 Forgero is in active development, and features are being added frequently.  
 We support [Semantic Versioning](https://semver.org/), which means we make sure to not introduce breaking changes unless
-we are moving to a new major version. Upcoming things are: 
+we are moving to a new major version. Upcoming things are:
 
 - [ ] Gem overhaul
 - [ ] Progression and station overhaul
@@ -75,7 +75,7 @@ we are moving to a new major version. Upcoming things are:
 See the [open issues](https://github.com/sigmundgranaas/forgero/issues) for a full list of proposed features and known
 bugs.
 
-Do keep in mind we work on this in our freetime and when we feel like it. Development can be sporadic. 
+Do keep in mind we work on this in our freetime and when we feel like it. Development can be sporadic.
 
 
 <!-- CONTRIBUTING -->

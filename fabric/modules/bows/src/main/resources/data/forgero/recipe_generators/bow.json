@@ -3,7 +3,7 @@
   "identifier": "forgero:${material.name}-bow-state-crafting",
   "variables": {
     "material": {
-      "type": "WOOD"
+      "type": "BOW_LIMB_MATERIAL"
     }
   },
   "type": "forgero:state_crafting_recipe",

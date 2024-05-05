@@ -4,11 +4,46 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.model.match.predicate.IdPredicate;
 import com.sigmundgranaas.forgero.core.model.match.predicate.ModelPredicate;
+import com.sigmundgranaas.forgero.core.texture.utils.Offset;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
 
 public interface ModelMatcher extends Comparable<ModelMatcher> {
+	ModelMatcher EMPTY_TRUE = new ModelMatcher() {
+		@Override
+		public int compareTo(@NotNull ModelMatcher o) {
+			return comparator(this, o);
+		}
+
+		@Override
+		public boolean match(Matchable state, MatchContext context) {
+			return true;
+		}
+
+		@Override
+		public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
+			return Optional.of(EMPTY_TEMPLATE);
+		}
+	};
+
+	ModelTemplate EMPTY_TEMPLATE = new ModelTemplate() {
+		@Override
+		public int order() {
+			return 0;
+		}
+
+		@Override
+		public Optional<Offset> getOffset() {
+			return Optional.empty();
+		}
+
+		@Override
+		public <T> T convert(Converter<T, ModelTemplate> converter) {
+			return converter.convert(this);
+		}
+	};
+
 	ModelMatcher EMPTY = new ModelMatcher() {
 		@Override
 		public int compareTo(@NotNull ModelMatcher o) {

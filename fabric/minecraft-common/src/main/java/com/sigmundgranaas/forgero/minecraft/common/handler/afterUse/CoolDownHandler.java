@@ -68,7 +68,7 @@ public class CoolDownHandler implements AfterUseHandler, StopHandler {
 
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (user instanceof ServerPlayerEntity player) {
 			ItemCooldownManager cooldownManager = player.getItemCooldownManager();
 			cooldownManager.set(stack.getItem(), duration);

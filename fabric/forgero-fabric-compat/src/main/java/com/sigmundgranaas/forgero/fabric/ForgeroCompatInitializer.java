@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.fabric;
 
 import java.util.function.Supplier;
 
-import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.mythicmetals.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;

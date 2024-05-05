@@ -1,7 +1,11 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
+import static com.sigmundgranaas.forgero.minecraft.common.api.v0.predicate.Registries.*;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.defaultItem;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.settingProcessor;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.block.Adapters.*;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter.ENTITY_TYPE_KEY;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityFlagPredicates.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,6 +13,10 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.api.identity.DefaultRules;
+import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRule;
+import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.core.model.match.builders.string.StringIdentifierBuilder;
@@ -23,6 +31,7 @@ import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
 import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
@@ -40,11 +49,15 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeStack
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.ConsumeUpgradeHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.CoolDownHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.afterUse.DamageHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.FilterWrapper;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.IsBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SameBlockFilter;
+import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SimilarBlockFilter;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Diminishing;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
@@ -85,6 +98,12 @@ import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRe
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.MatchContextTypePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.item.ItemGroups;
@@ -106,8 +125,25 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		registerFeatureBuilder();
 		registerHandlerBuilders();
 		registerItemConverters();
+		registerNameModifications();
 	}
 
+	private void registerNameModifications() {
+		SortingRuleRegistry sorting = SortingRuleRegistry.staticRegistry();
+		sorting.registerRule("forgero:schematic", SortingRule.of(Type.SCHEMATIC, 20));
+		sorting.registerRule("forgero:material", SortingRule.of(Type.MATERIAL, 10));
+		sorting.registerRule("forgero:part", SortingRule.of(Type.PART, 30));
+
+		ModificationRuleRegistry modification = ModificationRuleRegistry.staticRegistry();
+
+		modification.registerRule("forgero:schematic", DefaultRules.schematic.build());
+		modification.registerRule("forgero:handle", DefaultRules.handle.build());
+		modification.registerRule("forgero:pickaxe", DefaultRules.pickaxe.build());
+		modification.registerRule("forgero:sword", DefaultRules.sword.build());
+		modification.registerRule("forgero:hoe", DefaultRules.hoe.build());
+		modification.registerRule("forgero:axe", DefaultRules.axe.build());
+		modification.registerRule("forgero:shovel", DefaultRules.shovel.build());
+	}
 
 	private void registerItemConverters() {
 		var settingRegistry = ItemRegistries.SETTING_PROCESSOR;
@@ -134,6 +170,31 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	}
 
 	private void registerPredicateBuilders() {
+		// Block
+		// Key options
+		BLOCK_CODEC_REGISTRY.register(BLOCKS_KEY, blocksAdapter());
+		BLOCK_CODEC_REGISTRY.register(BLOCK_KEY, blockAdapter());
+		BLOCK_CODEC_REGISTRY.register(TAGS_KEY, blockTagsAdapter());
+		BLOCK_CODEC_REGISTRY.register(TAG_KEY, blockTagAdapter());
+
+		// Block predicate
+		PredicateFactory.register(BlockPredicateMatcher.CODEC);
+
+		// Entity
+		// Flag options
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SNEAKING);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SPRINTING);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SWIMMING);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_ON_GROUND);
+
+		// Key options
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(FlagGroupPredicate.KEY, FlagGroupPredicate.CODEC_SPECIFICATION));
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair("pos", EntityAdapter.entityPosCodec()));
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(ENTITY_TYPE_KEY, EntityAdapter.entityTypePredicate()));
+
+		// Entity predicate
+		PredicateFactory.register(EntityPredicate.CODEC);
+
 		PredicateFactory.register(new StringModelBuilder());
 		PredicateFactory.register(new StringIdentifierBuilder());
 		PredicateFactory.register(new StringModelBuilder());
@@ -142,6 +203,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(StringNameBuilder::new);
 		PredicateFactory.register(StringSlotCategoryBuilder::new);
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
+		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
@@ -156,7 +218,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		FeatureRegistry.register(BlockEfficiencyFeature.KEY, BlockEfficiencyFeature.BUILDER);
 		FeatureRegistry.register(OnUseFeature.KEY, OnUseFeature.BUILDER);
 		FeatureRegistry.register(SwingHandFeature.KEY, SwingHandFeature.BUILDER);
-
 	}
 
 	private void registerHandlerBuilders() {
@@ -206,7 +267,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// Hardness calculators
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, All.TYPE, All.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Average.TYPE, Average.BUILDER);
-		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Diminishing.TYPE, Diminishing.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Instant.TYPE, Instant.BUILDER);
 		HandlerBuilderRegistry.register(BlockBreakSpeedCalculator.KEY, Single.TYPE, Single.BUILDER);
 
@@ -217,8 +277,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 				.register(UseHandler.KEY);
 		// Entity use handlers
 
-		// Block use handlers
-
 		// Stop use handlers
 		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowTridentHandler.TYPE, ThrowTridentHandler.BUILDER);
 		HandlerBuilderRegistry.register(StopHandler.KEY, ThrowableHandler.TYPE, ThrowableHandler.BUILDER);
@@ -228,7 +286,12 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(StopHandler.KEY, CoolDownHandler.TYPE, CoolDownHandler.BUILDER);
 
 		// Block filters
-		// Soonish
+		HandlerBuilderRegistry.register(BlockFilter.KEY, FilterWrapper.TYPE, FilterWrapper.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, CanMineFilter.TYPE, CanMineFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, IsBlockFilter.TYPE, IsBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, SameBlockFilter.TYPE, SameBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, SimilarBlockFilter.TYPE, SimilarBlockFilter.BUILDER);
+		HandlerBuilderRegistry.register(BlockFilter.KEY, BlockPredicateMatcher.TYPE, BlockPredicateMatcher.CODEC);
 	}
 
 	private void registerEntityBasedHandler(String key, JsonBuilder<? extends EntityBasedHandler> builder) {

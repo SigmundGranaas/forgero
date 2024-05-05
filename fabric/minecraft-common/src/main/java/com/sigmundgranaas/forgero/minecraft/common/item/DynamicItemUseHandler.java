@@ -96,7 +96,7 @@ public interface DynamicItemUseHandler extends EntityUseHandler, UseHandler, Blo
 	}
 
 	@Override
-	default void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+	default void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		dynamicOnStoppedUsing(stack, world, user, remainingUseTicks);
 	}
 
@@ -116,7 +116,7 @@ public interface DynamicItemUseHandler extends EntityUseHandler, UseHandler, Blo
 	}
 
 	@Override
-	default TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	default TypedActionResult<ItemStack> onUse(World world, PlayerEntity user, Hand hand) {
 		return dynamicUse(world, user, hand);
 	}
 
@@ -162,7 +162,7 @@ public interface DynamicItemUseHandler extends EntityUseHandler, UseHandler, Blo
 						.put(WORLD, world)
 						.put(ENTITY, user)
 		)
-				.ifPresent(handler -> handler.onStoppedUsing(stack, world, user, remainingUseTicks));
+				.ifPresent(handler -> handler.stoppedUsing(stack, world, user, remainingUseTicks));
 	}
 
 
@@ -203,7 +203,7 @@ public interface DynamicItemUseHandler extends EntityUseHandler, UseHandler, Blo
 						.put(WORLD, world)
 						.put(ENTITY, user)
 		)
-				.map(handler -> handler.use(world, user, hand))
+				.map((OnUseFeature handler) -> handler.onUse(world, user, hand))
 				.orElse(TypedActionResult.pass(user.getStackInHand(hand)));
 	}
 }

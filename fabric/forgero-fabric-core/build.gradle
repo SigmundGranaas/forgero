@@ -17,28 +17,6 @@ dependencies {
 	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
 }
 
-loom {
-	accessWidenerPath = file("src/main/resources/forgero-fabric-core.accesswidener")
-
-	runs {
-		testmodServer {
-			server()
-			ideConfigGenerated project.rootProject == project
-			name = "Testmod Server"
-			source sourceSets.test
-		}
-		gametest {
-			inherit testmodServer
-
-			name "Game Test"
-			// Enable the gametest runner
-			vmArg "-Dfabric-api.gametest"
-			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-			runDir "build/gametest"
-		}
-	}
-}
-
 sourceSets {
 	test {
 		compileClasspath += test.compileClasspath
@@ -46,6 +24,35 @@ sourceSets {
 		runtimeClasspath += main.runtimeClasspath
 	}
 }
+
+loom {
+	accessWidenerPath = file("src/main/resources/forgero-core.accesswidener")
+
+	runs {
+		testServer {
+			server()
+			ideConfigGenerated project.rootProject == project
+			name = "Test Server"
+			source sourceSets.test
+		}
+		gametest {
+			inherit testServer
+			name "Game Test"
+			// Enable the gametest runner
+			vmArg "-Dfabric-api.gametest"
+			runDir "build/gametest"
+		}
+		testClient {
+			client()
+			name = "Test Client"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/forgero/gametest/structures")}"
+
+			ideConfigGenerated = false
+			source sourceSets.test
+		}
+	}
+}
+
 
 test {
 	useJUnitPlatform()

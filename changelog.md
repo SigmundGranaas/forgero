@@ -1,14 +1,13 @@
-# Forgero Beta release 0.11.12
+# Forgero Beta release 0.12.0-rc-4
 
 # Changelog
 
-* [Feature]: Shortbow + texture and lang fixes by @JorisDeBeer in https://github.com/SigmundGranaas/forgero/pull/824
-* [Feature]: Single block selector by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/825
-* [Feature]: Random matcher with seeds by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/826
-* [Feature]: Resource overrides from Datapacks by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/827
-* [Feature]: A context type checking predicate by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/829
-* [Patch]: Fixed arrow rendering to use the velocity to determine angle. by @SigmundGranaas
-  in https://github.com/SigmundGranaas/forgero/pull/834
-* [Feature]: Bow pull logic and handling as feature configuration by @SigmundGranaas
-  in https://github.com/SigmundGranaas/forgero/pull/833
-* [Patch]: Corrected namespace for compat packs by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/835
+## What's Changed
+
+* [Patch]: Added vein mining description to tree-chopper heads by @SigmundGranaas
+  in https://github.com/SigmundGranaas/forgero/pull/895
+* [Feature]: Reworked context provider strategy for dynamic models by @SigmundGranaas
+  in https://github.com/SigmundGranaas/forgero/pull/894
+* [Feature]: Name composition api by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/901
+* [Patch]: Disabled arrow heads from being inserted into the disassembly station by @SigmundGranaas
+  in https://github.com/SigmundGranaas/forgero/pull/903

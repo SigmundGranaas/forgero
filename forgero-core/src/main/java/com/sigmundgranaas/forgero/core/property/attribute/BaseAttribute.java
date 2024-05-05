@@ -126,11 +126,10 @@ public record BaseAttribute(String attribute,
 	public String type() {
 		return getAttributeType();
 	}
-
-
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(attribute, operation, value, condition, order, level, category, id, priority, context);
+		return Objects.hash(attribute, operation, value, order, level, category, id, priority, context);
 	}
 
 	@Override
@@ -159,6 +158,14 @@ public record BaseAttribute(String attribute,
 				", id='" + id + '\'' +
 				", priority=" + priority +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BaseAttribute that = (BaseAttribute) o;
+		return Float.compare(value, that.value) == 0 && level == that.level && priority == that.priority && Objects.equals(attribute, that.attribute) && operation == that.operation && order == that.order && category == that.category && Objects.equals(id, that.id) && Objects.equals(context, that.context);
 	}
 
 	public static class BaseAttributeCodec {

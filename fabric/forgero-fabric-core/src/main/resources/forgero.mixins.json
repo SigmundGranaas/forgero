@@ -30,7 +30,6 @@
     "ClientPlayNetworkGetTotemMixin",
     "ItemDescriptionInjector",
     "ItemModelGeneratorMixin",
-    "ItemRenderContextMixin",
     "ItemRenderMixin",
     "LifecycleResourceManagerImplMixin",
     "PlayerInteractionManagerMixin",

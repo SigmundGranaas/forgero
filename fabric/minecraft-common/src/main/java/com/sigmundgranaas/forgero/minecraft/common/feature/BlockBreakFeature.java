@@ -34,11 +34,9 @@ import net.minecraft.util.math.BlockPos;
  *     "filter": [
  *       "forgero:same_block"
  *     ],
- *     "depth": 1
+ *     "radius": 1
  *   },
- *   "hardness": {
- *     "type": "forgero:hardness_composite"
- *   },
+ *   "speed": "forgero:all",
  *   "predicate": {
  *     "type": "minecraft:block",
  *     "tag": "forgero:vein_mining_ores"
@@ -143,9 +141,7 @@ import net.minecraft.util.math.BlockPos;
  * <h3>Hardness Calculation:</h3>
  * <p>This optional parameter calculates the hardness of the blocks being broken.</p>
  * <pre>
- * "hardness": {
- *   "type": "forgero:hardness_composite"
- * }
+ *   "speed": "forgero:all",
  * </pre>
  *
  * <h3>Predicate:</h3>

@@ -96,11 +96,9 @@
         "filter": {
           "type": "forgero:same_block"
         },
-        "depth": 3
+        "radius": 3
       },
-      "speed": {
-        "type": "forgero:all"
-      },
+      "speed": "forgero:all",
       "predicate": {
         "type": "minecraft:block",
         "tag": "forgero:vein_mining_ores"

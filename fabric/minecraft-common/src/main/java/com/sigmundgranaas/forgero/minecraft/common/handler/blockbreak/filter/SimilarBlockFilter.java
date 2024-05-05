@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.property.v2.feature.ClassKey;
+import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
+import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,23 +25,29 @@ import net.minecraft.util.math.BlockPos;
  * The filter will then identify blocks as similar if they share at least one tag in this category.
  */
 public class SimilarBlockFilter implements BlockFilter {
-	public static final String Key = "forgero:similar_block";
+	public static final String TYPE = "forgero:similar_block";
 
 	public static final SimilarBlockFilter DEFAULT = new SimilarBlockFilter();
 
+	public final static ClassKey<SimilarBlockFilter> KEY = new ClassKey<>(TYPE, SimilarBlockFilter.class);
 
-	private final Cache<Block, Set<Identifier>> blockTagCache = CacheBuilder.newBuilder().softValues().build();
-	private final Cache<BlockState, Boolean> similarityCache = CacheBuilder.newBuilder().softValues().build();
-	private Set<TagKey<Block>> similarBlockTags;
-	private boolean tagsLoaded = false;
+	public final static JsonBuilder<SimilarBlockFilter> BUILDER = HandlerBuilder.fromStringOrType(KEY.clazz(), TYPE, DEFAULT);
+	
+	private static final Cache<Block, Set<Identifier>> blockTagCache = CacheBuilder.newBuilder().build();
+	private static final Cache<Integer, Boolean> similarityCache = CacheBuilder.newBuilder().build();
+	private static Set<TagKey<Block>> similarBlockTags;
+	private static boolean tagsLoaded = false;
 
 	@Override
 	public boolean filter(Entity entity, BlockPos currentPos, BlockPos root) {
 		BlockState currentBlock = entity.getWorld().getBlockState(currentPos);
 		BlockState rootBlock = entity.getWorld().getBlockState(root);
 
+		if (currentBlock.getBlock() == rootBlock.getBlock()) {
+			return true;
+		}
 		try {
-			return similarityCache.get(currentBlock, () -> evaluateSimilarity(currentBlock, rootBlock));
+			return similarityCache.get(currentBlock.getBlock().hashCode() + rootBlock.getBlock().hashCode(), () -> evaluateSimilarity(currentBlock, rootBlock));
 		} catch (ExecutionException e) {
 			Forgero.LOGGER.error(e);
 			return false;

@@ -18,7 +18,7 @@
           {
             "type": "TOOL_MATERIAL",
             "unique": true,
-            "amount": 3
+            "amount": 1
           }
         ]
       }
@@ -33,24 +33,6 @@
       }
     ],
     "slots": [
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "OFFENSIVE"
-        ],
-        "description": "reinforcement",
-        "type": "UPGRADE_MATERIAL",
-        "tier": 1
-      },
-      {
-        "upgrade_type": "SMITHING",
-        "category": [
-          "UTILITY"
-        ],
-        "description": "cosmetic",
-        "type": "DYE",
-        "tier": 1
-      }
     ]
   },
   "properties": {
@@ -62,12 +44,45 @@
         "context": "LOCAL",
         "operation": "ADDITION",
         "value": 25
+      },
+      {
+        "id": "arrowhead-base-accuracy",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "type": "forgero:accuracy",
+        "value": 15
       }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.3
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 0.9
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.25
+          }
+        ]
+      }
+    ],
+    "features": [
     ]
   },
   "custom_data": {
     "ingredient_count": {
-      "value": 3,
+      "value": 1,
       "context": "LOCAL"
     }
   }
