@@ -3,3 +3,5 @@ accessWidener v2 named
 accessible method net/minecraft/test/TestContext getTestBox ()Lnet/minecraft/util/math/Box;
 accessible class net/minecraft/structure/StructureTemplateManager$Provider
 accessible method net/minecraft/structure/StructureTemplateManager$Provider <init> (Ljava/util/function/Function;Ljava/util/function/Supplier;)V
+
+accessible field net/minecraft/client/network/ClientCommonNetworkHandler client Lnet/minecraft/client/MinecraftClient;

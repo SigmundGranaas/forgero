@@ -29,12 +29,11 @@ public abstract class ClientPlayNetworkGetTotemMixin {
 	@Shadow
 	private ClientWorld world;
 
-
 	@Inject(at = @At("HEAD"), method = "onEntityStatus")
 	private void getTotem(EntityStatusS2CPacket packet, CallbackInfo indo) {
 		ClientPlayNetworkHandler handler = (ClientPlayNetworkHandler) (Object) this;
-		MinecraftClient client = ((ClientCommonNetworkHandler)handler).client;
-		NetworkThreadUtils.forceMainThread(packet, handler , client);
+		MinecraftClient client = handler.client;
+		NetworkThreadUtils.forceMainThread(packet, handler, client);
 		Entity entity = packet.getEntity(world);
 		if (entity instanceof PlayerEntity player) {
 			if (packet.getStatus() == ENTITY_STATUS_TOTEM) {

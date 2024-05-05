@@ -98,13 +98,11 @@ import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicWeaponItemRe
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercentagePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.MatchContextTypePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.PredicateWriterFactory;
 
 import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.Resource;
@@ -203,7 +201,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(StringNameBuilder::new);
 		PredicateFactory.register(StringSlotCategoryBuilder::new);
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
-		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);

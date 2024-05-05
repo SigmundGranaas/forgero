@@ -21,6 +21,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -40,11 +41,11 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 	}
 
 	public DynamicArrowEntity(EntityType<DynamicArrowEntity> entityType, World world) {
-		super(entityType, world);
+		super(entityType, world, new ItemStack(Items.AIR));
 	}
 
 	public DynamicArrowEntity(World world, LivingEntity owner, ItemStack stack) {
-		super(DYNAMIC_ARROW_ENTITY, owner, world);
+		super(DYNAMIC_ARROW_ENTITY, world, stack);
 		setStack(stack.copy());
 		StateService.INSTANCE.convert(stack)
 				.map(state -> ComputedAttribute.apply(state, AttackDamage.KEY))
