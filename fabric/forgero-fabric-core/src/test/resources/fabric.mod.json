@@ -16,7 +16,6 @@
       "com.sigmundgranaas.forgero.fabric.gametest.RecipeTest",
       "com.sigmundgranaas.forgero.fabric.gametest.AssemblyStationTester",
       "com.sigmundgranaas.forgero.fabric.gametest.RepairKitTest",
-      "com.sigmundgranaas.forgero.fabric.gametest.UpgradeTest",
       "com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest",
       "com.sigmundgranaas.forgero.fabric.gametest.MiningLevelTest",
       "com.sigmundgranaas.forgero.fabric.gametest.AttributeApplicationTest",

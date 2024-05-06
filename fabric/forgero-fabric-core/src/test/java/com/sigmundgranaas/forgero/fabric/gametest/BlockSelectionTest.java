@@ -39,9 +39,9 @@ public class BlockSelectionTest {
 	public static BlockPos RELATIVE_5X5_CENTER = new BlockPos(2, 2, 2);
 	public static BlockPos RELATIVE_7X7_CENTER = new BlockPos(3, 3, 3);
 
-	public static BlockPos RELATIVE_3X3_NORTH = new BlockPos(1, 1, 0);
-	public static BlockPos RELATIVE_3X3_EAST = new BlockPos(0, 1, 1);
-	public static BlockPos RELATIVE_3X3_DOWN = new BlockPos(1, 0, 1);
+	public static BlockPos RELATIVE_3X3_NORTH = new BlockPos(1, 2, 0);
+	public static BlockPos RELATIVE_3X3_EAST = new BlockPos(0, 2, 2);
+	public static BlockPos RELATIVE_3X3_DOWN = new BlockPos(1, 1, 1);
 
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "BlockSelectionTest")
@@ -50,7 +50,7 @@ public class BlockSelectionTest {
 		BlockSelector selector = selector3x3();
 
 		TestPos center = TestPos.of(RELATIVE_3X3_NORTH, context);
-		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(BlockPos.ORIGIN, context), 3, 3, 1), context));
+		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(BlockPos.ORIGIN.up(), context), 3, 3, 1), context));
 
 		Set<BlockPos> selected = selector.select(center.absolute(), context.createMockCreativePlayer());
 
@@ -65,7 +65,7 @@ public class BlockSelectionTest {
 		TestPos center = TestPos.of(RELATIVE_3X3_NORTH, context);
 		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(new BlockPos(0, 1, 0), context), 3, 3, 1), context));
 
-		Set<BlockPos> selected = selector.select(center.absolute().up(), context.createMockCreativePlayer());
+		Set<BlockPos> selected = selector.select(center.absolute(), context.createMockCreativePlayer());
 
 		if (selected.size() == 1) {
 			context.complete();
@@ -82,7 +82,7 @@ public class BlockSelectionTest {
 		TestPos center = TestPos.of(RELATIVE_3X3_NORTH, context);
 		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(new BlockPos(0, 1, 0), context), 3, 3, 1), context));
 
-		Set<BlockPos> selected = selector.select(center.absolute().up(), context.createMockCreativePlayer());
+		Set<BlockPos> selected = selector.select(center.absolute(), context.createMockCreativePlayer());
 
 		if (selected.size() == 5) {
 			context.complete();
@@ -97,7 +97,7 @@ public class BlockSelectionTest {
 		BlockSelector selector = selector3x3();
 
 		TestPos center = TestPos.of(RELATIVE_3X3_EAST, context);
-		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(BlockPos.ORIGIN, context), 3, 1, 3), context));
+		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(BlockPos.ORIGIN.add(0, 1, 1), context), 3, 1, 3), context));
 
 		PlayerEntity entity = context.createMockCreativePlayer();
 		entity.teleport(center.absolute().getX(), center.absolute().getY(), center.absolute().getZ() + 1, false);
@@ -116,7 +116,7 @@ public class BlockSelectionTest {
 		BlockSelector selector = selector3x3();
 
 		TestPos center = TestPos.of(RELATIVE_3X3_DOWN, context);
-		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(BlockPos.ORIGIN, context), 1, 3, 3), context));
+		TestPosCollection square = TestPosCollection.of(insert(createSquare(TestPos.of(BlockPos.ORIGIN.up(), context), 1, 3, 3), context));
 
 		PlayerEntity entity = context.createMockCreativePlayer();
 		BlockPos centerAbs = center.absolute();
@@ -170,7 +170,7 @@ public class BlockSelectionTest {
 	public void testColumnMiningSingleColumn(TestContext context) {
 		// Prepare selector
 		BlockSelector selector = columnX1();
-		TestPos center = TestPos.of(BlockPos.ORIGIN, context);
+		TestPos center = TestPos.of(BlockPos.ORIGIN.up(), context);
 
 		TestPosCollection square = TestPosCollection.of(insert(createSquare(center, 5, 1, 1), context));
 		Set<BlockPos> selected = selector.select(center.absolute(), context.createMockCreativePlayer());

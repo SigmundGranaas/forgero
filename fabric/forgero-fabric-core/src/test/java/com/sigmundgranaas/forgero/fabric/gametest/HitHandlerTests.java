@@ -35,6 +35,8 @@ import net.minecraft.util.math.Vec3d;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
+import java.util.Objects;
+
 public class HitHandlerTests {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "hitHandler", tickLimit = 120)
@@ -144,8 +146,10 @@ public class HitHandlerTests {
 			// Ensure the target's main hand is now empty
 			context.assertTrue(target.getMainHandStack().isEmpty(), "Target entity's main hand is not empty after being disarmed.");
 
+			BlockPos first = TestPos.of(new BlockPos(0, 0, 0), context).absolute();
+			BlockPos second =  TestPos.of(new BlockPos(7, 7, 7), context).absolute();
 			// Check for a dropped item entity to ensure the item was dropped
-			boolean itemDropped = context.getWorld().getEntitiesByClass(ItemEntity.class, new Box(TestPos.of(new BlockPos(0, 0, 0), context).absolute(), TestPos.of(new BlockPos(7, 7, 7), context).absolute()), entity -> entity.getStack().getItem() == Items.DIAMOND_SWORD).size() == 1;
+			boolean itemDropped = context.getWorld().getEntitiesByClass(ItemEntity.class, new Box(first.toCenterPos(), second.toCenterPos()), entity -> entity.getStack().getItem() == Items.DIAMOND_SWORD).size() == 1;
 			context.assertTrue(itemDropped, "The disarmed item was not dropped in the world.");
 
 			context.complete();
@@ -182,7 +186,7 @@ public class HitHandlerTests {
 			// Verify that the original target is removed
 			context.assertTrue(target.isRemoved(), "Original target entity has not been removed.");
 
-			boolean conversionSuccessful = context.getWorld().getEntitiesByClass(ZombieEntity.class, new Box(playerPos.offset(-3, -2, -3).absolute(), playerPos.offset(3, 2, 3).absolute()), e -> e instanceof ZombieEntity).size() == 1;
+			boolean conversionSuccessful = context.getWorld().getEntitiesByClass(ZombieEntity.class, new Box(playerPos.offset(-3, -2, -3).absolute().toCenterPos(), playerPos.offset(3, 2, 3).absolute().toCenterPos()), Objects::nonNull).size() == 1;
 			context.assertTrue(conversionSuccessful, "Target entity was not converted to the specified type.");
 
 			context.complete();

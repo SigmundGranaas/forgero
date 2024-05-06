@@ -1,9 +1,12 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+import static net.minecraft.network.packet.c2s.common.SyncedClientOptions.createDefault;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
@@ -16,6 +19,7 @@ import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 
 import net.minecraft.entity.Entity;
@@ -43,27 +47,19 @@ public class AttributeApplicationTest {
 
 	public static float EXPECTED_DIAMOND_SWORD_DAMAGE = 7f;
 
-	public static ServerPlayerEntity createMockPlayer(BlockPos pos, TestContext context) {
-		context.getWorld().getServer().setDemo(false);
-		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(UUID.randomUUID(), "test-mock-player"));
-		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity);
-		var profile =  new GameProfile(UUID.randomUUID(), "test-mock-player");
-		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(),profile, createDefault());
-		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity, ConnectedClientData.createDefault(profile));
-		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
-		return entity;
-	}
 
 	public static void createFloor(TestContext context) {
-		BlockSelectionTest.insert(BlockSelectionTest.createSquare(TestPos.of(BlockPos.ORIGIN, context), 1, 7, 7), context);
+		TestPos center = TestPos.of(new BlockPos(0, 0, 0), context);
+		Set<TestPos> blocks = BlockSelectionTest.createSquare(TestPos.of(BlockPos.ORIGIN, context), 1, 7, 7).stream().filter(pos -> !pos.absolute().equals(center.absolute())).collect(Collectors.toSet());
+		BlockSelectionTest.insert(blocks, context);
 	}
 
 	public static void runDamageTest(TestContext context, ItemStack testItem, EntityType<?> testEntity, float expectedDamage) {
 		createFloor(context);
-		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 0, 0)).add(-3, 0, -3);
+		BlockPos rootPos = context.getAbsolutePos(new BlockPos(0, 1, 0)).add(-3, 0, -3);
 		BlockPos relative = context.getRelativePos(rootPos);
 		// Create and setup mock player with item
-		ServerPlayerEntity entity = createMockPlayer(relative, context);
+		ServerPlayerEntity entity = PlayerFactory.of(context, TestPos.of(rootPos, context));
 
 		entity.setStackInHand(Hand.MAIN_HAND, testItem);
 
@@ -85,9 +81,7 @@ public class AttributeApplicationTest {
 		// Assert the target's health matches expectation
 		if (((LivingEntity) target).getHealth() != expectedHealthPostAttack) {
 
-			// If this is a real test framework, you might have an assert or fail method.
-			// Here's a hypothetical way to report a failure in the test:
-			throw new GameTestException("Expected target health to be " + expectedHealthPostAttack + " but was " + (initialHealth - ((LivingEntity) target).getHealth()));
+			throw new GameTestException("Expected target health to be " + expectedHealthPostAttack + " but was " + ((LivingEntity) target).getHealth());
 		} else {
 			context.complete();
 		}
@@ -123,7 +117,7 @@ public class AttributeApplicationTest {
 		ConstructedTool sword = (ConstructedTool) StateService.INSTANCE.find(new Identifier("forgero:diamond-sword")).get();
 		sword = sword.applyCondition(PropertyContainer.of(List.of(attribute)));
 		Entity pig = new PigEntity(EntityType.PIG, context.getWorld());
-		ServerPlayerEntity entity = createMockPlayer(relative, context);
+		ServerPlayerEntity entity = PlayerFactory.of(context, TestPos.of(rootPos, context));
 		MatchContext matchContext = MatchContext.of()
 				.put(WORLD, context.getWorld())
 				.put(ENTITY_TARGET, pig)

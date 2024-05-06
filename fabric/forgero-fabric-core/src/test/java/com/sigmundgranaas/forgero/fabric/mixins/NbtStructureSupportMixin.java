@@ -56,7 +56,7 @@ public abstract class NbtStructureSupportMixin {
 
 		if (resource.isPresent()) {
 			try {
-				NbtCompound nbtCompound = NbtIo.read(new DataInputStream(new FixedBufferInputStream(new GZIPInputStream(resource.get().getInputStream()))));
+				NbtCompound nbtCompound = NbtIo.readCompound(new DataInputStream(new FixedBufferInputStream(new GZIPInputStream(resource.get().getInputStream()))));
 				StructureTemplate struc = this.createTemplate(nbtCompound);
 				return Optional.of(struc);
 			} catch (IOException e) {

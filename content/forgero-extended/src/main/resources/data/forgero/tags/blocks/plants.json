@@ -10,6 +10,10 @@
       "required": false
     },
     {
+      "id": "minecraft:short_grass",
+      "required": false
+    },
+    {
       "id": "minecraft:fern",
       "required": false
     },

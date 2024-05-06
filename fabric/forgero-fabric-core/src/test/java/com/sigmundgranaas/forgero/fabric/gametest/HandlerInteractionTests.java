@@ -18,7 +18,9 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameMode;
+import net.minecraft.world.GameRules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,20 +96,25 @@ public class HandlerInteractionTests {
 		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
 		createFloor(context);
 
-		// Spawn a player holding a gold ingot, which triggers piglin aggression
+		// Spawn a player holding an iron ingot, which triggers piglin aggression
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.pos(playerPos.absolute())
 				.gameMode(GameMode.SURVIVAL)
 				.stack(() -> new ItemStack(Items.IRON_INGOT))
-				.playerName("Agressive")
+				.playerName("Aggressive")
 				.build()
 				.createPlayer();
-		
+
+		player.tick();
+
 		// Spawn piglins around the player
-		spawnPiglinsAroundPlayer(context, playerPos, 2).forEach(entity -> entity.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, player.getPos()));
+		spawnPiglinsAroundPlayer(context, playerPos, 2).forEach(entity ->  {
+			entity.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, player.getPos().add(0, 1, 0));
+			player.attack(entity);
+		});
 
 		// After 100 ticks, check the player's health to determine if piglins were aggressive
-		context.runAtTick(100, () -> {
+ 		context.runAtTick(100, () -> {
 			boolean isHealthDecreased = player.getHealth() < player.getMaxHealth();
 			context.assertTrue(isHealthDecreased, "Piglins should be aggressive towards the player.");
 
@@ -147,7 +154,7 @@ public class HandlerInteractionTests {
 			double xOffset = Math.cos(angle) * radius;
 			double zOffset = Math.sin(angle) * radius;
 			PiglinEntity entity = new PiglinEntity(EntityType.PIGLIN, context.getWorld());
-			Vec3d pos = new Vec3d(playerPos.absolute().getX() + xOffset, playerPos.absolute().getY(), playerPos.absolute().getZ() + zOffset);
+			Vec3d pos = new Vec3d(playerPos.absolute().getX() + xOffset, playerPos.absolute().getY() + 1, playerPos.absolute().getZ() + zOffset);
 			entity.setPos(pos.getX(), pos.getY(), pos.getZ());
 			context.getWorld().spawnEntity(entity);
 			entity.tick();

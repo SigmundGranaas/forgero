@@ -5,9 +5,15 @@ import java.util.function.Supplier;
 
 import com.mojang.authlib.GameProfile;
 
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.embedded.EmbeddedChannel;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
+import net.minecraft.network.NetworkState;
+import net.minecraft.network.packet.c2s.common.SyncedClientOptions;
+import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.TestContext;
@@ -75,7 +81,6 @@ public class PlayerFactory implements ContextSupplier {
 		return Direction.NORTH;
 	}
 
-
 	public static PlayerBuilder builder() {
 		return new PlayerBuilder();
 	}
@@ -87,19 +92,23 @@ public class PlayerFactory implements ContextSupplier {
 
 	public ServerPlayerEntity createPlayer() {
 		TestContext context = ctxSupplier.get();
-		context.getWorld().getServer().setDemo(false);
-		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), new GameProfile(uuid, playerName));
-		entity.networkHandler = new ServerPlayNetworkHandler(context.getWorld().getServer(), new ClientConnection(NetworkSide.CLIENTBOUND), entity);
 
-		entity.setPos(pos.getX(), pos.getY(), pos.getZ());
+		ConnectedClientData connectedClientData = ConnectedClientData.createDefault(new GameProfile(UUID.randomUUID(), "test-mock-player"));
+		ServerPlayerEntity entity = new ServerPlayerEntity(context.getWorld().getServer(), context.getWorld(), connectedClientData.gameProfile(), connectedClientData.syncedOptions());
+
+		ClientConnection clientConnection = new ClientConnection(NetworkSide.SERVERBOUND);
+		EmbeddedChannel embeddedChannel = new EmbeddedChannel(clientConnection);
+		embeddedChannel.attr(ClientConnection.SERVERBOUND_PROTOCOL_KEY).set(NetworkState.PLAY.getHandler(NetworkSide.SERVERBOUND));
+		context.getWorld().getServer().getPlayerManager().onPlayerConnect(clientConnection, entity, connectedClientData);
+
+		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 		entity.setStackInHand(stackHand, stack.get());
 		entity.setYaw(direction.asRotation());
 		entity.setPitch(0f);
 		entity.setHeadYaw(direction.asRotation());
 
-		context.getWorld().getServer().getPlayerManager().onPlayerConnect(new ClientConnection(NetworkSide.SERVERBOUND), entity);
-		entity.tick();
 
+		entity.tick();
 		entity.changeGameMode(gameMode);
 		return entity;
 	}
