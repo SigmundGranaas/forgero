@@ -1,0 +1,47 @@
+{
+  "type": "HEAD_MODIFICATION",
+  "name": "vein_mining-modification",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 65
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 72000,
+        "use_action": "SPEAR",
+        "use": [
+          {
+            "type": "minecraft:consume"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:throw",
+            "velocity_multiplier": "2",
+            "instability": "10"
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.trident.throw"
+          },
+          {
+            "type": "minecraft:consume_stack",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  }
+}

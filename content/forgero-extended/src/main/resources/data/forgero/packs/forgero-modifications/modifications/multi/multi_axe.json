@@ -1,0 +1,28 @@
+{
+  "type": "HEAD_MODIFICATION",
+  "name": "multitool-axe-modification",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 65
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/axe"
+        ]
+      }
+    ]
+  }
+}
