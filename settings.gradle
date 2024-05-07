@@ -34,4 +34,5 @@ include 'fabric:minecraft-common'
 include 'fabric:modules'
 include 'fabric:modules:bows'
 include 'fabric:modules:generator'
+include 'fabric:modules:blocks'
 
