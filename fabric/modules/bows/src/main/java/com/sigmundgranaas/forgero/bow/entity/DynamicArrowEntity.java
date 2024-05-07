@@ -45,7 +45,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 	}
 
 	public DynamicArrowEntity(World world, LivingEntity owner, ItemStack stack) {
-		super(DYNAMIC_ARROW_ENTITY, world, stack);
+		super(DYNAMIC_ARROW_ENTITY, owner, world, stack);
 		setStack(stack.copy());
 		StateService.INSTANCE.convert(stack)
 				.map(state -> ComputedAttribute.apply(state, AttackDamage.KEY))

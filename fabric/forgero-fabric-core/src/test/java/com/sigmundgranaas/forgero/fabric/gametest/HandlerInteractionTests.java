@@ -18,9 +18,7 @@ import net.minecraft.test.TestContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameMode;
-import net.minecraft.world.GameRules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +108,6 @@ public class HandlerInteractionTests {
 		// Spawn piglins around the player
 		spawnPiglinsAroundPlayer(context, playerPos, 2).forEach(entity ->  {
 			entity.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, player.getPos().add(0, 1, 0));
-			player.attack(entity);
 		});
 
 		// After 100 ticks, check the player's health to determine if piglins were aggressive
