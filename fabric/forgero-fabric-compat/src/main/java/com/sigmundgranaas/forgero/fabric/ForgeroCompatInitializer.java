@@ -35,11 +35,6 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 			ToolStatTagGenerator.generateTags();
 		}
 
-		if(emi.get()){
-			ForgeroConfigurationLoader.configuration.buildModelsAsync = false;
-		}
-
-
 		if (mythicmetals.get()) {
 			MythicMetalsCommons.generateTags();
 		}
