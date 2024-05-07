@@ -26,7 +26,8 @@
       "com.sigmundgranaas.forgero.fabric.gametest.HandlerInteractionTests",
       "com.sigmundgranaas.forgero.fabric.gametest.HitHandlerTests",
       "com.sigmundgranaas.forgero.fabric.gametest.StateTests",
-      "com.sigmundgranaas.forgero.fabric.gametest.EntityPredicateTest"
+      "com.sigmundgranaas.forgero.fabric.gametest.EntityPredicateTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.BowTest"
     ]
   }
 }
