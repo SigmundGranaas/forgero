@@ -87,37 +87,37 @@
           ],
           "template": "refined_bow_limb.png"
         },
-          {
-            "predicate": [
-              "model:refined_bow_pull_2.png",
-              {
-                "type": "forgero:bow_pull",
-                "pull": 0.9
-              }
-            ],
-            "template": "refined_bow_pull_2.png"
-          },
-          {
-            "predicate": [
-              "model:refined_bow_pull_1.png",
-              {
-                "type": "forgero:bow_pull",
-                "pull": 0.6
-              }
-            ],
-            "template": "refined_bow_pull_1.png"
-          },
-          {
-            "predicate": [
-              "model:refined_bow_pull_0.png",
-              {
-                "type": "forgero:bow_pull",
-                "pull": 0.1
-              }
-            ],
-            "template": "refined_bow_pull_0.png"
-          }
-        ]
+        {
+          "predicate": [
+            "model:refined_bow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "refined_bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:refined_bow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "refined_bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:refined_bow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "refined_bow_pull_0.png"
+        }
+      ]
     },
     {
       "target": [

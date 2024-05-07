@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import com.google.gson.JsonObject;
@@ -40,6 +41,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 	private final String id;
 	private final Baker loader;
 	private final Function<SpriteIdentifier, Sprite> textureGetter;
+	private final String parent;
 
 	public Unbaked2DTexturedModel(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, List<ModelTemplate> textures, String id) {
 		this.loader = loader;
@@ -51,6 +53,11 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 		this.indexMap = new HashMap<>();
 		this.displayOverrides = new ArrayList<>();
 		this.textures.sort(Comparator.comparing(ModelTemplate::order));
+		this.parent = this.textures.stream()
+				.map(ModelTemplate::getParent)
+				.flatMap(Optional::stream)
+				.findAny()
+				.orElse("minecraft:item/handheld");
 	}
 
 	private String textureName(ModelTemplate model) {
@@ -62,7 +69,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 
 	public String BuildJsonModel() {
 		JsonObject model = new JsonObject();
-		model.addProperty("parent", "minecraft:item/handheld");
+		model.addProperty("parent", this.parent);
 		model.add("textures", this.getTextures());
 		model.addProperty("gui_light", "front");
 		if (!this.displayOverrides.isEmpty()) {
@@ -153,7 +160,7 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 
 	@Override
 	public BakedModel bake() {
-		var parentModel = loader.getOrLoadModel(new Identifier("minecraft:item/handheld"));
+		var parentModel = loader.getOrLoadModel(new Identifier(this.parent));
 		JsonUnbakedModel model = this.buildUnbakedJsonModel();
 		ModelIdentifier id = this.getId();
 		JsonUnbakedModel generated_model = ITEM_MODEL_GENERATOR.create(textureGetter, model);
@@ -166,9 +173,9 @@ public class Unbaked2DTexturedModel implements UnbakedDynamicModel {
 			applyResolutionScaling(element);
 		}
 
-		if (parentModel instanceof JsonUnbakedModel parent) {
-			((JsonUnbakedModelOverrideMixin) generated_model).setParent(parent);
-			return generated_model.bake(loader, parent, textureGetter, X0_Y0, id, true);
+		if (parentModel instanceof JsonUnbakedModel jsonParent) {
+			((JsonUnbakedModelOverrideMixin) generated_model).setParent(jsonParent);
+			return generated_model.bake(loader, jsonParent, textureGetter, X0_Y0, id, true);
 		}
 
 		return generated_model.bake(loader, model, textureGetter, X0_Y0, id, true);
