@@ -23,7 +23,8 @@
     "PlayerCritChanceMixin",
     "PlayerEntityAttackMixin",
     "PlayerServerInteractionManagerMixin",
-    "RecipeManagerMixin"
+    "RecipeManagerMixin",
+    "ServerInteractionManagerReachMixin"
   ],
   "client": [
     "ClientPlayerInteractionManagerReachMixin",

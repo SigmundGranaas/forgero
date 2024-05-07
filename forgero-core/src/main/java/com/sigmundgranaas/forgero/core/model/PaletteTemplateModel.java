@@ -13,11 +13,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public record PaletteTemplateModel(String palette,
-								   String template,
-								   int order,
-								   @Nullable Offset offset,
-								   @Nullable Integer resolution,
-								   @Nullable JsonObject displayOverrides,
+                                   String template,
+                                   int order,
+                                   @Nullable Offset offset,
+                                   @Nullable Integer resolution,
+                                   @Nullable JsonObject displayOverrides,
+                                   @Nullable String parent,
                                    List<ModelTemplate> children) implements ModelTemplate, ModelMatcher, Identifiable {
 
 	@Override
@@ -33,6 +34,11 @@ public record PaletteTemplateModel(String palette,
 	@Override
 	public Optional<JsonObject> getDisplayOverrides() {
 		return Optional.ofNullable(displayOverrides);
+	}
+
+	@Override
+	public Optional<String> getParent() {
+		return Optional.ofNullable(parent);
 	}
 
 	@Override
