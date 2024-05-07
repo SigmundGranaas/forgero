@@ -67,7 +67,7 @@ public class AttributeApplicationTest {
 			entity.playerTick();
 		}
 
-		Entity target = context.spawnEntity(testEntity, relative);
+		Entity target = context.spawnEntity(testEntity, relative.up());
 
 		// Backup initial health
 		float initialHealth = ((LivingEntity) target).getHealth();
@@ -88,12 +88,12 @@ public class AttributeApplicationTest {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "attribute_test", required = true)
 	public void testDefaultDamageAppliesToEntity(TestContext context) {
-		runDamageTest(context, new ItemStack(Items.DIAMOND_SWORD), EntityType.PIG, EXPECTED_DIAMOND_SWORD_DAMAGE);
+		runDamageTest(context, new ItemStack(Items.DIAMOND_SWORD), EntityType.COW, EXPECTED_DIAMOND_SWORD_DAMAGE);
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "attribute_test", required = true)
 	public void testForgeroDamageAppliesToEntity(TestContext context) {
-		runDamageTest(context, new ItemStack(Utils.itemFromString("forgero:diamond-sword")), EntityType.PIG, EXPECTED_DIAMOND_SWORD_DAMAGE);
+		runDamageTest(context, new ItemStack(Utils.itemFromString("forgero:diamond-sword")), EntityType.COW, EXPECTED_DIAMOND_SWORD_DAMAGE);
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "attribute_test", required = true)
