@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-blocks",
+  "id": "blocks",
   "version": "${version}",
   "name": "Forgero blocks module",
   "description": "Separate module for blocks",

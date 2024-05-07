@@ -5,6 +5,7 @@ dependencies {
 	localRuntime project(':content:forgero-structures')
 
 	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
+	localRuntime project(path: ':fabric:modules:blocks', configuration: 'namedElements')
 
 	implementation project(':forgero-core')
 	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')

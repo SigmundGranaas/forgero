@@ -3,8 +3,6 @@ package com.sigmundgranaas.forgero.blocks.item;
 import com.sigmundgranaas.forgero.blocks.block.ModBlocks;
 import com.sigmundgranaas.forgero.core.Forgero;
 
-import com.sigmundgranaas.forgero.smithingrework.block.ModBlocks;
-
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
 import net.minecraft.item.ItemGroup;
@@ -21,8 +19,6 @@ public class ModItemGroups {
 					.icon(() -> new ItemStack(ModBlocks.CRAFTING_STATION)).entries((displayContext, entries) -> {
 
 						entries.add(ModBlocks.CRAFTING_STATION);
-
-
 
 					}).build());
 	public static void registerItemGroups() {

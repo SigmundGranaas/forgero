@@ -28,6 +28,7 @@ dependencies {
 	include project(':content:forgero-structures')
 	include project(':fabric:modules:generator')
 	include project(':fabric:modules:bows')
+	include project(':fabric:modules:blocks')
 
 	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
 
