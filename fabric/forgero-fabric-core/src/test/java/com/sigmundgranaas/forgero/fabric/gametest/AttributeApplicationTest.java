@@ -80,7 +80,6 @@ public class AttributeApplicationTest {
 
 		// Assert the target's health matches expectation
 		if (((LivingEntity) target).getHealth() != expectedHealthPostAttack) {
-
 			throw new GameTestException("Expected target health to be " + expectedHealthPostAttack + " but was " + ((LivingEntity) target).getHealth());
 		} else {
 			context.complete();
@@ -115,6 +114,7 @@ public class AttributeApplicationTest {
 				.build();
 
 		ConstructedTool sword = (ConstructedTool) StateService.INSTANCE.find(new Identifier("forgero:diamond-sword")).get();
+		sword = sword.copy();
 		sword = sword.applyCondition(PropertyContainer.of(List.of(attribute)));
 		Entity pig = new PigEntity(EntityType.PIG, context.getWorld());
 		ServerPlayerEntity entity = PlayerFactory.of(context, TestPos.of(rootPos, context));

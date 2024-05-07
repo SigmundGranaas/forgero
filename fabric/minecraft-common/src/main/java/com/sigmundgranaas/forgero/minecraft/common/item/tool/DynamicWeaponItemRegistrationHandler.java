@@ -35,7 +35,9 @@ public class DynamicWeaponItemRegistrationHandler implements Registerable<Rankab
 	}
 
 	private Item sword(StateProvider provider, Item.Settings settings, RegistryUtils.DynamicToolItemSettings params) {
-		return new DynamicSwordItem(new ForgeroMaterial(provider, params.ingredient(), StateService.INSTANCE), params.attackDamage(), params.attackSpeed(), settings, provider);
+		// Attack damage is now added to the material value inside the sworditem
+		// Because ForgeroMaterials are a proxy for the state, we need to set the input attack damage to 0
+		return new DynamicSwordItem(new ForgeroMaterial(provider, params.ingredient(), StateService.INSTANCE), 0, params.attackSpeed(), settings, provider);
 	}
 
 }
