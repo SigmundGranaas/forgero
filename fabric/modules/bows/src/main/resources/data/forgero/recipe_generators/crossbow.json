@@ -1,0 +1,26 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-crossbow-state-crafting",
+  "variables": {
+    "material": {
+      "type": "BOW_LIMB_MATERIAL"
+    }
+  },
+  "type": "forgero:state_crafting_recipe",
+  "pattern": [
+    "a ",
+    " b"
+  ],
+  "key": {
+    "a": {
+      "tag": "forgero:${material.name}-crossbow_stock"
+    },
+    "b": {
+      "tag": "forgero:string"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-crossbow",
+    "count": 1
+  }
+}

@@ -15,6 +15,9 @@
     },
     {
       "name": "ARROW_FEATHER_SCHEMATIC"
+    },
+    {
+      "name": "CROSSBOW_STOCK_SCHEMATIC"
     }
   ]
 }

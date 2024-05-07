@@ -1,0 +1,66 @@
+{
+  "type": "CROSSBOW_STOCK",
+  "models": [
+    {
+      "name": "crossbow_stock",
+      "template": "crossbow_stock.png",
+      "type": "GENERATE",
+      "palette": "BOW_LIMB_MATERIAL",
+      "order": 2,
+      "parent": "minecraft:item/crossbow"
+    },
+    {
+      "name": "crossbow_reinforcement",
+      "modelType": "GENERATE",
+      "template": "crossbow_stock_reinforcement.png",
+      "palette": "UPGRADE_MATERIAL",
+      "order": 5
+    },
+    {
+      "name": "stirrup",
+      "template": "stirrup.png",
+      "type": "GENERATE",
+      "palette": "SOFT_MATERIAL",
+      "order": 4
+    },
+    {
+      "name": "crossbow_dye",
+      "template": "crossbow_stock.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 3
+    },
+    {
+      "target": [
+        "type:BOW_LIMB_MATERIAL",
+        "type:CROSSBOW_STOCK_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "crossbow_stock"
+    },
+    {
+      "target": [
+        "type:SOFT_MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "stirrup"
+    },
+    {
+      "target": [
+        "type:UPGRADE_MATERIAL",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "crossbow_reinforcement"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "crossbow_dye"
+    }
+  ]
+}
