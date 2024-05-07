@@ -95,8 +95,9 @@ public class ForgeroClient implements ClientModInitializer {
 		var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder().build());
+
 		for (State material : materials) {
-			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null, Collections.emptyList()));
+			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null, null, Collections.emptyList()));
 		}
 
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());

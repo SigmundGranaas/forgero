@@ -7,6 +7,7 @@
       "type": "GENERATE",
       "palette": "BOW_LIMB_MATERIAL",
       "order": 2,
+      "parent": "minecraft:item/bow",
       "variants": [
         {
           "predicate": [
@@ -43,7 +44,6 @@
       "template": "bow_limb_reinforcement.png",
       "palette": "UPGRADE_MATERIAL",
       "order": 5
-
     },
     {
       "name": "bow_grip",

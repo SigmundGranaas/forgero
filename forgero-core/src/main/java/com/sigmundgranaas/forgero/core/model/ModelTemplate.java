@@ -13,10 +13,14 @@ public interface ModelTemplate {
 	default Integer getResolution() {
 		return 16;
 	}
-	
+
 	default Optional<JsonObject> getDisplayOverrides() {
 		return Optional.empty();
 	}
 
 	<T> T convert(Converter<T, ModelTemplate> converter);
+
+	default Optional<String> getParent() {
+		return Optional.empty();
+	}
 }

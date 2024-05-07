@@ -309,9 +309,9 @@ public class ModelConverter {
 		if (data.getTemplate().contains(EMPTY_IMAGE_IDENTIFIER)) {
 			return ModelMatcher.EMPTY_TRUE;
 		} else if (data.getTexture().equals(EMPTY_IDENTIFIER)) {
-			template = new PaletteTemplateModel(data.getPalette(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
+			template = new PaletteTemplateModel(data.getPalette(), data.getTemplate(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), data.getParent().orElse(null), children);
 		} else {
-			template = new TextureModel(data.getTexture(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), children);
+			template = new TextureModel(data.getTexture(), data.order(), Offset.of(data.getOffset()), data.getResolution(), data.displayOverrides().orElse(null), data.getParent().orElse(null), children);
 		}
 
 		Identifiable identifiable = (Identifiable) template;

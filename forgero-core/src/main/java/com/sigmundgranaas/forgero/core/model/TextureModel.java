@@ -17,6 +17,7 @@ public record TextureModel(String texture,
                            @Nullable Offset offset,
                            @Nullable Integer resolution,
                            @Nullable JsonObject displayOverrides,
+                           @Nullable String parent,
                            List<ModelTemplate> children) implements ModelTemplate, ModelMatcher, Identifiable {
 
 	@Override
@@ -40,6 +41,11 @@ public record TextureModel(String texture,
 	}
 
 	@Override
+	public Optional<String> getParent() {
+		return Optional.ofNullable(parent);
+	}
+
+	@Override
 	public boolean match(Matchable state, MatchContext context) {
 		return true;
 	}
@@ -52,9 +58,9 @@ public record TextureModel(String texture,
 	@Override
 	public String name() {
 		var split = texture().split(":");
-		if(split.length > 1){
+		if (split.length > 1) {
 			return split[1];
-		}else {
+		} else {
 			return texture();
 		}
 	}
@@ -62,9 +68,9 @@ public record TextureModel(String texture,
 	@Override
 	public String nameSpace() {
 		var split = texture.split(":");
-		if(split.length > 1){
+		if (split.length > 1) {
 			return split[0];
-		}else {
+		} else {
 			return Forgero.NAMESPACE;
 		}
 	}
