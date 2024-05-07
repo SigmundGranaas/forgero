@@ -21,6 +21,10 @@ public class ServerInteractionManagerReachMixin {
 	@Final
 	protected ServerPlayerEntity player;
 
+	/**
+	 * The purpose of this mixin is to cancel the default behaviour of checking if a player is trying to reach beyond 5 blocks or not.
+	 * I assume this has been placed here for anti cheat measures, but this will only allow it to happen if the player actually have longer reach than 4.5.
+	 */
 	@Redirect(method = "processBlockBreakingAction",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D"))
 	private double forgero$cancelDistanceCheckIfReachIsHigherThanVanilla(Vec3d instance, Vec3d vec, BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence) {
