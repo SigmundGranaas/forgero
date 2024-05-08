@@ -1,0 +1,11 @@
+{
+  "type": "CROSSBOW",
+  "models": [
+    {
+      "target": [
+        "type:CROSSBOW"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}

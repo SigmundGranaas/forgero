@@ -94,7 +94,17 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 				.register();
 
 		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.CROSSBOW)
+				.attributes(bows)
+				.register();
+
+		TooltipAttributeRegistry.filterBuilder()
 				.type(Type.BOW_LIMB)
+				.attributes(bows)
+				.register();
+
+		TooltipAttributeRegistry.filterBuilder()
+				.type(Type.CROSSBOW_STOCK)
 				.attributes(bows)
 				.register();
 
@@ -128,6 +138,7 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 		ModificationRuleRegistry modification = ModificationRuleRegistry.staticRegistry();
 
 		modification.registerRule("forgero:bow_limb", bowLimb.build());
+		modification.registerRule("forgero:crossbow_stock", crossbowStock.build());
 		modification.registerRule("forgero:arrow_head", arrowHead.build());
 		modification.registerRule("forgero:feather", feather.build());
 		modification.registerRule("forgero:string", string.build());

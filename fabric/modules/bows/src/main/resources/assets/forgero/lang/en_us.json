@@ -9,6 +9,7 @@
   "item.forgero.longbow_limb": "Longbow Limb",
   "item.forgero.refined_bow_limb": "Refined Bow Limb",
   "item.forgero.bow_limb": "Bow Limb",
+  "item.forgero.crossbow_stock": "Bow Limb",
   "item.forgero.shortbow_limb": "Shortbow Limb",
   "item.forgero.arrow": "Arrow",
   "item.forgero.mastercrafted_bow": "Mastercrafted Bow",
@@ -16,6 +17,7 @@
   "item.forgero.longbow": "Longbow",
   "item.forgero.shortbow": "Shortbow",
   "item.forgero.bow": "Bow",
+  "item.forgero.crossbow": "Crossbow",
   "tooltip.forgero.attribute.forgero:accuracy": "Accuracy",
   "tooltip.forgero.attribute.forgero:draw_speed": "Draw speed",
   "tooltip.forgero.attribute.forgero:draw_power": "Draw power"
