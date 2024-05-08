@@ -8,6 +8,8 @@ import com.sigmundgranaas.forgero.core.type.Type;
 
 public class NamingRules {
 	public static Condition bowLimbType = Condition.type(Type.BOW_LIMB);
+	public static Condition crossbowStockType = Condition.type(Type.CROSSBOW_STOCK);
+
 	public static Condition arrowHeadType = Condition.type(Type.ARROW_HEAD);
 
 	public static Condition stringType = Condition.type(Type.STRING);
@@ -16,6 +18,10 @@ public class NamingRules {
 	public static ModificationRuleBuilder bowLimb = builder()
 			.when(bowLimbType)
 			.replaceElement("bow_limb", "bow");
+
+	public static ModificationRuleBuilder crossbowStock = builder()
+			.when(crossbowStockType)
+			.replaceElement("crossbow_stock", "crossbow");
 
 	public static ModificationRuleBuilder arrowHead = builder()
 			.when(arrowHeadType)
