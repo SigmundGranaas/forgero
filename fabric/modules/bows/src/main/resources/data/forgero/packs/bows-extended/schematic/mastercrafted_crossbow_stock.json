@@ -1,0 +1,95 @@
+{
+  "type": "CROSSBOW_STOCK_SCHEMATIC",
+  "name": "mastercrafted_crossbow_stock-schematic",
+  "parent": "crossbow_stock_base",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "CROSSBOW_STOCK",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "BOW_LIMB_MATERIAL",
+            "unique": true,
+            "amount": 3
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "BOW_LIMB_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "stirrup",
+        "type": "Metal",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 25
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1
+      }
+    ],
+    "features": [
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    }
+  }
+}

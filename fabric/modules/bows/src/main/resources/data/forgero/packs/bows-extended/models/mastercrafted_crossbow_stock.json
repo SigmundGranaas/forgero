@@ -1,0 +1,65 @@
+{
+  "type": "CROSSBOW_STOCK",
+  "models": [
+    {
+      "name": "mastercrafted_crossbow_stock",
+      "modelType": "GENERATE",
+      "template": "mastercrafted_crossbow_stock.png",
+      "palette": "BOW_LIMB_MATERIAL",
+      "order": 2,
+      "parent": "minecraft:item/crossbow"
+    },
+    {
+      "name": "bow_grip",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_bow_limb.png"
+          ],
+          "template": "mastercrafted_bow_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "crossbow_stock_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:mastercrafted_crossbow_stock.png"
+          ],
+          "template": "mastercrafted_crossbow_stock_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "crossbow_string",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_crossbow_stock.png"
+          ],
+          "template": "mastercrafted_bow_string.png"
+        }
+      ]
+    },
+    {
+      "name": "crossbow_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_crossbow_stock.png"
+          ],
+          "template": "mastercrafted_crossbow_stock.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:BOW_LIMB_MATERIAL",
+        "id:mastercrafted_crossbow_stock-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "mastercrafted_crossbow_stock"
+    }
+  ]
+}
