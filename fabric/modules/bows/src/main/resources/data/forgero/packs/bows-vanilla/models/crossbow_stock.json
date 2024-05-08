@@ -35,7 +35,7 @@
       "variants": [
         {
           "predicate": [
-            "model:crossbow_pull_2.png",
+            "model:crossbow_stock .png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
@@ -45,7 +45,7 @@
         },
         {
           "predicate": [
-            "model:crossbow_pull_1.png",
+            "model:crossbow_stock.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.6
@@ -55,7 +55,7 @@
         },
         {
           "predicate": [
-            "model:crossbow_pull_0.png",
+            "model:crossbow_stock.png",
             {
               "type": "forgero:bow_pull",
               "pull": 0.1

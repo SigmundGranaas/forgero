@@ -16,6 +16,9 @@
   "item.forgero.longbow": "Longbow",
   "item.forgero.shortbow": "Shortbow",
   "item.forgero.bow": "Bow",
+  "item.forgero.crossbow": "Crossbow",
+  "item.forgero.crossbow_stock": "Crossbow Stock",
+  "item.forgero.stirrup": "Stirrup",
   "tooltip.forgero.attribute.forgero:accuracy": "Accuracy",
   "tooltip.forgero.attribute.forgero:draw_speed": "Draw speed",
   "tooltip.forgero.attribute.forgero:draw_power": "Draw power"

@@ -39,8 +39,8 @@
         "category": [
           "UTILITY"
         ],
-        "description": "grip",
-        "type": "SOFT_MATERIAL",
+        "description": "stirrup",
+        "type": "METAL",
         "tier": 1
       },
       {
