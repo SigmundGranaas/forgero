@@ -1,14 +1,13 @@
 {
-  "type": "CROSSBOW_STOCK_SCHEMATIC",
+  "type": "BOW_LIMB_SCHEMATIC",
   "name": "crossbow_stock-schematic",
   "parent": "crossbow_stock_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "CROSSBOW_STOCK",
+    "type": "BOW_LIMB",
     "target": "CREATE",
     "recipes": [
       {
@@ -40,7 +39,7 @@
         "category": [
           "UTILITY"
         ],
-        "description": "stirrup",
+        "description": "grip",
         "type": "SOFT_MATERIAL",
         "tier": 1
       },

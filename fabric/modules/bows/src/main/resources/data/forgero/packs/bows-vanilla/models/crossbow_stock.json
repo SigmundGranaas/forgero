@@ -1,5 +1,5 @@
 {
-  "type": "CROSSBOW_STOCK",
+  "type": "BOW_LIMB",
   "models": [
     {
       "name": "crossbow_stock",
@@ -17,10 +17,10 @@
       "order": 5
     },
     {
-      "name": "stirrup",
-      "template": "stirrup.png",
+      "name": "crossbow_stirrup",
+      "template": "crossbow_stirrup.png",
       "type": "GENERATE",
-      "palette": "SOFT_MATERIAL",
+      "palette": "METAL",
       "order": 4
     },
     {
@@ -31,20 +31,61 @@
       "order": 3
     },
     {
+      "name": "bow_string",
+      "variants": [
+        {
+          "predicate": [
+            "model:crossbow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "crossbow_string_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:crossbow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "crossbow_string_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:crossbow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "crossbow_string_pull_0.png"
+        },
+        {
+          "target": [
+            "model:crossbow_stock.png"
+          ],
+          "template": "crossbow_string.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:BOW_LIMB_MATERIAL",
-        "type:CROSSBOW_STOCK_SCHEMATIC"
+        "id:crossbow_stock-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "crossbow_stock"
     },
     {
       "target": [
-        "type:SOFT_MATERIAL",
+        "type:METAL",
         "slot:0"
       ],
       "modelType": "UPGRADE",
-      "template": "stirrup"
+      "template": "crossbow_stirrup"
     },
     {
       "target": [
