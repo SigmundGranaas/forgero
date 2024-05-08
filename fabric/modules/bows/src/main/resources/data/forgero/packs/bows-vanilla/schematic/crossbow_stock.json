@@ -1,7 +1,7 @@
 {
   "type": "CROSSBOW_STOCK_SCHEMATIC",
   "name": "crossbow_stock-schematic",
-  "parent": "bow_limb_base",
+  "parent": "crossbow_stock_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -40,8 +40,8 @@
         "category": [
           "UTILITY"
         ],
-        "description": "grip",
-        "type": "SOFT_MATERIAL",
+        "description": "stirrup",
+        "type": "Metal",
         "tier": 1
       },
       {
