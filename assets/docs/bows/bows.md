@@ -1,5 +1,7 @@
 # Bows & arrows
 
+![img_1.png](img_1.png)
+
 Forgero supports custom bows and arrow! Bows and arrows can be crafted using most materials and upgraded to enhance
 looks and attributes.
 
