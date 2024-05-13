@@ -6,7 +6,7 @@
       "type": "WOOD"
     }
   },
-  "type": "forgero:state_crafting_recipe",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " a ",
     "ab ",
