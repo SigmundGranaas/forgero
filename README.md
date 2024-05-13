@@ -44,7 +44,7 @@
 ## About
 
 <a href="https://www.curseforge.com/minecraft/mc-mods/forgero">
-    <img align="center" src="assets/banner_bow.png" alt="Logo" >
+    <img align="center" src="assets/banner_bow_scaled.png" alt="Logo" >
 </a>
 
 **Forgero was created to fill a gap in the mods available for Fabric. The aim of the mod is to give tool creation and
@@ -54,7 +54,7 @@ Key features:
 
 * A wide variety of materials that have their own strength, weaknesses and visuals;
 * Schematics which will enhance the look, attributes and abilities of your tools;
-* Vanilla friendly, everything in the base mod is made to fit the vanilla art style; 
+* Vanilla friendly, everything in the base mod is made to fit the vanilla art style;
 * Gems, which can further enhance stats on tools;
 * Enchanting is fully supported;
 * Support for adding and customizing materials, schematics and gems entirely through config/json files.
@@ -68,8 +68,9 @@ We support [Semantic Versioning](https://semver.org/), which means we make sure 
 we are moving to a new major version. Upcoming things are:
 
 - [ ] Progression and station overhaul
+- [ ] Gem and extended module overhaul
 - [ ] Armor sets
-- [ ] Smithing 
+- [ ] Smithing
 
 See the [open issues](https://github.com/sigmundgranaas/forgero/issues) for a full list of proposed features and known
 bugs.
