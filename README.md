@@ -50,7 +50,7 @@
 **Forgero was created to fill a gap in the mods available for Fabric. The aim of the mod is to give tool creation and
 customization in Minecraft a greater depth.**
 
-Key features:
+## Key features
 
 * A wide variety of materials can be used to craft every part of a tool (But some are better suited than others)
 * Unique schematics which will enhance the look and attributes of your tools
