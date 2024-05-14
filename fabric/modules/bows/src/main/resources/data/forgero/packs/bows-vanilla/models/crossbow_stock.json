@@ -14,7 +14,7 @@
       "modelType": "GENERATE",
       "template": "crossbow_stock_reinforcement.png",
       "palette": "UPGRADE_MATERIAL",
-      "order": 6
+      "order": 3
     },
     {
       "name": "crossbow_stirrup",

@@ -2,9 +2,9 @@
   "type": "CROSSBOW_STOCK",
   "models": [
     {
-      "name": "mastercrafted_crossbow_stock",
+      "name": "refined_crossbow_stock",
       "modelType": "GENERATE",
-      "template": "mastercrafted_crossbow_stock.png",
+      "template": "refined_crossbow_stock.png",
       "palette": "BOW_LIMB_MATERIAL",
       "order": 2,
       "parent": "minecraft:item/crossbow"
@@ -14,9 +14,9 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_crossbow_stock.png"
+            "model:refined_crossbow_stock.png"
           ],
-          "template": "mastercrafted_crossbow_stirrup.png"
+          "template": "refined _crossbow_stirrup.png"
         }
       ]
     },
@@ -25,9 +25,9 @@
       "variants": [
         {
           "predicate": [
-            "model:mastercrafted_crossbow_stock.png"
+            "model:refined_crossbow_stock.png"
           ],
-          "template": "mastercrafted_crossbow_stock_reinforcement.png"
+          "template": "refined_crossbow_stock_reinforcement.png"
         }
       ]
     },
@@ -36,9 +36,9 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_crossbow_stock.png"
+            "model:refined_crossbow_stock.png"
           ],
-          "template": "mastercrafted_bow_string.png"
+          "template": "refined_bow_string.png"
         }
       ]
     },
@@ -47,19 +47,19 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_crossbow_stock.png"
+            "model:refined_crossbow_stock.png"
           ],
-          "template": "mastercrafted_crossbow_stock.png"
+          "template": "refined_crossbow_stock.png"
         }
       ]
     },
     {
       "target": [
         "type:BOW_LIMB_MATERIAL",
-        "id:mastercrafted_crossbow_stock-schematic"
+        "id:refined_crossbow_stock-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "mastercrafted_crossbow_stock"
+      "template": "refined_crossbow_stock"
     }
   ]
 }
