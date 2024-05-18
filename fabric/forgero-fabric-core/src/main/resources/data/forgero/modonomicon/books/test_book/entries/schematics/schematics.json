@@ -3,7 +3,7 @@
   "name": "book.forgero.guidebook.getting_started.schematics.name",
   "description": "book.forgero.guidebook.getting_started.schematics.description",
   "icon": "forgero:handle-schematic",
-  "x": 7,
+  "x": -5,
   "y": 0,
   "pages": [
     {

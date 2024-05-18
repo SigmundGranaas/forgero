@@ -3,7 +3,7 @@
   "name": "book.forgero.guidebook.getting_started.using_your_schematics.name",
   "description": "book.forgero.guidebook.getting_started.using_your_schematics.description",
   "icon": "forgero:cobblestone-pickaxe",
-  "x": 10,
+  "x": 1,
   "y": 0,
   "pages": [
     {
@@ -27,7 +27,13 @@
   "parents": [
     {
       "draw_arrow": true,
-      "entry": "",
+      "entry": "forgero:schematics/schematics",
+      "line_enabled": true,
+      "line_reversed": false
+    },
+    {
+      "draw_arrow": true,
+      "entry": "forgero:schematics/disassembly_station",
       "line_enabled": true,
       "line_reversed": false
     }

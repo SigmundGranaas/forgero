@@ -3,7 +3,7 @@
   "name": "book.forgero.guidebook.getting_started.schematic_variants.name",
   "description": "book.forgero.guidebook.getting_started.schematic_variants.description",
   "icon": "forgero:pickaxe_head-schematic",
-  "x": 7,
+  "x": -2,
   "y": -2,
   "pages": [
     {
@@ -26,8 +26,8 @@
   ],
   "parents": [
     {
-      "draw_arrow": false,
-      "entry": "",
+      "draw_arrow": true,
+      "entry": "forgero:schematics/schematics",
       "line_enabled": true,
       "line_reversed": false
     }

@@ -4,14 +4,14 @@
   "description": "book.forgero.guidebook.getting_started.shortcut.description",
   "background_u_index": 1,
   "background_v_index": 2,
-  "icon": "forgero:assembly_station",
-  "category_to_open": "forgero:schematics",
-  "x": 3,
+  "icon": "forgero:upgrade_station",
+  "category_to_open": "forgero:upgrading",
+  "x": 7,
   "y": 0,
   "parents": [
     {
       "draw_arrow": false,
-      "entry": "forgero:getting_started/your_first_tool",
+      "entry": "forgero:schematics/using_your_schematics",
       "line_enabled": true,
       "line_reversed": false
     }

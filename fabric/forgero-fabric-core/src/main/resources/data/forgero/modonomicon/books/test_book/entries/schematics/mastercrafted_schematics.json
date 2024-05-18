@@ -3,8 +3,8 @@
   "name": "book.forgero.guidebook.getting_started.mastercrafted_schematics.name",
   "description": "book.forgero.guidebook.getting_started.mastercrafted_schematics.description",
   "icon": "forgero:mastercrafted_pickaxe_head-schematic",
-  "x": 9,
-  "y": -3,
+  "x": 4,
+  "y": -2,
   "pages": [
     {
       "type": "modonomicon:text",
@@ -18,7 +18,7 @@
   "parents": [
     {
       "draw_arrow": true,
-      "entry": "",
+      "entry": "forgero:schematics/refined_schematics",
       "line_enabled": true,
       "line_reversed": false
     }
