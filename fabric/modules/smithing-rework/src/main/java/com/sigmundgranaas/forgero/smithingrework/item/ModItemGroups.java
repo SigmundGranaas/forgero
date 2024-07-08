@@ -4,6 +4,8 @@ import com.sigmundgranaas.forgero.core.Forgero;
 
 import com.sigmundgranaas.forgero.smithingrework.block.ModBlocks;
 
+import com.sigmundgranaas.forgero.smithingrework.fluid.ModFluids;
+
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
 import net.minecraft.item.ItemGroup;
@@ -25,6 +27,8 @@ public class ModItemGroups {
 
 						entries.add(ModBlocks.SMITHING_ANVIL);
 						entries.add(ModBlocks.BLOOMERY);
+
+						entries.add(ModFluids.MOLTEN_IRON_BUCKET);
 
 
 					}).build());

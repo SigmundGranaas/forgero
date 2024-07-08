@@ -9,8 +9,10 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FurnaceBlock;
+import net.minecraft.block.MapColor;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -21,8 +23,7 @@ public class ModBlocks {
 	public static final Block SMITHING_ANVIL = registerBlock("smithing_anvil",
 			new SmithingAnvil(FabricBlockSettings.copyOf(Blocks.ANVIL)));
 	public static final Block BLOOMERY = registerBlock("bloomery",
-			new BloomeryBlock(FabricBlockSettings.copyOf(Blocks.FURNACE)));
-
+			new BloomeryBlock(MapColor.BLACK, 3.0f, "blackstone"));
 
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
