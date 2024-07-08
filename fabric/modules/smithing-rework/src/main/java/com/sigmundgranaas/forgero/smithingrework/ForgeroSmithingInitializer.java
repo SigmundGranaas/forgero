@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 
 import com.sigmundgranaas.forgero.smithingrework.block.ModBlocks;
 import com.sigmundgranaas.forgero.smithingrework.block.entity.ModBlockEntities;
+import com.sigmundgranaas.forgero.smithingrework.fluid.ModFluids;
 import com.sigmundgranaas.forgero.smithingrework.item.ModItemGroups;
 
 import com.sigmundgranaas.forgero.smithingrework.item.ModItems;
@@ -13,6 +14,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+
+import static com.sigmundgranaas.forgero.smithingrework.fluid.ModFluids.registerFluid;
 
 
 public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntryPoint {
@@ -24,6 +27,8 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 			ModItemGroups.registerItemGroups();
 			ModItems.registerModItems();
 			ModBlocks.registerModBlocks();
+			ModFluids.registerModFluids();
+			registerFluid();
 	}
 
 

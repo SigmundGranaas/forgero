@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "forgero:block/fluid_still"
+    }
+  }
+}
