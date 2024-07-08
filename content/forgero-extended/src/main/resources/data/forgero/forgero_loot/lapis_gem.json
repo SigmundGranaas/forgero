@@ -7,6 +7,6 @@
   "ids": [
     "forgero:lapis_gem_1"
   ],
-  "chance": 0.025,
+  "chance": 0.010,
   "rolls": 1
 }
