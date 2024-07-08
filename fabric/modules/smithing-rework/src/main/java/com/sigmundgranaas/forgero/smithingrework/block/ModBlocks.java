@@ -23,7 +23,7 @@ public class ModBlocks {
 	public static final Block SMITHING_ANVIL = registerBlock("smithing_anvil",
 			new SmithingAnvil(FabricBlockSettings.copyOf(Blocks.ANVIL)));
 	public static final Block BLOOMERY = registerBlock("bloomery",
-			new BloomeryBlock(MapColor.BLACK, 3.0f, "blackstone"));
+			new BloomeryBlock(true,FabricBlockSettings.copyOf(Blocks.ANVIL)));
 
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
