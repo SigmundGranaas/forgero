@@ -1,24 +1,11 @@
 pluginManagement {
 	repositories {
-		maven {
-			name = "FabricMC Maven"
-			url = "https://maven.fabricmc.net/"
-		}
-		maven {
-			name = "Architectury Maven"
-			url = "https://maven.architectury.dev/"
-		}
-		maven {
-			name = "MinecraftForge Maven"
-			url = "https://files.minecraftforge.net/maven/"
-		}
-		mavenCentral()
+		maven { url "https://maven.fabricmc.net/" }
 		gradlePluginPortal()
-		mavenLocal()
 	}
 }
 
-rootProject.name = 'forgero'
+rootProject.name = "${mod_id}"
 
 // Core
 include 'forgero-core'

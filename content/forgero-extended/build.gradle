@@ -1,4 +1,3 @@
-
 dependencies {
 	implementation project(':content:forgero-vanilla')
 	testImplementation project(':content:forgero-vanilla')

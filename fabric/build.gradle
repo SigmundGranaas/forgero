@@ -7,6 +7,10 @@ plugins {
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
+configurations {
+	forgero-core
+}
+
 subprojects {
 	apply plugin: "idea"
 	apply plugin: 'fabric-loom'

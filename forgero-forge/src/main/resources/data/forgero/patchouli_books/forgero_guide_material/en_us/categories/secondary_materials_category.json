@@ -1,7 +1,0 @@
-{
-  "parent": "forgero:materials_category",
-  "name": "Secondary Materials",
-  "description": "Not all materials are suitable for constructing tools, but can still be used to upgrade your tool with better stats or give them other unique properties",
-  "icon": "minecraft:leather",
-  "sortnum": 2
-}
