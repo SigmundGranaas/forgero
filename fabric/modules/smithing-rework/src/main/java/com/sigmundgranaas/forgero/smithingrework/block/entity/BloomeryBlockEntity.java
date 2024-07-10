@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithingrework.block.entity;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithingrework.block.custom.BloomeryBlock;
 
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -36,33 +37,15 @@ public class BloomeryBlockEntity extends AbstractFurnaceBlockEntity {
 		super(ModBlockEntities.BLOOMERY_BLOCK, pos, state, RecipeType.SMELTING);
 	}
 
-	public static final BooleanProperty LIT = Properties.LIT;
-
 	@Override
 	protected Text getContainerName() {
-		return Text.translatable("container." + getBlock().type + "_furnace");
+		return Text.translatable("container." + Forgero.NAMESPACE + "_bloomery");
 	}
 
 	@Override
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
 		return new FurnaceScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
 	}
-
-	public static void clientTick(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
-		int i;
-		Random random = world.random;
-		if (random.nextFloat() < 0.11f) {
-			for (i = 0; i < random.nextInt(2) + 2; ++i) {
-				CampfireBlock.spawnSmokeParticle(world, pos, state.get(CampfireBlock.SIGNAL_FIRE), false);
-			}
-		}
-	}
-
-
-	protected BloomeryBlock getBlock() {
-		return (BloomeryBlock) getCachedState().getBlock();
-	}
-
 }
 
 

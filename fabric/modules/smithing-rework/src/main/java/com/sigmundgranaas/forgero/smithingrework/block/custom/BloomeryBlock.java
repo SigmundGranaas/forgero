@@ -53,20 +53,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class BloomeryBlock extends AbstractFurnaceBlock {
 	private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 14, 16);
-	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
-
 	public String type;
-	private final boolean emitsParticles;
+	public final boolean emitsParticles;
 
 	public BloomeryBlock(boolean emitsParticles, AbstractBlock.Settings settings) {
 		super(settings);
 		this.emitsParticles = emitsParticles;
-		this.setDefaultState((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(LIT, false));
-	}
-
-	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return (BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
 	}
 
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
@@ -92,17 +84,32 @@ public class BloomeryBlock extends AbstractFurnaceBlock {
 		if (!state.get(LIT).booleanValue()) {
 			return;
 		}
+		double d = (double)pos.getX() + 0.5;
+		double e = pos.getY();
+		double f = (double)pos.getZ() + 0.5;
+		if (random.nextDouble() < 0.1) {
+			world.playSound(d, e, f, SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+		}
+		Direction direction = state.get(FACING);
+		Direction.Axis axis = direction.getAxis();
+		double g = 0.52;
+		double h = random.nextDouble() * 0.6 - 0.3;
+		double p = axis == Direction.Axis.X ? (double)direction.getOffsetX() * 0.52 : h;
+		double j = random.nextDouble() * 9.0 / 16.0;
+		double k = axis == Direction.Axis.Z ? (double)direction.getOffsetZ() * 0.52 : h;
+		world.addParticle(ParticleTypes.SMOKE, d + p, e + j, f + k, 0.0, 0.0, 0.0);
+		world.addParticle(ParticleTypes.FLAME, d + p, e + j, f + k, 0.0, 0.0, 0.0);
 		if (random.nextInt(10) == 0) {
 			world.playSound((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5, SoundEvents.BLOCK_CAMPFIRE_CRACKLE, SoundCategory.BLOCKS, 0.5f + random.nextFloat(), random.nextFloat() * 0.7f + 0.6f, false);
 		}
-		if (random.nextInt(5) == 0) {
-			for (int i = 0; i < random.nextInt(1) + 1; ++i) {
-				BloomeryBlock.spawnSmokeParticle(world, pos, state.get(BloomeryBlock.LIT), true);
+		if (random.nextFloat() < 0.11f) {
+			for (int i = 0; i < random.nextInt(2) + 2; ++i) {
+				BloomeryBlock.spawnSmokeParticle(world, pos, state.get(BloomeryBlock.LIT), false);
 			}
 		}
 		if (this.emitsParticles && random.nextInt(5) == 0) {
 			for (int i = 0; i < random.nextInt(1) + 1; ++i) {
-				world.addParticle(ParticleTypes.LAVA, (double) pos.getX() + 0.5, (double) pos.getY() + 1.2, (double) pos.getZ() + 0.5, random.nextFloat() / 2.0f, 5.0E-5, random.nextFloat() / 2.0f);
+				world.addParticle(ParticleTypes.LAVA, (double)pos.getX() + 0.5, (double)pos.getY() + 1.2, (double)pos.getZ() + 0.5, random.nextFloat() / 2.0f, 5.0E-5, random.nextFloat() / 2.0f);
 			}
 		}
 	}
@@ -110,11 +117,10 @@ public class BloomeryBlock extends AbstractFurnaceBlock {
 	public static void spawnSmokeParticle(World world, BlockPos pos, boolean isSignal, boolean lotsOfSmoke) {
 		Random random = world.getRandom();
 		DefaultParticleType defaultParticleType = isSignal ? ParticleTypes.CAMPFIRE_SIGNAL_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE;
-		world.addImportantParticle(defaultParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double) pos.getY() + 1.2 + random.nextDouble() + random.nextDouble(), (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
+		world.addImportantParticle(defaultParticleType, true, (double)pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), (double) pos.getY() + 1.2, (double)pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
 		if (lotsOfSmoke) {
-			world.addParticle(ParticleTypes.SMOKE,(double) pos.getX() + 0.5, (double) pos.getY() + 1.2, (double) pos.getZ() + 0.5, 0.0, 0.005, 0.0);
+			world.addParticle(ParticleTypes.SMOKE, (double)pos.getX() + 0.5 + random.nextDouble() / 4.0 * (double)(random.nextBoolean() ? 1 : -1), (double)pos.getY() + 0.4, (double)pos.getZ() + 0.5 + random.nextDouble() / 4.0 * (double)(random.nextBoolean() ? 1 : -1), 0.0, 0.005, 0.0);
 		}
-
 	}
 
 	@Nullable
