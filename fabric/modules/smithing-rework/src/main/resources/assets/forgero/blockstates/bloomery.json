@@ -5,21 +5,21 @@
       "y": 90
     },
     "facing=east,lit=true": {
-      "model": "forgero:block/bloomery",
+      "model": "forgero:block/bloomery_on",
       "y": 90
     },
     "facing=north,lit=false": {
       "model": "forgero:block/bloomery"
     },
     "facing=north,lit=true": {
-      "model": "forgero:block/bloomery"
+      "model": "forgero:block/bloomery_on"
     },
     "facing=south,lit=false": {
       "model": "forgero:block/bloomery",
       "y": 180
     },
     "facing=south,lit=true": {
-      "model": "forgero:block/bloomery",
+      "model": "forgero:block/bloomery_on",
       "y": 180
     },
     "facing=west,lit=false": {
@@ -27,7 +27,7 @@
       "y": 270
     },
     "facing=west,lit=true": {
-      "model": "forgero:block/bloomery",
+      "model": "forgero:block/bloomery_on",
       "y": 270
     }
   }
