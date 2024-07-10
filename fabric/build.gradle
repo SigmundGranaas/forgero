@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version '1.5-SNAPSHOT' apply true
+	id "fabric-loom" version "${fabric_loom_version}" apply true
 	id "com.modrinth.minotaur" version "2.+"
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
@@ -98,7 +98,7 @@ curseforge {
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
 
-	projectId = project.modid
+	projectId = project.mod_id
 	versionNumber = version
 	versionType = project.release_type
 	uploadFile = remapJar

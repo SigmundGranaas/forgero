@@ -13,7 +13,7 @@ dependencies {
 
 	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
-	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
+	modImplementation("maven.modrinth:arrp:${project.arrp_version}")
 
 	//dynamiclights compat
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lambd_version}")
@@ -104,7 +104,7 @@ dependencies {
 	//modImplementation 'com.ptsmods:devlogin:2.1'
 
 	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Mod Menu API
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
