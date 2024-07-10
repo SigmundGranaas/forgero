@@ -1,3 +1,6 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+
 plugins {
 	id "fabric-loom" version "${fabric_loom_version}" apply true
 	id "com.modrinth.minotaur" version "2.+"
@@ -122,7 +125,7 @@ modrinth {
 	}
 }
 
-task publishToModrinthAndCurseForge {
+tasks.register('publishToModrinthAndCurseForge') {
 	dependsOn 'modrinth', 'curseforge'
 }
 

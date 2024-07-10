@@ -1,3 +1,6 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+
 dependencies {
 	localRuntime project(':content:forgero-vanilla')
 	localRuntime project(':content:forgero-extended')
@@ -138,7 +141,7 @@ loom {
 			name "Game Test"
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
-			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+			vmArg "-Dfabric-api.gametest.report-file=${project.layout.buildDirectory}/junit.xml"
 			runDir "build/gametest"
 		}
 	}

@@ -1,3 +1,6 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+
 plugins {
 	id "idea"
 	id 'java-library'
