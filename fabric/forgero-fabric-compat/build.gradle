@@ -1,5 +1,6 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
 
 dependencies {
 	// Parent modules
@@ -16,100 +17,33 @@ dependencies {
 
 	localRuntime project(path: ":fabric:modules:bows", configuration: "namedElements")
 
-	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.0+kotlin.1.8.0")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
-	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
-	modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}")
 	modImplementation("maven.modrinth:arrp:${project.arrp_version}")
+	modImplementation("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
+
+	// Mod Menu
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon
-	modCompileOnly "vazkii.patchouli:Patchouli:${project.patchouli_version}"
-
-	// LambDynamicLights
-	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lambd_version}")
-	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
-
-	// Simple Hats
-//	 modImplementation("maven.modrinth:simple-hats:${project.simple_hats_version}")
-//	 modImplementation("maven.modrinth:trinkets:${project.trinkets_version}")
-
-	// Cardinal Components API
-//	 modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
-//	 modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+	modCompileOnly("maven.modrinth:patchouli:${project.patchouli_version}")
 
 	// Better Combat
-//	modCompileOnly("maven.modrinth:better-combat:${project.better_combat_version}")
-//	modImplementation "maven.modrinth:cloth-config:9.0.94+fabric"
-//	modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
-
-	// MoreMCMeta
-//	modCompileOnly("maven.modrinth:moremcmeta-emissive:v1.20.2-2.0.4-fabric")
-
-	// BetterX (BetterEnd & BetterNether)
-//	 modImplementation "maven.modrinth:BgNRHReB:mKksn4EY"
-//	 modImplementation "maven.modrinth:gc8OEnCC:5CIFclEA"
-//	 modImplementation "maven.modrinth:MpzVLzy5:InVK1xFf"
-
-	// EMI
-//	modCompileOnly "dev.emi:emi:${emi_version}:api"
-//	modImplementation "maven.modrinth:emi-loot:0.6.5+1.20.1"
-//	modImplementation "maven.modrinth:emi:${rootProject.emi_version}+${rootProject.minecraft_version}+fabric"
-
-	// JEI
-//	 modRuntimeOnly "maven.modrinth:jei:${project.jei_version}"
-
-	// REI
-//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
-//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
-//	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-//	modImplementation "curse.maven:roughly-enough-resources-325625:3837336"
-
-	// ToolStats
-//	modImplementation "curse.maven:tool-stats-377109:3944167"
-//	modImplementation "net.darkhax.bookshelf:Bookshelf-Fabric-1.19.2:16.1.11"
-
-	// Twilight Forest
-//	modImplementation "teamtwilight:twilightforest:4.1.1102:universal"
-
-	// Continuity
-//	modImplementation "curse.maven:continuity-531351:3822250"
-
-	// Alloygery
-//	modImplementation "curse.maven:alloygery-573592:3778894"
-//	modImplementation "curse.maven:nbtcrafting-314633:3707208"
-
-	// Therassium
-//	modImplementation "curse.maven:therassium-554562:3829121"
-//	modImplementation "de.guntram.mcmod:crowdin-translate:1.4+1.18.2"
+	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}")
+	modImplementation("maven.modrinth:playeranimator:${project.player_animator_version}")
+	modImplementation("maven.modrinth:better-combat:${project.better_combat_version}")
 
 	// Mythic Metals
-//	modImplementation "curse.maven:mythicmetals-410127:4118479"
-//	modImplementation "curse.maven:alloy-forgery-438718:4073356"
-//	modImplementation "curse.maven:owo-lib-532610:4028921"
-//	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
-//	modRuntimeOnly "dev.architectury:architectury-fabric:${project.architectury_version}"
-//	modImplementation "com.github.DaFuqs:AdditionalEntityAttributes:${project.aea_versionite}"
-//	include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.rea_version}"))
+	annotationProcessor(modImplementation("io.wispforest:owo-lib:${project.owo_lib_version}"))
+	include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"))
+	modRuntimeOnly("dev.architectury:architectury-fabric:${project.architectury_version}")
+	modImplementation("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
+	modImplementation("curse.maven:mythicmetals-410127:${project.mythic_metals_version}")
+	modImplementation("curse.maven:alloy-forgery-438718:${project.alloy_forgery_version}")
 
-	// Applied Energistics 2
-//	modLocalRuntime "maven.modrinth:ae2:fabric-12.9.2"
-//	modLocalRuntime('teamreborn:energy:2.3.0')
-
-	// InventoryProfilesNext
-//	modCompileOnly "curse.maven:inventory-profiles-next-495267:4263990"
-//	modCompileOnly "curse.maven:libipn-679177:4263961"
-
-	// Polymorph
-//	modImplementation "curse.maven:cardinal-components-318449:3669769"
-//	modImplementation "curse.maven:cardinal-components-318449:3669770"
-//	modImplementation "curse.maven:cardinal-components-318449:3669771"
-//	modImplementation "curse.maven:cardinal-components-318449:3669774"
-//	modImplementation "curse.maven:cardinal-components-318449:3669773"
-//	modImplementation "curse.maven:polymorph-397434:3793108"
-
-	// CombatEdit
-//	modImplementation "curse.maven:combatedit-385513:3869344"
+	// LambDynamicLights
+	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
+	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lamb_dynamic_lights_version}")
 }
 
 sourceSets {

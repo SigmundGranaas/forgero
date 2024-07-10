@@ -1,5 +1,6 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
 
 plugins {
 	id "fabric-loom" version "${fabric_loom_version}" apply true
@@ -41,15 +42,27 @@ dependencies {
 	runtimeOnly project(":content:${rootProject.mod_id}-structures")
 }
 
+allprojects {
+	processResources {
+		inputs.property "version", rootProject.version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": rootProject.version
+		}
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${archivesBaseName}" }
+		}
+	}
+	java {
+		withSourcesJar()
+	}
+}
+
 subprojects {
 	dependencies {
-		minecraft "com.mojang:minecraft:$project.minecraft_version"
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
-
-		annotationProcessor 'org.projectlombok:lombok:1.18.32'
-		implementation 'org.projectlombok:lombok:1.18.32'
-
 		implementation 'org.jetbrains:annotations:23.0.0'
 		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 	}
@@ -128,23 +141,4 @@ modrinth {
 
 tasks.register('publishToModrinthAndCurseForge') {
 	dependsOn 'modrinth', 'curseforge'
-}
-
-allprojects {
-	processResources {
-		inputs.property "version", rootProject.version
-
-		filesMatching("fabric.mod.json") {
-			expand "version": rootProject.version
-		}
-	}
-
-	jar {
-		from("LICENSE") {
-			rename { "${it}_${archivesBaseName}" }
-		}
-	}
-	java {
-		withSourcesJar()
-	}
 }
