@@ -62,8 +62,8 @@ dependencies {
 		exclude group: "net.fabricmc", module: "fabric-loader"
 	}
 	modImplementation("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
-	modImplementation("curse.maven:mythicmetals-410127:${project.mythic_metals_version}")
-	modImplementation("curse.maven:alloy-forgery-438718:${project.alloy_forgery_version}")
+	modImplementation("maven.modrinth:mythicmetals:${project.mythic_metals_version}")
+	modImplementation("maven.modrinth:alloy-forgery:${project.alloy_forgery_version}")
 
 	// LambDynamicLights
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
