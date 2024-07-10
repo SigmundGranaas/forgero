@@ -1,17 +1,10 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GroovyAssignabilityCheck
 
-configure(subprojects) {
-	apply plugin: 'java-library'
-	apply plugin: 'idea'
-	apply plugin: 'maven-publish'
-}
-
 subprojects {
 	dependencies {
-		implementation project(':forgero-core')
-
-		testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+		implementation(project(":${rootProject.mod_id}-core"))
+		testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 	}
 
 	processResources {

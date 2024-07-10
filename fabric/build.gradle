@@ -7,41 +7,38 @@ plugins {
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-configurations {
-	forgero-core
-}
-
 subprojects {
-	apply plugin: "idea"
-	apply plugin: 'fabric-loom'
+	apply plugin: "fabric-loom"
 }
 
-archivesBaseName = "forgero-fabric"
+archivesBaseName = "${rootProject.mod_id}-fabric"
 
 dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include project(':forgero-core')
+	// Parent projects
+	include project(":${rootProject.mod_id}-core")
 
-	include project(':fabric:forgero-fabric-core')
-	include project(':fabric:minecraft-common')
-	include project(':fabric:forgero-fabric-compat')
+	// Subprojects
+	include project(":fabric:${rootProject.mod_id}-fabric-core")
+	include project(":fabric:minecraft-common")
+	include project(":fabric:${rootProject.mod_id}-fabric-compat")
+	api project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements")
 
-	include project(':content:forgero-vanilla')
-	include project(':content:forgero-extended')
-	include project(':content:forgero-compat')
-	include project(':content:forgero-structures')
-	include project(':fabric:modules:generator')
-	include project(':fabric:modules:bows')
+	// Content projects
+	include project(":content:${rootProject.mod_id}-vanilla")
+	include project(":content:${rootProject.mod_id}-extended")
+	include project(":content:${rootProject.mod_id}-compat")
+	include project(":content:${rootProject.mod_id}-structures")
+	include project(":fabric:modules:generator")
+	include project(":fabric:modules:bows")
 
-	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
-
-	runtimeOnly project(':content:forgero-vanilla')
-	runtimeOnly project(':content:forgero-extended')
-	runtimeOnly project(':content:forgero-compat')
-	runtimeOnly project(':content:forgero-structures')
+	runtimeOnly project(":content:${rootProject.mod_id}-vanilla")
+	runtimeOnly project(":content:${rootProject.mod_id}-extended")
+	runtimeOnly project(":content:${rootProject.mod_id}-compat")
+	runtimeOnly project(":content:${rootProject.mod_id}-structures")
 }
 
 subprojects {

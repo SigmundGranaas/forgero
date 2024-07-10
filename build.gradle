@@ -3,6 +3,7 @@
 
 plugins {
 	id "java-library"
+	id "idea"
 	id "maven-publish"
 }
 
@@ -11,7 +12,7 @@ def isSnapshotVersion = { versionString ->
 }
 
 def getGitVersion = { ->
-	def projectVersion = project.forgero_version + "+" + project.minecraft_version
+	def projectVersion = rootProject.mod_version + "+" + rootProject.minecraft_version
 	try {
 		def stdout = new ByteArrayOutputStream()
 		exec {
@@ -34,7 +35,7 @@ def getGitVersion = { ->
 	}
 }
 
-println("Forgero version: ${getGitVersion()}")
+println("${rootProject.mod_name} version: ${getGitVersion()}")
 
 version = "${getGitVersion()}"
 group = project.maven_group
@@ -50,6 +51,7 @@ dependencies {
 
 allprojects {
 	apply plugin: "java-library"
+	apply plugin: "idea"
 
 	repositories {
 		mavenCentral()
@@ -106,8 +108,8 @@ subprojects { project ->
 				mavenJava(MavenPublication) {
 					groupId = group
 					if (project.name === 'fabric') {
-						artifactId = 'forgero-fabric'
-						archivesBaseName = 'forgero-fabric'
+						artifactId = "${rootProject.mod_id}-fabric"
+						archivesBaseName = "${rootProject.mod_id}-fabric"
 					} else {
 						artifactId = archivesBaseName
 					}
