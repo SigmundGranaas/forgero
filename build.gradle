@@ -55,6 +55,9 @@ subprojects {
 		maven { url 'https://maven.gegy.dev' }
 		maven { url 'https://maven.kosmx.dev/' }
 		maven { url 'https://jitpack.io' }
+		maven { url = "https://mvn.devos.one/snapshots/" } // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
+		maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
+		maven { url = "https://maven.tterrag.com/" } // Flywheel
 		maven {
 			name = "Xander Maven"
 			url = "https://maven.isxander.dev/releases"
