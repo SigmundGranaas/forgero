@@ -1,11 +1,17 @@
 pluginManagement {
 	repositories {
 		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
+			name = "FabricMC Maven"
+			url = "https://maven.fabricmc.net/"
 		}
-		maven { url "https://maven.architectury.dev/" }
-		maven { url "https://files.minecraftforge.net/maven/" }
+		maven {
+			name = "Architectury Maven"
+			url = "https://maven.architectury.dev/"
+		}
+		maven {
+			name = "MinecraftForge Maven"
+			url = "https://files.minecraftforge.net/maven/"
+		}
 		mavenCentral()
 		gradlePluginPortal()
 		mavenLocal()
@@ -34,4 +40,3 @@ include 'fabric:minecraft-common'
 include 'fabric:modules'
 include 'fabric:modules:bows'
 include 'fabric:modules:generator'
-

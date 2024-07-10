@@ -43,8 +43,6 @@ subprojects {
 	group = project.maven_group
 
 	repositories {
-		mavenLocal()
-		mavenCentral()
 		maven { url "https://api.modrinth.com/maven" }
 		maven { url "https://cursemaven.com" }
 		maven { url 'https://jitpack.io' }
