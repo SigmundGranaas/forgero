@@ -2,6 +2,11 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection DependencyNotationArgument
 
+dependencies {
+	// Fabric Loader
+	modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+}
+
 loom {
 	accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
 }

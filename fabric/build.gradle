@@ -16,16 +16,15 @@ subprojects {
 	dependencies {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 		// Common module
-		include(api(project(":${rootProject.mod_id}-core")))
+		api(project(":${rootProject.mod_id}-core"))
 
 		// Content modules
 		file("${rootDir}/content").eachDir { subProject ->
 			{
 				try {
-					include runtimeOnly(project(":content:${subProject.name}"))
+					runtimeOnly(project(":content:${subProject.name}"))
 				} catch (Exception ignored) {
 					// NO-OP
 				}

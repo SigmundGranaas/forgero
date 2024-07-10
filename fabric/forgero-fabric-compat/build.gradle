@@ -3,6 +3,17 @@
 //file:noinspection DependencyNotationArgument
 
 dependencies {
+	// Content modules
+	file("${rootDir}/content").eachDir { subProject ->
+		{
+			try {
+				include runtimeOnly(project(":content:${subProject.name}"))
+			} catch (Exception ignored) {
+				// NO-OP
+			}
+		}
+	}
+
 	// Fabric content modules
 	file("${rootDir}/fabric/modules").eachDir { subProject ->
 		{
@@ -18,9 +29,11 @@ dependencies {
 	include(implementation(project(":fabric:minecraft-common")))
 	include(implementation(project(":fabric:${rootProject.mod_id}-fabric-core")))
 
+	// Fabric Loader
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
 	// Advanced Runtime Resource Pack
-	modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
-	include("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	include(modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}"))
 
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
@@ -36,14 +49,18 @@ dependencies {
 	modCompileOnly("maven.modrinth:patchouli:${project.patchouli_version}")
 
 	// Better Combat
-	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}")
+	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 	modImplementation("maven.modrinth:playeranimator:${project.player_animator_version}")
 	modImplementation("maven.modrinth:better-combat:${project.better_combat_version}")
 
 	// Mythic Metals
 	annotationProcessor(modImplementation("io.wispforest:owo-lib:${project.owo_lib_version}"))
 	include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"))
-	modRuntimeOnly("dev.architectury:architectury-fabric:${project.architectury_version}")
+	modRuntimeOnly("dev.architectury:architectury-fabric:${project.architectury_version}") {
+		exclude group: "net.fabricmc", module: "fabric-loader"
+	}
 	modImplementation("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
 	modImplementation("curse.maven:mythicmetals-410127:${project.mythic_metals_version}")
 	modImplementation("curse.maven:alloy-forgery-438718:${project.alloy_forgery_version}")

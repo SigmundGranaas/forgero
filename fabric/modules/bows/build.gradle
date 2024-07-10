@@ -3,5 +3,5 @@
 //file:noinspection DependencyNotationArgument
 
 dependencies {
-	include(implementation(project(":fabric:${rootProject.mod_id}-fabric-core")))
+	implementation(project(":fabric:${rootProject.mod_id}-fabric-core"))
 }

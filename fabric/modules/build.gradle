@@ -9,6 +9,9 @@ subprojects {
 		// Common modules
 		include(implementation(project(":fabric:minecraft-common")))
 
+		// Fabric Loader
+		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+
 		// Fabric API
 		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	}
