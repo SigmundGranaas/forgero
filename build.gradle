@@ -2,42 +2,41 @@
 //file:noinspection GroovyAssignabilityCheck
 
 plugins {
-	id "java"
+	id "java-library"
 	id "maven-publish"
 }
 
-//def isSnapshotVersion = { versionString ->
-//	return versionString.contains("-g")
-//}
-//
-//def getGitVersion = { ->
-//	def projectVersion = project.forgero_version + "+" + project.minecraft_version
-//	try {
-//		def stdout = new ByteArrayOutputStream()
-//		exec {
-//			commandLine "git", "describe", "--tags"
-//			standardOutput = stdout
-//		}
-//
-//		def gitVersionString = stdout.toString().trim()
-//		def gitVersionStringParsed = gitVersionString.startsWith("v") ? gitVersionString.substring(1) : gitVersionString
-//
-//		// If it's a snapshot version, append '-SNAPSHOT'
-//		if (isSnapshotVersion(gitVersionStringParsed)) {
-//			return gitVersionStringParsed + "-SNAPSHOT"
-//		} else {
-//			return projectVersion
-//		}
-//	}
-//	catch (Exception ignored) {
-//		return projectVersion
-//	}
-//}
-//
-//println("Forgero version: ${getGitVersion()}")
+def isSnapshotVersion = { versionString ->
+	return versionString.contains("-g")
+}
 
-//version = "${getGitVersion()}"
-version = "1.0.0"
+def getGitVersion = { ->
+	def projectVersion = project.forgero_version + "+" + project.minecraft_version
+	try {
+		def stdout = new ByteArrayOutputStream()
+		exec {
+			commandLine "git", "describe", "--tags"
+			standardOutput = stdout
+		}
+
+		def gitVersionString = stdout.toString().trim()
+		def gitVersionStringParsed = gitVersionString.startsWith("v") ? gitVersionString.substring(1) : gitVersionString
+
+		// If it's a snapshot version, append '-SNAPSHOT'
+		if (isSnapshotVersion(gitVersionStringParsed)) {
+			return gitVersionStringParsed + "-SNAPSHOT"
+		} else {
+			return projectVersion
+		}
+	}
+	catch (Exception ignored) {
+		return projectVersion
+	}
+}
+
+println("Forgero version: ${getGitVersion()}")
+
+version = "${getGitVersion()}"
 group = project.maven_group
 
 dependencies {
@@ -50,6 +49,8 @@ dependencies {
 }
 
 allprojects {
+	apply plugin: "java-library"
+
 	repositories {
 		mavenCentral()
 		maven { url = "https://api.modrinth.com/maven" }
@@ -82,48 +83,41 @@ allprojects {
 	}
 }
 
-subprojects {
-//	version = "${getGitVersion()}"
-	version = "1.0.0"
-	group = project.maven_group
-}
+subprojects { project ->
+	if (project.name != 'content') {
+		apply plugin: "maven-publish"
 
-//subprojects { project ->
-//	if (project.name != 'content') {
-//		apply plugin: "maven-publish"
-//		apply plugin: "java-library"
-//
-//		publishing {
-//			repositories {
-//				maven {
-//					name = "ReposiliteMavenRepo"
-//					// Determine if it's a snapshot and adjust the URL accordingly.
-//					url = isSnapshotVersion(project.version) ?
-//						"https://maven.sigmundgranaas.com/snapshots/" :
-//						"https://maven.sigmundgranaas.com/releases/"
-//					credentials {
-//						username 'admin'
-//						password System.getenv("REPOSILITE_ADMIN_SECRET")
-//					}
-//				}
-//			}
-//
-//			publications {
-//				mavenJava(MavenPublication) {
-//					groupId = group
-//					if (project.name === 'fabric') {
-//						artifactId = 'forgero-fabric'
-//						archivesBaseName = 'forgero-fabric'
-//					} else {
-//						artifactId = archivesBaseName
-//					}
-//					from components.java
-//				}
-//			}
-//
-//		}
-//	}
-//}
+		publishing {
+			repositories {
+				maven {
+					name = "ReposiliteMavenRepo"
+					// Determine if it's a snapshot and adjust the URL accordingly.
+					url = isSnapshotVersion(project.version) ?
+						"https://maven.sigmundgranaas.com/snapshots/" :
+						"https://maven.sigmundgranaas.com/releases/"
+					credentials {
+						username 'admin'
+						password System.getenv("REPOSILITE_ADMIN_SECRET")
+					}
+				}
+			}
+
+			publications {
+				mavenJava(MavenPublication) {
+					groupId = group
+					if (project.name === 'fabric') {
+						artifactId = 'forgero-fabric'
+						archivesBaseName = 'forgero-fabric'
+					} else {
+						artifactId = archivesBaseName
+					}
+					from components.java
+				}
+			}
+
+		}
+	}
+}
 
 tasks.register('copyJars', Copy) {
 	group = "build"
