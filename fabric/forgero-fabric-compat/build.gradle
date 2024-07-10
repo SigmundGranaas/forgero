@@ -7,7 +7,7 @@ dependencies {
 	file("${rootDir}/content").eachDir { subProject ->
 		{
 			try {
-				include runtimeOnly(project(":content:${subProject.name}"))
+				include runtimeOnly(project(path: ":content:${subProject.name}"))
 			} catch (Exception ignored) {
 				// NO-OP
 			}
@@ -18,7 +18,7 @@ dependencies {
 	file("${rootDir}/fabric/modules").eachDir { subProject ->
 		{
 			try {
-				include runtimeOnly(project(":fabric:modules:${subProject.name}"))
+				include runtimeOnly(project(path: ":fabric:modules:${subProject.name}", configuration: "namedElements"))
 			} catch (Exception ignored) {
 				// NO-OP
 			}
@@ -26,8 +26,8 @@ dependencies {
 	}
 
 	// Fabric common modules
-	include(implementation(project(":fabric:minecraft-common")))
-	include(implementation(project(":fabric:${rootProject.mod_id}-fabric-core")))
+	include(implementation(project(path: ":fabric:minecraft-common", configuration: "namedElements")))
+	include(implementation(project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements")))
 
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
