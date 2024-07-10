@@ -1,0 +1,15 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+// TODO: Abstract the Fabric submodules
+//  Move the Fabric submodules into a common module
+subprojects {
+	dependencies {
+		// Common modules
+		include(implementation(project(":fabric:minecraft-common")))
+
+		// Fabric API
+		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	}
+}

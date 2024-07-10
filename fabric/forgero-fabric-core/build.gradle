@@ -1,23 +1,21 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
 
 dependencies {
-	api project(':forgero-core')
-	api project(path: ':fabric:modules:generator', configuration: 'namedElements')
-	api project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	// Fabric common module
+	include(implementation(project(":fabric:minecraft-common")))
 
+	// Fabric generator module
+	// TODO: Fix circular dependency
+	include(implementation(project(":fabric:modules:generator")))
+
+	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation("maven.modrinth:arrp:${project.arrp_version}")
-	include("maven.modrinth:arrp:${project.arrp_version}")
-
-	localRuntime project(':content:forgero-vanilla')
-	localRuntime project(':content:forgero-extended')
-	localRuntime project(':content:forgero-compat')
-	localRuntime project(':content:forgero-structures')
-
-	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
+	// Advanced Runtime Resource Pack
+	modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	include("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 }
 
 sourceSets {
@@ -29,7 +27,7 @@ sourceSets {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/forgero-core.accesswidener")
+	accessWidenerPath = file("src/main/resources/${mod_id}-core.accesswidener")
 
 	runs {
 		testServer {
@@ -38,7 +36,7 @@ loom {
 			name = "Test Server"
 			source sourceSets.test
 		}
-		gametest {
+		gameTest {
 			inherit testServer
 			name "Game Test"
 			// Enable the gametest runner
@@ -48,14 +46,13 @@ loom {
 		testClient {
 			client()
 			name = "Test Client"
-			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/forgero/gametest/structures")}"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/${mod_id}/gametest/structures")}"
 
 			ideConfigGenerated = false
 			source sourceSets.test
 		}
 	}
 }
-
 
 test {
 	useJUnitPlatform()

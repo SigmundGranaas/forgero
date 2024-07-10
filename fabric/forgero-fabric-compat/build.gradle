@@ -3,26 +3,33 @@
 //file:noinspection DependencyNotationArgument
 
 dependencies {
-	// Parent modules
-	implementation project(":${rootProject.mod_id}-core")
-	implementation project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements")
-	implementation project(path: ":fabric:modules:generator", configuration: "namedElements")
-	implementation project(path: ":fabric:minecraft-common", configuration: "namedElements")
+	// Fabric content modules
+	file("${rootDir}/fabric/modules").eachDir { subProject ->
+		{
+			try {
+				include runtimeOnly(project(":fabric:modules:${subProject.name}"))
+			} catch (Exception ignored) {
+				// NO-OP
+			}
+		}
+	}
 
-	// Content submodules
-	localRuntime project(":content:${rootProject.mod_id}-vanilla")
-	localRuntime project(":content:${rootProject.mod_id}-extended")
-	localRuntime project(":content:${rootProject.mod_id}-compat")
-	localRuntime project(":content:${rootProject.mod_id}-structures")
+	// Fabric common modules
+	include(implementation(project(":fabric:minecraft-common")))
+	include(implementation(project(":fabric:${rootProject.mod_id}-fabric-core")))
 
-	localRuntime project(path: ":fabric:modules:bows", configuration: "namedElements")
+	// Advanced Runtime Resource Pack
+	modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	include("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
-	modImplementation("maven.modrinth:arrp:${project.arrp_version}")
-	modImplementation("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Mod Menu
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+	// YetAnotherConfigLib
+	modImplementation("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon

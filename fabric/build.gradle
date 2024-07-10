@@ -3,43 +3,47 @@
 //file:noinspection DependencyNotationArgument
 
 plugins {
-	id "fabric-loom" version "${fabric_loom_version}" apply true
+	id "fabric-loom" version "${fabric_loom_version}"
 	id "com.modrinth.minotaur" version "2.+"
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
+archivesBaseName = "${rootProject.mod_id}-fabric"
+
 subprojects {
 	apply plugin: "fabric-loom"
-}
 
-archivesBaseName = "${rootProject.mod_id}-fabric"
+	dependencies {
+		minecraft "com.mojang:minecraft:$project.minecraft_version"
+		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+		// Common module
+		include(api(project(":${rootProject.mod_id}-core")))
+
+		// Content modules
+		file("${rootDir}/content").eachDir { subProject ->
+			{
+				try {
+					include runtimeOnly(project(":content:${subProject.name}"))
+				} catch (Exception ignored) {
+					// NO-OP
+				}
+			}
+		}
+	}
+}
 
 dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Parent projects
-	include project(":${rootProject.mod_id}-core")
+	// Common module
+	include(project(":${rootProject.mod_id}-core"))
 
-	// Subprojects
-	include project(":fabric:${rootProject.mod_id}-fabric-core")
-	include project(":fabric:minecraft-common")
-	include project(":fabric:${rootProject.mod_id}-fabric-compat")
-	api project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements")
-
-	// Content projects
-	include project(":content:${rootProject.mod_id}-vanilla")
-	include project(":content:${rootProject.mod_id}-extended")
-	include project(":content:${rootProject.mod_id}-compat")
-	include project(":content:${rootProject.mod_id}-structures")
-	include project(":fabric:modules:generator")
-	include project(":fabric:modules:bows")
-
-	runtimeOnly project(":content:${rootProject.mod_id}-vanilla")
-	runtimeOnly project(":content:${rootProject.mod_id}-extended")
-	runtimeOnly project(":content:${rootProject.mod_id}-compat")
-	runtimeOnly project(":content:${rootProject.mod_id}-structures")
+	// Content modules
+	runtimeOnly(project(":content").subprojects)
+	runtimeOnly(project(":fabric:modules").subprojects)
 }
 
 allprojects {

@@ -1,6 +1,7 @@
-dependencies {
-	implementation project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
-	implementation project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+dependencies {
+	include(implementation(project(":fabric:${rootProject.mod_id}-fabric-core")))
 }

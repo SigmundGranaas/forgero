@@ -1,9 +1,6 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GroovyAssignabilityCheck
-
-dependencies {
-	api project(':forgero-core')
-}
+//file:noinspection DependencyNotationArgument
 
 loom {
 	accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
