@@ -2,7 +2,7 @@
   "name": "create-materials",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "mythicmetals",
+  "namespace": "create",
   "dependencies": [
     "minecraft",
     "forgero",
