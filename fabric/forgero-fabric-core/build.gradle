@@ -4,11 +4,14 @@
 
 dependencies {
 	// Fabric common module
-	implementation(project(":fabric:minecraft-common"))
+	implementation(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
 
 	// Fabric generator module
 	// TODO: Fix circular dependency
-	implementation(project(":fabric:modules:generator"))
+	implementation(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
+
+	// Fabric JUnit
+	testImplementation("net.fabricmc:fabric-loader-junit:${project.loader_version}")
 
 	// Fabric Loader
 	modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -22,8 +25,7 @@ dependencies {
 
 sourceSets {
 	test {
-		compileClasspath += test.compileClasspath
-		runtimeClasspath += test.runtimeClasspath
+		compileClasspath += main.compileClasspath
 		runtimeClasspath += main.runtimeClasspath
 	}
 }
@@ -43,7 +45,7 @@ loom {
 			name "Game Test"
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
-			runDir "build/gametest"
+			runDir "build/gameTest"
 		}
 		testClient {
 			client()
