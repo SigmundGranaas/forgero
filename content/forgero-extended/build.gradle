@@ -1,5 +1,4 @@
-
 dependencies {
-	implementation project(':content:forgero-vanilla')
-	testImplementation project(':content:forgero-vanilla')
+	implementation project(":content:${rootProject.mod_id}-vanilla")
+	testImplementation project(":content:${rootProject.mod_id}-vanilla")
 }

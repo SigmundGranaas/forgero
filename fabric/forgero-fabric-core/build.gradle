@@ -1,32 +1,38 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
 dependencies {
-	api project(':forgero-core')
-	api project(path: ':fabric:modules:generator', configuration: 'namedElements')
-	api project(path: ':fabric:minecraft-common', configuration: 'namedElements')
+	// Fabric common module
+	api(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	// Fabric generator module
+	api(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
 
-	modImplementation("maven.modrinth:arrp:${project.aarp_version}")
-	include("maven.modrinth:arrp:${project.aarp_version}")
+	// Bow and arrows
+	// Arrows and bow tests are still in the core fabric module. This dependency is needed until they are moved to their own module.
+	// Ref: https://github.com/SigmundGranaas/forgero/issues/933
+	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
 
-	localRuntime project(':content:forgero-vanilla')
-	localRuntime project(':content:forgero-extended')
-	localRuntime project(':content:forgero-compat')
-	localRuntime project(':content:forgero-structures')
+	// Fabric Loader
+	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 
-	localRuntime project(path: ':fabric:modules:bows', configuration: 'namedElements')
+	// Fabric API
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	// Advanced Runtime Resource Pack
+	modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 }
 
 sourceSets {
 	test {
-		compileClasspath += test.compileClasspath
-		runtimeClasspath += test.runtimeClasspath
+		compileClasspath += main.compileClasspath
 		runtimeClasspath += main.runtimeClasspath
 	}
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/forgero-core.accesswidener")
+	accessWidenerPath = file("src/main/resources/${mod_id}-core.accesswidener")
 
 	runs {
 		testServer {
@@ -35,24 +41,23 @@ loom {
 			name = "Test Server"
 			source sourceSets.test
 		}
-		gametest {
+		gameTest {
 			inherit testServer
 			name "Game Test"
 			// Enable the gametest runner
 			vmArg "-Dfabric-api.gametest"
-			runDir "build/gametest"
+			runDir "build/gameTest"
 		}
 		testClient {
 			client()
 			name = "Test Client"
-			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/forgero/gametest/structures")}"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/${mod_id}/gametest/structures")}"
 
 			ideConfigGenerated = false
 			source sourceSets.test
 		}
 	}
 }
-
 
 test {
 	useJUnitPlatform()

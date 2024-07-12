@@ -1,21 +1,13 @@
-plugins {
-	id "idea"
-	id 'java-library'
-	id 'maven-publish'
-}
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
 
 dependencies {
-	compileOnly 'org.projectlombok:lombok:1.18.32'
-	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+	// JUnit
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 
-	api 'org.jetbrains:annotations:23.0.0'
-	api 'com.google.guava:guava:33.0.0-jre'
-	api 'org.apache.logging.log4j:log4j-core:2.18.0'
-	api 'com.google.code.gson:gson:2.9.0'
-	api 'com.mojang:datafixerupper:6.0.8'
-
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+	// DataFixerUpper
+	api("com.mojang:datafixerupper:${project.data_fixer_upper_version}")
 }
 
 processResources {
