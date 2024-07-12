@@ -3,37 +3,15 @@
 //file:noinspection DependencyNotationArgument
 
 dependencies {
-	// Content modules
-	file("${rootDir}/content").eachDir { subProject ->
-		{
-			try {
-				runtimeOnly(project(path: ":content:${subProject.name}"))
-			} catch (Exception ignored) {
-				// NO-OP
-			}
-		}
-	}
-
-	// Fabric content modules
-	file("${rootDir}/fabric/modules").eachDir { subProject ->
-		{
-			try {
-				runtimeOnly(project(path: ":fabric:modules:${subProject.name}", configuration: "namedElements"))
-			} catch (Exception ignored) {
-				// NO-OP
-			}
-		}
-	}
-
 	// Fabric common modules
 	implementation(project(path: ":fabric:minecraft-common", configuration: "namedElements"))
 	implementation(project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements"))
 
+	// Bows
+	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
+	
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Advanced Runtime Resource Pack
-	include modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
@@ -57,8 +35,8 @@ dependencies {
 
 	// Mythic Metals
 	annotationProcessor(modImplementation("io.wispforest:owo-lib:${project.owo_lib_version}"))
-	include(modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api_version}"))
-	include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"))
+	modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api_version}")
+	modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 	modRuntimeOnly("dev.architectury:architectury-fabric:${project.architectury_version}") {
 		exclude group: "net.fabricmc", module: "fabric-loader"
 	}
