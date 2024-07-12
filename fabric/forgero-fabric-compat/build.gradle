@@ -28,10 +28,7 @@ dependencies {
 	// Fabric common modules
 	include(implementation(project(path: ":fabric:minecraft-common", configuration: "namedElements")))
 	include(implementation(project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements")))
-
-	// Fabric JUnit
-	testImplementation("net.fabricmc:fabric-loader-junit:${project.loader_version}")
-
+	
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
