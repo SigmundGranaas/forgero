@@ -21,10 +21,9 @@ subprojects {
 		api(project(":${rootProject.mod_id}-core"))
 
 		// Content modules
-		dependencies {
-			project(":content").subprojects.each { subproject ->
-				dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
-			}
+
+		project(":content").subprojects.each { subproject ->
+			dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
 		}
 	}
 }
