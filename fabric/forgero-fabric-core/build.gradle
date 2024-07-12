@@ -7,7 +7,7 @@ dependencies {
 	implementation(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
 
 	// Fabric generator module
-	include implementation(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
+	implementation(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
 
 	// Bow and arrows
 	// Arrows and bow tests are still in the core fabric module. This dependency is needed until they are moved to their own module.
@@ -21,7 +21,7 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
 	// Advanced Runtime Resource Pack
-	include modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 }
 
 sourceSets {
