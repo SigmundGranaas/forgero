@@ -7,7 +7,7 @@ dependencies {
 	file("${rootDir}/content").eachDir { subProject ->
 		{
 			try {
-				include runtimeOnly(project(path: ":content:${subProject.name}"))
+				runtimeOnly(project(path: ":content:${subProject.name}"))
 			} catch (Exception ignored) {
 				// NO-OP
 			}
@@ -18,7 +18,7 @@ dependencies {
 	file("${rootDir}/fabric/modules").eachDir { subProject ->
 		{
 			try {
-				include runtimeOnly(project(path: ":fabric:modules:${subProject.name}", configuration: "namedElements"))
+				runtimeOnly(project(path: ":fabric:modules:${subProject.name}", configuration: "namedElements"))
 			} catch (Exception ignored) {
 				// NO-OP
 			}
@@ -26,14 +26,14 @@ dependencies {
 	}
 
 	// Fabric common modules
-	include(implementation(project(path: ":fabric:minecraft-common", configuration: "namedElements")))
-	include(implementation(project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements")))
-	
+	implementation(project(path: ":fabric:minecraft-common", configuration: "namedElements"))
+	implementation(project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements"))
+
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Advanced Runtime Resource Pack
-	include(modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}"))
+	include modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"

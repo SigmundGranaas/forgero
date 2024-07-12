@@ -7,7 +7,7 @@
 subprojects {
 	dependencies {
 		// Common modules
-		include(implementation(project(":fabric:minecraft-common")))
+		implementation(project(":fabric:minecraft-common"))
 
 		// Fabric Loader
 		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
