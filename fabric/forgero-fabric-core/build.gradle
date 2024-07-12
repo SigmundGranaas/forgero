@@ -4,10 +4,10 @@
 
 dependencies {
 	// Fabric common module
-	implementation(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
+	api(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
 
 	// Fabric generator module
-	implementation(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
+	api(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
 
 	// Bow and arrows
 	// Arrows and bow tests are still in the core fabric module. This dependency is needed until they are moved to their own module.
