@@ -1,5 +1,10 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
 dependencies {
-	api project(':forgero-core')
+	// Fabric Loader
+	modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
 }
 
 loom {
