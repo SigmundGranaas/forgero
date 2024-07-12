@@ -21,14 +21,9 @@ subprojects {
 		api(project(":${rootProject.mod_id}-core"))
 
 		// Content modules
-		file("${rootDir}/content").eachDir { subProject ->
-			{
-				try {
-					runtimeOnly(project(":content:${subProject.name}"))
-				} catch (Exception ignored) {
-					// NO-OP
-				}
-			}
+
+		project(":content").subprojects.each { subproject ->
+			dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
 		}
 	}
 }
@@ -37,12 +32,30 @@ dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	// Common module
+	// Core fabric modules
 	include(project(":${rootProject.mod_id}-core"))
+	include(project(":fabric:${rootProject.mod_id}-fabric-core"))
+	include(project(":fabric:minecraft-common"))
 
-	// Content modules
-	runtimeOnly(project(":content").subprojects)
-	runtimeOnly(project(":fabric:modules").subprojects)
+	// Fabric mod compat
+	include(project(":fabric:${rootProject.mod_id}-fabric-compat"))
+
+	// Modules
+	dependencies {
+		project(":fabric:modules").subprojects.each { subproject ->
+			dependencies.add("include", project(path: ":fabric:modules:${subproject.name}"))
+		}
+	}
+
+	// Content
+	dependencies {
+		project(":content").subprojects.each { subproject ->
+			dependencies.add("include", project(path: ":content:${subproject.name}"))
+		}
+	}
+
+	// Advanced runtime resource pack
+	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 }
 
 allprojects {

@@ -37,12 +37,12 @@ def getGitVersion = { ->
 
 println("${rootProject.mod_name} version: ${getGitVersion()}")
 
-version = "${getGitVersion()}"
-group = project.maven_group
-
 allprojects {
 	apply plugin: "java-library"
 	apply plugin: "idea"
+
+	version = "${getGitVersion()}"
+	group = project.maven_group
 
 	repositories {
 		mavenCentral()
@@ -58,9 +58,6 @@ allprojects {
 		maven { url = "https://maven.kosmx.dev/" }
 		maven { url = "https://jitpack.io" }
 		maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
-		maven { url = "https://mvn.devos.one/snapshots/" } // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
-		maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
-		maven { url = "https://maven.tterrag.com/" } // Flywheel
 		maven {
 			name = "Xander Maven"
 			url = "https://maven.isxander.dev/releases"
@@ -126,11 +123,4 @@ subprojects { project ->
 
 		}
 	}
-}
-
-tasks.register('copyJars', Copy) {
-	group = "build"
-	from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
-	exclude "**/*-dev.jar"
-	into "${project.layout.buildDirectory}/libs"
 }

@@ -17,7 +17,7 @@
       "tag": "forgero:${material.name}-sword_blade"
     },
     "b": {
-      "tag": "forgero:tool_binding"
+      "tag": "forgero:sword_guard"
     },
     "c": {
       "tag": "forgero:handle"
