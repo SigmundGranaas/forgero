@@ -20,7 +20,7 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	// YetAnotherConfigLib
-	modImplementation("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
+	modCompileOnly("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon
@@ -50,6 +50,14 @@ dependencies {
 	// LambDynamicLights
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lamb_dynamic_lights_version}")
+
+	// BClib & Wunderlib
+	modImplementation "com.github.quiqueck:BCLib:${project.bclib_version}"
+	modImplementation "com.github.quiqueck:WunderLib:${project.wunderlib_version}"
+
+
+	// Better End
+	modImplementation("maven.modrinth:betterend:${project.betterend_version}")
 }
 
 sourceSets {
