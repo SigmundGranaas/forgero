@@ -50,6 +50,9 @@ dependencies {
 	// LambDynamicLights
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lamb_dynamic_lights_version}")
+
+	// Create
+	modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_version}")
 }
 
 sourceSets {
