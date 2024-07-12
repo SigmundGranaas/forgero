@@ -37,12 +37,12 @@ def getGitVersion = { ->
 
 println("${rootProject.mod_name} version: ${getGitVersion()}")
 
-version = "${getGitVersion()}"
-group = project.maven_group
-
 allprojects {
 	apply plugin: "java-library"
 	apply plugin: "idea"
+
+	version = "${getGitVersion()}"
+	group = project.maven_group
 
 	repositories {
 		mavenCentral()
@@ -123,11 +123,4 @@ subprojects { project ->
 
 		}
 	}
-}
-
-tasks.register('copyJars', Copy) {
-	group = "build"
-	from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
-	exclude "**/*-dev.jar"
-	into "${project.layout.buildDirectory}/libs"
 }
