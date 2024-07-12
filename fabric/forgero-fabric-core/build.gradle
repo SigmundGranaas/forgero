@@ -10,6 +10,11 @@ dependencies {
 	// TODO: Fix circular dependency
 	implementation(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
 
+	// Bow and arrows
+	// Arrows and bow tests are still in the core fabric module. This dependency is needed until they are moved to their own module.
+	// Ref: https://github.com/SigmundGranaas/forgero/issues/933
+	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
+
 	// Fabric Loader
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 
