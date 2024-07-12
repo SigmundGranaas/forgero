@@ -124,10 +124,3 @@ subprojects { project ->
 		}
 	}
 }
-
-tasks.register('copyJars', Copy) {
-	group = "build"
-	from subprojects.collect { it.tasks.withType(AbstractArchiveTask) }
-	exclude "**/*-dev.jar"
-	into "${project.layout.buildDirectory}/libs"
-}
