@@ -45,7 +45,7 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	// YetAnotherConfigLib
-	modImplementation("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
+	modCompileOnly("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon
@@ -59,19 +59,22 @@ dependencies {
 	modImplementation("maven.modrinth:better-combat:${project.better_combat_version}")
 
 	// Mythic Metals
-	annotationProcessor(modImplementation("io.wispforest:owo-lib:${project.owo_lib_version}"))
-	include(modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api_version}"))
-	include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"))
-	modRuntimeOnly("dev.architectury:architectury-fabric:${project.architectury_version}") {
-		exclude group: "net.fabricmc", module: "fabric-loader"
-	}
-	modImplementation("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
-	modImplementation("maven.modrinth:mythicmetals:${project.mythic_metals_version}")
-	modImplementation("maven.modrinth:alloy-forgery:${project.alloy_forgery_version}")
+	//annotationProcessor(modImplementation("io.wispforest:owo-lib:${project.owo_lib_version}"))
+	//include(modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api_version}"))
+	//include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"))
+	//modRuntimeOnly("dev.architectury:architectury-fabric:${project.architectury_version}") {
+	//	exclude group: "net.fabricmc", module: "fabric-loader"
+	//}
+	//modImplementation("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
+	//modImplementation("maven.modrinth:mythicmetals:${project.mythic_metals_version}")
+	//modImplementation("maven.modrinth:alloy-forgery:${project.alloy_forgery_version}")
 
 	// LambDynamicLights
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lamb_dynamic_lights_version}")
+
+	// Create
+	modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_version}")
 }
 
 sourceSets {
