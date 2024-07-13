@@ -20,11 +20,11 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	// YetAnotherConfigLib
-	modImplementation("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
+	modCompileOnly("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon
-	modCompileOnly("maven.modrinth:patchouli:${project.patchouli_version}")
+	modImplementation("maven.modrinth:patchouli:${project.patchouli_version}")
 
 	// Better Combat
 	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}") {
@@ -50,6 +50,24 @@ dependencies {
 	// LambDynamicLights
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lamb_dynamic_lights_version}")
+
+	//Amethyst Imbuement
+	modImplementation("maven.modrinth:amethyst-imbuement:${project.imbuement_version}")
+
+	// Trinkets
+	modImplementation "dev.emi:trinkets:${trinkets_version}"
+
+	// Kotlin
+	modImplementation("net.fabricmc:fabric-language-kotlin:1.11.0+kotlin.2.0.0")
+
+	// Fzzy Core
+	modImplementation("maven.modrinth:fzzy-core:${project.fzzy_version}")
+
+	// Amethyst Core
+	modImplementation("maven.modrinth:amethyst-core:${project.amethyst_core_version}")
+
+	// Fzzy Config
+	modImplementation "maven.modrinth:fzzy-config:${project.fzzyConfigVersion}"
 }
 
 sourceSets {
