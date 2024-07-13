@@ -1,0 +1,36 @@
+{
+  "type": "DUST",
+  "name": "powdered_obsidian",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "create:powdered_obsidian"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "features": [
+    ]
+  },
+  "palette": {
+    "name": "glowstone"
+  }
+}

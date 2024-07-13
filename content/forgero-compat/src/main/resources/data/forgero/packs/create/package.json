@@ -1,5 +1,5 @@
 {
-  "name": "create-materials",
+  "name": "create-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "create",
