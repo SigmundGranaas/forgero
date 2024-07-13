@@ -1,0 +1,30 @@
+{
+  "type": "GOO",
+  "name": "glow_goop",
+  "parent": "goo_base",
+  "container": {
+    "type": "HOST",
+    "id": "naturalist:glow_goop"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "naturalist/glow_goop"
+  }
+}

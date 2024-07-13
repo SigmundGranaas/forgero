@@ -1,0 +1,30 @@
+{
+  "type": "STONE",
+  "name": "shellstone",
+  "parent": "stone_base",
+  "container": {
+    "type": "HOST",
+    "id": "naturalist:shellstone"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "naturalist/shellstone"
+  }
+}

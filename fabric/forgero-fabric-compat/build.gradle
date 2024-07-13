@@ -51,12 +51,6 @@ dependencies {
 	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
 	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lamb_dynamic_lights_version}")
 
-	// Geckolib
-	modImplementation("software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}")
-	implementation("com.eliotlash.mclib:mclib:20")
-
-	// Naturalist
-	modImplementation("maven.modrinth:naturalist:${project.naturalist_version}")
 }
 
 sourceSets {
