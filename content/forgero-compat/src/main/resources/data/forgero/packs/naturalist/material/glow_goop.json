@@ -7,6 +7,12 @@
     "id": "naturalist:glow_goop"
   },
   "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
@@ -53,7 +59,7 @@
         ]
       }
     ],
-    "attributes": [
+    "features": [
       {
         "type": "forgero:emissive",
         "title": "feature.forgero.emissive",
