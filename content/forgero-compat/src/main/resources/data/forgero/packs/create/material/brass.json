@@ -35,14 +35,14 @@
             "type": "MINING_SPEED",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 6.25
+            "value": 5.5
           },
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 670
+            "value": 280
           },
           {
             "id": "metal-attack_damage-composite",
@@ -56,14 +56,14 @@
             "type": "ARMOR",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 6
+            "value": 5.5
           },
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 35
+            "value": 50
           }
 
         ]
@@ -85,7 +85,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 25
           },
           {
             "id": "metal-attack_speed-offensive-upgrade",
@@ -99,7 +99,7 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 3
+            "value": 2.5
           },
           {
             "id": "metal-mining_speed-offensive-upgrade",
@@ -113,21 +113,21 @@
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": 0
           },
           {
             "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 335
+            "value": 140
           },
           {
             "id": "metal-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 1
+            "value": 0
           },
           {
             "id": "metal-attack_damage-utility-upgrade",
@@ -155,7 +155,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 335
+            "value": 140
           }
         ]
       }
