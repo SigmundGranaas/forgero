@@ -1,13 +1,10 @@
 {
   "type": "WOOD",
-  "name": "alpha",
+  "name": "blue_bioshroom_stem",
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "regions_unexplored:alpha_planks"
-  },
-  "palette": {
-    "name": "alpha"
+    "id": "regions_unexplored:blue_bioshroom_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -17,44 +14,24 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2
-          },
-          {
-            "id": "wood-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 2
-          },
-          {
-            "id": "wood-mining_speed-composite",
+            "id": "wood-mining-speed-composite",
             "type": "MINING_SPEED",
-            "value": 2
+            "value": 2.2
           },
           {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "value": 50
+            "value": 35
           },
           {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 30
+            "value": 35
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
             "value": 20
-          },
-          {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 3
-          },
-          {
-            "id": "wood-draw_speed-composite",
-            "type": "forgero:draw_speed",
-            "value": 1.2
           }
         ]
       },
@@ -67,7 +44,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 17.5
           },
           {
             "id": "wood-weight-upgrade",
@@ -82,33 +59,76 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 25
-          },
-          {
-            "id": "wood-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
-          },
-          {
-            "id": "wood-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
+            "value": 18
           },
           {
             "id": "wood-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 25
+            "value": 18
+          },
+          {
+            "id": "wood-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.25
+          },
+          {
+            "id": "wood-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.2
           }
         ]
       }
     ],
     "attributes": [
     ]
+  },
+  "palette": {
+    "name": "blue_bioshroom_stem"
+  }
+}
+{
+  "type": "CRYSTAL",
+  "name": "prismarite_cluster",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "regions_unexplored:prismarite_cluster"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "prismarite_cluster"
   }
 }

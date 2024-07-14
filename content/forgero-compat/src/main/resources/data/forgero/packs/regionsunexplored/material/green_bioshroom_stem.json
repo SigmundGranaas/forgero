@@ -1,10 +1,10 @@
 {
   "type": "WOOD",
-  "name": "maple",
+  "name": "green_bioshroom_stem",
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "regions_unexplored:maple_planks"
+    "id": "regions_unexplored:green_bioshroom_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,19 +14,24 @@
         "operation": "ADDITION",
         "attributes": [
           {
+            "id": "wood-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 2.2
+          },
+          {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "value": 45
+            "value": 35
           },
           {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 25
+            "value": 35
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 25
+            "value": 20
           }
         ]
       },
@@ -39,7 +44,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 12.5
+            "value": 17.5
           },
           {
             "id": "wood-weight-upgrade",
@@ -47,21 +52,35 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 12
+            "value": 10
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 22
+            "value": 18
           },
           {
             "id": "wood-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 22
+            "value": 18
+          },
+          {
+            "id": "wood-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.25
+          },
+          {
+            "id": "wood-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.2
           }
         ]
       }
@@ -70,6 +89,6 @@
     ]
   },
   "palette": {
-    "name": "maple"
+    "name": "green_bioshroom_stem"
   }
 }
