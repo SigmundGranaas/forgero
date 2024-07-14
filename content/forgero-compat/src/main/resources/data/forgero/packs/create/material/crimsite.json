@@ -1,0 +1,75 @@
+{
+  "type": "STONE",
+  "name": "crimsite",
+  "parent": "stone_base",
+  "container": {
+    "type": "HOST",
+    "id": "create:crimsite"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "stone-durability-composite",
+            "type": "DURABILITY",
+            "value": 140
+          },
+          {
+            "id": "stone-rarity-composite",
+            "type": "RARITY",
+            "value": 45
+          },
+          {
+            "id": "stone-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "stone-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 22
+          },
+          {
+            "id": "stone-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "stone-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 70
+          },
+          {
+            "id": "stone-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 70
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "create/crimsite"
+  }
+}
