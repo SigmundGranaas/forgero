@@ -20,10 +20,9 @@
         "operation": "ADDITION",
         "value": 5,
         "predicate": {
-          "condition": "minecraft:target_entity_properties",
-          "entity": "this",
-          "predicate": {
-            "type": "minecraft:pig"
+          "type": "minecraft:entity",
+          "entity_type": {
+            "id": "minecraft:pig"
           }
         }
       }

@@ -1,22 +1,10 @@
-configure(subprojects) {
-	apply plugin: 'java-library'
-	apply plugin: 'idea'
-	apply plugin: 'maven-publish'
-}
-
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
 
 subprojects {
 	dependencies {
-		implementation project(':forgero-core')
-		testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-
-		annotationProcessor 'org.projectlombok:lombok:1.18.32'
-		implementation 'org.projectlombok:lombok:1.18.32'
-		
-		implementation 'org.jetbrains:annotations:23.0.0'
-		implementation 'com.google.guava:guava:31.1-jre'
-		implementation 'org.apache.logging.log4j:log4j-core:2.18.0'
-		implementation 'com.google.code.gson:gson:2.9.0'
+		implementation(project(":${rootProject.mod_id}-core"))
+		testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 	}
 
 	processResources {

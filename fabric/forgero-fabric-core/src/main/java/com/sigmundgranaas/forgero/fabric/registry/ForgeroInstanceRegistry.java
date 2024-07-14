@@ -112,7 +112,7 @@ public class ForgeroInstanceRegistry implements StateService {
 		}
 		Function<String, Optional<Identifier>> mapFn = (String id) -> Optional.of(mapper.stateToContainer(id));
 		ItemStack stack = new StateToStackConverter(ItemUtils::itemFinder, mapFn).convert(state);
-		if ((stack == null || stack.isEmpty()) && ForgeroConfigurationLoader.configuration.resourceLogging) {
+		if ((stack == null || stack.isEmpty()) && ForgeroConfigurationLoader.configuration.debugLogging) {
 			Forgero.LOGGER.warn("The converted stack is empty, which means you tried to convert invalid data: {}", state.toString());
 		}
 		return Optional.ofNullable(stack);

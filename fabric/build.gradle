@@ -1,51 +1,84 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
 plugins {
-	id "fabric-loom" version '1.5-SNAPSHOT' apply true
+	id "fabric-loom" version "${fabric_loom_version}"
 	id "com.modrinth.minotaur" version "2.+"
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-configure(allprojects) {
-	apply plugin: "idea"
-	apply plugin: 'fabric-loom'
-}
+archivesBaseName = "${rootProject.mod_id}-fabric"
 
-archivesBaseName = "forgero-fabric"
+subprojects {
+	apply plugin: "fabric-loom"
+
+	dependencies {
+		minecraft "com.mojang:minecraft:$project.minecraft_version"
+		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+		// Common module
+		api(project(":${rootProject.mod_id}-core"))
+
+		// Content modules
+
+		project(":content").subprojects.each { subproject ->
+			dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
+		}
+	}
+}
 
 dependencies {
 	minecraft "com.mojang:minecraft:$project.minecraft_version"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include project(':forgero-core')
+	// Core fabric modules
+	include(project(":${rootProject.mod_id}-core"))
+	include(project(":fabric:${rootProject.mod_id}-fabric-core"))
+	include(project(":fabric:minecraft-common"))
 
-	include project(':fabric:forgero-fabric-core')
-	include project(':fabric:minecraft-common')
-	include project(':fabric:forgero-fabric-compat')
+	// Fabric mod compat
+	include(project(":fabric:${rootProject.mod_id}-fabric-compat"))
 
-	include project(':content:forgero-vanilla')
-	include project(':content:forgero-extended')
-	include project(':content:forgero-compat')
-	include project(':content:forgero-structures')
-	include project(':fabric:modules:generator')
-	include project(':fabric:modules:bows')
+	// Modules
+	dependencies {
+		project(":fabric:modules").subprojects.each { subproject ->
+			dependencies.add("include", project(path: ":fabric:modules:${subproject.name}"))
+		}
+	}
 
-	api project(path: ':fabric:forgero-fabric-core', configuration: 'namedElements')
+	// Content
+	dependencies {
+		project(":content").subprojects.each { subproject ->
+			dependencies.add("include", project(path: ":content:${subproject.name}"))
+		}
+	}
 
-	runtimeOnly project(':content:forgero-vanilla')
-	runtimeOnly project(':content:forgero-extended')
-	runtimeOnly project(':content:forgero-compat')
-	runtimeOnly project(':content:forgero-structures')
+	// Advanced runtime resource pack
+	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+}
+
+allprojects {
+	processResources {
+		inputs.property "version", rootProject.version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": rootProject.version
+		}
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${archivesBaseName}" }
+		}
+	}
+	java {
+		withSourcesJar()
+	}
 }
 
 subprojects {
 	dependencies {
-		minecraft "com.mojang:minecraft:$project.minecraft_version"
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
-
-		annotationProcessor 'org.projectlombok:lombok:1.18.32'
-		implementation 'org.projectlombok:lombok:1.18.32'
-
 		implementation 'org.jetbrains:annotations:23.0.0'
 		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 	}
@@ -98,7 +131,7 @@ curseforge {
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
 
-	projectId = project.modid
+	projectId = project.mod_id
 	versionNumber = version
 	versionType = project.release_type
 	uploadFile = remapJar
@@ -122,25 +155,6 @@ modrinth {
 	}
 }
 
-task publishToModrinthAndCurseForge {
+tasks.register('publishToModrinthAndCurseForge') {
 	dependsOn 'modrinth', 'curseforge'
-}
-
-allprojects {
-	processResources {
-		inputs.property "version", rootProject.version
-
-		filesMatching("fabric.mod.json") {
-			expand "version": rootProject.version
-		}
-	}
-
-	jar {
-		from("LICENSE") {
-			rename { "${it}_${archivesBaseName}" }
-		}
-	}
-	java {
-		withSourcesJar()
-	}
 }

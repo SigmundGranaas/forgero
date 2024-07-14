@@ -7,6 +7,7 @@
       "template": "mastercrafted_bow_limb.png",
       "palette": "BOW_LIMB_MATERIAL",
       "order": 2,
+      "parent": "minecraft:item/bow",
       "variants": [
         {
           "predicate": [
@@ -103,36 +104,36 @@
     {
       "name": "bow_dye",
       "variants": [
-          {
-            "predicate": [
-              "model:mastercrafted_bow_pull_2.png",
-              {
-                "type": "forgero:bow_pull",
-                "pull": 0.9
-              }
-            ],
-            "template": "mastercrafted_bow_pull_2.png"
-          },
-          {
-            "predicate": [
-              "model:mastercrafted_bow_pull_1.png",
-              {
-                "type": "forgero:bow_pull",
-                "pull": 0.6
-              }
-            ],
-            "template": "mastercrafted_bow_pull_1.png"
-          },
-          {
-            "predicate": [
-              "model:mastercrafted_bow_pull_0.png",
-              {
-                "type": "forgero:bow_pull",
-                "pull": 0.1
-              }
-            ],
-            "template": "mastercrafted_bow_pull_0.png"
-          },
+        {
+          "predicate": [
+            "model:mastercrafted_bow_pull_2.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_bow_pull_2.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_bow_pull_1.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_bow_pull_1.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_bow_pull_0.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "template": "mastercrafted_bow_pull_0.png"
+        },
         {
           "target": [
             "model:mastercrafted_bow_limb.png"

@@ -62,12 +62,9 @@
         "operation": "MULTIPLICATION",
         "value": 1.5,
         "predicate": {
-          "condition": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "flags": {
-              "is_sneaking": true
-            }
+          "type": "minecraft:entity",
+          "flag": {
+            "is_sneaking": true
           }
         }
       },

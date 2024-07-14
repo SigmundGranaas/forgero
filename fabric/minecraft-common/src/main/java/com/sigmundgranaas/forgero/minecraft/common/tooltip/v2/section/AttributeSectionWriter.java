@@ -1,20 +1,22 @@
 package com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.context.Contexts;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Reach;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.AttributeWriterHelper;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
+
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 public class AttributeSectionWriter extends SectionWriter {
 
@@ -70,17 +72,32 @@ public class AttributeSectionWriter extends SectionWriter {
 		Optional<Attribute> attributeOpt = helper.attributesOfType(attributeType)
 				.filter(attribute -> attribute.getContext().test(Contexts.UNDEFINED))
 				.findFirst();
-		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attributeOpt.isPresent() && attributeOpt.get().leveledValue() == 0f) {
-			return Collections.emptyList();
-		} else if (attributeOpt.isPresent()) {
+		if (attributeOpt.isPresent()) {
+			if (shouldIgnoreAttribute(attributeOpt.get())) {
+				return Collections.emptyList();
+			}
+
 			ComputedAttribute attribute = ComputedAttribute.of(container, attributeType);
 
 			var builder = ImmutableList.<Text>builder();
 			builder.add(helper.writeBaseNumber(attribute));
 			builder.addAll(helper.writeTarget(attributeOpt.get()));
 			return builder.build();
+
 		}
 
 		return Collections.emptyList();
+	}
+
+	private boolean shouldIgnoreAttribute(Attribute attribute) {
+		if (configuration.hideZeroValues() && !configuration.showDetailedInfo() && attribute.leveledValue() == 0f) {
+			return true;
+		}
+
+		if (attribute.getAttributeType().equals(Reach.KEY) && attribute.getValue() == 4.5) {
+			return true;
+		}
+
+		return false;
 	}
 }

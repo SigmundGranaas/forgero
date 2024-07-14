@@ -56,11 +56,15 @@ public class ModelData {
 
 	@Builder.Default
 	@Nullable
-	private String texture =  Identifiers.EMPTY_IDENTIFIER;
+	private String texture = Identifiers.EMPTY_IDENTIFIER;
 
 	@Nullable
 	@SerializedName(value = "display_overrides", alternate = "display")
 	private JsonObject displayOverrides;
+
+	@Nullable
+	@SerializedName(value = "parent")
+	private String parent;
 
 	@Builder.Default
 	@Nullable
@@ -111,6 +115,11 @@ public class ModelData {
 	@NotNull
 	public List<ModelData> getChildren() {
 		return Objects.requireNonNullElse(children, Collections.emptyList());
+	}
+
+	@NotNull
+	public Optional<String> getParent() {
+		return Optional.ofNullable(this.parent);
 	}
 
 	@NotNull

@@ -21,6 +21,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.BrokenTo
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Reach;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
@@ -125,11 +126,14 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerToolTipFilters() {
-		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY);
-		defaults.stream().map(TooltipAttributeRegistry.attributeBuilder()::attribute).forEach(TooltipAttributeRegistry.AttributeBuilder::register);
+		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
+		defaults.stream()
+				.map(TooltipAttributeRegistry.attributeBuilder()::attribute)
+				.forEach(TooltipAttributeRegistry.AttributeBuilder::register);
+
 		TooltipAttributeRegistry.attributeBuilder().attribute("RARITY").condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
 
-		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY);
+		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD_BLADE).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(defaults).type(Type.MATERIAL).register();

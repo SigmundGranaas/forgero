@@ -14,6 +14,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	public List<String> disabledResources = Collections.emptyList();
 	@NotNull
 	public List<String> disabledPacks = Collections.emptyList();
+
 	// Recipes, upgrades, and loot
 	@NotNull
 	public Boolean disableVanillaRecipes = false;
@@ -63,6 +64,8 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	// Debug
 	@NotNull
 	public Boolean resourceLogging = true;
+	@NotNull
+	public Boolean debugLogging = false;
 	@NotNull
 	public Boolean logDisabledPackages = false;
 	@NotNull
