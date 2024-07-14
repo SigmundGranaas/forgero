@@ -1,0 +1,30 @@
+{
+  "type": "STONE",
+  "name": "cobbled_sculk_stone",
+  "parent": "stone_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:cobbled_sculk_stone"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "deeperdarker/cobbled_sculk_stone"
+  }
+}

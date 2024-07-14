@@ -1,0 +1,16 @@
+{
+  "type": "WOOD",
+  "name": "echo_planks",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:echo_planks"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "deeperdarker/echo_planks"
+  }
+}

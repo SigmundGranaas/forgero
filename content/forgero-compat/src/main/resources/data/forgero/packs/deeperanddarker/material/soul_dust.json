@@ -1,0 +1,30 @@
+{
+  "type": "DUST",
+  "name": "soul_dust",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:soul_dust"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "features": [
+    ]
+  },
+  "palette": {
+    "name": "deeperdarker/soul_dust"
+  }
+}

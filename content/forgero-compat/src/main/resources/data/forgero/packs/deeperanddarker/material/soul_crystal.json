@@ -1,0 +1,29 @@
+{
+  "type": "CRYSTAL",
+  "name": "soul_crystal",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:soul_crystal"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "features": [
+    ]
+  },
+  "palette": {
+    "name": "deeperdarker/soul_crystal"
+  }
+}

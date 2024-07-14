@@ -1,0 +1,30 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "sculk_vines",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:sculk_vines"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "deeperdarker/sculk_vines"
+  }
+}

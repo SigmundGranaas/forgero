@@ -153,5 +153,17 @@
   "item.forgero.sythian": "Sythian",
   "item.forgero.white_mangrove": "White Mangrove",
   "item.forgero.witch_hazel": "Witch Hazel",
-  "item.forgero.zelkova": "Zelkova"
+  "item.forgero.zelkova": "Zelkova",
+  "item.forgero.cobbled_gloomslate": "Cobbled Gloomslate",
+  "item.forgero.cobbled_sculk_stone": "Cobbled Sculk Stone",
+  "item.forgero.echo_planks": "Echo Planks",
+  "item.forgero.gloomslate": "Gloomslate",
+  "item.forgero.grime_ball": "Grime Ball",
+  "item.forgero.reinforced_echo_shard": "Reinforced Echo Shard",
+  "item.forgero.sculk_bone": "Sculk Bone",
+  "item.forgero.sculk_stone": "Sculk Stone",
+  "item.forgero.sculk_vines": "Sculk Vines",
+  "item.forgero.soul_crystal": "Soul Crystal",
+  "item.forgero.soul_dust": "Soul Dust",
+  "item.forgero.warden_carapace": "Warden Carapace"
 }

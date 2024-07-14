@@ -1,0 +1,30 @@
+{
+  "type": "GOO",
+  "name": "grime_ball",
+  "parent": "goo_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:grime_ball"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "deeperdarker/grime_ball"
+  }
+}

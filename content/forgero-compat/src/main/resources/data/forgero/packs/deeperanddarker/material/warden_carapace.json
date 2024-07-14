@@ -1,0 +1,30 @@
+{
+  "type": "SCALE",
+  "name": "warden_carapace",
+  "parent": "scale_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:warden_carapace"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "deeperdarker/warden_carapace"
+  }
+}
