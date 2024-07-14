@@ -29,7 +29,7 @@
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 245
+            "value": 260
           },
           {
             "id": "metal-rarity-composite",
@@ -93,14 +93,14 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 122
+            "value": 130
           },
           {
             "id": "metal-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 122
+            "value": 130
           },
           {
             "id": "metal-draw_power-offensive-upgrade",
