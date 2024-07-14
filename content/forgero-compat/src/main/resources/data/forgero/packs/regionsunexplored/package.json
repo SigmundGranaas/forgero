@@ -1,5 +1,5 @@
 {
-  "name": "regionsunexplored-compat",
+  "name": "regions_unexplored-compat",
   "resource_type": "PACKAGE",
   "priority": 5,
   "namespace": "minecraft",
@@ -7,6 +7,6 @@
     "minecraft",
     "forgero",
     "minecraft-vanilla",
-    "regionsunexplored"
+    "regions_unexplored"
   ]
 }

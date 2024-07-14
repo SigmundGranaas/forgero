@@ -1,9 +1,9 @@
 {
-  "namespace": "regionsunexplored",
+  "namespace": "regions_unexplored",
   "dependencies": [
     "minecraft",
     "forgero",
     "minecraft-vanilla",
-    "regionsunexplored"
+    "regions_unexplored"
   ]
 }
