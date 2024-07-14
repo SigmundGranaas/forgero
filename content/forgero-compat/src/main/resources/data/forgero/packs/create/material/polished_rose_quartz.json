@@ -10,6 +10,19 @@
     "name": "create/polished_rose_quartz"
   },
   "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
+    ],
     "grouped_attributes": [
       {
         "context": "COMPOSITE",

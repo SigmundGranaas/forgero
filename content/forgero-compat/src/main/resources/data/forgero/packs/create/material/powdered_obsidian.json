@@ -7,23 +7,97 @@
     "id": "create:powdered_obsidian"
   },
   "properties": {
-    "attributes": [
-      {
-        "type": "forgero:emissive",
-        "value": 4
-      }
-    ],
     "grouped_attributes": [
       {
         "context": "COMPOSITE",
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "dust-rarity-composite",
+            "type": "RARITY",
+            "value": 70
+          },
+          {
+            "id": "dust-durability-composite",
+            "type": "DURABILITY",
+            "value": 430
+          },
+          {
+            "id": "dust-weight-composite",
+            "type": "WEIGHT",
+            "value": 30
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "dust-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 35
+          },
+          {
+            "id": "dust-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "dust-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "dust-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "dust-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.5
+          },
+          {
+            "id": "dust-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "dust-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 215
+          },
+          {
+            "id": "dust-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 215
+          },
+          {
+            "id": "dust-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.25
+          }
         ]
       }
     ],
@@ -31,6 +105,6 @@
     ]
   },
   "palette": {
-    "name": "glowstone"
+    "name": "create/powdered_obsidian"
   }
 }
