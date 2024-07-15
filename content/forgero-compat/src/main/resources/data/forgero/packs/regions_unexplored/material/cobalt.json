@@ -1,0 +1,183 @@
+{
+  "type": "WOOD",
+  "parent": "wood_base",
+  "name": "cobalt",
+  "container": {
+    "type": "HOST",
+    "id": "regions_unexplored:cobalt_planks"
+  },
+  "palette": {
+    "name": "regions_unexplored/cobalt"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 40
+          },
+          {
+            "id": "wood-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 0
+          },
+          {
+            "id": "wood-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 0
+          },
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 40
+          },
+          {
+            "id": "wood-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 3
+          },
+          {
+            "id": "wood-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 2
+          },
+          {
+            "id": "wood-armor-composite",
+            "type": "ARMOR",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 0
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 20
+          }
+
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "wood-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "wood-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "wood-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "wood-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.25
+          },
+          {
+            "id": "wood-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 20
+          },
+          {
+            "id": "wood-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.1
+          },
+          {
+            "id": "wood-draw_speed-offensive-upgrade",
+            "type": "DRAW_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.2
+          },
+          {
+            "id": "wood-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "wood-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "wood-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "wood-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 20
+          }
+        ]
+      }
+    ]
+  }
+}

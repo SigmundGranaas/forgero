@@ -1,0 +1,171 @@
+{
+  "type": "OBSIDIAN",
+  "parent": "obsidian_base",
+  "name": "cobalt_obsidian",
+  "container": {
+    "type": "HOST",
+    "id": "regions_unexplored:cobalt_obsidian"
+  },
+  "palette": {
+    "name": "regions_unexplored/cobalt_obsidian"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "obsidian-rarity-composite",
+            "type": "RARITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 60
+          },
+          {
+            "id": "obsidian-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 3
+          },
+          {
+            "id": "obsidian-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 6
+          },
+          {
+            "id": "obsidian-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 1950
+          },
+          {
+            "id": "obsidian-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 4
+          },
+          {
+            "id": "obsidian-armor-composite",
+            "type": "ARMOR",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 0
+          },
+          {
+            "id": "obsidian-weight-composite",
+            "type": "WEIGHT",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 50
+          }
+
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "obsidian-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 30
+          },
+          {
+            "id": "obsidian-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "obsidian-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "obsidian-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "obsidian-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 3.5
+          },
+          {
+            "id": "obsidian-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.5
+          },
+          {
+            "id": "obsidian-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 975
+          },
+          {
+            "id": "obsidian-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.65
+          },
+          {
+            "id": "obsidian-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "obsidian-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "obsidian-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "obsidian-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "obsidian-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 975
+          }
+        ]
+      }
+    ]
+  }
+}

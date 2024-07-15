@@ -1,0 +1,40 @@
+{
+  "type": "CRYSTAL",
+  "name": "prismarite_cluster",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "regions_unexplored:prismarite_cluster"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "regions_unexplored/prismarite_cluster"
+  }
+}
