@@ -8,10 +8,6 @@
   },
   "properties": {
     "attributes": [
-      {
-        "type": "forgero:emissive",
-        "value": 1
-      }
     ],
     "grouped_attributes": [
       {
@@ -113,8 +109,6 @@
           }
         ]
       }
-    ],
-    "attributes": [
     ],
     "features": [
       {
