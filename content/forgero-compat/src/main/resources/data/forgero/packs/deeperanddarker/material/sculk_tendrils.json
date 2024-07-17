@@ -1,10 +1,10 @@
 {
   "type": "SOFT_PLANT",
-  "name": "sculk_vines",
+  "name": "sculk_tendrils",
   "parent": "soft_plant_base",
   "container": {
     "type": "HOST",
-    "id": "deeperdarker:sculk_vines"
+    "id": "deeperdarker:sculk_tendrils"
   },
   "properties": {
     "grouped_attributes": [
@@ -21,7 +21,7 @@
           {
             "id": "soft_plant-durability-composite",
             "type": "DURABILITY",
-            "value": 150
+            "value": 120
           }
         ]
       },
@@ -41,42 +41,28 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 75
+            "value": 60
           },
           {
             "id": "soft_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.15
+            "value": 0.3
           },
           {
             "id": "soft_plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "soft_plant-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0.3
-          },
-          {
-            "id": "soft_plant-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1
+            "value": 0.75
           },
           {
             "id": "soft_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 75
+            "value": 60
           },
           {
             "id": "soft_plant-draw_speed-utility-upgrade",
@@ -92,6 +78,6 @@
     ]
   },
   "palette": {
-    "name": "deeperanddarker/sculk_vines"
+    "name": "deeperanddarker/sculk_tendrils"
   }
 }

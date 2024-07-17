@@ -1,7 +1,7 @@
 {
-  "type": "MAKESHIFT",
+  "type": "MINERAL",
   "name": "reinforced_echo_shard",
-  "parent": "makeshift_base",
+  "parent": "mineral_base",
   "container": {
     "type": "HOST",
     "id": "deeperdarker:reinforced_echo_shard"
@@ -11,18 +11,152 @@
       {
         "context": "COMPOSITE",
         "order": "BASE",
-        "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "mineral-attack-damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 7
+          },
+          {
+            "id": "mineral-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 10
+          },
+          {
+            "id": "mineral-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 5
+          },
+          {
+            "id": "mineral-durability-composite",
+            "type": "DURABILITY",
+            "value": 2500
+          },
+          {
+            "id": "mineral-rarity-composite",
+            "type": "RARITY",
+            "value": 90
+          },
+          {
+            "id": "mineral-weight-composite",
+            "type": "WEIGHT",
+            "value": 15
+          },
+          {
+            "id": "mineral-armor-composite",
+            "type": "ARMOR",
+            "value": 9
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "mineral-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 45
+          },
+          {
+            "id": "mineral-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 7.5
+          },
+          {
+            "id": "mineral-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.15
+          },
+          {
+            "id": "mineral-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 3.5
+          },
+          {
+            "id": "mineral-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 5
+          },
+          {
+            "id": "mineral-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "mineral-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1250
+          },
+          {
+            "id": "mineral-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "mineral-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 1250
+          },
+          {
+            "id": "mineral-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.9
+          },
+          {
+            "id": "mineral-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.1
+          }
         ]
       }
     ]
   },
   "palette": {
-    "name": "deeperdarker/reinforced_echo_shard"
+    "name": "deeperanddarker/reinforced_echo_shard"
   }
 }

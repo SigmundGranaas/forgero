@@ -13,11 +13,126 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "scale-rarity-composite",
+            "type": "RARITY",
+            "value": 80
+          },
+          {
+            "id": "scale-durability-composite",
+            "type": "DURABILITY",
+            "value": 850
+          },
+          {
+            "id": "scale-weight-composite",
+            "type": "WEIGHT",
+            "value": 35
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
+          {
+            "id": "scale-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "scale-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 17.5
+          },
+          {
+            "id": "scale-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.1
+          },
+          {
+            "id": "scale-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "scale-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "scale-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "scale-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 425
+          },
+          {
+            "id": "scale-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "scale-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "scale-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "scale-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "scale-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 425
+          },
+          {
+            "id": "scale-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.7
+          },
+          {
+            "id": "scale-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.15
+          }
         ]
       }
     ],
@@ -25,6 +140,6 @@
     ]
   },
   "palette": {
-    "name": "deeperdarker/warden_carapace"
+    "name": "deeperanddarker/warden_carapace"
   }
 }
