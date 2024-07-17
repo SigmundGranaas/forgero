@@ -1,10 +1,10 @@
 {
   "type": "HARD_PLANT",
-  "name": "raw_chorus_mushroom",
+  "name": "crimson_fungus",
   "parent": "hard_plant_base",
   "container": {
     "type": "HOST",
-    "id": "betterend:chorus_mushroom_raw"
+    "id": "betterend:crimson_fungus"
   },
   "properties": {
     "grouped_attributes": [
