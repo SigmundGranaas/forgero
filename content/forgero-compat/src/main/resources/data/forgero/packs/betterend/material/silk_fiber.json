@@ -1,10 +1,11 @@
 {
-  "type": "HARD_PLANT",
-  "name": "raw_chorus_mushroom",
-  "parent": "hard_plant_base",
+  "type": "STRING",
+  "name": "silk_fiber",
+  "parent": "string_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "HOST",
-    "id": "betterend:chorus_mushroom_raw"
+    "id": "betterend:silk_fiber"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,19 +15,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "hard_plant-rarity-composite",
+            "id": "string-rarity-composite",
             "type": "RARITY",
-            "value": 40
+            "value": 10
           },
           {
-            "id": "hard_plant-durability-composite",
+            "id": "string-durability-composite",
             "type": "DURABILITY",
-            "value": 180
+            "value": 15
           },
           {
-            "id": "hard_plant-weight-composite",
+            "id": "string-weight-composite",
             "type": "WEIGHT",
-            "value": 15
+            "value": 3
           }
         ]
       },
@@ -34,104 +35,104 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "hard_plant-rarity-upgrade",
+            "id": "string-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 5
           },
           {
-            "id": "hard_plant-weight-upgrade",
+            "id": "string-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
+            "value": 1.5
+          },
+          {
+            "id": "string-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "string-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "string-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "string-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "string-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
             "value": 7.5
           },
           {
-            "id": "hard_plant-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.25
-          },
-          {
-            "id": "hard_plant-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 1
-          },
-          {
-            "id": "hard_plant-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 90
-          },
-          {
-            "id": "hard_plant-attack_speed-utility-upgrade",
+            "id": "string-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 90
-          },
-          {
-            "id": "hard_plant-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
             "value": 0.05
           },
           {
-            "id": "hard_plant-draw_speed-offensive-upgrade",
+            "id": "string-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "string-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.05
+          },
+          {
+            "id": "string-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "string-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 7.5
+          },
+          {
+            "id": "string-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.5
+          },
+          {
+            "id": "string-draw_speed-utility-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.1
+            "category": "UTILITY",
+            "value": 0.025
           }
         ]
       }
@@ -140,6 +141,6 @@
     ]
   },
   "palette": {
-    "name": "betterend/raw_chorus_mushroom"
+    "name": "betterend/silk_fiber"
   }
 }

@@ -1,10 +1,10 @@
 {
-  "type": "HARD_PLANT",
-  "name": "raw_chorus_mushroom",
-  "parent": "hard_plant_base",
+  "type": "CRYSTAL",
+  "name": "sulphur_crystal",
+  "parent": "crystal_base",
   "container": {
     "type": "HOST",
-    "id": "betterend:chorus_mushroom_raw"
+    "id": "betterend:sulphur_crystal"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,17 +14,17 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "hard_plant-rarity-composite",
+            "id": "crystal-rarity-composite",
             "type": "RARITY",
-            "value": 40
+            "value": 60
           },
           {
-            "id": "hard_plant-durability-composite",
+            "id": "crystal-durability-composite",
             "type": "DURABILITY",
-            "value": 180
+            "value": 140
           },
           {
-            "id": "hard_plant-weight-composite",
+            "id": "crystal-weight-composite",
             "type": "WEIGHT",
             "value": 15
           }
@@ -34,15 +34,15 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "hard_plant-rarity-upgrade",
+            "id": "crystal-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 30
           },
           {
-            "id": "hard_plant-weight-upgrade",
+            "id": "crystal-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
@@ -50,96 +50,94 @@
             "value": 7.5
           },
           {
-            "id": "hard_plant-attack_speed-offensive-upgrade",
+            "id": "crystal-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": 0.1
           },
           {
-            "id": "hard_plant-attack_damage-offensive-upgrade",
+            "id": "crystal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.75
+          },
+          {
+            "id": "crystal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "hard_plant-mining_speed-offensive-upgrade",
+            "id": "crystal-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "MULTIPLICATION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "crystal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 70
+          },
+          {
+            "id": "crystal-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "crystal-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "crystal-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "crystal-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "crystal-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 70
+          },
+          {
+            "id": "crystal-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.25
           },
           {
-            "id": "hard_plant-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 1
-          },
-          {
-            "id": "hard_plant-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 90
-          },
-          {
-            "id": "hard_plant-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 90
-          },
-          {
-            "id": "hard_plant-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.05
-          },
-          {
-            "id": "hard_plant-draw_speed-offensive-upgrade",
+            "id": "crystal-draw_speed-offensive-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.1
+            "value": 0
           }
         ]
       }
-    ],
-    "attributes": [
     ]
   },
   "palette": {
-    "name": "betterend/raw_chorus_mushroom"
+    "name": "betterend/sulphur_crystal"
   }
 }

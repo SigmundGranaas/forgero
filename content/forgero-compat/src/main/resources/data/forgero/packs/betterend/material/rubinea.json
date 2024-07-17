@@ -1,10 +1,10 @@
 {
-  "type": "HARD_PLANT",
-  "name": "raw_chorus_mushroom",
-  "parent": "hard_plant_base",
+  "type": "SOFT_PLANT",
+  "name": "rubinea",
+  "parent": "soft_plant_base",
   "container": {
     "type": "HOST",
-    "id": "betterend:chorus_mushroom_raw"
+    "id": "betterend:rubinea"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,19 +14,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "hard_plant-rarity-composite",
+            "id": "soft_plant-rarity-composite",
             "type": "RARITY",
-            "value": 40
-          },
-          {
-            "id": "hard_plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 180
-          },
-          {
-            "id": "hard_plant-weight-composite",
-            "type": "WEIGHT",
             "value": 15
+          },
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 70
+          },
+          {
+            "id": "soft_plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
           }
         ]
       },
@@ -34,112 +34,110 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "hard_plant-rarity-upgrade",
+            "id": "soft_plant-rarity-upgrade",
             "type": "RARITY",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 20
-          },
-          {
-            "id": "hard_plant-weight-upgrade",
-            "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
             "value": 7.5
           },
           {
-            "id": "hard_plant-attack_speed-offensive-upgrade",
+            "id": "soft_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "soft_plant-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "hard_plant-attack_damage-offensive-upgrade",
+            "id": "soft_plant-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
+            "value": -0.25
           },
           {
-            "id": "hard_plant-mining_speed-offensive-upgrade",
+            "id": "soft_plant-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.25
+            "value": -0.5
           },
           {
-            "id": "hard_plant-mining_level-offensive-upgrade",
+            "id": "soft_plant-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1
+            "value": -1
           },
           {
-            "id": "hard_plant-durability-offensive-upgrade",
+            "id": "soft_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 90
+            "value": 35
           },
           {
-            "id": "hard_plant-attack_speed-utility-upgrade",
+            "id": "soft_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0
+            "value": 0.2
           },
           {
-            "id": "hard_plant-attack_damage-utility-upgrade",
+            "id": "soft_plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "hard_plant-mining_speed-utility-upgrade",
+            "id": "soft_plant-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "hard_plant-mining_level-utility-upgrade",
+            "id": "soft_plant-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "hard_plant-durability-utility-upgrade",
+            "id": "soft_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 90
+            "value": 35
           },
           {
-            "id": "hard_plant-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
+            "id": "soft_plant-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
             "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.05
+            "category": "UTILITY",
+            "value": 3
           },
           {
-            "id": "hard_plant-draw_speed-offensive-upgrade",
+            "id": "soft_plant-draw_speed-utility-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.1
+            "category": "UTILITY",
+            "value": 0.2
           }
         ]
       }
-    ],
-    "attributes": [
     ]
   },
   "palette": {
-    "name": "betterend/raw_chorus_mushroom"
+    "name": "betterend/rubinea"
   }
 }

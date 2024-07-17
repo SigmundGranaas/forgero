@@ -1,10 +1,10 @@
 {
-  "type": "HARD_PLANT",
-  "name": "raw_chorus_mushroom",
-  "parent": "hard_plant_base",
+  "type": "STONE",
+  "name": "violecite",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
-    "id": "betterend:chorus_mushroom_raw"
+    "id": "betterend:violecite"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,19 +14,44 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "hard_plant-rarity-composite",
+            "id": "stone-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 2
+          },
+          {
+            "id": "stone-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 3
+          },
+          {
+            "id": "stone-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 4
+          },
+          {
+            "id": "stone-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 2
+          },
+          {
+            "id": "stone-durability-composite",
+            "type": "DURABILITY",
+            "value": 240
+          },
+          {
+            "id": "stone-rarity-composite",
             "type": "RARITY",
+            "value": 20
+          },
+          {
+            "id": "stone-weight-composite",
+            "type": "WEIGHT",
             "value": 40
           },
           {
-            "id": "hard_plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 180
-          },
-          {
-            "id": "hard_plant-weight-composite",
-            "type": "WEIGHT",
-            "value": 15
+            "id": "stone-armor-composite",
+            "type": "ARMOR",
+            "value": 3
           }
         ]
       },
@@ -34,104 +59,104 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "hard_plant-rarity-upgrade",
+            "id": "stone-rarity-upgrade",
             "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "stone-weight-upgrade",
+            "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
             "value": 20
           },
           {
-            "id": "hard_plant-weight-upgrade",
-            "type": "WEIGHT",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 7.5
-          },
-          {
-            "id": "hard_plant-attack_speed-offensive-upgrade",
+            "id": "stone-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "hard_plant-attack_damage-offensive-upgrade",
+            "id": "stone-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.5
+          },
+          {
+            "id": "stone-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "id": "stone-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "hard_plant-mining_speed-offensive-upgrade",
+            "id": "stone-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 120
+          },
+          {
+            "id": "stone-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "stone-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "stone-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "stone-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "stone-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 120
+          },
+          {
+            "id": "stone-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.25
           },
           {
-            "id": "hard_plant-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 1
-          },
-          {
-            "id": "hard_plant-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 90
-          },
-          {
-            "id": "hard_plant-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 90
-          },
-          {
-            "id": "hard_plant-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.05
-          },
-          {
-            "id": "hard_plant-draw_speed-offensive-upgrade",
+            "id": "stone-draw_speed-offensive-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.1
+            "value": 0
           }
         ]
       }
@@ -140,6 +165,6 @@
     ]
   },
   "palette": {
-    "name": "betterend/raw_chorus_mushroom"
+    "name": "betterend/violecite"
   }
 }
