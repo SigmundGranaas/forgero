@@ -24,23 +24,11 @@
             "value": 30
           },
           {
-            "id": "wood-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 1
-          },
-          {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
             "value": 75
-          },
-          {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 3
           },
           {
             "id": "wood-attack_damage-composite",
@@ -98,13 +86,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 37
-          },
-          {
-            "id": "wood-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.25
           },
           {
             "id": "wood-durability-utility-upgrade",
