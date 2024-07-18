@@ -1,0 +1,89 @@
+{
+  "type": "HARD_PLANT",
+  "name": "raw_chorus_mushroom",
+  "parent": "hard_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "betterend:chorus_mushroom_raw"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "hard_plant-rarity-composite",
+            "type": "RARITY",
+            "value": 40
+          },
+          {
+            "id": "hard_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 200
+          },
+          {
+            "id": "hard_plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "hard_plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "hard_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 7.5
+          },
+          {
+            "id": "hard_plant-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 100
+          },
+          {
+            "id": "hard_plant-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 100
+          },
+          {
+            "id": "hard_plant-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.15
+          },
+          {
+            "id": "hard_plant-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.05
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "betterend/raw_chorus_mushroom"
+  }
+}
