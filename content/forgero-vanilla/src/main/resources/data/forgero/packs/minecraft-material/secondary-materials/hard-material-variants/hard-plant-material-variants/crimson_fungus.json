@@ -4,7 +4,7 @@
   "parent": "hard_plant_base",
   "container": {
     "type": "HOST",
-    "id": "betterend:crimson_fungus"
+    "id": "minecraft:crimson_fungus"
   },
   "properties": {
     "grouped_attributes": [
