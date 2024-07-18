@@ -75,13 +75,6 @@
             "value": 20
           },
           {
-            "id": "stone-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "stone-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
@@ -110,34 +103,6 @@
             "value": 100
           },
           {
-            "id": "stone-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "stone-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "stone-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "stone-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
             "id": "stone-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
@@ -150,13 +115,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.7
-          },
-          {
-            "id": "stone-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }

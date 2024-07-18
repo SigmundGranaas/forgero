@@ -50,13 +50,6 @@
             "value": 5
           },
           {
-            "id": "soft_plant-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "soft_plant-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
@@ -71,13 +64,6 @@
             "value": -1
           },
           {
-            "id": "soft_plant-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "soft_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
@@ -90,27 +76,6 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
-          },
-          {
-            "id": "soft_plant-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "soft_plant-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "soft_plant-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
           },
           {
             "id": "soft_plant-durability-utility-upgrade",

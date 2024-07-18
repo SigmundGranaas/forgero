@@ -71,46 +71,11 @@
             "value": 0.5
           },
           {
-            "id": "crystal-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "crystal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 430
-          },
-          {
-            "id": "crystal-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "crystal-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "crystal-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "crystal-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
           },
           {
             "id": "crystal-durability-utility-upgrade",
@@ -125,13 +90,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.65
-          },
-          {
-            "id": "crystal-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }

@@ -57,27 +57,6 @@
             "value": 0.1
           },
           {
-            "id": "crystal-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "crystal-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "crystal-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "crystal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
@@ -92,27 +71,6 @@
             "value": 0.1
           },
           {
-            "id": "crystal-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "crystal-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "crystal-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
             "id": "crystal-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
@@ -125,13 +83,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.66
-          },
-          {
-            "id": "crystal-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }
