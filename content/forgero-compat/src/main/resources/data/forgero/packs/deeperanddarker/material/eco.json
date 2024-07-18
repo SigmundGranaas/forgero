@@ -1,6 +1,6 @@
 {
   "type": "WOOD",
-  "name": "echo_planks",
+  "name": "eco",
   "parent": "wood_base",
   "container": {
     "type": "HOST",
@@ -72,6 +72,6 @@
     ]
   },
   "palette": {
-    "name": "deeperanddarker/echo_planks"
+    "name": "deeperanddarker/eco"
   }
 }
