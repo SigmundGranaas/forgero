@@ -16,17 +16,12 @@
           {
             "id": "goo-rarity-composite",
             "type": "RARITY",
-            "value": 60
+            "value": 70
           },
           {
             "id": "goo-durability-composite",
             "type": "DURABILITY",
             "value": 320
-          },
-          {
-            "id": "goo-weight-composite",
-            "type": "WEIGHT",
-            "value": 10
           }
         ]
       },
@@ -39,36 +34,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
-          },
-          {
-            "id": "goo-weight-upgrade",
-            "type": "WEIGHT",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 5
-          },
-          {
-            "id": "goo-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": -1
-          },
-          {
-            "id": "goo-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": -1
-          },
-          {
-            "id": "goo-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": -1
+            "value": 35
           },
           {
             "id": "goo-durability-offensive-upgrade",
@@ -96,14 +62,14 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.4
+            "value": 0.25
           },
           {
             "id": "goo-draw_speed-offensive-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.2
+            "value": 0.3
           }
         ]
       }

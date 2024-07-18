@@ -44,13 +44,6 @@
             "value": 60
           },
           {
-            "id": "soft_plant-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0.3
-          },
-          {
             "id": "soft_plant-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",

@@ -23,11 +23,6 @@
             "value": 10
           },
           {
-            "id": "mineral-mining-level-composite",
-            "type": "MINING_LEVEL",
-            "value": 5
-          },
-          {
             "id": "mineral-durability-composite",
             "type": "DURABILITY",
             "value": 2500
@@ -40,7 +35,7 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 15
+            "value": 60
           },
           {
             "id": "mineral-armor-composite",
@@ -66,14 +61,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7.5
-          },
-          {
-            "id": "mineral-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.15
+            "value": 30
           },
           {
             "id": "mineral-attack_damage-offensive-upgrade",
@@ -94,7 +82,7 @@
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 2
+            "value": 3
           },
           {
             "id": "mineral-durability-offensive-upgrade",
@@ -115,14 +103,7 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.9
-          },
-          {
-            "id": "mineral-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.1
+            "value": 0.80
           }
         ]
       }

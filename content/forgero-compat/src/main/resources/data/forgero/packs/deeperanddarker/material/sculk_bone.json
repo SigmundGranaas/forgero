@@ -19,16 +19,6 @@
             "value": 60
           },
           {
-            "id": "bone-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2
-          },
-          {
-            "id": "bone-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 3
-          },
-          {
             "id": "bone-mining-speed-composite",
             "type": "MINING_SPEED",
             "value": 3.5
@@ -36,7 +26,7 @@
           {
             "id": "bone-mining-level-composite",
             "type": "MINING_LEVEL",
-            "value": 1
+            "value": 2
           },
           {
             "id": "bone-durability-composite",
@@ -44,14 +34,14 @@
             "value": 160
           },
           {
+            "id": "bone-weight-composite",
+            "type": "WEIGHT",
+            "value": 35
+          },
+          {
             "id": "bone-armor-composite",
             "type": "ARMOR",
             "value": 4
-          },
-          {
-            "id": "bone-weight-composite",
-            "type": "WEIGHT",
-            "value": 30
           }
         ]
       },
@@ -72,21 +62,21 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
-          },
-          {
-            "id": "bone-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1.75
+            "value": 17
           },
           {
             "id": "bone-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 2
+            "value": 1.75
+          },
+          {
+            "id": "bone-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
           },
           {
             "id": "bone-durability-offensive-upgrade",
@@ -107,7 +97,7 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.4
+            "value": 0.45
           }
         ]
       }

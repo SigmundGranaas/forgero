@@ -50,27 +50,6 @@
             "value": 17.5
           },
           {
-            "id": "scale-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.1
-          },
-          {
-            "id": "scale-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 2
-          },
-          {
-            "id": "scale-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 2
-          },
-          {
             "id": "scale-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
@@ -89,14 +68,7 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.7
-          },
-          {
-            "id": "scale-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.15
+            "value": 0.55
           }
         ]
       }
