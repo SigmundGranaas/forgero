@@ -119,6 +119,7 @@ curseforge {
 				optionalDependency "betternether"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
+				optionalDependency "naturalist"
 				incompatible "exordium"
 			}
 		}
