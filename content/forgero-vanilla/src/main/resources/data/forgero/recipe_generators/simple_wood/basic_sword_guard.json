@@ -13,7 +13,7 @@
   ],
   "key": {
     "x": {
-      "item": "${wood.namespace}:${wood.name}_planks"
+      "item": "${wood.namespace}:${wood.name_replace_planks}_planks"
     },
     "i": {
       "item": "${wood.namespace}:${wood.name}_slab"
