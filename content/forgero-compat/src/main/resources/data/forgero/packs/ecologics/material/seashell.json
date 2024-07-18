@@ -50,13 +50,6 @@
             "value": 12.5
           },
           {
-            "id": "scale-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "scale-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
@@ -71,46 +64,11 @@
             "value": 1
           },
           {
-            "id": "scale-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "scale-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 80
-          },
-          {
-            "id": "scale-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "scale-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "scale-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "scale-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
           },
           {
             "id": "scale-durability-utility-upgrade",

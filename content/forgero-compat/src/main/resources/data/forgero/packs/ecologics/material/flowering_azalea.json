@@ -29,11 +29,6 @@
             "value": 2
           },
           {
-            "id": "wood-mining-level-composite",
-            "type": "MINING_LEVEL",
-            "value": 0
-          },
-          {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
             "value": 40
@@ -57,11 +52,6 @@
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
             "value": 3.25
-          },
-          {
-            "id": "wood-armor-composite",
-            "type": "ARMOR",
-            "value": 0
           }
         ]
       },
@@ -85,13 +75,6 @@
             "value": 10
           },
           {
-            "id": "wood-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "wood-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
@@ -106,46 +89,11 @@
             "value": 1
           },
           {
-            "id": "wood-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 20
-          },
-          {
-            "id": "wood-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "wood-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "wood-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "wood-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
           },
           {
             "id": "wood-durability-utility-upgrade",
@@ -160,13 +108,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.3
-          },
-          {
-            "id": "wood-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }
