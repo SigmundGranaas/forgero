@@ -93,20 +93,6 @@
             "value": 25
           },
           {
-            "id": "wood-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.25
-          },
-          {
-            "id": "wood-draw_speed-offensive-upgrade",
-            "type": "DRAW_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.1
-          },
-          {
             "id": "wood-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",

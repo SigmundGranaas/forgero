@@ -31,11 +31,6 @@
             "value": 80
           },
           {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 3
-          },
-          {
             "id": "wood-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
             "context": "COMPOSITE",

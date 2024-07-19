@@ -36,13 +36,6 @@
             "value": 3.25
           },
           {
-            "id": "wood-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 2
-          },
-          {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
             "context": "COMPOSITE",
@@ -70,20 +63,6 @@
             "operation": "ADDITION",
             "category": "ALL",
             "value": 10
-          },
-          {
-            "id": "wood-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
-          },
-          {
-            "id": "wood-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
           },
           {
             "id": "wood-durability-offensive-upgrade",

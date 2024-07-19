@@ -21,7 +21,7 @@
             "type": "RARITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 40
+            "value": 30
           },
           {
             "id": "wood-durability-composite",

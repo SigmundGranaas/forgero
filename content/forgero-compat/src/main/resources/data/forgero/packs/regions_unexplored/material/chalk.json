@@ -31,20 +31,6 @@
             "value": 32
           },
           {
-            "id": "stone-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 3
-          },
-          {
-            "id": "stone-armor-composite",
-            "type": "ARMOR",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 5
-          },
-          {
             "id": "stone-weight-composite",
             "type": "WEIGHT",
             "context": "COMPOSITE",
@@ -74,13 +60,6 @@
             "value": 10
           },
           {
-            "id": "stone-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1.5
-          },
-          {
             "id": "stone-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
@@ -93,13 +72,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 16
-          },
-          {
-            "id": "stone-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.5
           },
           {
             "id": "stone-durability-utility-upgrade",

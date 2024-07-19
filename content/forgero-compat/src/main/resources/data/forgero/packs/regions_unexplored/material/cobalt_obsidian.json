@@ -21,21 +21,7 @@
             "type": "RARITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 60
-          },
-          {
-            "id": "obsidian-mining_level-composite",
-            "type": "MINING_LEVEL",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 3
-          },
-          {
-            "id": "obsidian-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 6
+            "value": 80
           },
           {
             "id": "obsidian-durability-composite",
@@ -43,20 +29,6 @@
             "context": "COMPOSITE",
             "operation": "ADDITION",
             "value": 1950
-          },
-          {
-            "id": "obsidian-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 4
-          },
-          {
-            "id": "obsidian-weight-composite",
-            "type": "WEIGHT",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 50
           }
 
         ]
@@ -70,36 +42,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
-          },
-          {
-            "id": "obsidian-weight-upgrade",
-            "type": "WEIGHT",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 25
-          },
-          {
-            "id": "obsidian-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 2
-          },
-          {
-            "id": "obsidian-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 3.5
-          },
-          {
-            "id": "obsidian-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1.5
+            "value": 40
           },
           {
             "id": "obsidian-durability-offensive-upgrade",
@@ -107,13 +50,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 975
-          },
-          {
-            "id": "obsidian-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.65
           },
           {
             "id": "obsidian-durability-utility-upgrade",
