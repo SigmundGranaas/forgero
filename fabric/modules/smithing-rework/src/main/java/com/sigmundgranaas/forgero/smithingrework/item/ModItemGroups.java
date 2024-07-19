@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.smithingrework.item;
 
+import static com.sigmundgranaas.forgero.smithingrework.ForgeroSmithingInitializer.BLOOMERY_ITEM;
+import static com.sigmundgranaas.forgero.smithingrework.ForgeroSmithingInitializer.CRUCIBLE;
+
 import com.sigmundgranaas.forgero.core.Forgero;
-
 import com.sigmundgranaas.forgero.smithingrework.block.ModBlocks;
-
 import com.sigmundgranaas.forgero.smithingrework.fluid.ModFluids;
-
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -15,6 +14,8 @@ import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
 public class ModItemGroups {
 	public static final ItemGroup SMITHING_GROUP = Registry.register(Registries.ITEM_GROUP,
 			new Identifier(Forgero.NAMESPACE, "smithing"),
@@ -22,16 +23,17 @@ public class ModItemGroups {
 					.icon(() -> new ItemStack(ModBlocks.SMITHING_ANVIL)).entries((displayContext, entries) -> {
 						entries.add(ModItems.TONGS);
 						entries.add(ModItems.SMITHING_HAMMER);
-						entries.add(ModItems.CRUCIBLE);
-						entries.add(ModItems.CLAY_CRUCIBLE );
+						entries.add(CRUCIBLE);
+						entries.add(ModItems.CLAY_CRUCIBLE);
 
 						entries.add(ModBlocks.SMITHING_ANVIL);
-						entries.add(ModBlocks.BLOOMERY);
+						entries.add(BLOOMERY_ITEM);
 
 						entries.add(ModFluids.MOLTEN_IRON_BUCKET);
 
 
 					}).build());
+
 	public static void registerItemGroups() {
 		Forgero.LOGGER.info("Registering Item Groups for " + Forgero.NAMESPACE);
 	}
