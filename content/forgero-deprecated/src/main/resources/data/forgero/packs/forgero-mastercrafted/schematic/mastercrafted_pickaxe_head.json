@@ -1,0 +1,89 @@
+{
+  "type": "PICKAXE_HEAD_SCHEMATIC",
+  "name": "mastercrafted_pickaxe_head-schematic",
+  "parent": "pickaxe_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "PICKAXE_HEAD",
+    "target": "CREATE",
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "refined-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.5
+          },
+          {
+            "id": "refined-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.5
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    }
+  }
+}
