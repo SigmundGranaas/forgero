@@ -1,5 +1,5 @@
 {
-  "name": "betterend-materials",
+  "name": "betterend-compat",
   "resource_type": "PACKAGE",
   "priority": 5,
   "namespace": "betterend",
