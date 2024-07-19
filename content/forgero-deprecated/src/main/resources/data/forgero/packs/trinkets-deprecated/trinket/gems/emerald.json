@@ -1,6 +1,6 @@
 {
   "type": "GEM",
-  "name": "emerald-gem",
+  "name": "diamond_gem_1",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -13,7 +13,7 @@
         "order": "BASE",
         "category": "ALL",
         "operation": "ADDITION",
-        "value": 40
+        "value": 30
       },
       {
         "type": "DURABILITY",
@@ -21,11 +21,11 @@
         "order": "BASE",
         "category": "ALL",
         "operation": "ADDITION",
-        "value": 300.0
+        "value": 250
       }
     ]
   },
   "palette": {
-    "name": "emerald_gem"
+    "name": "diamond_gem"
   }
 }

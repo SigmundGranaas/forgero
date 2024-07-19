@@ -1,6 +1,6 @@
 {
   "type": "GEM",
-  "name": "lapis-gem",
+  "name": "echo_gem_1",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -21,11 +21,11 @@
         "context": "UPGRADE",
         "category": "ALL",
         "operation": "ADDITION",
-        "value": 2.0
+        "value": 1
       }
     ]
   },
   "palette": {
-    "name": "lapis_gem"
+    "name": "echo_gem"
   }
 }

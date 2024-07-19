@@ -90,7 +90,6 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowTridentHandl
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.GemItemRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicToolItemRegistrationHandler;
@@ -165,7 +164,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		converterRegistry.register("forgero:default", baseConverter);
 		RegistryUtils.register(converterRegistry, new DynamicWeaponItemRegistrationHandler(baseConverter));
 		RegistryUtils.register(converterRegistry, new DynamicToolItemRegistrationHandler(baseConverter));
-		RegistryUtils.register(converterRegistry, new GemItemRegistrar(baseConverter));
 	}
 
 	private void registerPredicateBuilders() {

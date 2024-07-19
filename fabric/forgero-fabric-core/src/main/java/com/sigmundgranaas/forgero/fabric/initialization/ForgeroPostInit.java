@@ -21,6 +21,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.BrokenTo
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Reach;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
@@ -115,9 +116,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		operation("forgero:state_identifier", "id", factory.build(idConverter));
 		operation("forgero:tag_or_item", "tagOrItem", factory.build(tagOrItem));
 
-		// Edge cases
-		operation("forgero:state_name_replace_planks", "name_replace_planks", factory.build((State state) -> state.name().replace("_planks", "")));
-
 		Function<String, List<State>> stateFinder = (type) -> ForgeroStateRegistry.TREE.find(Type.of(type))
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder()
@@ -129,14 +127,11 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerToolTipFilters() {
-		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
-		defaults.stream()
-				.map(TooltipAttributeRegistry.attributeBuilder()::attribute)
-				.forEach(TooltipAttributeRegistry.AttributeBuilder::register);
+		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Reach.KEY, Weight.KEY);
+		defaults.stream().map(TooltipAttributeRegistry.attributeBuilder()::attribute).forEach(TooltipAttributeRegistry.AttributeBuilder::register);
+		TooltipAttributeRegistry.attributeBuilder().attribute(Rarity.KEY).condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
 
-		TooltipAttributeRegistry.attributeBuilder().attribute("RARITY").condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
-
-		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
+		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY);
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD_BLADE).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(defaults).type(Type.MATERIAL).register();

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "forgero:item/magneticgem"
+    "layer0": "forgero:item/echo_gem_2"
   }
 }
