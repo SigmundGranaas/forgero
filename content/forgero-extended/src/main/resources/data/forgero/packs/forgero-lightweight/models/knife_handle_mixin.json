@@ -1,0 +1,17 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:knife_blade.png"
+          ],
+          "template": "throwing_handle.png"
+        }
+      ]
+    }
+  ]
+}
