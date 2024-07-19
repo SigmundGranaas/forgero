@@ -1,0 +1,9 @@
+{
+  "type": "forgero:metal_smelting",
+  "ingredient": {
+    "item": "minecraft:iron_ingot"
+  },
+  "liquid_amount": 1,
+  "liquid": "forgero:iron",
+  "cookingtime": 200
+}
