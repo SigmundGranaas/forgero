@@ -1,55 +1,146 @@
 package com.sigmundgranaas.forgero.smithingrework.block.entity;
 
-import com.sigmundgranaas.forgero.core.Forgero;
+import static com.sigmundgranaas.forgero.smithingrework.ForgeroSmithingInitializer.BLOOMERY_BLOCK_ENTITY;
+
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.smithingrework.block.custom.BloomeryBlock;
+import com.sigmundgranaas.forgero.smithingrework.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithingrework.recipe.MetalSmeltingRecipe;
 
-import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.CampfireBlockEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.screen.FurnaceScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-import org.jetbrains.annotations.Nullable;
+public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
+	private final BloomeryInventory inventory = new BloomeryInventory();
+	private int cookTime = 0;
+	private MetalSmeltingRecipe currentRecipe;
+	private final PropertyDelegate propertyDelegate;
 
-public class BloomeryBlockEntity extends AbstractFurnaceBlockEntity {
+
 	public BloomeryBlockEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.BLOOMERY_BLOCK, pos, state, RecipeType.SMELTING);
+		super(BLOOMERY_BLOCK_ENTITY, pos, state);
+		this.propertyDelegate = new PropertyDelegate() {
+			@Override
+			public int get(int index) {
+				if (index == 0) {
+					return cookTime;
+				}
+				return 0;
+			}
+
+			@Override
+			public void set(int index, int value) {
+				if (index == 0) {
+					cookTime = value;
+				}
+			}
+
+			@Override
+			public int size() {
+				return 1;
+			}
+		};
+	}
+
+	public BloomeryInventory getInventory() {
+		return inventory;
+	}
+
+	public static void tick(World world, BlockPos pos, BlockState state, BloomeryBlockEntity be) {
+		if (world.isClient) return;
+
+		boolean wasLit = state.get(BloomeryBlock.LIT);
+		boolean shouldBeLit = be.isSmelting();
+
+		if (wasLit != shouldBeLit) {
+			world.setBlockState(pos, state.with(BloomeryBlock.LIT, shouldBeLit), Block.NOTIFY_ALL);
+		}
+
+		if (be.currentRecipe == null) {
+			Optional<MetalSmeltingRecipe> recipe = world.getRecipeManager()
+					.getFirstMatch(MetalSmeltingRecipe.TYPE, be.inventory, world);
+			if (recipe.isPresent()) {
+				be.currentRecipe = recipe.get();
+				be.cookTime = 0;
+			}
+		}
+
+		if (be.currentRecipe != null && be.canSmelt()) {
+			be.cookTime++;
+			if (be.cookTime >= be.currentRecipe.getCookingTime()) {
+				be.craftItem();
+			}
+		} else {
+			be.cookTime = 0;
+		}
+
+		be.markDirty();
+	}
+
+	private boolean isSmelting() {
+		return this.currentRecipe != null && this.canSmelt();
+	}
+
+	private boolean canSmelt() {
+		if (this.currentRecipe == null) return false;
+		ItemStack inputStack = inventory.getStack(BloomeryInventory.INGREDIENT_SLOT);
+
+		return !inputStack.isEmpty() &&
+				this.currentRecipe.matches(this.inventory, this.world);
+	}
+
+	private void craftItem() {
+		if (this.currentRecipe != null && this.canSmelt()) {
+			ItemStack ingredient = inventory.getStack(BloomeryInventory.INGREDIENT_SLOT);
+			ItemStack crucibleStack = inventory.getStack(BloomeryInventory.CRUCIBLE_SLOT);
+
+			if (crucibleStack.getItem() instanceof LiquidMetalCrucibleItem crucibleItem && crucibleItem.canAddLiquid(ingredient, currentRecipe.getLiquid(), currentRecipe.getLiquidAmount())) {
+				crucibleItem.addLiquid(crucibleStack, currentRecipe.getLiquid(), currentRecipe.getLiquidAmount());
+			}
+
+			inventory.getStack(BloomeryInventory.INGREDIENT_SLOT).decrement(1);
+
+			this.cookTime = 0;
+			this.currentRecipe = null;
+		}
+	}
+
+
+	@Override
+	public void writeNbt(NbtCompound nbt) {
+		super.writeNbt(nbt);
+		Inventories.writeNbt(nbt, inventory.getItems());
+		nbt.putInt("CookTime", cookTime);
 	}
 
 	@Override
-	protected Text getContainerName() {
-		return Text.translatable("container." + Forgero.NAMESPACE + "_bloomery");
+	public void readNbt(NbtCompound nbt) {
+		super.readNbt(nbt);
+		Inventories.readNbt(nbt, inventory.getItems());
+		cookTime = nbt.getInt("CookTime");
+	}
+
+
+	@Override
+	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+		return new BloomeryScreenHandler(syncId, playerInventory, this.inventory, this.propertyDelegate);
 	}
 
 	@Override
-	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
-		return new FurnaceScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
+	public Text getDisplayName() {
+		return Text.translatable("block.forgero.bloomery");
 	}
 }
-
-
-
-
-
-

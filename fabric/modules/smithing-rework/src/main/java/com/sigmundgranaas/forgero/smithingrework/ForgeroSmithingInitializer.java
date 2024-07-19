@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.smithingrework;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.smithingrework.block.ModBlocks;
-import com.sigmundgranaas.forgero.smithingrework.block.custom.BloomeryBlock2;
+import com.sigmundgranaas.forgero.smithingrework.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithingrework.block.custom.MoldBlock;
-import com.sigmundgranaas.forgero.smithingrework.block.entity.BloomeryBlockEntity2;
+import com.sigmundgranaas.forgero.smithingrework.block.entity.BloomeryBlockEntity;
 import com.sigmundgranaas.forgero.smithingrework.block.entity.BloomeryScreenHandler;
 import com.sigmundgranaas.forgero.smithingrework.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithingrework.block.entity.MoldBlockEntity;
@@ -35,9 +35,9 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntryPoint {
 	public static final RegistryKey<ItemGroup> FORGERO_SMITHING_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "smithing"));
 
-	public static final Block BLOOMERY_BLOCK2 = new BloomeryBlock2(FabricBlockSettings.copyOf(Blocks.STONE).strength(4.0f).requiresTool());
-	public static final BlockItem BLOOMERY_ITEM = new BlockItem(BLOOMERY_BLOCK2, new Item.Settings());
-	public static final BlockEntityType<BloomeryBlockEntity2> BLOOMERY_BLOCK_ENTITY = FabricBlockEntityTypeBuilder.create(BloomeryBlockEntity2::new, BLOOMERY_BLOCK2).build(null);
+	public static final Block BLOOMERY_BLOCK = new BloomeryBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(4.0f).requiresTool());
+	public static final BlockItem BLOOMERY_ITEM = new BlockItem(BLOOMERY_BLOCK, new Item.Settings());
+	public static final BlockEntityType<BloomeryBlockEntity> BLOOMERY_BLOCK_ENTITY = FabricBlockEntityTypeBuilder.create(BloomeryBlockEntity::new, BLOOMERY_BLOCK).build(null);
 	public static final ScreenHandlerType<BloomeryScreenHandler> BLOOMERY_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, new Identifier(Forgero.NAMESPACE, "bloomery"), new ScreenHandlerType<>(BloomeryScreenHandler::new, FeatureFlags.VANILLA_FEATURES));
 	public static final Item CRUCIBLE = new LiquidMetalCrucibleItem(new Item.Settings());
 
@@ -52,7 +52,7 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 	@Override
 	public void onPreInitialization() {
 		// Bloomery and crucible
-		Registry.register(Registries.BLOCK, new Identifier(Forgero.NAMESPACE, "bloomery"), BLOOMERY_BLOCK2);
+		Registry.register(Registries.BLOCK, new Identifier(Forgero.NAMESPACE, "bloomery"), BLOOMERY_BLOCK);
 		Registry.register(Registries.ITEM, new Identifier(Forgero.NAMESPACE, "bloomery"), BLOOMERY_ITEM);
 		Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(Forgero.NAMESPACE, "bloomery"), BLOOMERY_BLOCK_ENTITY);
 		Registry.register(Registries.ITEM, new Identifier(Forgero.NAMESPACE, "crucible"), CRUCIBLE);
