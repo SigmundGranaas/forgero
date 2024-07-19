@@ -82,7 +82,7 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.66
+            "value": 0.5
           }
         ]
       }

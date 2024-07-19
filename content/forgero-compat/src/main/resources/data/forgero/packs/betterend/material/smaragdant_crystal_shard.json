@@ -16,7 +16,7 @@
           {
             "id": "crystal-rarity-composite",
             "type": "RARITY",
-            "value": 60
+            "value": 70
           },
           {
             "id": "crystal-durability-composite",
@@ -39,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 35
           },
           {
             "id": "crystal-weight-upgrade",

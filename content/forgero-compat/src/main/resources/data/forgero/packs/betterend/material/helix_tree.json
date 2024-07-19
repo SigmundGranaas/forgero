@@ -14,19 +14,9 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2
-          },
-          {
             "id": "wood-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
             "value": 2.5
-          },
-          {
-            "id": "wood-mining-speed-composite",
-            "type": "MINING_SPEED",
-            "value": 2
           },
           {
             "id": "wood-durability-composite",
@@ -36,17 +26,12 @@
           {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 10
+            "value": 40
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
             "value": 20
-          },
-          {
-            "id": "wood-draw_speed-composite",
-            "type": "forgero:draw_speed",
-            "value": 1.2
           },
           {
             "id": "wood-draw_power-composite",
@@ -64,7 +49,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 20
           },
           {
             "id": "wood-weight-upgrade",
@@ -73,20 +58,6 @@
             "operation": "ADDITION",
             "category": "ALL",
             "value": 10
-          },
-          {
-            "id": "wood-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
-          },
-          {
-            "id": "wood-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
           },
           {
             "id": "wood-durability-offensive-upgrade",

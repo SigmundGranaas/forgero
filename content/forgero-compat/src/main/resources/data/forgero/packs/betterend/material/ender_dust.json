@@ -75,7 +75,7 @@
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.2
+            "value": 0.05
           }
         ]
       }

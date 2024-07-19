@@ -14,21 +14,6 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2
-          },
-          {
-            "id": "wood-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 2
-          },
-          {
-            "id": "wood-mining-speed-composite",
-            "type": "MINING_SPEED",
-            "value": 2
-          },
-          {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
             "value": 60
@@ -36,7 +21,7 @@
           {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 10
+            "value": 40
           },
           {
             "id": "wood-weight-composite",
@@ -64,7 +49,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 20
           },
           {
             "id": "wood-weight-upgrade",

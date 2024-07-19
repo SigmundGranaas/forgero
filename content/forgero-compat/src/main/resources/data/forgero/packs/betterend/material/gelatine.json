@@ -16,7 +16,7 @@
           {
             "id": "goo-rarity-composite",
             "type": "RARITY",
-            "value": 87.5
+            "value": 80
           },
           {
             "id": "goo-durability-composite",
@@ -39,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 43.75
+            "value": 40
           },
           {
             "id": "goo-weight-upgrade",
@@ -82,7 +82,7 @@
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.3
+            "value": 0.25
           },
           {
             "id": "goo-durability-utility-upgrade",
@@ -96,14 +96,14 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.35
+            "value": 0.3
           },
           {
             "id": "goo-draw_speed-offensive-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.1
+            "value": 0.08
           }
         ]
       }
