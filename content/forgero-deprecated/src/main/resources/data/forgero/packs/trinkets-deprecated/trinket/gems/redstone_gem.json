@@ -1,6 +1,6 @@
 {
   "type": "GEM",
-  "name": "prismarine_gem_1",
+  "name": "redstone-gem",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -17,7 +17,6 @@
       },
       {
         "type": "ATTACK_DAMAGE",
-        "context": "UPGRADE",
         "order": "BASE",
         "category": "ALL",
         "operation": "ADDITION",
@@ -26,6 +25,6 @@
     ]
   },
   "palette": {
-    "name": "prismarine_gem"
+    "name": "redstone_gem"
   }
 }

@@ -1,6 +1,6 @@
 {
   "type": "GEM",
-  "name": "quartz_gem_2",
+  "name": "ender-gem",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -16,16 +16,16 @@
         "value": 30
       },
       {
-        "type": "ARMOR",
+        "type": "WEIGHT",
         "context": "UPGRADE",
-        "order": "BASE",
+        "order": "END",
         "category": "ALL",
         "operation": "ADDITION",
-        "value": 2
+        "value": -10
       }
     ]
   },
   "palette": {
-    "name": "quartz_gem"
+    "name": "ender_gem"
   }
 }
