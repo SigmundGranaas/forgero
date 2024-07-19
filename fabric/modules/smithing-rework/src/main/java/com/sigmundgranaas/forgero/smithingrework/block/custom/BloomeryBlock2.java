@@ -37,7 +37,7 @@ public class BloomeryBlock2 extends BlockWithEntity implements BlockEntityProvid
 	public static final BooleanProperty LIT = Properties.LIT;
 
 	public BloomeryBlock2(Settings settings) {
-		super(settings);
+		super(settings.luminance((state) -> state.get(LIT) ? 13 : 0));
 		setDefaultState(this.stateManager.getDefaultState()
 				.with(FACING, Direction.NORTH)
 				.with(LIT, false));
