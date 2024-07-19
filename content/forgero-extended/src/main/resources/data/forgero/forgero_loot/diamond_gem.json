@@ -1,0 +1,12 @@
+{
+  "id": "diamond_gem_from_ore",
+  "tables": [
+    "minecraft:blocks/diamond_ore",
+    "minecraft:blocks/deepslate_diamond_ore"
+  ],
+  "ids": [
+    "forgero:diamond_gem_1"
+  ],
+  "chance": 0.025,
+  "rolls": 1
+}

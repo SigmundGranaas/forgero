@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": {
+        "item": "forgero:echo_gem_2"
+    },
+    "result": "forgero:echo_gem_3",
+    "count": 1
+}
