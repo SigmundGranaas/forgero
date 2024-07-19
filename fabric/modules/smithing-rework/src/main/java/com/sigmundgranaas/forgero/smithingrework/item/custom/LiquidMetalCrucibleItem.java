@@ -38,6 +38,11 @@ public class LiquidMetalCrucibleItem extends Item {
 		return nbt != null && nbt.contains("liquid") && nbt.contains("quantity");
 	}
 
+	public boolean hasMoreOrEqualLiquid(ItemStack stack, int amount) {
+		NbtCompound nbt = stack.getNbt();
+		return nbt != null && nbt.contains("liquid") && nbt.contains("quantity") && nbt.getInt("quantity") >= amount;
+	}
+
 	public boolean canAddLiquid(ItemStack stack, Identifier liquid, int amount) {
 		NbtCompound nbt = stack.getNbt();
 		if (nbt == null) {
@@ -154,7 +159,7 @@ public class LiquidMetalCrucibleItem extends Item {
 
 		Optional<MetalMoldRecipe> recipeOpt = world.getRecipeManager().getFirstMatch(
 				MetalMoldRecipe.TYPE,
-				new SimpleInventory(world.getBlockState(pos).getBlock().asItem().getDefaultStack()),
+				new SimpleInventory(world.getBlockState(pos).getBlock().asItem().getDefaultStack(), stack),
 				world
 		);
 
