@@ -27,7 +27,7 @@ public class BloomeryScreenHandler extends ScreenHandler {
 		this.inventory = inventory;
 
 		// Bloomery Inventory
-		this.addSlot(new Slot(inventory, INGREDIENT_SLOT, 56, 35));  // Input slot
+		this.addSlot(new Slot(inventory, INGREDIENT_SLOT, 56, 17));  // Input slot
 		this.addSlot(new Slot(inventory, CRUCIBLE_SLOT, 116, 35)); // Crucible slot
 
 		// Player Inventory (3 rows of 9 slots)
