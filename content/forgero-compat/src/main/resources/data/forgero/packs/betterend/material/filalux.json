@@ -16,7 +16,7 @@
           {
             "id": "soft_plant-rarity-composite",
             "type": "RARITY",
-            "value": 15
+            "value": 45
           },
           {
             "id": "soft_plant-durability-composite",
@@ -39,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7.5
+            "value": 22
           },
           {
             "id": "soft_plant-weight-upgrade",
@@ -69,13 +69,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 57.5
-          },
-          {
-            "id": "soft_plant-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0.1
           },
           {
             "id": "soft_plant-durability-utility-upgrade",

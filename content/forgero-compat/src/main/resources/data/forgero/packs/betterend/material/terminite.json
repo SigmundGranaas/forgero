@@ -14,11 +14,6 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "metal-attack_speed-composite",
-            "type": "ATTACK_SPEED",
-            "value": 2
-          },
-          {
             "id": "metal-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
             "value": 5
@@ -57,11 +52,6 @@
             "id": "metal-draw_power-composite",
             "type": "forgero:draw_power",
             "value": 4
-          },
-          {
-            "id": "metal-armor-composite",
-            "type": "ARMOR",
-            "value": 7
           }
         ]
       },
@@ -82,7 +72,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 22.5
+            "value": 22
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",

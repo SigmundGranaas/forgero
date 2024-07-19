@@ -1,10 +1,10 @@
 {
-  "type": "WOOD",
-  "name": "pythadendron",
-  "parent": "wood_base",
+  "type": "HARD_PLANT",
+  "name": "small_amaranita_mushroom",
+  "parent": "hard_plant_base",
   "container": {
     "type": "HOST",
-    "id": "betterend:pythadendron_planks"
+    "id": "betterend:small_amaranita_mushroom"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,29 +14,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 90
-          },
-          {
-            "id": "wood-rarity-composite",
+            "id": "hard_plant-rarity-composite",
             "type": "RARITY",
             "value": 40
           },
           {
-            "id": "wood-weight-composite",
+            "id": "hard_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 180
+          },
+          {
+            "id": "hard_plant-weight-composite",
             "type": "WEIGHT",
-            "value": 30
-          },
-          {
-            "id": "wood-draw_speed-composite",
-            "type": "forgero:draw_speed",
-            "value": 1
-          },
-          {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 3.25
+            "value": 15
           }
         ]
       },
@@ -44,7 +34,7 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "wood-rarity-upgrade",
+            "id": "hard_plant-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -52,43 +42,36 @@
             "value": 20
           },
           {
-            "id": "wood-weight-upgrade",
+            "id": "hard_plant-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 7.5
           },
           {
-            "id": "wood-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.05
-          },
-          {
-            "id": "wood-durability-offensive-upgrade",
+            "id": "hard_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 45
+            "value": 90
           },
           {
-            "id": "wood-durability-utility-upgrade",
+            "id": "hard_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 45
+            "value": 90
           },
           {
-            "id": "wood-draw_power-offensive-upgrade",
+            "id": "hard_plant-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.45
+            "value": 0.1
           },
           {
-            "id": "wood-draw_speed-offensive-upgrade",
+            "id": "hard_plant-draw_speed-offensive-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
@@ -101,6 +84,6 @@
     ]
   },
   "palette": {
-    "name": "betterend/pythadendron"
+    "name": "betterend/small_amaranita_mushroom"
   }
 }
