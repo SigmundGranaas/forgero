@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "filled=false": {
+      "model": "forgero:block/pickaxe_mold_empty"
+    },
+    "filled=true": {
+      "model": "forgero:block/pickaxe_mold_filled"
+    }
+  }
+}

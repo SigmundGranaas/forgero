@@ -10,7 +10,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class BloomeryScreen extends HandledScreen<BloomeryScreenHandler> {
-	private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/bloomery.png");
+	private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/container/bloomery.png");
 
 	public BloomeryScreen(BloomeryScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
