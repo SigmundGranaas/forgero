@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -88,7 +89,9 @@ public class BloomeryBlock extends BlockWithEntity implements BlockEntityProvide
 			double f = (double) pos.getZ() + 0.5;
 			if (random.nextDouble() < 0.1) {
 				world.playSound(d, e, f, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+
 			}
+
 
 			Direction direction = state.get(FACING);
 			Direction.Axis axis = direction.getAxis();
@@ -98,6 +101,13 @@ public class BloomeryBlock extends BlockWithEntity implements BlockEntityProvide
 			double k = axis == Direction.Axis.Z ? (double) direction.getOffsetZ() * 0.52 : h;
 			world.addParticle(ParticleTypes.SMOKE, d + i, e + j, f + k, 0.0, 0.0, 0.0);
 			world.addParticle(ParticleTypes.FLAME, d + i, e + j, f + k, 0.0, 0.0, 0.0);
+
+			if ( random.nextInt(5) == 0) {
+				for (int p = 0; p < random.nextInt(1) + 1; ++p) {
+					world.addParticle(ParticleTypes.LAVA, (double) pos.getX() + 0.5, (double) pos.getY() + 1.5, (double) pos.getZ() + 0.5, random.nextFloat() / 2.0f, 5.0E-5, random.nextFloat() / 2.0f);
+					world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, (double) pos.getX() + 0.5, (double) pos.getY() + 1.5, (double) pos.getZ() + 0.5, 0, 0.05, 0);
+				}
+			}
 		}
 	}
 
