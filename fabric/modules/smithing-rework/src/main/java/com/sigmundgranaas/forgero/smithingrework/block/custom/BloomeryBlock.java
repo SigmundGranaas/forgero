@@ -105,14 +105,19 @@ public class BloomeryBlock extends BlockWithEntity implements BlockEntityProvide
 			if ( random.nextInt(5) == 0) {
 				for (int p = 0; p < random.nextInt(1) + 1; ++p) {
 					world.addParticle(ParticleTypes.LAVA, (double) pos.getX() + 0.5, (double) pos.getY() + 1.5, (double) pos.getZ() + 0.5, random.nextFloat() / 2.0f, 5.0E-5, random.nextFloat() / 2.0f);
-					world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, (double) pos.getX() + 0.5, (double) pos.getY() + 1.5, (double) pos.getZ() + 0.5, 0, 0.05, 0);
-				}
+
+}
 			}
+					if ( random.nextInt(2) == 0) {
+					for (int p = 0; p < random.nextInt(1) + 1; ++p) {
+		world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, (double) pos.getX() + 0.5, (double) pos.getY() + 1.5, (double) pos.getZ() + 0.5, 0, 0.05, 0);
 		}
-	}
+		}
+		}
+		}
 
 
-	@Override
+@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (!world.isClient) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
