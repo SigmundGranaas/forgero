@@ -117,8 +117,8 @@ curseforge {
 				optionalDependency "modmenu"
 				optionalDependency "mythicmetals"
 				optionalDependency "betternether"
+				optionalDependency "betterend"
 				optionalDependency "mystical-crops"
-				optionalDependency "mythicmetals"
 				incompatible "exordium"
 			}
 		}
