@@ -1,0 +1,35 @@
+{
+  "category": "forgero:schematics",
+  "name": "book.forgero.guidebook.getting_started.schematic_variants.name",
+  "description": "book.forgero.guidebook.getting_started.schematic_variants.description",
+  "icon": "forgero:pickaxe_head-schematic",
+  "x": -2,
+  "y": -2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.getting_started.schematic_variants.text",
+      "title": "book.forgero.guidebook.getting_started.schematic_variants.title",
+      "use_markdown_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.getting_started.schematic_variants.text1",
+      "title": "book.forgero.guidebook.getting_started.schematic_variants.title1",
+      "use_markdown_title": false
+    }
+
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:schematics/schematics",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}
