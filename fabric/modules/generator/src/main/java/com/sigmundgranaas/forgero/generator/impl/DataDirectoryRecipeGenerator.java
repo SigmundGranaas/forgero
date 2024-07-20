@@ -33,14 +33,17 @@ public class DataDirectoryRecipeGenerator {
 	}
 
 	private boolean validateRecipe(IdentifiedJson identifiedJson) {
-		if (identifiedJson.json().has("result")) {
-			JsonObject result = identifiedJson.json().getAsJsonObject("result");
-			if (result.has("item")) {
-				Identifier item = new Identifier(result.get("item").getAsString());
-				return Registries.ITEM.containsId(item);
+		if (identifiedJson.json().get("type").getAsString().contains("crafting")) {
+			if (identifiedJson.json().has("result")) {
+				JsonObject result = identifiedJson.json().getAsJsonObject("result");
+				if (result.has("item")) {
+					Identifier item = new Identifier(result.get("item").getAsString());
+					return Registries.ITEM.containsId(item);
+				}
 			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private Stream<IdentifiedJson> convertToIdentifiedJson(JsonObject object) {

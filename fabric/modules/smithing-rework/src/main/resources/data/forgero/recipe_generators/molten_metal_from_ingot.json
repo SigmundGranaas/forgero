@@ -1,0 +1,16 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "variables": {
+    "metal": {
+      "type": "METAL"
+    }
+  },
+  "identifier": "forgero:${metal.name}-to_molten-recipe",
+  "type": "forgero:metal_smelting",
+  "ingredient": {
+    "${metal.tagOrItem}": "${metal.identifier}"
+  },
+  "liquid_amount": 1,
+  "liquid": "${metal.namespace}:${metal.name}",
+  "cookingtime": 200
+}

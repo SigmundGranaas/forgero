@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithingrework.recipe;
 
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.smithingrework.item.custom.LiquidMetalCrucibleItem;
 
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -36,7 +37,11 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 
 	@Override
 	public boolean matches(SimpleInventory inventory, World world) {
-		return mold.test(inventory.getStack(0));
+		ItemStack crucible = inventory.getStack(1);
+		return mold.test(inventory.getStack(0))
+				&& crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem
+				&& crucibleItem.hasMoreOrEqualLiquid(crucible, liquidAmount)
+				&& crucibleItem.getLiquidType(crucible).equals(liquid);
 	}
 
 	@Override
