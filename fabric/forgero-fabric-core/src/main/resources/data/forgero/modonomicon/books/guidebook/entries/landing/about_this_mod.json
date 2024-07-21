@@ -3,7 +3,7 @@
   "background_v_index": 1,
   "name": "book.forgero.guidebook.landing.about_this_mod.name",
   "description": "",
-  "icon": "forgero:guidebook",
+  "icon": "minecraft:nether_star",
   "x": 1.5,
   "y": 0,
   "pages": [
@@ -16,7 +16,6 @@
     },
     {
       "type": "modonomicon:text",
-      "anchor": "",
       "show_title_separator": true,
       "text": "book.forgero.guidebook.landing.about_this_mod.text1",
       "title": "book.forgero.guidebook.landing.about_this_mod.title1",

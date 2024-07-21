@@ -35,7 +35,7 @@
     "texture_height": 256,
     "texture_width": 256
   },
-  "model": "forgero:guidebook",
+  "model": "modonomicon:modonomicon_green",
   "name": "book.forgero.guidebook.name",
   "page_display_mode": "double_page",
   "read_all_button_y_offset": 0,

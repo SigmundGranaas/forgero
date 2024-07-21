@@ -12,7 +12,7 @@
   },
   "max_scroll_x": 512,
   "max_scroll_y": 512,
-  "name": "book.forgero.guidebook.getting_started.name",
+  "name": "book.forgero.guidebook.category.getting_started.name",
   "show_category_button": true,
   "sort_number": 1
 }
