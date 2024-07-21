@@ -1,12 +1,12 @@
 {
-  "type": "PUMMEL_SCHEMATIC",
+  "type": "POMMEL_SCHEMATIC",
   "name": "piglin_pommel-schematic",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "PUMMEL",
+    "type": "POMMEL",
     "target": "CREATE",
     "components": [
       {
