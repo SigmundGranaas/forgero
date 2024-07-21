@@ -13,6 +13,14 @@
       "text": "book.forgero.guidebook.upgrading.reinforcement.text",
       "title": "book.forgero.guidebook.upgrading.reinforcement.title",
       "use_markdown_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.upgrading.reinforcement.text1",
+      "title": "book.forgero.guidebook.upgrading.reinforcement.title1",
+      "use_markdown_title": false
     }
   ],
   "parents": [
