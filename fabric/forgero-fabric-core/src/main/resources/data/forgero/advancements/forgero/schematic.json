@@ -1,5 +1,5 @@
 {
-  "parent": "forgero:forgero/root",
+  "parent": "forgero:forgero/tool",
   "display": {
     "icon": {
       "item": "forgero:pickaxe_head-schematic"

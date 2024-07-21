@@ -40,9 +40,8 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 			ToolStatTagGenerator.generateTags();
 		}
 
-		if (patchouli.get()) {
+		if (modonomicon.get()) {
 			BookDropOnAdvancement.registerBookDrop();
-			GuideBookGenerator.registerGuideBookRecipes();
 		}
 
 		if (mythicmetals.get()) {

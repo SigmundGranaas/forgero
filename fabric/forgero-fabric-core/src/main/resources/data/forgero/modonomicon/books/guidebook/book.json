@@ -18,7 +18,7 @@
   "category_button_x_offset": 0,
   "category_button_y_offset": 0,
   "crafting_texture": "modonomicon:textures/gui/crafting_textures.png",
-  "creative_tab": "modonomicon:modonomicon",
+  "creative_tab": "forgero:schematics",
   "default_title_color": 0,
   "font": "modonomicon:default",
   "frame_texture": "forgero:textures/gui/book_frame.png",
