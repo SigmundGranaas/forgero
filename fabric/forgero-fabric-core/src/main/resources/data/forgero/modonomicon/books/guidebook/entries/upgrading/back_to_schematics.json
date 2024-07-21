@@ -5,7 +5,7 @@
   "background_u_index": 1,
   "background_v_index": 2,
   "icon": "forgero:mastercrafted_pickaxe_head-schematic",
-  "category_to_open": "forgero:getting_started",
+  "category_to_open": "forgero:schematics",
   "x": -7,
   "y": 0,
   "parents": [
