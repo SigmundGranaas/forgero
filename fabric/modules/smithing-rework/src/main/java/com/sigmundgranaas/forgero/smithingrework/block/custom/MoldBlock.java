@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -25,9 +26,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class MoldBlock extends BlockWithEntity {
+	private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
 	public static final IntProperty PROGRESS = IntProperty.of("progress", 0, 100);
 	public static final BooleanProperty FILLED = BooleanProperty.of("filled");
 
@@ -38,6 +42,11 @@ public class MoldBlock extends BlockWithEntity {
 				.with(FILLED, false));
 	}
 
+
+	@Override
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+		return SHAPE;
+	}
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(PROGRESS, FILLED);
