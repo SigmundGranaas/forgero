@@ -22,6 +22,19 @@
       }
     ],
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "title": "feature.forgero.knockback",
+        "description": "feature.forgero.knockback.description",
+        "on_hit": {
+          "type": "minecraft:knockback",
+          "target": "minecraft:targeted_entity",
+          "force": 3,
+          "direction": "push"
+        }
+      }
     ]
   },
   "palette": {

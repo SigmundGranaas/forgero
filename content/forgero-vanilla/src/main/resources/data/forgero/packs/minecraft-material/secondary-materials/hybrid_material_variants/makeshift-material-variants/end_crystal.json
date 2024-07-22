@@ -135,6 +135,18 @@
           }
         ]
       }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+         "type": "minecraft:block_breaking",
+           "on_hit": {
+             "type": "minecraft:explosion",
+             "target": "minecraft:targeted_entity",
+             "power": 10
+           }
+         }
     ]
   },
   "palette": {

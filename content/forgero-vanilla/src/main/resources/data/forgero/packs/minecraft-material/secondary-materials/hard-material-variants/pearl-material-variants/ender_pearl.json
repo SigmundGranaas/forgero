@@ -22,6 +22,16 @@
       }
     ],
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:teleport",
+        "teleport": {
+          "random": true,
+          "onGround": false,
+          "maxDistance": 10,
+          "target": "minecraft:targeted_entity"}
+      }
     ]
   },
   "palette": {
