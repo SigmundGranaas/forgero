@@ -1,10 +1,18 @@
 {
   "type": "WOOD",
-  "name": "cypress",
   "parent": "wood_base",
+  "name": "larch",
+  "dependencies": {
+    "any": [
+      "regions_unexplored"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "natures_spirit:cypress_planks"
+    "tag": "c:larch"
+  },
+  "palette": {
+    "name": "natures_spirit/larch"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,25 +22,27 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 60
-          },
-          {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 40
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 30
+          },
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 75
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 25
-          },
-          {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 3
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 20
           }
+
         ]
       },
       {
@@ -44,7 +54,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 15
           },
           {
             "id": "wood-weight-upgrade",
@@ -52,36 +62,24 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 12
+            "value": 10
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 30
+            "value": 37
           },
           {
             "id": "wood-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 30
-          },
-          {
-            "id": "wood-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.15
+            "value": 37
           }
         ]
       }
-    ],
-    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "natures_spirit/cypress"
   }
 }

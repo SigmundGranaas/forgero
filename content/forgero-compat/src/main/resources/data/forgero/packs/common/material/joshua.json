@@ -1,10 +1,18 @@
 {
   "type": "WOOD",
-  "name": "maple",
   "parent": "wood_base",
+  "name": "joshua",
+  "dependencies": {
+    "any": [
+      "regions_unexplored"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "natures_spirit:maple_planks"
+    "tag": "c:joshua"
+  },
+  "palette": {
+    "name": "natures_spirit/joshua"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,25 +22,20 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 70
-          },
-          {
             "id": "wood-rarity-composite",
             "type": "RARITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
             "value": 30
           },
           {
-            "id": "wood-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          },
-          {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 3.25
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 30
           }
+
         ]
       },
       {
@@ -47,41 +50,28 @@
             "value": 15
           },
           {
-            "id": "wood-weight-upgrade",
-            "type": "WEIGHT",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 10
-          },
-          {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 35
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 35
+            "value": 15
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.3
+            "value": 0.2
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 15
           }
         ]
       }
-    ],
-    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "natures_spirit/maple"
   }
 }

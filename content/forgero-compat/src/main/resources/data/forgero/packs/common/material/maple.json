@@ -1,10 +1,18 @@
 {
   "type": "WOOD",
-  "name": "larch",
   "parent": "wood_base",
+  "name": "maple",
+  "dependencies": {
+    "any": [
+      "regions_unexplored"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "natures_spirit:larch_planks"
+    "tag": "c:maple"
+  },
+  "palette": {
+    "name": "natures_spirit/maple"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,25 +22,32 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 40
-          },
-          {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 20
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 30
           },
           {
-            "id": "wood-weight-composite",
-            "type": "WEIGHT",
-            "value": 15
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 70
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 2.5
+            "value": 3.25
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 20
           }
+
         ]
       },
       {
@@ -44,7 +59,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 15
           },
           {
             "id": "wood-weight-upgrade",
@@ -52,36 +67,31 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7
+            "value": 10
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 20
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 20
+            "value": 35
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.1
+            "value": 0.3
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 35
           }
         ]
       }
-    ],
-    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "natures_spirit/larch"
   }
 }

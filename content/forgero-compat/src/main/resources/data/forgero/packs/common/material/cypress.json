@@ -1,10 +1,18 @@
 {
   "type": "WOOD",
-  "name": "redwood",
   "parent": "wood_base",
+  "name": "cypress",
+  "dependencies": {
+    "any": [
+      "regions_unexplored"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "natures_spirit:redwood_planks"
+    "tag": "c:cypress"
+  },
+  "palette": {
+    "name": "natures_spirit/cypress"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,25 +22,32 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 40
-          },
-          {
             "id": "wood-rarity-composite",
             "type": "RARITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
             "value": 30
           },
           {
-            "id": "wood-weight-composite",
-            "type": "WEIGHT",
-            "value": 30
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 70
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 2.5
+            "value": 2.75
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 30
           }
+
         ]
       },
       {
@@ -59,29 +74,24 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 20
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 20
+            "value": 35
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.2
+            "value": 0.15
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 35
           }
         ]
       }
-    ],
-    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "natures_spirit/redwood"
   }
 }

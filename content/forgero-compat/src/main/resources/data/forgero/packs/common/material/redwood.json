@@ -1,10 +1,18 @@
 {
   "type": "WOOD",
-  "name": "joshua",
   "parent": "wood_base",
+  "name": "redwood",
+  "dependencies": {
+    "any": [
+      "regions_unexplored"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "natures_spirit:joshua_planks"
+    "tag": "c:redwood"
+  },
+  "palette": {
+    "name": "natures_spirit/redwood"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,25 +22,39 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 70
-          },
-          {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 45
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 30
           },
           {
-            "id": "wood-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 40
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 2.75
+            "value": 2.5
+          },
+          {
+            "id": "wood-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 2
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 30
           }
+
         ]
       },
       {
@@ -44,7 +66,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 22
+            "value": 15
           },
           {
             "id": "wood-weight-upgrade",
@@ -52,36 +74,31 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 15
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 35
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 35
+            "value": 20
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.15
+            "value": 0.2
+          },
+          {
+            "id": "wood-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 20
           }
         ]
       }
-    ],
-    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "natures_spirit/joshua"
   }
 }
