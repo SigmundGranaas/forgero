@@ -4,17 +4,11 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.trademodule.util.ForgeroCustomTrades;
 
 
-public class TradeInitializer implements ForgeroPreInitializationEntryPoint {
+public class TradeInitializer extends ForgeroPostInit {
 
 
 	@Override
-	public void onPreInitialization() {
-
+	public void onInitialized(StateService stateService) {
 		ForgeroCustomTrades.registerCustomTrades();
-
-
 	}
-
-
 }
-
