@@ -4,12 +4,13 @@
   "name": "maple",
   "dependencies": {
     "any": [
-      "regions_unexplored"
+      "regions_unexplored",
+      "natures_spirit"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:maple"
+    "tag": "c:maple_planks"
   },
   "palette": {
     "name": "natures_spirit/maple"

@@ -4,12 +4,13 @@
   "name": "cypress",
   "dependencies": {
     "any": [
-      "regions_unexplored"
+      "regions_unexplored",
+      "natures_spirit"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:cypress"
+    "tag": "c:cypress_planks"
   },
   "palette": {
     "name": "natures_spirit/cypress"

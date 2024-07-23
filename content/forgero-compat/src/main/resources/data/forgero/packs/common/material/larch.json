@@ -4,12 +4,13 @@
   "name": "larch",
   "dependencies": {
     "any": [
-      "regions_unexplored"
+      "regions_unexplored",
+      "natures_spirit"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:larch"
+    "tag": "c:larch_planks"
   },
   "palette": {
     "name": "natures_spirit/larch"

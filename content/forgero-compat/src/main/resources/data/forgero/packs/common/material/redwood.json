@@ -4,12 +4,13 @@
   "name": "redwood",
   "dependencies": {
     "any": [
-      "regions_unexplored"
+      "regions_unexplored",
+      "natures_spirit"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:redwood"
+    "tag": "c:redwood_planks"
   },
   "palette": {
     "name": "natures_spirit/redwood"

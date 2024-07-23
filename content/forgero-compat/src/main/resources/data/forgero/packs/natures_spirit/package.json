@@ -1,8 +1,8 @@
 {
-  "name": "natures_spirit-materials",
+  "name": "natures_spirit-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "mythicmetals",
+  "namespace": "natures_spirit",
   "dependencies": [
     "minecraft",
     "forgero",
