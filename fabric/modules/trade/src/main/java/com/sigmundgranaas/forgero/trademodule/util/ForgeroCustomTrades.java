@@ -46,7 +46,6 @@ public class ForgeroCustomTrades {
 
 				});
 
-
 		TradeOfferHelper.registerVillagerOffers(VillagerProfession.WEAPONSMITH, 3,
 				factories -> {
 					factories.add((entity, random) -> new TradeOffer(

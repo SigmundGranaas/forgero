@@ -1,15 +1,19 @@
 package com.sigmundgranaas.forgero.trademodule;
 
-import com.sigmundgranaas.forgero.fabric.initialization.ForgeroPostInit;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.trademodule.util.ForgeroCustomTrades;
 
 
-public class TradeInitializer extends ForgeroPostInit {
+public class TradeInitializer implements ForgeroPreInitializationEntryPoint {
 
 
 	@Override
-	public void onInitialized(StateService stateService) {
+	public void onPreInitialization() {
+
 		ForgeroCustomTrades.registerCustomTrades();
+
+
 	}
+
+
 }

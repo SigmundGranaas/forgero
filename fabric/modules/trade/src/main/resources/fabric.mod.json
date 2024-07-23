@@ -23,7 +23,7 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
-    "forgeroPostInit": [
+    "forgeroPreInitialization": [
       "com.sigmundgranaas.forgero.trademodule.TradeInitializer"
     ]
   },
