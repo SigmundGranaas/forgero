@@ -140,13 +140,23 @@
     ],
     "features": [
       {
-         "type": "minecraft:block_breaking",
-           "on_hit": {
-             "type": "minecraft:explosion",
-             "target": "minecraft:targeted_entity",
-             "power": 10
-           }
-         }
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:targeted_entity",
+          "power": 10
+        },
+        "title": "feature.forgero.explosive",
+        "description": "feature.forgero.explosive.description"
+      },
+      {
+        "type": "minecraft:on_hit_block",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:block_target",
+          "power": 10
+        }
+      }
     ]
   },
   "palette": {

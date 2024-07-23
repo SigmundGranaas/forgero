@@ -12,5 +12,6 @@ public interface EntityTargetHandler {
 	EntityTargetHandler DEFAULT = (Entity root, World world, Entity target) -> {
 	};
 
+
 	void onHit(Entity root, World world, Entity target);
 }

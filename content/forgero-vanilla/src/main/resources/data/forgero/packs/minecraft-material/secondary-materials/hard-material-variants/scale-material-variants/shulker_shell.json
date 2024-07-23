@@ -137,6 +137,20 @@
       }
     ],
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+          "on_hit": {
+            "type": "minecraft:status_effect",
+            "duration": 60,
+            "target": "minecraft:targeted_entity",
+            "effect": "minecraft:levitation",
+            "level": 2
+        },
+        "title": "feature.forgero.levitation",
+        "description": "feature.forgero.levitation.description"
+      }
     ]
   },
   "palette": {

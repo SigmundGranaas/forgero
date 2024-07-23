@@ -125,13 +125,13 @@
     ],
     "features": [
       {
-        "type": "forgero:magnetic",
-        "power": 10,
-        "range": 10,
-        "filter": "minecraft:item",
-        "pushAway": false
-      },
-      {
+        "type": "minecraft:entity_tick",
+        "handler": {
+          "type": "forgero:magnetic",
+          "filter": "minecraft:item",
+          "range": 3,
+          "power": 1
+        },
         "title": "feature.forgero.magnetic",
         "description": "feature.forgero.magnetic.description"
       }

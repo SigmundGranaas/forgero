@@ -137,6 +137,26 @@
       }
     ],
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:status_effect",
+          "duration": 60,
+          "target": "minecraft:self",
+          "effect": "minecraft:conduit_power",
+          "level": 2
+        },
+        "predicate": {
+          "type": "minecraft:entity",
+          "flags": {
+            "is_swiming": true
+          },
+          "title": "feature.forgero.conduit_power",
+          "description": "feature.forgero.conduit_power.description"
+        }
+      }
     ]
   },
   "palette": {

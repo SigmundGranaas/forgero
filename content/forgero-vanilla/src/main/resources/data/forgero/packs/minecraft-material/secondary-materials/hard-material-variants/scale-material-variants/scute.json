@@ -24,6 +24,24 @@
     "attributes": [
     ],
     "features": [
+      {
+        "type": "minecraft:on_hit",
+          "on_hit": {
+            "type": "minecraft:status_effect",
+            "duration": 60,
+            "target": "minecraft:self",
+            "effect": "minecraft:water_breathing",
+            "level": 2
+          },
+        "predicate": {
+          "type": "minecraft:entity",
+          "flags": {
+            "is_swiming": true
+          },
+          "title": "feature.forgero.water_breathing",
+          "description": "feature.forgero.water_breathing.description"
+        }
+      }
     ]
   },
   "palette": {

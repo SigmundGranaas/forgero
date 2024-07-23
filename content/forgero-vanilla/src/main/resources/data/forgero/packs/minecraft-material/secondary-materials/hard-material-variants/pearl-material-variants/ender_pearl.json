@@ -25,12 +25,17 @@
     ],
     "features": [
       {
-        "type": "minecraft:teleport",
-        "teleport": {
-          "random": true,
-          "onGround": false,
-          "maxDistance": 10,
-          "target": "minecraft:targeted_entity"}
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:teleport",
+          "teleport": {
+            "random": true,
+            "onGround": true,
+            "maxDistance": 1
+          }
+        },
+        "title": "feature.forgero.teleportation",
+        "description": "feature.forgero.teleportation.description"
       }
     ]
   },
