@@ -1,0 +1,40 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "blue_wisteria_vines",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "natures_spirit:blue_wisteria_vines"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 130
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "soft_plant-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 65
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "natures_spirit/blue_wisteria_vines"
+  }
+}

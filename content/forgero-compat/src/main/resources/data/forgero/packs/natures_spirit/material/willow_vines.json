@@ -1,0 +1,40 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "willow_vines",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "natures_spirit:willow_vines"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 140
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "soft_plant-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 70
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "natures_spirit/willow_vines"
+  }
+}
