@@ -137,26 +137,21 @@
       }
     ],
     "attributes": [
-    ],
-    "features": [
       {
-        "type": "minecraft:on_hit",
-        "on_hit": {
-          "type": "minecraft:status_effect",
-          "duration": 60,
-          "target": "minecraft:self",
-          "effect": "minecraft:conduit_power",
-          "level": 2
-        },
+        "id": "sneaking-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
         "predicate": {
           "type": "minecraft:entity",
-          "flags": {
-            "is_swiming": true
-          },
-          "title": "feature.forgero.conduit_power",
-          "description": "feature.forgero.conduit_power.description"
+          "flag": {
+            "is_swimming": true
+          }
         }
       }
+    ],
+    "features": [
     ]
   },
   "palette": {

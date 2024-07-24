@@ -146,6 +146,10 @@
           "target": "minecraft:targeted_entity",
           "power": 10
         },
+        "predicate": {
+          "type": "forgero:random",
+          "chance": 0.4
+        },
         "title": "feature.forgero.explosive",
         "description": "feature.forgero.explosive.description"
       },
@@ -155,6 +159,10 @@
           "type": "minecraft:explosion",
           "target": "minecraft:block_target",
           "power": 10
+        },
+        "predicate": {
+          "type": "forgero:random",
+          "chance": 0.4
         }
       }
     ]

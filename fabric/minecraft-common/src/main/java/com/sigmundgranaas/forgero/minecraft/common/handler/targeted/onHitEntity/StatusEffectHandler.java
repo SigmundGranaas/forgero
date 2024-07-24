@@ -97,11 +97,7 @@ public class StatusEffectHandler implements EntityTargetHandler {
 		if ("minecraft:targeted_entity".equals(target) && targetEntity instanceof LivingEntity livingTarget) {
 			livingTarget.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
 		}
-		else if ("minecraft:self".equals(target) && source instanceof LivingEntity sourceEntity) {
-		sourceEntity.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
-		}
 	}
-
 
 	private int duration(Entity source) {
 		return compute(duration, source).asInt();

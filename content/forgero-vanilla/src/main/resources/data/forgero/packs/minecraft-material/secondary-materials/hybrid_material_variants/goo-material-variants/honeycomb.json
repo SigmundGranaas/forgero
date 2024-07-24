@@ -74,13 +74,15 @@
         "type": "minecraft:on_hit",
         "on_hit": {
           "type": "minecraft:status_effect",
-          "duration": 60,
+          "duration": 40,
           "target": "minecraft:targeted_entity",
           "effect": "minecraft:slowness",
-          "level": 2
+          "level": 3
         },
-        "title": "feature.forgero.slowness",
-        "description": "feature.forgero.slowness.description"
+        "predicate": {
+          "type": "forgero:random",
+          "chance": 0.5
+        }
       }
     ]
   },
