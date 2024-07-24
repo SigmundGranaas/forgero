@@ -4,7 +4,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.api.v0.predicate.Regis
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.defaultItem;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.settingProcessor;
 import static com.sigmundgranaas.forgero.minecraft.common.predicate.block.Adapters.*;
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter.ENTITY_TYPE_KEY;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter.*;
 import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityFlagPredicates.*;
 
 import java.io.InputStream;
@@ -104,6 +104,8 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicat
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.world.DimensionPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.world.WorldPredicate;
 
 import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.Resource;
@@ -179,6 +181,11 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// Block predicate
 		PredicateFactory.register(BlockPredicateMatcher.CODEC);
 
+		// World
+		WORLD_CODEC_REGISTRY.register(KeyPair.pair(DimensionPredicate.KEY, DimensionPredicate.KEY_PAIR_CODEC));
+
+		PredicateFactory.register(WorldPredicate.CODEC);
+
 		// Entity
 		// Flag options
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SNEAKING);
@@ -188,11 +195,13 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 		// Key options
 		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(FlagGroupPredicate.KEY, FlagGroupPredicate.CODEC_SPECIFICATION));
-		ENTITY_CODEC_REGISTRY.register(KeyPair.pair("pos", EntityAdapter.entityPosCodec()));
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(ENTITY_POS_KEY, EntityAdapter.entityPosCodec()));
 		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(ENTITY_TYPE_KEY, EntityAdapter.entityTypePredicate()));
+		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(WORLD_TYPE_KEY, EntityAdapter.entityWorldCodec()));
 
 		// Entity predicate
 		PredicateFactory.register(EntityPredicate.CODEC);
+
 
 		PredicateFactory.register(new StringModelBuilder());
 		PredicateFactory.register(new StringIdentifierBuilder());

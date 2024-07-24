@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationRegist
 import com.sigmundgranaas.forgero.minecraft.common.predicate.block.WorldBlockPair;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 
 public class Registries {
 	// Entity
@@ -16,4 +17,7 @@ public class Registries {
 
 	// Blocks
 	public static final SpecificationRegistry<Codec<KeyPair<Predicate<WorldBlockPair>>>> BLOCK_CODEC_REGISTRY = new SpecificationRegistry<>();
+
+	// World
+	public static final SpecificationRegistry<Codec<KeyPair<Predicate<World>>>> WORLD_CODEC_REGISTRY = new SpecificationRegistry<>();
 }
