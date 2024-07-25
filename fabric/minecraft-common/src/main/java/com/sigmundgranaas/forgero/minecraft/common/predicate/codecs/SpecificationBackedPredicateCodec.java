@@ -1,7 +1,8 @@
-package com.sigmundgranaas.forgero.minecraft.common.predicate;
+package com.sigmundgranaas.forgero.minecraft.common.predicate.codecs;
+
+import static com.sigmundgranaas.forgero.core.util.StringSimilarity.findClosestMatch;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -49,7 +50,7 @@ public class SpecificationBackedPredicateCodec<T> extends MapCodec<GroupEntry<Ke
 				.map(KeyPair::value)
 				.map(codec -> codec.parse(ops, value))
 				.orElseGet(() -> {
-					String closestMatch = findClosestMatch(entryKey);
+					String closestMatch = findClosestMatch(entryKey, codecs.keySet());
 					String errorMessage = "No codec found for key: " + entryKey;
 					if (!closestMatch.isEmpty() && !closestMatch.equals(entryKey)) {
 						errorMessage += ". Did you mean '" + closestMatch + "'?";
@@ -87,7 +88,6 @@ public class SpecificationBackedPredicateCodec<T> extends MapCodec<GroupEntry<Ke
 
 					if (!errors.isEmpty()) {
 						String errorMessage = "Errors occurred during decoding: " + String.join(", ", errors);
-						Forgero.LOGGER.error(errorMessage);
 						return DataResult.error(() -> errorMessage);
 					}
 
@@ -103,35 +103,6 @@ public class SpecificationBackedPredicateCodec<T> extends MapCodec<GroupEntry<Ke
 	private <R> DataResult<String> getEntryKey(DynamicOps<R> ops, R keyObj) {
 		return ops.getStringValue(keyObj)
 				.mapError(error -> "Failed to get entry key: " + error);
-	}
-
-	private int calculateSimilarity(String s1, String s2) {
-		s1 = s1.toLowerCase();
-		s2 = s2.toLowerCase();
-		int[][] dp = new int[s1.length() + 1][s2.length() + 1];
-
-		for (int i = 0; i <= s1.length(); i++) {
-			for (int j = 0; j <= s2.length(); j++) {
-				if (i == 0) {
-					dp[i][j] = j;
-				} else if (j == 0) {
-					dp[i][j] = i;
-				} else {
-					dp[i][j] = Math.min(
-							dp[i - 1][j - 1] + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1),
-							Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1)
-					);
-				}
-			}
-		}
-
-		return dp[s1.length()][s2.length()];
-	}
-
-	private String findClosestMatch(String inputKey) {
-		return codecs.keySet().stream()
-				.min(Comparator.comparingInt(registryKey -> calculateSimilarity(inputKey, registryKey)))
-				.orElse("");
 	}
 }
 

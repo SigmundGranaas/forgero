@@ -9,9 +9,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.GroupEntry;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationBackedPredicateCodec;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.GroupEntry;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyBasedRegistryBackedMapCodec;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.SpecificationBackedPredicateCodec;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.error.PredicateErrorHandlerRegistry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -19,8 +21,11 @@ import net.minecraft.world.World;
 public class WorldPredicate implements Predicate<World>, Matchable {
 	private final GroupEntry<KeyPair<Predicate<World>>> entry;
 	private static final String type = "minecraft:world";
-	public static final MapCodec<GroupEntry<KeyPair<Predicate<World>>>> WORLD_CODEC = new SpecificationBackedPredicateCodec<>(type, WORLD_CODEC_REGISTRY);
-	public static final Codec<WorldPredicate> CODEC = new MapCodec.MapCodecCodec<>(WORLD_CODEC.xmap(WorldPredicate::new, worldPredicate -> worldPredicate.entry));
+	public static final MapCodec<GroupEntry<KeyPair<Predicate<World>>>> ROOT_WORLD_CODEC = new SpecificationBackedPredicateCodec<>(type, WORLD_CODEC_REGISTRY);
+	public static final MapCodec<GroupEntry<KeyPair<Predicate<World>>>> KEY_WORLD_CODEC = new KeyBasedRegistryBackedMapCodec<>(WORLD_CODEC_REGISTRY, PredicateErrorHandlerRegistry.INSTANCE, "world");
+
+	public static final Codec<WorldPredicate> ROOT_CODEC = new MapCodec.MapCodecCodec<>(ROOT_WORLD_CODEC.xmap(WorldPredicate::new, worldPredicate -> worldPredicate.entry));
+	public static final Codec<WorldPredicate> KEY_CODEC = new MapCodec.MapCodecCodec<>(KEY_WORLD_CODEC.xmap(WorldPredicate::new, worldPredicate -> worldPredicate.entry));
 
 	public WorldPredicate(GroupEntry<KeyPair<Predicate<World>>> entry) {
 		this.entry = entry;

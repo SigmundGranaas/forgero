@@ -1,16 +1,16 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate.entity;
 
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.CodecUtils.generalPredicate;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.CodecUtils.generalPredicate;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.AdapterCodec;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.PredicateAdapter;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.XYZPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.PredicateAdapter;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.world.XYZPredicate;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.AdapterCodec;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.world.WorldPredicate;
 
 import net.minecraft.entity.Entity;
@@ -35,7 +35,7 @@ public class EntityAdapter {
 	}
 
 	public static Codec<KeyPair<Predicate<Entity>>> entityWorldCodec() {
-		return AdapterCodec.of(WORLD_TYPE_KEY, generalPredicate(WorldPredicate.CODEC, WorldPredicate.class), PredicateAdapter.create(world));
+		return AdapterCodec.of(WORLD_TYPE_KEY, generalPredicate(WorldPredicate.KEY_CODEC, WorldPredicate.class), PredicateAdapter.create(world));
 	}
 
 	public static Codec<KeyPair<Predicate<Entity>>> entityTypePredicate() {

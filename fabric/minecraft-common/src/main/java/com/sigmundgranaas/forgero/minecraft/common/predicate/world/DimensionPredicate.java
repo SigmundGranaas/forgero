@@ -4,8 +4,8 @@ import java.util.function.Predicate;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPairCodec;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPairCodec;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;

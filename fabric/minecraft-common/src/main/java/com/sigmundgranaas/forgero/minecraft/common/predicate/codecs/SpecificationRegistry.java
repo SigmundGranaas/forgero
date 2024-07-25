@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.predicate;
+package com.sigmundgranaas.forgero.minecraft.common.predicate.codecs;
 
 import java.util.HashMap;
 import java.util.Map;

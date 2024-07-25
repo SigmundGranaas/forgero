@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.predicate;
+package com.sigmundgranaas.forgero.minecraft.common.predicate.world;
 
 import java.util.function.Predicate;
 
