@@ -62,6 +62,8 @@ public class ThrowableHandler implements StopHandler {
 
 	@Override
 	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		float tickDelta = Math.max(Math.min((72000 - remainingUseTicks) / 20, 1), 0);
+
 		if (!world.isClient) {
 			float weight = StateService.INSTANCE.convert(stack)
 					.map(container -> ComputedAttribute.of(container, Weight.KEY))
@@ -81,9 +83,10 @@ public class ThrowableHandler implements StopHandler {
 					user.getPitch(),
 					user.getYaw(),
 					0.0f,
-					10 * config.velocityMultiplier(),
+					(10 * config.velocityMultiplier()) * tickDelta,
 					config.instability()
 			);
+			throwableItem.setPosition(throwableItem.getX(), throwableItem.getY() + 0.5, throwableItem.getZ());
 			world.spawnEntity(throwableItem);
 		}
 	}
