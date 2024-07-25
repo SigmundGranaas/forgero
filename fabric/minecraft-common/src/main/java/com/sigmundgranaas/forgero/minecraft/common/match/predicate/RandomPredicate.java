@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.match.predicate;
 
+import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -16,8 +19,6 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 
 /**
@@ -91,15 +92,20 @@ import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContext
  * 		 "description": "feature.forgero.random_insta_break.description"
  *   }
  * </pre>
- *
  */
-public record RandomPredicate(float value, int worldTimeQuantization, List<SeedSource> seedSources) implements Matchable {
+public record RandomPredicate(float value, int worldTimeQuantization,
+                              List<SeedSource> seedSources) implements Matchable {
 	public static String ID = "forgero:random";
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		long seed = generateSeed(context);
-		Random random = new Random(seed);
+		Random random;
+		if (this.seedSources.isEmpty()) {
+			random = new Random();
+		} else {
+			long seed = generateSeed(context);
+			random = new Random(seed);
+		}
 
 		return random.nextFloat() < value;
 	}
@@ -110,10 +116,11 @@ public record RandomPredicate(float value, int worldTimeQuantization, List<SeedS
 					case BLOCK_POS -> context.get(BLOCK_TARGET).map(BlockPos::asLong).orElse(0L);
 					case TARGET_ENTITY -> context.get(ENTITY_TARGET).map(Entity::getId).orElse(0);
 					case SOURCE_ENTITY -> context.get(ENTITY).map(Entity::getId).orElse(0);
-					case WORLD_TIME -> quantizeWorldTime(context.get(WORLD).map(World::getTime).orElse(0L), worldTimeQuantization);
-					case NONE -> 0L;
+					case WORLD_TIME ->
+							quantizeWorldTime(context.get(WORLD).map(World::getTime).orElse(0L), worldTimeQuantization);
+					case NONE -> System.currentTimeMillis();
 				})
-				.reduce(0L, (a, b) -> a ^ b); // Combine seeds using XOR
+				.reduce(System.currentTimeMillis(), (a, b) -> a ^ b); // Combine seeds using XOR
 	}
 
 	private long quantizeWorldTime(long worldTime, long quantizationInterval) {
@@ -141,7 +148,7 @@ public record RandomPredicate(float value, int worldTimeQuantization, List<SeedS
 						int worldTimeQuantization = jsonObject.has("worldTimeQuantization")
 								? jsonObject.get("worldTimeQuantization").getAsInt()
 								: 0;
-						List<SeedSource> seedSources = parseSeedSources(jsonObject.getAsJsonArray("seed"));
+						List<SeedSource> seedSources = jsonObject.has("seed") ? parseSeedSources(jsonObject.getAsJsonArray("seed")) : Collections.emptyList();
 						return new RandomPredicate(value, worldTimeQuantization, seedSources);
 					});
 		}
