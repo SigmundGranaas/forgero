@@ -43,6 +43,8 @@ public abstract class OnEntityHitMixin {
 					.put(ENTITY_TARGET, target);
 
 			cachedFilteredFeatures(main, OnHitEntityFeature.KEY, context)
+					.stream()
+					.filter(handler -> handler.test(context))
 					.forEach(handler -> {
 						handler.onHit(entity, entity.getWorld(), target);
 						handler.handle(entity, main, Hand.MAIN_HAND);
