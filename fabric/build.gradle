@@ -119,6 +119,7 @@ curseforge {
 				optionalDependency "betternether"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
+				optionalDependency "create"
 				incompatible "exordium"
 			}
 		}
@@ -151,6 +152,7 @@ modrinth {
 		optional.project "mystical_crops"
 		optional.project "mythicmetals"
 		optional.project "wiredredstone"
+		optional.project "create"
 		incompatible.project "exordium"
 	}
 }
