@@ -4,12 +4,14 @@
   "parent": "metal_base",
   "dependencies": {
     "any": [
-      "mythicmetals"
+      "mythicmetals",
+      "modern_industrialization",
+      "tech_reborn"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:bronze_ingot"
+    "tag": "c:bronze_ingots"
   },
   "palette": {
     "name": "bronze"

@@ -4,12 +4,14 @@
   "name": "steel",
   "dependencies": {
     "any": [
-      "mythicmetals"
+      "mythicmetals",
+      "modern_industrialization",
+      "tech_reborn"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:steel_ingot"
+    "tag": "c:steel_ingots"
   },
   "palette": {
     "name": "steel"

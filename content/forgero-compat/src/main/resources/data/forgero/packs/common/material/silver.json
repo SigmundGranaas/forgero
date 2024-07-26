@@ -4,12 +4,14 @@
   "name": "silver",
   "dependencies": {
     "any": [
-      "mythicmetals"
+      "mythicmetals",
+      "modern_industrialization",
+      "tech_reborn"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:silver_ingot"
+    "tag": "c:silver_ingots"
   },
   "palette": {
     "name": "silver"
