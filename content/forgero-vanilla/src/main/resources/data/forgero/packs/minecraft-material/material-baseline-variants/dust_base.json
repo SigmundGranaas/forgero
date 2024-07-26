@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 15
+            "value": 0
           },
           {
             "id": "dust-draw_power-offensive-upgrade",
