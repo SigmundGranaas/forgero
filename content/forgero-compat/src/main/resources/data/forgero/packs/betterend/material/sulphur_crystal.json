@@ -13,21 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "crystal-rarity-composite",
-            "type": "RARITY",
-            "value": 70
-          },
-          {
-            "id": "crystal-durability-composite",
-            "type": "DURABILITY",
-            "value": 140
-          },
-          {
-            "id": "crystal-weight-composite",
-            "type": "WEIGHT",
-            "value": 15
-          }
         ]
       },
       {
@@ -68,13 +53,6 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 70
-          },
-          {
-            "id": "crystal-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 70
           },
           {

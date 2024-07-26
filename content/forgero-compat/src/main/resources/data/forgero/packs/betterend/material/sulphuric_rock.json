@@ -69,13 +69,6 @@
             "value": 100
           },
           {
-            "id": "stone-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 100
-          },
-          {
             "id": "stone-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",

@@ -65,13 +65,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 15
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 15
           }
         ]
       }

@@ -65,20 +65,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 30
-          },
-          {
-            "id": "wood-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0.05
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 30
           }
         ]
       }

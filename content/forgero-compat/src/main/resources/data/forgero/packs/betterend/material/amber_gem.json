@@ -95,13 +95,6 @@
             "value": 10
           },
           {
-            "id": "mineral-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 10
-          },
-          {
             "id": "mineral-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",

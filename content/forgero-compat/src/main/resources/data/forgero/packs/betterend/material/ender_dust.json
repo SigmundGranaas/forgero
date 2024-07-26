@@ -13,21 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "dust-rarity-composite",
-            "type": "RARITY",
-            "value": 60
-          },
-          {
-            "id": "dust-durability-composite",
-            "type": "DURABILITY",
-            "value": 80
-          },
-          {
-            "id": "dust-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          }
         ]
       },
       {
@@ -54,13 +39,6 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 40
-          },
-          {
-            "id": "dust-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 40
           },
           {
