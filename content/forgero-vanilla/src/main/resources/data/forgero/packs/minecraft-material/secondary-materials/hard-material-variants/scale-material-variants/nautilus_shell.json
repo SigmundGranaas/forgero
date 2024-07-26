@@ -13,21 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "scale-rarity-composite",
-            "type": "RARITY",
-            "value": 60
-          },
-          {
-            "id": "scale-durability-composite",
-            "type": "DURABILITY",
-            "value": 380
-          },
-          {
-            "id": "scale-weight-composite",
-            "type": "WEIGHT",
-            "value": 30
-          }
+
         ]
       },
       {
@@ -71,52 +57,10 @@
             "value": 1
           },
           {
-            "id": "scale-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "scale-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 190
-          },
-          {
-            "id": "scale-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "scale-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "scale-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "scale-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "scale-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 190
           },
           {
@@ -125,13 +69,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.65
-          },
-          {
-            "id": "scale-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }

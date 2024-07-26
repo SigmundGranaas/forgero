@@ -13,16 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "goo-rarity-composite",
-            "type": "RARITY",
-            "value": 50
-          },
-          {
-            "id": "goo-durability-composite",
-            "type": "DURABILITY",
-            "value": 180
-          }
+
         ]
       },
       {
@@ -41,13 +32,6 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 90
-          },
-          {
-            "id": "goo-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 90
           },
           {

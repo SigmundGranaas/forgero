@@ -13,21 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "makeshift-rarity-composite",
-            "type": "RARITY",
-            "value": 40
-          },
-          {
-            "id": "makeshift-durability-composite",
-            "type": "DURABILITY",
-            "value": 450
-          },
-          {
-            "id": "makeshift-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          }
+
         ]
       },
       {
@@ -57,25 +43,11 @@
             "value": 225
           },
           {
-            "id": "makeshift-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 225
-          },
-          {
             "id": "makeshift-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.09
-          },
-          {
-            "id": "makeshift-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }

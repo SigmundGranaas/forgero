@@ -13,21 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "hard_plant-rarity-composite",
-            "type": "RARITY",
-            "value": 30
-          },
-          {
-            "id": "hard_plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 170
-          },
-          {
-            "id": "hard_plant-weight-composite",
-            "type": "WEIGHT",
-            "value": 15
-          }
         ]
       },
       {
@@ -111,13 +96,6 @@
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
-          },
-          {
-            "id": "hard_plant-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 80
           },
           {
             "id": "hard_plant-draw_power-offensive-upgrade",

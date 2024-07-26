@@ -13,21 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "makeshift-rarity-composite",
-            "type": "RARITY",
-            "value": 100
-          },
-          {
-            "id": "makeshift-durability-composite",
-            "type": "DURABILITY",
-            "value": 2820
-          },
-          {
-            "id": "makeshift-weight-composite",
-            "type": "WEIGHT",
-            "value": 60
-          }
+
         ]
       },
       {
@@ -85,53 +71,11 @@
             "value": 1410
           },
           {
-            "id": "makeshift-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1
-          },
-          {
-            "id": "makeshift-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1
-          },
-          {
-            "id": "makeshift-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1
-          },
-          {
-            "id": "makeshift-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1
-          },
-          {
-            "id": "makeshift-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1410
-          },
-          {
             "id": "makeshift-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 1.5
-          },
-          {
-            "id": "makeshift-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }
