@@ -20,7 +20,7 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	// YetAnotherConfigLib
-	modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}")
+	modImplementation("maven.modrinth:yacl:${project.yacl_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon
