@@ -1,0 +1,12 @@
+{
+  "name": "advancednetherite-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "ae2",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "advancednetherite"
+  ]
+}
