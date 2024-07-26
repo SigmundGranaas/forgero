@@ -4,10 +4,10 @@
   "name": "zinc",
   "container": {
     "type": "HOST",
-    "id": "create:zinc_ingot"
+    "id": "techreborn:zinc_ingot"
   },
   "palette": {
-    "name": "create/zinc"
+    "name": "techreborn/zinc"
   },
   "properties": {
     "grouped_attributes": [
