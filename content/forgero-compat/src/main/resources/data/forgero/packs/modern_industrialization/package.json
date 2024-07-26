@@ -1,0 +1,12 @@
+{
+  "name": "modern_industrialization-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "mythicmetals",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "modern_industrialization"
+  ]
+}
