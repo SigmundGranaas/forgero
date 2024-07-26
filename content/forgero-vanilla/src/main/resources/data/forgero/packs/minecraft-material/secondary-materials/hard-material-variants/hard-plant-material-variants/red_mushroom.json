@@ -113,13 +113,6 @@
             "value": 0
           },
           {
-            "id": "hard_plant-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 80
-          },
-          {
             "id": "hard_plant-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
