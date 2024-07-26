@@ -12,7 +12,7 @@
     "tag": "c:steel_ingot"
   },
   "palette": {
-    "name": "steel"
+    "name": "common/steel"
   },
   "properties": {
     "attributes": [

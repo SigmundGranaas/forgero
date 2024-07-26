@@ -12,7 +12,7 @@
     "tag": "c:bronze_ingot"
   },
   "palette": {
-    "name": "bronze"
+    "name": "common/bronze"
   },
   "properties": {
     "attributes": [
