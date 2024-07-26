@@ -74,6 +74,8 @@ public class PredicateFactory {
 		try {
 			return cache.get(element);
 		} catch (Exception e) {
+			Forgero.LOGGER.error("Failed to create predicate from {}", element);
+			Forgero.LOGGER.info(e.getMessage());
 			return Matchable.DEFAULT_FALSE;
 		}
 	}
