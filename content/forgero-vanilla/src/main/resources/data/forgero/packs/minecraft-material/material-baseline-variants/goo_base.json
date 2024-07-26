@@ -85,7 +85,7 @@
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.1
+            "value": 0
           },
           {
             "id": "goo-attack_damage-utility-upgrade",
@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 105
+            "value": 0
           },
           {
             "id": "goo-draw_power-offensive-upgrade",

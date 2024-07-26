@@ -62,13 +62,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 140
-          },
-          {
-            "id": "dust-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 140
           }
         ]
       }
