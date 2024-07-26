@@ -55,13 +55,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 82
-          },
-          {
-            "id": "stone-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 82
           }
         ]
       }
