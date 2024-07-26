@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 287.5
+            "value": 0
           },
           {
             "id": "crystal-draw_power-offensive-upgrade",
