@@ -1,0 +1,73 @@
+{
+  "type": "METAL",
+  "name": "steel",
+  "parent": "metal_base",
+  "container": {
+    "type": "HOST",
+    "id": "techreborn:steel_ingot"
+  },
+  "palette": {
+    "name": "techreborn/steel"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "metal-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 38
+      },
+      {
+        "id": "metal-mining_level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "id": "metal-mining_speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 6.5
+      },
+      {
+        "id": "metal-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 600.0
+      },
+      {
+        "id": "metal-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 1.9
+      },
+      {
+        "id": "metal-armor-composite",
+        "type": "ARMOR",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4
+      },
+      {
+        "id": "metal-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 37
+      },
+      {
+        "id": "metal-rarity-upgrade",
+        "context": "UPGRADE",
+        "type": "RARITY",
+        "operation": "ADDITION",
+        "category": "ALL",
+        "value": 17
+      }
+    ]
+  }
+}
