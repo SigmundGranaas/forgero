@@ -138,7 +138,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 60
+            "value": 0
           },
           {
             "id": "stone-draw_power-offensive-upgrade",

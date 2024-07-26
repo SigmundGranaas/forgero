@@ -9,21 +9,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "crystal-rarity-composite",
-            "type": "RARITY",
-            "value": 75
-          },
-          {
-            "id": "crystal-durability-composite",
-            "type": "DURABILITY",
-            "value": 575
-          },
-          {
-            "id": "crystal-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          }
         ]
       },
       {
@@ -113,7 +98,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 287.5
+            "value": 0
           },
           {
             "id": "crystal-draw_power-offensive-upgrade",

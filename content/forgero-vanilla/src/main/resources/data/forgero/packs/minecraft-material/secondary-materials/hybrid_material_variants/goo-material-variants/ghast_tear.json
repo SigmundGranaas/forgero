@@ -13,21 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "goo-rarity-composite",
-            "type": "RARITY",
-            "value": 90
-          },
-          {
-            "id": "goo-durability-composite",
-            "type": "DURABILITY",
-            "value": 380
-          },
-          {
-            "id": "goo-weight-composite",
-            "type": "WEIGHT",
-            "value": 5
-          }
+
         ]
       },
       {
@@ -57,25 +43,11 @@
             "value": 190
           },
           {
-            "id": "goo-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 190
-          },
-          {
             "id": "goo-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.21
-          },
-          {
-            "id": "goo-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }
