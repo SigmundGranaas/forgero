@@ -4,7 +4,8 @@
   "parent": "metal_base",
   "dependencies": {
     "any": [
-      "mythicmetals"
+      "mythicmetals",
+      "techreborn"
     ]
   },
   "container": {

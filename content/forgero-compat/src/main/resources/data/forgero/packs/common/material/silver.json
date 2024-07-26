@@ -4,7 +4,8 @@
   "name": "silver",
   "dependencies": {
     "any": [
-      "mythicmetals"
+      "mythicmetals",
+      "techreborn"
     ]
   },
   "container": {
