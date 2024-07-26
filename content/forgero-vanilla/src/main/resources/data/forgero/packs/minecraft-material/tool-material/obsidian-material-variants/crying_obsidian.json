@@ -48,13 +48,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 940
-          },
-          {
-            "id": "obsidian-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 940
           }
         ]
       }
