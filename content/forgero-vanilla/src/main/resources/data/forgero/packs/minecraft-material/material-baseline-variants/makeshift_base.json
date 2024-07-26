@@ -9,21 +9,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "makeshift-rarity-composite",
-            "type": "RARITY",
-            "value": 50
-          },
-          {
-            "id": "makeshift-durability-composite",
-            "type": "DURABILITY",
-            "value": 680
-          },
-          {
-            "id": "makeshift-weight-composite",
-            "type": "WEIGHT",
-            "value": 30
-          }
+
         ]
       },
       {
