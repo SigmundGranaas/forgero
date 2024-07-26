@@ -113,7 +113,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 90
+            "value": 0
           },
           {
             "id": "hard_plant-draw_power-offensive-upgrade",

@@ -58,7 +58,7 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": -1
+            "value": 0
           },
           {
             "id": "hide-mining_speed-offensive-upgrade",
@@ -79,7 +79,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 80
+            "value": 0
           },
           {
             "id": "hide-attack_speed-utility-upgrade",
