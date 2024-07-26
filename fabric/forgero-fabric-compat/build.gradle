@@ -19,8 +19,8 @@ dependencies {
 	// Mod Menu
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
-	// YetAnotherConfigLib
-	modCompileOnly("maven.modrinth:yacl:${project.yet_another_config_lib_version}")
+  // Yacl
+	modImplementation("maven.modrinth:yacl:${project.yacl_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon
