@@ -13,21 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "dust-rarity-composite",
-            "type": "RARITY",
-            "value": 40
-          },
-          {
-            "id": "dust-durability-composite",
-            "type": "DURABILITY",
-            "value": 40
-          },
-          {
-            "id": "dust-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          }
         ]
       },
       {
