@@ -4,8 +4,7 @@
   "parent": "metal_base",
   "dependencies": {
     "any": [
-      "modern_industrialization",
-      "tech_reborn"
+      "modern_industrialization"
     ]
   },
   "container": {

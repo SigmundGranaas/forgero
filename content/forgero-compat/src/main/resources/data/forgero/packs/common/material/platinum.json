@@ -5,8 +5,7 @@
   "dependencies": {
     "any": [
       "mythicmetals",
-      "modern_industrialization",
-      "tech_reborn"
+      "modern_industrialization"
     ]
   },
   "container": {
