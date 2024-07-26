@@ -13,21 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "hard_plant-rarity-composite",
-            "type": "RARITY",
-            "value": 30
-          },
-          {
-            "id": "hard_plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 160
-          },
-          {
-            "id": "hard_plant-weight-composite",
-            "type": "WEIGHT",
-            "value": 15
-          }
+
         ]
       },
       {
@@ -50,73 +36,10 @@
             "value": 7.5
           },
           {
-            "id": "hard_plant-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "hard_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 80
-          },
-          {
-            "id": "hard_plant-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "hard_plant-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 80
           },
           {
@@ -125,13 +48,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.05
-          },
-          {
-            "id": "hard_plant-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }

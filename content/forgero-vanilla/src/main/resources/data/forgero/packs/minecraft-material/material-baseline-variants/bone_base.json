@@ -138,7 +138,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 40
+            "value": 0
           },
           {
             "id": "bone-draw_power-offensive-upgrade",
