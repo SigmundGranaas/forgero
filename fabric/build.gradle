@@ -152,6 +152,7 @@ modrinth {
 		optional.project "mystical_crops"
 		optional.project "mythicmetals"
 		optional.project "wiredredstone"
+		optional.project "deeperdarker"
 		incompatible.project "exordium"
 	}
 }
