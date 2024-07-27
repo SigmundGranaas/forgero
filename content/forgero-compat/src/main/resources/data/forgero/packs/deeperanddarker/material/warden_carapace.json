@@ -1,10 +1,10 @@
 {
   "type": "SCALE",
-  "name": "blaze_rod",
+  "name": "warden_carapace",
   "parent": "scale_base",
   "container": {
     "type": "HOST",
-    "id": "minecraft:blaze_rod"
+    "id": "deeperdarker:warden_carapace"
   },
   "properties": {
     "grouped_attributes": [
@@ -13,7 +13,21 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-
+          {
+            "id": "scale-rarity-composite",
+            "type": "RARITY",
+            "value": 80
+          },
+          {
+            "id": "scale-durability-composite",
+            "type": "DURABILITY",
+            "value": 850
+          },
+          {
+            "id": "scale-weight-composite",
+            "type": "WEIGHT",
+            "value": 35
+          }
         ]
       },
       {
@@ -25,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 40
           },
           {
             "id": "scale-weight-upgrade",
@@ -33,55 +47,36 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
-          },
-          {
-            "id": "scale-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.5
-          },
-          {
-            "id": "scale-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
+            "value": 17.5
           },
           {
             "id": "scale-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 280
+            "value": 425
           },
           {
             "id": "scale-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 280
+            "value": 425
           },
           {
             "id": "scale-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.45
-          },
-          {
-            "id": "scale-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
+            "value": 0.55
           }
         ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {
-    "name": "blaze_rod"
+    "name": "deeperanddarker/warden_carapace"
   }
 }
