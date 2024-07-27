@@ -18,3 +18,5 @@ accessible  field   net/minecraft/predicate/entity/EntityPredicate   vehicle    
 accessible  field   net/minecraft/predicate/entity/EntityPredicate   passenger          Lnet/minecraft/predicate/entity/EntityPredicate;
 accessible  field   net/minecraft/predicate/entity/EntityPredicate   targetedEntity     Lnet/minecraft/predicate/entity/EntityPredicate;
 accessible  field   net/minecraft/predicate/entity/EntityPredicate   team               Ljava/lang/String;
+
+accessible class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory

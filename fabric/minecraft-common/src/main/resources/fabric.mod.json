@@ -24,6 +24,9 @@
   "environment": "*",
   "accessWidener": "minecraft-common.accesswidener",
   "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry"
+    ]
   },
   "mixins": [
     "common.mixins.json"

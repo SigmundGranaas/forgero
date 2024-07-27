@@ -2,11 +2,14 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 
+import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.entity.AssemblyStationBlockEntity;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationBlock;
 
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -32,13 +35,19 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.Blocks.DEEPSLATE;
 
-public class AssemblyStationBlock extends HorizontalFacingBlock {
+public class AssemblyStationBlock extends HorizontalFacingBlock implements BlockEntityProvider {
+	public static final @NotNull String ASSEMBLY_STATION_NAME = "assembly_station";
+	/**
+	 * An {@link Identifier} for multiple parts of this {@link AssemblyStationBlock}.
+	 */
+	public static final @NotNull Identifier ASSEMBLY_STATION_IDENTIFIER = new Identifier(Forgero.NAMESPACE, ASSEMBLY_STATION_NAME);
+	public static final @NotNull String ASSEMBLY_STATION_TRANSLATION_KEY = "block.forgero.assembly_station";
 	public static final @NotNull EnumProperty<AssemblyStationPart> PART = EnumProperty.of("part", AssemblyStationPart.class);
 	public static final @NotNull Block ASSEMBLY_STATION_BLOCK = new AssemblyStationBlock(
 			Settings.copy(DEEPSLATE).strength(3.5F, 6.0F).solidBlock((BlockState state, BlockView world, BlockPos pos) -> true));
 	public static final @NotNull BlockItem ASSEMBLY_STATION_ITEM = new BlockItem(ASSEMBLY_STATION_BLOCK, new Item.Settings());
-	// An identifier for multiple parts of our assembly station
-	public static final @NotNull Identifier ASSEMBLY_STATION = new Identifier(Forgero.NAMESPACE, "assembly_station");
+	public static final int DISASSEMBLY_INVENTORY_SIZE = 1;
+	public static final int RESULT_INVENTORY_SIZE = 9;
 
 	private static final @NotNull VoxelShape SHAPE_LEFT;
 	private static final @NotNull VoxelShape SHAPE_RIGHT;
@@ -100,10 +109,23 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	public NamedScreenHandlerFactory createScreenHandlerFactory(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition) {
+		@Nullable var blockEntity = world.getBlockEntity(blockPosition);
+		if (!(blockEntity instanceof AssemblyStationBlockEntity assemblyStationBlockEntity)) {
+			return new SimpleNamedScreenHandlerFactory(
+					(syncId, inventory, player) -> new AssemblyStationScreenHandler(
+							syncId, inventory, ScreenHandlerContext.create(world, blockPosition),
+							new SimpleInventory(DISASSEMBLY_INVENTORY_SIZE), new SimpleInventory(RESULT_INVENTORY_SIZE)
+					),
+					Text.literal(ASSEMBLY_STATION_NAME)
+			);
+		}
+
 		return new SimpleNamedScreenHandlerFactory(
 				(syncId, inventory, player) -> new AssemblyStationScreenHandler(
-						syncId, inventory, ScreenHandlerContext.create(world, blockPosition)),
-				Text.literal("assembly_station")
+						syncId, inventory, ScreenHandlerContext.create(world, blockPosition),
+						assemblyStationBlockEntity.getDisassemblyInventory(), assemblyStationBlockEntity.getResultInventory()
+				),
+				Text.literal(ASSEMBLY_STATION_NAME)
 		);
 	}
 
@@ -179,6 +201,15 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 		}
 
 		return UpgradeStationBlock.rotateShape(Direction.SOUTH, blockState.get(FACING), SHAPE_RIGHT.offset(-1, 0, 0));
+	}
+
+	@Override
+	public @Nullable BlockEntity createBlockEntity(@NotNull BlockPos blockPosition, @NotNull BlockState blockState) {
+		if (blockState.get(PART) == AssemblyStationPart.LEFT) {
+			return new AssemblyStationBlockEntity(blockPosition, blockState);
+		} else {
+			return null;
+		}
 	}
 
 	public enum AssemblyStationPart implements StringIdentifiable {
