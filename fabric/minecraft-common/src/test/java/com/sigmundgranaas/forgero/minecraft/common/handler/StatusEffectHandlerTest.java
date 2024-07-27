@@ -9,29 +9,19 @@ import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import net.minecraft.Bootstrap;
-import net.minecraft.SharedConstants;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
-class StatusEffectHandlerTest {
-
+class StatusEffectHandlerTest implements Bootstrapped {
 	private StatusEffectHandler handler;
 	private StatusEffect effect;
 	private Attribute level;
 	private Attribute duration;
-
-	@BeforeAll
-	static void beforeAll() {
-		SharedConstants.createGameVersion();
-		Bootstrap.initialize();
-	}
 
 	@BeforeEach
 	void setUp() {
