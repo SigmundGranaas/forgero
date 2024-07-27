@@ -30,6 +30,9 @@ dependencies {
 	// TODO: Switch to Modonomicon
 	modCompileOnly("maven.modrinth:patchouli:${project.patchouli_version}")
 
+	// Modonomicon
+	modImplementation "com.klikli_dev:modonomicon-${minecraft_version}-fabric:${modonomicon_version}"
+
 	// Better Combat
 	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
