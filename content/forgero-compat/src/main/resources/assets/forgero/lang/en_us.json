@@ -153,5 +153,9 @@
   "item.forgero.sythian": "Sythian",
   "item.forgero.white_mangrove": "White Mangrove",
   "item.forgero.witch_hazel": "Witch Hazel",
-  "item.forgero.zelkova": "Zelkova"
+  "item.forgero.zelkova": "Zelkova",
+  "item.forgero.netherite_gold_ingot": "Netherite-Gold Ingot",
+  "item.forgero.netherite_emerald_ingot": "Netherite-Emerald Ingot",
+  "item.forgero.netherite_diamond_ingot": "Netherite-Diamond Ingot",
+  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot"
 }
