@@ -12,10 +12,10 @@
   ],
   "key": {
     "x": {
-      "item": "${wood.namespace}:${wood.name}_planks"
+      "${wood.tagOrItem}": "${wood.namespace}:${wood.name}_planks"
     },
     "i": {
-      "item": "${wood.namespace}:${wood.name}_slab"
+      "${wood.tagOrItem}": "${wood.namespace}:${wood.name}_slab"
     }
   },
   "result": {

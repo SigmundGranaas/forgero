@@ -133,7 +133,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 875
+            "value": 0
           },
           {
             "id": "obsidian-draw_power-offensive-upgrade",

@@ -10,6 +10,10 @@ dependencies {
 	// Bows
 	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
 
+	// Trade
+	localRuntime(project(path: ":fabric:modules:trade", configuration: 'namedElements'))
+
+
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
@@ -20,7 +24,7 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	// YetAnotherConfigLib
-	modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}")
+	modImplementation("maven.modrinth:yacl:${project.yacl_version}")
 
 	// Patchouli
 	// TODO: Switch to Modonomicon

@@ -14,6 +14,9 @@ dependencies {
 	// Ref: https://github.com/SigmundGranaas/forgero/issues/933
 	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
 
+	// Trade
+	localRuntime(project(path: ":fabric:modules:trade", configuration: 'namedElements'))
+
 	// Fabric Loader
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 
