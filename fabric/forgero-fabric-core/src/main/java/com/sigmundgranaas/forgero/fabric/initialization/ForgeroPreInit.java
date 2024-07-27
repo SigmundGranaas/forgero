@@ -99,13 +99,10 @@ import com.sigmundgranaas.forgero.minecraft.common.match.predicate.DamagePercent
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.MatchContextTypePredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.match.predicate.WeatherPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicateMatcher;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.error.MissingFieldErrorHandler;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.error.PredicateErrorHandlerRegistry;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.error.TypeFieldErrorHandler;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.world.DimensionPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.world.WorldPredicate;
@@ -218,10 +215,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
 		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
 		PredicateFactory.register(MatchContextTypePredicate.MatchContextTypePredicateBuilder::new);
-
-		// Error handling
-		PredicateErrorHandlerRegistry.INSTANCE.registerHandler(new TypeFieldErrorHandler());
-		PredicateErrorHandlerRegistry.INSTANCE.registerHandler(new MissingFieldErrorHandler());
 	}
 
 	private void registerFeatureBuilder() {

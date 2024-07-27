@@ -14,18 +14,19 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.error.MissingFieldErrorHandler;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.error.PredicateErrorHandler;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.error.PredicateErrorHandlerRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.error.TypeFieldErrorHandler;
 import org.apache.logging.log4j.Logger;
 
 public class KeyBasedRegistryBackedMapCodec<T> extends MapCodec<GroupEntry<KeyPair<Predicate<T>>>> {
 	private static final Logger LOGGER = Forgero.LOGGER;
-	private final PredicateErrorHandlerRegistry errorHandlerRegistry;
+	private final List<PredicateErrorHandler> errorHandlerRegistry;
 	private final SpecificationRegistry<Codec<KeyPair<Predicate<T>>>> codecs;
 	private final String key;
 
-	public KeyBasedRegistryBackedMapCodec(SpecificationRegistry<Codec<KeyPair<Predicate<T>>>> codecs, PredicateErrorHandlerRegistry errorHandlerRegistry, String key) {
-		this.errorHandlerRegistry = errorHandlerRegistry;
+	public KeyBasedRegistryBackedMapCodec(SpecificationRegistry<Codec<KeyPair<Predicate<T>>>> codecs, String key) {
+		this.errorHandlerRegistry = List.of(new TypeFieldErrorHandler(), new MissingFieldErrorHandler());
 		this.codecs = codecs;
 		this.key = key;
 	}
