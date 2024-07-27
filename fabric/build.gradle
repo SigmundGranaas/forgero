@@ -119,7 +119,8 @@ curseforge {
 				optionalDependency "betternether"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
-				optionalDependency "advancednetherite"
+				optionalDependency "naturalist"
+				optionalDependency "advanced-netherite"
 				incompatible "exordium"
 			}
 		}
@@ -152,7 +153,8 @@ modrinth {
 		optional.project "mystical_crops"
 		optional.project "mythicmetals"
 		optional.project "wiredredstone"
-		optional.project "advancednetherite"
+		optional.project "naturalist"
+		optional.project "advanced-netherite"
 		incompatible.project "exordium"
 	}
 }
