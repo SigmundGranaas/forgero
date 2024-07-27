@@ -69,14 +69,14 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSideInvisible(@NotNull BlockState blockState, @NotNull BlockState stateFrom, @NotNull Direction direction) {
-		return stateFrom.isOf(this) || super.isSideInvisible(blockState, stateFrom, direction);
+	public boolean isSideInvisible(@NotNull BlockState blockState, @NotNull BlockState blockStateFrom, @NotNull Direction direction) {
+		return blockStateFrom.isOf(this) || super.isSideInvisible(blockState, blockStateFrom, direction);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResult onUse(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (world.isClient) {
+	public ActionResult onUse(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @Nullable PlayerEntity player, @Nullable Hand hand, @NotNull BlockHitResult hit) {
+		if (world.isClient || player == null) {
 			return ActionResult.SUCCESS;
 		}
 
@@ -99,50 +99,51 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+	public NamedScreenHandlerFactory createScreenHandlerFactory(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition) {
 		return new SimpleNamedScreenHandlerFactory(
-				(syncId, inventory, player) -> new AssemblyStationScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)),
+				(syncId, inventory, player) -> new AssemblyStationScreenHandler(
+						syncId, inventory, ScreenHandlerContext.create(world, blockPosition)),
 				Text.literal("assembly_station")
 		);
 	}
 
 	@Override
-	public void onPlaced(World world, BlockPos blockPosition, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-		super.onPlaced(world, blockPosition, state, placer, itemStack);
+	public void onPlaced(@NotNull World world, @NotNull BlockPos blockPosition, @NotNull BlockState blockState, @Nullable LivingEntity placer, @Nullable ItemStack itemStack) {
+		super.onPlaced(world, blockPosition, blockState, placer, itemStack);
 		if (world.isClient) {
 			return;
 		}
 
-		@NotNull var offsetBlockPosition = blockPosition.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+		@NotNull var offsetBlockPosition = blockPosition.offset(blockState.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
 		world.breakBlock(offsetBlockPosition, true, placer, 1);
-		world.setBlockState(offsetBlockPosition, state.with(PART, AssemblyStationPart.RIGHT), 3);
+		world.setBlockState(offsetBlockPosition, blockState.with(PART, AssemblyStationPart.RIGHT), 3);
 		world.updateNeighbors(blockPosition, Blocks.AIR);
-		state.updateNeighbors(world, blockPosition, 3);
+		blockState.updateNeighbors(world, blockPosition, 3);
 	}
 
 	@Override
-	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		AssemblyStationPart part = state.get(PART);
+	public void onBreak(@NotNull World world, @NotNull BlockPos blockPosition, @NotNull BlockState blockState, @Nullable PlayerEntity player) {
+		AssemblyStationPart part = blockState.get(PART);
 		BlockPos blockPos;
 		if (part == AssemblyStationPart.LEFT) {
-			blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+			blockPos = blockPosition.offset(blockState.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
 		} else {
-			blockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
+			blockPos = blockPosition.offset(blockState.get(FACING).rotateClockwise(Direction.Axis.Y));
 		}
 		if (!world.isClient) {
 			world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
-			world.updateNeighbors(pos, Blocks.AIR);
-			state.updateNeighbors(world, pos, 3);
+			world.updateNeighbors(blockPosition, Blocks.AIR);
+			blockState.updateNeighbors(world, blockPosition, 3);
 
 		}
-		super.onBreak(world, pos, state, player);
+		super.onBreak(world, blockPosition, blockState, player);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-		if (super.canPlaceAt(state, world, pos)) {
-			BlockPos blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+	public boolean canPlaceAt(@NotNull BlockState blockState, @NotNull WorldView world, @NotNull BlockPos blockPosition) {
+		if (super.canPlaceAt(blockState, world, blockPosition)) {
+			BlockPos blockPos = blockPosition.offset(blockState.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
 			return !world.getBlockState(blockPos).isSolidBlock(world, blockPos);
 		} else {
 			return false;
@@ -151,12 +152,12 @@ public class AssemblyStationBlock extends HorizontalFacingBlock {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockRenderType getRenderType(@NotNull BlockState state) {
-		if (state.get(PART) == AssemblyStationPart.RIGHT) {
+	public BlockRenderType getRenderType(@NotNull BlockState blockState) {
+		if (blockState.get(PART) == AssemblyStationPart.RIGHT) {
 			return BlockRenderType.INVISIBLE;
 		}
 
-		return super.getRenderType(state);
+		return super.getRenderType(blockState);
 	}
 
 	protected void appendProperties(StateManager.@NotNull Builder<Block, BlockState> builder) {
