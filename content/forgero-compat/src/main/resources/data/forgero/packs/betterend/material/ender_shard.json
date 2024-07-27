@@ -1,0 +1,65 @@
+{
+  "type": "CRYSTAL",
+  "name": "ender_shard",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "betterend:ender_shard"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "crystal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 35
+          },
+          {
+            "id": "crystal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "crystal-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.1
+          },
+          {
+            "id": "crystal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 210
+          },
+          {
+            "id": "crystal-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "betterend/ender_shard"
+  }
+}
