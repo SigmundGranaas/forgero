@@ -9,21 +9,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "goo-rarity-composite",
-            "type": "RARITY",
-            "value": 60
-          },
-          {
-            "id": "goo-durability-composite",
-            "type": "DURABILITY",
-            "value": 210
-          },
-          {
-            "id": "goo-weight-composite",
-            "type": "WEIGHT",
-            "value": 10
-          }
         ]
       },
       {

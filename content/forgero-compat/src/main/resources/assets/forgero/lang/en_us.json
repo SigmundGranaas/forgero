@@ -158,5 +158,9 @@
   "item.forgero.cattail_fluff": "Cattail Fluff",
   "item.forgero.glow_goop": "Glow Goop",
   "item.forgero.shellstone": "Shellstone",
-  "item.forgero.snail_shell": "Snail Shell"
+  "item.forgero.snail_shell": "Snail Shell",
+  "item.forgero.netherite_gold_ingot": "Netherite-Gold Ingot",
+  "item.forgero.netherite_emerald_ingot": "Netherite-Emerald Ingot",
+  "item.forgero.netherite_diamond_ingot": "Netherite-Diamond Ingot",
+  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot"
 }

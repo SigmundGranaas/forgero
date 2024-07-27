@@ -10,6 +10,10 @@ dependencies {
 	// Bows
 	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
 
+	// Trade
+	localRuntime(project(path: ":fabric:modules:trade", configuration: 'namedElements'))
+
+
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
@@ -25,6 +29,9 @@ dependencies {
 	// Patchouli
 	// TODO: Switch to Modonomicon
 	modCompileOnly("maven.modrinth:patchouli:${project.patchouli_version}")
+
+	// Modonomicon
+	modImplementation "com.klikli_dev:modonomicon-${minecraft_version}-fabric:${modonomicon_version}"
 
 	// Better Combat
 	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}") {
