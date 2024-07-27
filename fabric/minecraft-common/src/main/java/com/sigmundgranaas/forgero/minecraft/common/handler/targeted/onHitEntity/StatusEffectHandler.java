@@ -28,7 +28,7 @@ import net.minecraft.world.World;
  *   "type": "minecraft:on_hit",
  *   "on_hit": {
  *     "type": "minecraft:status_effect",
- *     "target": "minecraft:targeted_entity",
+ *     "target": "minecraft:targeted_entity", or "minecraft:attacker"
  *     "effect": "minecraft:poison",
  *     "level": 1
  *   },
@@ -96,6 +96,8 @@ public class StatusEffectHandler implements EntityTargetHandler {
 	public void onHit(Entity source, World world, Entity targetEntity) {
 		if ("minecraft:targeted_entity".equals(target) && targetEntity instanceof LivingEntity livingTarget) {
 			livingTarget.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
+		} else if ("minecraft:attacker".equals(target) && source instanceof LivingEntity livingSource) {
+			livingSource.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
 		}
 	}
 
