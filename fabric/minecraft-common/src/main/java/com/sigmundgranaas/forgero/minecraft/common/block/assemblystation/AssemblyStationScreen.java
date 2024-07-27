@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import com.sigmundgranaas.forgero.core.Forgero;
+
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
@@ -12,7 +14,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHandler> {
-	private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/container/assembly_table_ui.png");
+	private static final @NotNull Identifier TEXTURE = new Identifier(Forgero.NAMESPACE, "textures/gui/container/assembly_table_ui.png");
 
 	@SuppressWarnings("unused")
 	public AssemblyStationScreen(AssemblyStationScreenHandler handler, PlayerInventory inventory, Text title) {
