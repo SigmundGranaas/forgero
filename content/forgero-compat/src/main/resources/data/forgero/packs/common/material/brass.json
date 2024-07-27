@@ -2,12 +2,18 @@
   "type": "METAL",
   "parent": "metal_base",
   "name": "brass",
+  "dependencies": {
+    "any": [
+      "create",
+      "techreborn"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "techreborn:brass_ingot"
+    "tag": "c:brass_ingots"
   },
   "palette": {
-    "name": "techreborn/brass"
+    "name": "brass"
   },
   "properties": {
     "grouped_attributes": [

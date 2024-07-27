@@ -5,12 +5,13 @@
   "dependencies": {
     "any": [
       "mythicmetals",
-      "techreborn"
+      "techreborn",
+      "modern_industrialization"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:bronze_ingot"
+    "tag": "c:bronze_ingots"
   },
   "palette": {
     "name": "bronze"
@@ -50,7 +51,7 @@
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 1.7
+        "value": 5.5
       },
       {
         "id": "metal-armor-composite",

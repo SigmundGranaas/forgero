@@ -1,10 +1,19 @@
 {
   "type": "METAL",
-  "name": "advanced_alloy",
   "parent": "metal_base",
+  "name": "chromium",
+  "dependencies": {
+    "any": [
+      "modern_industrialization",
+      "techreborn"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "techreborn:advanced_alloy_ingot"
+    "tag": "c:chromium_ingots"
+  },
+  "palette": {
+    "name": "chromium"
   },
   "properties": {
     "grouped_attributes": [
@@ -21,7 +30,7 @@
           {
             "id": "metal-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 6.75
+            "value": 7
           },
           {
             "id": "metal-mining_level-composite",
@@ -31,27 +40,22 @@
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 650
+            "value": 500
           },
           {
             "id": "metal-rarity-composite",
             "type": "RARITY",
-            "value": 90
-          },
-          {
-            "id": "metal-weight-composite",
-            "type": "WEIGHT",
-            "value": 50
+            "value": 80
           },
           {
             "id": "metal-armor-composite",
             "type": "ARMOR",
-            "value": 5
+            "value": 6
           },
           {
-            "id": "metal-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 4.1
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "value": 25
           }
         ]
       },
@@ -64,7 +68,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 45
+            "value": 40
           },
           {
             "id": "metal-weight-upgrade",
@@ -72,41 +76,31 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 25
+            "value": 12
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 2.25
+            "value": 1.75
           },
           {
             "id": "metal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 4
+            "value": 2.75
           },
           {
             "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 325
-          },
-          {
-            "id": "metal-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.95
+            "value": 250
           }
         ]
       }
     ]
-  },
-  "palette": {
-    "name": "techreborn/advanced_alloy"
   }
 }

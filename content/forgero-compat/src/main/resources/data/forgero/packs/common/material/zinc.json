@@ -1,10 +1,19 @@
 {
-  "type": "MINERAL",
-  "name": "synthetic_redstone",
-  "parent": "mineral_base",
+  "type": "METAL",
+  "parent": "metal_base",
+  "name": "zinc",
+  "dependencies": {
+    "any": [
+      "create",
+      "techreborn"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "techreborn:synthetic_redstone_crystal"
+    "tag": "c:zinc_ingots"
+  },
+  "palette": {
+    "name": "zinc"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,34 +23,39 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "mineral-attack-damage-composite",
+            "id": "metal-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
+            "value": 3.25
+          },
+          {
+            "id": "metal-mining_speed-composite",
+            "type": "MINING_SPEED",
             "value": 4.5
           },
           {
-            "id": "mineral-mining-speed-composite",
-            "type": "MINING_SPEED",
-            "value": 7
-          },
-          {
-            "id": "mineral-mining-level-composite",
-            "type": "MINING_LEVEL",
-            "value": 3
-          },
-          {
-            "id": "mineral-durability-composite",
+            "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 425
+            "value": 210
           },
           {
-            "id": "mineral-rarity-composite",
+            "id": "metal-rarity-composite",
             "type": "RARITY",
-            "value": 80
+            "value": 30
           },
           {
-            "id": "mineral-weight-composite",
+            "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 45
+          },
+          {
+            "id": "metal-armor-composite",
+            "type": "ARMOR",
+            "value": 5
+          },
+          {
+            "id": "metal-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 3
           }
         ]
       },
@@ -49,81 +63,65 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "mineral-rarity-upgrade",
+            "id": "metal-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 40
+            "value": 22
           },
           {
-            "id": "mineral-weight-upgrade",
+            "id": "metal-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 22
           },
           {
-            "id": "mineral-attack_damage-offensive-upgrade",
+            "id": "metal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.25
+            "value": 1.65
           },
           {
-            "id": "mineral-mining_speed-offensive-upgrade",
+            "id": "metal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 3
+            "value": 2.25
           },
           {
-            "id": "mineral-mining_level-offensive-upgrade",
+            "id": "metal-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 1
           },
           {
-            "id": "mineral-durability-offensive-upgrade",
+            "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 212
+            "value": 105
           },
           {
-            "id": "mineral-draw_power-offensive-upgrade",
+            "id": "metal-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.8
+            "value": 0.5
           },
           {
-            "id": "mineral-draw_speed-offensive-upgrade",
+            "id": "metal-draw_speed-offensive-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.25
+            "value": 0
           }
         ]
       }
-    ],
-    "attributes": [
-      {
-        "type": "forgero:emissive",
-        "value": 4
-      }
-    ],
-    "features": [
-      {
-        "type": "forgero:emissive",
-        "title": "feature.forgero.emissive",
-        "description": "feature.forgero.emissive.description"
-      }
     ]
-  },
-  "palette": {
-    "name": "techreborn/synthetic_redstone"
   }
 }

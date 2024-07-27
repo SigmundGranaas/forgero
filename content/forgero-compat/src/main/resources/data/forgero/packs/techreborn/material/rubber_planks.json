@@ -1,10 +1,10 @@
 {
-  "type": "GOO",
-  "name": "sap",
-  "parent": "goo_base",
+  "type": "WOOD",
+  "name": "rubber_planks",
+  "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "techreborn:sap"
+    "id": "techreborn:rubber_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -13,38 +13,43 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 90
+          },
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 40
+          }
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "goo-rarity-upgrade",
+            "id": "wood-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 42.5
+            "value": 20
           },
           {
-            "id": "goo-durability-offensive-upgrade",
+            "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 180
-          },
-          {
-            "id": "goo-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.3
+            "value": 45
           }
         ]
       }
+    ],
+    "attributes": [
     ]
   },
   "palette": {
-    "name": "techreborn/sap"
+    "name": "techreborn/rubber_planks"
   }
 }
