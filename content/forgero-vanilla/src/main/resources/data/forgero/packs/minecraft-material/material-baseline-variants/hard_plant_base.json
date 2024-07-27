@@ -9,21 +9,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "hard_plant-rarity-composite",
-            "type": "RARITY",
-            "value": 20
-          },
-          {
-            "id": "hard_plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 180
-          },
-          {
-            "id": "hard_plant-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          }
+
         ]
       },
       {

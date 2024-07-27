@@ -26,4 +26,5 @@ include "fabric:minecraft-common"
 // Modules
 include "fabric:modules"
 include "fabric:modules:bows"
+include "fabric:modules:trade"
 include "fabric:modules:generator"
