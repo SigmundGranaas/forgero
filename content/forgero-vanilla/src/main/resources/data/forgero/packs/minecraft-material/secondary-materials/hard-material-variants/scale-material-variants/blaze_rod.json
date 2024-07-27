@@ -13,21 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "scale-rarity-composite",
-            "type": "RARITY",
-            "value": 60
-          },
-          {
-            "id": "scale-durability-composite",
-            "type": "DURABILITY",
-            "value": 560
-          },
-          {
-            "id": "scale-weight-composite",
-            "type": "WEIGHT",
-            "value": 40
-          }
+
         ]
       },
       {
@@ -68,6 +54,13 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
+            "value": 280
+          },
+          {
+            "id": "scale-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
             "value": 280
           },
           {
