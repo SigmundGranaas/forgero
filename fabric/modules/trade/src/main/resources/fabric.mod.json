@@ -20,12 +20,9 @@
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "license": "MIT",
-  "icon": "assets/forgero/bows.png",
+  "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "com.sigmundgranaas.forgero.trademodule.TradeClientInitializer"
-    ],
     "forgeroPreInitialization": [
       "com.sigmundgranaas.forgero.trademodule.TradeInitializer"
     ]
@@ -38,8 +35,6 @@
     "forgero-fabric-core": "*"
   },
   "suggests": {
-    "patchouli": "*",
-    "lambdynamiclights": "*"
   },
   "custom": {
     "modmenu": {
@@ -53,7 +48,7 @@
         "id": "forgero",
         "name": "Forgero",
         "description": "Equipment crafting expansion mod for Fabric!",
-        "icon": "bows.png"
+        "icon": "icon.png"
       }
     }
   }
