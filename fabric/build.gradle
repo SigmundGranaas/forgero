@@ -111,7 +111,7 @@ curseforge {
 			relations {
 				embeddedLibrary 'arrp'
 				requiredDependency 'fabric-api'
-				optionalDependency 'patchouli'
+				optionalDependency 'modonomicon'
 				optionalDependency "lambdynamiclights"
 				optionalDependency "better-combat"
 				optionalDependency "modmenu"
@@ -120,6 +120,8 @@ curseforge {
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
 				optionalDependency "ecologics"
+				optionalDependency "naturalist"
+				optionalDependency "advanced-netherite"
 				incompatible "exordium"
 			}
 		}
@@ -143,7 +145,7 @@ modrinth {
 	dependencies {
 		embedded.project "arrp"
 		required.project "fabric-api"
-		optional.project "patchouli"
+		optional.project "modonomicon"
 		optional.project "lambdynamiclights"
 		optional.project "better-combat"
 		optional.project "modmenu"
@@ -153,6 +155,8 @@ modrinth {
 		optional.project "mythicmetals"
 		optional.project "wiredredstone"
 		optional.project "ecologics"
+		optional.project "naturalist"
+		optional.project "advanced-netherite"
 		incompatible.project "exordium"
 	}
 }
