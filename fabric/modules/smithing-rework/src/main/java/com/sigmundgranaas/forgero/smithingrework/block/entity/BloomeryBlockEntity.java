@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.smithingrework.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithingrework.item.custom.LiquidMetalCrucibleItem;
 import com.sigmundgranaas.forgero.smithingrework.recipe.MetalSmeltingRecipe;
 
+import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
@@ -25,6 +26,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
@@ -95,18 +97,20 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 
 	public static void tick(World world, BlockPos pos, BlockState state, BloomeryBlockEntity be) {
 		if (world.isClient) return;
+		boolean bl4;
+		boolean bl = be.isSmelting();
+		boolean bl2 = false;
 
-		boolean wasLit = state.get(BloomeryBlock.LIT);
-		boolean shouldBeLit = be.isSmelting();
 		ItemStack itemStack = be.inventory.getStack(2);
-
-		if (wasLit != shouldBeLit) {
-			world.setBlockState(pos, state.with(BloomeryBlock.LIT, shouldBeLit), Block.NOTIFY_ALL);
-
-		}
 
 		if (be.isSmelting()) {
 			--be.burnTime;
+			Item item = itemStack.getItem();
+			itemStack.decrement(1);
+			if (itemStack.isEmpty()) {
+				Item item2 = item.getRecipeRemainder();
+				be.inventory.setStack(2, item2 == null ? ItemStack.EMPTY : new ItemStack(item2));
+			}
 		}
 
 		if (be.currentRecipe == null) {
@@ -127,6 +131,14 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 			}
 		} else {
 			be.cookTime = 0;
+		}
+		if(!be.isSmelting() && be.cookTime > 0) {
+			be.cookTime = MathHelper.clamp(be.cookTime - 2, 0, be.cookTimeTotal);
+		}
+
+		if (bl != be.isSmelting()) {
+			state = (BlockState)state.with(AbstractFurnaceBlock.LIT, be.isSmelting());
+			world.setBlockState(pos, state, Block.NOTIFY_ALL);
 		}
 
 		be.markDirty();
