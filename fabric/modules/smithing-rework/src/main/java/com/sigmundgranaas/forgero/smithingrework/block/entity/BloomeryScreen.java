@@ -2,10 +2,13 @@ package com.sigmundgranaas.forgero.smithingrework.block.entity;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import com.sigmundgranaas.forgero.core.context.Context;
+
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -30,9 +33,16 @@ public class BloomeryScreen extends HandledScreen<BloomeryScreenHandler> {
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		int x = (width - backgroundWidth) / 2;
 		int y = (height - backgroundHeight) / 2;
-		int cookTime = this.handler.getCookTime();
-
+		int k;
 		context.drawTexture(TEXTURE, x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+
+		if (((BloomeryScreenHandler)this.handler).isSmelting()) {
+			k = ((BloomeryScreenHandler)this.handler).getFuelProgress();
+			context.drawTexture(TEXTURE, x + 56, y + 36 + 12 - k, 176, 12 - k, 14, k + 1);
+		}
+		k = ((BloomeryScreenHandler)this.handler).getCookProgress();
+		context.drawTexture(TEXTURE, x + 79, y + 34, 176, 14, k + 1, 16);
+
 	}
 
 	@Override

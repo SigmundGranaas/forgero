@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.smithingrework.block.entity;
 
 import static com.sigmundgranaas.forgero.smithingrework.ForgeroSmithingInitializer.BLOOMERY_SCREEN_HANDLER;
-import static com.sigmundgranaas.forgero.smithingrework.block.entity.BloomeryInventory.CRUCIBLE_SLOT;
-import static com.sigmundgranaas.forgero.smithingrework.block.entity.BloomeryInventory.INGREDIENT_SLOT;
+import static com.sigmundgranaas.forgero.smithingrework.block.entity.BloomeryInventory.*;
 
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -17,18 +18,20 @@ public class BloomeryScreenHandler extends ScreenHandler {
 	private final BloomeryInventory inventory;
 
 	public BloomeryScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(syncId, playerInventory, new BloomeryInventory(), new ArrayPropertyDelegate(1));
+		this(syncId, playerInventory, new BloomeryInventory(), new ArrayPropertyDelegate(4));
 	}
 
 	public BloomeryScreenHandler(int syncId, PlayerInventory playerInventory, BloomeryInventory inventory, PropertyDelegate propertyDelegate) {
 		super(BLOOMERY_SCREEN_HANDLER, syncId);
-		checkSize(inventory, 2);
+		checkSize(inventory, 3);
+		checkDataCount(propertyDelegate, 4);
 		this.propertyDelegate = propertyDelegate;
 		this.inventory = inventory;
 
 		// Bloomery Inventory
 		this.addSlot(new Slot(inventory, INGREDIENT_SLOT, 56, 17));  // Input slot
 		this.addSlot(new Slot(inventory, CRUCIBLE_SLOT, 116, 35)); // Crucible slot
+		this.addSlot(new Slot(inventory, FUEL_SLOT, 56, 53)); // Crucible slot
 
 		// Player Inventory (3 rows of 9 slots)
 		for (int row = 0; row < 3; ++row) {
@@ -44,13 +47,34 @@ public class BloomeryScreenHandler extends ScreenHandler {
 		addProperties(propertyDelegate);
 	}
 
-	public int getCookTime() {
-		return this.propertyDelegate.get(0);
+	public int getCookProgress() {
+		int i = this.propertyDelegate.get(2);
+		int j = this.propertyDelegate.get(3);
+		if (j == 0 || i == 0) {
+			return 0;
+		}
+		return i * 24 / j;
+	}
+
+	public int getFuelProgress() {
+		int i = this.propertyDelegate.get(1);
+		if (i == 0) {
+			i = 200;
+		}
+		return this.propertyDelegate.get(0) * 13 / i;
 	}
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
 		return this.inventory.canPlayerUse(player);
+	}
+
+	protected boolean isFuel(ItemStack itemStack) {
+		return AbstractFurnaceBlockEntity.canUseAsFuel(itemStack);
+	}
+
+	public boolean isSmelting() {
+		return this.propertyDelegate.get(0) > 0;
 	}
 
 	@Override

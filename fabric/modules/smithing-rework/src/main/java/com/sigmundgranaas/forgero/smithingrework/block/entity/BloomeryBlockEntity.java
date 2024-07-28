@@ -10,12 +10,16 @@ import com.sigmundgranaas.forgero.smithingrework.recipe.MetalSmeltingRecipe;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -25,9 +29,13 @@ import net.minecraft.world.World;
 
 public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
 	private final BloomeryInventory inventory = new BloomeryInventory();
-	private int cookTime = 0;
+	int burnTime;
+	int fuelTime;
+	int cookTime;
+	int cookTimeTotal;
 	private MetalSmeltingRecipe currentRecipe;
 	private final PropertyDelegate propertyDelegate;
+
 
 
 	public BloomeryBlockEntity(BlockPos pos, BlockState state) {
@@ -35,22 +43,48 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 		this.propertyDelegate = new PropertyDelegate() {
 			@Override
 			public int get(int index) {
-				if (index == 0) {
-					return cookTime;
+				switch (index) {
+					case 0: {
+						return BloomeryBlockEntity.this.burnTime;
+					}
+					case 1: {
+						return BloomeryBlockEntity.this.fuelTime;
+					}
+					case 2: {
+						return BloomeryBlockEntity.this.cookTime;
+					}
+					case 3: {
+						return BloomeryBlockEntity.this.cookTimeTotal;
+					}
 				}
 				return 0;
 			}
 
 			@Override
 			public void set(int index, int value) {
-				if (index == 0) {
-					cookTime = value;
+				switch (index) {
+					case 0: {
+						BloomeryBlockEntity.this.burnTime = value;
+						break;
+					}
+					case 1: {
+						BloomeryBlockEntity.this.fuelTime = value;
+						break;
+					}
+					case 2: {
+						BloomeryBlockEntity.this.cookTime = value;
+						break;
+					}
+					case 3: {
+						BloomeryBlockEntity.this.cookTimeTotal = value;
+						break;
+					}
 				}
 			}
 
 			@Override
 			public int size() {
-				return 1;
+				return 4;
 			}
 		};
 	}
@@ -64,9 +98,15 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 
 		boolean wasLit = state.get(BloomeryBlock.LIT);
 		boolean shouldBeLit = be.isSmelting();
+		ItemStack itemStack = be.inventory.getStack(2);
 
 		if (wasLit != shouldBeLit) {
 			world.setBlockState(pos, state.with(BloomeryBlock.LIT, shouldBeLit), Block.NOTIFY_ALL);
+
+		}
+
+		if (be.isSmelting()) {
+			--be.burnTime;
 		}
 
 		if (be.currentRecipe == null) {
@@ -75,11 +115,13 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 			if (recipe.isPresent()) {
 				be.currentRecipe = recipe.get();
 				be.cookTime = 0;
+				be.fuelTime = be.burnTime = be.getFuelTime(itemStack);
 			}
 		}
 
 		if (be.currentRecipe != null && be.canSmelt()) {
 			be.cookTime++;
+
 			if (be.cookTime >= be.currentRecipe.getCookingTime()) {
 				be.craftItem();
 			}
@@ -106,6 +148,7 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 		if (this.currentRecipe != null && this.canSmelt()) {
 			ItemStack ingredient = inventory.getStack(BloomeryInventory.INGREDIENT_SLOT);
 			ItemStack crucibleStack = inventory.getStack(BloomeryInventory.CRUCIBLE_SLOT);
+			ItemStack fuelStack = inventory.getStack(BloomeryInventory.FUEL_SLOT);
 
 			if (crucibleStack.getItem() instanceof LiquidMetalCrucibleItem crucibleItem && crucibleItem.canAddLiquid(ingredient, currentRecipe.getLiquid(), currentRecipe.getLiquidAmount())) {
 				crucibleItem.addLiquid(crucibleStack, currentRecipe.getLiquid(), currentRecipe.getLiquidAmount());
@@ -118,12 +161,25 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 		}
 	}
 
+	public boolean isValid(int slot, ItemStack stack) {
+		if (slot == 2) {
+			return false;
+		}
+		if (slot == 1) {
+			ItemStack itemStack = this.inventory.getStack(2);
+			return AbstractFurnaceBlockEntity.canUseAsFuel(stack) || stack.isOf(Items.BUCKET) && !itemStack.isOf(Items.BUCKET);
+		}
+		return true;
+	}
+
 
 	@Override
 	public void writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 		Inventories.writeNbt(nbt, inventory.getItems());
 		nbt.putInt("CookTime", cookTime);
+		nbt.putInt("BurnTime", burnTime);
+		nbt.putInt("CookTimeTime", cookTimeTotal);
 	}
 
 	@Override
@@ -131,6 +187,17 @@ public class BloomeryBlockEntity extends BlockEntity implements NamedScreenHandl
 		super.readNbt(nbt);
 		Inventories.readNbt(nbt, inventory.getItems());
 		cookTime = nbt.getInt("CookTime");
+		burnTime = nbt.getInt("BurnTime");
+		cookTimeTotal = nbt.getInt("CookTimeTotal");
+		this.fuelTime = this.getFuelTime(this.inventory.getStack(2));
+	}
+
+	protected int getFuelTime(ItemStack fuel) {
+		if (fuel.isEmpty()) {
+			return 0;
+		}
+		Item item = fuel.getItem();
+		return AbstractFurnaceBlockEntity.createFuelTimeMap().getOrDefault(item, 0);
 	}
 
 
