@@ -407,6 +407,8 @@ public class HitHandlerTests {
 
 		// Verify the status effect is applied correctly
 		context.runAtTick(1, () -> {
+			// PLayer did no get ticked by the game world. It needs a single manual tick.
+			player.baseTick();
 			boolean hasEffect = player.hasStatusEffect(StatusEffects.POISON);
 			context.assertTrue(hasEffect, "Player does not have the expected Poison effect.");
 
