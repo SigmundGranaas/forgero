@@ -91,32 +91,11 @@
             "value": 160
           },
           {
-            "id": "metal-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 160
-          },
-          {
-            "id": "metal-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "metal-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.6
-          },
-          {
-            "id": "metal-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }

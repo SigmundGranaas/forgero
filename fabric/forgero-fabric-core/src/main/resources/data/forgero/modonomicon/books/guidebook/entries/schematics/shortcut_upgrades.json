@@ -1,0 +1,19 @@
+{
+  "category": "forgero:schematics",
+  "name": "book.forgero.guidebook.schematics.shortcut.name",
+  "description": "book.forgero.guidebook.schematics.shortcut.description",
+  "background_u_index": 1,
+  "background_v_index": 2,
+  "icon": "forgero:upgrade_station",
+  "category_to_open": "forgero:upgrading",
+  "x": 7,
+  "y": 0,
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:schematics/using_your_schematics",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}

@@ -13,21 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "makeshift-rarity-composite",
-            "type": "RARITY",
-            "value": 75
-          },
-          {
-            "id": "makeshift-durability-composite",
-            "type": "DURABILITY",
-            "value": 490
-          },
-          {
-            "id": "makeshift-weight-composite",
-            "type": "WEIGHT",
-            "value": 40
-          }
+
         ]
       },
       {
@@ -50,73 +36,10 @@
             "value": 15
           },
           {
-            "id": "makeshift-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "makeshift-attack_damage-offensive-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "makeshift-mining_speed-offensive-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "makeshift-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
             "id": "makeshift-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 245
-          },
-          {
-            "id": "makeshift-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "makeshift-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "makeshift-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "makeshift-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "makeshift-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 245
           },
           {
@@ -125,13 +48,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.66
-          },
-          {
-            "id": "makeshift-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
           }
         ]
       }

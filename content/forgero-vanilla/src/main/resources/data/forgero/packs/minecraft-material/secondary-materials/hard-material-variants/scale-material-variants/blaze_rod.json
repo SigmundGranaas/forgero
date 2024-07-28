@@ -13,28 +13,14 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "scale-rarity-composite",
-            "type": "RARITY",
-            "value": 60
-          },
-          {
-            "id": "scale-durability-composite",
-            "type": "DURABILITY",
-            "value": 560
-          },
-          {
-            "id": "scale-weight-composite",
-            "type": "WEIGHT",
-            "value": 40
-          }
+
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "dust-rarity-upgrade",
+            "id": "scale-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -42,7 +28,7 @@
             "value": 30
           },
           {
-            "id": "dust-weight-upgrade",
+            "id": "scale-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
@@ -50,7 +36,7 @@
             "value": 20
           },
           {
-            "id": "dust-attack_damage-offensive-upgrade",
+            "id": "scale-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
@@ -64,14 +50,14 @@
             "value": 0
           },
           {
-            "id": "dust-durability-offensive-upgrade",
+            "id": "scale-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 280
           },
           {
-            "id": "dust-durability-utility-upgrade",
+            "id": "scale-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
