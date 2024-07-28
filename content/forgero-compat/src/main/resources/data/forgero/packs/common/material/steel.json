@@ -5,6 +5,7 @@
   "dependencies": {
     "any": [
       "mythicmetals",
+      "techreborn",
       "modern_industrialization"
     ]
   },
@@ -50,7 +51,7 @@
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 1.9
+        "value": 5.5
       },
       {
         "id": "metal-armor-composite",
