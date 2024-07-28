@@ -7,7 +7,9 @@ import net.minecraft.util.collection.DefaultedList;
 public class BloomeryInventory implements ImplementedInventory {
 	public static final int INGREDIENT_SLOT = 0;
 	public static final int CRUCIBLE_SLOT = 1;
-	public static final int INVENTORY_SIZE = 2;
+
+	public static final int FUEL_SLOT = 2;
+	public static final int INVENTORY_SIZE = 3;
 
 	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
 
@@ -63,12 +65,20 @@ public class BloomeryInventory implements ImplementedInventory {
 		return getStack(CRUCIBLE_SLOT);
 	}
 
+	public ItemStack getFuel() {
+		return getStack(FUEL_SLOT);
+	}
+
 	public ItemStack getIngredient() {
 		return getStack(INGREDIENT_SLOT);
 	}
 
 	public void setCrucible(ItemStack stack) {
 		setStack(CRUCIBLE_SLOT, stack);
+	}
+
+	public void setFuel(ItemStack stack) {
+		setStack(FUEL_SLOT, stack);
 	}
 
 	public void setIngredient(ItemStack stack) {
