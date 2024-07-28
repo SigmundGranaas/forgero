@@ -1,0 +1,34 @@
+{
+  "category": "forgero:schematics",
+  "name": "book.forgero.guidebook.schematics.extended_schematics.name",
+  "description": "book.forgero.guidebook.schematics.extended_schematics.description",
+  "icon": "forgero:refined_pickaxe_head-schematic",
+  "x": -2,
+  "y": -4,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.schematics.extended_schematics.text",
+      "title": "book.forgero.guidebook.schematics.extended_schematics.title",
+      "use_markdown_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.schematics.extended_schematics.text1",
+      "title": "book.forgero.guidebook.schematics.extended_schematics.title1",
+      "use_markdown_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "forgero:schematics/schematic_variants",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ]
+}

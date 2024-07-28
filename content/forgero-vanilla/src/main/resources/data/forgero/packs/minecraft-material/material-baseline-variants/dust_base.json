@@ -9,21 +9,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "dust-rarity-composite",
-            "type": "RARITY",
-            "value": 50
-          },
-          {
-            "id": "dust-durability-composite",
-            "type": "DURABILITY",
-            "value": 30
-          },
-          {
-            "id": "dust-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          }
         ]
       },
       {
@@ -113,7 +98,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 15
+            "value": 0
           },
           {
             "id": "dust-draw_power-offensive-upgrade",

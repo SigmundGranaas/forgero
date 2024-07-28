@@ -1,5 +1,5 @@
 {
-  "parent": "forgero:forgero/toolpart",
+  "parent": "forgero:forgero/root",
   "display": {
     "icon": {
       "item": "forgero:iron-pickaxe"
@@ -35,12 +35,45 @@
           }
         ]
       }
+    },
+    "shovels": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "fabric:shovel"
+          }
+        ]
+      }
+    },
+    "hoes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "fabric:hoe"
+          }
+        ]
+      }
+    },
+    "swords": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "fabric:sword"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "axes",
-      "pickaxes"
+      "pickaxes",
+      "hoes",
+      "swords",
+      "shovels"
     ]
   ]
 }
