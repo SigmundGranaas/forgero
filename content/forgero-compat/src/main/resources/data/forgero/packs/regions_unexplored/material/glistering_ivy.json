@@ -37,13 +37,6 @@
             "value": 25
           },
           {
-            "id": "soft_plant-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 50
-          },
-          {
             "id": "soft_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
