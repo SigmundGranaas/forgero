@@ -82,27 +82,6 @@
             "value": 210
           },
           {
-            "id": "mineral-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 2
-          },
-          {
-            "id": "mineral-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 3
-          },
-          {
-            "id": "mineral-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 210
-          },
-          {
             "id": "mineral-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",

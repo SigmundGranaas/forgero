@@ -44,13 +44,6 @@
             "value": 40
           },
           {
-            "id": "soft_plant-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 40
-          },
-          {
             "id": "soft_plant-draw_speed-utility-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",

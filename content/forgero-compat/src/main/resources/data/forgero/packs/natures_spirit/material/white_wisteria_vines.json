@@ -24,10 +24,10 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "soft_plant-durability-offensive-upgrade",
+            "id": "soft_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
-            "category": "OFFENSIVE",
+            "category": "UTILITY",
             "value": 65
           }
         ]
