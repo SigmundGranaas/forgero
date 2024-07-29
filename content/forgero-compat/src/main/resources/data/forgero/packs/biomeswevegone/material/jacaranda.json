@@ -4,7 +4,8 @@
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "biomeswevegone:jacaranda_planks",
+    "id": "biomeswevegone:jacaranda_planks"
+  },
     "properties": {
       "grouped_attributes": [
         {
@@ -77,8 +78,7 @@
         }
       ]
     },
-    "palette": {
-      "name": "biomeswevegone/jacaranda"
-    }
+  "palette": {
+    "name": "biomeswevegone/jacaranda"
   }
 }
