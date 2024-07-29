@@ -25,7 +25,7 @@
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 50
+            "value": 60
           },
           {
             "id": "wood-draw_power-composite",
@@ -66,7 +66,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 25
+            "value": 30
           },
           {
             "id": "wood-draw_power-offensive-upgrade",

@@ -13,16 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "soft_plant-rarity-composite",
-            "type": "RARITY",
-            "value": 30
-          },
-          {
-            "id": "soft_plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 130
-          }
         ]
       },
       {

@@ -13,16 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "soft_plant-rarity-composite",
-            "type": "RARITY",
-            "value": 30
-          },
-          {
-            "id": "soft_plant-durability-composite",
-            "type": "DURABILITY",
-            "value": 130
-          }
         ]
       },
       {
@@ -41,14 +31,14 @@
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.15
+            "value": 0.1
           },
           {
             "id": "soft_plant-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 65
+            "value": 45
           }
         ]
       }

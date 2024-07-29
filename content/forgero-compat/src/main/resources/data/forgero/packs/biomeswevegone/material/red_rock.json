@@ -28,7 +28,7 @@
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 160
+            "value": 165
           },
           {
             "id": "stone-weight-composite",
@@ -78,7 +78,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 80
+            "value": 82
           }
         ]
       }
