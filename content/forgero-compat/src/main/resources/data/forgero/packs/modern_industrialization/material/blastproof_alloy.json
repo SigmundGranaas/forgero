@@ -16,27 +16,32 @@
           {
             "id": "metal-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 3.5
+            "value": 6
           },
           {
             "id": "metal-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 5
+            "value": 7
+          },
+          {
+            "id": "metal-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 3
           },
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 320
+            "value": 1750
           },
           {
             "id": "metal-rarity-composite",
             "type": "RARITY",
-            "value": 30
+            "value": 90
           },
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 58
+            "value": 50
           },
           {
             "id": "metal-armor-composite",
@@ -46,7 +51,7 @@
           {
             "id": "metal-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 3.50
+            "value": 3.9
           }
         ]
       },
@@ -59,7 +64,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 45
           },
           {
             "id": "metal-weight-upgrade",
@@ -67,56 +72,42 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 29
+            "value": 25
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.75
+            "value": 2.25
           },
           {
             "id": "metal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 2.50
+            "value": 3
+          },
+          {
+            "id": "metal-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
           },
           {
             "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 160
-          },
-          {
-            "id": "metal-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 160
+            "value": 875
           },
           {
             "id": "metal-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0
-          },
-          {
-            "id": "metal-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.6
-          },
-          {
-            "id": "metal-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
+            "value": 0.8
           }
         ]
       }

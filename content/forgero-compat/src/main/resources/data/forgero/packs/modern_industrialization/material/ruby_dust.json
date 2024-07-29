@@ -13,21 +13,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "dust-rarity-composite",
-            "type": "RARITY",
-            "value": 60
-          },
-          {
-            "id": "dust-durability-composite",
-            "type": "DURABILITY",
-            "value": 280
-          },
-          {
-            "id": "dust-weight-composite",
-            "type": "WEIGHT",
-            "value": 30
-          }
         ]
       },
       {
@@ -54,21 +39,21 @@
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.2
+            "value": 0.35
+          },
+          {
+            "id": "dust-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.5
           },
           {
             "id": "dust-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 140
-          },
-          {
-            "id": "dust-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 140
+            "value": 150
           }
         ]
       }
