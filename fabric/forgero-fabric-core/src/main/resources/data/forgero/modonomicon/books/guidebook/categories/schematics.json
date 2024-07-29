@@ -8,7 +8,7 @@
   "icon": "forgero:mastercrafted_pickaxe_head-schematic",
   "condition" : {
     "type": "modonomicon:entry_read",
-    "entry_id": "forgero:getting_started/your_first_tool"
+    "entry_id": "forgero:getting_started/shortcut_schematics"
   },
   "sort_number": 3
 }
