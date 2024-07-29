@@ -1,0 +1,82 @@
+{
+  "type": "SCALE",
+  "name": "warden_carapace",
+  "parent": "scale_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:warden_carapace"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "scale-rarity-composite",
+            "type": "RARITY",
+            "value": 80
+          },
+          {
+            "id": "scale-durability-composite",
+            "type": "DURABILITY",
+            "value": 850
+          },
+          {
+            "id": "scale-weight-composite",
+            "type": "WEIGHT",
+            "value": 35
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "scale-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "scale-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 17.5
+          },
+          {
+            "id": "scale-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 425
+          },
+          {
+            "id": "scale-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 425
+          },
+          {
+            "id": "scale-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.55
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "deeperanddarker/warden_carapace"
+  }
+}
