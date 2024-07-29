@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
-import java.util.function.BiConsumer;
-
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.DisassemblyHandler;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.EmptyHandler;
 
@@ -10,13 +8,11 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +32,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	private final @NotNull SimpleInventory disassemblyInventory;
 	private final @NotNull SimpleInventory resultInventory;
 	private final @NotNull ScreenHandlerContext context;
-	private final @NotNull PlayerEntity player;
 	private final @NotNull AssemblyStationScreenHandler.DisassemblySlot disassemblySlot;
 
 	//This constructor gets called on the client when the server wants it to open the screenHandler,
@@ -50,7 +45,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	//and can therefore directly provide it as an argument. This inventory will then be synced to the client.
 	public AssemblyStationScreenHandler(int syncId, @NotNull PlayerInventory playerInventory, @NotNull ScreenHandlerContext context, @NotNull SimpleInventory disassemblyInventory, @NotNull SimpleInventory resultInventory) {
 		super(AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER, syncId);
-		this.player = playerInventory.player;
 		this.context = context;
 		this.disassemblyInventory = disassemblyInventory;
 		this.resultInventory = resultInventory;
@@ -66,9 +60,9 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		// Place the inventory slots in the correct locations
 		// Result inventory
 		// 3x3
-		for (int xIndex = 0; xIndex < 3; xIndex++) {
-			for (int yIndex = 0; yIndex < 3; yIndex++) {
-				this.addSlot(new ResultSlot(resultInventory, xIndex + yIndex, 92 + xIndex * 18, 17 * (1 + yIndex) + yIndex));
+		for (int yIndex = 0; yIndex < 3; yIndex++) {
+			for (int xIndex = 0; xIndex < 3; xIndex++) {
+				this.addSlot(new ResultSlot(resultInventory, xIndex + yIndex * (1 + yIndex), 92 + xIndex * 18, 17 * (1 + yIndex) + yIndex));
 			}
 		}
 		// Player inventory and hotbar
@@ -143,18 +137,11 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	private void disassembleTool() {
 		this.context.run((world, pos) -> {
-			if (world.isClient || !(this.player instanceof ServerPlayerEntity serverPlayerEntity)) {
+			if (world.isClient) {
 				return;
 			}
 
-			disassemblySlot.disassembleTool((resultInventorySlotId, disassembledToolPartItemStack) -> {
-				setPreviousTrackedSlot(resultInventorySlotId + 1, disassembledToolPartItemStack);
-				serverPlayerEntity.networkHandler.sendPacket(
-						new ScreenHandlerSlotUpdateS2CPacket(this.syncId, this.nextRevision(), resultInventorySlotId + 1,
-								disassembledToolPartItemStack
-						)
-				);
-			});
+			disassemblySlot.disassembleTool();
 		});
 	}
 
@@ -188,7 +175,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			return this.hasDisassembledTool;
 		}
 
-		public void disassembleTool(@NotNull BiConsumer<Integer, ItemStack> onSlotUpdated) {
+		public void disassembleTool() {
 			disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(getStack());
 
 			@NotNull var disassembledToolPartItemStacks = disassemblyHandler.disassemble();
@@ -199,7 +186,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 				@NotNull var disassembledToolPartItemStack = disassembledToolPartItemStacks.get(resultInventorySlotId);
 				resultInventory.setStack(resultInventorySlotId, disassembledToolPartItemStack);
-				onSlotUpdated.accept(resultInventorySlotId, disassembledToolPartItemStack);
 			}
 
 //			@NotNull var toolItemStack = this.inventory.getStack(0);
