@@ -120,6 +120,12 @@ curseforge {
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
 				optionalDependency "natures_spirit"
+				optionalDependency "create"
+				optionalDependency "ad_astra"
+				optionalDependency "deeperdarker"
+				optionalDependency "ecologics"
+				optionalDependency "naturalist"
+				optionalDependency "advanced-netherite"
 				incompatible "exordium"
 			}
 		}
@@ -153,6 +159,13 @@ modrinth {
 		optional.project "mythicmetals"
 		optional.project "wiredredstone"
 		optional.project "natures_spirit"
+		optional.project "create"
+		optional.project "ad_astra"
+		optional.project "betterend"
+		optional.project "deeperdarker"
+		optional.project "ecologics"
+		optional.project "naturalist"
+		optional.project "advanced-netherite"
 		incompatible.project "exordium"
 	}
 }
