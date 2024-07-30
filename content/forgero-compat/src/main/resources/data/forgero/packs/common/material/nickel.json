@@ -13,7 +13,7 @@
     "tag": "c:nickel_ingots"
   },
   "palette": {
-    "name": "nickel"
+    "name": "common/nickel"
   },
   "properties": {
     "grouped_attributes": [

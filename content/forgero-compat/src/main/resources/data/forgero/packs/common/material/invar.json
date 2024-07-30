@@ -13,7 +13,7 @@
     "tag": "c:invar_ingots"
   },
   "palette": {
-    "name": "invar"
+    "name": "common/invar"
   },
   "properties": {
     "grouped_attributes": [

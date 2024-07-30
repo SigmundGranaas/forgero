@@ -14,7 +14,7 @@
     "tag": "c:silver_ingots"
   },
   "palette": {
-    "name": "silver"
+    "name": "common/silver"
   },
   "properties": {
     "attributes": [

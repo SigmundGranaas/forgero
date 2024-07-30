@@ -14,7 +14,7 @@
     "tag": "c:bronze_ingots"
   },
   "palette": {
-    "name": "bronze"
+    "name": "common/bronze"
   },
   "properties": {
     "attributes": [

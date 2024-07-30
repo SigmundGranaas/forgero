@@ -13,7 +13,7 @@
     "tag": "c:lead_ingots"
   },
   "palette": {
-    "name": "lead"
+    "name": "common/lead"
   },
   "properties": {
     "grouped_attributes": [

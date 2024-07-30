@@ -13,7 +13,7 @@
     "tag": "c:titanium_ingots"
   },
   "palette": {
-    "name": "titanium"
+    "name": "common/titanium"
   },
   "properties": {
     "grouped_attributes": [

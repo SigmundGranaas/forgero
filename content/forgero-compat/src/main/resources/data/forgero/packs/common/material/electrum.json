@@ -13,7 +13,7 @@
     "tag": "c:electrum_ingots"
   },
   "palette": {
-    "name": "electrum"
+    "name": "common/electrum"
   },
   "properties": {
     "grouped_attributes": [

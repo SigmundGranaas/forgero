@@ -13,7 +13,7 @@
     "tag": "c:zinc_ingots"
   },
   "palette": {
-    "name": "zinc"
+    "name": "common/zinc"
   },
   "properties": {
     "grouped_attributes": [
