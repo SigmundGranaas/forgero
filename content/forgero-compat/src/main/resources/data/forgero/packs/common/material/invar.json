@@ -1,0 +1,118 @@
+{
+  "type": "METAL",
+  "parent": "metal_base",
+  "name": "invar",
+  "dependencies": {
+    "any": [
+      "modern_industrialization",
+      "techreborn"
+    ]
+  },
+  "container": {
+    "type": "HOST",
+    "tag": "c:invar_ingots"
+  },
+  "palette": {
+    "name": "invar"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "metal-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 5.5
+          },
+          {
+            "id": "metal-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 7
+          },
+          {
+            "id": "metal-mining_level-composite",
+            "type": "MINING_LEVEL",
+            "value": 3
+          },
+          {
+            "id": "metal-durability-composite",
+            "type": "DURABILITY",
+            "value": 800
+          },
+          {
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "value": 80
+          },
+          {
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "value": 40
+          },
+          {
+            "id": "metal-armor-composite",
+            "type": "ARMOR",
+            "value": 5
+          },
+          {
+            "id": "metal-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 3.8
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "metal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "metal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.3
+          },
+          {
+            "id": "metal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "metal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 3.3
+          },
+          {
+            "id": "metal-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 400
+          }
+        ]
+      }
+    ]
+  }
+}
