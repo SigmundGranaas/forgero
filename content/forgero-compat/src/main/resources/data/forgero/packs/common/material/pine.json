@@ -13,7 +13,7 @@
     "tag": "c:pine_planks"
   },
   "palette": {
-    "name": "pine"
+    "name": "common/pine"
   },
   "properties": {
     "grouped_attributes": [

@@ -18,7 +18,6 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> yacl;
 	public static final Supplier<Boolean> emi;
 	public static final Supplier<Boolean> modonomicon;
-
 	public static final Supplier<Boolean> biomeswevegone;
 
 	static {

@@ -13,7 +13,7 @@
     "tag": "c:palm_planks"
   },
   "palette": {
-    "name": "palm"
+    "name": "common/palm"
   },
   "properties": {
     "grouped_attributes": [

@@ -13,7 +13,7 @@
     "tag": "c:baobab_planks"
   },
   "palette": {
-    "name": "baobab"
+    "name": "common/baobab"
   },
   "properties": {
     "grouped_attributes": [

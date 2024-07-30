@@ -14,7 +14,7 @@
     "tag": "c:redwood_planks"
   },
   "palette": {
-    "name": "redwood"
+    "name": "common/redwood"
   },
   "properties": {
     "grouped_attributes": [

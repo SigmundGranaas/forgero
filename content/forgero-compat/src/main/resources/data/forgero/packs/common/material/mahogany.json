@@ -13,7 +13,7 @@
     "tag": "c:mahogany_planks"
   },
   "palette": {
-    "name": "mahogany"
+    "name": "common/mahogany"
   },
   "properties": {
     "grouped_attributes": [

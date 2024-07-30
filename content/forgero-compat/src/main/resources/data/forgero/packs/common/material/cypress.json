@@ -14,7 +14,7 @@
     "tag": "c:cypress_planks"
   },
   "palette": {
-    "name": "cypress"
+    "name": "common/cypress"
   },
   "properties": {
     "grouped_attributes": [
