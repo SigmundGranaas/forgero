@@ -49,7 +49,7 @@
             "value": 65
           },
           {
-            "id": "metal-draw_power-offensive-upgrade",
+            "id": "dust-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
