@@ -4,12 +4,14 @@
   "name": "silver",
   "dependencies": {
     "any": [
-      "mythicmetals"
+      "mythicmetals",
+      "techreborn",
+      "modern_industrialization"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:silver_ingot"
+    "tag": "c:silver_ingots"
   },
   "palette": {
     "name": "silver"
@@ -49,7 +51,7 @@
         "type": "ATTACK_DAMAGE",
         "context": "COMPOSITE",
         "operation": "ADDITION",
-        "value": 2.7
+        "value": 5
       },
       {
         "id": "metal-armor-composite",
