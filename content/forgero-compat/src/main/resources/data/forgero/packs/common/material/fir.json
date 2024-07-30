@@ -13,7 +13,7 @@
     "tag": "c:fir_planks"
   },
   "palette": {
-    "name": "fir"
+    "name": "common/fir"
   },
   "properties": {
     "grouped_attributes": [

@@ -14,7 +14,7 @@
     "tag": "c:maple_planks"
   },
   "palette": {
-    "name": "maple"
+    "name": "common/maple"
   },
   "properties": {
     "grouped_attributes": [

@@ -13,7 +13,7 @@
     "tag": "c:aspen_planks"
   },
   "palette": {
-    "name": "aspen"
+    "name": "common/aspen"
   },
   "properties": {
     "grouped_attributes": [

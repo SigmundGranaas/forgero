@@ -1,7 +1,7 @@
 {
   "type": "WOOD",
   "parent": "wood_base",
-  "name": "redwood",
+  "name": "willow",
   "dependencies": {
     "any": [
       "regions_unexplored",
@@ -11,10 +11,10 @@
   },
   "container": {
     "type": "HOST",
-    "tag": "c:redwood_planks"
+    "tag": "c:willow_planks"
   },
   "palette": {
-    "name": "willow"
+    "name": "common/willow"
   },
   "properties": {
     "grouped_attributes": [
