@@ -101,6 +101,19 @@
       }
     ],
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:entity_tick",
+        "handler": {
+          "type": "forgero:magnetic",
+          "filter": "minecraft:item",
+          "range": 3,
+          "power": 1
+        },
+        "title": "feature.forgero.magnetic",
+        "description": "feature.forgero.magnetic.description"
+      }
     ]
   },
   "palette": {
