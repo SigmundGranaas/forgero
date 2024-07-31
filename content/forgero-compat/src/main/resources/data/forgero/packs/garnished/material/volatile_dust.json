@@ -56,7 +56,7 @@
         },
         "predicate": {
           "type": "forgero:random",
-          "chance": 0.9
+          "chance": 0.4
         },
         "title": "feature.forgero.explosive",
         "description": "feature.forgero.explosive.description"
@@ -70,7 +70,7 @@
         },
         "predicate": {
           "type": "forgero:random",
-          "chance": 0.9
+          "chance": 0.4
         }
       }
     ]
