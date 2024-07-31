@@ -74,6 +74,21 @@
       }
     ],
     "attributes": [
+      {
+        "id": "sneaking-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "type": "minecraft:entity",
+          "flag": {
+            "is_swimming": true
+          }
+        }
+      }
+    ],
+    "features": [
     ]
   },
   "palette": {
