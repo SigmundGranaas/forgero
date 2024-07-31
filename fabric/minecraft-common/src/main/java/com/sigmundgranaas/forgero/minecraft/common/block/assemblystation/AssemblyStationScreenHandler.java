@@ -79,8 +79,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	@Override
 	protected void dropInventory(PlayerEntity player, Inventory inventory) {
-		super.dropInventory(player, disassemblyInventory);
-		super.dropInventory(player, resultInventory);
+		super.dropInventory(player, this.disassemblyInventory);
+		super.dropInventory(player, this.resultInventory);
 	}
 
 	@Override
@@ -107,53 +107,69 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 
 		@NotNull var itemStack = inventorySlot.getStack();
-		if (inventorySlot instanceof DisassemblySlot || inventorySlot instanceof ResultSlot) {
+		if (inventorySlot instanceof DisassemblySlot) {
+			inventorySlot.setStack(ItemStack.EMPTY);
+			player.getInventory().insertStack(itemStack);
+			return itemStack;
+		} else if (inventorySlot instanceof ResultSlot) {
+			inventorySlot.setStack(ItemStack.EMPTY);
 			player.getInventory().insertStack(itemStack);
 			return itemStack;
 		} else if (this.disassemblySlot.canInsert(itemStack)) {
-			return this.disassemblySlot.insertStack(itemStack);
+			inventorySlot.setStack(ItemStack.EMPTY);
+			return this.disassemblyInventory.addStack(itemStack);
 		}
 
 		return ItemStack.EMPTY;
 	}
 
 	private void onDisassemblyInventoryChanged(@NotNull Inventory disassemblyInventory) {
-		if (!disassemblyInventory.isEmpty() && !disassemblySlot.hasDisassembledTool()) {
-			disassembleTool();
+		if (!disassemblyInventory.isEmpty() && !disassemblySlot.hasToolParts()) {
+			this.startToolDisassembly();
+		} else if (disassemblyInventory.isEmpty()) {
+			this.cancelToolDisassembly();
 		}
 
-		onContentChanged(disassemblyInventory);
+		this.onContentChanged(disassemblyInventory);
 	}
 
 	private void onResultInventoryChanged(@NotNull Inventory resultInventory) {
-		if (!disassemblyInventory.isEmpty() || !resultInventory.isEmpty()) {
-			onContentChanged(resultInventory);
-			return;
+		if (!this.disassemblyInventory.isEmpty() && this.disassemblySlot.isPreviewingToolDisassembly()) {
+			this.finishToolDisassembly();
 		}
 
-		resetDisassembly();
-		onContentChanged(resultInventory);
+		this.onContentChanged(resultInventory);
 	}
 
-	private void disassembleTool() {
+	private void startToolDisassembly() {
 		this.context.run((world, pos) -> {
 			if (world.isClient) {
 				return;
 			}
 
-			disassemblySlot.disassembleTool();
+			this.disassemblySlot.startToolDisassembly();
 		});
 	}
 
-	private void resetDisassembly() {
-		this.context.run((world, pos) -> disassemblySlot.resetDisassembly());
+	private void finishToolDisassembly() {
+		this.context.run((world, pos) -> {
+			if (world.isClient) {
+				return;
+			}
+
+			this.disassemblySlot.finishToolDisassembly();
+		});
+	}
+
+	private void cancelToolDisassembly() {
+		this.context.run((world, pos) -> this.disassemblySlot.cancelToolDisassembly());
 	}
 
 	private static class DisassemblySlot extends Slot {
 		private final @NotNull Inventory resultInventory;
 
 		private @NotNull DisassemblyHandler disassemblyHandler = new EmptyHandler();
-		private boolean hasDisassembledTool = false;
+		private boolean isPreviewingToolDisassembly = false;
 
 		public DisassemblySlot(@NotNull Inventory disassemblyInventory, int index, int x, int y, @NotNull Inventory resultInventory) {
 			super(disassemblyInventory, index, x, y);
@@ -167,39 +183,57 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 		@Override
 		public boolean canInsert(ItemStack stack) {
-			return this.inventory.isEmpty() && !hasDisassembledTool() && stack.getDamage() == 0 && resultInventory.isEmpty();
+			return this.inventory.isEmpty() && !hasToolParts() && stack.getDamage() == 0;
+		}
+
+		public boolean isPreviewingToolDisassembly() {
+			return this.isPreviewingToolDisassembly;
 		}
 
 		@SuppressWarnings("BooleanMethodIsAlwaysInverted")
-		public boolean hasDisassembledTool() {
-			return this.hasDisassembledTool;
+		public boolean hasToolParts() {
+			return !this.resultInventory.isEmpty();
 		}
 
-		public void disassembleTool() {
-			disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(getStack());
+		/**
+		 * Starts tool disassembly, creating a preview of the resulting tool parts in the {@link DisassemblySlot#resultInventory}.
+		 */
+		public void startToolDisassembly() {
+			this.disassemblyHandler = this.disassemblyHandler.insertIntoDisassemblySlot(this.inventory.getStack(0));
 
-			@NotNull var disassembledToolPartItemStacks = disassemblyHandler.disassemble();
+			@NotNull var disassembledToolPartItemStacks = this.disassemblyHandler.disassemble();
 			for (int resultInventorySlotId = 0; resultInventorySlotId < disassembledToolPartItemStacks.size(); resultInventorySlotId++) {
-				if (resultInventorySlotId > resultInventory.size()) {
+				if (resultInventorySlotId > this.resultInventory.size()) {
 					continue;
 				}
 
-				@NotNull var disassembledToolPartItemStack = disassembledToolPartItemStacks.get(resultInventorySlotId);
-				resultInventory.setStack(resultInventorySlotId, disassembledToolPartItemStack);
+				this.resultInventory.setStack(resultInventorySlotId, disassembledToolPartItemStacks.get(resultInventorySlotId));
 			}
 
-//			@NotNull var toolItemStack = this.inventory.getStack(0);
-//			if (toolItemStack.isEmpty()) {
-//				disassemblyHandler = disassemblyHandler.insertIntoDisassemblySlot(getStack());
-//				return;
-//			}
-//
-//			toolItemStack.decrement(1);
-			this.hasDisassembledTool = true;
+			this.isPreviewingToolDisassembly = true;
 		}
 
-		public void resetDisassembly() {
-			this.hasDisassembledTool = false;
+		/**
+		 * Finishes tool disassembly, removing the tool from the {@link DisassemblySlot#disassemblyInventory}.
+		 */
+		public void finishToolDisassembly() {
+			@NotNull var toolItemStack = this.inventory.getStack(0);
+			if (toolItemStack.isEmpty()) {
+				this.disassemblyHandler = this.disassemblyHandler.insertIntoDisassemblySlot(getStack());
+				this.isPreviewingToolDisassembly = false;
+				return;
+			}
+
+			toolItemStack.decrement(1);
+			this.isPreviewingToolDisassembly = false;
+		}
+
+		/**
+		 * Cancels tool disassembly, removing the results from the {@link DisassemblySlot#resultInventory}.
+		 */
+		public void cancelToolDisassembly() {
+			resultInventory.clear();
+			this.isPreviewingToolDisassembly = false;
 		}
 	}
 

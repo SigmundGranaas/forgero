@@ -9,10 +9,8 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
@@ -108,25 +106,13 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public NamedScreenHandlerFactory createScreenHandlerFactory(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition) {
-		@Nullable var blockEntity = world.getBlockEntity(blockPosition);
-		if (!(blockEntity instanceof AssemblyStationBlockEntity assemblyStationBlockEntity)) {
-			return new SimpleNamedScreenHandlerFactory(
-					(syncId, inventory, player) -> new AssemblyStationScreenHandler(
-							syncId, inventory, ScreenHandlerContext.create(world, blockPosition),
-							new SimpleInventory(DISASSEMBLY_INVENTORY_SIZE), new SimpleInventory(RESULT_INVENTORY_SIZE)
-					),
-					Text.literal(ASSEMBLY_STATION_NAME)
-			);
+	public @Nullable NamedScreenHandlerFactory createScreenHandlerFactory(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition) {
+		if (!(world.getBlockEntity(blockPosition) instanceof AssemblyStationBlockEntity assemblyStationBlockEntity)) {
+			Forgero.LOGGER.warn("Error occurred while trying to open {} screen at {}.", this, blockPosition);
+			return null;
 		}
 
-		return new SimpleNamedScreenHandlerFactory(
-				(syncId, inventory, player) -> new AssemblyStationScreenHandler(
-						syncId, inventory, ScreenHandlerContext.create(world, blockPosition),
-						assemblyStationBlockEntity.getDisassemblyInventory(), assemblyStationBlockEntity.getResultInventory()
-				),
-				Text.literal(ASSEMBLY_STATION_NAME)
-		);
+		return new SimpleNamedScreenHandlerFactory(assemblyStationBlockEntity, Text.literal(ASSEMBLY_STATION_NAME));
 	}
 
 	@Override
