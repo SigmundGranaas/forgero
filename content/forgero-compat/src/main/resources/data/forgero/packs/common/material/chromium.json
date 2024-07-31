@@ -13,7 +13,7 @@
     "tag": "c:chromium_ingots"
   },
   "palette": {
-    "name": "chromium"
+    "name": "common/chromium"
   },
   "properties": {
     "grouped_attributes": [

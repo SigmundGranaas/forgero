@@ -13,7 +13,7 @@
     "tag": "c:iridium_ingots"
   },
   "palette": {
-    "name": "iridium"
+    "name": "common/iridium"
   },
   "properties": {
     "grouped_attributes": [

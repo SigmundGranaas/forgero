@@ -14,7 +14,7 @@
     "tag": "c:platinum_ingots"
   },
   "palette": {
-    "name": "platinum"
+    "name": "common/platinum"
   },
   "properties": {
     "grouped_attributes": [

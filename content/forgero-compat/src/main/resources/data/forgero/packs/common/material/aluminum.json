@@ -13,7 +13,7 @@
     "tag": "c:aluminum_ingots"
   },
   "palette": {
-    "name": "aluminum"
+    "name": "common/aluminum"
   },
   "properties": {
     "grouped_attributes": [

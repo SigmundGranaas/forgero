@@ -13,7 +13,7 @@
     "tag": "c:brass_ingots"
   },
   "palette": {
-    "name": "brass"
+    "name": "common/brass"
   },
   "properties": {
     "grouped_attributes": [

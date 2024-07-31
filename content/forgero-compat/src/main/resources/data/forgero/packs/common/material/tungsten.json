@@ -13,7 +13,7 @@
     "tag": "c:tungsten_ingots"
   },
   "palette": {
-    "name": "tungsten"
+    "name": "common/tungsten"
   },
   "properties": {
     "grouped_attributes": [
