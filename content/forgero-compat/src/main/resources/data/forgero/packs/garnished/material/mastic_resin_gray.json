@@ -1,0 +1,30 @@
+{
+  "type": "GOO",
+  "name": "mastic_resin_gray",
+  "parent": "goo_base",
+  "container": {
+    "type": "HOST",
+    "id": "garnished:mastic_resin_gray"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "garnished/mastic_resin_gray"
+  }
+}

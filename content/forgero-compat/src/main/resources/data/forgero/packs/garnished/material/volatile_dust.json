@@ -1,0 +1,63 @@
+{
+  "type": "DUST",
+  "name": "volatile_dust",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "garnished:volatile_dust"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "dust-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 30
+          },
+          {
+            "id": "dust-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "dust-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 30
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_breaking",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:targeted_entity",
+          "power": 5
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "garnished/volatile_dust"
+  }
+}
