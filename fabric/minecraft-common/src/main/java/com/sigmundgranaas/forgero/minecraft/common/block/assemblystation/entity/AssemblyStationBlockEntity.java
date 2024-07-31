@@ -7,9 +7,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -27,23 +27,17 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.
 import static com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry.ASSEMBLY_STATION_BLOCK_ENTITY;
 
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
+	private static final @NotNull String DISASSEMBLY_INVENTORY_NBT_KEY = "DisassemblyInventory";
+	private static final @NotNull String RESULT_INVENTORY_NBT_KEY = "ResultInventory";
+
 	private final @NotNull SimpleInventory disassemblyInventory = new SimpleInventory(DISASSEMBLY_INVENTORY_SIZE);
 	private final @NotNull SimpleInventory resultInventory = new SimpleInventory(RESULT_INVENTORY_SIZE);
 
 	public AssemblyStationBlockEntity(@NotNull BlockPos blockPosition, @NotNull BlockState blockState) {
 		super(ASSEMBLY_STATION_BLOCK_ENTITY, blockPosition, blockState);
 
-		this.disassemblyInventory.addListener(this::onInventoryChanged);
-		this.resultInventory.addListener(this::onInventoryChanged);
-	}
-
-	private void onInventoryChanged(@NotNull Inventory inventory) {
-		if (this.world == null) {
-			return;
-		}
-
-		this.markDirty();
-		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
+		this.disassemblyInventory.addListener(inventory -> this.markDirtyAndUpdateListeners());
+		this.resultInventory.addListener(inventory -> this.markDirtyAndUpdateListeners());
 	}
 
 	@Override
@@ -54,35 +48,24 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	@Override
 	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
 		return new AssemblyStationScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(this.world, this.pos),
-				getDisassemblyInventory(), getResultInventory()
+				this.getDisassemblyInventory(), this.getResultInventory()
 		);
 	}
 
-	// TODO: Ser/de
-//	@Override
-//	public void readNbt(NbtCompound nbt) {
-//		resultInventory.clear();
-//		disassemblyInventory.clear();
-//		super.readNbt(nbt);
-//		Inventories.readNbt(nbt, resultInventory.stacks);
-//
-//		if (nbt.contains("DisassemblyItems")) {
-//			Inventories.readNbt(nbt.getCompound("DisassemblyItems"), disassemblyInventory.stacks);
-//		}
-//
-//		updateListeners();
-//	}
-//
-//	@Override
-//	public void writeNbt(NbtCompound nbt) {
-//		Inventories.writeNbt(nbt, resultInventory.stacks);
-//
-//		NbtCompound disassemblyNbt = new NbtCompound();
-//		Inventories.writeNbt(disassemblyNbt, disassemblyInventory.stacks);
-//		nbt.put("DisassemblyItems", disassemblyNbt);
-//
-//		super.writeNbt(nbt);
-//	}
+	@Override
+	public void writeNbt(@NotNull NbtCompound nbt) {
+		nbt.put(DISASSEMBLY_INVENTORY_NBT_KEY, this.getDisassemblyInventory().toNbtList());
+		nbt.put(RESULT_INVENTORY_NBT_KEY, this.getResultInventory().toNbtList());
+		super.writeNbt(nbt);
+	}
+
+	@Override
+	public void readNbt(@NotNull NbtCompound nbt) {
+		this.getDisassemblyInventory().readNbtList(nbt.getList(DISASSEMBLY_INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
+		this.getResultInventory().readNbtList(nbt.getList(RESULT_INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
+		super.readNbt(nbt);
+		this.markDirtyAndUpdateListeners();
+	}
 
 	@Override
 	public NbtCompound toInitialChunkDataNbt() {
@@ -100,5 +83,14 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	public @NotNull SimpleInventory getResultInventory() {
 		return this.resultInventory;
+	}
+
+	private void markDirtyAndUpdateListeners() {
+		if (this.world == null) {
+			return;
+		}
+
+		this.markDirty();
+		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
 	}
 }
