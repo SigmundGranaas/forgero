@@ -16,7 +16,7 @@ import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
-import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.registry.entity.EntityRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableItemRenderer;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.devtech.arrp.api.RRPCallback;
@@ -81,7 +81,7 @@ public class ForgeroClient implements ClientModInitializer {
 
 		ModelResolver stateModels = new ForgeroStateModelResolver(modelRegistry, StateService.INSTANCE, models);
 		ModelLoadingPlugin.register(pluginContext -> pluginContext.resolveModel().register(stateModels));
-		EntityRendererRegistry.register(Entities.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
+		EntityRendererRegistry.register(EntityRegistry.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
 	}
 
 	private void registerToolPartTextures(ModelRegistry modelRegistry) {

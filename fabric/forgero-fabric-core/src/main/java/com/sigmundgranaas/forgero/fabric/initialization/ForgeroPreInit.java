@@ -36,7 +36,7 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitialization
 import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
 import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
-import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.registry.entity.EntityRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
@@ -105,6 +105,8 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapte
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredicate;
 
+import com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry;
+
 import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -119,7 +121,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	public void onPreInitialization() {
 		soulLevelPropertyReloader();
 		DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);
-		Entities.register();
+		EntityRegistry.register();
+		BlockEntityRegistry.register();
 		registerPredicateBuilders();
 		registerFeatureBuilder();
 		registerHandlerBuilders();
