@@ -108,8 +108,14 @@ public class AssemblyStationBlock extends HorizontalFacingBlock implements Block
 	@Override
 	public @Nullable NamedScreenHandlerFactory createScreenHandlerFactory(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition) {
 		if (!(world.getBlockEntity(blockPosition) instanceof AssemblyStationBlockEntity assemblyStationBlockEntity)) {
-			Forgero.LOGGER.warn("Error occurred while trying to open {} screen at {}.", this, blockPosition);
-			return null;
+			blockPosition = blockPosition.offset(blockState.get(FACING).rotateClockwise(Direction.Axis.Y));
+			blockState = world.getBlockState(blockPosition);
+			if (!blockState.hasBlockEntity()) {
+				Forgero.LOGGER.warn("Error occurred while trying to open {} screen at {}.", this, blockPosition);
+				return null;
+			}
+
+			return blockState.createScreenHandlerFactory(world, blockPosition);
 		}
 
 		return new SimpleNamedScreenHandlerFactory(assemblyStationBlockEntity, Text.literal(ASSEMBLY_STATION_NAME));
