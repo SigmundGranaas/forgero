@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.mythicmetals.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
+import com.sigmundgranaas.forgero.fabric.tags.TechReborn;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -18,7 +19,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> emi;
 	public static final Supplier<Boolean> modonomicon;
 
+	public static final Supplier<Boolean> techreborn;
+
 	static {
+		techreborn = () -> isModLoaded("techreborn");
 		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
@@ -43,6 +47,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (mythicmetals.get()) {
 			MythicMetalsCommons.generateTags();
+		}
+
+		if (techreborn.get()) {
+			TechReborn.generateTags();
 		}
 	}
 }
