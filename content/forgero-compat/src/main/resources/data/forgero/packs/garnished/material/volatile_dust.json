@@ -48,11 +48,29 @@
     ],
     "features": [
       {
-        "type": "minecraft:block_breaking",
+        "type": "minecraft:on_hit",
         "on_hit": {
           "type": "minecraft:explosion",
           "target": "minecraft:targeted_entity",
-          "power": 5
+          "power": 2
+        },
+        "predicate": {
+          "type": "forgero:random",
+          "chance": 0.9
+        },
+        "title": "feature.forgero.explosive",
+        "description": "feature.forgero.explosive.description"
+      },
+      {
+        "type": "minecraft:on_hit_block",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:block_target",
+          "power": 2
+        },
+        "predicate": {
+          "type": "forgero:random",
+          "chance": 0.9
         }
       }
     ]
