@@ -19,7 +19,7 @@ public class TechReborn {
 		RESOURCE_PACK.addTag(new Identifier("c", "items/electrum_ingot"), JTag.tag().add(new Identifier("techreborn:electrum_ingot")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/aluminum_ingot"), JTag.tag().add(new Identifier("techreborn:aluminum_ingot")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/titanium_ingot"), JTag.tag().add(new Identifier("techreborn:titanium_ingot")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/chromium_ingot"), JTag.tag().add(new Identifier("techreborn:chromium_ingot")));
+		RESOURCE_PACK.addTag(new Identifier("c", "items/chromium_ingot"), JTag.tag().add(new Identifier("techreborn:chrome_ingot")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/iridium_ingot"), JTag.tag().add(new Identifier("techreborn:iridium_ingot")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/tungsten_ingot"), JTag.tag().add(new Identifier("techreborn:tungsten_ingot")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/platinum_ingot"), JTag.tag().add(new Identifier("techreborn:platinum_ingot")));
