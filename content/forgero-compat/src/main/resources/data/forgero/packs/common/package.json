@@ -9,7 +9,11 @@
       "forgero"
     ],
     "any": [
-      "mythicmetals"
+      "mythicmetals",
+      "natures_spirit",
+      "regions_unexplored",
+      "biomeswevegone",
+      "beachparty"
     ]
   }
 }
