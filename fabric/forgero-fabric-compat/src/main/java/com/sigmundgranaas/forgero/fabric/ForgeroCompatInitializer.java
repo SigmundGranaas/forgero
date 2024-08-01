@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.mythicmetals.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
+import com.sigmundgranaas.forgero.fabric.tags.LetsDoBeachParty;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -17,8 +18,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> yacl;
 	public static final Supplier<Boolean> emi;
 	public static final Supplier<Boolean> modonomicon;
+	public static final Supplier<Boolean> letsdobeachparty;
 
 	static {
+		letsdobeachparty = () -> isModLoaded("beachparty");
 		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
@@ -43,6 +46,9 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (mythicmetals.get()) {
 			MythicMetalsCommons.generateTags();
+		}
+		if (letsdobeachparty.get()) {
+			LetsDoBeachParty.generateTags();
 		}
 	}
 }
