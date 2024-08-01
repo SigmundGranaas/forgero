@@ -4,10 +4,10 @@
   "name": "zinc",
   "container": {
     "type": "HOST",
-    "id": "create:zinc_ingot"
+    "id": "c:zinc_ingots"
   },
   "palette": {
-    "name": "create/zinc"
+    "name": "common/zinc"
   },
   "properties": {
     "grouped_attributes": [
