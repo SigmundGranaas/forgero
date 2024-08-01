@@ -243,5 +243,8 @@
   "item.forgero.netherite_gold_ingot": "Netherite-Gold Ingot",
   "item.forgero.netherite_emerald_ingot": "Netherite-Emerald Ingot",
   "item.forgero.netherite_diamond_ingot": "Netherite-Diamond Ingot",
-  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot"
+  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot",
+  "item.forgero.nutium_ingot": "Nutium Ingot",
+  "item.forgero.ethereal_roots": "Ethereal Roots",
+  "item.forgero.ethereal": "Ethereal"
 }
