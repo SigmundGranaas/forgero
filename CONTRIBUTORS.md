@@ -9,5 +9,6 @@ Thank you to everyone that contributed to Forgero, be it code, documentation, mo
 - Quinn Lane ([@identithree](https://github.com/identithree))
 - Rad233 ([@Rad233](https://github.com/Rad233))
 - Darion Spaargaren ([@Steveplays28](https://github.com/Steveplays28))
-- Joris de Beer ([@JorisDeBeer](https://github.com/JorisDeBeer))
+- JorisdeBeer ([@JorisDeBeer](https://github.com/JorisDeBeer))
 - holmraven ([@holmraven](https://github.com/holmraven))
+- Apocip ([@Apocip0](https://github.com/Apocip0))
