@@ -3,8 +3,8 @@
   "name": "book.forgero.guidebook.upgrading.binding.name",
   "description": "book.forgero.guidebook.upgrading.binding.description",
   "icon": "forgero:vines-soft_binding",
-  "x": -1,
-  "y": 5,
+  "x": -4,
+  "y": 3,
   "pages": [
     {
       "type": "modonomicon:text",
@@ -20,6 +20,14 @@
       "show_title_separator": true,
       "text": "book.forgero.guidebook.upgrading.binding.text1",
       "title": "book.forgero.guidebook.upgrading.binding.title1",
+      "use_markdown_title": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.upgrading.pommel.text",
+      "title": "book.forgero.guidebook.upgrading.pommel.title",
       "use_markdown_title": false
     }
   ],
