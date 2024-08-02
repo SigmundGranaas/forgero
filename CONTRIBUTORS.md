@@ -12,4 +12,4 @@ Thank you to everyone that contributed to Forgero, be it code, documentation, mo
 - JorisdeBeer ([@JorisDeBeer](https://github.com/JorisDeBeer))
 - holmraven ([@holmraven](https://github.com/holmraven))
 - Apocip ([@Apocip0](https://github.com/Apocip0))
-- Temathy ([@temyy](https://github.com/temyy))
+- temathy ([@temyy](https://github.com/temyy))
