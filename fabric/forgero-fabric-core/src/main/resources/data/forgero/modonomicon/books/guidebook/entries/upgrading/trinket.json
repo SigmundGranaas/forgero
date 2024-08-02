@@ -4,8 +4,8 @@
   "description": "book.forgero.guidebook.upgrading.trinket.description",
   "icon": "minecraft:totem_of_undying",
   "background_v_index": 1,
-  "x": 2,
-  "y": 0,
+  "x": -2,
+  "y": -2,
   "pages": [
     {
       "type": "modonomicon:text",
