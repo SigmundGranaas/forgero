@@ -55,7 +55,7 @@
           {
             "id": "hard_plant-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
