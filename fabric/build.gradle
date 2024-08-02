@@ -126,6 +126,7 @@ curseforge {
 				optionalDependency "ecologics"
 				optionalDependency "naturalist"
 				optionalDependency "advanced-netherite"
+				optionalDependency "ribbits"
 				incompatible "exordium"
 			}
 		}
@@ -165,6 +166,7 @@ modrinth {
 		optional.project "ecologics"
 		optional.project "naturalist"
 		optional.project "advanced-netherite"
+		optional.project "ribbits"
 		incompatible.project "exordium"
 	}
 }

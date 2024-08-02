@@ -243,5 +243,8 @@
   "item.forgero.netherite_gold_ingot": "Netherite-Gold Ingot",
   "item.forgero.netherite_emerald_ingot": "Netherite-Emerald Ingot",
   "item.forgero.netherite_diamond_ingot": "Netherite-Diamond Ingot",
-  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot"
+  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot",
+  "item.forgero.lush_lily_pad": "Lush Lily Pad",
+  "item.forgero.mossy_oak": "Mossy Oak",
+  "item.forgero.toadstool": "Toadstool"
 }
