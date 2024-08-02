@@ -10,5 +10,6 @@ public class Create {
 	public static void generateTags() {
 		RESOURCE_PACK.addTag(new Identifier("c", "items/brass_ingot"), JTag.tag().add(new Identifier("create:brass_ingot")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/zinc_ingot"), JTag.tag().add(new Identifier("create:zinc_ingot")));
+		RESOURCE_PACK.addTag(new Identifier("c", "items/limestone"), JTag.tag().add(new Identifier("create:limestone")));
 	}
 }

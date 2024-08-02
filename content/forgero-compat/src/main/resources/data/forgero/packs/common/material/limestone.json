@@ -4,7 +4,7 @@
   "parent": "stone_base",
   "container": {
     "type": "HOST",
-    "id": "create:limestone"
+    "id": "c:limestone"
   },
   "properties": {
     "grouped_attributes": [
@@ -63,6 +63,6 @@
     ]
   },
   "palette": {
-    "name": "create/limestone"
+    "name": "common/limestone"
   }
 }
