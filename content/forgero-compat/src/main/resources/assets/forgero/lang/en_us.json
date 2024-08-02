@@ -243,5 +243,9 @@
   "item.forgero.netherite_gold_ingot": "Netherite-Gold Ingot",
   "item.forgero.netherite_emerald_ingot": "Netherite-Emerald Ingot",
   "item.forgero.netherite_diamond_ingot": "Netherite-Diamond Ingot",
-  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot"
+  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot",
+  "item.forgero.soulblight_fungus": "Soulblight Fungus",
+  "item.forgero.whistlecane": "Whistlecane",
+  "item.forgero.soulblight": "Soulblight",
+  "item.forgero.whistlecane_planks": "Whistlecane"
 }
