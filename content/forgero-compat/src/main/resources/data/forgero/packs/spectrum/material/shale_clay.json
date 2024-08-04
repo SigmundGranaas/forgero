@@ -1,0 +1,57 @@
+{
+  "type": "STONE",
+  "name": "shale_clay",
+  "parent": "stone_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:shale_clay"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "stone-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 3.25
+          },
+          {
+            "id": "stone-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 4.25
+          },
+          {
+            "id": "stone-durability-composite",
+            "type": "DURABILITY",
+            "value": 160
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "stone-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 80
+          },
+          {
+            "id": "stone-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.55
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/shale_clay"
+  }
+}

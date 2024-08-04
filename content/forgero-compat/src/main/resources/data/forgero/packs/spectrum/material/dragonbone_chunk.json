@@ -1,0 +1,119 @@
+{
+  "type": "BONE",
+  "parent": "bone_base",
+  "name": "dragonbone_chunk",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:dragonbone_chunk"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "bone-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 2
+          },
+          {
+            "id": "bone-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 5
+          },
+          {
+            "id": "bone-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 6
+          },
+          {
+            "id": "bone-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 2
+          },
+          {
+            "id": "bone-durability-composite",
+            "type": "DURABILITY",
+            "value": 1280
+          },
+          {
+            "id": "bone-rarity-composite",
+            "type": "RARITY",
+            "value": 80
+          },
+          {
+            "id": "bone-weight-composite",
+            "type": "WEIGHT",
+            "value": 30
+          },
+          {
+            "id": "bone-armor-composite",
+            "type": "ARMOR",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "bone-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "bone-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "bone-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "id": "bone-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 3
+          },
+          {
+            "id": "bone-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "bone-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 640
+          },
+          {
+            "id": "bone-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.6
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/dragonbone_chunk"
+  }
+}

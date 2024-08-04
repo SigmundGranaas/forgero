@@ -1,0 +1,60 @@
+{
+  "type": "MINERAL",
+  "name": "pure_diamond",
+  "parent": "mineral_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:pure_diamond"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "mineral-durability-composite",
+            "type": "DURABILITY",
+            "value": 1350
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "mineral-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.75
+          },
+          {
+            "id": "mineral-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 4.25
+          },
+          {
+            "id": "mineral-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 675
+          },
+          {
+            "id": "mineral-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.7
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/pure_diamond"
+  }
+}

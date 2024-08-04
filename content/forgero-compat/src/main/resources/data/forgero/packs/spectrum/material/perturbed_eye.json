@@ -1,0 +1,72 @@
+{
+  "type": "MAKESHIFT",
+  "name": "perturbed_eye",
+  "parent": "makeshift_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:perturbed_eye"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "makeshift-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 30
+          },
+          {
+            "id": "makeshift-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "makeshift-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.25
+          },
+          {
+            "id": "makeshift-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.25
+          },
+          {
+            "id": "makeshift-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 465
+          },
+          {
+            "id": "makeshift-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.88
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/perturbed_eye"
+  }
+}

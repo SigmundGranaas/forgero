@@ -1,0 +1,55 @@
+{
+  "type": "CRYSTAL",
+  "name": "pure_glowstone",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:pure_glowstone"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "crystal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 10
+          },
+          {
+            "id": "crystal-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.2
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/pure_glowstone"
+  }
+}

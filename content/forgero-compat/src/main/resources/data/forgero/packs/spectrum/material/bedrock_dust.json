@@ -1,0 +1,79 @@
+{
+  "type": "DUST",
+  "name": "bedrock_dust",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:bedrock_dust"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "dust-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 50
+          },
+          {
+            "id": "dust-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "dust-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "dust-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "dust-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "dust-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 200
+          },
+          {
+            "id": "dust-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/bedrock_dust"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "type": "MINERAL",
+  "name": "shimmerstone_gem",
+  "parent": "mineral_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:shimmerstone_gem"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "mineral-attack-speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 2.1
+          },
+          {
+            "id": "mineral-attack-damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 3
+          },
+          {
+            "id": "mineral-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 4
+          },
+          {
+            "id": "mineral-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 2
+          },
+          {
+            "id": "mineral-durability-composite",
+            "type": "DURABILITY",
+            "value": 110
+          },
+          {
+            "id": "mineral-rarity-composite",
+            "type": "RARITY",
+            "value": 50
+          },
+          {
+            "id": "mineral-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
+          },
+          {
+            "id": "mineral-armor-composite",
+            "type": "ARMOR",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "mineral-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "mineral-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "mineral-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 3.25
+          },
+          {
+            "id": "mineral-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 4.5
+          },
+          {
+            "id": "mineral-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 55
+          },
+          {
+            "id": "mineral-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.55
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/shimmerstone_gem"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "type": "CRYSTAL",
+  "name": "neolith",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:neolith"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "crystal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "crystal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "crystal-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.2
+          },
+          {
+            "id": "crystal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "crystal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 515
+          },
+          {
+            "id": "crystal-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.5
+          },
+          {
+            "id": "crystal-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.05
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/neolith"
+  }
+}
