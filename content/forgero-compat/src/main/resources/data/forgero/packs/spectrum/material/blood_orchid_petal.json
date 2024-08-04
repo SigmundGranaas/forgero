@@ -1,0 +1,87 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "blood_orchid_petal",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:blood_orchid_petal"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-composite",
+            "type": "RARITY",
+            "value": 15
+          },
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 60
+          },
+          {
+            "id": "soft_plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 7.5
+          },
+          {
+            "id": "soft_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 2
+          },
+          {
+            "id": "soft_plant-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.1
+          },
+          {
+            "id": "soft_plant-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 30
+          },
+          {
+            "id": "soft_plant-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 2
+          },
+          {
+            "id": "soft_plant-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.2
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/blood_orchid_petal"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "type": "CRYSTAL",
+  "name": "mermaids_gem",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:mermaids_gem"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "crystal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "crystal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "crystal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "crystal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "crystal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 310
+          },
+          {
+            "id": "crystal-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "spectrum/mermaids_gem"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "type": "HARD_PLANT",
+  "name": "ivory_noxshroom",
+  "parent": "hard_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:ivory_noxshroom"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "hard_plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "hard_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 7.5
+          },
+          {
+            "id": "hard_plant-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.1
+          },
+          {
+            "id": "hard_plant-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 80
+          },
+          {
+            "id": "hard_plant-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.15
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "spectrum/ivory_noxshroom"
+  }
+}

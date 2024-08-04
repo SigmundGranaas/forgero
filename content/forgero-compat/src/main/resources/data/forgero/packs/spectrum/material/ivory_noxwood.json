@@ -1,0 +1,85 @@
+{
+  "type": "WOOD",
+  "name": "ivory_noxwood",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "spectrum:ivory_noxwood"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 70
+          },
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 20
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "value": 25
+          },
+          {
+            "id": "wood-draw_speed-composite",
+            "type": "forgero:draw_speed",
+            "value": 1.4
+          },
+          {
+            "id": "wood-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 2.85
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "wood-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 12.5
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 35
+          },
+          {
+            "id": "wood-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "spectrum/ivory_noxwood"
+  }
+}
