@@ -4,7 +4,7 @@
   "name": "pure_iron",
   "container": {
     "type": "HOST",
-    "tag": "spectrum:pure_iron"
+    "id": "spectrum:pure_iron"
   },
   "properties": {
     "grouped_attributes": [

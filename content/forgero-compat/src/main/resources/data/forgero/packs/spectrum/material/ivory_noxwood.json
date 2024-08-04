@@ -4,7 +4,7 @@
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "spectrum:ivory_noxwood"
+    "id": "spectrum:ivory_noxwood_planks"
   },
   "properties": {
     "grouped_attributes": [
