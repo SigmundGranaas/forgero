@@ -202,6 +202,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// Entity predicate
 		PredicateFactory.register(EntityPredicate.CODEC);
 
+		PredicateFactory.register(RandomPredicate.CODEC);
 
 		PredicateFactory.register(new StringModelBuilder());
 		PredicateFactory.register(new StringIdentifierBuilder());
@@ -213,7 +214,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		PredicateFactory.register(DamagePercentagePredicate.DamagePercentagePredicateBuilder::new);
 		PredicateFactory.register(WeatherPredicate.WeatherPredicateBuilder::new);
 		PredicateFactory.register(CanMineFilter.CanMineFilterBuilder::new);
-		PredicateFactory.register(RandomPredicate.RandomPredicatePredicateBuilder::new);
 		PredicateFactory.register(MatchContextTypePredicate.MatchContextTypePredicateBuilder::new);
 	}
 

@@ -4,20 +4,16 @@ import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContext
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.core.model.match.builders.ElementParser;
-import com.sigmundgranaas.forgero.core.model.match.builders.PredicateBuilder;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 
@@ -53,7 +49,7 @@ import net.minecraft.world.World;
  *   "type": "forgero:random",
  *   "value": 0.3,
  *   "seed": ["world_time"],
- *   "worldTimeQuantization": 1200
+ *   "world_time_quantization": 1200
  * }
  * </pre>
  *
@@ -97,6 +93,32 @@ public record RandomPredicate(float value, int worldTimeQuantization,
                               List<SeedSource> seedSources) implements Matchable {
 	public static String ID = "forgero:random";
 
+	private static final long FIXED_SEED = 0x12345678ABCDL; // A fixed seed to mix with context-based seeds
+
+
+	public static Codec<SeedSource> SEED_SOURCE_PREDICATE = Codec.STRING.xmap(RandomPredicate::from, SeedSource::toString);
+
+	public static Codec<RandomPredicate> CODEC = RecordCodecBuilder
+			.create(instance -> instance.group(
+							Codec.FLOAT.fieldOf("value").forGetter(RandomPredicate::value),
+							Codec.INT.optionalFieldOf("world_time_quantization", 0).forGetter(RandomPredicate::worldTimeQuantization),
+							Codec.list(SEED_SOURCE_PREDICATE).optionalFieldOf("seed", Collections.emptyList()).forGetter(RandomPredicate::seedSources)
+					)
+					.apply(instance, RandomPredicate::factory));
+
+
+	public static RandomPredicate factory(float value, int worldTimeQuantization, List<SeedSource> seedSources) {
+		if (seedSources.isEmpty() && worldTimeQuantization != 0) {
+			throw new IllegalArgumentException("World time quantization cannot be set to a number if there is no seed sources!");
+		}
+		return new RandomPredicate(value, worldTimeQuantization, seedSources);
+	}
+
+
+	public static SeedSource from(String source) {
+		return SeedSource.valueOf(source.toUpperCase());
+	}
+
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
 		Random random;
@@ -111,20 +133,27 @@ public record RandomPredicate(float value, int worldTimeQuantization,
 	}
 
 	private long generateSeed(MatchContext context) {
-		return seedSources.stream()
-				.mapToLong(source -> switch (source) {
-					case BLOCK_POS -> context.get(BLOCK_TARGET).map(BlockPos::asLong).orElse(0L);
-					case TARGET_ENTITY -> context.get(ENTITY_TARGET).map(Entity::getId).orElse(0);
-					case SOURCE_ENTITY -> context.get(ENTITY).map(Entity::getId).orElse(0);
-					case WORLD_TIME ->
-							quantizeWorldTime(context.get(WORLD).map(World::getTime).orElse(0L), worldTimeQuantization);
-					case NONE -> System.currentTimeMillis();
-				})
-				.reduce(System.currentTimeMillis(), (a, b) -> a ^ b); // Combine seeds using XOR
-	}
-
-	private long quantizeWorldTime(long worldTime, long quantizationInterval) {
-		return quantizationInterval > 0 ? worldTime / quantizationInterval : worldTime;
+		long seed = FIXED_SEED;
+		for (SeedSource source : seedSources) {
+			long sourceSeed = switch (source) {
+				case BLOCK_POS -> context.get(BLOCK_TARGET).map(BlockPos::asLong).orElse(0L);
+				case TARGET_ENTITY -> context.get(ENTITY_TARGET).map(Entity::getId).orElse(0);
+				case SOURCE_ENTITY -> context.get(ENTITY).map(Entity::getId).orElse(0);
+				case WORLD_TIME -> {
+					long worldTime = context.get(WORLD).map(World::getTime).orElse(0L);
+					if (worldTimeQuantization > 0) {
+						worldTime = worldTime / worldTimeQuantization;
+					}
+					// Sine function to create more variation even with very small time changes.
+					// Example: world time goes from 1 to 2
+					double angle = (worldTime % 360) * (Math.PI / 180);
+					yield (long) (MathHelper.sin((float) angle) * Long.MAX_VALUE);
+				}
+				case NONE -> 1L;
+			};
+			seed = Long.rotateLeft(seed, 5) ^ sourceSeed;
+		}
+		return seed;
 	}
 
 	@Override
@@ -134,31 +163,5 @@ public record RandomPredicate(float value, int worldTimeQuantization,
 
 	public enum SeedSource {
 		BLOCK_POS, TARGET_ENTITY, SOURCE_ENTITY, WORLD_TIME, NONE
-	}
-
-	/**
-	 * Attempts to create a Matchable of type RandomPredicate from a JsonElement.
-	 */
-	public static class RandomPredicatePredicateBuilder implements PredicateBuilder {
-		@Override
-		public Optional<Matchable> create(JsonElement element) {
-			return ElementParser.fromIdentifiedElement(element, ID)
-					.map(jsonObject -> {
-						float value = jsonObject.get("value").getAsFloat();
-						int worldTimeQuantization = jsonObject.has("worldTimeQuantization")
-								? jsonObject.get("worldTimeQuantization").getAsInt()
-								: 0;
-						List<SeedSource> seedSources = jsonObject.has("seed") ? parseSeedSources(jsonObject.getAsJsonArray("seed")) : Collections.emptyList();
-						return new RandomPredicate(value, worldTimeQuantization, seedSources);
-					});
-		}
-
-		private List<SeedSource> parseSeedSources(JsonArray jsonArray) {
-			return StreamSupport.stream(jsonArray.spliterator(), false)
-					.map(JsonElement::getAsString)
-					.map(String::toUpperCase)
-					.map(SeedSource::valueOf)
-					.collect(Collectors.toList());
-		}
 	}
 }
