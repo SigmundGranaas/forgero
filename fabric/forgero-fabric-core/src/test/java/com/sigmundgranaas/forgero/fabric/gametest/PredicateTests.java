@@ -183,7 +183,6 @@ public class PredicateTests {
 				new BlockPos(10, 20, 30)
 		};
 
-		// Run the test multiple times to catch different time quantizations
 		for (int run = 0; run < 5; run++) {
 			Map<BlockPos, Boolean> results = new HashMap<>();
 			context.getWorld().tick(() -> true);
