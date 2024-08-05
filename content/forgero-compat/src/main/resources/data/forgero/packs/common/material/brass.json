@@ -4,10 +4,10 @@
   "name": "brass",
   "container": {
     "type": "HOST",
-    "id": "create:brass_ingot"
+    "id": "c:brass_ingots"
   },
   "palette": {
-    "name": "create/brass"
+    "name": "common/brass"
   },
   "properties": {
     "grouped_attributes": [
