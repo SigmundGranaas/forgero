@@ -9,21 +9,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "scale-rarity-composite",
-            "type": "RARITY",
-            "value": 50
-          },
-          {
-            "id": "scale-durability-composite",
-            "type": "DURABILITY",
-            "value": 325
-          },
-          {
-            "id": "scale-weight-composite",
-            "type": "WEIGHT",
-            "value": 20
-          }
         ]
       },
       {

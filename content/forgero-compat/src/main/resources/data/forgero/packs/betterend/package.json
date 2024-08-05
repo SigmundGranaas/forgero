@@ -1,0 +1,12 @@
+{
+  "name": "betterend-compat",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "betterend",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "betterend"
+  ]
+}
