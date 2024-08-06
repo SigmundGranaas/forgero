@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.fabric.gametest;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.BLOCK_TARGET;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
@@ -19,14 +19,13 @@ import net.minecraft.world.World;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 public class PredicateTests {
-
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "predicateTests1")
 	public void testRandomPredicateConsistency(TestContext context) {
 		World world = context.getWorld();
 		BlockPos testPos = new BlockPos(1, 2, 3);
 
 		RandomPredicate predicate = new RandomPredicate(0.5f, 1200,
-				Arrays.asList(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
+				List.of(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
 
 		MatchContext matchContext = new MatchContext().put(WORLD, world).put(BLOCK_TARGET, testPos);
 
@@ -39,7 +38,8 @@ public class PredicateTests {
 		}
 
 		context.waitAndRun(100, () -> {
-			// Verify consistency
+			// Verify consistency by waiting 100 ticks and rerunning the same predicates.
+			// We expect the result to be the same because we are still in the same time quant.
 			for (Map.Entry<Long, Boolean> entry : results.entrySet()) {
 				long worldTime = entry.getKey();
 				boolean expectedResult = entry.getValue();
@@ -61,16 +61,14 @@ public class PredicateTests {
 		BlockPos testPos = new BlockPos(1, 2, 3);
 
 		RandomPredicate predicate = new RandomPredicate(0.5f, 1,
-				Arrays.asList(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
+				List.of(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
 
 		MatchContext matchContext = new MatchContext().put(WORLD, world).put(BLOCK_TARGET, testPos);
 
 		int trueCount = 0;
 		int totalTests = 1000;
 
-		long time = context.getWorld().getTime();
 		for (int i = 0; i < totalTests; i++) {
-			context.setTime((int) (time + i));
 
 			context.getWorld().tick(() -> true);
 
@@ -78,8 +76,6 @@ public class PredicateTests {
 				trueCount += 1;
 			}
 		}
-
-		context.setTime((int) time);
 
 		context.getWorld().tick(() -> true);
 
@@ -96,12 +92,10 @@ public class PredicateTests {
 		World world = context.getWorld();
 		BlockPos testPos = new BlockPos(1, 2, 3);
 
-		long time = context.getWorld().getTime();
-
-		int[] quantizationRanges = {1, 20, 100};
+		List<Integer> quantizationRanges = List.of(1, 20, 100);
 		for (int quantization : quantizationRanges) {
 			RandomPredicate predicate = new RandomPredicate(0.5f, quantization,
-					Arrays.asList(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
+					List.of(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
 
 			MatchContext matchContext = new MatchContext().put(WORLD, world).put(BLOCK_TARGET, testPos);
 
@@ -109,7 +103,6 @@ public class PredicateTests {
 			int totalTests = 1000;
 
 			for (int i = 0; i < totalTests; i++) {
-				context.setTime(i * quantization);
 				context.getWorld().tick(() -> true);
 
 				if (predicate.test(null, matchContext)) {
@@ -122,9 +115,6 @@ public class PredicateTests {
 				throw new GameTestException("Distribution not within expected range for quantization " + quantization + ". Actual ratio: " + ratio);
 			}
 		}
-
-		context.setTime((int) time);
-		context.getWorld().tick(() -> true);
 		context.complete();
 	}
 
@@ -134,7 +124,7 @@ public class PredicateTests {
 		BlockPos testPos = new BlockPos(1, 2, 3);
 		int quantization = 100;
 		RandomPredicate predicate = new RandomPredicate(0.5f, quantization,
-				Arrays.asList(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
+				List.of(RandomPredicate.SeedSource.BLOCK_POS, RandomPredicate.SeedSource.WORLD_TIME));
 
 		MatchContext matchContext = new MatchContext().put(WORLD, world).put(BLOCK_TARGET, testPos);
 
@@ -142,8 +132,8 @@ public class PredicateTests {
 		long currentQuantizedTime = startTime / quantization;
 		Boolean lastResult = null;
 
-		for (int i = 0; i < 1000; i++) {  // Run for a longer time to catch more transitions
-			context.getWorld().tick(() -> false);
+		for (int i = 0; i < 1000; i++) {
+			context.getWorld().tick(() -> true);
 			long currentTime = world.getTime();
 			long newQuantizedTime = currentTime / quantization;
 
@@ -157,7 +147,6 @@ public class PredicateTests {
 			} else {
 				// We've transitioned to a new quantized bracket
 				currentQuantizedTime = newQuantizedTime;
-				lastResult = null;  // Reset the last result as we're in a new bracket
 			}
 
 			lastResult = currentResult;
@@ -171,29 +160,28 @@ public class PredicateTests {
 		World world = context.getWorld();
 
 		RandomPredicate predicate = new RandomPredicate(0.5f, 0,
-				Arrays.asList(RandomPredicate.SeedSource.BLOCK_POS));
+				List.of(RandomPredicate.SeedSource.BLOCK_POS));
 
 		MatchContext matchContext = new MatchContext().put(WORLD, world);
 
-		BlockPos[] testPositions = {
+		List<BlockPos> testPositions = List.of(
 				new BlockPos(1, 1, 1),
 				new BlockPos(2, 2, 2),
 				new BlockPos(3, 3, 3),
 				new BlockPos(-1, -1, -1),
 				new BlockPos(10, 20, 30)
-		};
+		);
+		int numberOfRuns = 5;
 
-		for (int run = 0; run < 5; run++) {
+		for (int run = 0; run < numberOfRuns; run++) {
 			Map<BlockPos, Boolean> results = new HashMap<>();
 			context.getWorld().tick(() -> true);
 
 			for (BlockPos pos : testPositions) {
 				results.put(pos, predicate.test(null, matchContext.put(BLOCK_TARGET, pos)));
-
 			}
 
-			// Only perform checks if we completed all positions within the same time quantization
-			if (results.size() == testPositions.length) {
+			if (results.size() == testPositions.size()) {
 				// Verify that changing block position changes the result
 				long uniqueResults = results.values().stream().distinct().count();
 				if (uniqueResults < 2) {
