@@ -27,6 +27,16 @@
             "id": "hide-weight-composite",
             "type": "WEIGHT",
             "value": 10
+          },
+          {
+            "id": "hide-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 0.3
+          },
+          {
+            "id": "hide-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 0.5
           }
         ]
       },
