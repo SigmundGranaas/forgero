@@ -13,6 +13,21 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
+          {
+            "id": "hide-rarity-composite",
+            "type": "RARITY",
+            "value": 80
+          },
+          {
+            "id": "hide-durability-composite",
+            "type": "DURABILITY",
+            "value": 100
+          },
+          {
+            "id": "hide-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
+          }
         ]
       },
       {
