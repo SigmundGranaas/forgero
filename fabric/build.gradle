@@ -172,7 +172,6 @@ modrinth {
 		optional.project "advanced-netherite"
 		optional.project "biomeswevegone"
 		optional.project "modern-industrialization"
-		optional.project "techreborn"
 		incompatible.project "exordium"
 	}
 }
