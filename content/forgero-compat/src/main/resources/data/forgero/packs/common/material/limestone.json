@@ -2,9 +2,14 @@
   "type": "STONE",
   "name": "limestone",
   "parent": "stone_base",
+  "dependencies": {
+    "any": [
+      "create"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "create:limestone"
+    "tag": "c:limestone"
   },
   "properties": {
     "grouped_attributes": [
@@ -63,6 +68,6 @@
     ]
   },
   "palette": {
-    "name": "create/limestone"
+    "name": "common/limestone"
   }
 }

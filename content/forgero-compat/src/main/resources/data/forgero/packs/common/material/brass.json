@@ -2,12 +2,17 @@
   "type": "METAL",
   "parent": "metal_base",
   "name": "brass",
+  "dependencies": {
+    "any": [
+      "create"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "create:brass_ingot"
+    "tag": "c:brass_ingots"
   },
   "palette": {
-    "name": "create/brass"
+    "name": "common/brass"
   },
   "properties": {
     "grouped_attributes": [

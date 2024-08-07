@@ -11,7 +11,8 @@
     "any": [
       "mythicmetals",
       "natures_spirit",
-      "regions_unexplored"
+      "regions_unexplored",
+      "create"
     ]
   }
 }

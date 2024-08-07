@@ -20,12 +20,12 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> emi;
 	public static final Supplier<Boolean> modonomicon;
 	public static final Supplier<Boolean> natures_spirit;
-
+	public static final Supplier<Boolean> create;
 	public static final Supplier<Boolean> ecologics;
-
 
 	static {
 		ecologics = () -> isModLoaded("ecologics");
+		create = () -> isModLoaded("create");
 		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
@@ -59,6 +59,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (ecologics.get()) {
 			Ecologics.generateTags();
+		}
+
+		if (create.get()) {
+			Create.generateTags();
 		}
 	}
 }
