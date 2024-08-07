@@ -117,6 +117,7 @@ curseforge {
 				optionalDependency "modmenu"
 				optionalDependency "mythicmetals"
 				optionalDependency "betternether"
+				optionalDependency "betterend"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
 				optionalDependency "natures_spirit"
@@ -126,6 +127,7 @@ curseforge {
 				optionalDependency "ecologics"
 				optionalDependency "naturalist"
 				optionalDependency "advanced-netherite"
+				optionalDependency "modern-industrialization"
 				optionalDependency "biomeswevegone"
 				incompatible "exordium"
 			}
@@ -168,6 +170,7 @@ modrinth {
 		optional.project "naturalist"
 		optional.project "advanced-netherite"
 		optional.project "biomeswevegone"
+		optional.project "modern-industrialization"
 		incompatible.project "exordium"
 	}
 }

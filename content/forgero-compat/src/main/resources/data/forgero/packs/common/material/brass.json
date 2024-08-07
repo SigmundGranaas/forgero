@@ -4,7 +4,8 @@
   "name": "brass",
   "dependencies": {
     "any": [
-      "create"
+      "create",
+      "techreborn"
     ]
   },
   "container": {
