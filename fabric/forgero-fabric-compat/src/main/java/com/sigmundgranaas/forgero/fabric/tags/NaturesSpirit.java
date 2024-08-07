@@ -13,5 +13,7 @@ public class NaturesSpirit {
 		RESOURCE_PACK.addTag(new Identifier("c", "items/larch_planks"), JTag.tag().add(new Identifier("natures_spirit:larch_planks")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/maple_planks"), JTag.tag().add(new Identifier("natures_spirit:maple_planks")));
 		RESOURCE_PACK.addTag(new Identifier("c", "items/redwood_planks"), JTag.tag().add(new Identifier("natures_spirit:redwood_planks")));
+		RESOURCE_PACK.addTag(new Identifier("c", "items/willow_planks"), JTag.tag().add(new Identifier("natures_spirit:willow_planks")));
+		RESOURCE_PACK.addTag(new Identifier("c", "items/coconut_planks"), JTag.tag().add(new Identifier("natures_spirit:coconut_planks")));
 	}
 }

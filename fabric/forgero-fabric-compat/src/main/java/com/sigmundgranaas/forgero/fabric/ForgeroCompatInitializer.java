@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
+import com.sigmundgranaas.forgero.fabric.tags.Ecologics;
 import com.sigmundgranaas.forgero.fabric.tags.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.tags.NaturesSpirit;
@@ -20,8 +21,11 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> modonomicon;
 	public static final Supplier<Boolean> natures_spirit;
 
+	public static final Supplier<Boolean> ecologics;
+
 
 	static {
+		ecologics = () -> isModLoaded("ecologics");
 		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
@@ -51,6 +55,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (natures_spirit.get()) {
 			NaturesSpirit.generateTags();
+		}
+
+		if (ecologics.get()) {
+			Ecologics.generateTags();
 		}
 	}
 }

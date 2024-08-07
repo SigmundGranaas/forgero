@@ -111,7 +111,7 @@ curseforge {
 			relations {
 				embeddedLibrary 'arrp'
 				requiredDependency 'fabric-api'
-				optionalDependency 'patchouli'
+				optionalDependency 'modonomicon'
 				optionalDependency "lambdynamiclights"
 				optionalDependency "better-combat"
 				optionalDependency "modmenu"
@@ -149,7 +149,7 @@ modrinth {
 	dependencies {
 		embedded.project "arrp"
 		required.project "fabric-api"
-		optional.project "patchouli"
+		optional.project "modonomicon"
 		optional.project "lambdynamiclights"
 		optional.project "better-combat"
 		optional.project "modmenu"

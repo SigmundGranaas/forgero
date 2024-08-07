@@ -1,10 +1,16 @@
 {
   "type": "WOOD",
-  "name": "coconut",
+  "name": "willow",
   "parent": "wood_base",
+  "dependencies": {
+    "any": [
+      "regions_unexplored",
+      "natures_spirit"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "natures_spirit:coconut_planks"
+    "tag": "c:willow_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -21,17 +27,17 @@
           {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 40
+            "value": 30
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 30
+            "value": 25
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 2.8
+            "value": 2.75
           }
         ]
       },
@@ -44,7 +50,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 15
           },
           {
             "id": "wood-weight-upgrade",
@@ -52,7 +58,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 12
           },
           {
             "id": "wood-durability-offensive-upgrade",
@@ -66,7 +72,7 @@
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.25
+            "value": 0.15
           }
         ]
       }
@@ -75,6 +81,6 @@
     ]
   },
   "palette": {
-    "name": "natures_spirit/coconut"
+    "name": "common/willow"
   }
 }
