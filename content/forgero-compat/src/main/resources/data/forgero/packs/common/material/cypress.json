@@ -5,7 +5,8 @@
   "dependencies": {
     "any": [
       "regions_unexplored",
-      "natures_spirit"
+      "natures_spirit",
+      "biomeswevegone"
     ]
   },
   "container": {
@@ -13,7 +14,7 @@
     "tag": "c:cypress_planks"
   },
   "palette": {
-    "name": "natures_spirit/cypress"
+    "name": "common/cypress"
   },
   "properties": {
     "grouped_attributes": [

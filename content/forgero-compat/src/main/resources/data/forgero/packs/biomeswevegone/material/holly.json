@@ -1,20 +1,10 @@
 {
   "type": "WOOD",
+  "name": "holly",
   "parent": "wood_base",
-  "name": "redwood",
-  "dependencies": {
-    "any": [
-      "regions_unexplored",
-      "natures_spirit",
-      "biomeswevegone"
-    ]
-  },
   "container": {
     "type": "HOST",
-    "tag": "c:redwood_planks"
-  },
-  "palette": {
-    "name": "common/redwood"
+    "id": "biomeswevegone:holly_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -35,19 +25,12 @@
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 40
+            "value": 70
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 2.5
-          },
-          {
-            "id": "wood-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 2
+            "value": 3.3
           },
           {
             "id": "wood-weight-composite",
@@ -83,7 +66,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 20
+            "value": 35
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
@@ -91,16 +74,12 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.2
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 20
           }
         ]
       }
     ]
+  },
+  "palette": {
+    "name": "biomeswevegone/holly"
   }
 }

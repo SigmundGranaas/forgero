@@ -1,20 +1,19 @@
 {
   "type": "WOOD",
   "parent": "wood_base",
-  "name": "redwood",
+  "name": "fir",
   "dependencies": {
     "any": [
-      "regions_unexplored",
       "natures_spirit",
       "biomeswevegone"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:redwood_planks"
+    "tag": "c:fir_planks"
   },
   "palette": {
-    "name": "common/redwood"
+    "name": "common/fir"
   },
   "properties": {
     "grouped_attributes": [
@@ -24,39 +23,25 @@
         "operation": "ADDITION",
         "attributes": [
           {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 70
+          },
+          {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
             "value": 30
           },
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 40
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
             "value": 2.5
-          },
-          {
-            "id": "wood-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 2
-          },
-          {
-            "id": "wood-weight-composite",
-            "type": "WEIGHT",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 30
           }
-
         ]
       },
       {
@@ -76,28 +61,21 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 10
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 20
+            "value": 35
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.2
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 20
+            "value": 0.3
           }
         ]
       }
