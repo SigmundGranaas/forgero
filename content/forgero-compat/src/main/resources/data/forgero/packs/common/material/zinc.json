@@ -2,9 +2,14 @@
   "type": "METAL",
   "parent": "metal_base",
   "name": "zinc",
+  "dependencies": {
+    "any": [
+      "create"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "c:zinc_ingots"
+    "tag": "c:zinc_ingots"
   },
   "palette": {
     "name": "common/zinc"
