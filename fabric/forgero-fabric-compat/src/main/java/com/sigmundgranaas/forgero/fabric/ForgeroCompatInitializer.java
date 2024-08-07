@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.fabric.tags.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.tags.NaturesSpirit;
 import com.sigmundgranaas.forgero.fabric.tags.BiomesWeveGone;
+import com.sigmundgranaas.forgero.fabric.tags.ModernIndustrialization;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -21,12 +22,14 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> yacl;
 	public static final Supplier<Boolean> emi;
 	public static final Supplier<Boolean> modonomicon;
+	public static final Supplier<Boolean> modernindustrialization;
 	public static final Supplier<Boolean> natures_spirit;
 	public static final Supplier<Boolean> create;
 	public static final Supplier<Boolean> ecologics;
 	public static final Supplier<Boolean> biomeswevegone;
 
 	static {
+		modernindustrialization = () -> isModLoaded("modernindustrialization");
 		ecologics = () -> isModLoaded("ecologics");
 		create = () -> isModLoaded("create");
 		biomeswevegone = () -> isModLoaded("biomeswevegone");
@@ -56,6 +59,11 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 		if (mythicmetals.get()) {
 			MythicMetalsCommons.generateTags();
 		}
+
+		if (modernindustrialization.get()) {
+			ModernIndustrialization.generateTags();
+		}
+
 		if (biomeswevegone.get()) {
 			BiomesWeveGone.generateTags();
 		}

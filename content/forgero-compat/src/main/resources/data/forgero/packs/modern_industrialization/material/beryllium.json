@@ -1,19 +1,10 @@
 {
   "type": "METAL",
   "parent": "metal_base",
-  "name": "zinc",
-  "dependencies": {
-    "any": [
-      "create",
-      "techreborn"
-    ]
-  },
+  "name": "beryllium",
   "container": {
     "type": "HOST",
-    "tag": "c:zinc_ingots"
-  },
-  "palette": {
-    "name": "common/zinc"
+    "id": "modern_industrialization:beryllium_ingot"
   },
   "properties": {
     "grouped_attributes": [
@@ -25,37 +16,37 @@
           {
             "id": "metal-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 3.25
+            "value": 6
           },
           {
             "id": "metal-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 4.5
+            "value": 6.25
           },
           {
             "id": "metal-durability-composite",
             "type": "DURABILITY",
-            "value": 210
+            "value": 900
           },
           {
             "id": "metal-rarity-composite",
             "type": "RARITY",
-            "value": 30
+            "value": 80
           },
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 45
+            "value": 20
           },
           {
             "id": "metal-armor-composite",
             "type": "ARMOR",
-            "value": 5
+            "value": 6
           },
           {
             "id": "metal-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 3
+            "value": 3.8
           }
         ]
       },
@@ -68,7 +59,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 22
+            "value": 40
           },
           {
             "id": "metal-weight-upgrade",
@@ -76,52 +67,43 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 22
+            "value": 10
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 1.65
+            "value": 2
           },
           {
             "id": "metal-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 2.25
-          },
-          {
-            "id": "metal-mining_level-offensive-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 1
+            "value": 2.6
           },
           {
             "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 105
+            "value": 450
           },
           {
             "id": "metal-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.5
-          },
-          {
-            "id": "metal-draw_speed-offensive-upgrade",
-            "type": "forgero:draw_speed",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
+            "value": 0.8
           }
         ]
       }
+    ],
+    "attributes": [
     ]
+  },
+  "palette": {
+    "name": "modern_industrialization/beryllium"
   }
 }
