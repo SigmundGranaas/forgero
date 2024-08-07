@@ -9,7 +9,7 @@
   },
   "container": {
     "type": "HOST",
-    "id": "c:limestone"
+    "tag": "c:limestone"
   },
   "properties": {
     "grouped_attributes": [
