@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryP
 import com.sigmundgranaas.forgero.fabric.tags.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.tags.NaturesSpirit;
+import com.sigmundgranaas.forgero.fabric.tags.Create;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -19,9 +20,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> emi;
 	public static final Supplier<Boolean> modonomicon;
 	public static final Supplier<Boolean> natures_spirit;
-
+	public static final Supplier<Boolean> create;
 
 	static {
+		create = () -> isModLoaded("create");
 		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
@@ -51,6 +53,9 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (natures_spirit.get()) {
 			NaturesSpirit.generateTags();
+    }
+		if (create.get()) {
+			Create.generateTags();
 		}
 	}
 }
