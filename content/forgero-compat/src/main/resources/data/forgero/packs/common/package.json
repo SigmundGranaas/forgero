@@ -10,7 +10,12 @@
     ],
     "any": [
       "mythicmetals",
-      "modern_industrialization"
+      "modern_industrialization",
+      "mythicmetals",
+      "natures_spirit",
+      "regions_unexplored",
+      "biomeswevegone",
+      "create"
     ]
   }
 }
