@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.mythicmetals;
+package com.sigmundgranaas.forgero.fabric.tags;
 
 import static com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator.RESOURCE_PACK;
 
