@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.fabric;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
+import com.sigmundgranaas.forgero.fabric.tags.Create;
 import com.sigmundgranaas.forgero.fabric.tags.Ecologics;
 import com.sigmundgranaas.forgero.fabric.tags.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
