@@ -129,6 +129,7 @@ curseforge {
 				optionalDependency "advanced-netherite"
 				optionalDependency "modern-industrialization"
 				optionalDependency "biomeswevegone"
+				optionalDependency "techreborn"
 				incompatible "exordium"
 			}
 		}

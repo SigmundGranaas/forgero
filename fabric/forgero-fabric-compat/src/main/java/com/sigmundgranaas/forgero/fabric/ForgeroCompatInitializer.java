@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.tags.NaturesSpirit;
 import com.sigmundgranaas.forgero.fabric.tags.BiomesWeveGone;
 import com.sigmundgranaas.forgero.fabric.tags.ModernIndustrialization;
+import com.sigmundgranaas.forgero.fabric.tags.TechReborn;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -28,7 +29,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> ecologics;
 	public static final Supplier<Boolean> biomeswevegone;
 
+	public static final Supplier<Boolean> techreborn;
+
 	static {
+		techreborn = () -> isModLoaded("techreborn");
 		modernindustrialization = () -> isModLoaded("modernindustrialization");
 		ecologics = () -> isModLoaded("ecologics");
 		create = () -> isModLoaded("create");
@@ -78,6 +82,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (create.get()) {
 			Create.generateTags();
+		}
+
+		if (techreborn.get()) {
+			TechReborn.generateTags();
 		}
 	}
 }
