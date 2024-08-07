@@ -20,7 +20,8 @@
       "anchor": "",
       "recipe_id_1": "forgero:oak-handle-basic_recipe",
       "title1": "",
-      "title2": ""
+      "title2": "",
+      "text": "book.forgero.guidebook.getting_started.handle.text1"
     }
   ],
   "parents": [

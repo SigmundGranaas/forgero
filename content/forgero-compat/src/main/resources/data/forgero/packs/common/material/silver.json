@@ -17,65 +17,82 @@
     "name": "common/silver"
   },
   "properties": {
-    "attributes": [
+    "grouped_attributes": [
       {
-        "id": "metal-rarity-composite",
-        "type": "RARITY",
         "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 57
-      },
-      {
-        "id": "metal-mining_level-composite",
-        "type": "MINING_LEVEL",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3
-      },
-      {
-        "id": "metal-mining_speed-composite",
-        "type": "MINING_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 7
-      },
-      {
-        "id": "metal-durability-composite",
-        "type": "DURABILITY",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 658.0
-      },
-      {
-        "id": "metal-attack_damage-composite",
-        "type": "ATTACK_DAMAGE",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 5
-      },
-      {
-        "id": "metal-armor-composite",
-        "type": "ARMOR",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 3
-      },
-      {
-        "id": "metal-weight-composite",
-        "type": "WEIGHT",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 45
-      },
-      {
-        "id": "metal-rarity-upgrade",
-        "context": "UPGRADE",
-        "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "category": "ALL",
-        "value": 25
+        "attributes": [
+          {
+            "id": "metal-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 3.5
+          },
+          {
+            "id": "metal-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 5.5
+          },
+          {
+            "id": "metal-durability-composite",
+            "type": "DURABILITY",
+            "value": 220
+          },
+          {
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "value": 45
+          },
+          {
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "metal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 22
+          },
+          {
+            "id": "metal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 32
+          },
+          {
+            "id": "metal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.75
+          },
+          {
+            "id": "metal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.75
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 110
+          }
+        ]
       }
     ]
   }
 }
+
