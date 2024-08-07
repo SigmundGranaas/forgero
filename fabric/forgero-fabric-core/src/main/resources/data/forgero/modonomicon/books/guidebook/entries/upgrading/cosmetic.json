@@ -3,8 +3,8 @@
   "name": "book.forgero.guidebook.upgrading.cosmetic.name",
   "description": "book.forgero.guidebook.upgrading.cosmetic.description",
   "icon": "minecraft:red_dye",
-  "x": 3,
-  "y": 5,
+  "x": 0,
+  "y": 3,
   "pages": [
     {
       "type": "modonomicon:text",
