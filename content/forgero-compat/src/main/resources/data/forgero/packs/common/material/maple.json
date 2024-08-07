@@ -5,7 +5,8 @@
   "dependencies": {
     "any": [
       "regions_unexplored",
-      "natures_spirit"
+      "natures_spirit",
+      "biomeswevegone"
     ]
   },
   "container": {
@@ -13,7 +14,7 @@
     "tag": "c:maple_planks"
   },
   "palette": {
-    "name": "natures_spirit/maple"
+    "name": "common/maple"
   },
   "properties": {
     "grouped_attributes": [

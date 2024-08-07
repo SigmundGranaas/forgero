@@ -1,20 +1,13 @@
 {
-  "type": "WOOD",
-  "parent": "wood_base",
-  "name": "redwood",
-  "dependencies": {
-    "any": [
-      "regions_unexplored",
-      "natures_spirit",
-      "biomeswevegone"
-    ]
-  },
+  "type": "STONE",
+  "parent": "stone_base",
+  "name": "red_rock",
   "container": {
     "type": "HOST",
-    "tag": "c:redwood_planks"
+    "id": "biomeswevegone:red_rock"
   },
   "palette": {
-    "name": "common/redwood"
+    "name": "biomeswevegone/red_rock"
   },
   "properties": {
     "grouped_attributes": [
@@ -24,33 +17,21 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-rarity-composite",
+            "id": "stone-rarity-composite",
             "type": "RARITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
             "value": 30
           },
           {
-            "id": "wood-durability-composite",
+            "id": "stone-durability-composite",
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 40
+            "value": 165
           },
           {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 2.5
-          },
-          {
-            "id": "wood-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 2
-          },
-          {
-            "id": "wood-weight-composite",
+            "id": "stone-weight-composite",
             "type": "WEIGHT",
             "context": "COMPOSITE",
             "operation": "ADDITION",
@@ -63,7 +44,7 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "wood-rarity-upgrade",
+            "id": "stone-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -71,7 +52,7 @@
             "value": 15
           },
           {
-            "id": "wood-weight-upgrade",
+            "id": "stone-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
@@ -79,25 +60,25 @@
             "value": 15
           },
           {
-            "id": "wood-durability-offensive-upgrade",
+            "id": "stone-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.5
+          },
+          {
+            "id": "stone-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2
+          },
+          {
+            "id": "stone-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 20
-          },
-          {
-            "id": "wood-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.2
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 20
+            "value": 82
           }
         ]
       }

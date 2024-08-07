@@ -1,16 +1,20 @@
 {
   "type": "WOOD",
-  "name": "willow",
   "parent": "wood_base",
+  "name": "willow",
   "dependencies": {
     "any": [
       "regions_unexplored",
-      "natures_spirit"
+      "natures_spirit",
+      "biomeswevegone"
     ]
   },
   "container": {
     "type": "HOST",
     "tag": "c:willow_planks"
+  },
+  "palette": {
+    "name": "common/willow"
   },
   "properties": {
     "grouped_attributes": [
@@ -20,24 +24,30 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
-            "type": "DURABILITY",
-            "value": 45
-          },
-          {
             "id": "wood-rarity-composite",
             "type": "RARITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
             "value": 30
           },
           {
-            "id": "wood-weight-composite",
-            "type": "WEIGHT",
-            "value": 25
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 45
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
             "value": 2.75
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "context": "COMPOSITE",
+            "operation": "ADDITION",
+            "value": 25
           }
         ]
       },
@@ -76,11 +86,6 @@
           }
         ]
       }
-    ],
-    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "common/willow"
   }
 }
