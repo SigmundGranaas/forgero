@@ -3,8 +3,8 @@
   "name": "book.forgero.guidebook.upgrading.gems.name",
   "description": "book.forgero.guidebook.upgrading.gems.description",
   "icon": "forgero:diamond-gem",
-  "x": 2,
-  "y": -2,
+  "x": -2,
+  "y": -4,
   "pages": [
     {
       "type": "modonomicon:text",
