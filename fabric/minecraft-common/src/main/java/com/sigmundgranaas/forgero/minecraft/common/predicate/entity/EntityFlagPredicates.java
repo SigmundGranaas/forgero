@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate.entity;
 
 
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair.predicate;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair.predicate;
 
 import java.util.function.Predicate;
 
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
 
 import net.minecraft.entity.Entity;
 
