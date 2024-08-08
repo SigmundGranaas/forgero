@@ -1,0 +1,12 @@
+{
+  "name": "natures_spirit-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "natures_spirit",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "natures_spirit"
+  ]
+}
