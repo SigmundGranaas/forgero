@@ -132,7 +132,12 @@ curseforge {
 				optionalDependency "techreborn"
 				optionalDependency "lets-do-bloomingnature"
 				optionalDependency "lets-do-beachparty"
+				optionalDependency "lets-do-vinery"
 				optionalDependency "lets-do-nethervinery"
+				optionalDependency "gardens-of-the-dead"
+				optionalDependency "ribbits"
+				optionalDependency "dragonloot"
+				optionalDependency "garnished-additions"
 				incompatible "exordium"
 			}
 		}
@@ -179,6 +184,11 @@ modrinth {
 		optional.project "fruitful-fun"
 		optional.project "lets-do-beachparty"
 		optional.project "lets-do-nethervinery"
+		optional.project "lets-do-vinery"
+		optional.project "gardens-of-the-dead"
+		optional.project "ribbits"
+		optional.project "dragonloot"
+		optional.project "garnished-additions"
 		incompatible.project "exordium"
 	}
 }

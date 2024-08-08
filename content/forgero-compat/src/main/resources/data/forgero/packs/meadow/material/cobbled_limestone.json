@@ -1,19 +1,10 @@
 {
   "type": "STONE",
-  "name": "limestone",
+  "name": "cobbled_limestone",
   "parent": "stone_base",
-  "dependencies": {
-    "any": [
-      "create",
-      "meadow"
-    ]
-  },
   "container": {
     "type": "HOST",
-    "tag": "c:limestone"
-  },
-  "palette": {
-    "name": "common/limestone"
+    "id": "meadow:cobbled_limestone"
   },
   "properties": {
     "grouped_attributes": [
@@ -25,7 +16,7 @@
           {
             "id": "stone-durability-composite",
             "type": "DURABILITY",
-            "value": 140
+            "value": 120
           },
           {
             "id": "stone-rarity-composite",
@@ -63,12 +54,15 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 70
+            "value": 60
           }
         ]
       }
     ],
     "attributes": [
     ]
+  },
+  "palette": {
+    "name": "meadow/cobbled_limestone"
   }
 }
