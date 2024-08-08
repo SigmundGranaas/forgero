@@ -138,6 +138,7 @@ curseforge {
 				optionalDependency "ribbits"
 				optionalDependency "dragonloot"
 				optionalDependency "garnished-additions"
+				optionalDependency "mythicmetals-decorations"
 				incompatible "exordium"
 			}
 		}
@@ -189,6 +190,7 @@ modrinth {
 		optional.project "ribbits"
 		optional.project "dragonloot"
 		optional.project "garnished-additions"
+		optional.project "mythicmetals-decorations"
 		incompatible.project "exordium"
 	}
 }
