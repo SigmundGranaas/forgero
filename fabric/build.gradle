@@ -136,6 +136,7 @@ curseforge {
 				optionalDependency "gardens-of-the-dead"
 				optionalDependency "ribbits"
 				optionalDependency "dragonloot"
+				optionalDependency "garnished-additions"
 				incompatible "exordium"
 			}
 		}
@@ -185,6 +186,7 @@ modrinth {
 		optional.project "gardens-of-the-dead"
 		optional.project "ribbits"
 		optional.project "dragonloot"
+		optional.project "garnished-additions"
 		incompatible.project "exordium"
 	}
 }
