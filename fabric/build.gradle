@@ -134,6 +134,7 @@ curseforge {
 				optionalDependency "lets-do-beachparty"
 				optionalDependency "lets-do-vinery"
 				optionalDependency "gardens-of-the-dead"
+				optionalDependency "ribbits"
 				incompatible "exordium"
 			}
 		}
@@ -181,6 +182,7 @@ modrinth {
 		optional.project "lets-do-beachparty"
 		optional.project "lets-do-vinery"
 		optional.project "gardens-of-the-dead"
+		optional.project "ribbits"
 		incompatible.project "exordium"
 	}
 }
