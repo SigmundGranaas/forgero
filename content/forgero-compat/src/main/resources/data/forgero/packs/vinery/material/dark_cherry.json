@@ -4,7 +4,7 @@
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "tag": "vinery:dark_cherry_planks"
+    "id": "vinery:dark_cherry_planks"
   },
   "properties": {
     "grouped_attributes": [
