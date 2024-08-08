@@ -131,6 +131,7 @@ curseforge {
 				optionalDependency "biomeswevegone"
 				optionalDependency "techreborn"
 				optionalDependency "lets-do-bloomingnature"
+				optionalDependency "lets-do-beachparty"
 				incompatible "exordium"
 			}
 		}
@@ -175,6 +176,7 @@ modrinth {
 		optional.project "modern-industrialization"
 		optional.project "lets-do-bloomingnature"
 		optional.project "fruitful-fun"
+		optional.project "lets-do-beachparty"
 		incompatible.project "exordium"
 	}
 }

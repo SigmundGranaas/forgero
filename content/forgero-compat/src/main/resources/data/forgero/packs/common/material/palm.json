@@ -5,7 +5,8 @@
   "dependencies": {
     "any": [
       "regions_unexplored",
-      "biomeswevegone"
+      "biomeswevegone",
+      "beachparty"
     ]
   },
   "container": {
