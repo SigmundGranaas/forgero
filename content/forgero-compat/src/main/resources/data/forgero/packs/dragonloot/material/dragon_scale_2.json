@@ -1,0 +1,169 @@
+{
+  "type": "SPECIAL",
+  "name": "dragon_scale_2",
+  "container": {
+    "type": "HOST",
+    "id": "dragonloot:dragon_scale"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "special-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 2
+          },
+          {
+            "id": "special-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 8
+          },
+          {
+            "id": "special-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 10
+          },
+          {
+            "id": "special-mining-level-composite",
+            "type": "MINING_LEVEL",
+            "value": 5
+          },
+          {
+            "id": "special-durability-composite",
+            "type": "DURABILITY",
+            "value": 2270
+          },
+          {
+            "id": "special-rarity-composite",
+            "type": "RARITY",
+            "value": 100
+          },
+          {
+            "id": "special-weight-composite",
+            "type": "WEIGHT",
+            "value": 40
+          },
+          {
+            "id": "special-armor-composite",
+            "type": "ARMOR",
+            "value": 9
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "special-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 50
+          },
+          {
+            "id": "special-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "special-attack_speed-offensive-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          },
+          {
+            "id": "special-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 4
+          },
+          {
+            "id": "special-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 5
+          },
+          {
+            "id": "special-mining_level-offensive-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 2.5
+          },
+          {
+            "id": "special-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1135
+          },
+          {
+            "id": "special-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "special-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "special-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "special-mining_level-utility-upgrade",
+            "type": "MINING_LEVEL",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "special-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0
+          },
+          {
+            "id": "special-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.5
+          },
+          {
+            "id": "special-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "dragonloot/dragon_scale"
+  }
+}
