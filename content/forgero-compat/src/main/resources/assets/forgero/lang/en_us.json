@@ -334,18 +334,15 @@
   "item.forgero.blastproof_alloy": "Blastproof Alloy",
   "item.forgero.coke": "Coke",
   "item.forgero.lignite_coal": "Lignite Coal",
-  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot",
   "item.forgero.travertin": "Travertin",
   "item.forgero.laterit": "Laterit",
   "item.forgero.swamp_oak": "Swamp Oak",
   "item.forgero.swamp_cypress": "Swamp Cypress",
   "item.forgero.fan_palm": "Fan Palm",
   "item.forgero.chestnut": "Chestnut",
-  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot",
   "item.forgero.citrus": "Citrus",
   "item.forgero.redlove": "Redlove",
-  "item.forgero.netherite_iron_ingot": "Netherite-Iron Ingot",
   "item.forgero.obsidian_stem": "Obsidian Stem",
-  "item.forgero.reinforced_crimson_planks": "Reinforced Crimson Planks",
-  "item.forgero.reinforced_warped_planks": "Reinforced Warped Planks"
+  "item.forgero.reinforced_crimson": "Reinforced Crimson Planks",
+  "item.forgero.reinforced_warped": "Reinforced Warped Planks"
 }
