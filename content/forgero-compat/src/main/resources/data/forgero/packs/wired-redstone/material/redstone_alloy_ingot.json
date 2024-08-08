@@ -1,7 +1,7 @@
 {
   "type": "METAL",
   "parent": "metal_base",
-  "name": "redstone",
+  "name": "redstone_alloy_ingot",
   "container": {
     "type": "HOST",
     "id": "wiredredstone:redstone_alloy_ingot"
@@ -94,13 +94,6 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 110
-          },
-          {
-            "id": "metal-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 110
           }
         ]
