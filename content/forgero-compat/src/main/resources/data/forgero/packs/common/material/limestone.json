@@ -4,12 +4,16 @@
   "parent": "stone_base",
   "dependencies": {
     "any": [
-      "create"
+      "create",
+      "meadow"
     ]
   },
   "container": {
     "type": "HOST",
     "tag": "c:limestone"
+  },
+  "palette": {
+    "name": "common/limestone"
   },
   "properties": {
     "grouped_attributes": [
@@ -66,8 +70,5 @@
     ],
     "attributes": [
     ]
-  },
-  "palette": {
-    "name": "common/limestone"
   }
 }

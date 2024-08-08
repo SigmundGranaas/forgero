@@ -1,10 +1,10 @@
 {
-  "type": "WOOD",
-  "name": "dark_cherry",
-  "parent": "wood_base",
+  "type": "STONE",
+  "name": "cobbled_limestone",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
-    "id": "vinery:dark_cherry_planks"
+    "id": "meadow:cobbled_limestone"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,24 +14,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-durability-composite",
+            "id": "stone-durability-composite",
             "type": "DURABILITY",
-            "value": 60
+            "value": 120
           },
           {
-            "id": "wood-rarity-composite",
+            "id": "stone-rarity-composite",
             "type": "RARITY",
-            "value": 30
+            "value": 35
           },
           {
-            "id": "wood-weight-composite",
+            "id": "stone-weight-composite",
             "type": "WEIGHT",
             "value": 15
-          },
-          {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 3.6
           }
         ]
       },
@@ -39,34 +34,27 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "wood-rarity-upgrade",
+            "id": "stone-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 17
           },
           {
-            "id": "wood-weight-upgrade",
+            "id": "stone-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7.5
+            "value": 7
           },
           {
-            "id": "wood-durability-offensive-upgrade",
+            "id": "stone-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 30
-          },
-          {
-            "id": "wood-draw_power-offensive-upgrade",
-            "type": "forgero:draw_power",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0.45
+            "value": 60
           }
         ]
       }
@@ -75,6 +63,6 @@
     ]
   },
   "palette": {
-    "name": "vinery/dark_cherry"
+    "name": "meadow/cobbled_limestone"
   }
 }
