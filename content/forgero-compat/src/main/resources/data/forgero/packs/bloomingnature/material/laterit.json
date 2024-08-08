@@ -1,0 +1,55 @@
+{
+  "type": "STONE",
+  "name": "laterit",
+  "parent": "stone_base",
+  "container": {
+    "type": "HOST",
+    "id": "bloomingnature:laterit"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "stone-durability-composite",
+            "type": "DURABILITY",
+            "value": 170
+          },
+          {
+            "id": "stone-rarity-composite",
+            "type": "RARITY",
+            "value": 30
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "stone-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "stone-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 85
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "bloomingnature/laterit"
+  }
+}
