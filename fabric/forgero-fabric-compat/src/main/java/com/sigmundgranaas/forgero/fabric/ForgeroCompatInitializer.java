@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.fabric.tags.ModernIndustrialization;
 import com.sigmundgranaas.forgero.fabric.tags.TechReborn;
 import com.sigmundgranaas.forgero.fabric.tags.BloomingNature;
 import com.sigmundgranaas.forgero.fabric.tags.BeachParty;
+import com.sigmundgranaas.forgero.fabric.tags.Meadow;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -34,6 +35,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 	public static final Supplier<Boolean> techreborn;
 	public static final Supplier<Boolean> bloomingnature;
+	public static final Supplier<Boolean> meadow;
 
 	static {
 		beachparty = () -> isModLoaded("beachparty");
@@ -43,6 +45,7 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 		ecologics = () -> isModLoaded("ecologics");
 		create = () -> isModLoaded("create");
 		biomeswevegone = () -> isModLoaded("biomeswevegone");
+		meadow = () -> isModLoaded("meadow");
 		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
@@ -100,6 +103,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (beachparty.get()) {
 			BeachParty.generateTags();
+		}
+
+		if (meadow.get()) {
+			Meadow.generateTags();
 		}
 	}
 }

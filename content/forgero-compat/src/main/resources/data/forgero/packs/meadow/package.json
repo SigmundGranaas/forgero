@@ -1,0 +1,12 @@
+{
+  "name": "meadow-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "meadow",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "meadow"
+  ]
+}

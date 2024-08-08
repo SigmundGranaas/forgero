@@ -1,11 +1,12 @@
 {
   "type": "WOOD",
-  "parent": "wood_base",
   "name": "pine",
+  "parent": "wood_base",
   "dependencies": {
     "any": [
       "regions_unexplored",
-      "biomeswevegone"
+      "biomeswevegone",
+      "meadow"
     ]
   },
   "container": {
