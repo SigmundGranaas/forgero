@@ -55,19 +55,12 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 20
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 20
           }
         ]
       }
     ]
   },
   "palette": {
-    "name": "mushroom_fir"
+    "name": "betternether/mushroom_fir"
   }
 }

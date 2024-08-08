@@ -37,25 +37,11 @@
             "value": 20
           },
           {
-            "id": "soft_plant-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 75
-          },
-          {
             "id": "soft_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
-          },
-          {
-            "id": "soft_plant-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
           },
           {
             "id": "soft_plant-mining_speed-utility-upgrade",
@@ -83,6 +69,6 @@
     ]
   },
   "palette": {
-    "name": "black_vine"
+    "name": "betternether/black_vine"
   }
 }
