@@ -135,6 +135,7 @@ curseforge {
 				optionalDependency "lets-do-vinery"
 				optionalDependency "gardens-of-the-dead"
 				optionalDependency "ribbits"
+				optionalDependency "dragonloot"
 				incompatible "exordium"
 			}
 		}
@@ -183,6 +184,7 @@ modrinth {
 		optional.project "lets-do-vinery"
 		optional.project "gardens-of-the-dead"
 		optional.project "ribbits"
+		optional.project "dragonloot"
 		incompatible.project "exordium"
 	}
 }
