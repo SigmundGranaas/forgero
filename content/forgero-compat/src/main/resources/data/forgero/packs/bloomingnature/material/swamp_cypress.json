@@ -1,20 +1,10 @@
 {
   "type": "WOOD",
   "parent": "wood_base",
-  "name": "aspen",
-  "dependencies": {
-    "any": [
-      "natures_spirit",
-      "biomeswevegone",
-      "bloomingnature"
-    ]
-  },
+  "name": "swamp_cypress",
   "container": {
     "type": "HOST",
-    "tag": "c:aspen_planks"
-  },
-  "palette": {
-    "name": "common/aspen"
+    "id": "bloomingnature:swamp_cypress_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -35,7 +25,7 @@
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 70
+            "value": 80
           },
           {
             "id": "wood-draw_power-composite",
@@ -76,7 +66,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 35
+            "value": 40
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
@@ -84,16 +74,12 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0.15
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 35
           }
         ]
       }
     ]
+  },
+  "palette": {
+    "name": "bloomingnature/swamp_cypress"
   }
 }

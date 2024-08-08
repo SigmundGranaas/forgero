@@ -130,6 +130,7 @@ curseforge {
 				optionalDependency "modern-industrialization"
 				optionalDependency "biomeswevegone"
 				optionalDependency "techreborn"
+				optionalDependency "lets-do-bloomingnature"
 				incompatible "exordium"
 			}
 		}
@@ -172,6 +173,7 @@ modrinth {
 		optional.project "advanced-netherite"
 		optional.project "biomeswevegone"
 		optional.project "modern-industrialization"
+		optional.project "lets-do-bloomingnature"
 		incompatible.project "exordium"
 	}
 }
