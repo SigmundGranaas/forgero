@@ -174,6 +174,7 @@ modrinth {
 		optional.project "biomeswevegone"
 		optional.project "modern-industrialization"
 		optional.project "lets-do-bloomingnature"
+		optional.project "fruitful-fun"
 		incompatible.project "exordium"
 	}
 }
