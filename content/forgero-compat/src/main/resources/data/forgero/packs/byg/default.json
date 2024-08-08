@@ -1,9 +1,0 @@
-{
-  "namespace": "byg",
-  "dependencies": [
-    "minecraft",
-    "forgero",
-    "minecraft-vanilla",
-    "byg"
-  ]
-}
