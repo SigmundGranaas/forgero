@@ -8,53 +8,46 @@
   },
   "properties": {
     "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
           {
-            "context": "COMPOSITE",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "attributes": [
-              {
-                "id": "wood-durability-composite",
-                "type": "DURABILITY",
-                "value": 80
-              },
-              {
-                "id": "wood-rarity-composite",
-                "type": "RARITY",
-                "value": 30
-              }
-            ]
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 65
           },
           {
-            "context": "UPGRADE",
-            "attributes": [
-              {
-                "id": "wood-rarity-upgrade",
-                "type": "RARITY",
-                "order": "BASE",
-                "operation": "ADDITION",
-                "category": "ALL",
-                "value": 15
-              },
-              {
-                "id": "wood-durability-offensive-upgrade",
-                "type": "DURABILITY",
-                "operation": "ADDITION",
-                "category": "OFFENSIVE",
-                "value": 40
-              },
-              {
-                "id": "wood-durability-utility-upgrade",
-                "type": "DURABILITY",
-                "operation": "ADDITION",
-                "category": "UTILITY",
-                "value": 40
-              }
-            ]
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 25
           }
         ]
       },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 12.5
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 32.5
+          }
+        ]
+      }
+    ]
+  },
   "palette": {
-    "name": "nether_sakura"
+    "name": "betternether/nether_sakura"
   }
 }
