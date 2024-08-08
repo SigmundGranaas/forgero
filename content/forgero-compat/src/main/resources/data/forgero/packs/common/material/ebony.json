@@ -1,20 +1,19 @@
 {
   "type": "WOOD",
   "parent": "wood_base",
-  "name": "aspen",
+  "name": "ebony",
   "dependencies": {
     "any": [
-      "natures_spirit",
       "biomeswevegone",
       "bloomingnature"
     ]
   },
   "container": {
     "type": "HOST",
-    "tag": "c:aspen_planks"
+    "tag": "c:ebony_planks"
   },
   "palette": {
-    "name": "common/aspen"
+    "name": "common/ebony"
   },
   "properties": {
     "grouped_attributes": [
@@ -35,19 +34,19 @@
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 70
+            "value": 75
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 2.75
+            "value": 3.15
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 30
+            "value": 25
           }
 
         ]
@@ -69,28 +68,21 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 12
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 35
+            "value": 37
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.15
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 35
+            "value": 0.37
           }
         ]
       }

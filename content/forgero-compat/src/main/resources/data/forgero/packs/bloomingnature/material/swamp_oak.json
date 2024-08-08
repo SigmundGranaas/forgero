@@ -1,20 +1,10 @@
 {
   "type": "WOOD",
   "parent": "wood_base",
-  "name": "aspen",
-  "dependencies": {
-    "any": [
-      "natures_spirit",
-      "biomeswevegone",
-      "bloomingnature"
-    ]
-  },
+  "name": "swamp_oak",
   "container": {
     "type": "HOST",
-    "tag": "c:aspen_planks"
-  },
-  "palette": {
-    "name": "common/aspen"
+    "id": "bloomingnature:swamp_oak_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -35,19 +25,19 @@
             "type": "DURABILITY",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 70
+            "value": 60
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 2.75
+            "value": 3.05
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 30
+            "value": 20
           }
 
         ]
@@ -69,31 +59,27 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 10
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 35
+            "value": 30
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.15
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 35
+            "value": 0.3
           }
         ]
       }
     ]
+  },
+  "palette": {
+    "name": "bloomingnature/swamp_oak"
   }
 }

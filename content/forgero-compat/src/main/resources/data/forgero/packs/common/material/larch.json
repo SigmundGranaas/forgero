@@ -5,7 +5,8 @@
   "dependencies": {
     "any": [
       "regions_unexplored",
-      "natures_spirit"
+      "natures_spirit",
+      "bloomingnature"
     ]
   },
   "container": {
@@ -13,7 +14,7 @@
     "tag": "c:larch_planks"
   },
   "palette": {
-    "name": "natures_spirit/larch"
+    "name": "common/larch"
   },
   "properties": {
     "grouped_attributes": [
