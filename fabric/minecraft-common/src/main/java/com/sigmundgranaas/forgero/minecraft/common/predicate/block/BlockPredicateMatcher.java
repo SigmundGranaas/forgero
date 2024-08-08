@@ -9,9 +9,9 @@ import com.mojang.serialization.MapCodec;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.GroupEntry;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationBackedPredicateCodec;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.GroupEntry;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.SpecificationBackedPredicateCodec;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;

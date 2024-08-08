@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.predicate.flag;
 
 import java.util.function.Predicate;
 
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
 
 public record FlagPredicateInstance<T>(String key, Boolean flag,
                                        Predicate<T> test) implements KeyPair<Predicate<T>>, Predicate<T> {

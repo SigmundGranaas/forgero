@@ -4,8 +4,8 @@
   "description": "book.forgero.guidebook.upgrading.utility.description",
   "icon": "forgero:leather-scrappy_binding",
   "background_v_index": 1,
-  "x": 1,
-  "y": 4,
+  "x": -2,
+  "y": 2,
   "pages": [
     {
       "type": "modonomicon:text",
