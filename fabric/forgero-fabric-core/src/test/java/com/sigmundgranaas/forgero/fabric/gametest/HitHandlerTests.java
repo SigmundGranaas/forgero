@@ -389,11 +389,57 @@ public class HitHandlerTests {
 		});
 	}
 
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "StatusEffectHandlerTest", tickLimit = 120)
+	public void testStatusAttackerEffectHandler(TestContext context) {
+		TestPos playerPos = TestPos.of(new BlockPos(3, 1, 3), context);
+		createFloor(context);
+
+		PlayerEntity player = PlayerFactory.of(context, playerPos);
+
+		// Spawn a target entity (e.g., a zombie) that will receive the status effect
+		LivingEntity target = context.spawnEntity(EntityType.PIG, playerPos.offset(1, 0, 1).relative());
+
+		// Create an instance of StatusEffectHandler from JSON
+		StatusEffectHandler statusEffectHandler = statusEffectAttackerHandler();
+
+		// Trigger the onHit method simulating the player hitting the target
+		statusEffectHandler.onHit(player, context.getWorld(), target);
+
+		// Verify the status effect is applied correctly
+		context.runAtTick(1, () -> {
+			// PLayer did no get ticked by the game world. It needs a single manual tick.
+			player.baseTick();
+			boolean hasEffect = player.hasStatusEffect(StatusEffects.POISON);
+			context.assertTrue(hasEffect, "Player does not have the expected Poison effect.");
+
+			if (hasEffect) {
+				StatusEffectInstance effectInstance = player.getStatusEffect(StatusEffects.POISON);
+				context.assertTrue(0 == effectInstance.getAmplifier(), "Poison effect level is not as expected.");
+				context.assertTrue(599 == effectInstance.getDuration(), "Poison effect duration is not as expected.");
+			}
+
+			context.complete();
+		});
+	}
+
 	public static StatusEffectHandler statusEffectHandler() {
 		String json = """
 				{
 				  "type": "minecraft:status_effect",
 				   "target": "minecraft:targeted_entity",
+				   "effect": "minecraft:poison",
+				   "level": 1,
+				   "duration": 600
+				}
+				""";
+		return Utils.handlerFromString(json, StatusEffectHandler.BUILDER);
+	}
+
+	public static StatusEffectHandler statusEffectAttackerHandler() {
+		String json = """
+				{
+				  "type": "minecraft:status_effect",
+				   "target": "minecraft:attacker",
 				   "effect": "minecraft:poison",
 				   "level": 1,
 				   "duration": 600
