@@ -1,20 +1,10 @@
 {
-  "type": "WOOD",
-  "parent": "wood_base",
-  "name": "palm",
-  "dependencies": {
-    "any": [
-      "regions_unexplored",
-      "biomeswevegone",
-      "beachparty"
-    ]
-  },
+  "type": "STONE",
+  "name": "cobbled_limestone",
+  "parent": "stone_base",
   "container": {
     "type": "HOST",
-    "tag": "c:palm_planks"
-  },
-  "palette": {
-    "name": "common/palm"
+    "id": "meadow:cobbled_limestone"
   },
   "properties": {
     "grouped_attributes": [
@@ -24,42 +14,35 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-rarity-composite",
-            "type": "RARITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 30
-          },
-          {
-            "id": "wood-durability-composite",
+            "id": "stone-durability-composite",
             "type": "DURABILITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 55
+            "value": 120
           },
           {
-            "id": "wood-weight-composite",
+            "id": "stone-rarity-composite",
+            "type": "RARITY",
+            "value": 35
+          },
+          {
+            "id": "stone-weight-composite",
             "type": "WEIGHT",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
             "value": 15
           }
-
         ]
       },
       {
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "wood-rarity-upgrade",
+            "id": "stone-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 17
           },
           {
-            "id": "wood-weight-upgrade",
+            "id": "stone-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
@@ -67,14 +50,19 @@
             "value": 7
           },
           {
-            "id": "wood-durability-offensive-upgrade",
+            "id": "stone-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 27
+            "value": 60
           }
         ]
       }
+    ],
+    "attributes": [
     ]
+  },
+  "palette": {
+    "name": "meadow/cobbled_limestone"
   }
 }

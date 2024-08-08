@@ -130,6 +130,10 @@ curseforge {
 				optionalDependency "modern-industrialization"
 				optionalDependency "biomeswevegone"
 				optionalDependency "techreborn"
+				optionalDependency "lets-do-bloomingnature"
+				optionalDependency "lets-do-beachparty"
+				optionalDependency "lets-do-vinery"
+				optionalDependency "gardens-of-the-dead"
 				incompatible "exordium"
 			}
 		}
@@ -172,6 +176,11 @@ modrinth {
 		optional.project "advanced-netherite"
 		optional.project "biomeswevegone"
 		optional.project "modern-industrialization"
+		optional.project "lets-do-bloomingnature"
+		optional.project "fruitful-fun"
+		optional.project "lets-do-beachparty"
+		optional.project "lets-do-vinery"
+		optional.project "gardens-of-the-dead"
 		incompatible.project "exordium"
 	}
 }

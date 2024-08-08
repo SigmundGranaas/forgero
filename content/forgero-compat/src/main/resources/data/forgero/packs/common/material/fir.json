@@ -5,7 +5,8 @@
   "dependencies": {
     "any": [
       "natures_spirit",
-      "biomeswevegone"
+      "biomeswevegone",
+      "bloomingnature"
     ]
   },
   "container": {

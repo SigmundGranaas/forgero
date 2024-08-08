@@ -1,20 +1,10 @@
 {
   "type": "WOOD",
+  "name": "whistlecane_planks",
   "parent": "wood_base",
-  "name": "aspen",
-  "dependencies": {
-    "any": [
-      "natures_spirit",
-      "biomeswevegone",
-      "bloomingnature"
-    ]
-  },
   "container": {
     "type": "HOST",
-    "tag": "c:aspen_planks"
-  },
-  "palette": {
-    "name": "common/aspen"
+    "id": "gardens_of_the_dead:whistlecane_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -24,32 +14,25 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-rarity-composite",
-            "type": "RARITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 30
+            "id": "wood-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 2.35
           },
           {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 70
+            "value": 130
           },
           {
-            "id": "wood-draw_power-composite",
-            "type": "forgero:draw_power",
-            "value": 2.75
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 50
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 30
+            "value": 20
           }
-
         ]
       },
       {
@@ -61,7 +44,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 25
           },
           {
             "id": "wood-weight-upgrade",
@@ -69,31 +52,36 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 10
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 35
+            "value": 65
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.15
+            "value": 0.27
           },
           {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
+            "id": "wood-draw_speed-offensive-upgrade",
+            "type": "forgero:draw_speed",
             "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 35
+            "category": "OFFENSIVE",
+            "value": 0.18
           }
         ]
       }
+    ],
+    "attributes": [
     ]
+  },
+  "palette": {
+    "name": "gardens_of_the_dead/whistlecane_planks"
   }
 }

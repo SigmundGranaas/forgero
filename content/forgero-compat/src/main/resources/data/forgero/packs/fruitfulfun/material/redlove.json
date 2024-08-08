@@ -1,20 +1,10 @@
 {
   "type": "WOOD",
+  "name": "redlove",
   "parent": "wood_base",
-  "name": "baobab",
-  "dependencies": {
-    "any": [
-      "regions_unexplored",
-      "biomeswevegone",
-      "bloomingnature"
-    ]
-  },
   "container": {
     "type": "HOST",
-    "tag": "c:baobab_planks"
-  },
-  "palette": {
-    "name": "common/baobab"
+    "id": "fruitfulfun:redlove_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -24,27 +14,20 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "wood-rarity-composite",
-            "type": "RARITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 30
-          },
-          {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 50
+            "value": 60
+          },
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 30
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "context": "COMPOSITE",
-            "operation": "ADDITION",
-            "value": 20
+            "value": 15
           }
-
         ]
       },
       {
@@ -56,7 +39,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7
+            "value": 15
           },
           {
             "id": "wood-weight-upgrade",
@@ -64,17 +47,22 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 7
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 25
+            "value": 30
           }
         ]
       }
+    ],
+    "attributes": [
     ]
+  },
+  "palette": {
+    "name": "fruitfulfun/redlove"
   }
 }
