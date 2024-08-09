@@ -139,6 +139,7 @@ curseforge {
 				optionalDependency "dragonloot"
 				optionalDependency "garnished-additions"
 				optionalDependency "mythicmetals-decorations"
+				optionalDependency "enderitemod"
 				incompatible "exordium"
 			}
 		}
@@ -191,6 +192,7 @@ modrinth {
 		optional.project "dragonloot"
 		optional.project "garnished-additions"
 		optional.project "mythicmetals-decorations"
+		optional.project "enderitemod"
 		incompatible.project "exordium"
 	}
 }
