@@ -1,0 +1,107 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "redstone_root",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "botania:redstone_root"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-composite",
+            "type": "RARITY",
+            "value": 30
+          },
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 130
+          },
+          {
+            "id": "soft_plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "soft_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "soft_plant-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.13
+          },
+          {
+            "id": "soft_plant-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.1
+          },
+          {
+            "id": "soft_plant-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 65
+          },
+          {
+            "id": "soft_plant-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 2
+          },
+          {
+            "id": "soft_plant-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.12
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 3
+      }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "botania/redstone_root"
+  }
+}

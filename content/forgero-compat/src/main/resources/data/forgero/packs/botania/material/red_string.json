@@ -1,0 +1,115 @@
+{
+  "type": "STRING",
+  "name": "red_string",
+  "parent": "string_base",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "HOST",
+    "id": "botania:red_string"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "string-rarity-composite",
+            "type": "RARITY",
+            "value": 70
+          },
+          {
+            "id": "string-durability-composite",
+            "type": "DURABILITY",
+            "value": 130
+          },
+          {
+            "id": "string-weight-composite",
+            "type": "WEIGHT",
+            "value": 7
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "string-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 35
+          },
+          {
+            "id": "string-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 3.5
+          },
+          {
+            "id": "string-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.15
+          },
+          {
+            "id": "string-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.15
+          },
+          {
+            "id": "string-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.2
+          },
+          {
+            "id": "string-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 65
+          },
+          {
+            "id": "string-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 1
+          },
+          {
+            "id": "string-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.45
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 3
+      }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "botania/red_string"
+  }
+}
