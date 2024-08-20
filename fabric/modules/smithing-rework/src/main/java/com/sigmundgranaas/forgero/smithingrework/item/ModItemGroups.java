@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.smithingrework.item;
 
-import static com.sigmundgranaas.forgero.smithingrework.ForgeroSmithingInitializer.BLOOMERY_ITEM;
-import static com.sigmundgranaas.forgero.smithingrework.ForgeroSmithingInitializer.CRUCIBLE;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithingrework.block.ModBlocks;
-import com.sigmundgranaas.forgero.smithingrework.fluid.ModFluids;
+
+import com.sigmundgranaas.forgero.smithingrework.block.custom.BloomeryBlock;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -23,13 +22,11 @@ public class ModItemGroups {
 					.icon(() -> new ItemStack(ModBlocks.SMITHING_ANVIL)).entries((displayContext, entries) -> {
 						entries.add(ModItems.TONGS);
 						entries.add(ModItems.SMITHING_HAMMER);
-						entries.add(CRUCIBLE);
 						entries.add(ModItems.CLAY_CRUCIBLE);
 
-						entries.add(ModBlocks.SMITHING_ANVIL);
-						entries.add(BLOOMERY_ITEM);
+				 		entries.add(ModBlocks.SMITHING_ANVIL);
+						entries.add(ModBlocks.BLOOMERY);
 
-						entries.add(ModFluids.MOLTEN_IRON_BUCKET);
 
 
 					}).build());

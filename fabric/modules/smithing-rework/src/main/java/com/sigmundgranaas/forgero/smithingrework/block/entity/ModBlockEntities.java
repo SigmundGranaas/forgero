@@ -13,12 +13,17 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 public class ModBlockEntities {
 	public static BlockEntityType<SmithingAnvilBlockEntity> SMITHING_ANVIL;
 
-	public static BlockEntityType<BloomeryBlockEntity> BLOOMERY_BLOCK;
+	public static BlockEntityType<BloomeryBlockEntity> BLOOMERY;
 
 	public static void registerBlockEntities() {
 		SMITHING_ANVIL = Registry.register(Registries.BLOCK_ENTITY_TYPE,
 				new Identifier(Forgero.NAMESPACE, "smithing_anvil"),
 				FabricBlockEntityTypeBuilder.create(SmithingAnvilBlockEntity::new,
 						ModBlocks.SMITHING_ANVIL).build(null));
+
+		BLOOMERY = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+				new Identifier(Forgero.NAMESPACE, "bloomery"),
+				FabricBlockEntityTypeBuilder.create(BloomeryBlockEntity::new,
+						ModBlocks.BLOOMERY).build(null));
 	}
 }
