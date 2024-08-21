@@ -14,7 +14,7 @@
   ],
   "key": {
     "a": {
-      "${material.tagOrItem}": "${material.namespace}:${material.name_replace_planks}_planks"
+      "${material.tagOrItem}": "${material.container_id}"
     },
     "b": {
       "tag": "forgero:string"
