@@ -15,5 +15,6 @@ public class RegionsUnexplored extends CommonTagGenerator {
 		registerCommonItemTag("willow_planks");
 		registerCommonItemTag("pine_planks");
 		registerCommonItemTag("baobab_planks");
+		registerCommonItemTag("palm_planks");
 	}
 }
