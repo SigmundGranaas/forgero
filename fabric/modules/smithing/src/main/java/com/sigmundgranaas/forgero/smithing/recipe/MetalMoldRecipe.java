@@ -37,7 +37,7 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 
 	@Override
 	public boolean matches(SimpleInventory inventory, World world) {
-		ItemStack crucible = inventory.getStack(1);
+		ItemStack crucible = inventory.getStack(2);
 		return mold.test(inventory.getStack(0))
 				&& crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem
 				&& crucibleItem.hasMoreOrEqualLiquid(crucible, liquidAmount)
@@ -71,14 +71,13 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 
 	@Override
 	public RecipeType<?> getType() {
-		return TYPE;
+		return Type.INSTANCE;
 	}
 
-	public static RecipeType<MetalMoldRecipe> TYPE = new RecipeType<>() {
-		public String toString() {
-			return "forgero:metal_mold";
-		}
-	};
+	public static class Type implements RecipeType<MetalMoldRecipe> {
+		public static final Type INSTANCE = new Type();
+		public static final String ID = "metal_molding";
+	}
 
 
 	public Identifier getLiquid() {
@@ -95,6 +94,7 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 
 	public static class Serializer implements RecipeSerializer<MetalMoldRecipe> {
 		public static Serializer INSTANCE = new Serializer();
+		public static final String ID = "metal_molding";
 
 		@Override
 		public MetalMoldRecipe read(Identifier id, JsonObject json) {

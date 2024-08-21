@@ -7,6 +7,8 @@ import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.item.ModItemGroups;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
 
+import com.sigmundgranaas.forgero.smithing.recipe.ModRecipes;
+
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -25,6 +27,7 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 		ModItemGroups.registerItemGroups();
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
+		ModRecipes.registerRecipes();
 	}
 
 

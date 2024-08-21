@@ -77,7 +77,7 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 
 	@Override
 	public RecipeType<?> getType() {
-		return TYPE;
+		return Type.INSTANCE;
 	}
 
 	public Ingredient getIngredient() {
@@ -97,16 +97,14 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 	}
 
 
-	public static RecipeType<MetalSmeltingRecipe> TYPE = new RecipeType<>() {
-		public String toString() {
-			return "forgero:metal_smelting";
-		}
-	};
-
-	public static final String ID = "metal_smelting";
+	public static class Type implements RecipeType<MetalSmeltingRecipe> {
+		public static final Type INSTANCE = new Type();
+		public static final String ID = "metal_smelting";
+	}
 
 	public static class Serializer implements RecipeSerializer<MetalSmeltingRecipe> {
 		public static final Serializer INSTANCE = new Serializer();
+		public static final String ID = "metal_smelting";
 
 		@Override
 		public MetalSmeltingRecipe read(Identifier id, JsonObject json) {

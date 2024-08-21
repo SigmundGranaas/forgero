@@ -158,7 +158,7 @@ public class LiquidMetalCrucibleItem extends Item {
 		int liquidAmount = nbt.getInt("quantity");
 
 		Optional<MetalMoldRecipe> recipeOpt = world.getRecipeManager().getFirstMatch(
-				MetalMoldRecipe.TYPE,
+				MetalMoldRecipe.Type.INSTANCE,
 				new SimpleInventory(world.getBlockState(pos).getBlock().asItem().getDefaultStack(), stack),
 				world
 		);

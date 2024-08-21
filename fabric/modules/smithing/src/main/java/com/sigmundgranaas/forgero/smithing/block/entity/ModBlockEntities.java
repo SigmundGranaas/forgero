@@ -15,6 +15,8 @@ public class ModBlockEntities {
 
 	public static BlockEntityType<BloomeryBlockEntity> BLOOMERY;
 
+	public static BlockEntityType<MoldBlockEntity> MOLD;
+
 	public static void registerBlockEntities() {
 		SMITHING_ANVIL = Registry.register(Registries.BLOCK_ENTITY_TYPE,
 				new Identifier(Forgero.NAMESPACE, "smithing_anvil"),
@@ -25,5 +27,11 @@ public class ModBlockEntities {
 				new Identifier(Forgero.NAMESPACE, "bloomery"),
 				FabricBlockEntityTypeBuilder.create(BloomeryBlockEntity::new,
 						ModBlocks.BLOOMERY).build(null));
+
+		MOLD = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+				new Identifier(Forgero.NAMESPACE, "mold"),
+				FabricBlockEntityTypeBuilder.create(MoldBlockEntity::new,
+						ModBlocks.MOLD).build(null));
+
 	}
 }

@@ -21,9 +21,11 @@ public class ModItemGroups {
 						entries.add(ModItems.TONGS);
 						entries.add(ModItems.SMITHING_HAMMER);
 						entries.add(ModItems.CLAY_CRUCIBLE);
+						entries.add(ModItems.CRUCIBLE);
 
 				 		entries.add(ModBlocks.SMITHING_ANVIL);
 						entries.add(ModBlocks.BLOOMERY);
+						entries.add(ModBlocks.MOLD);
 
 
 
