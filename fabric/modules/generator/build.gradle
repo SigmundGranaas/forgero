@@ -1,4 +1,5 @@
 dependencies {
 	implementation project(":${rootProject.mod_id}-core")
+	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
