@@ -407,5 +407,7 @@
   "item.forgero.void_dust": "Void Dust",
   "item.forgero.volatile_dust": "Volatile Dust",
   "item.forgero.wyvern_stone": "Wyvern Stone",
-  "item.forgero.zultanite": "Zultanite"
+  "item.forgero.zultanite": "Zultanite",
+  "feature.forgero.explosive": "Explosive",
+  "feature.forgero.explosive.description": "Boom!"
 }
