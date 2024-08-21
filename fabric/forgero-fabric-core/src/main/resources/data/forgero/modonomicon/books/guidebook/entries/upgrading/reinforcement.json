@@ -3,8 +3,8 @@
   "name": "book.forgero.guidebook.upgrading.reinforcement.name",
   "description": "book.forgero.guidebook.upgrading.reinforcement.description",
   "icon": "minecraft:netherite_ingot",
-  "x": 6,
-  "y": 1,
+  "x": 4,
+  "y": 0,
   "pages": [
     {
       "type": "modonomicon:text",
