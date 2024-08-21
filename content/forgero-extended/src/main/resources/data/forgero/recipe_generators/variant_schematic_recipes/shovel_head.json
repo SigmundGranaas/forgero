@@ -16,7 +16,7 @@
       "item": "forgero:${variant}_shovel_head-schematic"
     },
     {
-      "${material.tagOrItem}": "${material.id}"
+      "${material.tagOrItem}": "${material.container_id}"
     }
   ],
   "result": {

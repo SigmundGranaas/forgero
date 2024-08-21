@@ -6,18 +6,14 @@
       "type": "TOOL_MATERIAL"
     },
     "variant": [
-      "piglin_hoe_head",
-      "piglin_shovel_head",
-      "piglin_sword_blade"
+      "piglin_pommel"
     ]
   },
+  "dependencies": ["betternether"],
   "type": "forgero:schematic_part_crafting",
   "ingredients": [
     {
       "item": "forgero:${variant}-schematic"
-    },
-    {
-      "${material.tagOrItem}": "${material.id}"
     },
     {
       "${material.tagOrItem}": "${material.id}"
