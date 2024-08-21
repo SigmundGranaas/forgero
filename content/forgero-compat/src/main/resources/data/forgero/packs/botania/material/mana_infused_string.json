@@ -1,0 +1,109 @@
+{
+  "type": "STRING",
+  "name": "mana_infused_string",
+  "parent": "string_base",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "HOST",
+    "id": "botania:mana_string"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "string-rarity-composite",
+            "type": "RARITY",
+            "value": 20
+          },
+          {
+            "id": "string-durability-composite",
+            "type": "DURABILITY",
+            "value": 40
+          },
+          {
+            "id": "string-weight-composite",
+            "type": "WEIGHT",
+            "value": 6
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "string-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "string-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 3
+          },
+          {
+            "id": "string-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.12
+          },
+          {
+            "id": "string-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.2
+          },
+          {
+            "id": "string-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 20
+          },
+          {
+            "id": "string-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 2
+          },
+          {
+            "id": "string-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.1
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "string-durability-bow",
+        "type": "DURABILITY",
+        "value": 254,
+        "context": "PREDICATE_CONVERTED",
+        "predicate": {
+          "type": "forgero:context_type",
+          "types": [
+            "BOW"
+          ]
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "botania/mana_infused_string"
+  }
+}

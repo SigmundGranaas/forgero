@@ -1,0 +1,12 @@
+{
+  "name": "botania-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "botania",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "botania"
+  ]
+}
