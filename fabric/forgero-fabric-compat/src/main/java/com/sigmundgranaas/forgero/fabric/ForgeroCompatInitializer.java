@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.tags.Create;
 import com.sigmundgranaas.forgero.fabric.tags.Ecologics;
+import com.sigmundgranaas.forgero.fabric.tags.Galosphere;
 import com.sigmundgranaas.forgero.fabric.tags.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.tags.NaturesSpirit;
@@ -36,8 +37,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> techreborn;
 	public static final Supplier<Boolean> bloomingnature;
 	public static final Supplier<Boolean> meadow;
+	public static final Supplier<Boolean> galosphere;
 
 	static {
+		galosphere = () -> isModLoaded("galosphere");
 		beachparty = () -> isModLoaded("beachparty");
 		bloomingnature = () -> isModLoaded("bloomingnature");
 		techreborn = () -> isModLoaded("techreborn");
@@ -107,6 +110,10 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		if (meadow.get()) {
 			Meadow.generateTags();
+		}
+
+		if (galosphere.get()) {
+			Galosphere.generateTags();
 		}
 	}
 }
