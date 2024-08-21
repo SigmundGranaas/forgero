@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.tags;
 
-public class NaturesSpirit extends CommonTagGenerator {
-	protected NaturesSpirit() {
-		super("natures_spirit");
+public class RegionsUnexplored extends CommonTagGenerator {
+	protected RegionsUnexplored() {
+		super("regions_unexplored");
 	}
 
 	@Override
@@ -13,6 +13,7 @@ public class NaturesSpirit extends CommonTagGenerator {
 		registerCommonItemTag("maple_planks");
 		registerCommonItemTag("redwood_planks");
 		registerCommonItemTag("willow_planks");
-		registerCommonItemTag("coconut_planks");
+		registerCommonItemTag("pine_planks");
+		registerCommonItemTag("baobab_planks");
 	}
 }
