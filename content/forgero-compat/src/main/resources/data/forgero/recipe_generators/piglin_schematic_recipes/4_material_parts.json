@@ -6,13 +6,17 @@
       "type": "TOOL_MATERIAL"
     },
     "variant": [
-      "piglin_pickaxe_head"
+      "piglin_axe_head"
     ]
   },
+  "dependencies": ["betternether"],
   "type": "forgero:schematic_part_crafting",
   "ingredients": [
     {
       "item": "forgero:${variant}-schematic"
+    },
+    {
+      "${material.tagOrItem}": "${material.id}"
     },
     {
       "${material.tagOrItem}": "${material.id}"
