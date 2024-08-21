@@ -42,7 +42,7 @@ public class RecipeValidator {
 
 		if(!isValid){
 			LOGGER.error("Found error in the following recipe: \n {}", prettyPrintJson(json.toString()));
-			LOGGER.error("Found error in the following recipe template: \n {}", prettyPrintJson(identifiedJson.template().toString()));
+			LOGGER.error("The error was found in a recipe generated from this template: \n {}", prettyPrintJson(identifiedJson.template().toString()));
 		}
 		return isValid;
 	}
