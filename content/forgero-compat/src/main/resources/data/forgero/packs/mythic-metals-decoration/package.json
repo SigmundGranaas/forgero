@@ -1,0 +1,12 @@
+{
+  "name": "mythicmetalsdecorations-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "mythicmetals_decorations",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "mythicmetals_decorations"
+  ]
+}

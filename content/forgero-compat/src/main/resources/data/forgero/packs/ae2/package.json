@@ -1,5 +1,5 @@
 {
-  "name": "applied-energistics-2-materials",
+  "name": "applied-energistics-2-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "ae2",

@@ -137,6 +137,7 @@ curseforge {
 				optionalDependency "ribbits"
 				optionalDependency "dragonloot"
 				optionalDependency "garnished"
+				optionalDependency "mythicmetals-decorations"
 				incompatible "exordium"
 			}
 		}
@@ -182,11 +183,13 @@ modrinth {
 		optional.project "lets-do-bloomingnature"
 		optional.project "fruitful-fun"
 		optional.project "lets-do-beachparty"
+		optional.project "lets-do-nethervinery"
 		optional.project "lets-do-vinery"
 		optional.project "gardens-of-the-dead"
 		optional.project "ribbits"
 		optional.project "dragonloot"
-		optional.project "create-garnished"
+		optional.project "garnished"
+		optional.project "mythicmetals-decorations"
 		incompatible.project "exordium"
 	}
 }
