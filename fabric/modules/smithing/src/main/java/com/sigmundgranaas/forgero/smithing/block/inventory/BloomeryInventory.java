@@ -1,14 +1,14 @@
-package com.sigmundgranaas.forgero.smithing.block.entity;
+package com.sigmundgranaas.forgero.smithing.block.inventory;
 
+import com.sigmundgranaas.forgero.smithing.block.entity.ImplementedInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
 public class BloomeryInventory implements ImplementedInventory {
 	public static final int INGREDIENT_SLOT = 0;
-	public static final int CRUCIBLE_SLOT = 1;
-
-	public static final int FUEL_SLOT = 2;
+	public static final int FUEL_SLOT = 1;
+	public static final int CRUCIBLE_SLOT = 2;
 	public static final int INVENTORY_SIZE = 3;
 
 	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);

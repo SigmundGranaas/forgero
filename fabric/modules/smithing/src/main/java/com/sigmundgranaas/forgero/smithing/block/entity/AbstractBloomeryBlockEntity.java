@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.smithing.block.entity;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sigmundgranaas.forgero.smithing.block.custom.AbstractBloomeryBlock;
+import com.sigmundgranaas.forgero.smithing.block.inventory.BloomeryInventory;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
@@ -78,7 +79,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 		public static final int PROPERTY_COUNT = 4;
 		public static final int DEFAULT_COOK_TIME = 200;
 		public static final int field_31295 = 2;
-		protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+		private final BloomeryInventory inventory = new BloomeryInventory();
 		int burnTime;
 		int fuelTime;
 		int cookTime;
@@ -236,12 +237,11 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 		@Override
 		public void readNbt(NbtCompound nbt) {
 			super.readNbt(nbt);
-			this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
-			Inventories.readNbt(nbt, this.inventory);
+			Inventories.readNbt(nbt, inventory.getItems());
 			this.burnTime = nbt.getShort("BurnTime");
 			this.cookTime = nbt.getShort("CookTime");
 			this.cookTimeTotal = nbt.getShort("CookTimeTotal");
-			this.fuelTime = this.getFuelTime(this.inventory.get(1));
+			this.fuelTime = this.getFuelTime(this.inventory.getFuel());
 			NbtCompound nbtCompound = nbt.getCompound("RecipesUsed");
 			for (String string : nbtCompound.getKeys()) {
 				this.recipesUsed.put(new Identifier(string), nbtCompound.getInt(string));
@@ -254,7 +254,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 			nbt.putShort("BurnTime", (short)this.burnTime);
 			nbt.putShort("CookTime", (short)this.cookTime);
 			nbt.putShort("CookTimeTotal", (short)this.cookTimeTotal);
-			Inventories.writeNbt(nbt, this.inventory);
+			Inventories.writeNbt(nbt, inventory.getItems());
 			NbtCompound nbtCompound = new NbtCompound();
 			this.recipesUsed.forEach((identifier, count) -> nbtCompound.putInt(identifier.toString(), (int)count));
 			nbt.put("RecipesUsed", nbtCompound);
@@ -267,8 +267,8 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 			if (blockEntity.isBurning()) {
 				--blockEntity.burnTime;
 			}
-			ItemStack itemStack = blockEntity.inventory.get(1);
-			boolean bl3 = !blockEntity.inventory.get(0).isEmpty();
+			ItemStack itemStack = blockEntity.inventory.getFuel();
+			boolean bl3 = !blockEntity.inventory.getIngredient().isEmpty();
 			boolean bl5 = bl4 = !itemStack.isEmpty();
 			if (blockEntity.isBurning() || bl4 && bl3) {
 				Recipe recipe = bl3 ? (Recipe)blockEntity.matchGetter.getFirstMatch(blockEntity, world).orElse(null) : null;
@@ -282,7 +282,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 							itemStack.decrement(1);
 							if (itemStack.isEmpty()) {
 								Item item2 = item.getRecipeRemainder();
-								blockEntity.inventory.set(1, item2 == null ? ItemStack.EMPTY : new ItemStack(item2));
+								blockEntity.inventory.setStack(1, item2 == null ? ItemStack.EMPTY : new ItemStack(item2));
 							}
 						}
 					}
@@ -394,13 +394,8 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 		}
 
 		@Override
-		public int size() {
-			return this.inventory.size();
-		}
-
-		@Override
 		public boolean isEmpty() {
-			for (ItemStack itemStack : this.inventory) {
+			for (ItemStack itemStack : this.) {
 				if (itemStack.isEmpty()) continue;
 				return false;
 			}
@@ -409,7 +404,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 
 		@Override
 		public ItemStack getStack(int slot) {
-			return this.inventory.get(slot);
+			return this.inventory.getStack(slot);
 		}
 
 		@Override
@@ -424,9 +419,9 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 
 		@Override
 		public void setStack(int slot, ItemStack stack) {
-			ItemStack itemStack = this.inventory.get(slot);
+			ItemStack itemStack = this.inventory.getStack(slot);
 			boolean bl = !stack.isEmpty() && ItemStack.canCombine(itemStack, stack);
-			this.inventory.set(slot, stack);
+			this.inventory.setStack(slot, stack);
 			if (stack.getCount() > this.getMaxCountPerStack()) {
 				stack.setCount(this.getMaxCountPerStack());
 			}
@@ -448,7 +443,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 				return false;
 			}
 			if (slot == 1) {
-				ItemStack itemStack = this.inventory.get(1);
+				ItemStack itemStack = this.inventory.getFuel();
 				return AbstractBloomeryBlockEntity.canUseAsFuel(stack) || stack.isOf(Items.BUCKET) && !itemStack.isOf(Items.BUCKET);
 			}
 			return true;
