@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.core.Forgero;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
 
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -29,48 +28,19 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvider {
-
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-
-	public SmithingAnvil(Settings settings) {
-		super(settings);
-		setDefaultState(getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
-	}
-
-	public static final Identifier SMITHING_ANVIL = new Identifier(Forgero.NAMESPACE, "smithing_anvil");
+	public static final Identifier SMITHING_ANVIL_ID = new Identifier(Forgero.NAMESPACE, "smithing_anvil");
 
 	private static final VoxelShape SHAPE_NORTH;
 	private static final VoxelShape SHAPE_EAST;
 	private static final VoxelShape SHAPE_SOUTH;
 	private static final VoxelShape SHAPE_WEST;
 
-	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext ctx) {
-		Direction dir = state.get(FACING);
-		return switch (dir) {
-			case NORTH -> SHAPE_NORTH;
-			case SOUTH -> SHAPE_SOUTH;
-			case EAST -> SHAPE_EAST;
-			case WEST -> SHAPE_WEST;
-			default -> VoxelShapes.fullCube();
-		};
-	}
-
-	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return super.getPlacementState(ctx).with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
-	}
-
-	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(Properties.HORIZONTAL_FACING);
-	}
-
 	static {
-
 		VoxelShape shapeS = VoxelShapes.empty();
 		shapeS = VoxelShapes.union(shapeS, VoxelShapes.cuboid(0.25, 0.5, 0.25, 0.375, 0.5625, 0.75));
 		shapeS = VoxelShapes.union(shapeS, VoxelShapes.cuboid(0.625, 0.5, 0.25, 0.75, 0.5625, 0.75));
@@ -198,10 +168,39 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 		shapeW = VoxelShapes.union(shapeW, VoxelShapes.cuboid(0.5625, 0.9375, 0.1875, 0.625, 1, 0.25));
 		shapeW = VoxelShapes.union(shapeW, VoxelShapes.cuboid(0.0625, 0, 0.0625, 0.9375, 0.5, 0.9375));
 		SHAPE_WEST = shapeW.simplify();
-
 	}
 
-	//Entity
+	public SmithingAnvil(Settings settings) {
+		super(settings);
+		setDefaultState(getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext ctx) {
+		return switch (state.get(FACING)) {
+			case NORTH -> SHAPE_NORTH;
+			case SOUTH -> SHAPE_SOUTH;
+			case EAST -> SHAPE_EAST;
+			case WEST -> SHAPE_WEST;
+			default -> VoxelShapes.fullCube();
+		};
+	}
+
+	@Override
+	public @NotNull BlockState getPlacementState(ItemPlacementContext ctx) {
+		@Nullable var placementState = super.getPlacementState(ctx);
+		if (placementState == null) {
+			return this.getDefaultState();
+		}
+
+		return placementState.with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+	}
+
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(Properties.HORIZONTAL_FACING);
+	}
 
 	@Nullable
 	@Override
@@ -214,23 +213,20 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 		return BlockRenderType.MODEL;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResult onUse(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
-		if (world.isClient) return ActionResult.SUCCESS;
+	public ActionResult onUse(BlockState blockState, @NotNull World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
+		if (world.isClient) {
+			return ActionResult.SUCCESS;
+		}
+
 		Inventory blockEntity = (Inventory) world.getBlockEntity(blockPos);
+		if (blockEntity == null) {
+			return ActionResult.PASS;
+		}
 
-
-		if (!player.getStackInHand(hand).isEmpty()) {
-			// Check what is the first open slot and put an item from the player's hand there
-			if (blockEntity.getStack(0).isEmpty()) {
-				// Put the stack the player is holding into the inventory
-				blockEntity.setStack(0, player.getStackInHand(hand).copy());
-				// Remove the stack from the player's hand
-				player.getStackInHand(hand).setCount(0);
-			}
-		} else {
+		if (player.getStackInHand(hand).isEmpty()) {
 			// If the player is not holding anything we'll get give him the items in the block entity one by one
-
 			// Find the first slot that has an item and give it to the player
 			if (!blockEntity.getStack(0).isEmpty()) {
 				// Give the player the stack in the inventory
@@ -241,7 +237,16 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 				player.getInventory().offerOrDrop(blockEntity.getStack(0));
 				blockEntity.removeStack(0);
 			}
+		} else {
+			// Check what is the first open slot and put an item from the player's hand there
+			if (blockEntity.getStack(0).isEmpty()) {
+				// Put the stack the player is holding into the inventory
+				blockEntity.setStack(0, player.getStackInHand(hand).copy());
+				// Remove the stack from the player's hand
+				player.getStackInHand(hand).setCount(0);
+			}
 		}
+
 		blockEntity.markDirty();
 		return ActionResult.SUCCESS;
 	}

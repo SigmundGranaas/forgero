@@ -2,8 +2,6 @@ package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.AbstractBloomeryBlockEntity;
 
-
-
 import net.minecraft.block.AbstractBlock;
 
 import net.minecraft.block.Block;
@@ -16,7 +14,6 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -36,63 +33,72 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractBloomeryBlock extends BlockWithEntity
-{
+public abstract class AbstractBloomeryBlock extends BlockWithEntity {
 	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 	public static final BooleanProperty LIT = Properties.LIT;
 
 	protected AbstractBloomeryBlock(AbstractBlock.Settings settings) {
 		super(settings);
-		this.setDefaultState((BlockState) ((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(LIT, false));
+		this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(LIT, false));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	public ActionResult onUse(BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @Nullable PlayerEntity player, @Nullable Hand hand, BlockHitResult hit) {
 		if (world.isClient) {
 			return ActionResult.SUCCESS;
 		}
-		this.openScreen(world, pos, player);
+		this.openScreen(world, blockPosition, player);
 		return ActionResult.CONSUME;
 	}
 
 	protected abstract void openScreen(World var1, BlockPos var2, PlayerEntity var3);
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return (BlockState)this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+	public BlockState getPlacementState(@NotNull ItemPlacementContext ctx) {
+		return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
 	}
 
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
 		BlockEntity blockEntity;
 		if (itemStack.hasCustomName() && (blockEntity = world.getBlockEntity(pos)) instanceof AbstractBloomeryBlockEntity) {
-			((AbstractBloomeryBlockEntity)blockEntity).setCustomName(itemStack.getName());
+			((AbstractBloomeryBlockEntity) blockEntity).setCustomName(itemStack.getName());
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		if (state.isOf(newState.getBlock())) {
+	public void onStateReplaced(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @NotNull BlockState newState, boolean moved) {
+		if (blockState.isOf(newState.getBlock())) {
 			return;
 		}
-		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if (blockEntity instanceof AbstractBloomeryBlockEntity) {
-			if (world instanceof ServerWorld) {
-				ItemScatterer.spawn(world, pos, (Inventory)((AbstractBloomeryBlockEntity) blockEntity));
-				((AbstractBloomeryBlockEntity)blockEntity).getRecipesUsedAndDropExperience((ServerWorld)world, Vec3d.ofCenter(pos));
-			}
-			world.updateComparators(pos, this);
+
+		@Nullable BlockEntity blockEntity = world.getBlockEntity(blockPosition);
+		if (!(blockEntity instanceof AbstractBloomeryBlockEntity abstractBloomeryBlockEntity)) {
+			super.onStateReplaced(blockState, world, blockPosition, newState, moved);
+			return;
 		}
-		super.onStateReplaced(state, world, pos, newState, moved);
+
+		if (world instanceof ServerWorld) {
+			ItemScatterer.spawn(world, blockPosition, abstractBloomeryBlockEntity);
+			((AbstractBloomeryBlockEntity) blockEntity).getRecipesUsedAndDropExperience((ServerWorld) world, Vec3d.ofCenter(blockPosition));
+		}
+
+		world.updateComparators(blockPosition, this);
+		super.onStateReplaced(blockState, world, blockPosition, newState, moved);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean hasComparatorOutput(BlockState state) {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
 		return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
@@ -103,11 +109,13 @@ public abstract class AbstractBloomeryBlock extends BlockWithEntity
 		return BlockRenderType.MODEL;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState rotate(BlockState state, BlockRotation rotation) {
-		return (BlockState)state.with(FACING, rotation.rotate(state.get(FACING)));
+		return state.with(FACING, rotation.rotate(state.get(FACING)));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(BlockState state, BlockMirror mirror) {
 		return state.rotate(mirror.getRotation(state.get(FACING)));
