@@ -1,0 +1,58 @@
+{
+  "type": "HARD_PLANT",
+  "name": "wood_blewit",
+  "parent": "hard_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "biomeswevegone:wood_blewit"
+  },
+  "palette": {
+    "name": "biomeswevegone/wood_blewit"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "hard_plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "hard_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "hard_plant-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 80
+          },
+          {
+            "id": "hard_plant-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.13
+          }
+        ]
+      }
+    ]
+  }
+}

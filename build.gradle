@@ -66,6 +66,7 @@ allprojects {
 			name = "Ladysnake Mods"
 			url = "https://maven.ladysnake.org/releases"
 		}
+		// Reach entity attributes, and more
 		maven {
 			url = "https://maven.jamieswhiteshirt.com/libs-release"
 			content {

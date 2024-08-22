@@ -3,8 +3,19 @@ package com.sigmundgranaas.forgero.fabric;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
-import com.sigmundgranaas.forgero.fabric.mythicmetals.MythicMetalsCommons;
+import com.sigmundgranaas.forgero.fabric.tags.CommonTagGenerator;
+import com.sigmundgranaas.forgero.fabric.tags.CommonTags;
+import com.sigmundgranaas.forgero.fabric.tags.Create;
+import com.sigmundgranaas.forgero.fabric.tags.Ecologics;
+import com.sigmundgranaas.forgero.fabric.tags.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
+import com.sigmundgranaas.forgero.fabric.tags.NaturesSpirit;
+import com.sigmundgranaas.forgero.fabric.tags.BiomesWeveGone;
+import com.sigmundgranaas.forgero.fabric.tags.ModernIndustrialization;
+import com.sigmundgranaas.forgero.fabric.tags.TechReborn;
+import com.sigmundgranaas.forgero.fabric.tags.BloomingNature;
+import com.sigmundgranaas.forgero.fabric.tags.BeachParty;
+import com.sigmundgranaas.forgero.fabric.tags.Meadow;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -13,7 +24,6 @@ import net.fabricmc.loader.api.FabricLoader;
 public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> toolstats;
 	public static final Supplier<Boolean> bettercombat;
-	public static final Supplier<Boolean> mythicmetals;
 	public static final Supplier<Boolean> yacl;
 	public static final Supplier<Boolean> emi;
 	public static final Supplier<Boolean> modonomicon;
@@ -22,7 +32,6 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 		modonomicon = () -> isModLoaded("modonomicon");
 		toolstats = () -> isModLoaded("toolstats");
 		emi = () -> isModLoaded("emi");
-		mythicmetals = () -> isModLoaded("mythicmetals");
 		bettercombat = () -> isModLoaded("bettercombat");
 		yacl = () -> isModLoaded("yet-another-config-lib") || isModLoaded("yet_another_config_lib_v3");
 	}
@@ -41,8 +50,8 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 			BookDropOnAdvancement.registerBookDrop();
 		}
 
-		if (mythicmetals.get()) {
-			MythicMetalsCommons.generateTags();
-		}
+		// Goes through all mod compats that has common materials and checks if the mod is loaded and adds all of their tags to a separate resource pack
+		// Each mod gets its own runtime resource pack to avoid them overriding each other.
+		CommonTags.registerAndFilterCommonMaterialTags();
 	}
 }
