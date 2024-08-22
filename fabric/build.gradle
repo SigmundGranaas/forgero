@@ -139,6 +139,7 @@ curseforge {
 				optionalDependency "dragonloot"
 				optionalDependency "garnished-additions"
 				optionalDependency "mythicmetals-decorations"
+				optionalDependency "ends-phantasm"
 				incompatible "exordium"
 			}
 		}
@@ -191,6 +192,7 @@ modrinth {
 		optional.project "dragonloot"
 		optional.project "garnished-additions"
 		optional.project "mythicmetals-decorations"
+		optional.project "ends-phantasm"
 		incompatible.project "exordium"
 	}
 }
