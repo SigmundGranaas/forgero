@@ -33,6 +33,14 @@
       }
     ],
     "slots": [
+      {
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "upgrade",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      }
     ]
   },
   "properties": {

@@ -51,6 +51,19 @@
           }
         ]
       }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:status_effect",
+          "target": "minecraft:targeted_entity",
+          "effect": "minecraft:poison",
+          "level": 1
+        },
+        "title": "Poison",
+        "description": "Applies poison on hit"
+      }
     ]
   },
   "palette": {
