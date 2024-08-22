@@ -8,6 +8,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -19,6 +20,7 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
 
 import net.minecraft.util.math.BlockPos;
+
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -93,4 +95,10 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		this.markDirty();
 		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
 	}
+
+	public ItemStack getRenderStack(){
+		return this.disassemblyInventory.getStack(0);
+	}
+
+
 }
