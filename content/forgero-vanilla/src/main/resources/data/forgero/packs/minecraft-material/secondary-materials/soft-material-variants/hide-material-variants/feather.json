@@ -74,13 +74,6 @@
             "value": 2.5
           },
           {
-            "id": "hide-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 20
-          },
-          {
             "id": "hide-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",

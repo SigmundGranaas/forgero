@@ -13,16 +13,7 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "goo-rarity-composite",
-            "type": "RARITY",
-            "value": 85
-          },
-          {
-            "id": "goo-durability-composite",
-            "type": "DURABILITY",
-            "value": 280
-          }
+
         ]
       },
       {
@@ -41,20 +32,6 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 140
-          },
-          {
-            "id": "goo-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0.2
-          },
-          {
-            "id": "goo-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 140
           },
           {

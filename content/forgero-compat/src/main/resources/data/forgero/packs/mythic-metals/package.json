@@ -1,5 +1,5 @@
 {
-  "name": "mythicmetals-materials",
+  "name": "mythicmetals-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "mythicmetals",

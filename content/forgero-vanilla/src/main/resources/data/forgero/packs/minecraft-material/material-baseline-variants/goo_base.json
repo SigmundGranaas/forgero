@@ -9,21 +9,6 @@
         "order": "BASE",
         "operation": "ADDITION",
         "attributes": [
-          {
-            "id": "goo-rarity-composite",
-            "type": "RARITY",
-            "value": 60
-          },
-          {
-            "id": "goo-durability-composite",
-            "type": "DURABILITY",
-            "value": 210
-          },
-          {
-            "id": "goo-weight-composite",
-            "type": "WEIGHT",
-            "value": 10
-          }
         ]
       },
       {
@@ -69,7 +54,7 @@
           {
             "id": "goo-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": -1
           },
@@ -85,7 +70,7 @@
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 0.1
+            "value": 0
           },
           {
             "id": "goo-attack_damage-utility-upgrade",
@@ -113,7 +98,7 @@
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 105
+            "value": 0
           },
           {
             "id": "goo-draw_power-offensive-upgrade",

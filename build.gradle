@@ -66,10 +66,17 @@ allprojects {
 			name = "Ladysnake Mods"
 			url = "https://maven.ladysnake.org/releases"
 		}
+		// Reach entity attributes, and more
 		maven {
 			url = "https://maven.jamieswhiteshirt.com/libs-release"
 			content {
 				includeGroup "com.jamieswhiteshirt"
+			}
+		}
+		maven {
+			url "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
+			content {
+				includeGroup "com.klikli_dev"
 			}
 		}
 	}
