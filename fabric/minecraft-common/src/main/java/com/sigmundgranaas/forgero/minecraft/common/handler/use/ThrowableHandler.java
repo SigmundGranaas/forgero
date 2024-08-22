@@ -51,11 +51,13 @@ public class ThrowableHandler implements StopHandler {
 
 	private final float velocityMultiplier;
 	private final float instability;
+	private final float chargeTime;
 	private final ThrowableItem.SpinType spinType;
 
-	public ThrowableHandler(float velocityMultiplier, float instability, ThrowableItem.SpinType spinType) {
+	public ThrowableHandler(float velocityMultiplier, float instability, float chargeTime, ThrowableItem.SpinType spinType) {
 		this.velocityMultiplier = velocityMultiplier;
 		this.instability = instability;
+		this.chargeTime = chargeTime;
 		this.spinType = spinType;
 	}
 
@@ -63,13 +65,14 @@ public class ThrowableHandler implements StopHandler {
 	public static ThrowableHandler fromJson(JsonObject json) {
 		float velocityMultiplier = json.has("velocity_multiplier") ? json.get("velocity_multiplier").getAsFloat() : 1.0F;
 		float instability = json.has("instability") ? json.get("instability").getAsFloat() : 0.0F;
+		float chargeTime = json.has("charge_time") ? json.get("charge_time").getAsFloat() : 20;
 		ThrowableItem.SpinType spinType = json.has("spin_type") ? ThrowableItem.SpinType.valueOf(json.get("spin_type").getAsString()) : ThrowableItem.SpinType.NONE;
-		return new ThrowableHandler(velocityMultiplier, instability, spinType);
+		return new ThrowableHandler(velocityMultiplier, instability, chargeTime, spinType );
 	}
 
 	@Override
 	public void stoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		float tickDelta = Math.max(Math.min((72000 - remainingUseTicks) / 20, 1), 0);
+		float tickDelta = Math.max(Math.min((72000 - remainingUseTicks) / chargeTime, 1), 0);
 
 		if (!world.isClient) {
 			float weight = StateService.INSTANCE.convert(stack)
