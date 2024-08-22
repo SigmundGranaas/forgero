@@ -57,15 +57,15 @@
     "features": [
       {
         "type": "minecraft:on_hit",
-           "on_hit": {
-             "type": "minecraft:status_effect",
-             "target": "minecraft:targeted_entity",
-             "effect": "minecraft:poison",
-             "level": 1
-           },
-           "predicate": {
-             "type": "forgero:random",
-             "chance": 0.5
+        "on_hit": {
+          "type": "minecraft:status_effect",
+          "target": "minecraft:targeted_entity",
+          "effect": "minecraft:poison",
+          "level": 1
+        },
+        "predicate": {
+          "type": "forgero:random",
+          "value": 0.4
            },
         "title": "feature.forgero.poison",
         "description": "feature.forgero.poison.description"

@@ -60,6 +60,10 @@
           "type": "minecraft:fire",
           "duration": 2
         },
+        "predicate": {
+          "type": "forgero:random",
+          "value": 0.4
+        },
         "title": "feature.forgero.fire",
         "description": "feature.forgero.fire.description"
       }

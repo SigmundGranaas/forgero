@@ -89,6 +89,10 @@
       }
     ],
     "features": [
+      {
+        "title": "feature.forgero.swimming",
+        "description": "feature.forgero.swimming.description"
+      }
     ]
   },
   "palette": {

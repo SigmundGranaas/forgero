@@ -87,7 +87,7 @@
         },
         "predicate": {
           "type": "forgero:random",
-          "chance": 0.4
+          "value": 0.4
         },
         "title": "feature.forgero.levitation",
         "description": "feature.forgero.levitation.description"

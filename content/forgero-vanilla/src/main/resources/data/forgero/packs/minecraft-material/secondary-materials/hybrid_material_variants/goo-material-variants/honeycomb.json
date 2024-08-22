@@ -65,7 +65,7 @@
         },
         "predicate": {
           "type": "forgero:random",
-          "chance": 0.5
+          "value": 0.5
         }
       }
     ]

@@ -88,8 +88,8 @@
           "duration": 2
         },
         "predicate": {
-               "type": "forgero:random",
-               "chance": 0.4
+          "type": "forgero:random",
+          "value": 0.4
         },
         "title": "feature.forgero.fire",
         "description": "feature.forgero.fire.description"

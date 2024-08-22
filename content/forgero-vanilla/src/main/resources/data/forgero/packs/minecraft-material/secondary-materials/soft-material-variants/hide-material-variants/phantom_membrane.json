@@ -94,7 +94,7 @@
         },
         "predicate": {
           "type": "forgero:random",
-          "chance": 0.4
+          "value": 0.4
         },
         "title": "feature.forgero.slow_falling",
         "description": "feature.forgero.slow_falling.description"
