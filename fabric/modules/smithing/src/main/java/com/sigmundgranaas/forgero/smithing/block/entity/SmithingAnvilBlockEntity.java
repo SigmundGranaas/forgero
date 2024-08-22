@@ -1,11 +1,19 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
+
+import lombok.Getter;
+
+import net.minecraft.block.Block;
+import net.minecraft.inventory.SimpleInventory;
+
+import net.minecraft.nbt.NbtElement;
+
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -14,105 +22,87 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.Chunk;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-public class SmithingAnvilBlockEntity extends BlockEntity implements ImplementedInventory {
-    private final DefaultedList<ItemStack> items = DefaultedList.ofSize(1, ItemStack.EMPTY);
+@Getter
+public class SmithingAnvilBlockEntity extends BlockEntity {
+	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
 
-    public ItemStack getRenderStack(){
-        return this.getStack(0);
-    }
+	private @NotNull SimpleInventory inventory = new SimpleInventory(1);
 
-    public void setInventory(DefaultedList<ItemStack> items) {
-        for (int i = 0; i < items.size(); i++) {
-            this.items.set(i, items.get(i));
-        }
-    }
+	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
+		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
+	}
 
-    @Override
-    public void markDirty() {
-        if(!world.isClient()) {
-            PacketByteBuf data = PacketByteBufs.create();
-            data.writeInt(items.size());
-            for(int i = 0; i < items.size(); i++) {
-                data.writeItemStack(items.get(i));
-            }
-            data.writeBlockPos(getPos());
+	@Override
+	public void markDirty() {
+		if (world == null) {
+			return;
+		}
+		if (world.isClient()) {
+			super.markDirty();
+			return;
+		}
 
-            for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
-                ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
-            }
-        }
+		@NotNull PacketByteBuf data = PacketByteBufs.create();
+		@NotNull SimpleInventory inventory = getInventory();
+		int inventorySize = getInventory().size();
+		data.writeInt(inventorySize);
+		for (int i = 0; i < inventorySize; i++) {
+			data.writeItemStack(inventory.getStack(i));
+		}
+		data.writeBlockPos(getPos());
 
-        super.markDirty();
-    }
+		for (@NotNull ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
+			ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
+		}
 
-    @Override
-    public DefaultedList<ItemStack> getItems() {
-        return items;
-    }
+		super.markDirty();
+	}
 
-    public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.SMITHING_ANVIL, pos, state);
+	@Override
+	public @Nullable Packet<ClientPlayPacketListener> toUpdatePacket() {
+		return BlockEntityUpdateS2CPacket.create(this);
+	}
 
+	@Override
+	public void writeNbt(@NotNull NbtCompound nbt) {
+		nbt.put(INVENTORY_NBT_KEY, this.getInventory().toNbtList());
+		super.writeNbt(nbt);
+	}
 
+	@Override
+	public void readNbt(@NotNull NbtCompound nbt) {
+		this.getInventory().readNbtList(nbt.getList(INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
+		super.readNbt(nbt);
+		this.markDirtyAndUpdateListeners();
+	}
 
-    }
+	@Override
+	public NbtCompound toInitialChunkDataNbt() {
+		return super.createNbt();
+	}
 
-    @Nullable
-    @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
-    }
+	public @NotNull ItemStack getRenderStack() {
+		return this.getInventory().getStack(0);
+	}
 
-    @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
-        Inventories.readNbt(nbt, items);
-    }
+	public void setInventory(@NotNull SimpleInventory inventory) {
+		this.inventory = inventory;
+	}
 
-    @Override
-    public void writeNbt(NbtCompound nbt) {
-        Inventories.writeNbt(nbt, items);
-        super.writeNbt(nbt);
-    }
+	private void markDirtyAndUpdateListeners() {
+		if (this.world == null) {
+			return;
+		}
 
-
-    @Override
-    public NbtCompound toInitialChunkDataNbt() {
-        NbtCompound nbtCompound = new NbtCompound();
-        Inventories.writeNbt(nbtCompound, this.items, true);
-        return nbtCompound;
-    }
-
-    /**
-     * Update the block entity listeners so the resultInventory gets updated on the client.
-     * This is done because the item renderer needs to access the resultInventory clientside.
-     */
-
-    private void updateListeners() {
-        var world = this.getWorld();
-        if (world == null) return;
-
-        this.markDirty();
-
-        if (world instanceof ServerWorld serverWorld) {
-            // Sync block entity with client
-            final Chunk chunk = world.getChunk(pos);
-            final Packet<?> packet = toUpdatePacket();
-
-            serverWorld.getChunkManager().threadedAnvilChunkStorage.getPlayersWatchingChunk(
-                    chunk.getPos(), false).forEach(player -> player.networkHandler.sendPacket(packet));
-        }
-    }
-
-
+		this.markDirty();
+		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
+	}
 }
 
 

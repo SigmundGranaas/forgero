@@ -4,6 +4,10 @@ import com.sigmundgranaas.forgero.core.Forgero;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
 
+import com.sigmundgranaas.forgero.smithing.item.ModItems;
+
+import com.sigmundgranaas.forgero.smithing.recipe.SmithingRecipe;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -13,6 +17,7 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -30,6 +35,8 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvider {
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
@@ -215,17 +222,18 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResult onUse(BlockState blockState, @NotNull World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
+	public ActionResult onUse(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @Nullable PlayerEntity player, @Nullable Hand hand, @NotNull BlockHitResult blockHitResult) {
 		if (world.isClient) {
 			return ActionResult.SUCCESS;
 		}
 
-		Inventory blockEntity = (Inventory) world.getBlockEntity(blockPos);
-		if (blockEntity == null) {
+		Inventory blockEntity = (Inventory) world.getBlockEntity(blockPosition);
+		if (player == null || !(blockEntity instanceof SmithingAnvilBlockEntity smithingAnvilBlockEntity)) {
 			return ActionResult.PASS;
 		}
 
-		if (player.getStackInHand(hand).isEmpty()) {
+		@NotNull var stackInHand = player.getStackInHand(hand);
+		if (stackInHand.isEmpty()) {
 			// If the player is not holding anything we'll get give him the items in the block entity one by one
 			// Find the first slot that has an item and give it to the player
 			if (!blockEntity.getStack(0).isEmpty()) {
@@ -241,9 +249,21 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 			// Check what is the first open slot and put an item from the player's hand there
 			if (blockEntity.getStack(0).isEmpty()) {
 				// Put the stack the player is holding into the inventory
-				blockEntity.setStack(0, player.getStackInHand(hand).copy());
+				blockEntity.setStack(0, stackInHand.copy());
 				// Remove the stack from the player's hand
-				player.getStackInHand(hand).setCount(0);
+				stackInHand.setCount(0);
+			} else if (stackInHand.getItem().equals(ModItems.SMITHING_HAMMER)) {
+				// Smith the tool part using the smithing hammer in the player's hand
+				Optional<SmithingRecipe> recipeOpt = world.getRecipeManager().getFirstMatch(
+						SmithingRecipe.Type.INSTANCE,
+						new SimpleInventory(blockState.getBlock().asItem().getDefaultStack(), stackInHand),
+						world
+				);
+				if (recipeOpt.isEmpty()) {
+					return ActionResult.PASS;
+				}
+
+				recipeOpt.get().craft(smithingAnvilBlockEntity.getInventory(), world.getRegistryManager());
 			}
 		}
 

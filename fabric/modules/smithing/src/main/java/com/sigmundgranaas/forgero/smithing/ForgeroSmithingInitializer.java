@@ -14,22 +14,16 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
-
 public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntryPoint {
 	public static final RegistryKey<ItemGroup> FORGERO_SMITHING_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "smithing"));
 
-
 	@Override
 	public void onPreInitialization() {
-
-
 		ModBlockEntities.registerBlockEntities();
 		ModItemGroups.registerItemGroups();
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
 		ModRecipes.registerRecipes();
 	}
-
-
 }
 

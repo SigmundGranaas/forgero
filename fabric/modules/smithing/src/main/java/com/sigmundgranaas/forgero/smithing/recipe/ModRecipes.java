@@ -8,14 +8,25 @@ import net.minecraft.util.Identifier;
 
 public class ModRecipes {
 	public static void registerRecipes() {
-		Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, MetalMoldRecipe.Serializer.ID),
-				MetalMoldRecipe.Serializer.INSTANCE);
-		Registry.register(Registries.RECIPE_TYPE, new Identifier(Forgero.NAMESPACE, MetalMoldRecipe.Type.ID),
-				MetalMoldRecipe.Type.INSTANCE);
+		// Mold pouring
+		Registry.register(
+				Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, MetalMoldRecipe.Serializer.ID),
+				MetalMoldRecipe.Serializer.INSTANCE
+		);
+		Registry.register(
+				Registries.RECIPE_TYPE, new Identifier(Forgero.NAMESPACE, MetalMoldRecipe.Type.ID), MetalMoldRecipe.Type.INSTANCE);
 
-		Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Serializer.ID),
-				MetalSmeltingRecipe.Serializer.INSTANCE);
-		Registry.register(Registries.RECIPE_TYPE, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Type.ID),
-				MetalSmeltingRecipe.Type.INSTANCE);
+		// Metal smelting
+		Registry.register(
+				Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Serializer.ID),
+				MetalSmeltingRecipe.Serializer.INSTANCE
+		);
+
+		// Smithing
+		Registry.register(
+				Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, SmithingRecipe.Type.ID),
+				SmithingRecipe.Serializer.INSTANCE
+		);
+		Registry.register(Registries.RECIPE_TYPE, new Identifier(Forgero.NAMESPACE, SmithingRecipe.Type.ID), SmithingRecipe.Type.INSTANCE);
 	}
 }
