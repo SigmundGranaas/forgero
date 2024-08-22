@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.generator.mixin;
 
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonElement;
@@ -11,6 +12,9 @@ import com.sigmundgranaas.forgero.generator.impl.Registries;
 import com.sigmundgranaas.forgero.generator.impl.ResourceManagerJsonLoader;
 import com.sigmundgranaas.forgero.generator.impl.StringReplacer;
 import com.sigmundgranaas.forgero.generator.impl.VariableToMapTransformer;
+
+import net.fabricmc.loader.api.FabricLoader;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,7 +32,10 @@ public class RecipeInjectionMixin {
 	public void forgero$injectDynamicRecipes(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
 		StringReplacer stringReplacer = new StringReplacer(Registries.operationRegistry()::convert);
 		VariableToMapTransformer transformer = new VariableToMapTransformer(Registries.variableConverterRegistry()::convert);
-		DataDirectoryRecipeGenerator generator = new DataDirectoryRecipeGenerator(stringReplacer, transformer, "recipe_generators", new ResourceManagerJsonLoader(resourceManager));
+
+		Predicate<String> isModLoaded = FabricLoader.getInstance()::isModLoaded;
+
+		DataDirectoryRecipeGenerator generator = new DataDirectoryRecipeGenerator(stringReplacer, transformer, "recipe_generators", new ResourceManagerJsonLoader(resourceManager), isModLoaded);
 
 		Map<Identifier, JsonObject> recipes = generator.generate().stream()
 				.collect(Collectors.toMap(IdentifiedJson::id, IdentifiedJson::json));
