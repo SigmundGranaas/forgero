@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import com.google.gson.JsonObject;
@@ -130,7 +132,7 @@ public class TeleportHandler implements EntityBasedHandler {
 		}
 
 		for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-			BlockPos newPos = getRandomPosition(originalPos);
+			BlockPos newPos = getRandomPosition(world, originalPos);
 
 			if (isSafeBlockTeleportLocation(world, newPos)) {
 				// Remove the block from its original position
@@ -157,12 +159,47 @@ public class TeleportHandler implements EntityBasedHandler {
 	}
 
 
-	private BlockPos getRandomPosition(BlockPos originalPos) {
+	private BlockPos getRandomPosition(World world, BlockPos originalPos) {
 		Random random = new Random();
-		int deltaX = random.nextInt(maxDistance * 2 + 1) - maxDistance;
-		int deltaY = onGround ? 0 : random.nextInt(maxDistance * 2 + 1) - maxDistance;
-		int deltaZ = random.nextInt(maxDistance * 2 + 1) - maxDistance;
-		return originalPos.add(deltaX, deltaY, deltaZ);
+		List<BlockPos> validPositions = new ArrayList<>();
+
+		for (int x = -maxDistance; x <= maxDistance; x++) {
+			for (int z = -maxDistance; z <= maxDistance; z++) {
+				if (onGround) {
+					for (int y = -maxDistance; y <= maxDistance; y++) {
+						BlockPos pos = originalPos.add(x, y, z);
+						if (isValidGroundPosition(world, pos)) {
+							validPositions.add(pos);
+						}
+					}
+				} else {
+					int y = random.nextInt(maxDistance * 2 + 1) - maxDistance;
+					BlockPos pos = originalPos.add(x, y, z);
+					if (isValidAirPosition(world, pos)) {
+						validPositions.add(pos);
+					}
+				}
+			}
+		}
+
+		if (validPositions.isEmpty()) {
+			return originalPos; // Return original position if no valid positions found
+		}
+
+		return validPositions.get(random.nextInt(validPositions.size()));
+	}
+
+	private boolean isValidGroundPosition(World world, BlockPos pos) {
+		return world.getBlockState(pos).isAir() &&
+				world.getBlockState(pos.up()).isAir() &&
+				world.getBlockState(pos.up(2)).isAir() &&
+				!world.getBlockState(pos.down()).isAir();
+	}
+
+	private boolean isValidAirPosition(World world, BlockPos pos) {
+		return world.getBlockState(pos).isAir() &&
+				world.getBlockState(pos.up()).isAir() &&
+				world.getBlockState(pos.down()).isAir();
 	}
 
 	private boolean isSafeBlockTeleportLocation(World world, BlockPos pos) {
