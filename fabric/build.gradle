@@ -142,6 +142,7 @@ curseforge {
 				optionalDependency "garnished-additions"
 				optionalDependency "mythicmetals-decorations"
 				optionalDependency "eldritch-end"
+				optionalDependency "regions_unexplored"
 				incompatible "exordium"
 			}
 		}
@@ -195,6 +196,7 @@ modrinth {
 		optional.project "garnished-additions"
 		optional.project "mythicmetals-decorations"
 		optional.project "eldritch-end"
+		optional.project "regions_unexplored"
 		incompatible.project "exordium"
 	}
 }
