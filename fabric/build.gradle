@@ -56,6 +56,8 @@ dependencies {
 
 	// Advanced runtime resource pack
 	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+
+	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 }
 
 allprojects {
