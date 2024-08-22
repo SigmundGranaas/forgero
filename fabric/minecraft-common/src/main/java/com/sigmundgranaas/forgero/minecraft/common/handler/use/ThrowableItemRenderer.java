@@ -64,10 +64,10 @@ public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 				throw new RuntimeException("Not implemented yet!");
 			case NONE:
 
-				matrices.multiply(POSITIVE_Y.rotationDegrees(yaw2 - 90.0F));
+				matrices.multiply(POSITIVE_Y.rotationDegrees(yaw - 90.0F));
 				matrices.multiply(POSITIVE_Z.rotationDegrees(pitch));
 
-				matrices.multiply(POSITIVE_Z.rotationDegrees(-90.0F));
+				matrices.multiply(POSITIVE_Z.rotationDegrees(-135.0F));
 				break;
 		}
 
