@@ -273,7 +273,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 			if (blockEntity.isBurning() || bl4 && bl3) {
 				Recipe recipe = bl3 ? (Recipe)blockEntity.matchGetter.getFirstMatch(blockEntity, world).orElse(null) : null;
 				int i = blockEntity.getMaxCountPerStack();
-				if (!blockEntity.isBurning() && AbstractBloomeryBlockEntity.canAcceptRecipeOutput(world.getRegistryManager(), recipe, blockEntity.inventory, i)) {
+				if (!blockEntity.isBurning() && AbstractBloomeryBlockEntity.canAcceptRecipeOutput(world.getRegistryManager(), recipe, blockEntity.inventory.getItems(), i)) {
 					blockEntity.fuelTime = blockEntity.burnTime = blockEntity.getFuelTime(itemStack);
 					if (blockEntity.isBurning()) {
 						bl2 = true;
@@ -287,12 +287,12 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 						}
 					}
 				}
-				if (blockEntity.isBurning() && AbstractBloomeryBlockEntity.canAcceptRecipeOutput(world.getRegistryManager(), recipe, blockEntity.inventory, i)) {
+				if (blockEntity.isBurning() && AbstractBloomeryBlockEntity.canAcceptRecipeOutput(world.getRegistryManager(), recipe, blockEntity.inventory.getItems(), i)) {
 					++blockEntity.cookTime;
 					if (blockEntity.cookTime == blockEntity.cookTimeTotal) {
 						blockEntity.cookTime = 0;
 						blockEntity.cookTimeTotal = AbstractBloomeryBlockEntity.getCookTime(world, blockEntity);
-						if (AbstractBloomeryBlockEntity.craftRecipe(world.getRegistryManager(), recipe, blockEntity.inventory, i)) {
+						if (AbstractBloomeryBlockEntity.craftRecipe(world.getRegistryManager(), recipe, blockEntity.inventory.getItems(), i)) {
 							blockEntity.setLastRecipe(recipe);
 						}
 						bl2 = true;
@@ -395,8 +395,11 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 
 		@Override
 		public boolean isEmpty() {
-			for (ItemStack itemStack : this.) {
-				if (itemStack.isEmpty()) continue;
+			for (ItemStack itemStack : this.inventory.getItems()) {
+				if (itemStack.isEmpty()) {
+					continue;
+				}
+
 				return false;
 			}
 			return true;
@@ -409,12 +412,12 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 
 		@Override
 		public ItemStack removeStack(int slot, int amount) {
-			return Inventories.splitStack(this.inventory, slot, amount);
+			return Inventories.splitStack(this.inventory.getItems(), slot, amount);
 		}
 
 		@Override
 		public ItemStack removeStack(int slot) {
-			return Inventories.removeStack(this.inventory, slot);
+			return Inventories.removeStack(this.inventory.getItems(), slot);
 		}
 
 		@Override
@@ -477,7 +480,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 			player.unlockRecipes(list);
 			for (Recipe<?> recipe : list) {
 				if (recipe == null) continue;
-				player.onRecipeCrafted(recipe, this.inventory);
+				player.onRecipeCrafted(recipe, this.inventory.getItems());
 			}
 			this.recipesUsed.clear();
 		}
@@ -504,7 +507,7 @@ public abstract class AbstractBloomeryBlockEntity extends LockableContainerBlock
 
 		@Override
 		public void provideRecipeInputs(RecipeMatcher finder) {
-			for (ItemStack itemStack : this.inventory) {
+			for (ItemStack itemStack : this.inventory.getItems()) {
 				finder.addInput(itemStack);
 			}
 		}
