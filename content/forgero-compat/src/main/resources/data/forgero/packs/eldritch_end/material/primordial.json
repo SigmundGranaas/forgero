@@ -1,0 +1,90 @@
+{
+  "type": "WOOD",
+  "name": "primordial",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "eldritch_end:primordial_planks"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2.5
+          },
+          {
+            "id": "wood-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 2.5
+          },
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 70
+          },
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 40
+          },
+          {
+            "id": "wood-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
+          },
+          {
+            "id": "wood-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 3.12
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "wood-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 35
+          },
+          {
+            "id": "wood-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.2
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "eldritch_end/primordial"
+  }
+}
