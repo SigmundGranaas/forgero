@@ -147,6 +147,7 @@ curseforge {
 				optionalDependency "ends-phantasm"
 				optionalDependency "enderitemod"
 				optionalDependency "galosphere"
+				optionalDependency "bountiful-fares"
 				incompatible "exordium"
 			}
 		}
@@ -205,6 +206,7 @@ modrinth {
 		optional.project "ends-phantasm"
 		optional.project "enderitemod"
 		optional.project "galosphere"
+		optional.project "bountiful-fares"
 		incompatible.project "exordium"
 	}
 }
