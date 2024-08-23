@@ -148,6 +148,7 @@ curseforge {
 				optionalDependency "enderitemod"
 				optionalDependency "galosphere"
 				optionalDependency "bountiful-fares"
+				optionalDependency "edenring-reforked"
 				incompatible "exordium"
 			}
 		}
@@ -207,6 +208,7 @@ modrinth {
 		optional.project "enderitemod"
 		optional.project "galosphere"
 		optional.project "bountiful-fares"
+		optional.project "edenring-reforked"
 		incompatible.project "exordium"
 	}
 }

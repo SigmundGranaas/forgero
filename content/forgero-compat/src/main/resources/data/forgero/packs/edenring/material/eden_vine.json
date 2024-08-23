@@ -1,0 +1,103 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "eden_vine",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "edenring:eden_vine"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-composite",
+            "type": "RARITY",
+            "value": 30
+          },
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 140
+          },
+          {
+            "id": "soft_plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "soft_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "soft_plant-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.3
+          },
+          {
+            "id": "soft_plant-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "soft_plant-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "soft_plant-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 70
+          },
+          {
+            "id": "soft_plant-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 2
+          },
+          {
+            "id": "soft_plant-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.15
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "edenring/eden_vine"
+  }
+}
