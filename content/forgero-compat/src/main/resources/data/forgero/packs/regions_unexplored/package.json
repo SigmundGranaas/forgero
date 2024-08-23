@@ -1,0 +1,12 @@
+{
+  "name": "regions_unexplored-compat",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "minecraft",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "regions_unexplored"
+  ]
+}
