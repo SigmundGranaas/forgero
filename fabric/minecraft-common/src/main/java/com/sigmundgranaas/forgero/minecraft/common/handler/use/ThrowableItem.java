@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.registry.entity.EntityRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -45,7 +45,7 @@ public class ThrowableItem extends PersistentProjectileEntity {
 	}
 
 	public ThrowableItem(World world, LivingEntity owner, ItemStack itemStack, Float weight, SpinType spinType) {
-		super(Entities.THROWN_ITEM_ENTITY, owner, world);
+		super(EntityRegistry.THROWN_ITEM_ENTITY, owner, world);
 		this.getDataTracker().set(STACK, itemStack);
 		this.getDataTracker().set(spinTypeData, spinType.toString());
 		this.getDataTracker().set(ThrowableItem.weight, weight);

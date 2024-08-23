@@ -193,9 +193,9 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerBlocks() {
-		Registry.register(Registries.BLOCK, ASSEMBLY_STATION, ASSEMBLY_STATION_BLOCK);
-		Registry.register(Registries.ITEM, ASSEMBLY_STATION, ASSEMBLY_STATION_ITEM);
-		Registry.register(Registries.SCREEN_HANDLER, ASSEMBLY_STATION, ASSEMBLY_STATION_SCREEN_HANDLER);
+		Registry.register(Registries.BLOCK, ASSEMBLY_STATION_IDENTIFIER, ASSEMBLY_STATION_BLOCK);
+		Registry.register(Registries.ITEM, ASSEMBLY_STATION_IDENTIFIER, ASSEMBLY_STATION_ITEM);
+		Registry.register(Registries.SCREEN_HANDLER, ASSEMBLY_STATION_IDENTIFIER, ASSEMBLY_STATION_SCREEN_HANDLER);
 
 		Registry.register(Registries.BLOCK, UPGRADE_STATION, UPGRADE_STATION_BLOCK);
 		Registry.register(Registries.ITEM, UPGRADE_STATION, UPGRADE_STATION_ITEM);
