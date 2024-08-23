@@ -20,6 +20,7 @@ public abstract class PlayerInteractionManagerMixin {
 	@Shadow
 	@Final
 	private MinecraftClient client;
+
 	@Shadow
 	private float currentBreakingProgress;
 
