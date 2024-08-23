@@ -56,7 +56,12 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writePercentageAttribute(Attribute attribute) {
-		return writeAttributeType(attribute.type())
+		return writePercentageAttribute(attribute, 1);
+	}
+
+	public MutableText writePercentageAttribute(Attribute attribute, int indent) {
+		return
+				writeAttributeType(attribute.type(), indent)
 				.append(indented(1))
 				.append(percentageNumberText(attribute));
 	}
@@ -109,11 +114,15 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writeAdditionAttribute(Attribute attribute) {
+		return writeAdditionAttribute(attribute, 1);
+	}
+
+		public MutableText writeAdditionAttribute(Attribute attribute, int indent) {
 		float value = attribute.leveledValue();
 		if (attribute.getAttributeType().equals(AttackSpeed.KEY)) {
 			value = 4 + value;
 		}
-		return writeAttributeType(attribute.type())
+		return writeAttributeType(attribute.type(), indent)
 				.append(indented(1))
 				.append(additionSign(value))
 				.append(number(attribute.leveledValue()));
@@ -166,7 +175,10 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writeAttributeType(String attribute) {
-		return indented(configuration.baseIndent() + 1)
+		return writeAttributeType(attribute, 1);
+	}
+		public MutableText writeAttributeType(String attribute, int indent) {
+		return indented(configuration.baseIndent() + indent)
 				.append(writeTranslatableAttributeType(attribute)
 						.formatted(neutral()))
 				.append(sectionSeparator()

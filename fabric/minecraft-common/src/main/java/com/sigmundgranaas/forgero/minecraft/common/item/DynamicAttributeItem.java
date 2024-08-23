@@ -12,6 +12,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
@@ -30,6 +31,9 @@ import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicEffectiveN
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningLevel;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.DynamicMiningSpeed;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LuckHandler;
+
+import net.minecraft.entity.player.PlayerEntity;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,6 +75,9 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 			});
 
 	UUID ADDITION_HEALTH_MODIFIER_ID = UUID.randomUUID();
+	UUID ADDITION_REACH_MODIFIER_ID = UUID.randomUUID();
+	UUID ADDITION_REACH_ATTACK_MODIFIER_ID = UUID.randomUUID();
+
 	UUID ADDITION_LUCK_MODIFIER_ID = UUID.fromString("CC3F55D5-755C-4F38-A497-9C13A33DB5CF");
 	UUID ADDITION_ARMOR_MODIFIER_ID = UUID.fromString("AC3F55D5-755C-4F38-A497-9C13A63DB5CF");
 
@@ -113,7 +120,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 	default Multimap<EntityAttribute, EntityAttributeModifier> getDynamicModifiers(EquipmentSlot slot, ItemStack stack, @Nullable LivingEntity user) {
 		if (slot.equals(EquipmentSlot.MAINHAND) && stack.getItem() instanceof DynamicAttributeItem && isEquippable()) {
 			try {
-				return multiMapCache.get(stack, () -> createMultiMap(stack));
+				return multiMapCache.get(stack, () -> createMultiMap(stack, user));
 			} catch (ExecutionException e) {
 				return EMPTY;
 			}
@@ -122,7 +129,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		}
 	}
 
-	private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack) {
+	private ImmutableMultimap<EntityAttribute, EntityAttributeModifier> createMultiMap(ItemStack stack, LivingEntity user) {
 		Matchable target = Matchable.DEFAULT_TRUE;
 		MatchContext context = MatchContext.of();
 		ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
@@ -147,6 +154,18 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		float currentAttackSpeed = ComputedAttribute.apply(dynamicProperties(stack), AttackSpeed.KEY, target, context);
 		float baseAttackSpeed = ComputedAttribute.apply(defaultProperties(), AttackSpeed.KEY);
 		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ItemUUIDMixin.getAttackSpeedModifierID(), "Tool attack speed", currentAttackSpeed, EntityAttributeModifier.Operation.ADDITION));
+
+		// Reach
+		boolean isCreative =  user instanceof PlayerEntity player && player.isCreative();
+		float modifier = isCreative ? 0.5f : 0f;
+		float baseReach = isCreative ? 5 : 4.5f;
+		float reach = ComputedAttribute.apply(defaultProperties(), Reach.KEY) + modifier;
+		float diff = reach - baseReach;
+
+		if(diff != 0){
+			builder.put(ReachEntityAttributes.REACH, new EntityAttributeModifier(ADDITION_REACH_MODIFIER_ID, "Forgero reach", diff, EntityAttributeModifier.Operation.ADDITION));
+			builder.put(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier(ADDITION_REACH_ATTACK_MODIFIER_ID, "Forgero attack reach", diff, EntityAttributeModifier.Operation.ADDITION));
+		}
 
 		if (ForgeroConfigurationLoader.configuration.useEntityAttributes) {
 			// Mining speed
