@@ -60,6 +60,6 @@ public interface EntityBasedHandler extends BlockTargetHandler, EntityTargetHand
 	@Override
 	default TypedActionResult<ItemStack> onUse(World world, PlayerEntity user, Hand hand) {
 		handle(user);
-		return UseHandler.DEFAULT_ITEM_USE_ACTIONS.use(world, user, hand);
+		return UseHandler.DEFAULT_ITEM_USE_ACTIONS.get().use(world, user, hand);
 	}
 }
