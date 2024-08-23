@@ -1,0 +1,28 @@
+{
+  "category": "forgero:schematics",
+  "name": "book.forgero.guidebook.schematics.schematics.name",
+  "description": "book.forgero.guidebook.schematics.schematics.description",
+  "icon": "forgero:handle-schematic",
+  "x": -5,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "item": {
+        "item": "forgero:oak-pickaxe_head"
+      },
+      "text": "book.forgero.guidebook.schematics.schematics.text",
+      "title": "book.forgero.guidebook.schematics.schematics.title"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "recipe_id_1": "forgero:handle-schematic_recipe",
+      "recipe_id_2": "forgero:pickaxe_head-schematic_recipe",
+      "text": "book.modonomicon.demo.features.recipe.crafting.text",
+      "title1": "",
+      "title2": ""
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
-  "type": "PLANT",
+  "type": "SOFT_PLANT",
   "name": "blooming_vine",
-  "parent": "vines_base",
+  "parent": "soft_plant_base",
   "container": {
     "type": "HOST",
     "id": "betternether:blooming_vine"
@@ -37,25 +37,11 @@
             "value": 15
           },
           {
-            "id": "soft_plant-durability-offensive-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 55
-          },
-          {
             "id": "soft_plant-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
-          },
-          {
-            "id": "soft_plant-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
           },
           {
             "id": "soft_plant-mining_speed-utility-upgrade",
@@ -83,6 +69,6 @@
     ]
   },
   "palette": {
-    "name": "blooming_vine"
+    "name": "betternether/blooming_vine"
   }
 }
