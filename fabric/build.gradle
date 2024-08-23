@@ -56,6 +56,8 @@ dependencies {
 
 	// Advanced runtime resource pack
 	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+
+	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 }
 
 allprojects {
@@ -139,6 +141,12 @@ curseforge {
 				optionalDependency "dragonloot"
 				optionalDependency "garnished-additions"
 				optionalDependency "mythicmetals-decorations"
+				optionalDependency "eldritch-end"
+				optionalDependency "regions_unexplored"
+				optionalDependency "spelunkery"
+				optionalDependency "ends-phantasm"
+				optionalDependency "enderitemod"
+				optionalDependency "galosphere"
 				optionalDependency "bountiful-fares"
 				incompatible "exordium"
 			}
@@ -192,6 +200,12 @@ modrinth {
 		optional.project "dragonloot"
 		optional.project "garnished-additions"
 		optional.project "mythicmetals-decorations"
+		optional.project "eldritch-end"
+		optional.project "regions_unexplored"
+		optional.project "spelunkery"
+		optional.project "ends-phantasm"
+		optional.project "enderitemod"
+		optional.project "galosphere"
 		optional.project "bountiful-fares"
 		incompatible.project "exordium"
 	}
