@@ -1,0 +1,81 @@
+{
+  "type": "DUST",
+  "name": "volatile_dust",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "garnished:volatile_dust"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "dust-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 30
+          },
+          {
+            "id": "dust-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "dust-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 30
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:targeted_entity",
+          "power": 2
+        },
+        "predicate": {
+          "type": "forgero:random",
+          "value": 0.4
+        },
+        "title": "feature.forgero.explosive",
+        "description": "feature.forgero.explosive.description"
+      },
+      {
+        "type": "minecraft:on_hit_block",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:block_target",
+          "power": 2
+        },
+        "predicate": {
+          "type": "forgero:random",
+          "value": 0.4
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "garnished/volatile_dust"
+  }
+}

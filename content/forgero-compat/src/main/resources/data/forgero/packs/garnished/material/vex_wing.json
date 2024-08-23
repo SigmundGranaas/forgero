@@ -1,0 +1,94 @@
+{
+  "type": "HIDE",
+  "name": "vex_wing",
+  "parent": "hide_base",
+  "container": {
+    "type": "HOST",
+    "id": "garnished:vex_wing"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "hide-rarity-composite",
+            "type": "RARITY",
+            "value": 60
+          },
+          {
+            "id": "hide-durability-composite",
+            "type": "DURABILITY",
+            "value": 100
+          },
+          {
+            "id": "hide-weight-composite",
+            "type": "WEIGHT",
+            "value": -10
+          },
+          {
+            "id": "hide-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": 0.5
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "hide-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 30
+          },
+          {
+            "id": "hide-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": -5
+          },
+          {
+            "id": "hide-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "hide-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.1
+          },
+          {
+            "id": "hide-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 50
+          },
+          {
+            "id": "hide-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.07
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "garnished/vex_wing"
+  }
+}

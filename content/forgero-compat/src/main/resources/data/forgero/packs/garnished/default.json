@@ -1,0 +1,9 @@
+{
+  "namespace": "garnished",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "garnished"
+  ]
+}

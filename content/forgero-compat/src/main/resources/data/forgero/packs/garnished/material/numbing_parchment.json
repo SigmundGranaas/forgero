@@ -1,0 +1,87 @@
+{
+  "type": "HIDE",
+  "name": "numbing_parchment",
+  "parent": "hide_base",
+  "container": {
+    "type": "HOST",
+    "id": "garnished:numbing_parchment"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "hide-rarity-composite",
+            "type": "RARITY",
+            "value": 80
+          },
+          {
+            "id": "hide-durability-composite",
+            "type": "DURABILITY",
+            "value": 300
+          },
+          {
+            "id": "hide-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
+          },
+          {
+            "id": "hide-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.3
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "hide-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 40
+          },
+          {
+            "id": "hide-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "hide-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.65
+          },
+          {
+            "id": "hide-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 150
+          },
+          {
+            "id": "hide-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.4
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "garnished/numbing_parchment"
+  }
+}

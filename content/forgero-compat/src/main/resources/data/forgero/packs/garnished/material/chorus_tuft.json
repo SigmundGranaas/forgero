@@ -1,0 +1,96 @@
+{
+  "type": "SOFT_PLANT",
+  "name": "chorus_tuft",
+  "parent": "soft_plant_base",
+  "container": {
+    "type": "HOST",
+    "id": "garnished:chorus_tuft"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-composite",
+            "type": "RARITY",
+            "value": 40
+          },
+          {
+            "id": "soft_plant-durability-composite",
+            "type": "DURABILITY",
+            "value": 100
+          },
+          {
+            "id": "soft_plant-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "soft_plant-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "soft_plant-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "soft_plant-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.12
+          },
+          {
+            "id": "soft_plant-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "soft_plant-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "soft_plant-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 50
+          },
+          {
+            "id": "soft_plant-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.06
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "garnished/chorus_tuft"
+  }
+}

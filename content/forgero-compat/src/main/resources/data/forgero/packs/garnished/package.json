@@ -1,0 +1,12 @@
+{
+  "name": "garnished-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "garnished",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "garnished"
+  ]
+}

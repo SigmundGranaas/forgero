@@ -1,0 +1,51 @@
+{
+  "type": "DUST",
+  "name": "cosmic_powder",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "garnished:cosmic_powder"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "dust-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 30
+          },
+          {
+            "id": "dust-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "dust-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 25
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "garnished/cosmic_powder"
+  }
+}
