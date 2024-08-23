@@ -31,11 +31,9 @@ import net.minecraft.world.World;
  * <pre>
  * {
  *   "type": "minecraft:teleport",
- *   "teleport": {
- *     "random": true,
- *     "onGround": false,
- *     "maxDistance": 10
- *   }
+ *    "random": true,
+ *    "on_ground": false,
+ *    "max_distance": 10
  * }
  * </pre>
  * </p>
@@ -76,8 +74,8 @@ public class TeleportHandler implements EntityBasedHandler {
 	 */
 	public static TeleportHandler fromJson(JsonObject json) {
 		boolean randomDirection = json.has("random") && json.get("random").getAsBoolean();
-		boolean airTeleport = json.has("onGround") && json.get("onGround").getAsBoolean();
-		int lookDirectionDistance = json.has("maxDistance") ? json.get("maxDistance").getAsInt() : 10;
+		boolean airTeleport = json.has("on_ground") && json.get("on_ground").getAsBoolean();
+		int lookDirectionDistance = json.has("max_distance") ? json.get("max_distance").getAsInt() : 10;
 		String target = json.has("target") ? json.get("target").getAsString() : "target";
 
 		return new TeleportHandler(randomDirection, airTeleport, lookDirectionDistance, target);
@@ -97,6 +95,9 @@ public class TeleportHandler implements EntityBasedHandler {
 			teleportEntity(targetEntity, world);
 		} else if ("minecraft:attacker".equals(target) || "minecraft:self".equals(target)) {
 			teleportEntity(source, world);
+		}else{
+			LOGGER.warn("Not a valid entity target for teleportation: {}", target);
+
 		}
 	}
 
