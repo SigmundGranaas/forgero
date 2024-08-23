@@ -8,6 +8,7 @@ public class CommonTags {
 			BiomesWeveGone::new,
 			BloomingNature::new,
 			Create::new,
+			Ecologics::new,
 			Galosphere::new,
 			BountifulFares::new,
 			Meadow::new,
