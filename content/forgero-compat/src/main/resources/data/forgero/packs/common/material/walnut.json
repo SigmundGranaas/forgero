@@ -1,10 +1,19 @@
 {
   "type": "WOOD",
-  "name": "walnut",
   "parent": "wood_base",
+  "name": "walnut",
+  "dependencies": {
+    "any": [
+      "ecologics",
+      "bountifulfares"
+    ]
+  },
   "container": {
     "type": "HOST",
-    "id": "ecologics:walnut_planks"
+    "tag": "c:walnut_planks"
+  },
+  "palette": {
+    "name": "common/walnut"
   },
   "properties": {
     "grouped_attributes": [
@@ -75,11 +84,6 @@
           }
         ]
       }
-    ],
-    "attributes": [
     ]
-  },
-  "palette": {
-    "name": "ecologics/walnut"
   }
 }
