@@ -399,5 +399,14 @@
   "item.forgero.raw_magnetite": "Magnetite",
   "item.forgero.cinnabar": "Cinnabar",
   "item.forgero.tangle_roots": "Tangle Roots",
-  "item.forgero.nephrite": "Nephrite"
+  "item.forgero.nephrite": "Nephrite",
+  "item.forgero.crystal_shard": "Crystal Shard",
+  "item.forgero.void_crystal_shard": "Void Crystal Shard",
+  "item.forgero.fallen_star": "Fallen Star",
+  "item.forgero.crystal_block": "Crystal",
+  "item.forgero.void_crystal_block": "Void Crystal",
+  "item.forgero.oblivine": "Oblivine",
+  "item.forgero.pream": "Pream"
 }
+
+

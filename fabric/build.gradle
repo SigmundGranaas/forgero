@@ -144,6 +144,7 @@ curseforge {
 				optionalDependency "eldritch-end"
 				optionalDependency "regions_unexplored"
 				optionalDependency "spelunkery"
+				optionalDependency "ends-phantasm"
 				incompatible "exordium"
 			}
 		}
@@ -199,6 +200,7 @@ modrinth {
 		optional.project "eldritch-end"
 		optional.project "regions_unexplored"
 		optional.project "spelunkery"
+		optional.project "ends-phantasm"
 		incompatible.project "exordium"
 	}
 }

@@ -1,0 +1,85 @@
+{
+  "type": "CRYSTAL",
+  "name": "fallen_star",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "phantasm:fallen_star"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "crystal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 45
+          },
+          {
+            "id": "crystal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 15
+          },
+          {
+            "id": "crystal-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "crystal-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1
+          },
+          {
+            "id": "crystal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 70
+          },
+          {
+            "id": "crystal-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.4
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:status_effect",
+          "target": "minecraft:targeted_entity",
+          "effect": "minecraft:glowing",
+          "duration": 200,
+          "level": 1
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "phantasm/fallen_star"
+  }
+}
