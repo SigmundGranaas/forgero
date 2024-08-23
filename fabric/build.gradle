@@ -146,6 +146,7 @@ curseforge {
 				optionalDependency "spelunkery"
 				optionalDependency "ends-phantasm"
 				optionalDependency "enderitemod"
+				optionalDependency "galosphere"
 				incompatible "exordium"
 			}
 		}
@@ -203,6 +204,7 @@ modrinth {
 		optional.project "spelunkery"
 		optional.project "ends-phantasm"
 		optional.project "enderitemod"
+		optional.project "galosphere"
 		incompatible.project "exordium"
 	}
 }

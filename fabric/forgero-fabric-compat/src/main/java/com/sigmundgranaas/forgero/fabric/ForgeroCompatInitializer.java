@@ -3,19 +3,8 @@ package com.sigmundgranaas.forgero.fabric;
 import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
-import com.sigmundgranaas.forgero.fabric.tags.CommonTagGenerator;
 import com.sigmundgranaas.forgero.fabric.tags.CommonTags;
-import com.sigmundgranaas.forgero.fabric.tags.Create;
-import com.sigmundgranaas.forgero.fabric.tags.Ecologics;
-import com.sigmundgranaas.forgero.fabric.tags.MythicMetalsCommons;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
-import com.sigmundgranaas.forgero.fabric.tags.NaturesSpirit;
-import com.sigmundgranaas.forgero.fabric.tags.BiomesWeveGone;
-import com.sigmundgranaas.forgero.fabric.tags.ModernIndustrialization;
-import com.sigmundgranaas.forgero.fabric.tags.TechReborn;
-import com.sigmundgranaas.forgero.fabric.tags.BloomingNature;
-import com.sigmundgranaas.forgero.fabric.tags.BeachParty;
-import com.sigmundgranaas.forgero.fabric.tags.Meadow;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
