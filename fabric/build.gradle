@@ -143,6 +143,7 @@ curseforge {
 				optionalDependency "mythicmetals-decorations"
 				optionalDependency "eldritch-end"
 				optionalDependency "regions_unexplored"
+				optionalDependency "spelunkery"
 				incompatible "exordium"
 			}
 		}
@@ -197,6 +198,7 @@ modrinth {
 		optional.project "mythicmetals-decorations"
 		optional.project "eldritch-end"
 		optional.project "regions_unexplored"
+		optional.project "spelunkery"
 		incompatible.project "exordium"
 	}
 }
