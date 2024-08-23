@@ -6,8 +6,13 @@ import net.devtech.arrp.json.tags.JTag;
 
 import net.minecraft.util.Identifier;
 
-public class BountifulFares {
-	public static void generateTags() {
-		RESOURCE_PACK.addTag(new Identifier("c", "items/walnut_planks"), JTag.tag().add(new Identifier("bountifulfares:walnut_planks")));
+public class BountifulFares extends CommonTagGenerator {
+	protected BountifulFares() {
+		super("bountifulfares");
+	}
+
+	@Override
+	public void addTags() {
+		registerCommonItemTag("walnut_planks");
 	}
 }
