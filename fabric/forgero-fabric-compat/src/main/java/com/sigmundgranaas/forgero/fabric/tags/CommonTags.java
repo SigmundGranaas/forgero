@@ -9,6 +9,7 @@ public class CommonTags {
 			BloomingNature::new,
 			Create::new,
 			Galosphere::new,
+			BountifulFares::new,
 			Meadow::new,
 			ModernIndustrialization::new,
 			MythicMetalsCommons::new,
