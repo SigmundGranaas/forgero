@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 public class CommonTags {
 	private static final List<Supplier<CommonTagGenerator>> TAGS = List.of(
 			BiomesWeveGone::new,
-			BiomesWeveGone::new,
 			BloomingNature::new,
 			Create::new,
 			Ecologics::new,
