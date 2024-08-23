@@ -1,10 +1,10 @@
 {
   "type": "WOOD",
-  "name": "walnut",
+  "name": "pream",
   "parent": "wood_base",
   "container": {
     "type": "HOST",
-    "id": "ecologics:walnut_planks"
+    "id": "phantasm:pream_planks"
   },
   "properties": {
     "grouped_attributes": [
@@ -16,27 +16,32 @@
           {
             "id": "wood-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 3
+            "value": 2.15
+          },
+          {
+            "id": "wood-mining-speed-composite",
+            "type": "MINING_SPEED",
+            "value": 2.15
           },
           {
             "id": "wood-durability-composite",
             "type": "DURABILITY",
-            "value": 65
+            "value": 80
           },
           {
             "id": "wood-rarity-composite",
             "type": "RARITY",
-            "value": 15
+            "value": 40
           },
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 40
+            "value": 20
           },
           {
             "id": "wood-draw_power-composite",
             "type": "forgero:draw_power",
-            "value": 3.6
+            "value": 3.2
           }
         ]
       },
@@ -49,7 +54,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7
+            "value": 20
           },
           {
             "id": "wood-weight-upgrade",
@@ -57,21 +62,35 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 10
+          },
+          {
+            "id": "wood-attack_damage-offensive-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.15
+          },
+          {
+            "id": "wood-mining_speed-offensive-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 1.15
           },
           {
             "id": "wood-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 32
+            "value": 40
           },
           {
             "id": "wood-draw_power-offensive-upgrade",
             "type": "forgero:draw_power",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 0.6
+            "value": 0.35
           }
         ]
       }
@@ -80,6 +99,6 @@
     ]
   },
   "palette": {
-    "name": "ecologics/walnut"
+    "name": "phantasm/pream"
   }
 }

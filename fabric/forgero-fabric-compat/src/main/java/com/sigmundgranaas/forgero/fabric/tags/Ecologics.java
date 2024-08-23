@@ -8,5 +8,6 @@ public class Ecologics extends CommonTagGenerator {
 	@Override
 	public void addTags() {
 		registerCommonItemTag("coconut_planks");
+		registerCommonItemTag("walnut_planks");
 	}
 }
