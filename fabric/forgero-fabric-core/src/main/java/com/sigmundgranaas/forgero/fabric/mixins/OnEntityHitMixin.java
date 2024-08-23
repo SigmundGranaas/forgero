@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.entity.OnHitEntityFeatureExecutor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,9 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Hand;
 
 @Mixin(LivingEntity.class)
 public abstract class OnEntityHitMixin {
@@ -31,24 +27,16 @@ public abstract class OnEntityHitMixin {
 	private void forgero$onDamageEntityMixin$OnHitHandler(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
 		Entity attacker = source.getAttacker();
 		if (attacker != null && (cir.getReturnValue() || attacker.getWorld().isClient) && attacker instanceof LivingEntity entity) {
-			ItemStack main = entity.getMainHandStack();
-			if (entity instanceof ServerPlayerEntity player && player.getItemCooldownManager().isCoolingDown(main.getItem())) {
-				return;
-			}
 			@SuppressWarnings("DataFlowIssue")
 			Entity target = (Entity) (Object) this;
+
 			MatchContext context = MatchContext.of()
 					.put(ENTITY, entity)
 					.put(WORLD, entity.getWorld())
 					.put(ENTITY_TARGET, target);
 
-			cachedFilteredFeatures(main, OnHitEntityFeature.KEY, context)
-					.stream()
-					.filter(handler -> handler.test(context))
-					.forEach(handler -> {
-						handler.onHit(entity, entity.getWorld(), target);
-						handler.handle(entity, main, Hand.MAIN_HAND);
-					});
+			OnHitEntityFeatureExecutor.initFromMainHandStack(entity, target, context)
+					.executeIfNotCoolingDown(context);
 		}
 	}
 }

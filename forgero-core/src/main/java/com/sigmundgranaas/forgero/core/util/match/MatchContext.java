@@ -34,8 +34,6 @@ public class MatchContext implements Matchable {
 	public record KeyValuePair(ContextKey<?> key, Object value) {
 	}
 
-	;
-
 	/**
 	 * Constructor that allows the initialization of metadata and matches with given values.
 	 *

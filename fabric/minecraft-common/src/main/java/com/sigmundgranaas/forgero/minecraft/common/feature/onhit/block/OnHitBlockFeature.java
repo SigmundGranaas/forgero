@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.minecraft.common.feature;
+package com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block;
 
 import static com.sigmundgranaas.forgero.minecraft.common.handler.HandlerBuilder.buildHandlerFromJson;
 
