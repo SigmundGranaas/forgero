@@ -31,6 +31,7 @@ import net.minecraft.world.World;
  * <pre>
  * {
  *   "type": "minecraft:teleport",
+ *    "target": "minecraft:targeted_entity",
  *    "random": true,
  *    "on_ground": false,
  *    "max_distance": 10
