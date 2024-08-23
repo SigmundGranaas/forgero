@@ -8,7 +8,7 @@ public class CommonTags {
 			BiomesWeveGone::new,
 			BloomingNature::new,
 			Create::new,
-			Ecologics::new,
+			Galosphere::new,
 			Meadow::new,
 			ModernIndustrialization::new,
 			MythicMetalsCommons::new,
