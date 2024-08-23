@@ -7,6 +7,6 @@ public class Galosphere extends CommonTagGenerator {
 
 	@Override
 	public void addTags() {
-		registerCommonItemTag("silver_ingots");
+		registerCommonItemTag("silver_ingot");
 	}
 }
