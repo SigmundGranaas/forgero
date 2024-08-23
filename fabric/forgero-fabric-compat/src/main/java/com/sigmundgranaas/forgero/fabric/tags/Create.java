@@ -9,5 +9,6 @@ public class Create extends CommonTagGenerator {
 	public void addTags() {
 		registerCommonItemTag("brass_ingot");
 		registerCommonItemTag("zinc_ingot");
+		registerCommonItemTag("limestone");
 	}
 }
