@@ -23,11 +23,9 @@
     "PlayerCritChanceMixin",
     "PlayerEntityAttackMixin",
     "PlayerServerInteractionManagerMixin",
-    "RecipeManagerMixin",
-    "ServerInteractionManagerReachMixin"
+    "RecipeManagerMixin"
   ],
   "client": [
-    "ClientPlayerInteractionManagerReachMixin",
     "ClientPlayNetworkGetTotemMixin",
     "ItemDescriptionInjector",
     "ItemModelGeneratorMixin",
