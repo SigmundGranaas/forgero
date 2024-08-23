@@ -1,0 +1,97 @@
+{
+  "type": "HIDE",
+  "name": "aberration_limb",
+  "parent": "hide_base",
+  "container": {
+    "type": "HOST",
+    "id": "eldritch_end:aberration_limb"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "hide-rarity-composite",
+            "type": "RARITY",
+            "value": 70
+          },
+          {
+            "id": "hide-durability-composite",
+            "type": "DURABILITY",
+            "value": 80
+          },
+          {
+            "id": "hide-weight-composite",
+            "type": "WEIGHT",
+            "value": 10
+          }
+
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "hide-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 35
+          },
+          {
+            "id": "hide-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 5
+          },
+          {
+            "id": "hide-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.05
+          },
+          {
+            "id": "hide-attack_damage-utility-upgrade",
+            "type": "ATTACK_DAMAGE",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.1
+          },
+          {
+            "id": "hide-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.1
+          },
+          {
+            "id": "hide-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 40
+          },
+          {
+            "id": "hide-accuracy-utility-upgrade",
+            "type": "forgero:accuracy",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "eldritch_end/aberration_limb"
+  }
+}

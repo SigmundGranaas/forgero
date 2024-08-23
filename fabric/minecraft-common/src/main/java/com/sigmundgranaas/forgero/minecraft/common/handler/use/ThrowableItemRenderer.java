@@ -1,18 +1,19 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.use;
 
+import static net.minecraft.util.math.RotationAxis.POSITIVE_Y;
+import static net.minecraft.util.math.RotationAxis.POSITIVE_Z;
+
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-
-import static net.minecraft.client.render.model.json.ModelTransformationMode.GROUND;
-import static net.minecraft.util.math.RotationAxis.*;
+import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3d;
 
 
 public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
@@ -26,36 +27,55 @@ public class ThrowableItemRenderer extends EntityRenderer<ThrowableItem> {
 	}
 
 	@Override
-	public void render(ThrowableItem item, float partialTicks, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
-		matrixStack.push();
+	public void render(ThrowableItem item, float yaw, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int light) {
+		// Not implemented yet.
+		assert (item.getSpinType() != ThrowableItem.SpinType.HORIZONTAL);
 
-		float interpolatedYaw = MathHelper.lerp(partialTicks, item.prevYaw, item.getYaw()) - 90.0F;
-		float interpolatedPitch = MathHelper.lerp(partialTicks, item.prevPitch, item.getPitch());
+		matrices.push();
 
-		matrixStack.multiply(POSITIVE_Y.rotation(interpolatedYaw));
-		matrixStack.multiply(POSITIVE_Z.rotation(interpolatedPitch));
+		Vec3d velocity = item.getVelocity();
 
-		matrixStack.scale(1.5F, 1.5F, 1.5F);
+		float prevTime = item.age - 1 + partialTicks;
+		float currentTime = item.age + partialTicks;
+		double sqrt = Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+		float spinSpeed = 120;
+
+		float prevSpinAngle = prevTime * spinSpeed;
+		float currentSpinAngle = currentTime * spinSpeed;
+		float lerpedSpinAngle = MathHelper.lerp(partialTicks, prevSpinAngle, currentSpinAngle);
+
+
+		float yaw2 = (float) Math.toDegrees(Math.atan2(velocity.x, velocity.z));
+		float pitch = (float) Math.toDegrees(Math.atan2(velocity.y, sqrt));
+
+		switch (item.getSpinType()) {
+			case VERTICAL:
+				matrices.multiply(POSITIVE_Y.rotationDegrees(yaw2 - 90.0F));
+				matrices.multiply(POSITIVE_Z.rotationDegrees(pitch));
+
+				matrices.multiply(POSITIVE_Z.rotationDegrees(-45.0F));
+
+				if (sqrt > 0.01 && !item.isInGround()) {
+					matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(lerpedSpinAngle));
+				}
+				break;
+			case HORIZONTAL:
+
+				throw new RuntimeException("Not implemented yet!");
+			case NONE:
+
+				matrices.multiply(POSITIVE_Y.rotationDegrees(yaw - 90.0F));
+				matrices.multiply(POSITIVE_Z.rotationDegrees(pitch));
+
+				matrices.multiply(POSITIVE_Z.rotationDegrees(-135.0F));
+				break;
+		}
 
 		ItemStack pickupItem = item.asItemStack();
-		if (!item.isInGround()) {
-			float velocity = Math.max((float) item.getVelocity().length(), 1);
-			float spinSpeed = 50 * velocity;
-			float totalAge = item.age + partialTicks;
-			float angle = (totalAge * spinSpeed) % 360;
+		this.renderer.renderItem(pickupItem, ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumerProvider, item.getWorld(), item.getId());
 
-			switch (item.getSpinType()) {
-				case HORIZONTAL -> matrixStack.multiply(NEGATIVE_Y.rotation(angle));
-				case VERTICAL -> matrixStack.multiply(NEGATIVE_Z.rotation(angle));
-			}
-		}
-		if (item.getSpinType() == ThrowableItem.SpinType.NONE) {
-			matrixStack.multiply(POSITIVE_Z.rotation(45.0F));
-		}
-
-		this.renderer.renderItem(pickupItem, GROUND ,i, 0, matrixStack, vertexConsumerProvider, item.getWorld(), 0);
-		matrixStack.pop();
-		super.render(item, partialTicks, g, matrixStack, vertexConsumerProvider, i);
+		matrices.pop();
+		super.render(item, yaw, partialTicks, matrices, vertexConsumerProvider, light);
 	}
 
 	@Override
