@@ -35,6 +35,8 @@ import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -56,7 +58,7 @@ public class ForgeroClient implements ClientModInitializer {
 		initializeItemModels();
 		HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
 		HandledScreens.register(UPGRADE_STATION_SCREEN_HANDLER, UpgradeStationScreen::new);
-		BlockEntityRendererRegistry.register(BlockEntityRegistry.ASSEMBLY_STATION_BLOCK_ENTITY, AssemblyStationBlockEntityRenderer::new);
+		BlockEntityRendererFactories.register(BlockEntityRegistry.ASSEMBLY_STATION_BLOCK_ENTITY, AssemblyStationBlockEntityRenderer::new);
 	}
 
 	private void initializeItemModels() {

@@ -8,6 +8,7 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -23,29 +24,21 @@ import net.minecraft.world.World;
 
 @Environment(EnvType.CLIENT)
 public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<AssemblyStationBlockEntity> {
-	public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
+	public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
 	}
 
 	@Override
-	public void render(AssemblyStationBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+	public void render(AssemblyStationBlockEntity entity, float tickDelta, MatrixStack matrices,
+					   VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-		int posLong = (int) entity.getPos().asLong();
-
-		ItemStack itemStack = entity.getRenderStack();
+		ItemStack stack = entity.getRenderStack();
 		matrices.push();
-		matrices.translate(0.5f, 1.0150f, 0.5f);
+		matrices.translate(0.5f, 0.75f, 0.5f);
 		matrices.scale(6f, 6f, 6f);
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 
-		switch (entity.getCachedState().get(AssemblyStationBlock.FACING)) {
-			case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
-			case EAST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
-			case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
-			case WEST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
-		}
-
-		itemRenderer.renderItem(itemStack, ModelTransformationMode.FIXED, light, overlay,
-				matrices, vertexConsumers, entity.getWorld(), posLong);
+		itemRenderer.renderItem(stack, ModelTransformationMode.GUI, getLightLevel(entity.getWorld(),
+				entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
 		matrices.pop();
 	}
 
