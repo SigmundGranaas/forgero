@@ -44,6 +44,7 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.fabric.resources.dynamic.WoodPartsTag;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
@@ -106,7 +107,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerRecipeGenerators(StateService stateService) {
 		Function<State, String> idConverter = s -> stateService.getMapper().stateToContainer(s.identifier()).toString();
 
-		Function<State, String> tagOrItem = (state) -> Registries.ITEM.get(stateService.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
+		Function<State, String> tagOrItem = (state) -> stateService.getMapper().stateToTag(state.identifier()).isPresent() ? "tag" : "item";
 		Function<State, String> material = (state) -> state instanceof MaterialBased based ? based.baseMaterial().name() : "";
 		Function<State, String> namespace = (state) -> stateService.getMapper().stateToTag(state.identifier()).map(Identifier::getNamespace)
 				.orElse(state.nameSpace());
@@ -288,6 +289,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.BaseVariantFilter()));
 		}
 
+		ARRPGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));
 		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
 		ARRPGenerator.register(() -> new SchematicPartTagGenerator(service));
 		ARRPGenerator.register(() -> new PartTypeTagGenerator(service));

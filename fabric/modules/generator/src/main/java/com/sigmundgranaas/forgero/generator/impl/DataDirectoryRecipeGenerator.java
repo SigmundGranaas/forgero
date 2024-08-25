@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.generator.impl.recipe.validation.RecipeValidat
 import net.minecraft.util.Identifier;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class DataDirectoryRecipeGenerator {
 		private final ResourceManagerJsonLoader loader;
 		private final RecipeValidator recipeValidator;
 		private final Predicate<String> isModLoaded;
+		private final Gson gson;
 
 		public DataDirectoryRecipeGenerator(StringReplacer replacer, VariableToMapTransformer transformer,
 											String directory, ResourceManagerJsonLoader loader, Predicate<String> isModLoaded) {
@@ -31,48 +33,56 @@ public class DataDirectoryRecipeGenerator {
 			this.loader = loader;
 			this.isModLoaded = isModLoaded;
 			this.recipeValidator = new RecipeValidator();
+			this.gson = new Gson();
 		}
 
-		public Collection<IdentifiedJson> generate() {
-			return loader.load(directory)
-					.parallelStream()
-					.filter(this::checkDependencies)
-					.flatMap(this::convertToIdentifiedJson)
-					.filter(recipeValidator::validateRecipe)
-					.collect(Collectors.toList());
-		}
 
-		private boolean checkDependencies(JsonObject object){
-			if(object.get("dependencies") == null){
-				return true;
-			}else{
-				JsonArray dependencies = object.get("dependencies").getAsJsonArray();
-				for(JsonElement dependency : dependencies){
-					if(!isModLoaded.test(dependency.getAsString())){
-						return false;
-					}
-				}
-			}
-			return true;
-		}
+	public Collection<IdentifiedJson> generate() {
+		long conversionTime = System.nanoTime();
+		var result = loader.load(directory)
+						.parallelStream()
+						.filter(this::checkDependencies)
+						.flatMap( (recipe) -> convertToIdentifiedJson(recipe).stream())
+						.filter(recipeValidator::validateRecipe)
+				.collect(Collectors.toList());
 
-	private Stream<IdentifiedJson> convertToIdentifiedJson(JsonObject object) {
-		return transformer.transformStateMap(object.getAsJsonObject("variables"))
-				.stream()
-				.map(variables -> createRecipe(copy(object), variables));
+		long convertEnd = System.nanoTime();
+
+		System.out.println("Total convert time: " + (convertEnd - conversionTime) / 1_000_000 + " ms");
+
+		return result;
+	}
+
+	private boolean checkDependencies(JsonObject object) {
+		boolean result;
+		if(object.get("dependencies") == null) {
+			result = true;
+		} else {
+			JsonArray dependencies = object.get("dependencies").getAsJsonArray();
+			result = dependencies.asList().stream()
+					.map(JsonElement::getAsString)
+					.allMatch(isModLoaded);
+		}
+		return result;
+	}
+
+	private List<IdentifiedJson> convertToIdentifiedJson(JsonObject object) {
+		return	transformer.transformStateMap(object.getAsJsonObject("variables"))
+				.parallelStream()
+				.map(variables -> createRecipe(object, variables)).toList();
 	}
 
 	private IdentifiedJson createRecipe(JsonObject template, Map<String, Object> variableMap) {
-		Identifier id = new Identifier(replacer.applyReplacements(template.get("identifier").getAsString(), variableMap));
-		JsonObject recipe = new Gson().fromJson(replacer.applyReplacements(template.toString(), variableMap), JsonObject.class);
+		String idString = replacer.applyReplacements(template.get("identifier").getAsString(), variableMap);
+		Identifier id = new Identifier(idString);
+
+		String jsonString = replacer.applyReplacements(template.toString(), variableMap);
+		JsonObject recipe = gson.fromJson(jsonString, JsonObject.class);
+
 		recipe.remove("identifier");
 		recipe.remove("generator_type");
 		recipe.remove("variables");
 
-		return new IdentifiedJson(id, recipe, template);
-	}
-
-	private JsonObject copy(JsonObject object) {
-		return new Gson().fromJson(object.toString(), JsonObject.class);
+		return new IdentifiedJson(id, recipe, recipe);
 	}
 }
