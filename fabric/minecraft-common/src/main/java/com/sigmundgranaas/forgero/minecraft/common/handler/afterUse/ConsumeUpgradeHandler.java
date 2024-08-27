@@ -28,7 +28,7 @@ import net.minecraft.world.World;
  *     "power": 3
  *   }
  *   "after_use": {
- *     "type": "minecraft:consume_upgrade",
+ *     "type": "forgero:consume_upgrade",
  *     "id": "forgero:undying_totem"
  *   }
  * }

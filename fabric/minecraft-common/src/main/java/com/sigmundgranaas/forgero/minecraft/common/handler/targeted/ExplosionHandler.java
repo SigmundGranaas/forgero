@@ -152,7 +152,7 @@ public class ExplosionHandler implements EntityTargetHandler, BlockTargetHandler
 		if ("minecraft:attacker".equals(target) && !world.isClient) {
 			world.createExplosion(null, source.getX(), source.getY(), source.getZ(), power, World.ExplosionSourceType.TNT);
 		} else if (!world.isClient) {
-			world.createExplosion(null, pos.getX(), pos.getY() + 1, pos.getZ(), power, World.ExplosionSourceType.TNT);
+			world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), power, World.ExplosionSourceType.TNT);
 		}
 	}
 }

@@ -19,22 +19,13 @@
           {
             "type": "minecraft:stack_damage",
             "damage":  200
+          },
+          {
+            "type": "forgero:consume_upgrade",
+            "id": "minecraft:tnt"
           }
         ],
         "title": "Explodes on impact"
-      },
-      {
-        "type": "minecraft:on_hit_block",
-        "on_hit": {
-          "type": "minecraft:explosion",
-          "power": 2
-        },
-        "after_use": [
-          {
-            "type": "minecraft:stack_damage",
-            "damage":  200
-          }
-        ]
       }
     ]
   },
