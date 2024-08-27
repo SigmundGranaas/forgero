@@ -22,6 +22,7 @@ import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
+import it.unimi.dsi.fastutil.Pair;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +52,39 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	public ConstructedTool upgrade(State upgrade) {
 		return toolBuilder().addUpgrade(upgrade).build();
 	}
+
+	public ConstructedTool nestedUpgrade(State upgrade) {
+		if(canUpgrade(upgrade)){
+			return toolBuilder().addUpgrade(upgrade).build();
+		}
+		List<State> parts = new ArrayList<>();
+
+		Optional<State> upgradedPart = Optional.empty();
+
+		for (State part : parts()){
+			if(upgradedPart.isEmpty() && part instanceof Composite composite && composite.canUpgrade(upgrade)){
+				State upgraded = composite.upgrade(upgrade);
+				parts.add(upgraded);
+				upgradedPart = Optional.of(upgraded);
+			} else {
+				parts.add(part);
+			}
+		}
+
+		if(upgradedPart.isPresent()){
+			Optional<ToolBuilder> builder = ToolBuilder.builder(parts);
+			if (builder.isPresent()){
+				return builder.get()
+						.addSlotContainer(this.slotContainer)
+						.id(identifier())
+						.conditions(conditions)
+						.type(type())
+						.build();
+			}
+		}
+		return this;
+	}
+
 
 	@Override
 	public ConstructedTool removeUpgrade(String id) {

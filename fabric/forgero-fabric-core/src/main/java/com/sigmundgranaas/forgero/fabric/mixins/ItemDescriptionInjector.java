@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.SimpleState;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
@@ -63,10 +64,16 @@ public class ItemDescriptionInjector {
 		Optional<State> toolState = StateService.INSTANCE.convert(tool);
 
 		if (state.isPresent() && stack.equals(user.getStackInHand(Hand.OFF_HAND)) && toolState.isPresent() && toolState.get() instanceof Composite upgradeable) {
+			if(upgradeable instanceof ConstructedTool tool1){
+				Composite composite = tool1.nestedUpgrade(state.get());
+				user.setStackInHand(Hand.MAIN_HAND, StateService.INSTANCE.convert(composite).get());
+				user.getStackInHand(Hand.OFF_HAND).decrement(1);
+			}else{
 				Composite composite = upgradeable.upgrade(state.get());
 				user.setStackInHand(Hand.MAIN_HAND, StateService.INSTANCE.convert(composite).get());
 				user.getStackInHand(Hand.OFF_HAND).decrement(1);
 			}
+		}
 	}
 
 	@Inject(at = @At("HEAD"), method = "getMaxUseTime", cancellable = true)
