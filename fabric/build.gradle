@@ -143,7 +143,6 @@ curseforge {
 				optionalDependency "mythicmetals-decorations"
 				optionalDependency "regions-unexplored"
 				optionalDependency "spelunkery"
-				optionalDependency "ends-phantasm"
 				optionalDependency "enderite-mod"
 				optionalDependency "galosphere"
 				optionalDependency "eden-ring-reforked"

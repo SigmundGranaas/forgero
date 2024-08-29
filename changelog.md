@@ -1,8 +1,6 @@
 # Forgero Beta release 0.12.5
 
 ## Changelog
-
-## What's Changed
 * [Compat] Eldritch End by @JorisDeBeer in https://github.com/SigmundGranaas/forgero/pull/1056
 * [Patch]: Integrated with reach entity attributes by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1058
 * [Compat] Regions Unexplored by @JorisDeBeer in https://github.com/SigmundGranaas/forgero/pull/1051
