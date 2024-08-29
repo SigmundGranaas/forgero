@@ -32,8 +32,7 @@ public class WoodPartsTag implements DynamicResourceGenerator {
 				"hoe_head",
 				"sword_blade",
 				"sword_guard",
-				"handle",
-				"binding");
+				"handle");
 		for (var part : parts) {
 			var tag = new JTag();
 			for (var wood : woods) {
