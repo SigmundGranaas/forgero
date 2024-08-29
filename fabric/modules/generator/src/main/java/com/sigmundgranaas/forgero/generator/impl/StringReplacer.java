@@ -7,32 +7,48 @@ import java.util.regex.Pattern;
 
 public class StringReplacer {
 	private final BiFunction<String, Object, String> variableReplacer;
+	private final Pattern pattern;
 
 	public StringReplacer(BiFunction<String, Object, String> variableReplacer) {
 		this.variableReplacer = variableReplacer;
+		this.pattern = Pattern.compile("\\$\\{(.*?)}");
 	}
 
 	public String applyReplacements(String template, Map<String, Object> variableMap) {
-		Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
 		Matcher matcher = pattern.matcher(template);
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder(template.length());
 
+		int lastEnd = 0;
 		while (matcher.find()) {
+			sb.append(template, lastEnd, matcher.start());
 			String placeholder = matcher.group(1);
-			String[] parts = placeholder.split("\\.");
-			String variableKey = parts[0];
-			if (parts.length == 2 && variableMap.containsKey(variableKey)) {
-				Object variable = variableMap.get(variableKey);
-				String operation = parts[1];
-				String replacement = variableReplacer.apply(operation, variable);
-				matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
-			} else if (parts.length == 1 && variableMap.containsKey(variableKey)) {
-				Object variable = variableMap.get(variableKey);
-				String replacement = variable.toString();
-				matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
+			int dotIndex = placeholder.indexOf('.');
+
+			String variableKey = (dotIndex == -1) ? placeholder : placeholder.substring(0, dotIndex);
+			Object variable = variableMap.get(variableKey);
+
+			if (variable != null) {
+				String replacement;
+				if (dotIndex != -1) {
+					String operation = placeholder.substring(dotIndex + 1);
+					replacement = variableReplacer.apply(operation, variable);
+				} else {
+					replacement = variable.toString();
+				}
+				sb.append(replacement);
+			} else {
+				sb.append(matcher.group());  // Keep original if no replacement found
 			}
+
+			lastEnd = matcher.end();
 		}
-		matcher.appendTail(sb);
+
+		if (lastEnd < template.length()) {
+			sb.append(template, lastEnd, template.length());
+		}
+
 		return sb.toString();
 	}
 }
+
+

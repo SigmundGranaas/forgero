@@ -3,3 +3,17 @@ dependencies {
 	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+test {
+	useJUnitPlatform()
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
+}
+
