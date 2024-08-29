@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.generator.impl.DataDirectoryRecipeGenerator;
 import com.sigmundgranaas.forgero.generator.impl.IdentifiedJson;
+import com.sigmundgranaas.forgero.generator.impl.RecipeGenerator;
 import com.sigmundgranaas.forgero.generator.impl.Registries;
 import com.sigmundgranaas.forgero.generator.impl.ResourceManagerJsonLoader;
 import com.sigmundgranaas.forgero.generator.impl.StringReplacer;
@@ -35,7 +36,8 @@ public class RecipeInjectionMixin {
 
 		Predicate<String> isModLoaded = FabricLoader.getInstance()::isModLoaded;
 
-		DataDirectoryRecipeGenerator generator = new DataDirectoryRecipeGenerator(stringReplacer, transformer, "recipe_generators", new ResourceManagerJsonLoader(resourceManager), isModLoaded);
+		RecipeGenerator recipeGenerator = new RecipeGenerator(stringReplacer, transformer,isModLoaded );
+		DataDirectoryRecipeGenerator generator = new DataDirectoryRecipeGenerator("recipe_generators", new ResourceManagerJsonLoader(resourceManager), recipeGenerator);
 
 		Map<Identifier, JsonObject> recipes = generator.generate().stream()
 				.collect(Collectors.toMap(IdentifiedJson::id, IdentifiedJson::json));
