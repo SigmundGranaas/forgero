@@ -11,7 +11,7 @@ public class StringReplacer {
 
 	public StringReplacer(BiFunction<String, Object, String> variableReplacer) {
 		this.variableReplacer = variableReplacer;
-		this.pattern = Pattern.compile("\\$\\{(.*?)\\}");
+		this.pattern = Pattern.compile("\\$\\{(.*?)}");
 	}
 
 	public String applyReplacements(String template, Map<String, Object> variableMap) {
@@ -50,3 +50,5 @@ public class StringReplacer {
 		return sb.toString();
 	}
 }
+
+

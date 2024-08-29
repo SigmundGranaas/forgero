@@ -1,88 +1,38 @@
 package com.sigmundgranaas.forgero.generator.impl;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.generator.impl.recipe.validation.RecipeValidator;
 
-import net.minecraft.util.Identifier;
-
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DataDirectoryRecipeGenerator {
-		private final StringReplacer replacer;
-		private final VariableToMapTransformer transformer;
 		private final String directory;
 		private final ResourceManagerJsonLoader loader;
 		private final RecipeValidator recipeValidator;
-		private final Predicate<String> isModLoaded;
-		private final Gson gson;
+		private final RecipeGenerator recipeGenerator;
 
-		public DataDirectoryRecipeGenerator(StringReplacer replacer, VariableToMapTransformer transformer,
-											String directory, ResourceManagerJsonLoader loader, Predicate<String> isModLoaded) {
-			this.replacer = replacer;
-			this.transformer = transformer;
+		public DataDirectoryRecipeGenerator(String directory, ResourceManagerJsonLoader loader, RecipeGenerator recipeGenerator) {
 			this.directory = directory;
 			this.loader = loader;
-			this.isModLoaded = isModLoaded;
+			this.recipeGenerator = recipeGenerator;
 			this.recipeValidator = new RecipeValidator();
-			this.gson = new Gson();
 		}
 
 
 	public Collection<IdentifiedJson> generate() {
 		long conversionTime = System.nanoTime();
-		var result = loader.load(directory)
+		var loadedTemplates = loader.load(directory);
+		var result = loadedTemplates
 						.parallelStream()
-						.filter(this::checkDependencies)
-						.flatMap( (recipe) -> convertToIdentifiedJson(recipe).stream())
+						.flatMap(template -> recipeGenerator.generateRecipeFrom(template).stream())
 						.filter(recipeValidator::validateRecipe)
 				.collect(Collectors.toList());
 
 		long convertEnd = System.nanoTime();
 
-		System.out.println("Total convert time: " + (convertEnd - conversionTime) / 1_000_000 + " ms");
-
+		long processingTime = (convertEnd - conversionTime) / 1_000_000;
+		Forgero.LOGGER.info("Converted {} recipes from {} templates recipes in {}ms", result.size(), loadedTemplates.size(), processingTime);
 		return result;
-	}
-
-	private boolean checkDependencies(JsonObject object) {
-		boolean result;
-		if(object.get("dependencies") == null) {
-			result = true;
-		} else {
-			JsonArray dependencies = object.get("dependencies").getAsJsonArray();
-			result = dependencies.asList().stream()
-					.map(JsonElement::getAsString)
-					.allMatch(isModLoaded);
-		}
-		return result;
-	}
-
-	private List<IdentifiedJson> convertToIdentifiedJson(JsonObject object) {
-		return	transformer.transformStateMap(object.getAsJsonObject("variables"))
-				.parallelStream()
-				.map(variables -> createRecipe(object, variables)).toList();
-	}
-
-	private IdentifiedJson createRecipe(JsonObject template, Map<String, Object> variableMap) {
-		String idString = replacer.applyReplacements(template.get("identifier").getAsString(), variableMap);
-		Identifier id = new Identifier(idString);
-
-		String jsonString = replacer.applyReplacements(template.toString(), variableMap);
-		JsonObject recipe = gson.fromJson(jsonString, JsonObject.class);
-
-		recipe.remove("identifier");
-		recipe.remove("generator_type");
-		recipe.remove("variables");
-
-		return new IdentifiedJson(id, recipe, recipe);
 	}
 }
