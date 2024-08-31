@@ -56,6 +56,8 @@ dependencies {
 
 	// Advanced runtime resource pack
 	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+
+	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 }
 
 allprojects {
@@ -111,14 +113,42 @@ curseforge {
 			relations {
 				embeddedLibrary 'arrp'
 				requiredDependency 'fabric-api'
-				optionalDependency 'patchouli'
+				optionalDependency 'modonomicon'
 				optionalDependency "lambdynamiclights"
 				optionalDependency "better-combat"
 				optionalDependency "modmenu"
 				optionalDependency "mythicmetals"
 				optionalDependency "betternether"
+				optionalDependency "betterend"
 				optionalDependency "mystical-crops"
 				optionalDependency "mythicmetals"
+				optionalDependency "natures-spirit"
+				optionalDependency "create"
+				optionalDependency "ad-astra"
+				optionalDependency "deeperdarker"
+				optionalDependency "ecologics"
+				optionalDependency "naturalist"
+				optionalDependency "advanced-netherite"
+				optionalDependency "modern-industrialization"
+				optionalDependency "oh-the-biomes-weve-gone"
+				optionalDependency "techreborn"
+				optionalDependency "lets-do-bloomingnature"
+				optionalDependency "lets-do-beachparty"
+				optionalDependency "lets-do-vinery"
+				optionalDependency "lets-do-nethervinery"
+				optionalDependency "gardens-of-the-dead"
+				optionalDependency "ribbits"
+				optionalDependency "dragonloot"
+				optionalDependency "garnished-additions"
+				optionalDependency "mythicmetals-decorations"
+				optionalDependency "eldritch-end"
+				optionalDependency "regions_unexplored"
+				optionalDependency "spelunkery"
+				optionalDependency "ends-phantasm"
+				optionalDependency "enderitemod"
+				optionalDependency "galosphere"
+				optionalDependency "bountiful-fares"
+				optionalDependency "edenring-reforked"
 				incompatible "exordium"
 			}
 		}
@@ -142,7 +172,7 @@ modrinth {
 	dependencies {
 		embedded.project "arrp"
 		required.project "fabric-api"
-		optional.project "patchouli"
+		optional.project "modonomicon"
 		optional.project "lambdynamiclights"
 		optional.project "better-combat"
 		optional.project "modmenu"
@@ -151,6 +181,34 @@ modrinth {
 		optional.project "mystical_crops"
 		optional.project "mythicmetals"
 		optional.project "wiredredstone"
+		optional.project "natures-spirit"
+		optional.project "create"
+		optional.project "ad-astra"
+		optional.project "betterend"
+		optional.project "deeperdarker"
+		optional.project "ecologics"
+		optional.project "naturalist"
+		optional.project "advanced-netherite"
+		optional.project "oh-the-biomes-weve-gone"
+		optional.project "modern-industrialization"
+		optional.project "lets-do-bloomingnature"
+		optional.project "fruitful-fun"
+		optional.project "lets-do-beachparty"
+		optional.project "lets-do-nethervinery"
+		optional.project "lets-do-vinery"
+		optional.project "gardens-of-the-dead"
+		optional.project "ribbits"
+		optional.project "dragonloot"
+		optional.project "garnished-additions"
+		optional.project "mythicmetals-decorations"
+		optional.project "eldritch-end"
+		optional.project "regions_unexplored"
+		optional.project "spelunkery"
+		optional.project "ends-phantasm"
+		optional.project "enderitemod"
+		optional.project "galosphere"
+		optional.project "bountiful-fares"
+		optional.project "edenring-reforked"
 		incompatible.project "exordium"
 	}
 }
