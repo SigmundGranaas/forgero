@@ -11,25 +11,21 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import net.minecraft.util.math.BlockPos;
-
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
 import static com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry.ASSEMBLY_STATION_BLOCK_ENTITY;
-import static net.minecraft.block.ChestBlock.getInventory;
 
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
 	private static final @NotNull String DISASSEMBLY_INVENTORY_NBT_KEY = "DisassemblyInventory";
@@ -99,15 +95,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
 	}
 
-	public ItemStack getRenderStack(){
+	public ItemStack getRenderStack() {
 		return this.disassemblyInventory.getStack(0);
 	}
-
-	@Override
-	public void markDirty() {
-		world.updateListeners(pos, getCachedState(), getCachedState(), 3);
-		super.markDirty();
-	}
-
-
 }

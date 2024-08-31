@@ -15,7 +15,7 @@ import com.sigmundgranaas.forgero.fabric.client.texture.Generator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreen;
-import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.renderer.AssemblyStationBlockEntityRenderer;
+import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.render.AssemblyStationBlockEntityRenderer;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.registry.entity.EntityRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableItemRenderer;
@@ -34,7 +34,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.resource.ResourceManager;
