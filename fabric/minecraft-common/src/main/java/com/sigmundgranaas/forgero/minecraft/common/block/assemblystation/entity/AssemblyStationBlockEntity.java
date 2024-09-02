@@ -62,8 +62,8 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	@Override
 	public void readNbt(@NotNull NbtCompound nbt) {
-		this.getDisassemblyInventory().readNbtList(nbt.getList(DISASSEMBLY_INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
-		this.getResultInventory().readNbtList(nbt.getList(RESULT_INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
+		this.getDisassemblyInventory().readNbtList(nbt.getList(DISASSEMBLY_INVENTORY_NBT_KEY, NbtElement.COMPOUND_TYPE));
+		this.getResultInventory().readNbtList(nbt.getList(RESULT_INVENTORY_NBT_KEY, NbtElement.COMPOUND_TYPE));
 		super.readNbt(nbt);
 		this.markDirtyAndUpdateListeners();
 	}
