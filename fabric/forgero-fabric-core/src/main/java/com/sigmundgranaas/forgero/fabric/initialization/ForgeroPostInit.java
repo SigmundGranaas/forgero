@@ -58,7 +58,6 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.ResourceType;
@@ -212,7 +211,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 * @param stateService The state service provides services related to Forgero states.
 	 */
 	private void registerItems(StateService stateService) {
-		new StateItemRegistrar(stateService).registerItem(Registries.ITEM);
+		new StateItemRegistrar(stateService).registerItems(Registries.ITEM);
 		new DynamicItemsRegistrar().register();
 	}
 
