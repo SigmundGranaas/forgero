@@ -1,29 +1,37 @@
 package com.sigmundgranaas.forgero.core.type;
 
 
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	private final List<MutableTypeNode> rootNodes;
 	private List<TypeData> missingNodes;
+	private final ConcurrentHashMap<String, Optional<MutableTypeNode>> nodeCache;
+	private final ConcurrentHashMap<Type, Optional<MutableTypeNode>> typeCache;
+
 
 	public TypeTree() {
 		this.rootNodes = new ArrayList<>();
 		this.missingNodes = new ArrayList<>();
+		this.nodeCache = new ConcurrentHashMap<>();
+		this.typeCache = new ConcurrentHashMap<>();
+	}
+
+	private void invalidateCache() {
+		nodeCache.clear();
+		typeCache.clear();
 	}
 
 	public Optional<MutableTypeNode> addNode(TypeData nodeData) {
+		invalidateCache();
+
 		Optional<MutableTypeNode> nodeOpt = find(nodeData.name());
 		if (nodeOpt.isEmpty()) {
 			if (nodeData.parent().isPresent()) {
@@ -51,11 +59,15 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 
 
 	public void addNodes(List<TypeData> nodes) {
+		invalidateCache();
+
 		nodes.forEach(this::addNode);
 		this.resolve();
 	}
 
 	private Optional<MutableTypeNode> addNodeWithParent(String name, String parent) {
+		invalidateCache();
+
 		var parentOpt = find(parent);
 
 		if (parentOpt.isPresent()) {
@@ -70,6 +82,8 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	}
 
 	public synchronized ResolvedTypeTree resolve() {
+		invalidateCache();
+
 		if (this.missingNodes.isEmpty()) {
 			return new ResolvedTree(resolveNodes());
 		}
@@ -90,6 +104,7 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	}
 
 	public List<TypeNode> resolveNodes() {
+		invalidateCache();
 		return rootNodes.stream().map(MutableTypeNode::resolve).toList();
 	}
 
@@ -100,22 +115,36 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	}
 
 	private void removeMissingNodes(List<MutableTypeNode> nodes) {
+		invalidateCache();
 		this.missingNodes = new ArrayList<>(missingNodes.stream().filter(missingNode -> nodes.stream().noneMatch(node -> node.name().equals(missingNode.name()))).toList());
 	}
 
 	public Optional<MutableTypeNode> find(String name) {
-		return rootNodes.stream().map(typeNode -> find(name, typeNode).map(MutableTypeNode.class::cast)).flatMap(Optional::stream).findAny();
+		return nodeCache.computeIfAbsent(name, k ->
+				rootNodes.stream()
+						.map(typeNode -> find(name, typeNode).map(MutableTypeNode.class::cast))
+						.flatMap(Optional::stream)
+						.findAny()
+		);
 	}
 
 	public Optional<MutableTypeNode> find(Type type) {
-		return rootNodes.stream().map(typeNode -> find(type.typeName(), typeNode).map(MutableTypeNode.class::cast)).flatMap(Optional::stream).findAny();
+		return typeCache.computeIfAbsent(type, k ->
+				rootNodes.stream()
+						.map(typeNode -> find(type.typeName(), typeNode).map(MutableTypeNode.class::cast))
+						.flatMap(Optional::stream)
+						.findAny()
+		);
 	}
 
 	public Optional<MutableTypeNode> find(String name, MutableTypeNode node) {
 		if (node.name().equals(name)) {
 			return Optional.of(node);
 		}
-		return node.children().stream().map(newNode -> find(name, newNode)).flatMap(Optional::stream).findAny();
+		return node.children().stream()
+				.map(newNode -> find(name, newNode))
+				.flatMap(Optional::stream)
+				.findAny();
 	}
 
 	public Type type(String type) {
