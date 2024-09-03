@@ -90,6 +90,20 @@
     ],
     "features": [
       {
+        "type": "minecraft:entity_tick",
+        "handler": {
+          "type": "minecraft:status_effect",
+          "effect": "minecraft:dolphins_grace",
+          "target": "minecraft:self",
+          "level": 1,
+          "duration": 30
+        },
+        "predicate": {
+          "type": "minecraft:entity",
+          "flag": {
+            "is_swimming": true
+          }
+        },
         "title": "feature.forgero.swimming",
         "description": "feature.forgero.swimming.description"
       }
