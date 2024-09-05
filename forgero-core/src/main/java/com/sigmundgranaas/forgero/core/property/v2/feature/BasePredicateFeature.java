@@ -56,4 +56,9 @@ public abstract class BasePredicateFeature implements Feature, Matchable {
 	public int hashCode() {
 		return Objects.hash(id, type, predicate, title, description);
 	}
+
+	@Override
+	public boolean isDynamic() {
+		return predicate.isDynamic();
+	}
 }

@@ -12,12 +12,8 @@
       "name": "guard_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "sword_gem_center.png",
-      "order": 75,
-      "offset": [
-        -3,
-        -3
-      ]
+      "template": "guard_gem.png",
+      "order": 75
     },
     {
       "name": "sword_guard_reinforcement",

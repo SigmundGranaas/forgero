@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.generator.impl.recipe.validation;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.generator.impl.IdentifiedJson;
 
