@@ -9,6 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityBasedHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -45,7 +46,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class StatusEffectHandler implements EntityTargetHandler {
+public class StatusEffectHandler implements EntityBasedHandler {
 	public static final String TYPE = "minecraft:status_effect";
 	public static final String EFFECT_LEVEL_ATTRIBUTE_TYPE = "minecraft:effect_level";
 	public static final String EFFECT_DURATION_TYPE = "minecraft:effect_duration";
@@ -56,7 +57,6 @@ public class StatusEffectHandler implements EntityTargetHandler {
 	public static Codec<StatusEffect> STATUS_EFFECT_CODEC = Identifier.CODEC.xmap(Registries.STATUS_EFFECT::get, Registries.STATUS_EFFECT::getId);
 
 	public static final Codec<StatusEffectHandler> BUILDER = codec();
-
 
 	private final StatusEffect effect;
 	private final Attribute level;
@@ -86,6 +86,15 @@ public class StatusEffectHandler implements EntityTargetHandler {
 				Attribute.defaultOrExplicitTypeCodec(EFFECT_DURATION_TYPE).optionalFieldOf("duration", DEFAULT_DURATION).forGetter(StatusEffectHandler::duration),
 				Codec.STRING.fieldOf("target").forGetter(StatusEffectHandler::target)
 		).apply(instance, StatusEffectHandler::new));
+	}
+
+	@Override
+	public void handle(Entity entity) {
+		if (entity instanceof LivingEntity livingTarget) {
+			livingTarget.addStatusEffect(new StatusEffectInstance(effect, duration(entity), level(entity) - 1));
+		}else {
+			Forgero.LOGGER.warn("Targeted entity is not a living entity!");
+		}
 	}
 
 	/**

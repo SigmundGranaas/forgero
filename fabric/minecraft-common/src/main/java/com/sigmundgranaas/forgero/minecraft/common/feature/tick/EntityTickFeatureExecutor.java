@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.util.match.Matchable.DEFAULT_TRUE;
 import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedRootFeatures;
 
 /**
  * Executor for applying entity tick features at every tick.
@@ -21,9 +22,9 @@ public record EntityTickFeatureExecutor(List<EntityTickFeature> features,
 										   Hand hand,
 										   Entity entity) {
 
-		public static EntityTickFeatureExecutor initFromMainHandStack(LivingEntity entity, MatchContext matchContext) {
+		public static EntityTickFeatureExecutor initFromMainHandStack(LivingEntity entity) {
 			ItemStack source = entity.getMainHandStack();
-			List<EntityTickFeature> features = cachedFilteredFeatures(source, EntityTickFeature.KEY, matchContext);
+			List<EntityTickFeature> features = cachedRootFeatures(source, EntityTickFeature.KEY);
 			return new EntityTickFeatureExecutor(features, source, Hand.MAIN_HAND, entity);
 		};
 

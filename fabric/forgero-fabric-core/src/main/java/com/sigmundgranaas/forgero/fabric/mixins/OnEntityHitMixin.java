@@ -35,7 +35,7 @@ public abstract class OnEntityHitMixin {
 					.put(WORLD, entity.getWorld())
 					.put(ENTITY_TARGET, target);
 
-			OnHitEntityFeatureExecutor.initFromMainHandStack(entity, target, context)
+			OnHitEntityFeatureExecutor.initFromMainHandStack(entity, target)
 					.executeIfNotCoolingDown(context);
 		}
 	}

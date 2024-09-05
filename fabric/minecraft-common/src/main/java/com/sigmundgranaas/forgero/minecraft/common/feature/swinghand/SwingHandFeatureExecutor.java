@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.util.match.Matchable.DEFAULT_TRUE;
 import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedRootFeatures;
 
 /**
  * Executor for ensuring that the features are filtered and applied correctly.
@@ -31,8 +32,8 @@ public record SwingHandFeatureExecutor(List<SwingHandFeature> features,
 		 ItemStack stack,
 		 Hand hand) {
 
-	public static SwingHandFeatureExecutor initFromMainHandStack(LivingEntity entity, ItemStack stack, Hand hand, MatchContext matchContext) {
-		List<SwingHandFeature> features = cachedFilteredFeatures(stack, SwingHandFeature.KEY, matchContext);
+	public static SwingHandFeatureExecutor initFromMainHandStack(LivingEntity entity, ItemStack stack, Hand hand) {
+		List<SwingHandFeature> features = cachedRootFeatures(stack, SwingHandFeature.KEY);
 		return new SwingHandFeatureExecutor(features, entity, stack, hand);
 	};
 
