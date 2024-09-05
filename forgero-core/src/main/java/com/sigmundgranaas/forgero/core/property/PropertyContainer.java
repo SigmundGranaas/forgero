@@ -77,10 +77,8 @@ public interface PropertyContainer extends Comparable<Object> {
 	default List<Property> applyProperty(Matchable target, MatchContext context) {
 		return getRootProperties().stream()
 				.filter(property -> {
-					if (property instanceof BasePredicateFeature data) {
-						if(data.predicate().isDynamic()){
+					if (property.isDynamic()) {
 							return true;
-						}
 					}
 					return property.applyCondition(target, context);
 				})
