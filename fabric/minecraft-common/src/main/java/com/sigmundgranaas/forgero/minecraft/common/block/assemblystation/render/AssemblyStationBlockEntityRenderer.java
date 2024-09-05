@@ -39,14 +39,133 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		}
 
 		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-		ItemStack stack = entity.getRenderStack();
+		ItemStack inventory = entity.getRenderInventory();
+		ItemStack resultSlot1 = entity.getRenderResultSlot1();
+		ItemStack resultSlot2 = entity.getRenderResultSlot2();
+		ItemStack resultSlot3 = entity.getRenderResultSlot3();
+		ItemStack resultSlot4 = entity.getRenderResultSlot4();
+		ItemStack resultSlot5 = entity.getRenderResultSlot5();
+		ItemStack resultSlot6 = entity.getRenderResultSlot6();
+		ItemStack resultSlot7 = entity.getRenderResultSlot7();
+		ItemStack resultSlot8 = entity.getRenderResultSlot8();
+		ItemStack resultSlot9 = entity.getRenderResultSlot9();
+
 		matrices.push();
-		matrices.translate(0.5f, 0.75f, 0.5f);
-		matrices.scale(6f, 6f, 6f);
+		matrices.translate(0.5f, 1.025f, 0.5f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 
 		itemRenderer.renderItem(
-				stack, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				inventory, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot1, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot2, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot3, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot4, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot5, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot6, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot7, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot8, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
+				vertexConsumers, world, 1
+		);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5f, 1.025f, 1.4f);
+		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+
+		itemRenderer.renderItem(
+				resultSlot9, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
 				vertexConsumers, world, 1
 		);
 		matrices.pop();

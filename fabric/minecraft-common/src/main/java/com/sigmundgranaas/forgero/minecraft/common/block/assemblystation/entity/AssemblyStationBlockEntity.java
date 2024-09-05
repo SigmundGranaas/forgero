@@ -95,7 +95,46 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
 	}
 
-	public ItemStack getRenderStack() {
+	public ItemStack getRenderInventory() {
 		return this.disassemblyInventory.getStack(0);
 	}
+
+	public ItemStack getRenderResultSlot1() {
+		return this.resultInventory.getStack(0);
+	}
+
+	public ItemStack getRenderResultSlot2() {
+		return this.resultInventory.getStack(1);
+	}
+
+	public ItemStack getRenderResultSlot3() {
+		return this.resultInventory.getStack(2);
+	}
+
+	public ItemStack getRenderResultSlot4() {
+		return this.resultInventory.getStack(3);
+	}
+
+	public ItemStack getRenderResultSlot5() {
+		return this.resultInventory.getStack(4);
+	}
+
+	public ItemStack getRenderResultSlot6() {
+		return this.resultInventory.getStack(5);
+
+	}
+
+	public ItemStack getRenderResultSlot7() {
+		return this.resultInventory.getStack(6);
+	}
+
+	public ItemStack getRenderResultSlot8() {
+		return this.resultInventory.getStack(7);
+	}
+
+	public ItemStack getRenderResultSlot9() {
+		return this.resultInventory.getStack(8);
+	}
+
+
 }
