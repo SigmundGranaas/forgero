@@ -39,15 +39,22 @@ public class WorldPredicate implements Predicate<World>, Matchable {
 
 	@Override
 	public boolean test(Matchable match, MatchContext context) {
-		var entity = context.get(WORLD).or(() -> context.get(ENTITY).map(Entity::getWorld))
+		var entity = context.get(WORLD)
+				.or(() -> context.get(ENTITY).map(Entity::getWorld))
 				.map(this::test)
 				.orElse(false);
 
 		if (entity) {
 			return true;
 		}
-		return context.get(ENTITY_TARGET).map(Entity::getWorld)
+		return context.get(ENTITY_TARGET)
+				.map(Entity::getWorld)
 				.map(this::test)
 				.orElse(false);
+	}
+
+	@Override
+	public boolean isDynamic() {
+		return true;
 	}
 }

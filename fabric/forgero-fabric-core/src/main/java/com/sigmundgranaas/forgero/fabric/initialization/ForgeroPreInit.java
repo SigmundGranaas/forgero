@@ -239,6 +239,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 
 		registerEntityBasedHandler(TeleportHandler.TYPE, TeleportHandler.BUILDER);
 
+
 		//On hit entity
 		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
@@ -248,12 +249,16 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, KnockbackHandler.TYPE, KnockbackHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
 
 		//On hit block
+		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
 		HandlerBuilderRegistry.register(BlockTargetHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
 		HandlerBuilderRegistry.register(BlockTargetHandler.KEY, ExplosionHandler.TYPE, ExplosionHandler.BUILDER);
 		HandlerBuilderRegistry.register(BlockTargetHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
 		HandlerBuilderRegistry.register(BlockTargetHandler.KEY, FireHandler.TYPE, FireHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityTargetHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
+
 
 		// After use
 		HandlerBuilderRegistry.register(AfterUseHandler.KEY, ConsumeStackHandler.TYPE, ConsumeStackHandler.BUILDER);
@@ -264,6 +269,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		// On entity tick
 		HandlerBuilderRegistry.register(EntityBasedHandler.KEY, MagneticHandler.TYPE, MagneticHandler.BUILDER);
 		HandlerBuilderRegistry.register(EntityBasedHandler.KEY, SummonHandler.TYPE, SummonHandler.BUILDER);
+		HandlerBuilderRegistry.register(EntityBasedHandler.KEY, StatusEffectHandler.TYPE, StatusEffectHandler.BUILDER);
+
 
 		// Block selectors
 		HandlerBuilderRegistry.register(BlockSelector.KEY, ColumnSelector.TYPE, ColumnSelector.BUILDER);

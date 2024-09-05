@@ -58,7 +58,7 @@ public abstract class PlayerServerInteractionManagerMixin {
 				.put(WORLD, entity.getWorld())
 				.put(BLOCK_TARGET, pos);
 
-		OnHitBlockFeatureExecutor.initFromMainHandStack(player, pos, context)
+		OnHitBlockFeatureExecutor.initFromMainHandStack(player, pos)
 				.executeIfNotCoolingDown(context);
 	}
 }

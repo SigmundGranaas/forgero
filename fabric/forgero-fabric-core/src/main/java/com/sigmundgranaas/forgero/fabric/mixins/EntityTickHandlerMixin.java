@@ -42,7 +42,7 @@ public abstract class EntityTickHandlerMixin extends Entity {
 			if(forgero$context == null){
 				this.forgero$context = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, entity.getWorld()));
 			}
-			EntityTickFeatureExecutor.initFromMainHandStack(entity, forgero$context).execute(forgero$context);
+			EntityTickFeatureExecutor.initFromMainHandStack(entity).execute(forgero$context);
 		}
 	}
 }

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block;
 
 import static com.sigmundgranaas.forgero.core.util.match.Matchable.DEFAULT_TRUE;
 import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedRootFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.feature.swinghand.SwingHandFeatureExecutor.isCoolingDownStack;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public record OnHitBlockFeatureExecutor(List<OnHitBlockFeature> features,
                                         World world,
                                         BlockPos target) {
 
-		public static OnHitBlockFeatureExecutor initFromMainHandStack(LivingEntity entity, BlockPos target, MatchContext matchContext) {
+		public static OnHitBlockFeatureExecutor initFromMainHandStack(LivingEntity entity, BlockPos target) {
 			ItemStack source = entity.getMainHandStack();
-			List<OnHitBlockFeature> features = cachedFilteredFeatures(source, OnHitBlockFeature.KEY, matchContext);
+			List<OnHitBlockFeature> features = cachedRootFeatures(source, OnHitBlockFeature.KEY);
 			return new OnHitBlockFeatureExecutor(features, source, Hand.MAIN_HAND, entity, entity.getWorld(), target);
 		};
 

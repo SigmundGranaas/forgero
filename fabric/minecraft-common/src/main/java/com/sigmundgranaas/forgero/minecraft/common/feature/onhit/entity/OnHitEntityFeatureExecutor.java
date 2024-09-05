@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.sigmundgranaas.forgero.core.util.match.Matchable.DEFAULT_TRUE;
 import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
+import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedRootFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.feature.swinghand.SwingHandFeatureExecutor.isCoolingDownStack;
 
 /**
@@ -26,9 +27,9 @@ public record OnHitEntityFeatureExecutor(List<OnHitEntityFeature> features,
 											 World world,
 											 Entity target) {
 
-		public static OnHitEntityFeatureExecutor initFromMainHandStack(LivingEntity entity, Entity target, MatchContext matchContext) {
+		public static OnHitEntityFeatureExecutor initFromMainHandStack(LivingEntity entity, Entity target) {
 			ItemStack source = entity.getMainHandStack();
-			List<OnHitEntityFeature> features = cachedFilteredFeatures(source, OnHitEntityFeature.KEY, matchContext);
+			List<OnHitEntityFeature> features = cachedRootFeatures(source, OnHitEntityFeature.KEY);
 			return new OnHitEntityFeatureExecutor(features, source, Hand.MAIN_HAND, entity, entity.getWorld(), target);
 		};
 
@@ -44,5 +45,4 @@ public record OnHitEntityFeatureExecutor(List<OnHitEntityFeature> features,
 						handler.handle(entity, stack, hand);
 					} );
 		}
-
 	}
