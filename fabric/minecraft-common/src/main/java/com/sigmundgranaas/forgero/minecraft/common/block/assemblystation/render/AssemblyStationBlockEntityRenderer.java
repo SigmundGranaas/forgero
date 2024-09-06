@@ -63,8 +63,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.70f, 1.025f, 1.15f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -75,8 +75,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.70f, 1.025f, 1.15f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -87,8 +87,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.70f, 1.025f, 1.65f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -99,8 +99,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.45f, 1.025f, 1.15f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -111,8 +111,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.45f, 1.025f, 1.15f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -123,8 +123,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.45f, 1.025f, 1.65f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -135,8 +135,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.20f, 1.025f, 1.15f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -147,8 +147,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.20f, 1.025f, 1.15f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
@@ -159,8 +159,8 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		matrices.pop();
 
 		matrices.push();
-		matrices.translate(0.5f, 1.025f, 1.4f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
+		matrices.translate(0.20f, 1.025f, 1.65f);
+		matrices.scale(0.30f, 0.75f, 0.30f);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 
