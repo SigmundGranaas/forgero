@@ -18,9 +18,49 @@
       "variants": [
         {
           "target": [
-            "type:AXE"
+            "type:AXE",
+            "model:32x/axe_head.png"
           ],
           "template": "32x/axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/pickaxe_head.png"
+          ],
+          "template": "32x/pickaxe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/shovel_head.png"
+          ],
+          "template": "32x/shovel_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/pickaxe_head.png"
+          ],
+          "template": "32x/pickaxe_handle.png",
           "resolution": 32
         }
       ]
