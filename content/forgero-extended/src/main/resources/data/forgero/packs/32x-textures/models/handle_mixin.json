@@ -1,0 +1,53 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "32x/handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "32x/axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_axe_handle",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "32x/refined_axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_axe_handle",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "32x/mastercrafted_axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}

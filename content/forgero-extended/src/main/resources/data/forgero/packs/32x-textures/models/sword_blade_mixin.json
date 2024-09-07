@@ -1,0 +1,149 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "broadsword_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/broadsword_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "katana_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/katana_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "knife_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/knife_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_sword_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/mastercrafted_sword_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "rapier_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/rapier_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_sword_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/refined_sword_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "saber_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/saber_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "scimitar_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/scimitar_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "serrated_sword_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/serrated_sword_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "shortsword_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/shortsword_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "slanted_sword_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/slanted_sword_blade.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "sword_blade",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD_BLADE"
+          ],
+          "template": "32x/sword_blade.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}

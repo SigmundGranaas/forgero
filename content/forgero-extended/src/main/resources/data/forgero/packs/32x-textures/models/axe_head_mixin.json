@@ -1,0 +1,149 @@
+{
+  "type": "AXE_HEAD",
+  "models": [
+    {
+      "name": "axe_head",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/axe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "axe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/axe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "clumpy_axe_head",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/clumpy_axe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "clumpy_axe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/clumpy_axe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "double_headed_axe_head",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/double_headed_axe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "double_headed_axe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/double_headed_axe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_axe_head",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/mastercrafted_axe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_axe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/mastercrafted_axe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pointy_axe_head",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/pointy_axe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pointy_axe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/pointy_axe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_axe_head",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/refined_axe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_axe_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:AXE_HEAD"
+          ],
+          "template": "32x/refined_axe_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}

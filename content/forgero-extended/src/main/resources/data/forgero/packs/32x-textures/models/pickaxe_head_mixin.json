@@ -1,0 +1,149 @@
+{
+  "type": "PICKAXE_HEAD",
+  "models": [
+    {
+      "name": "pickaxe_head",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/pickaxe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pickaxe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "clumpy_pickaxe_head",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/clumpy_pickaxe_tip_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "clumpy_pickaxe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/clumpy_pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "lightweight_pickaxe_head",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/lightweight_pickaxe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "lightweight_pickaxe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/lightweight_pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_pickaxe_head",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/mastercrafted_pickaxe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_pickaxe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/mastercrafted_pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pointy_pickaxe_head",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/pointy_pickaxe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pointy_pickaxe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/pointy_pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_pickaxe_head",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/refined_pickaxe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_pickaxe_head_tip_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD"
+          ],
+          "template": "32x/refined_pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}
