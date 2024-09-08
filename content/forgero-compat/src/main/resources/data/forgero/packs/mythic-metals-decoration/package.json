@@ -2,7 +2,7 @@
   "name": "mythicmetalsdecorations-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "mythicmetals_decorations",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",
