@@ -2,7 +2,7 @@
   "name": "deeper_and_darker-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "deeperdarker",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

@@ -2,7 +2,7 @@
   "name": "advancednetherite-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "advancednetherite",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

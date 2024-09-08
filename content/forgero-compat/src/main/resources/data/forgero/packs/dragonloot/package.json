@@ -2,7 +2,7 @@
   "name": "dragonloot-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "dragonloot",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",
