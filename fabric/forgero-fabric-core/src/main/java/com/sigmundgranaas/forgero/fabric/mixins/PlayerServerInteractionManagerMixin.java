@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block.OnHitBlockFeatureExecutor;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PropertyHelper;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler;
@@ -16,12 +15,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -55,19 +52,13 @@ public abstract class PlayerServerInteractionManagerMixin {
 			opcode = Opcodes.INVOKEVIRTUAL, shift = At.Shift.AFTER))
 	private void forgero$onStartMining(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, CallbackInfo ci) {
 		ServerPlayerEntity entity = player;
-		ItemStack main = entity.getMainHandStack();
-		if (player.getItemCooldownManager().isCoolingDown(main.getItem())) {
-			return;
-		}
+
 		MatchContext context = MatchContext.of()
 				.put(ENTITY, entity)
 				.put(WORLD, entity.getWorld())
 				.put(BLOCK_TARGET, pos);
 
-		cachedFilteredFeatures(main, OnHitBlockFeature.KEY, context)
-				.forEach(handler -> {
-					handler.onHit(entity, entity.getWorld(), pos);
-					handler.handle(entity, main, Hand.MAIN_HAND);
-				});
+		OnHitBlockFeatureExecutor.initFromMainHandStack(player, pos)
+				.executeIfNotCoolingDown(context);
 	}
 }

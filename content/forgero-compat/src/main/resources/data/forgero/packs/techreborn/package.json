@@ -2,7 +2,7 @@
   "name": "techreborn-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "tech_reborn",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

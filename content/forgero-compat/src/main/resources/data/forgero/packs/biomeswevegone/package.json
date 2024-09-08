@@ -2,7 +2,7 @@
   "name": "biomeswevegone-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "biomeswevegone",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

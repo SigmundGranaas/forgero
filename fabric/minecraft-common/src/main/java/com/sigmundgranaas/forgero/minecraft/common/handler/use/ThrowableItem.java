@@ -8,8 +8,8 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDa
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitBlockFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block.OnHitBlockFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.entity.OnHitEntityFeature;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.entity.Entity;

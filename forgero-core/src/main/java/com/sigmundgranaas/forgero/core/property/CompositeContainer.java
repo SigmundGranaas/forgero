@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
+import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +36,8 @@ public class CompositeContainer implements PropertyContainer {
 		return containers.stream()
 				.map(PropertyContainer::getRootProperties)
 				.flatMap(List::stream)
-				.filter(prop -> prop.applyCondition(target, context))
+				.filter(prop -> prop.isDynamic() || prop.applyCondition(target, context))
 				.toList();
-
 	}
 
 	@Override

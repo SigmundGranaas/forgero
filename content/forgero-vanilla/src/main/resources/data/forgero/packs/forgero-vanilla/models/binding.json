@@ -12,10 +12,6 @@
           "target": [
             "type:AXE"
           ],
-          "offset": [
-            1,
-            1
-          ],
           "template": "axe_binding.png"
         },
         {
@@ -48,10 +44,6 @@
         {
           "target": [
             "type:AXE"
-          ],
-          "offset": [
-            1,
-            1
           ],
           "template": "axe_binding.png"
         },
@@ -86,10 +78,6 @@
           "target": [
             "type:AXE"
           ],
-          "offset": [
-            1,
-            1
-          ],
           "template": "axe_binding_reinforced.png"
         },
         {
@@ -116,48 +104,32 @@
       "name": "binding_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "square_gem_center.png",
-      "offset": [
-        -1,
-        -1
-      ],
+      "template": "binding_gem.png",
       "order": 90,
       "variants": [
         {
           "target": [
-            "type:PICKAXE"
+            "type:AXE"
           ],
-          "offset": [
-            2,
-            2
-          ]
+          "template": "axe_binding_gem.png"
         },
         {
           "target": [
-            "type:AXE"
+            "type:PICKAXE"
           ],
-          "offset": [
-            1,
-            1
-          ]
+          "template": "pickaxe_binding_gem.png"
         },
         {
           "target": [
             "type:HOE"
           ],
-          "offset": [
-            2,
-            2
-          ]
+          "template": "hoe_binding_gem.png"
         },
         {
           "target": [
-            "model:binding.png"
+            "type:SHOVEL"
           ],
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "shovel_binding_gem.png"
         }
       ]
     },

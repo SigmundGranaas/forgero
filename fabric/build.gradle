@@ -145,6 +145,9 @@ curseforge {
 				optionalDependency "regions_unexplored"
 				optionalDependency "spelunkery"
 				optionalDependency "beneaththewetlands"
+				optionalDependency "enderite-mod"
+				optionalDependency "galosphere"
+				optionalDependency "eden-ring-reforked"
 				incompatible "exordium"
 			}
 		}
@@ -197,10 +200,15 @@ modrinth {
 		optional.project "dragonloot"
 		optional.project "garnished-additions"
 		optional.project "mythicmetals-decorations"
-		optional.project "beneaththewetlands"
 		optional.project "eldritch-end"
 		optional.project "regions_unexplored"
 		optional.project "spelunkery"
+		optional.project "ends-phantasm"
+		optional.project "enderite-mod"
+		optional.project "galosphere"
+		optional.project "bountiful-fares"
+		optional.project "eden-ring-reforked"
+		optional.project "beneaththewetlands"
 		incompatible.project "exordium"
 	}
 }

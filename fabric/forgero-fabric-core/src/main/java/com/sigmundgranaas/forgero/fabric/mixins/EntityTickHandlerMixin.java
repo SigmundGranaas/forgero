@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
 
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.feature.EntityTickFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeatureExecutor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,6 +21,8 @@ import net.minecraft.world.World;
 @Mixin(LivingEntity.class)
 public abstract class EntityTickHandlerMixin extends Entity {
 
+	private MatchContext forgero$context;
+
 	public EntityTickHandlerMixin(EntityType<?> type, World world) {
 		super(type, world);
 	}
@@ -35,15 +36,13 @@ public abstract class EntityTickHandlerMixin extends Entity {
 	 * @param callbackInfo CallbackInfo
 	 */
 	@Inject(method = "baseTick", at = @At("RETURN"))
-	public void forgero$entityBaseTick$EntityTickHandler(CallbackInfo callbackInfo) {
+	public void forgero$entityBaseTickHandler(CallbackInfo callbackInfo) {
 		//noinspection ConstantValue
 		if (this.getMainHandStack().getItem() instanceof PropertyContainer && ((Object) this instanceof LivingEntity entity)) {
-			ItemStack main = entity.getMainHandStack();
-			MatchContext context = MatchContext.of()
-					.put(ENTITY, entity)
-					.put(WORLD, entity.getWorld());
-			cachedFilteredFeatures(main, EntityTickFeature.KEY, context)
-					.forEach(handler -> handler.handle(entity));
+			if(forgero$context == null){
+				this.forgero$context = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, entity.getWorld()));
+			}
+			EntityTickFeatureExecutor.initFromMainHandStack(entity).execute(forgero$context);
 		}
 	}
 }
