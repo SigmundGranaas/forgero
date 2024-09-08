@@ -66,7 +66,9 @@
         "predicate": {
           "type": "forgero:random",
           "value": 0.5
-        }
+        },
+        "title": "feature.forgero.slowness",
+        "description": "feature.forgero.slowness.description"
       }
     ]
   },
