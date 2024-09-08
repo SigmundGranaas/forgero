@@ -90,9 +90,9 @@
           "target": "minecraft:targeted_entity",
           "power": 3
         },
-        "predicate": {
-          "type": "forgero:random",
-          "value": 0.4
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 100
         },
         "title": "feature.forgero.explosive",
         "description": "feature.forgero.explosive.description"
@@ -104,9 +104,9 @@
           "target": "minecraft:block_target",
           "power": 3
         },
-        "predicate": {
-          "type": "forgero:random",
-          "value": 0.4
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 100
         }
       }
     ]
