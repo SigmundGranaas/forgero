@@ -2,7 +2,7 @@
   "name": "edenring-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "edenring",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",
