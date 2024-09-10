@@ -208,7 +208,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 		}
 
 		public static Optional<ToolBuilder> builder(List<State> parts) {
-			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE) || part.test(Type.BOW_LIMB)).findFirst();
+			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.WEAPON_HEAD) || part.test(Type.BOW_LIMB)).findFirst();
 			var handle = parts.stream().filter(part -> head.orElse(null) != part).findFirst();
 			if (head.isPresent() && handle.isPresent()) {
 				return Optional.of(builder(head.get(), handle.get()));
