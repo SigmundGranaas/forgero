@@ -1,0 +1,128 @@
+{
+  "type": "SPEAR_HEAD_SCHEMATIC",
+  "name": "spear_head-schematic",
+  "parent": "sword_blade_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SPEAR_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.65
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.35
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.2
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "variant-reach-composite",
+        "type": "forgero:reach",
+        "value": 7.5
+      },
+      {
+        "id": "sprinting-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "type": "minecraft:entity",
+          "flag": {
+            "is_sprinting": true
+          }
+        }
+      }
+    ],
+    "features": [
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 2,
+      "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "sword",
+      "to": "spear"
+    }
+  }
+}
