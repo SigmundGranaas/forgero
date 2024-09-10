@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
 import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeatureExecutor;
+import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 
 import net.minecraft.entity.Entity;
@@ -42,7 +43,7 @@ public record OnHitBlockFeatureExecutor(List<OnHitBlockFeature> features,
 	};
 
 		public void executeIfNotCoolingDown(MatchContext matchContext){
-			if(stack != null && !(stack.getItem() instanceof ToolStateItem)){
+			if(stack != null && stack.getItem() instanceof DefaultStateItem){
 				return;
 			}
 

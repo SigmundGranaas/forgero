@@ -114,13 +114,23 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 		if (hitResult instanceof BlockHitResult blockHitResult && getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR) {
 			BlockPos pos = blockHitResult.getBlockPos();
-			MatchContext ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this.getOwner()), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(BLOCK_TARGET, pos));
-
-			OnHitBlockFeatureExecutor.initFromStack(this.getStack(), this.getOwner(), pos).executeIfNotCoolingDown(ctx);
+			MatchContext ctx;
+			if(this.getOwner() == null){
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(BLOCK_TARGET, pos));
+			} else {
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this.getOwner()), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(BLOCK_TARGET, pos));
+			}
+			OnHitBlockFeatureExecutor.initFromStack(this.getStack(), this, pos).executeIfNotCoolingDown(ctx);
 
 		} else if (hitResult instanceof EntityHitResult entityHitResult) {
-			MatchContext ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this.getOwner()), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(ENTITY_TARGET, entityHitResult.getEntity()));
-			OnHitEntityFeatureExecutor.initFromStack(this.getStack(), this.getOwner(), entityHitResult.getEntity()).executeIfNotCoolingDown(ctx);
+			MatchContext ctx;
+			if(this.getOwner() == null){
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(ENTITY_TARGET, entityHitResult.getEntity()));
+			} else {
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this.getOwner()), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(ENTITY_TARGET, entityHitResult.getEntity()));
+			}
+
+			OnHitEntityFeatureExecutor.initFromStack(this.getStack(), this, entityHitResult.getEntity()).executeIfNotCoolingDown(ctx);
 		}
 	}
 

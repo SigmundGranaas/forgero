@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.feature.tick;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
+import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 
 import net.minecraft.entity.Entity;
@@ -36,7 +37,7 @@ public record EntityTickFeatureExecutor(List<EntityTickFeature> features,
 	};
 
 		public void execute(MatchContext matchContext){
-			if(stack != null && !(stack.getItem() instanceof ToolStateItem)){
+			if(stack != null && !(stack.getItem() instanceof DefaultStateItem)){
 				return;
 			}
 
