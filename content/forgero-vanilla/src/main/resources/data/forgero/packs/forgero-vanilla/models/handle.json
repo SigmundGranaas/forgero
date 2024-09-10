@@ -97,6 +97,12 @@
             "type:SWORD"
           ],
           "template": "short_handle.png"
+        },
+        {
+          "target": [
+            "type:WEAPON"
+          ],
+          "template": "axe_handle.png"
         }
       ]
     },
@@ -119,7 +125,7 @@
     {
       "target": [
         "type:DYE",
-        "slot:1"
+        "slot:2"
       ],
       "modelType": "UPGRADE",
       "template": "handle_dye"
@@ -127,7 +133,7 @@
     {
       "target": [
         "type:POMMEL",
-        "slot:2"
+        "slot:1"
       ],
       "modelType": "UPGRADE",
       "template": "handle_pommel"

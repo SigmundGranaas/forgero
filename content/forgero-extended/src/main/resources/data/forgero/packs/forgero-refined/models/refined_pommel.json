@@ -7,19 +7,36 @@
       "type": "GENERATE",
       "palette": "METAL",
       "order": 60,
-      "offset": [
-        5,
-        5
-      ],
       "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
         {
           "target": [
             "type:SWORD"
           ],
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "refined_sword_pommel.png"
         },
         {
           "target": [
@@ -34,19 +51,36 @@
       "type": "GENERATE",
       "palette": "DYE",
       "order": 65,
-      "offset": [
-        5,
-        5
-      ],
       "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "refined_tool_pommel.png"
+        },
         {
           "target": [
             "type:SWORD"
           ],
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "refined_sword_pommel.png"
         },
         {
           "target": [
