@@ -24,6 +24,8 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -87,7 +89,7 @@ public class LaunchProjectileHandler implements StopHandler {
 					1.0F,
 					1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + ((float) useTime / 10) * 0.5F
 			);
-			if (!isCreativeMode(playerEntity)) {
+			if (!isCreativeMode(playerEntity) || !hasInfinity(stack)) {
 				decrementArrowStack(playerEntity, arrowStack);
 			}
 		}
@@ -119,6 +121,10 @@ public class LaunchProjectileHandler implements StopHandler {
 
 		float pullProgress = getPullProgress(useTime, getDrawTime(shooter));
 
+		if(hasInfinity(bow)){
+			projectile.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+		}
+
 		if (pullProgress == 1.0F && canBeCritical) {
 			projectile.setCritical(true);
 		}
@@ -132,6 +138,11 @@ public class LaunchProjectileHandler implements StopHandler {
 	private boolean isCreativeMode(PlayerEntity player) {
 		return player.getAbilities().creativeMode;
 	}
+
+	private boolean hasInfinity(ItemStack stack) {
+		return EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0;
+	}
+
 
 	private void decrementArrowStack(PlayerEntity shooter, ItemStack arrowStack) {
 		arrowStack.decrement(1);
