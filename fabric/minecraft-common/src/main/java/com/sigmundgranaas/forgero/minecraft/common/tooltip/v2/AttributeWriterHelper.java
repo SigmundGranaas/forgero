@@ -78,7 +78,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	private boolean isPartHead(Object o) {
-		return o instanceof Matchable matchable && (matchable.test(Type.SWORD_BLADE) || matchable.test(Type.TOOL_PART_HEAD));
+		return o instanceof Matchable matchable && (matchable.test(Type.WEAPON_HEAD) || matchable.test(Type.TOOL_PART_HEAD));
 	}
 
 	private boolean isSchematic(Object o) {
