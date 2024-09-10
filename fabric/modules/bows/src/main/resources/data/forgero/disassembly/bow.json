@@ -1,0 +1,7 @@
+{
+  "input": "minecraft:bow",
+  "results": [
+    "forgero:oak-bow_limb",
+    "minecraft:string"
+  ]
+}
