@@ -2,7 +2,7 @@
   "name": "bountifulfares-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "bountifulfares",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

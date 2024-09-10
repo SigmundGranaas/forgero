@@ -2,7 +2,7 @@
   "name": "enderitemod-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "enderitemod",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

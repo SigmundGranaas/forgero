@@ -2,7 +2,7 @@
   "name": "ecologics-materials",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "ecologics",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

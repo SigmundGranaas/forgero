@@ -27,7 +27,11 @@ public class FeatureCache {
 				@Override
 				public @NotNull
 				Boolean load(@NotNull FeatureContainerKey key) {
-					return key.pair().container().stream().features(key.key()).findFirst().isPresent();
+					return key.pair().container()
+							.stream()
+							.features(key.key())
+							.findFirst()
+							.isPresent();
 				}
 			});
 
