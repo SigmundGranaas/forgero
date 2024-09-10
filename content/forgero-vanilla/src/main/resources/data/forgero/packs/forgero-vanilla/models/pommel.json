@@ -2,7 +2,7 @@
   "type": "POMMEL",
   "models": [
     {
-      "name": "handle_pommel",
+      "name": "pommel",
       "template": "pommel.png",
       "type": "GENERATE",
       "palette": "METAL",
@@ -41,7 +41,8 @@
         {
           "target": [
             "type:HANDLE"
-          ]
+          ],
+          "template": "tool_pommel.png"
         }
       ]
     },
@@ -85,17 +86,18 @@
         {
           "target": [
             "type:HANDLE"
-          ]
+          ],
+          "template": "tool_pommel.png"
         }
       ]
     },
     {
       "target": [
         "type:METAL",
-        "id:pommel-schematic"
+        "type:POMMEL_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "handle_pommel"
+      "template": "pommel"
     },
     {
       "target": [

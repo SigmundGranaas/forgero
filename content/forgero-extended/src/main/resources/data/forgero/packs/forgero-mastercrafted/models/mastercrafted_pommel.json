@@ -41,51 +41,31 @@
         {
           "target": [
             "type:HANDLE"
-          ]
+          ],
+          "template": "mastercrafted_tool_pommel.png"
         }
       ]
     },
     {
-      "name": "mastercrafted_pommel_dye",
-      "template": "mastercrafted_pommel.png",
-      "type": "GENERATE",
-      "palette": "DYE",
-      "order": 65,
+      "name": "pommel_dye",
       "variants": [
         {
           "target": [
-            "type:HOE"
+            "model:mastercrafted_pommel.png"
+          ],
+          "template": "mastercrafted_pommel.png"
+        },
+        {
+          "target": [
+            "model:mastercrafted_tool_pommel.png"
           ],
           "template": "mastercrafted_tool_pommel.png"
         },
         {
           "target": [
-            "type:PICKAXE"
-          ],
-          "template": "mastercrafted_tool_pommel.png"
-        },
-        {
-          "target": [
-            "type:AXE"
-          ],
-          "template": "mastercrafted_tool_pommel.png"
-        },
-        {
-          "target": [
-            "type:SHOVEL"
-          ],
-          "template": "mastercrafted_tool_pommel.png"
-        },
-        {
-          "target": [
-            "type:SWORD"
+            "model:mastercrafted_sword_pommel.png"
           ],
           "template": "mastercrafted_sword_pommel.png"
-        },
-        {
-          "target": [
-            "type:HANDLE"
-          ]
         }
       ]
     },
@@ -96,14 +76,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "mastercrafted_pommel"
-    },
-    {
-      "target": [
-        "type:DYE",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "mastercrafted_pommel_dye"
     }
   ]
 }
