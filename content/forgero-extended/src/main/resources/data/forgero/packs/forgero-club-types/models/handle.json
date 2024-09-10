@@ -1,0 +1,16 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:CLUB"
+          ],
+          "template": "axe_handle.png"
+        }
+      ]
+    }
+  ]
+}

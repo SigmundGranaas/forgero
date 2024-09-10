@@ -1,0 +1,11 @@
+{
+  "type": "SPEAR",
+  "models": [
+    {
+      "target": [
+        "type:SPEAR"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "type": "WEAPON",
+  "name": "weapon",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "WEAPON",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "WEAPON_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "type": "WEAPON_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}
