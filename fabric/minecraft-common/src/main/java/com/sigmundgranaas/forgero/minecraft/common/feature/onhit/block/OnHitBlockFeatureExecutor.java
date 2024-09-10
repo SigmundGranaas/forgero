@@ -9,6 +9,11 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 
+import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeatureExecutor;
+import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
+import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -32,8 +37,16 @@ public record OnHitBlockFeatureExecutor(List<OnHitBlockFeature> features,
 			List<OnHitBlockFeature> features = cachedRootFeatures(source, OnHitBlockFeature.KEY);
 			return new OnHitBlockFeatureExecutor(features, source, Hand.MAIN_HAND, entity, entity.getWorld(), target);
 		};
+	public static OnHitBlockFeatureExecutor initFromStack(ItemStack stack, Entity entity, BlockPos target) {
+		List<OnHitBlockFeature> features = cachedRootFeatures(stack, OnHitBlockFeature.KEY);
+		return new OnHitBlockFeatureExecutor(features, stack, Hand.MAIN_HAND, entity,  entity.getWorld(), target);
+	};
 
 		public void executeIfNotCoolingDown(MatchContext matchContext){
+			if(stack != null && stack.getItem() instanceof DefaultStateItem){
+				return;
+			}
+
 			if (isCoolingDownStack(stack, entity)){
 				return;
 			}
