@@ -159,7 +159,7 @@ public interface DynamicAttributeItem extends DynamicAttributeTool, DynamicDurab
 		boolean isCreative =  user instanceof PlayerEntity player && player.isCreative();
 		float modifier = isCreative ? 0.5f : 0f;
 		float baseReach = isCreative ? 5 : 4.5f;
-		float reach = ComputedAttribute.apply(defaultProperties(), Reach.KEY) + modifier;
+		float reach = ComputedAttribute.apply(dynamicProperties(stack), Reach.KEY) + modifier;
 		float diff = reach - baseReach;
 
 		if(diff != 0){
