@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
@@ -61,7 +62,12 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	private Optional<State> convertHead(ItemStack stack) {
 		var converted = service.convert(stack);
-		if (converted.isPresent() && (converted.get().test(Type.SWORD_BLADE) || converted.get().test(Type.TOOL_PART_HEAD) || converted.get().test(Type.ARROW_HEAD) || converted.get().test(Type.BOW_LIMB))) {
+		Predicate<State> isPartHead = (part) ->
+								part.test(Type.WEAPON_HEAD) ||
+								part.test(Type.TOOL_PART_HEAD) ||
+								part.test(Type.ARROW_HEAD) ||
+								part.test(Type.BOW_LIMB);
+		if (converted.isPresent() && isPartHead.test(converted.get())) {
 			return converted;
 		}
 		return Optional.empty();

@@ -29,7 +29,7 @@ public class DynamicWeaponItemRegistrationHandler implements Registerable<Rankab
 				.build();
 
 		registry.register("forgero:sword", base.toBuilder()
-				.matcher(typeMatcher("SWORD"))
+				.matcher(typeMatcher("SWORD").or(typeMatcher("WEAPON")))
 				.item(itemClassPreparer(this::sword))
 				.build());
 	}
@@ -37,5 +37,4 @@ public class DynamicWeaponItemRegistrationHandler implements Registerable<Rankab
 	private Item sword(StateProvider provider, Item.Settings settings, RegistryUtils.DynamicToolItemSettings params) {
 		return new DynamicSwordItem(new ForgeroMaterial(provider, params.ingredient(), StateService.INSTANCE), params.attackDamage(), params.attackSpeed(), settings, provider);
 	}
-
 }
