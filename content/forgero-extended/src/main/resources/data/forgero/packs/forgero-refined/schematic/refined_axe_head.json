@@ -49,22 +49,22 @@
           {
             "id": "refined-schematic-rarity-composite",
             "type": "RARITY",
-            "value": 1.3
+            "value": 1.25
           },
           {
             "id": "refined-schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 1.3
+            "value": 1.25
           },
           {
             "id": "refined-schematic-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 1.3
+            "value": 1.25
           },
           {
             "id": "refined-schematic-durability-composite",
             "type": "DURABILITY",
-            "value": 1.3
+            "value": 1.25
           }
         ]
       }

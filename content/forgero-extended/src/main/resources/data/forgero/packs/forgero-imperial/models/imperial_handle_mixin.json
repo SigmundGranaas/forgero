@@ -1,0 +1,101 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:spear_head.png"
+          ],
+          "template": "handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:spear_head.png"
+          ],
+          "template": "handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:scythe_blade.png"
+          ],
+          "template": "scythe_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:spear_head.png"
+          ],
+          "template": "spear_handle_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:sickle_blade.png"
+          ],
+          "template": "sickle_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:sickle_blade.png"
+          ],
+          "template": "sickle_handle.png"
+        }
+      ]
+    }
+  ]
+}

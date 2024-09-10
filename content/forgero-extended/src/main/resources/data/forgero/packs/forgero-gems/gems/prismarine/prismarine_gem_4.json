@@ -1,0 +1,31 @@
+{
+  "type": "GEM",
+  "name": "prismarine_gem_4",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 4
+      }
+    ]
+  },
+  "palette": {
+    "name": "prismarine_gem"
+  }
+}
