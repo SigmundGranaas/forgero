@@ -37,7 +37,7 @@ public record EntityTickFeatureExecutor(List<EntityTickFeature> features,
 	};
 
 		public void execute(MatchContext matchContext){
-			if(stack != null && !(stack.getItem() instanceof DefaultStateItem)){
+			if(stack != null && stack.getItem() instanceof DefaultStateItem){
 				return;
 			}
 
