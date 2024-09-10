@@ -31,6 +31,6 @@ public class LivingEntitySwingHandMixin {
 			 this.forgero$context = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, entity.getWorld()));
 		}
 
-		 SwingHandFeatureExecutor.initFromMainHandStack(entity, main, hand).execute(forgero$context);
+		 SwingHandFeatureExecutor.initFromMainHandStack(entity, main, hand).executeIfNotCoolingDown(forgero$context);
 	}
 }
