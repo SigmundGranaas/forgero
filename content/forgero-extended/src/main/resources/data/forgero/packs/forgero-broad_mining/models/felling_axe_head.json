@@ -4,7 +4,7 @@
     {
       "name": "felling_axe_head",
       "type": "GENERATE",
-      "template": "felling_axe_head.png",
+      "template": "broadmining/felling_axe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:felling_axe_head.png"
+            "model:broadmining/felling_axe_head.png"
           ],
-          "template": "felling_axe_head_reinforcement.png"
+          "template": "broadmining/felling_axe_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:felling_axe_head.png"
+            "model:broadmining/felling_axe_head.png"
           ],
-          "template": "felling_axe_head.png"
+          "template": "broadmining/felling_axe_head.png"
         }
       ]
     },

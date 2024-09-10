@@ -4,7 +4,7 @@
     {
       "name": "cutter_mattock_head",
       "type": "GENERATE",
-      "template": "cutter_mattock_head.png",
+      "template": "utility/cutter_mattock_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
-          "template": "cutter_mattock_head.png"
+          "template": "utility/cutter_mattock_head.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
-          "template": "cutter_mattock_head_reinforcement.png"
+          "template": "utility/cutter_mattock_head_reinforcement.png"
         }
       ]
     },

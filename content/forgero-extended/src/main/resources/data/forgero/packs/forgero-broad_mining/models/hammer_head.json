@@ -4,7 +4,7 @@
     {
       "name": "hammer_head",
       "type": "GENERATE",
-      "template": "hammer_head.png",
+      "template": "broadmining/hammer_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:hammer_head.png"
+            "model:broadmining/hammer_head.png"
           ],
-          "template": "hammer_head_reinforcement.png"
+          "template": "broadmining/hammer_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:hammer_head.png"
+            "model:broadmining/hammer_head.png"
           ],
-          "template": "hammer_head.png"
+          "template": "broadmining/hammer_head.png"
         }
       ]
     },

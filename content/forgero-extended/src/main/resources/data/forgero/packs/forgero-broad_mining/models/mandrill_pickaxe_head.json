@@ -4,7 +4,7 @@
     {
       "name": "mandrill_pickaxe_head",
       "modelType": "GENERATE",
-      "template": "mandrill_pickaxe_head.png",
+      "template": "broadmining/mandrill_pickaxe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:mandrill_pickaxe_head.png"
+            "model:broadmining/mandrill_pickaxe_head.png"
           ],
-          "template": "mandrill_pickaxe_head_reinforcement.png"
+          "template": "broadmining/mandrill_pickaxe_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:mandrill_pickaxe_head.png"
+            "model:broadmining/mandrill_pickaxe_head.png"
           ],
-          "template": "mandrill_pickaxe_head.png"
+          "template": "broadmining/mandrill_pickaxe_head.png"
         }
       ]
     },

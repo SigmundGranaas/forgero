@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "half_basket_sword_guard",
-      "template": "half_basket_sword_guard.png",
+      "template": "guards/half_basket_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 60
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:half_basket_sword_guard.png"
+            "model:guards/half_basket_sword_guard.png"
           ],
-          "template": "half_basket_sword_guard_reinforcement.png"
+          "template": "guards/half_basket_sword_guard_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:half_basket_sword_guard.png"
+            "model:guards/half_basket_sword_guard.png"
           ],
-          "template": "half_basket_sword_guard.png"
+          "template": "guards/half_basket_sword_guard.png"
         }
       ]
     },

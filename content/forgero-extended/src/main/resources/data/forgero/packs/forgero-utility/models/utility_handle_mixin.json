@@ -7,9 +7,9 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
-          "template": "mattock_handle.png"
+          "template": "utility/mattock_handle.png"
         }
       ]
     },
@@ -19,9 +19,9 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
-          "template": "mattock_handle.png"
+          "template": "utility/mattock_handle.png"
         }
       ]
     },
@@ -31,9 +31,9 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
-          "template": "mattock_handle.png"
+          "template": "utility/mattock_handle.png"
         }
       ]
     },
@@ -43,9 +43,9 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
-          "template": "mattock_handle.png"
+          "template": "utility/mattock_handle.png"
         }
       ]
     }

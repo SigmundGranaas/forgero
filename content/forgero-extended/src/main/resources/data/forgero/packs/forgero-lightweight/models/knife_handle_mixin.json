@@ -7,9 +7,9 @@
         {
           "target": [
             "type:SWORD",
-            "model:knife_blade.png"
+            "model:lightweight/knife_blade.png"
           ],
-          "template": "throwing_handle.png"
+          "template": "lightweight/throwing_handle.png"
         }
       ]
     }

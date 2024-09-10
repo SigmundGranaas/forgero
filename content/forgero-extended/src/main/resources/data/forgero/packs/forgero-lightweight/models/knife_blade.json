@@ -4,7 +4,7 @@
     {
       "name": "knife_blade",
       "type": "GENERATE",
-      "template": "knife_blade.png",
+      "template": "lightweight/knife_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:knife_blade.png"
+            "model:lightweight/knife_blade.png"
           ],
-          "template": "knife_blade_reinforcement.png"
+          "template": "lightweight/knife_blade_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:knife_blade.png"
+            "model:lightweight/knife_blade.png"
           ],
-          "template": "knife_blade.png"
+          "template": "lightweight/knife_blade.png"
         }
       ]
     },

@@ -4,7 +4,7 @@
     {
       "name": "kunai_blade",
       "type": "GENERATE",
-      "template": "kunai_blade.png",
+      "template": "lightweight/kunai_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:kunai_blade.png"
+            "model:lightweight/kunai_blade.png"
           ],
-          "template": "kunai_blade_reinforcement.png"
+          "template": "lightweight/kunai_blade_reinforcement.png"
         }
       ]
     },
@@ -24,16 +24,16 @@
       "variants": [
         {
           "target": [
-            "model:kunai_blade.png"
+            "model:lightweight/kunai_blade.png"
           ],
-          "template": "kunai_blade.png"
+          "template": "lightweight/kunai_blade.png"
         }
       ]
     },
     {
       "name": "kunai_rope",
       "type": "GENERATE",
-      "template": "kunai_rope.png",
+      "template": "lightweight/kunai_rope.png",
       "palette": "SLOT_MATERIAL",
       "order": 15
     },

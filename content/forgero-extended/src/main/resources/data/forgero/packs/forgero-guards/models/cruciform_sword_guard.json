@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "cruciform_sword_guard",
-      "template": "cruciform_sword_guard.png",
+      "template": "guards/cruciform_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 60
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:cruciform_sword_guard.png"
+            "model:guards/cruciform_sword_guard.png"
           ],
-          "template": "cruciform_sword_guard_reinforcement.png"
+          "template": "guards/cruciform_sword_guard_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:cruciform_sword_guard.png"
+            "model:guards/cruciform_sword_guard.png"
           ],
-          "template": "cruciform_sword_guard.png"
+          "template": "guards/cruciform_sword_guard.png"
         }
       ]
     },

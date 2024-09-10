@@ -4,7 +4,7 @@
     {
       "name": "club_head",
       "type": "GENERATE",
-      "template": "club_head.png",
+      "template": "exotic/club_head.png",
       "palette": "WOOD",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:club_head.png"
+            "model:exotic/club_head.png"
           ],
-          "template": "club_head_reinforcement.png"
+          "template": "exotic/club_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:club_head.png"
+            "model:exotic/club_head.png"
           ],
-          "template": "club_head.png"
+          "template": "exotic/club_head.png"
         }
       ]
     },

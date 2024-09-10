@@ -7,9 +7,9 @@
         {
           "target": [
             "type:SWORD",
-            "model:kunai_blade.png"
+            "model:lightweight/kunai_blade.png"
           ],
-          "template": "kunai_handle.png"
+          "template": "lightweight/kunai_handle.png"
         }
       ]
     },
@@ -19,9 +19,9 @@
         {
           "target": [
             "type:SWORD",
-            "model:kunai_handle.png"
+            "model:lightweight/kunai_handle.png"
           ],
-          "template": "kunai_handle.png"
+          "template": "lightweight/kunai_handle.png"
         }
       ]
     },
@@ -31,9 +31,9 @@
         {
           "target": [
             "type:HANDLE",
-            "model:kunai_handle.png"
+            "model:lightweight/kunai_handle.png"
           ],
-          "template": "kunai_rope.png"
+          "template": "lightweight/kunai_rope.png"
         }
       ]
     },
@@ -43,9 +43,9 @@
         {
           "target": [
             "type:SWORD",
-            "model:throwing_handle.png"
+            "model:lightweight/throwing_handle.png"
           ],
-          "template": "throwing_handle.png"
+          "template": "lightweight/throwing_handle.png"
         }
       ]
     }

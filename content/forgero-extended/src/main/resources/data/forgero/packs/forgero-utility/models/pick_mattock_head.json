@@ -4,7 +4,7 @@
     {
       "name": "pick_mattock_head",
       "type": "GENERATE",
-      "template": "pick_mattock_head.png",
+      "template": "utility/pick_mattock_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
-          "template": "pick_mattock_head.png"
+          "template": "utility/pick_mattock_head.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
-          "template": "pick_mattock_head_reinforcement.png"
+          "template": "utility/pick_mattock_head_reinforcement.png"
         }
       ]
     },

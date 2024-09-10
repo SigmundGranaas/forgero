@@ -7,7 +7,7 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
           "template": "soft_hoe_binding.png",
           "offset": [
@@ -23,7 +23,7 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
           "template": "sword_gem_center.png",
           "offset": [
@@ -39,7 +39,7 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
           "template": "soft_hoe_binding.png",
           "offset": [
@@ -55,7 +55,7 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
           "template": "hoe_binding.png",
           "offset": [
@@ -71,7 +71,7 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
           "template": "hoe_binding.png",
           "offset": [
@@ -87,7 +87,7 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
           "template": "hoe_binding_reinforced.png",
           "offset": [
@@ -103,7 +103,7 @@
         {
           "target": [
             "type:HOE",
-            "model:cutter_mattock_head.png"
+            "model:utility/cutter_mattock_head.png"
           ],
           "template": "square_gem_center.png",
           "offset": [
@@ -119,7 +119,7 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
           "template": "soft_hoe_binding.png",
           "offset": [
@@ -135,7 +135,7 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
           "template": "sword_gem_center.png",
           "offset": [
@@ -151,7 +151,7 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
           "template": "soft_hoe_binding.png",
           "offset": [
@@ -167,7 +167,7 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
           "template": "hoe_binding.png",
           "offset": [
@@ -183,7 +183,7 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
           "template": "hoe_binding.png",
           "offset": [
@@ -199,7 +199,7 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
           "template": "hoe_binding_reinforced.png",
           "offset": [
@@ -215,7 +215,7 @@
         {
           "target": [
             "type:HOE",
-            "model:pick_mattock_head.png"
+            "model:utility/pick_mattock_head.png"
           ],
           "template": "square_gem_center.png",
           "offset": [

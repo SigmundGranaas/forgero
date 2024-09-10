@@ -4,7 +4,7 @@
     {
       "name": "cutlass_blade",
       "type": "GENERATE",
-      "template": "cutlass_blade.png",
+      "template": "exotic/cutlass_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:cutlass_blade.png"
+            "model:exotic/cutlass_blade.png"
           ],
-          "template": "cutlass_blade_reinforcement.png"
+          "template": "exotic/cutlass_blade_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:cutlass_blade.png"
+            "model:exotic/cutlass_blade.png"
           ],
-          "template": "cutlass_blade.png"
+          "template": "exotic/cutlass_blade.png"
         }
       ]
     },

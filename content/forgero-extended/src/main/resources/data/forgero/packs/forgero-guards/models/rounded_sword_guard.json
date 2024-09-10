@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "rounded_sword_guard",
-      "template": "rounded_sword_guard.png",
+      "template": "guards/rounded_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 60
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:rounded_sword_guard.png"
+            "model:guards/rounded_sword_guard.png"
           ],
-          "template": "rounded_sword_guard_reinforcement.png"
+          "template": "guards/rounded_sword_guard_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:rounded_sword_guard.png"
+            "model:guards/rounded_sword_guard.png"
           ],
-          "template": "rounded_sword_guard.png"
+          "template": "guards/rounded_sword_guard.png"
         }
       ]
     },
