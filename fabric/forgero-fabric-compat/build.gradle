@@ -34,11 +34,11 @@ dependencies {
 	modImplementation "com.klikli_dev:modonomicon-${minecraft_version}-fabric:${modonomicon_version}"
 
 	// Better Combat
-	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}") {
+	modCompileOnly("maven.modrinth:cloth-config:${project.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modImplementation("maven.modrinth:playeranimator:${project.player_animator_version}")
-	modImplementation("maven.modrinth:better-combat:${project.better_combat_version}")
+	modCompileOnly("maven.modrinth:playeranimator:${project.player_animator_version}")
+	modCompileOnly("maven.modrinth:better-combat:${project.better_combat_version}")
 
 	// Mythic Metals
 	// OwO thought it would be nice to give users a prompt to accept eula which crashes the test server. Don't enable it for anything but local testing.
