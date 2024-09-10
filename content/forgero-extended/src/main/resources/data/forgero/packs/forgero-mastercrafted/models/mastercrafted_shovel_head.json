@@ -6,9 +6,9 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_shovel_head.png"
+            "model:mastercrafted/mastercrafted_shovel_head.png"
           ],
-          "template": "mastercrafted_shovel_head_tip_reinforcement.png"
+          "template": "mastercrafted/mastercrafted_shovel_head_tip_reinforcement.png"
         }
       ]
     },
@@ -17,16 +17,16 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_shovel_head.png"
+            "model:mastercrafted/mastercrafted_shovel_head.png"
           ],
-          "template": "mastercrafted_shovel_head.png"
+          "template": "mastercrafted/mastercrafted_shovel_head.png"
         }
       ]
     },
     {
       "name": "mastercrafted_shovel_head",
       "modelType": "GENERATE",
-      "template": "mastercrafted_shovel_head.png",
+      "template": "mastercrafted/mastercrafted_shovel_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },

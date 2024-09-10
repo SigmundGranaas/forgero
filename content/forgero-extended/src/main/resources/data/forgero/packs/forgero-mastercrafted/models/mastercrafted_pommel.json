@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "mastercrafted_pommel",
-      "template": "mastercrafted_pommel.png",
+      "template": "mastercrafted/mastercrafted_pommel.png",
       "type": "GENERATE",
       "palette": "METAL",
       "order": 60,
@@ -12,37 +12,37 @@
           "target": [
             "type:HOE"
           ],
-          "template": "mastercrafted_tool_pommel.png"
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "mastercrafted_tool_pommel.png"
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
         },
         {
           "target": [
             "type:AXE"
           ],
-          "template": "mastercrafted_tool_pommel.png"
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
         },
         {
           "target": [
             "type:SHOVEL"
           ],
-          "template": "mastercrafted_tool_pommel.png"
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
         },
         {
           "target": [
             "type:SWORD"
           ],
-          "template": "mastercrafted_sword_pommel.png"
+          "template": "mastercrafted/mastercrafted_sword_pommel.png"
         },
         {
           "target": [
             "type:HANDLE"
           ],
-          "template": "mastercrafted_tool_pommel.png"
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
         }
       ]
     },
@@ -51,21 +51,21 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_pommel.png"
+            "model:mastercrafted/mastercrafted_pommel.png"
           ],
-          "template": "mastercrafted_pommel.png"
+          "template": "mastercrafted/mastercrafted_pommel.png"
         },
         {
           "target": [
-            "model:mastercrafted_tool_pommel.png"
+            "model:mastercrafted/mastercrafted_tool_pommel.png"
           ],
-          "template": "mastercrafted_tool_pommel.png"
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
         },
         {
           "target": [
-            "model:mastercrafted_sword_pommel.png"
+            "model:mastercrafted/mastercrafted_sword_pommel.png"
           ],
-          "template": "mastercrafted_sword_pommel.png"
+          "template": "mastercrafted/mastercrafted_sword_pommel.png"
         }
       ]
     },
