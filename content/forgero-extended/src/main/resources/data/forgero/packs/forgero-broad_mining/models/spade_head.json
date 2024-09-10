@@ -4,7 +4,7 @@
     {
       "name": "spade_head",
       "modelType": "GENERATE",
-      "template": "spade_head.png",
+      "template": "broadmining/spade_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:spade_head.png"
+            "model:broadmining/spade_head.png"
           ],
-          "template": "spade_head_reinforcement.png"
+          "template": "broadmining/spade_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:spade_head.png"
+            "model:broadmining/spade_head.png"
           ],
-          "template": "spade_head.png"
+          "template": "broadmining/spade_head.png"
         }
       ]
     },

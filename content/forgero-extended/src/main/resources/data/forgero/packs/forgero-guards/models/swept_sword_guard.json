@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "swept_sword_guard",
-      "template": "swept_sword_guard.png",
+      "template": "guards/swept_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 60
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:swept_sword_guard.png"
+            "model:guards/swept_sword_guard.png"
           ],
-          "template": "swept_sword_guard_reinforcement.png"
+          "template": "guards/swept_sword_guard_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:swept_sword_guard.png"
+            "model:guards/swept_sword_guard.png"
           ],
-          "template": "swept_sword_guard.png"
+          "template": "guards/swept_sword_guard.png"
         }
       ]
     },

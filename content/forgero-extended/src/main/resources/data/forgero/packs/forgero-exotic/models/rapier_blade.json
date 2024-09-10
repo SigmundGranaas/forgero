@@ -4,7 +4,7 @@
     {
       "name": "rapier_blade",
       "type": "GENERATE",
-      "template": "rapier_blade.png",
+      "template": "exotic/rapier_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:rapier_blade.png"
+            "model:exotic/rapier_blade.png"
           ],
-          "template": "rapier_blade_reinforcement.png"
+          "template": "exotic/rapier_blade_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:rapier_blade.png"
+            "model:exotic/rapier_blade.png"
           ],
-          "template": "rapier_blade.png"
+          "template": "exotic/rapier_blade.png"
         }
       ]
     },

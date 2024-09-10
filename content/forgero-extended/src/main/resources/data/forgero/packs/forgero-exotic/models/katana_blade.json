@@ -4,7 +4,7 @@
     {
       "name": "katana_blade",
       "type": "GENERATE",
-      "template": "katana_blade.png",
+      "template": "exotic/katana_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:katana_blade.png"
+            "model:exotic/katana_blade.png"
           ],
-          "template": "katana_blade_reinforcement.png"
+          "template": "exotic/katana_blade_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:katana_blade.png"
+            "model:exotic/katana_blade.png"
           ],
-          "template": "katana_blade.png"
+          "template": "exotic/katana_blade.png"
         }
       ]
     },

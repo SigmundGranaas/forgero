@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "shell_sword_guard",
-      "template": "shell_sword_guard.png",
+      "template": "guards/shell_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 60
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:shell_sword_guard.png"
+            "model:guards/shell_sword_guard.png"
           ],
-          "template": "shell_sword_guard_reinforcement.png"
+          "template": "guards/shell_sword_guard_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:shell_sword_guard.png"
+            "model:guards/shell_sword_guard.png"
           ],
-          "template": "shell_sword_guard.png"
+          "template": "guards/shell_sword_guard.png"
         }
       ]
     },
@@ -35,15 +35,10 @@
       "variants": [
         {
           "target": [
-            "model:shell_sword_guard.png"
+            "model:guards/shell_sword_guard.png"
           ],
-          "template": "sword_gem_center.png",
-          "offset": [
-            -3,
-            -3
-          ]
+          "template": "guards/sword_gem_shell.png"
         }
-
       ]
     },
     {
