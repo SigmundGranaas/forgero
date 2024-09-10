@@ -89,7 +89,7 @@ public class LaunchProjectileHandler implements StopHandler {
 					1.0F,
 					1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + ((float) useTime / 10) * 0.5F
 			);
-			if (!isCreativeMode(playerEntity) || !hasInfinity(stack)) {
+			if (!isCreativeMode(playerEntity) && !hasInfinity(stack)) {
 				decrementArrowStack(playerEntity, arrowStack);
 			}
 		}
