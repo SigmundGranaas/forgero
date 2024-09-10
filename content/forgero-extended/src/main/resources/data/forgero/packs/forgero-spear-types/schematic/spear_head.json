@@ -2,6 +2,7 @@
   "type": "SPEAR_HEAD_SCHEMATIC",
   "name": "spear_head-schematic",
   "parent": "sword_blade_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -113,6 +114,30 @@
       }
     ],
     "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 72000,
+        "use_action": "SPEAR",
+        "use": [
+          {
+            "type": "minecraft:consume"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:throw",
+            "velocity_multiplier": 3
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.trident.throw"
+          },
+          {
+            "type": "minecraft:consume_stack",
+            "count": 1
+          }
+        ]
+      }
     ]
   },
   "custom_data": {

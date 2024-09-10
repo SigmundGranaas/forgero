@@ -1,9 +1,9 @@
 {
-  "type": "WEAPON",
+  "type": "SPEAR",
   "models": [
     {
       "target": [
-        "type:WEAPON"
+        "type:SPEAR"
       ],
       "modelType": "COMPOSITE"
     }

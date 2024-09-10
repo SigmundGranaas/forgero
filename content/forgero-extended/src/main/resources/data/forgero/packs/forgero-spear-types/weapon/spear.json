@@ -1,6 +1,6 @@
 {
   "type": "SPEAR",
-  "name": "weapon",
+  "name": "spear",
   "resource_type": "CONSTRUCT_TEMPLATE",
   "container": {
     "type": "CREATE",
