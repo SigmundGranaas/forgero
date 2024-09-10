@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "mastercrafted_blade",
-      "template": "mastercrafted_sword_blade.png",
+      "template": "mastercrafted/mastercrafted_sword_blade.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 20
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_sword_blade.png"
+            "model:mastercrafted/mastercrafted_sword_blade.png"
           ],
-          "template": "mastercrafted_sword_blade_tip_reinforcement.png"
+          "template": "mastercrafted/mastercrafted_sword_blade_tip_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_sword_blade.png"
+            "model:mastercrafted/mastercrafted_sword_blade.png"
           ],
-          "template": "mastercrafted_sword_blade.png"
+          "template": "mastercrafted/mastercrafted_sword_blade.png"
         }
       ]
     },

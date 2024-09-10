@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "refined_pommel",
-      "template": "refined_pommel.png",
+      "template": "refined/refined_pommel.png",
       "type": "GENERATE",
       "palette": "METAL",
       "order": 60,
@@ -12,37 +12,37 @@
           "target": [
             "type:HOE"
           ],
-          "template": "refined_tool_pommel.png"
+          "template": "refined/refined_tool_pommel.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "refined_tool_pommel.png"
+          "template": "refined/refined_tool_pommel.png"
         },
         {
           "target": [
             "type:AXE"
           ],
-          "template": "refined_tool_pommel.png"
+          "template": "refined/refined_tool_pommel.png"
         },
         {
           "target": [
             "type:SHOVEL"
           ],
-          "template": "refined_tool_pommel.png"
+          "template": "refined/refined_tool_pommel.png"
         },
         {
           "target": [
             "type:SWORD"
           ],
-          "template": "refined_sword_pommel.png"
+          "template": "refined/refined_sword_pommel.png"
         },
         {
           "target": [
             "type:HANDLE"
           ],
-          "template": "refined_tool_pommel.png"
+          "template": "refined/refined_tool_pommel.png"
         }
       ]
     },
@@ -51,21 +51,21 @@
       "variants": [
         {
           "target": [
-            "model:refined_pommel.png"
+            "model:refined/refined_pommel.png"
           ],
-          "template": "refined_pommel.png"
+          "template": "refined/refined_pommel.png"
         },
         {
           "target": [
-            "model:refined_tool_pommel.png"
+            "model:refined/refined_tool_pommel.png"
           ],
-          "template": "refined_tool_pommel.png"
+          "template": "refined/refined_tool_pommel.png"
         },
         {
           "target": [
-            "model:refined_sword_pommel.png"
+            "model:refined/refined_sword_pommel.png"
           ],
-          "template": "refined_sword_pommel.png"
+          "template": "refined/refined_sword_pommel.png"
         }
       ]
     },
