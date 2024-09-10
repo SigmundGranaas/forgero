@@ -1,0 +1,42 @@
+{
+  "type": "HOE_HEAD",
+  "models": [
+    {
+      "name": "sickle_blade",
+      "type": "GENERATE",
+      "template": "sickle_blade.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "hoe_head_material",
+      "variants": [
+        {
+          "target": [
+            "model:sickle_blade.png"
+          ],
+          "template": "sickle_blade_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:sickle_blade.png"
+          ],
+          "template": "sickle_blade.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:sickle_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "sickle_blade"
+    }
+  ]
+}

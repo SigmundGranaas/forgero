@@ -6,8 +6,7 @@
       "type": "TOOL_MATERIAL"
     },
     "variant": [
-      "broadsword_blade",
-      "battle_axe_head"
+
     ]
   },
   "type": "forgero:schematic_part_crafting",

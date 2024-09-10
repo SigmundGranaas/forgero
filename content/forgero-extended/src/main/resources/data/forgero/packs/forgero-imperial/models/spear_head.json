@@ -1,0 +1,42 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "spear_head",
+      "modelType": "GENERATE",
+      "template": "spear_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:spear_head.png"
+          ],
+          "template": "spear_head_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:spear_head.png"
+          ],
+          "template": "spear_head.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:spear_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "spear_head"
+    }
+  ]
+}

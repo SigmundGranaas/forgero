@@ -47,22 +47,17 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "refined-schematic-rarity-composite",
+            "id": "mastercrafted-schematic-rarity-composite",
             "type": "RARITY",
             "value": 1.5
           },
           {
-            "id": "refined-schematic-attack_damage-composite",
-            "type": "ATTACK_DAMAGE",
-            "value": 1.5
-          },
-          {
-            "id": "refined-schematic-mining_speed-composite",
+            "id": "mastercrafted-schematic-mining_speed-composite",
             "type": "MINING_SPEED",
             "value": 1.5
           },
           {
-            "id": "refined-schematic-durability-composite",
+            "id": "mastercrafted-schematic-durability-composite",
             "type": "DURABILITY",
             "value": 1.5
           }
@@ -76,32 +71,10 @@
         "order": "BASE",
         "operation": "ADDITION",
         "category": "LOCAL",
-        "value": 75
+        "value": 100
       }
     ],
     "features": [
-      {
-        "type": "minecraft:block_breaking",
-        "selector": {
-          "type": "forgero:pattern",
-          "pattern": [
-            "xxx",
-            "xxx",
-            "xxx"
-          ],
-          "filter": {
-            "type": "minecraft:block",
-            "tag": "forgero:plants"
-          }
-        },
-        "predicate": {
-          "type": "minecraft:block",
-          "tag": "forgero:plants"
-        },
-        "speed": "forgero:instant",
-        "title": "feature.forgero.pattern_mining.title",
-        "description": "feature.forgero.pattern_mining.3x3-description"
-      }
     ]
   },
   "custom_data": {
