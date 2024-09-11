@@ -2,32 +2,47 @@
   "type": "POMMEL",
   "models": [
     {
-      "target": [
-        "type:METAL",
-        "id:pommel-schematic"
-      ],
-      "modelType": "BASED_COMPOSITE",
-      "template": "handle_pommel"
-    },
-    {
-      "name": "handle_pommel",
+      "name": "pommel",
       "template": "pommel.png",
       "type": "GENERATE",
       "palette": "METAL",
       "order": 60,
-      "offset": [
-        5,
-        5
-      ],
       "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "tool_pommel.png"
+        },
         {
           "target": [
             "type:SWORD"
           ],
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "sword_pommel.png"
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "tool_pommel.png"
         }
       ]
     },
@@ -37,21 +52,52 @@
       "type": "GENERATE",
       "palette": "DYE",
       "order": 65,
-      "offset": [
-        5,
-        5
-      ],
       "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "tool_pommel.png"
+        },
         {
           "target": [
             "type:SWORD"
           ],
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "sword_pommel.png"
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "tool_pommel.png"
         }
       ]
+    },
+    {
+      "target": [
+        "type:METAL",
+        "type:POMMEL_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "pommel"
     },
     {
       "target": [

@@ -4,7 +4,7 @@
     {
       "name": "mace_head",
       "type": "GENERATE",
-      "template": "mace_head.png",
+      "template": "exotic/mace_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:mace_head.png"
+            "model:exotic/mace_head.png"
           ],
-          "template": "mace_head_reinforcement.png"
+          "template": "exotic/mace_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:mace_head.png"
+            "model:exotic/mace_head.png"
           ],
-          "template": "mace_head.png"
+          "template": "exotic/mace_head.png"
         }
       ]
     },
