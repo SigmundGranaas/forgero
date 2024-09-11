@@ -37,12 +37,6 @@
             "type:SWORD"
           ],
           "template": "short_handle.png"
-        },
-        {
-          "target": [
-            "type:WEAPON"
-          ],
-          "template": "axe_handle.png"
         }
       ]
     },
