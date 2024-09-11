@@ -111,25 +111,25 @@
           "target": [
             "type:AXE"
           ],
-          "template": "axe_binding_gem.png"
+          "template": "gems/axe_binding_gem.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "pickaxe_binding_gem.png"
+          "template": "gems/pickaxe_binding_gem.png"
         },
         {
           "target": [
             "type:HOE"
           ],
-          "template": "hoe_binding_gem.png"
+          "template": "gems/hoe_binding_gem.png"
         },
         {
           "target": [
             "type:SHOVEL"
           ],
-          "template": "shovel_binding_gem.png"
+          "template": "gems/shovel_binding_gem.png"
         }
       ]
     },
