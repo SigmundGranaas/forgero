@@ -144,7 +144,7 @@ curseforge {
 				optionalDependency "eldritch-end"
 				optionalDependency "regions_unexplored"
 				optionalDependency "spelunkery"
-				optionalDependency "beneaththewetlands"
+				optionalDependency "beneath-the-wetlands"
 				optionalDependency "enderite-mod"
 				optionalDependency "galosphere"
 				optionalDependency "eden-ring-reforked"
@@ -208,7 +208,7 @@ modrinth {
 		optional.project "galosphere"
 		optional.project "bountiful-fares"
 		optional.project "eden-ring-reforked"
-		optional.project "beneaththewetlands"
+		optional.project "beneath-the-wetlands"
 		incompatible.project "exordium"
 	}
 }
