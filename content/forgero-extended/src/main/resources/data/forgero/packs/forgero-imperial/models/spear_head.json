@@ -4,12 +4,12 @@
     {
       "name": "spear_head",
       "modelType": "GENERATE",
-      "template": "spear_head.png",
+      "template": "imperial/spear_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
     {
-      "name": "sword_blade_material",
+      "name": "spear_head_material",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "sword_blade_dye",
+      "name": "spear_head_dye",
       "variants": [
         {
           "target": [
@@ -32,8 +32,24 @@
     },
     {
       "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "spear_head_material"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "spear_head_dye"
+    },
+    {
+      "target": [
         "type:TOOL_MATERIAL",
-        "id:spear_head-schematic"
+        "type:SPEAR_HEAD_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "spear_head"

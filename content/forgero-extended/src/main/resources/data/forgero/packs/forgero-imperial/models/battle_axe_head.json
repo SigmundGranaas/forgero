@@ -4,7 +4,7 @@
     {
       "name": "battle_axe_head",
       "type": "GENERATE",
-      "template": "battle_axe_head.png",
+      "template": "imperial/battle_axe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:battle_axe_head.png"
+            "model:imperial/battle_axe_head.png"
           ],
-          "template": "battle_axe_head_reinforcement.png"
+          "template": "imperial/battle_axe_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:battle_axe_head.png"
+            "model:imperial/battle_axe_head.png"
           ],
-          "template": "battle_axe_head.png"
+          "template": "imperial/battle_axe_head.png"
         }
       ]
     },

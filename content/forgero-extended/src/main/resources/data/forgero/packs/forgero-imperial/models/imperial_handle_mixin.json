@@ -6,8 +6,8 @@
       "variants": [
         {
           "target": [
-            "type:SWORD",
-            "model:spear_head.png"
+            "type:SPEAR",
+            "model:imperial/spear_head.png"
           ],
           "template": "handle.png"
         }
@@ -18,8 +18,8 @@
       "variants": [
         {
           "target": [
-            "type:SWORD",
-            "model:spear_head.png"
+            "type:SPEAR",
+            "model:imperial/spear_head.png"
           ],
           "template": "handle.png"
         }
@@ -31,9 +31,9 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
-          "template": "scythe_handle.png"
+          "template": "imperial/scythe_handle.png"
         }
       ]
     },
@@ -43,9 +43,9 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
-          "template": "scythe_handle.png"
+          "template": "imperial/scythe_handle.png"
         }
       ]
     },
@@ -55,9 +55,9 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
-          "template": "scythe_grip.png"
+          "template": "imperial/scythe_grip.png"
         }
       ]
     },
@@ -66,10 +66,10 @@
       "variants": [
         {
           "target": [
-            "type:SWORD",
-            "model:spear_head.png"
+            "type:SPEAR",
+            "model:imperial/spear_head.png"
           ],
-          "template": "spear_handle_grip.png"
+          "template": "imperial/spear_handle_grip.png"
         }
       ]
     },
@@ -79,9 +79,9 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "sickle_handle.png"
+          "template": "imperial/sickle_handle.png"
         }
       ]
     },
@@ -91,9 +91,9 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "sickle_handle.png"
+          "template": "imperial/sickle_handle.png"
         }
       ]
     }

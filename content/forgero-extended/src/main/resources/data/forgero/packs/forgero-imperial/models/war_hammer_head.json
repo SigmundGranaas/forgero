@@ -4,29 +4,29 @@
     {
       "name": "war_hammer_head",
       "type": "GENERATE",
-      "template": "war_hammer_head.png",
+      "template": "imperial/war_hammer_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
     {
-      "name": "axe_head_material",
+      "name": "club_head_material",
       "variants": [
         {
           "target": [
-            "model:war_hammer_head.png"
+            "model:imperial/war_hammer_head.png"
           ],
-          "template": "war_hammer_head_reinforcement.png"
+          "template": "imperial/war_hammer_head_reinforcement.png"
         }
       ]
     },
     {
-      "name": "axe_dye",
+      "name": "club_dye",
       "variants": [
         {
           "target": [
-            "model:war_hammer_head.png"
+            "model:imperial/war_hammer_head.png"
           ],
-          "template": "war_hammer_head.png"
+          "template": "imperial/war_hammer_head.png"
         }
       ]
     },
