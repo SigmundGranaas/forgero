@@ -4,7 +4,7 @@
     {
       "name": "sickle_blade",
       "type": "GENERATE",
-      "template": "sickle_blade.png",
+      "template": "imperial/sickle_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "sickle_blade_reinforcement.png"
+          "template": "imperial/sickle_blade_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "sickle_blade.png"
+          "template": "imperial/sickle_blade.png"
         }
       ]
     },

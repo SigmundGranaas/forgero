@@ -1,29 +1,15 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
+  "type": "SPEAR_HEAD_SCHEMATIC",
   "name": "spear_head-schematic",
   "parent": "sword_blade_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "SPEAR_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 2
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -94,12 +80,12 @@
         "value": 75
       },
       {
-        "id": "variant-reach-composite",
+        "id": "schematic-reach-composite",
         "type": "forgero:reach",
         "value": 7.5
       },
       {
-        "id": "sprinting-attack_damage-composite",
+        "id": "sprinting-attack_damage",
         "type": "ATTACK_DAMAGE",
         "order": "END",
         "operation": "MULTIPLICATION",
@@ -113,6 +99,30 @@
       }
     ],
     "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 72000,
+        "use_action": "SPEAR",
+        "use": [
+          {
+            "type": "minecraft:consume"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:throw",
+            "velocity_multiplier": 2
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.trident.throw"
+          },
+          {
+            "type": "minecraft:consume_stack",
+            "count": 1
+          }
+        ]
+      }
     ]
   },
   "custom_data": {
@@ -120,6 +130,7 @@
       "value": 2,
       "context": "LOCAL"
     },
+    "better_compat_attribute_container": "forgero:spear",
     "name_replacement": {
       "from": "sword",
       "to": "spear"

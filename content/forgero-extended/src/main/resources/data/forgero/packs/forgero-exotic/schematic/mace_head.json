@@ -1,13 +1,14 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
+  "type": "CLUB_HEAD_SCHEMATIC",
   "name": "mace_head-schematic",
   "parent": "sword_blade_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "CLUB_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -17,7 +18,7 @@
             "id": "this"
           },
           {
-            "type": "METAL",
+            "type": "TOOL_MATERIAL",
             "unique": true,
             "amount": 4
           }
@@ -29,7 +30,7 @@
         "id": "this"
       },
       {
-        "type": "METAL",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],
@@ -95,6 +96,7 @@
       "value": 4,
       "context": "LOCAL"
     },
+    "better_compat_attribute_container": "bettercombat:mace",
     "name_replacement": {
       "from": "sword",
       "to": "mace"
