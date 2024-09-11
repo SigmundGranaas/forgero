@@ -4,7 +4,7 @@
     {
       "name": "entrenching_shovel_head",
       "modelType": "GENERATE",
-      "template": "entrenching_shovel_head.png",
+      "template": "imperial/entrenching_shovel_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:entrenching_shovel_head.png"
+            "model:imperial/entrenching_shovel_head.png"
           ],
-          "template": "entrenching_shovel_head_reinforcement.png"
+          "template": "imperial/entrenching_shovel_head_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:entrenching_shovel_head.png"
+            "model:imperial/entrenching_shovel_head.png"
           ],
-          "template": "entrenching_shovel_head.png"
+          "template": "imperial/entrenching_shovel_head.png"
         }
       ]
     },

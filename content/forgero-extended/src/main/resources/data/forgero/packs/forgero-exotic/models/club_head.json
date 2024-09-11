@@ -1,5 +1,5 @@
 {
-  "type": "SWORD_BLADE",
+  "type": "CLUB_HEAD",
   "models": [
     {
       "name": "club_head",
@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "sword_blade_material",
+      "name": "mace_head_material",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "sword_blade_dye",
+      "name": "mace_head_dye",
       "variants": [
         {
           "target": [

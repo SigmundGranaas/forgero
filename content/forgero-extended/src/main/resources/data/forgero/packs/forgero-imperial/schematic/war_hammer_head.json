@@ -1,5 +1,5 @@
 {
-  "type": "AXE_HEAD_SCHEMATIC",
+  "type": "CLUB_HEAD_SCHEMATIC",
   "name": "war_hammer_head-schematic",
   "parent": "axe_head_base",
   "container": {
@@ -7,7 +7,7 @@
     "id": "this"
   },
   "construct": {
-    "type": "AXE_HEAD",
+    "type": "CLUB_HEAD",
     "target": "CREATE",
     "recipes": [
       {

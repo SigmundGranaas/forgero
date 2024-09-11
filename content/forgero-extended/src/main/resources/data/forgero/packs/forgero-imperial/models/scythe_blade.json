@@ -4,7 +4,7 @@
     {
       "name": "scythe_blade",
       "modelType": "GENERATE",
-      "template": "scythe_blade.png",
+      "template": "imperial/scythe_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
-          "template": "scythe_blade.png"
+          "template": "imperial/scythe_blade.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
-          "template": "scythe_blade_reinforcement.png"
+          "template": "imperial/scythe_blade_reinforcement.png"
         }
       ]
     },

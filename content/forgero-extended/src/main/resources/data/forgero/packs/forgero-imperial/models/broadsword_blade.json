@@ -4,7 +4,7 @@
     {
       "name": "broadsword_blade",
       "type": "GENERATE",
-      "template": "broadsword_blade.png",
+      "template": "imperial/broadsword_blade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:broadsword_blade.png"
+            "model:imperial/broadsword_blade.png"
           ],
-          "template": "broadsword_blade_reinforcement.png"
+          "template": "imperial/broadsword_blade_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:broadsword_blade.png"
+            "model:imperial/broadsword_blade.png"
           ],
-          "template": "broadsword_blade.png"
+          "template": "imperial/broadsword_blade.png"
         }
       ]
     },

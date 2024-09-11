@@ -6,10 +6,10 @@
       "variants": [
         {
           "target": [
-            "type:AXE",
-            "model:war_hammer_head.png"
+            "type:CLUB",
+            "model:imperial/war_hammer_head.png"
           ],
-          "template": "soft_warhammer_binding.png",
+          "template": "imperial/soft_warhammer_binding.png",
           "offset": [
             1,
             1
@@ -23,9 +23,9 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "soft_sickle_binding.png"
+          "template": "imperial/soft_sickle_binding.png"
         }
       ]
     },
@@ -35,9 +35,9 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "soft_sickle_gem.png"
+          "template": "imperial/soft_sickle_gem.png"
         }
       ]
     },
@@ -47,9 +47,9 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "soft_sickle_binding.png"
+          "template": "imperial/soft_sickle_binding.png"
         }
       ]
     },
@@ -59,9 +59,9 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "sickle_binding.png"
+          "template": "imperial/sickle_binding.png"
         }
       ]
     },
@@ -71,9 +71,9 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
-          "template": "sickle_binding.png"
+          "template": "imperial/sickle_binding.png"
         }
       ]
     },
@@ -83,7 +83,7 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
           "template": "hoe_binding_reinforced.png",
           "offset": [
@@ -99,7 +99,7 @@
         {
           "target": [
             "type:HOE",
-            "model:sickle_blade.png"
+            "model:imperial/sickle_blade.png"
           ],
           "template": "square_gem_center.png",
           "offset": [
@@ -115,7 +115,7 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
           "template": "soft_hoe_binding.png",
           "offset": [
@@ -131,7 +131,7 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
           "template": "sword_gem_center.png",
           "offset": [
@@ -147,7 +147,7 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
           "template": "soft_hoe_binding.png",
           "offset": [
@@ -163,7 +163,7 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
           "template": "hoe_binding.png",
           "offset": [
@@ -179,7 +179,7 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
           "template": "hoe_binding.png",
           "offset": [
@@ -195,7 +195,7 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
           "template": "hoe_binding_reinforced.png",
           "offset": [
@@ -211,7 +211,7 @@
         {
           "target": [
             "type:HOE",
-            "model:scythe_blade.png"
+            "model:imperial/scythe_blade.png"
           ],
           "template": "square_gem_center.png",
           "offset": [
