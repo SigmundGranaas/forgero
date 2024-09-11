@@ -1,11 +1,11 @@
 {
-  "type": "SWORD_BLADE",
+  "type": "CLUB_HEAD",
   "models": [
     {
       "name": "mace_head",
       "type": "GENERATE",
       "template": "mace_head.png",
-      "palette": "METAL",
+      "palette": "TOOL_MATERIAL",
       "order": 20
     },
     {

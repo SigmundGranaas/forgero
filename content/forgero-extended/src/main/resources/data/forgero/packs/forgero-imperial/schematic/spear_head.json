@@ -1,13 +1,14 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
+  "type": "SPEAR_HEAD_SCHEMATIC",
   "name": "spear_head-schematic",
   "parent": "sword_blade_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "SPEAR_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -120,6 +121,7 @@
       "value": 2,
       "context": "LOCAL"
     },
+    "better_compat_attribute_container": "forgero:spear",
     "name_replacement": {
       "from": "sword",
       "to": "spear"

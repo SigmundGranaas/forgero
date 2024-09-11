@@ -1,5 +1,5 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
+  "type": "CLUB_HEAD_SCHEMATIC",
   "name": "club_head-schematic",
   "parent": "sword_blade_base",
   "container": {
@@ -7,7 +7,7 @@
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "CLUB_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -95,6 +95,7 @@
       "value": 3,
       "context": "LOCAL"
     },
+    "better_compat_attribute_container": "bettercombat:mace",
     "name_replacement": {
       "from": "sword",
       "to": "club"
