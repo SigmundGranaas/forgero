@@ -1,0 +1,27 @@
+{
+  "type": "TRIDENT",
+  "name": "trident",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "TRIDENT",
+    "target": "CREATE",
+    "recipes": [],
+    "components": [
+      {
+        "type": "TRIDENT_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

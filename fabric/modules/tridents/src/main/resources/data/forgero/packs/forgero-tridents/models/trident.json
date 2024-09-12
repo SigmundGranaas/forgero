@@ -1,9 +1,9 @@
 {
-  "type": "SPEAR",
+  "type": "TRIDENT",
   "models": [
     {
       "target": [
-        "type:SPEAR"
+        "type:TRIDENT"
       ],
       "modelType": "COMPOSITE"
     }
