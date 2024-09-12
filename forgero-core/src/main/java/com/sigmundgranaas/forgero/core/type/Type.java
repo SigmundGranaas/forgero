@@ -21,7 +21,7 @@ public interface Type extends Matchable {
 	Type RANGED_WEAPON = new SimpleType("RANGED_WEAPON", Optional.of(WEAPON), new TypeMatcher());
 	Type PROJECTILE_WEAPON = new SimpleType("PROJECTILE_WEAPON", Optional.of(RANGED_WEAPON), new TypeMatcher());
 	Type CROSSBOW = new SimpleType("CROSSBOW", Optional.of(PROJECTILE_WEAPON), new TypeMatcher());
-	Type BOW = new SimpleType("BOW", Optional.of(WEAPON), new TypeMatcher());
+	Type BOW = new SimpleType("BOW", Optional.of(PROJECTILE_WEAPON), new TypeMatcher());
 	Type PART = new SimpleType("PART", Optional.empty(), new TypeMatcher());
 	Type BINDING = new SimpleType("BINDING", Optional.of(PART), new TypeMatcher());
 	Type SWORD_GUARD = new SimpleType("SWORD_GUARD", Optional.of(PART), new TypeMatcher());
@@ -53,6 +53,7 @@ public interface Type extends Matchable {
 	Type STRING = new SimpleType("STRING", Optional.of(SECONDARY_MATERIAL), new TypeMatcher());
 	Type BOW_LIMB = new SimpleType("BOW_LIMB", Optional.of(PART), new TypeMatcher());
 	Type CROSSBOW_STOCK = new SimpleType("CROSSBOW_STOCK", Optional.of(PART), new TypeMatcher());
+	Type CROSSBOW_LIMB = new SimpleType("CROSSBOW_LIMB", Optional.of(PART), new TypeMatcher());
 	Type ARROW = new SimpleType("ARROW", Optional.empty(), new TypeMatcher());
 	Type ARROW_HEAD = new SimpleType("ARROW_HEAD", Optional.of(PART), new TypeMatcher());
 

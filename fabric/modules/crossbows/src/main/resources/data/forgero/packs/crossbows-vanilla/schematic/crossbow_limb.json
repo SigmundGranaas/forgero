@@ -1,14 +1,14 @@
 {
-  "type": "CROSSBOW_STOCK_SCHEMATIC",
-  "name": "mastercrafted_crossbow_stock-schematic",
-  "parent": "crossbow_stock_base",
+  "type": "CROSSBOW_LIMB_SCHEMATIC",
+  "name": "crossbow_limb-schematic",
+  "parent": "crossbow_limb_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "CROSSBOW_STOCK",
+    "type": "CROSSBOW_LIMB",
     "target": "CREATE",
     "recipes": [
       {
@@ -40,8 +40,8 @@
         "category": [
           "UTILITY"
         ],
-        "description": "stirrup",
-        "type": "Metal",
+        "description": "grip",
+        "type": "SOFT_MATERIAL",
         "tier": 1
       },
       {

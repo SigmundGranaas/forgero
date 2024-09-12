@@ -13,10 +13,10 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.item.Item;
 
-public class DynamicBowItemRegistrationHandler implements Registerable<RankableConverter<StateProvider, ItemData>> {
+public class DynamicCrossBowItemRegistrationHandler implements Registerable<RankableConverter<StateProvider, ItemData>> {
 	private final BuildableStateConverter defaultStateConverter;
 
-	public DynamicBowItemRegistrationHandler(BuildableStateConverter defaultStateConverter) {
+	public DynamicCrossBowItemRegistrationHandler(BuildableStateConverter defaultStateConverter) {
 		this.defaultStateConverter = defaultStateConverter;
 	}
 
@@ -26,25 +26,15 @@ public class DynamicBowItemRegistrationHandler implements Registerable<RankableC
 				.priority(1)
 				.build();
 
-		registry.register("forgero:bow", base.toBuilder()
+		registry.register("forgero:crossbow", base.toBuilder()
 				.priority(2)
-				.matcher(typeMatcher(Type.BOW))
-				.item(this::bow)
+				.matcher(typeMatcher(Type.CROSSBOW))
+				.item(this::crossbow)
 				.build());
 
-		registry.register("forgero:arrow", base.toBuilder()
-				.priority(2)
-				.matcher(typeMatcher(Type.ARROW))
-				.item(this::arrow)
-				.build());
 	}
 
-	private Item bow(StateProvider provider, Item.Settings settings) {
-		return new DynamicBowItem(settings, provider, StateService.INSTANCE);
-	}
-
-
-	private Item arrow(StateProvider provider, Item.Settings settings) {
-		return new DynamicArrowItem(settings, provider);
+	private Item crossbow(StateProvider provider, Item.Settings settings) {
+		return new DynamicCrossBowItem(settings, provider, StateService.INSTANCE);
 	}
 }

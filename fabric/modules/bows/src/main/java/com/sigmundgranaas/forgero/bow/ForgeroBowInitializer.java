@@ -67,7 +67,6 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 	public void onPreInitialization() {
 		PredicateFactory.register(BowPullPredicate.BowPullPredicateBuilder::new);
 
-
 		var settingRegistry = ItemRegistries.SETTING_PROCESSOR;
 		var groupRegistry = ItemRegistries.GROUP_CONVERTER;
 
@@ -94,19 +93,10 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 				.register();
 
 		TooltipAttributeRegistry.filterBuilder()
-				.type(Type.CROSSBOW)
-				.attributes(bows)
-				.register();
-
-		TooltipAttributeRegistry.filterBuilder()
 				.type(Type.BOW_LIMB)
 				.attributes(bows)
 				.register();
 
-		TooltipAttributeRegistry.filterBuilder()
-				.type(Type.CROSSBOW_STOCK)
-				.attributes(bows)
-				.register();
 
 		var arrows = List.of(AttackDamage.KEY, ACCURACY, Weight.KEY);
 		TooltipAttributeRegistry.filterBuilder()
@@ -138,7 +128,6 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 		ModificationRuleRegistry modification = ModificationRuleRegistry.staticRegistry();
 
 		modification.registerRule("forgero:bow_limb", bowLimb.build());
-		modification.registerRule("forgero:crossbow_stock", crossbowStock.build());
 		modification.registerRule("forgero:arrow_head", arrowHead.build());
 		modification.registerRule("forgero:feather", feather.build());
 		modification.registerRule("forgero:string", string.build());
