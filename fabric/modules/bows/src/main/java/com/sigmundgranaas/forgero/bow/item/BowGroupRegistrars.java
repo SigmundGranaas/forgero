@@ -15,8 +15,6 @@ public class BowGroupRegistrars implements Registerable<RankableConverter<StateP
 	@Override
 	public void register(GenericRegistry<RankableConverter<StateProvider, ItemGroup>> registry) {
 		registry.register("forgero:bow", typeConverter(Type.BOW, FORGERO_BOWS, 3));
-		registry.register("forgero:crossbow", typeConverter(Type.CROSSBOW, FORGERO_BOWS, 3));
-
 		registry.register("forgero:bow_limb", typeConverter(Type.BOW_LIMB, FORGERO_BOWS, 3));
 		registry.register("forgero:arrow", typeConverter(Type.ARROW, FORGERO_BOWS, 3));
 		registry.register("forgero:arrow_head", typeConverter(Type.ARROW_HEAD, FORGERO_BOWS, 3));

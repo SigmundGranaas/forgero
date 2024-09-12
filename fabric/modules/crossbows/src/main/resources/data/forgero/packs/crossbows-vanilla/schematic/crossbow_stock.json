@@ -2,7 +2,6 @@
   "type": "CROSSBOW_STOCK_SCHEMATIC",
   "name": "crossbow_stock-schematic",
   "parent": "crossbow_stock_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"

@@ -11,10 +11,10 @@
     "target": "CREATE",
     "components": [
       {
-        "type": "CROSSBOW_STOCK"
+        "type": "CROSSBOW_LIMB"
       },
       {
-        "type": "STRING"
+        "type": "CROSSBOW_STOCK"
       }
     ],
     "slots": [
@@ -27,8 +27,5 @@
         "tier": 1
       }
     ]
-  },
-  "model": {
-    "type": "COMPOSITE"
   }
 }
