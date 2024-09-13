@@ -9,11 +9,8 @@
             "type:HOE",
             "model:utility/cutter_mattock_head.png"
           ],
-          "template": "soft_hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/soft_mattock_binding.png"
+
         }
       ]
     },
@@ -25,11 +22,7 @@
             "type:HOE",
             "model:utility/cutter_mattock_head.png"
           ],
-          "template": "sword_gem_center.png",
-          "offset": [
-            1,
-            1
-          ]
+          "template": "utility/mattock_soft_binding_gem.png"
         }
       ]
     },
@@ -41,11 +34,7 @@
             "type:HOE",
             "model:utility/cutter_mattock_head.png"
           ],
-          "template": "soft_hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/soft_mattock_binding.png"
         }
       ]
     },
@@ -57,11 +46,7 @@
             "type:HOE",
             "model:utility/cutter_mattock_head.png"
           ],
-          "template": "hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/mattock_binding.png"
         }
       ]
     },
@@ -73,11 +58,7 @@
             "type:HOE",
             "model:utility/cutter_mattock_head.png"
           ],
-          "template": "hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/mattock_binding.png"
         }
       ]
     },
@@ -89,11 +70,7 @@
             "type:HOE",
             "model:utility/cutter_mattock_head.png"
           ],
-          "template": "hoe_binding_reinforced.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/mattock_binding_reinforced.png"
         }
       ]
     },
@@ -105,11 +82,7 @@
             "type:HOE",
             "model:utility/cutter_mattock_head.png"
           ],
-          "template": "square_gem_center.png",
-          "offset": [
-            1,
-            1
-          ]
+          "template": "utility/mattock_binding_gem.png"
         }
       ]
     },
@@ -121,11 +94,7 @@
             "type:HOE",
             "model:utility/pick_mattock_head.png"
           ],
-          "template": "soft_hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/soft_mattock_binding.png"
         }
       ]
     },
@@ -137,11 +106,7 @@
             "type:HOE",
             "model:utility/pick_mattock_head.png"
           ],
-          "template": "sword_gem_center.png",
-          "offset": [
-            1,
-            1
-          ]
+          "template": "utility/mattock_soft_binding_gem.png"
         }
       ]
     },
@@ -153,11 +118,7 @@
             "type:HOE",
             "model:utility/pick_mattock_head.png"
           ],
-          "template": "soft_hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/soft_mattock_binding.png"
         }
       ]
     },
@@ -169,11 +130,7 @@
             "type:HOE",
             "model:utility/pick_mattock_head.png"
           ],
-          "template": "hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/mattock_binding.png"
         }
       ]
     },
@@ -185,11 +142,7 @@
             "type:HOE",
             "model:utility/pick_mattock_head.png"
           ],
-          "template": "hoe_binding.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/mattock_binding.png"
         }
       ]
     },
@@ -201,11 +154,7 @@
             "type:HOE",
             "model:utility/pick_mattock_head.png"
           ],
-          "template": "hoe_binding_reinforced.png",
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "utility/mattock_binding_reinforced.png"
         }
       ]
     },
@@ -217,11 +166,7 @@
             "type:HOE",
             "model:utility/pick_mattock_head.png"
           ],
-          "template": "square_gem_center.png",
-          "offset": [
-            1,
-            1
-          ]
+          "template": "utility/mattock_binding_gem.png"
         }
       ]
     }
