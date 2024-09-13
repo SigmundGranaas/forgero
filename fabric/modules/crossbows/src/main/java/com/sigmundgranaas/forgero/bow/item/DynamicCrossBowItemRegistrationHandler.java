@@ -31,7 +31,6 @@ public class DynamicCrossBowItemRegistrationHandler implements Registerable<Rank
 				.matcher(typeMatcher(Type.CROSSBOW))
 				.item(this::crossbow)
 				.build());
-
 	}
 
 	private Item crossbow(StateProvider provider, Item.Settings settings) {
