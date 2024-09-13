@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.bow.item;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.UPGRADES_IDENTIFIER;
 
 import java.util.List;
 
@@ -16,14 +14,10 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -73,5 +67,20 @@ public class DynamicCrossBowItem extends CrossbowItem implements ToolStateItem {
 
 	public int getRange() {
 		return RANGE;
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		return dynamicUse(world, user, hand);
+	}
+
+	@Override
+	public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+		dynamicUsageTick(world, user, stack, remainingUseTicks);
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		dynamicOnStoppedUsing(stack, world, user, remainingUseTicks);
 	}
 }

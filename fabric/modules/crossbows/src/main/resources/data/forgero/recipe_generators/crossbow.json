@@ -8,14 +8,18 @@
   },
   "type": "forgero:state_crafting_recipe",
   "pattern": [
-    "a ",
-    " b"
+    "  a",
+    " b ",
+    "c  "
   ],
   "key": {
     "a": {
-      "tag": "forgero:${material.name}-crossbow_stock"
+      "item": "forgero:${material.name}-crossbow_limb"
     },
     "b": {
+      "tag": "forgero:crossbow_stock"
+    },
+    "c": {
       "tag": "forgero:string"
     }
   },

@@ -71,19 +71,20 @@
       {
         "type": "minecraft:on_use",
         "max_use_time": 7200,
-        "use_action": "BOW",
+        "use_action": "CROSSBOW",
         "use": [
           {
-            "type": "forgero:mount_projectile"
+            "type": "forgero:launch_crossbow_arrow"
+          }
+        ],
+        "usage_tick": [
+          {
+            "type": "forgero:charge_crossbow_handler"
           }
         ],
         "on_stop": [
           {
-            "type": "forgero:launch_projectile"
-          },
-          {
-            "type": "minecraft:stack_damage",
-            "damage": 1
+            "type": "forgero:load_crossbow_arrow"
           }
         ]
       }

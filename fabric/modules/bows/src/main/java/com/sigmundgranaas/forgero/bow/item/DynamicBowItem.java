@@ -80,7 +80,6 @@ public class DynamicBowItem extends BowItem implements ToolStateItem {
 		return dynamicUse(world, user, hand);
 	}
 
-
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		dynamicOnStoppedUsing(stack, world, user, remainingUseTicks);
