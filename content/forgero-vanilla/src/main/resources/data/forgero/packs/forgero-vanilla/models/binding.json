@@ -104,7 +104,7 @@
       "name": "binding_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "binding_gem.png",
+      "template": "gems/binding_gem.png",
       "order": 90,
       "variants": [
         {

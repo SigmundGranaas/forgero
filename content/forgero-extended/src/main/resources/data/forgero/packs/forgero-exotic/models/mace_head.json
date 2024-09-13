@@ -5,11 +5,11 @@
       "name": "mace_head",
       "type": "GENERATE",
       "template": "exotic/mace_head.png",
-      "palette": "TOOL_MATERIAL",
+      "palette": "METAL",
       "order": 20
     },
     {
-      "name": "mace_head_material",
+      "name": "club_head_material",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "mace_head_dye",
+      "name": "club_head_dye",
       "variants": [
         {
           "target": [
@@ -29,22 +29,6 @@
           "template": "exotic/mace_head.png"
         }
       ]
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "mace_head_material"
-    },
-    {
-      "target": [
-        "type:DYE",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "mace_head_dye"
     },
     {
       "target": [

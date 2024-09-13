@@ -117,6 +117,7 @@
     "name_replacement": {
     "from": "shovel",
     "to": "entrenching_shovel"
-  }
+  },
+    "better_compat_attribute_container": "forgero:axe"
 }
 }

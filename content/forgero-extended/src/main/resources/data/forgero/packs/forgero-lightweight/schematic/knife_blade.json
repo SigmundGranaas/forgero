@@ -115,7 +115,7 @@
     "features": [
       {
         "type": "minecraft:on_use",
-        "max_use_time": 72000,
+        "max_use_time": 62000,
         "use_action": "SPEAR",
         "use": [
           {
@@ -125,8 +125,8 @@
         "on_stop": [
           {
             "type": "forgero:throw",
-            "velocity_multiplier": "2",
-            "instability": "10"
+            "velocity_multiplier": "2.5",
+            "instability": "2"
           },
           {
             "type": "minecraft:play_sound",
@@ -148,6 +148,7 @@
     "name_replacement": {
       "from": "sword",
       "to": "knife"
-    }
+    },
+    "better_compat_attribute_container": "forgero:dagger"
   }
 }

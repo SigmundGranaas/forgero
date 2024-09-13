@@ -111,6 +111,7 @@
     "name_replacement": {
       "from": "hoe",
       "to": "cutter_mattock"
-    }
+    },
+    "better_compat_attribute_container": "forgero:pickaxe"
   }
 }

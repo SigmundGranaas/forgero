@@ -1,0 +1,122 @@
+{
+  "name": "spear_head_base",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_speed-composite_multiplier",
+            "type": "ATTACK_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-attack_damage-composite_multiplier",
+            "type": "ATTACK_DAMAGE",
+            "value": 1
+          },
+          {
+            "id": "schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-attack_speed-composite",
+            "type": "ATTACK_SPEED",
+            "value": -4
+          },
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 6
+      },
+      {
+        "id": "sprinting-attack_damage",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "type": "minecraft:entity",
+          "flag": {
+            "is_sprinting": true
+          }
+        }
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 72000,
+        "use_action": "SPEAR",
+        "use": [
+          {
+            "type": "minecraft:consume"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:throw",
+            "velocity_multiplier": 2,
+            "instability": "2"
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.trident.throw"
+          },
+          {
+            "type": "minecraft:consume_stack",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/sword"
+        ]
+      }
+    ]
+  }
+}

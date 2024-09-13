@@ -139,6 +139,7 @@
     "name_replacement": {
       "from": "hoe",
       "to": "scythe"
-    }
+    },
+    "better_compat_attribute_container": "forgero:scythe"
   }
 }

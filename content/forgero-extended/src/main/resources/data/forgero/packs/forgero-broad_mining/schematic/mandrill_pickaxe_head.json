@@ -107,6 +107,7 @@
     "name_replacement": {
       "from": "pickaxe",
       "to": "mandrill_pickaxe"
-    }
+    },
+    "better_compat_attribute_container": "forgero:pickaxe"
   }
 }
