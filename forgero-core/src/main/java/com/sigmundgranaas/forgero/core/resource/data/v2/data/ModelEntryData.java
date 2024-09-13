@@ -21,6 +21,9 @@ public class ModelEntryData {
 	private String template;
 
 	@Nullable
+	private String parent;
+
+	@Nullable
 	private String palette;
 
 	@Builder.Default
@@ -73,5 +76,10 @@ public class ModelEntryData {
 	@NotNull
 	public String getTexture() {
 		return Objects.requireNonNullElse(texture, Identifiers.EMPTY_IDENTIFIER);
+	}
+
+	@Nullable
+	public String getParent() {
+		return Objects.requireNonNullElse(parent ,Identifiers.EMPTY_IDENTIFIER);
 	}
 }

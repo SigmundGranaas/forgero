@@ -274,6 +274,7 @@ public class ModelConverter {
 										.children(ImmutableList.<ModelData>builder().addAll(data.getChildren()).addAll(variant.getChildren()).build())
 										.texture(variant.getTexture().equals(EMPTY_IDENTIFIER) ? data.getTexture() : variant.getTexture())
 										.template(variant.getTemplate().equals(EMPTY_IDENTIFIER) ? data.getTemplate() : variant.getTemplate())
+										.parent(variant.getParent().equals(EMPTY_IDENTIFIER) ? data.getParent().orElse(null) : variant.getParent())
 										.palette(variant.getPalette().equals(EMPTY_IDENTIFIER) ? data.getPalette() : variant.getPalette())
 										.predicate(variant.getTarget())
 										.offset(variant.getOffset())

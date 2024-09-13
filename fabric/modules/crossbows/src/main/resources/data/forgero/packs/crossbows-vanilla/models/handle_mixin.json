@@ -1,0 +1,75 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:CROSSBOW"
+          ],
+          "template": "empty_model"
+        }
+      ]
+    },
+    {
+      "name": "handle_reinforcement",
+      "variants": [
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:CROSSBOW"
+          ],
+          "template": "empty_model"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:CROSSBOW"
+
+          ],
+          "template": "empty_model"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:charged",
+              "charged": true
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "arrow_shaft_in_crossbow.png"
+        }
+      ]
+    }
+  ]
+}

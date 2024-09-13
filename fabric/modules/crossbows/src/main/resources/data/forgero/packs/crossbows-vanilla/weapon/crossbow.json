@@ -15,6 +15,9 @@
       },
       {
         "type": "CROSSBOW_STOCK"
+      },
+      {
+        "type": "STRING"
       }
     ],
     "slots": [

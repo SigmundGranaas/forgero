@@ -6,37 +6,7 @@
       "template": "crossbow_limb.png",
       "type": "GENERATE",
       "palette": "BOW_LIMB_MATERIAL",
-      "order": 2,
-      "parent": "minecraft:item/bow",
-      "variants": [
-        {
-          "predicate": [
-            {
-              "type": "forgero:bow_pull",
-              "pull": 0.9
-            }
-          ],
-          "template": "bow_pull_2.png"
-        },
-        {
-          "predicate": [
-            {
-              "type": "forgero:bow_pull",
-              "pull": 0.6
-            }
-          ],
-          "template": "bow_pull_1.png"
-        },
-        {
-          "predicate": [
-            {
-              "type": "forgero:bow_pull",
-              "pull": 0.1
-            }
-          ],
-          "template": "bow_pull_0.png"
-        }
-      ]
+      "order": 2
     },
     {
       "name": "bow_reinforcement",
@@ -57,36 +27,7 @@
       "template": "bow_limb.png",
       "type": "GENERATE",
       "palette": "DYE",
-      "order": 3,
-      "variants": [
-        {
-          "predicate": [
-            {
-              "type": "forgero:bow_pull",
-              "pull": 0.9
-            }
-          ],
-          "template": "bow_pull_2.png"
-        },
-        {
-          "predicate": [
-            {
-              "type": "forgero:bow_pull",
-              "pull": 0.6
-            }
-          ],
-          "template": "bow_pull_1.png"
-        },
-        {
-          "predicate": [
-            {
-              "type": "forgero:bow_pull",
-              "pull": 0.1
-            }
-          ],
-          "template": "bow_pull_0.png"
-        }
-      ]
+      "order": 3
     },
     {
       "target": [

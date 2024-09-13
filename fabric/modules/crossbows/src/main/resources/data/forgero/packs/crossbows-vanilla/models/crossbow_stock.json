@@ -7,7 +7,20 @@
       "type": "GENERATE",
       "palette": "BOW_LIMB_MATERIAL",
       "order": 1,
-      "parent": "minecraft:item/crossbow"
+      "parent": "minecraft:item/crossbow",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:charged",
+              "charged": true
+            },
+            "type:CROSSBOW"
+          ],
+          "parent": "minecraft:item/crossbow_arrow",
+          "template": "crossbow_stock.png"
+        }
+      ]
     },
     {
       "name": "crossbow_stock_reinforcement",
