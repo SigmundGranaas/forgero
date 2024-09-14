@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.core.property.v2;
 
-import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.core.context.Contexts;
@@ -14,67 +13,69 @@ import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.CalculationOrder;
 import com.sigmundgranaas.forgero.core.property.NumericOperation;
 import com.sigmundgranaas.forgero.core.property.Property;
+import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.property.attribute.AttributeBuilder;
 import com.sigmundgranaas.forgero.core.property.attribute.Category;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public class CompositePropertyProcessor implements PropertyProcessor {
+	private List<Property> results;
+
 	@Override
 	public List<Property> process(List<Property> propertyList, Matchable target, MatchContext context) {
-		return combineCompositeProperties(propertyList, target, context);
+		if(results == null){
+			this.results = combineCompositeProperties(propertyList, target, context);
+		}
+		return results;
 	}
 
-
 	private List<Property> combineCompositeProperties(List<Property> props, Matchable target, MatchContext context) {
-		List<Property> compositeAttributes = Property.stream(props)
-				.getAttributes()
+		Map<String, List<Attribute>> groupedAttributes = props.stream()
+				.filter(prop -> prop instanceof Attribute)
+				.map(Attribute.class::cast)
 				.filter(attribute -> attribute.getContext().test(Contexts.COMPOSITE))
 				.filter(attribute -> attribute.applyCondition(target, context))
-				.collect(Collectors.toList());
+				.collect(Collectors.groupingBy(Property::type));
 
-		var newValues = new ArrayList<Property>();
-		Set<String> types = compositeAttributes.stream().map(Property::type).collect(Collectors.toUnmodifiableSet());
-		for (String type : types) {
-			List<Attribute> compAttributes = compositeAttributes.stream()
-					.filter(prop -> prop instanceof Attribute attribute1 && attribute1.getAttributeType().equals(type))
-					.map(Attribute.class::cast)
-					.toList();
-			boolean lessThanTwo = compAttributes.size() < 2;
+		List<Property> newValues = new ArrayList<>();
 
-			boolean onlyFromSameSource = compAttributes.stream()
-					.map(Attribute::source)
-					.flatMap(Optional::stream)
-					.collect(Collectors.toUnmodifiableSet())
-					.size() < 2;
-			if (lessThanTwo || onlyFromSameSource) {
+		for (Map.Entry<String, List<Attribute>> entry : groupedAttributes.entrySet()) {
+			String type = entry.getKey();
+			List<Attribute> compAttributes = entry.getValue().stream().sorted().toList();
+
+			if (compAttributes.size() < 2) {
 				continue;
 			}
 
-			var newBaseAttribute = new AttributeBuilder(type)
+			Set<PropertyContainer> sources = new HashSet<>();
+			float value = 0f;
+			StringBuilder idBuilder = new StringBuilder();
+
+			for (Attribute attribute : compAttributes) {
+				assert (!attribute.isDynamic()): "Composite attributes should not use dynamic conditions, due to performance. Consider creating an attribute with a dynamic condition using the order: END";
+				attribute.source().ifPresent(sources::add);
+				value = attribute.applyAttribute(target, context, value);
+				idBuilder.append(attribute.getId());
+			}
+
+			if (sources.size() < 2 || value == 0) {
+				continue;
+			}
+
+			String combinedId = idBuilder + FastRandomString.generateRandomString();
+			Property newAttribute = new AttributeBuilder(type)
 					.applyOperation(NumericOperation.ADDITION)
 					.applyOrder(CalculationOrder.BASE)
 					.applyContext(Contexts.UNDEFINED)
-					.applyCategory(Category.PASS);
+					.applyCategory(Category.PASS)
+					.applyValue(value)
+					.applyId(combinedId)
+					.build();
 
-			newBaseAttribute
-					.applyValue(Property.stream(compositeAttributes, target, context).applyAttribute(type));
-
-
-			String combinedId = compositeAttributes.stream()
-					.filter(attr -> attr.type().equals(type))
-					.map(com.sigmundgranaas.forgero.core.property.Attribute.class::cast)
-					.map(com.sigmundgranaas.forgero.core.property.Attribute::getId)
-					.reduce(EMPTY_IDENTIFIER, String::join);
-
-			combinedId = combinedId + UUID.randomUUID();
-			newBaseAttribute.applyId(combinedId);
-
-			var attribute = newBaseAttribute.build();
-			if (attribute.getValue() != 0) {
-				newValues.add(attribute);
-			}
+			newValues.add(newAttribute);
 		}
+
 		return newValues;
 	}
 
