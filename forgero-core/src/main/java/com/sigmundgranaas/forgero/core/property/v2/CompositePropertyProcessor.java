@@ -55,7 +55,7 @@ public class CompositePropertyProcessor implements PropertyProcessor {
 			for (Attribute attribute : compAttributes) {
 				assert (!attribute.isDynamic()): "Composite attributes should not use dynamic conditions, due to performance. Consider creating an attribute with a dynamic condition using the order: END";
 				attribute.source().ifPresent(sources::add);
-				value += attribute.applyAttribute(target, context, value);
+				value = attribute.applyAttribute(target, context, value);
 				idBuilder.append(attribute.getId());
 			}
 
