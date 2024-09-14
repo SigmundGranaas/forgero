@@ -105,6 +105,7 @@
     "name_replacement": {
       "from": "sword",
       "to": "broadsword"
-    }
+    },
+    "better_compat_attribute_container": "forgero:claymore"
   }
 }

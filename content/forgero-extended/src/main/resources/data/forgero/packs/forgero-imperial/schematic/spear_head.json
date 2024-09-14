@@ -1,7 +1,7 @@
 {
   "type": "SPEAR_HEAD_SCHEMATIC",
   "name": "spear_head-schematic",
-  "parent": "sword_blade_base",
+  "parent": "spear_head_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -78,51 +78,10 @@
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 75
-      },
-      {
-        "id": "schematic-reach-composite",
-        "type": "forgero:reach",
-        "value": 7.5
-      },
-      {
-        "id": "sprinting-attack_damage",
-        "type": "ATTACK_DAMAGE",
-        "order": "END",
-        "operation": "MULTIPLICATION",
-        "value": 1.5,
-        "predicate": {
-          "type": "minecraft:entity",
-          "flag": {
-            "is_sprinting": true
-          }
-        }
       }
     ],
     "features": [
-      {
-        "type": "minecraft:on_use",
-        "max_use_time": 72000,
-        "use_action": "SPEAR",
-        "use": [
-          {
-            "type": "minecraft:consume"
-          }
-        ],
-        "on_stop": [
-          {
-            "type": "forgero:throw",
-            "velocity_multiplier": 2
-          },
-          {
-            "type": "minecraft:play_sound",
-            "sound": "minecraft:item.trident.throw"
-          },
-          {
-            "type": "minecraft:consume_stack",
-            "count": 1
-          }
-        ]
-      }
+
     ]
   },
   "custom_data": {

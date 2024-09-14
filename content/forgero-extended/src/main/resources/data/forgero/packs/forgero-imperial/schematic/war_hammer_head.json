@@ -1,7 +1,8 @@
 {
   "type": "CLUB_HEAD_SCHEMATIC",
   "name": "war_hammer_head-schematic",
-  "parent": "axe_head_base",
+  "parent": "club_head_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -107,10 +108,6 @@
       "value": 4,
       "context": "LOCAL"
     },
-    "better_compat_attribute_container": "bettercombat:heavy_axe",
-    "name_replacement": {
-      "from": "axe",
-      "to": "war_hammer"
-    }
+    "better_compat_attribute_container": "forgero:mace"
   }
 }

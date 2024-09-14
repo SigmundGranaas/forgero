@@ -82,5 +82,6 @@
   },
   "custom_data": {
     "ingredient_count": "3"
-  }
+  },
+  "better_compat_attribute_container": "forgero:axe"
 }

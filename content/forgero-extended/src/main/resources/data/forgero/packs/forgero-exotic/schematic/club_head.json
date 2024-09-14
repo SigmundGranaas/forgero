@@ -1,7 +1,8 @@
 {
   "type": "CLUB_HEAD_SCHEMATIC",
   "name": "club_head-schematic",
-  "parent": "sword_blade_base",
+  "parent": "club_head_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -95,10 +96,6 @@
       "value": 3,
       "context": "LOCAL"
     },
-    "better_compat_attribute_container": "bettercombat:mace",
-    "name_replacement": {
-      "from": "sword",
-      "to": "club"
-    }
+    "better_compat_attribute_container": "forgero:mace"
   }
 }

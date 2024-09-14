@@ -103,6 +103,7 @@
     "name_replacement": {
       "from": "axe",
       "to": "felling_axe"
-    }
+    },
+    "better_compat_attribute_container": "forgero:axe"
   }
 }

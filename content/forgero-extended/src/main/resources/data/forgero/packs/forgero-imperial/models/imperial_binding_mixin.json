@@ -9,11 +9,7 @@
             "type:CLUB",
             "model:imperial/war_hammer_head.png"
           ],
-          "template": "imperial/soft_warhammer_binding.png",
-          "offset": [
-            1,
-            1
-          ]
+          "template": "imperial/soft_warhammer_binding.png"
         }
       ]
     },
@@ -85,11 +81,7 @@
             "type:HOE",
             "model:imperial/sickle_blade.png"
           ],
-          "template": "hoe_binding_reinforced.png",
-          "offset": [
-            -4,
-            -4
-          ]
+          "template": "imperial/sickle_binding_reinforced.png"
         }
       ]
     },
@@ -101,11 +93,7 @@
             "type:HOE",
             "model:imperial/sickle_blade.png"
           ],
-          "template": "square_gem_center.png",
-          "offset": [
-            -2,
-            -2
-          ]
+          "template": "imperial/sickle_binding_gem.png"
         }
       ]
     },
@@ -117,11 +105,7 @@
             "type:HOE",
             "model:imperial/scythe_blade.png"
           ],
-          "template": "soft_hoe_binding.png",
-          "offset": [
-            1,
-            0
-          ]
+          "template": "imperial/soft_scythe_binding.png"
         }
       ]
     },
@@ -133,11 +117,7 @@
             "type:HOE",
             "model:imperial/scythe_blade.png"
           ],
-          "template": "sword_gem_center.png",
-          "offset": [
-            3,
-            2
-          ]
+          "template": "imperial/scythe_soft_binding_gem.png"
         }
       ]
     },
@@ -149,11 +129,7 @@
             "type:HOE",
             "model:imperial/scythe_blade.png"
           ],
-          "template": "soft_hoe_binding.png",
-          "offset": [
-            1,
-            0
-          ]
+          "template": "imperial/soft_scythe_binding.png"
         }
       ]
     },
@@ -165,11 +141,7 @@
             "type:HOE",
             "model:imperial/scythe_blade.png"
           ],
-          "template": "hoe_binding.png",
-          "offset": [
-            1,
-            0
-          ]
+          "template": "imperial/scythe_binding.png"
         }
       ]
     },
@@ -181,11 +153,7 @@
             "type:HOE",
             "model:imperial/scythe_blade.png"
           ],
-          "template": "hoe_binding.png",
-          "offset": [
-            1,
-            0
-          ]
+          "template": "imperial/scythe_binding.png"
         }
       ]
     },
@@ -197,11 +165,7 @@
             "type:HOE",
             "model:imperial/scythe_blade.png"
           ],
-          "template": "hoe_binding_reinforced.png",
-          "offset": [
-            1,
-            0
-          ]
+          "template": "imperial/scythe_binding_reinforced.png"
         }
       ]
     },
@@ -213,11 +177,7 @@
             "type:HOE",
             "model:imperial/scythe_blade.png"
           ],
-          "template": "square_gem_center.png",
-          "offset": [
-            3,
-            2
-          ]
+          "template": "imperial/scythe_binding_gem.png"
         }
       ]
     }

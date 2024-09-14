@@ -109,6 +109,7 @@
     "name_replacement": {
       "from": "pickaxe",
       "to": "hammer"
-    }
+    },
+    "better_compat_attribute_container": "forgero:hammer"
   }
 }

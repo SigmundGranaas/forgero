@@ -1,7 +1,7 @@
 {
   "type": "CLUB_HEAD_SCHEMATIC",
   "name": "mace_head-schematic",
-  "parent": "sword_blade_base",
+  "parent": "club_head_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
@@ -18,7 +18,7 @@
             "id": "this"
           },
           {
-            "type": "TOOL_MATERIAL",
+            "type": "METAL",
             "unique": true,
             "amount": 4
           }
@@ -30,7 +30,7 @@
         "id": "this"
       },
       {
-        "type": "TOOL_MATERIAL",
+        "type": "METAL",
         "unique": true
       }
     ],
@@ -96,10 +96,6 @@
       "value": 4,
       "context": "LOCAL"
     },
-    "better_compat_attribute_container": "bettercombat:mace",
-    "name_replacement": {
-      "from": "sword",
-      "to": "mace"
-    }
+    "better_compat_attribute_container": "forgero:mace"
   }
 }

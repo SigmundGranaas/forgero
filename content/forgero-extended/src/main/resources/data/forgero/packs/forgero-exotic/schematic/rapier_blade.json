@@ -98,6 +98,7 @@
     "name_replacement": {
       "from": "sword",
       "to": "rapier"
-    }
+    },
+    "better_compat_attribute_container": "forgero:rapier"
   }
 }

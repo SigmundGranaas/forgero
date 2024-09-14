@@ -9,34 +9,42 @@
       "order": 20
     },
     {
-      "name": "mace_head_material",
-      "variants": [
-        {
-          "target": [
-            "model:exotic/club_head.png"
-          ],
-          "template": "exotic/club_head_reinforcement.png"
-        }
-      ]
+      "name": "club_head_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "exotic/club_head_reinforcement.png",
+      "order": 30
     },
     {
-      "name": "mace_head_dye",
-      "variants": [
-        {
-          "target": [
-            "model:exotic/club_head.png"
-          ],
-          "template": "exotic/club_head.png"
-        }
-      ]
+      "name": "club_head_dye",
+      "template": "exotic/club_head.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
     },
     {
       "target": [
         "type:WOOD",
-        "id:club_head-schematic"
+        "type:CLUB_HEAD_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "club_head"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "club_head_material"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "club_head_dye"
     }
   ]
 }

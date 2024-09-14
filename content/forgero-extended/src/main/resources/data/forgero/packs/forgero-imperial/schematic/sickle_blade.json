@@ -121,6 +121,7 @@
     "name_replacement": {
       "from": "hoe",
       "to": "sickle"
-    }
+    },
+    "better_compat_attribute_container": "forgero:sickle"
   }
 }

@@ -107,7 +107,7 @@
       "value": 4,
       "context": "LOCAL"
     },
-    "better_compat_attribute_container": "bettercombat:heavy_axe",
+    "better_compat_attribute_container": "forgero:double_axe",
     "name_replacement": {
       "from": "axe",
       "to": "battle_axe"
