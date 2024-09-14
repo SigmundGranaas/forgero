@@ -3,10 +3,12 @@ package com.sigmundgranaas.forgero.core.resource.data.v2.data;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
 import lombok.Builder;
@@ -39,6 +41,10 @@ public class ModelEntryData {
 	@Builder.Default
 	@Nullable
 	private String texture =  Identifiers.EMPTY_IDENTIFIER;
+
+	@Nullable
+	@SerializedName(value = "display_overrides", alternate = "display")
+	private JsonObject displayOverrides;
 
 	@NotNull
 	public List<Float> getOffset() {
@@ -73,5 +79,10 @@ public class ModelEntryData {
 	@NotNull
 	public String getTexture() {
 		return Objects.requireNonNullElse(texture, Identifiers.EMPTY_IDENTIFIER);
+	}
+
+	@NotNull
+	public Optional<JsonObject> getDisplayOverrides() {
+		return Optional.ofNullable(displayOverrides);
 	}
 }
