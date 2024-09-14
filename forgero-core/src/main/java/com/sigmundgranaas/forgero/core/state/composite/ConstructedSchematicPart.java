@@ -27,6 +27,8 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	private final ConditionContainer conditions;
 	private int code = 0;
 
+	private List<Property> defaultProps;
+
 
 	public ConstructedSchematicPart(State schematic, State baseMaterial, SlotContainer slots, IdentifiableContainer id, ConditionContainer conditions) {
 		super(slots, id, List.of(schematic, baseMaterial));
@@ -46,17 +48,28 @@ public class ConstructedSchematicPart extends ConstructedComposite implements Ma
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(super.getRootProperties(), conditionProperties(Matchable.DEFAULT_TRUE, MatchContext.of()))
-				.flatMap(List::stream)
-				.toList();
+		return loadRootProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
+	}
+
+	private List<Property> loadRootProperties(Matchable target, MatchContext context){
+		if(this.defaultProps == null){
+			this.defaultProps = Stream.of(super.getRootProperties(), conditionProperties(target, context))
+					.flatMap(List::stream)
+					.toList();
+		}
+		return defaultProps;
 	}
 
 
 	@Override
 	public @NotNull List<Property> getRootProperties(Matchable target, MatchContext context) {
-		return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context))
-				.flatMap(List::stream)
-				.toList();
+		if(target == Matchable.DEFAULT_TRUE && context == MatchContext.of()){
+			return loadRootProperties(target, context);
+		}else{
+			return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context))
+					.flatMap(List::stream)
+					.toList();
+		}
 	}
 
 	@Override
