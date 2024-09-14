@@ -42,7 +42,7 @@ public class CompositePropertyProcessor implements PropertyProcessor {
 
 		for (Map.Entry<String, List<Attribute>> entry : groupedAttributes.entrySet()) {
 			String type = entry.getKey();
-			List<Attribute> compAttributes = entry.getValue();
+			List<Attribute> compAttributes = entry.getValue().stream().sorted().toList();
 
 			if (compAttributes.size() < 2) {
 				continue;
@@ -53,6 +53,7 @@ public class CompositePropertyProcessor implements PropertyProcessor {
 			StringBuilder idBuilder = new StringBuilder();
 
 			for (Attribute attribute : compAttributes) {
+				assert (!attribute.isDynamic());
 				attribute.source().ifPresent(sources::add);
 				value += attribute.applyAttribute(target, context, value);
 				idBuilder.append(attribute.getId());
