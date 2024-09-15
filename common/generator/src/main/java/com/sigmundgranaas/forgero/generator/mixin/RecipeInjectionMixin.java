@@ -33,16 +33,12 @@ public class RecipeInjectionMixin {
 	public void forgero$injectDynamicRecipes(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
 		StringReplacer stringReplacer = new StringReplacer(Registries.operationRegistry()::convert);
 		VariableToMapTransformer transformer = new VariableToMapTransformer(Registries.variableConverterRegistry()::convert);
-
 		Predicate<String> isModLoaded = FabricLoader.getInstance()::isModLoaded;
-
-		RecipeGenerator recipeGenerator = new RecipeGenerator(stringReplacer, transformer,isModLoaded );
-		DataDirectoryRecipeGenerator generator = new DataDirectoryRecipeGenerator("recipe_generators", new ResourceManagerJsonLoader(resourceManager), recipeGenerator);
-
-		Map<Identifier, JsonObject> recipes = generator.generate().stream()
-				.collect(Collectors.toMap(IdentifiedJson::id, IdentifiedJson::json));
-
+		RecipeGenerator recipeGenerator = new RecipeGenerator(stringReplacer, transformer, isModLoaded);
+		DataDirectoryRecipeGenerator generator = new DataDirectoryRecipeGenerator(
+				"recipe_generators", new ResourceManagerJsonLoader(resourceManager), recipeGenerator);
+		Map<Identifier, JsonObject> recipes = generator.generate().stream().collect(
+				Collectors.toMap(IdentifiedJson::id, IdentifiedJson::json));
 		map.putAll(recipes);
-
 	}
 }

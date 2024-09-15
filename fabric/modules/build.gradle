@@ -4,12 +4,3 @@
 
 // TODO: Abstract the Fabric submodules
 //  Move the Fabric submodules into a common module
-subprojects {
-	dependencies {
-		// Fabric Loader
-		modCompileOnly "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
-
-		// Fabric API
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	}
-}

@@ -1,27 +1,23 @@
 package com.sigmundgranaas.forgero.generator;
 
-import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
-import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
-
 import java.util.function.Function;
 
+import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.StringListVariableConverter;
 import com.sigmundgranaas.forgero.generator.impl.converter.TagToItemConverter;
 
 import net.minecraft.item.Item;
-
-import net.fabricmc.api.ModInitializer;
-
 import net.minecraft.registry.Registries;
 
-public class GeneratorInitializer implements ModInitializer {
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
 
+public class GeneratorInitializer implements ForgeroInitializedEntryPoint {
 	@Override
-	public void onInitialize() {
+	public void onInitialized(com.sigmundgranaas.forgero.service.StateService service) {
 		minecraftSetup();
 	}
-
 
 	private void minecraftSetup() {
 		variableConverter("forgero:string_list", StringListVariableConverter::new);

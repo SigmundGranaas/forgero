@@ -4,7 +4,8 @@
 plugins {
 	id "java-library"
 	id "idea"
-	id "fabric-loom" version "${fabric_loom_version}" apply false
+	id "architectury-plugin" version "${architectury_plugin_version}"
+	id "dev.architectury.loom" version "${architectury_loom_version}" apply false
 	id "maven-publish"
 }
 
@@ -37,6 +38,10 @@ def getGitVersion = { ->
 }
 
 println("${rootProject.mod_name} version: ${getGitVersion()}")
+
+architectury {
+	minecraft = rootProject.minecraft_version
+}
 
 allprojects {
 	apply plugin: "java-library"
@@ -131,4 +136,9 @@ subprojects { project ->
 
 		}
 	}
+}
+
+// Clean the previous build output of the root project and all subprojects before building
+tasks.named("build") {
+	dependsOn(clean, subprojects.clean)
 }

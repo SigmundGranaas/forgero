@@ -26,7 +26,6 @@
   "license": "${mod_license}",
   "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
-  "accessWidener": "${mod_id}-fabric-compat.accesswidener",
   "entrypoints": {
     "dynamiclights": [
       "com.sigmundgranaas.forgero.fabric.dynamiclights.DynamicLightsRegistryEndpoint"
@@ -42,7 +41,7 @@
     ]
   },
   "mixins": [
-    "forgero-fabric-compat.mixins.json"
+    "${mod_id}-fabric-compat.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.12.12",

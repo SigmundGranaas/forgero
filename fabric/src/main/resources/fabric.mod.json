@@ -26,7 +26,6 @@
   "license": "${mod_license}",
   "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
-  "accessWidener": "${mod_id}.accesswidener",
   "entrypoints": {
     "client": [
       "com.sigmundgranaas.forgero.fabric.client.ForgeroClient"
@@ -42,7 +41,8 @@
     ]
   },
   "mixins": [
-    "${mod_id}-common.mixins.json"
+    "${mod_id}-common.mixins.json",
+    "${mod_id}-fabric.mixins.json"
   ],
   "depends": {
     "minecraft": "${supported_minecraft_version}",

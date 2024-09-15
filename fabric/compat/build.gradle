@@ -3,11 +3,12 @@
 //file:noinspection DependencyNotationArgument
 
 dependencies {
-	// Bows
-	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
-
-	// Trade
-	localRuntime(project(path: ":fabric:modules:trade", configuration: 'namedElements'))
+	include(api(project(":fabric")))
+	dependencies {
+		project(":fabric:modules").subprojects.each { subproject ->
+			dependencies.add("include", project(path: ":fabric:modules:${subproject.name}"))
+		}
+	}
 
 	// Mod Menu
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
@@ -56,8 +57,6 @@ sourceSets {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/${project.mod_id}.accesswidener")
-
 	runs {
 		testServer {
 			server()

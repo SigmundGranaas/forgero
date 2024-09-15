@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
 import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
-import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
+2import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
 import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;

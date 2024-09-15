@@ -1,8 +1,13 @@
-accessWidener	v1	named
+accessWidener	v2	named
 accessible	class	net/minecraft/screen/ScreenHandlerType$Factory
 accessible	method	net/minecraft/screen/ScreenHandlerType	<init>	(Lnet/minecraft/screen/ScreenHandlerType$Factory;Lnet/minecraft/resource/featuretoggle/FeatureSet;)V
 extendable	method	net/minecraft/screen/ScreenHandlerType	<init>	(Lnet/minecraft/screen/ScreenHandlerType$Factory;Lnet/minecraft/resource/featuretoggle/FeatureSet;)V
+accessible  field net/minecraft/screen/ScreenHandlerType    factory Lnet/minecraft/screen/ScreenHandlerType$Factory;
 accessible	class	net/minecraft/client/gui/screen/ingame/HandledScreens$Provider
+
+accessible method net/minecraft/test/TestContext getTestBox ()Lnet/minecraft/util/math/Box;
+accessible class net/minecraft/structure/StructureTemplateManager$Provider
+accessible method net/minecraft/structure/StructureTemplateManager$Provider <init> (Ljava/util/function/Function;Ljava/util/function/Supplier;)V
 
 # Fields in EntityPredicate
 accessible  field   net/minecraft/predicate/entity/EntityPredicate   type               Lnet/minecraft/predicate/entity/EntityTypePredicate;
