@@ -4,7 +4,6 @@
 
 dependencies {
 	// Fabric common modules
-	implementation(project(path: ":fabric:minecraft-common", configuration: "namedElements"))
 	implementation(project(path: ":fabric:${rootProject.mod_id}-fabric-core", configuration: "namedElements"))
 
 	// Bows
@@ -15,7 +14,7 @@ dependencies {
 
 
 	// Fabric Loader
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"

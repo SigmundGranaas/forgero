@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import com.sigmundgranaas.forgero.minecraft.common.utils.RegistryUtils;
+import com.sigmundgranaas.forgero.utils.RegistryUtils;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;

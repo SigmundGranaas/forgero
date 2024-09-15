@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.bow.item;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.UPGRADES_IDENTIFIER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.UPGRADES_IDENTIFIER;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.minecraft.common.customdata.CustomNameVisitor;
-import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
+import com.sigmundgranaas.forgero.customdata.CustomNameVisitor;
+import com.sigmundgranaas.forgero.item.ToolStateItem;
+import com.sigmundgranaas.forgero.service.StateService;
+import com.sigmundgranaas.forgero.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.tooltip.Writer;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;

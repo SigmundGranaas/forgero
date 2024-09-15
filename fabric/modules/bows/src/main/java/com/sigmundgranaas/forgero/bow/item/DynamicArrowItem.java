@@ -7,10 +7,10 @@ import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.StateWriter;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.Writer;
+import com.sigmundgranaas.forgero.item.StateItem;
+import com.sigmundgranaas.forgero.service.StateService;
+import com.sigmundgranaas.forgero.tooltip.StateWriter;
+import com.sigmundgranaas.forgero.tooltip.Writer;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;

@@ -5,8 +5,8 @@ import static dev.lambdaurora.lambdynlights.api.DynamicLightHandlers.registerDyn
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.LumaHandler;
+import com.sigmundgranaas.forgero.service.StateService;
+import com.sigmundgranaas.forgero.toolhandler.LumaHandler;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 
 import net.minecraft.entity.EntityType;

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.generator.impl.IdentifiedJson;
 
 import static com.sigmundgranaas.forgero.core.Forgero.LOGGER;
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.util.JsonUtils.prettyPrintJson;
+import static com.sigmundgranaas.forgero.predicate.util.JsonUtils.prettyPrintJson;
 
 public class RecipeValidator {
 	private final ResultValidator resultValidator;

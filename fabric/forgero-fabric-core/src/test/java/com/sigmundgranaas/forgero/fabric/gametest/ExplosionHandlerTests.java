@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.fabric.gametest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.ExplosionHandler;
+import com.sigmundgranaas.forgero.handler.targeted.ExplosionHandler;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 

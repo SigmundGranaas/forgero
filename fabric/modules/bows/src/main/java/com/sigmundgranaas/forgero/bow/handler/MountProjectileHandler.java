@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.bow.handler;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
 
 import java.util.Optional;
 
@@ -8,9 +8,9 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.handler.use.UseHandler;
+import com.sigmundgranaas.forgero.item.nbt.v2.StateEncoder;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

@@ -1,0 +1,24 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	// JUnit
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+
+	// DataFixerUpper
+	api("com.mojang:datafixerupper:${project.data_fixer_upper_version}")
+}
+
+processResources {
+	inputs.property "version", rootProject.version
+}
+
+test {
+	useJUnitPlatform()
+}
+
+java {
+	withSourcesJar()
+}

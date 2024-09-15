@@ -5,12 +5,12 @@ import java.util.List;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.CanMineFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.IsBlockFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SameBlockFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.SimilarBlockFilter;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.block.BlockPredicateMatcher;
+import com.sigmundgranaas.forgero.handler.blockbreak.filter.BlockFilter;
+import com.sigmundgranaas.forgero.handler.blockbreak.filter.CanMineFilter;
+import com.sigmundgranaas.forgero.handler.blockbreak.filter.IsBlockFilter;
+import com.sigmundgranaas.forgero.handler.blockbreak.filter.SameBlockFilter;
+import com.sigmundgranaas.forgero.handler.blockbreak.filter.SimilarBlockFilter;
+import com.sigmundgranaas.forgero.predicate.block.BlockPredicateMatcher;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 

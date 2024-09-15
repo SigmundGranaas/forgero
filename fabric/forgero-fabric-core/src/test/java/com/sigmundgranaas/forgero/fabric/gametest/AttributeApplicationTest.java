@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +13,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDa
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 
 import net.minecraft.entity.Entity;

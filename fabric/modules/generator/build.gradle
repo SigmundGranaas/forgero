@@ -1,6 +1,10 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
 dependencies {
-	implementation project(":${rootProject.mod_id}-core")
-	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
+	implementation project(":core")
+	modCompileOnly("net.fabricmc:fabric-loader:${project.fabric_loader_version}")
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
 

@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryP
 import com.sigmundgranaas.forgero.fabric.tags.CommonTags;
 import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.fabricmc.loader.api.FabricLoader;
 

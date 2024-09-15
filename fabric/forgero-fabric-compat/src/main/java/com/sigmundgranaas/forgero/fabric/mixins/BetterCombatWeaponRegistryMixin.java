@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.SchematicBased;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 import net.bettercombat.api.AttributesContainer;
 import net.bettercombat.api.WeaponAttributes;
 import net.bettercombat.logic.WeaponRegistry;

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import static com.sigmundgranaas.forgero.minecraft.common.client.forgerotool.model.implementation.EmptyBakedModel.EMPTY;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
+import static com.sigmundgranaas.forgero.client.forgerotool.model.implementation.EmptyBakedModel.EMPTY;
+import static com.sigmundgranaas.forgero.match.MinecraftContextKeys.STACK;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -11,8 +11,8 @@ import com.sigmundgranaas.forgero.core.state.SimpleState;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.BakedModelResult;
-import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.DefaultModelStrategy;
+import com.sigmundgranaas.forgero.client.model.baked.BakedModelResult;
+import com.sigmundgranaas.forgero.client.model.baked.strategy.DefaultModelStrategy;
 import org.junit.jupiter.api.Assertions;
 
 import net.minecraft.item.ItemStack;

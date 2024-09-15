@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import com.sigmundgranaas.forgero.minecraft.common.handler.entity.TeleportHandler;
+import com.sigmundgranaas.forgero.handler.entity.TeleportHandler;
 
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 

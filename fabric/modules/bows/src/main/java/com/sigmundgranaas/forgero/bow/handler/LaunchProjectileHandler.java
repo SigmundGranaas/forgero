@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.bow.handler;
 
 import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_POWER;
 import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.utils.PropertyUtils.container;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.FORGERO_IDENTIFIER;
+import static com.sigmundgranaas.forgero.utils.PropertyUtils.container;
 import static net.minecraft.item.BowItem.TICKS_PER_SECOND;
 
 import java.util.List;
@@ -19,10 +19,10 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.feature.FeatureUtils;
+import com.sigmundgranaas.forgero.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.item.nbt.v2.StateEncoder;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;

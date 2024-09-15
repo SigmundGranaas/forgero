@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.sigmundgranaas.forgero.fabric.gametest.cases.BlockBreakingCase;
 import com.sigmundgranaas.forgero.fabric.gametest.helper.WorldBlockHelper;
-import com.sigmundgranaas.forgero.minecraft.common.utils.BlockUtils;
+import com.sigmundgranaas.forgero.utils.BlockUtils;
 import com.sigmundgranaas.forgero.testutil.PlayerActionHelper;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;

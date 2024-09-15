@@ -4,6 +4,7 @@
 plugins {
 	id "java-library"
 	id "idea"
+	id "fabric-loom" version "${fabric_loom_version}" apply false
 	id "maven-publish"
 }
 

@@ -1,0 +1,35 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+plugins {
+	id "fabric-loom" version "${fabric_loom_version}"
+}
+
+dependencies {
+	include(api(project(":core")))
+
+	minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+	// JUnit
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+
+	// Reach Entity Attributes
+	modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"){
+		exclude(group: "net.fabricmc.fabric-loader")
+	}
+}
+
+processResources {
+	inputs.property "version", rootProject.version
+}
+
+test {
+	useJUnitPlatform()
+}
+
+java {
+	withSourcesJar()
+}

@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
 
-import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
+import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -24,7 +24,7 @@ import vazkii.patchouli.client.book.ClientBookRegistry;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.page.PageCrafting;
 
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
 public class StateCraftingRecipePage extends PageCrafting {
 	public static Identifier ID = new Identifier(Forgero.NAMESPACE, RecipeTypes.STATE_CRAFTING_RECIPE.getName());

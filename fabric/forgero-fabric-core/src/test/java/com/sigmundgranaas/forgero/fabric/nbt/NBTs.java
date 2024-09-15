@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.nbt;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.COMPOSITE_IDENTIFIER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.COMPOSITE_IDENTIFIER;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants;
+import com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;

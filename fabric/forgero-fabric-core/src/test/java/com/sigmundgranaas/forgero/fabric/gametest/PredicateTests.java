@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.BLOCK_TARGET;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.WORLD;
+import static com.sigmundgranaas.forgero.match.MinecraftContextKeys.BLOCK_TARGET;
+import static com.sigmundgranaas.forgero.match.MinecraftContextKeys.WORLD;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.match.predicate.RandomPredicate;
+import com.sigmundgranaas.forgero.match.predicate.RandomPredicate;
 
 import net.minecraft.test.GameTest;
 import net.minecraft.test.GameTestException;

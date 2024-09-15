@@ -3,9 +3,6 @@
 //file:noinspection DependencyNotationArgument
 
 dependencies {
-	// Fabric common module
-	api(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
-
 	// Fabric generator module
 	api(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
 
@@ -18,7 +15,7 @@ dependencies {
 	localRuntime(project(path: ":fabric:modules:trade", configuration: 'namedElements'))
 
 	// Fabric Loader
-	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+	modImplementation("net.fabricmc:fabric-loader:${project.fabric_loader_version}")
 
 	// Fabric API
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")

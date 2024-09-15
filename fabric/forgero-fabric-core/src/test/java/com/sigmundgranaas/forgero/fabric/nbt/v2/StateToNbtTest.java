@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.fabric.nbt.v2;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.INGREDIENTS_IDENTIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstants.NAME_IDENTIFIER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.INGREDIENTS_IDENTIFIER;
+import static com.sigmundgranaas.forgero.item.nbt.v2.NbtConstants.NAME_IDENTIFIER;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompositeEncoder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.CompoundEncoder;
+import com.sigmundgranaas.forgero.item.nbt.v2.CompositeEncoder;
+import com.sigmundgranaas.forgero.item.nbt.v2.CompoundEncoder;
 import com.sigmundgranaas.forgero.testutil.Tools;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

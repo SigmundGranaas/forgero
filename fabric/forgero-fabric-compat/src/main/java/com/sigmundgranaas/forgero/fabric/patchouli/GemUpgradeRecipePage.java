@@ -3,10 +3,10 @@ package com.sigmundgranaas.forgero.fabric.patchouli;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.LeveledState;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.GemUpgradeRecipe;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
+import com.sigmundgranaas.forgero.recipe.customrecipe.GemUpgradeRecipe;
+import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
 
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.bow.item;
 
-import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.typeMatcher;
+import static com.sigmundgranaas.forgero.item.RegistryUtils.typeMatcher;
 
 import com.sigmundgranaas.forgero.core.registry.GenericRegistry;
 import com.sigmundgranaas.forgero.core.registry.RankableConverter;
 import com.sigmundgranaas.forgero.core.registry.Registerable;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.ItemData;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.item.BuildableStateConverter;
+import com.sigmundgranaas.forgero.item.ItemData;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.item.Item;
 

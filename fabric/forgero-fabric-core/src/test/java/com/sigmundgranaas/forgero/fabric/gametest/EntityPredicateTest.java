@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityFlagPredicates.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -8,8 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredicate;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityTypePredicate;
+import com.sigmundgranaas.forgero.predicate.entity.EntityPredicate;
+import com.sigmundgranaas.forgero.predicate.entity.EntityTypePredicate;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import org.junit.jupiter.api.Assertions;

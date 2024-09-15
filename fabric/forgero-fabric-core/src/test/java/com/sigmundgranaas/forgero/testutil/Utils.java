@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedTool;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.bow.item;
 
 import static com.sigmundgranaas.forgero.bow.ForgeroBowInitializer.FORGERO_BOWS;
-import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.typeConverter;
+import static com.sigmundgranaas.forgero.item.RegistryUtils.typeConverter;
 
 import com.sigmundgranaas.forgero.core.state.StateProvider;
 import com.sigmundgranaas.forgero.core.type.Type;

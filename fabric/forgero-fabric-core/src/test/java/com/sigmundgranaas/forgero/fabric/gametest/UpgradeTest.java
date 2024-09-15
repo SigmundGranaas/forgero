@@ -8,7 +8,7 @@ import java.util.List;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.composite.Construct;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 import com.sigmundgranaas.forgero.testutil.RecipeTester;
 
 import net.minecraft.test.GameTest;

@@ -28,16 +28,16 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.sigmundgranaas.forgero.fabric.client.ForgeroClient"
+      "fabric.client.ForgeroClient"
     ],
     "main": [
-      "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"
+      "fabric.ForgeroInitializer"
     ],
     "forgeroInitialized": [
-      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPostInit"
+      "fabric.initialization.ForgeroPostInit"
     ],
     "forgeroPreInitialization": [
-      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPreInit"
+      "fabric.initialization.ForgeroPreInit"
     ]
   },
   "mixins": [

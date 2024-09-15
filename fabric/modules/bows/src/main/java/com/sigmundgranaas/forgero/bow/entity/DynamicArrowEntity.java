@@ -1,16 +1,15 @@
 package com.sigmundgranaas.forgero.bow.entity;
 
 import static com.sigmundgranaas.forgero.bow.ForgeroBowInitializer.DYNAMIC_ARROW_ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block.OnHitBlockFeatureExecutor;
-import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.entity.OnHitEntityFeatureExecutor;
-import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeatureExecutor;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.feature.onhit.block.OnHitBlockFeatureExecutor;
+import com.sigmundgranaas.forgero.feature.onhit.entity.OnHitEntityFeatureExecutor;
+import com.sigmundgranaas.forgero.feature.tick.EntityTickFeatureExecutor;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;

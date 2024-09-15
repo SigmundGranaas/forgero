@@ -1,8 +1,0 @@
-{
-  "type": "forgero:state_upgrade_crafting_table_recipe",
-  "ingredients": [
-  ],
-  "result": {
-    "item": "minecraft:stick"
-  }
-}

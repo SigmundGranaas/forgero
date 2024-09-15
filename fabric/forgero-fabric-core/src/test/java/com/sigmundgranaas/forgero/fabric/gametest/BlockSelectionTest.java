@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import static com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector.DEPTH_MODIFIER;
-import static com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector.multiDirection;
-import static com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.BlockUtils.isBreakableBlock;
+import static com.sigmundgranaas.forgero.handler.blockbreak.selector.PatternSelector.DEPTH_MODIFIER;
+import static com.sigmundgranaas.forgero.handler.blockbreak.selector.PatternSelector.multiDirection;
+import static com.sigmundgranaas.forgero.toolhandler.block.BlockUtils.isBreakableBlock;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.sigmundgranaas.forgero.minecraft.common.feature.ModifiableFeatureAttribute;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.filter.BlockFilter;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.BlockSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.ColumnSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.PatternSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.RadiusVeinSelector;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.selector.SingleSelector;
+import com.sigmundgranaas.forgero.feature.ModifiableFeatureAttribute;
+import com.sigmundgranaas.forgero.handler.blockbreak.filter.BlockFilter;
+import com.sigmundgranaas.forgero.handler.blockbreak.selector.BlockSelector;
+import com.sigmundgranaas.forgero.handler.blockbreak.selector.ColumnSelector;
+import com.sigmundgranaas.forgero.handler.blockbreak.selector.PatternSelector;
+import com.sigmundgranaas.forgero.handler.blockbreak.selector.RadiusVeinSelector;
+import com.sigmundgranaas.forgero.handler.blockbreak.selector.SingleSelector;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;
 

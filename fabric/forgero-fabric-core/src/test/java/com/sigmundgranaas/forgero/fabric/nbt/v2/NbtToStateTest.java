@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
-import com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.StateParser;
+import com.sigmundgranaas.forgero.item.nbt.v2.StateParser;
 import com.sigmundgranaas.forgero.testutil.Materials;
 import com.sigmundgranaas.forgero.testutil.Schematics;
 import com.sigmundgranaas.forgero.testutil.ToolParts;

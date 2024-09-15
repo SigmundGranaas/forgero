@@ -4,11 +4,11 @@ import java.util.Set;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.All;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Average;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Instant;
-import com.sigmundgranaas.forgero.minecraft.common.handler.blockbreak.hardness.Single;
+import com.sigmundgranaas.forgero.handler.blockbreak.hardness.All;
+import com.sigmundgranaas.forgero.handler.blockbreak.hardness.Average;
+import com.sigmundgranaas.forgero.handler.blockbreak.hardness.BlockBreakSpeedCalculator;
+import com.sigmundgranaas.forgero.handler.blockbreak.hardness.Instant;
+import com.sigmundgranaas.forgero.handler.blockbreak.hardness.Single;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import com.sigmundgranaas.forgero.testutil.TestPosCollection;

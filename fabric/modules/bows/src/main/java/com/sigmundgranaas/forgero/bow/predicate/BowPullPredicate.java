@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.bow.predicate;
 
 import static com.sigmundgranaas.forgero.bow.Attributes.DRAW_SPEED;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.STACK;
+import static com.sigmundgranaas.forgero.match.MinecraftContextKeys.ENTITY;
+import static com.sigmundgranaas.forgero.match.MinecraftContextKeys.STACK;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

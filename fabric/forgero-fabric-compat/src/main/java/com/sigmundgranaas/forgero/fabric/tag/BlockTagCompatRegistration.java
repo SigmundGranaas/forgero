@@ -11,7 +11,6 @@ import net.minecraft.util.Identifier;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.VersionParsingException;
-import net.fabricmc.loader.impl.util.version.SemanticVersionImpl;
 
 public class BlockTagCompatRegistration {
 	// Namespaces

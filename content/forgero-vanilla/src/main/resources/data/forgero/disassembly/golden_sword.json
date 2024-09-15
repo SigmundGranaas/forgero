@@ -1,8 +1,0 @@
-{
-  "input": "minecraft:golden_sword",
-  "results": [
-    "forgero:gold-sword_blade",
-    "forgero:oak-handle",
-    "forgero:gold-sword_guard"
-  ]
-}

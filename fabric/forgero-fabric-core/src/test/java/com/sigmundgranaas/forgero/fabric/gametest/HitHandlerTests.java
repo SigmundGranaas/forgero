@@ -2,13 +2,13 @@ package com.sigmundgranaas.forgero.fabric.gametest;
 
 import static com.sigmundgranaas.forgero.fabric.gametest.AttributeApplicationTest.createFloor;
 
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.ConvertHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.DisarmHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.FireHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.KnockbackHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LifeStealHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.LightningStrikeHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
+import com.sigmundgranaas.forgero.handler.targeted.onHitEntity.ConvertHandler;
+import com.sigmundgranaas.forgero.handler.targeted.onHitEntity.DisarmHandler;
+import com.sigmundgranaas.forgero.handler.targeted.onHitEntity.FireHandler;
+import com.sigmundgranaas.forgero.handler.targeted.onHitEntity.KnockbackHandler;
+import com.sigmundgranaas.forgero.handler.targeted.onHitEntity.LifeStealHandler;
+import com.sigmundgranaas.forgero.handler.targeted.onHitEntity.LightningStrikeHandler;
+import com.sigmundgranaas.forgero.handler.targeted.onHitEntity.StatusEffectHandler;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 

@@ -4,7 +4,6 @@ import static com.sigmundgranaas.forgero.bow.Attributes.*;
 import static com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity.DYNAMIC_ARROW_IDENTIFIER;
 import static com.sigmundgranaas.forgero.bow.item.NamingRules.*;
 import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
-import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.*;
 
 import java.util.List;
 
@@ -24,11 +23,11 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
-import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
-import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
+import com.sigmundgranaas.forgero.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.handler.use.UseHandler;
+import com.sigmundgranaas.forgero.item.BuildableStateConverter;
+import com.sigmundgranaas.forgero.item.ItemRegistries;
+import com.sigmundgranaas.forgero.tooltip.v2.TooltipAttributeRegistry;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;

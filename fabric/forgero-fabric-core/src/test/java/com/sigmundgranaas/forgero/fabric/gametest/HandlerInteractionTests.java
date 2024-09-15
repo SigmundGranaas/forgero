@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.fabric.gametest;
 
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.service.StateService;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

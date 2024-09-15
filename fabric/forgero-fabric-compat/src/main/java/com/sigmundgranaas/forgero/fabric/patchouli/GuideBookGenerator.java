@@ -7,11 +7,11 @@ import java.util.stream.Stream;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeCreator;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeGenerator;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.RecipeWrapper;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.TemplateGenerator;
+import com.sigmundgranaas.forgero.recipe.RecipeCreator;
+import com.sigmundgranaas.forgero.recipe.RecipeGenerator;
+import com.sigmundgranaas.forgero.recipe.RecipeWrapper;
+import com.sigmundgranaas.forgero.recipe.customrecipe.RecipeTypes;
+import com.sigmundgranaas.forgero.recipe.implementation.generator.TemplateGenerator;
 
 import net.minecraft.util.Identifier;
 

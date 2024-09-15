@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.testutil;
 
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
+import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreenHandler.dummyHandler;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.StateUpgradeRecipe;
-import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.recipe.customrecipe.StateUpgradeRecipe;
+import com.sigmundgranaas.forgero.service.StateService;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;

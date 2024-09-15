@@ -10,32 +10,14 @@ plugins {
 
 archivesBaseName = "${rootProject.mod_id}-fabric"
 
-subprojects {
-	apply plugin: "fabric-loom"
-
-	dependencies {
-		minecraft "com.mojang:minecraft:$project.minecraft_version"
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-		// Common module
-		api(project(":${rootProject.mod_id}-core"))
-
-		// Content modules
-
-		project(":content").subprojects.each { subproject ->
-			dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
-		}
-	}
-}
-
 dependencies {
-	minecraft "com.mojang:minecraft:$project.minecraft_version"
+	include(api(project(":common")))
+
+	minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	// Core fabric modules
-	include(project(":${rootProject.mod_id}-core"))
+	// Core fabric module
 	include(project(":fabric:${rootProject.mod_id}-fabric-core"))
-	include(project(":fabric:minecraft-common"))
 
 	// Fabric mod compat
 	include(project(":fabric:${rootProject.mod_id}-fabric-compat"))
@@ -47,33 +29,46 @@ dependencies {
 		}
 	}
 
-	// Content
-	dependencies {
-		project(":content").subprojects.each { subproject ->
-			dependencies.add("include", project(path: ":content:${subproject.name}"))
-		}
-	}
-
 	// Advanced runtime resource pack
 	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 
 	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 }
 
-allprojects {
+subprojects {
+	apply plugin: "fabric-loom"
+
+	dependencies {
+		api(project(":common"))
+
+		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	}
+
 	processResources {
 		inputs.property "version", rootProject.version
 
 		filesMatching("fabric.mod.json") {
-			expand "version": rootProject.version
+			expand "version": project.version,
+				"mod_id": rootProject.mod_id,
+				"mod_name": rootProject.mod_name,
+//				"mod_description": rootProject.mod_description,
+//				"mod_license": rootProject.mod_license,
+//				"curseforge_project_id": rootProject.curseforge_project_id,
+//				"modrinth_project_id": rootProject.modrinth_project_id,
+				"fabric_loader_version": rootProject.fabric_loader_version
+//				"supported_minecraft_version": rootProject.supported_minecraft_version
 		}
 	}
+}
 
+allprojects {
 	jar {
 		from("LICENSE") {
 			rename { "${it}_${archivesBaseName}" }
 		}
 	}
+
 	java {
 		withSourcesJar()
 	}
